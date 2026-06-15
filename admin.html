@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>마스터 관리자 · 컨텐츠 허브</title>
+<link rel="icon" type="image/png" sizes="192x192" href="la-192.png">
+<meta name="theme-color" content="#0b0720">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<script src="la-config.js"></script>
+<script>
+  /* la-config.js 미로드/오프라인 대비 폴백 (publishable 키는 브라우저 공개 안전) */
+  (function(){
+    if(typeof window.LA_SUPABASE_URL!=='string') window.LA_SUPABASE_URL='https://goaqxjecotkwxrbzbdzc.supabase.co';
+    if(typeof window.LA_SUPABASE_KEY!=='string') window.LA_SUPABASE_KEY='sb_publishable_Naq2_XethYcwMKG3pR4KUg_9KIxuHNM';
+    if(typeof window.laRpc!=='function'){
+      window.laRpc=async function(fn,args){ try{ var r=await fetch(window.LA_SUPABASE_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':window.LA_SUPABASE_KEY,'Authorization':'Bearer '+window.LA_SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify(args||{})}); return await r.json(); }catch(e){ return {ok:false,reason:'network'}; } };
+    }
+    function pureSha256(asciiStr){
+      function ror(x,n){ return (x>>>n)|(x<<(32-n)); }
+      var utf8=unescape(encodeURIComponent(asciiStr)), bytes=[]; for(var i=0;i<utf8.length;i++) bytes.push(utf8.charCodeAt(i));
+      var l=bytes.length; bytes.push(0x80); while(bytes.length%64!==56) bytes.push(0);
+      var bitLen=l*8; bytes.push(0,0,0,0,(bitLen>>>24)&255,(bitLen>>>16)&255,(bitLen>>>8)&255,bitLen&255);
+      var K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+      var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19], w=new Array(64);
+      for(var off=0; off<bytes.length; off+=64){
+        for(var i=0;i<16;i++) w[i]=(bytes[off+i*4]<<24)|(bytes[off+i*4+1]<<16)|(bytes[off+i*4+2]<<8)|(bytes[off+i*4+3]);
+        for(var i=16;i<64;i++){ var s0=ror(w[i-15],7)^ror(w[i-15],18)^(w[i-15]>>>3); var s1=ror(w[i-2],17)^ror(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)|0; }
+        var a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+        for(var i=0;i<64;i++){ var S1=ror(e,6)^ror(e,11)^ror(e,25), ch=(e&f)^((~e)&g), t1=(h+S1+ch+K[i]+w[i])|0; var S0=ror(a,2)^ror(a,13)^ror(a,22), maj=(a&b)^(a&c)^(b&c), t2=(S0+maj)|0; h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0; }
+        H[0]=(H[0]+a)|0;H[1]=(H[1]+b)|0;H[2]=(H[2]+c)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0;
+      }
+      var hex=''; for(var i=0;i<8;i++){ hex+=((H[i]>>>0).toString(16)).padStart(8,'0'); } return hex;
+    }
+    var prevSha=window.laSha256;
+    window.laSha256=async function(s){
+      try{ if(window.crypto&&window.crypto.subtle){ var buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join(''); } }catch(e){}
+      if(typeof prevSha==='function'){ try{ return await prevSha(s); }catch(e){} }
+      return pureSha256(s);
+    };
+  })();
+</script>
+<style>
+  :root{
+    --serif:'Nanum Myeongjo','Iowan Old Style',serif;
+    --sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+    --paper:#0a0820; --surface:#17132e; --soft:#1d1838; --ink:#EDE9FA; --muted:#9b94b8; --hair:rgba(160,140,230,.18);
+    --coral:#A78BFF; --coral-soft:rgba(123,90,255,.18);
+    --shadow:0 4px 16px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  html,body{background:radial-gradient(circle at 50% 0%, #16123c 0%, #0a0820 58%, #070418 100%);}
+  body{font-family:var(--sans); color:var(--ink); line-height:1.6; padding-bottom:50px; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:880px; margin:0 auto; padding:0 16px;}
+  .topbar{position:sticky; top:0; z-index:10; background:var(--paper); display:flex; align-items:center; gap:11px; padding:14px 16px; max-width:880px; margin:0 auto;}
+  .topbar img{border-radius:7px; display:block;}
+  .topbar .title{font-family:var(--serif); font-size:18px; font-weight:700; flex:1;}
+  .btn{border:1px solid var(--hair); background:var(--surface); color:var(--ink); font-family:var(--sans); font-size:13px; font-weight:500; padding:8px 14px; border-radius:10px; cursor:pointer;}
+  .btn.primary{background:linear-gradient(95deg,#3D7BFF,#9B3DFF,#FF3DC0); color:#fff; border:none; box-shadow:0 4px 14px rgba(123,60,230,.35);}
+
+  .card{background:var(--surface); border:1px solid var(--hair); border-radius:16px; box-shadow:var(--shadow); padding:18px; margin-bottom:18px;}
+  .card h2{font-family:var(--serif); font-size:17px; font-weight:700; margin-bottom:14px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px;}
+  .field input{width:100%; border:1px solid var(--hair); background:var(--soft); border-radius:10px; padding:11px 13px; font-size:14px; color:var(--ink); font-family:var(--sans);}
+  .field input::placeholder{color:var(--muted);}
+
+  .seg{display:flex; gap:8px; flex-wrap:wrap;}
+  .seg button{flex:1; min-width:90px; border:1px solid var(--hair); background:var(--surface); color:var(--muted); border-radius:11px; padding:11px; font-size:13px; font-family:var(--sans); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px;}
+  .seg button .ico{font-size:18px;}
+  .seg button.on{border-color:var(--coral); color:var(--coral); background:var(--coral-soft); font-weight:600;}
+  .seg.period button{flex-direction:row; min-width:0;}
+
+  .gen-result{display:none; margin-top:14px; border:1.5px solid var(--coral); background:var(--coral-soft); border-radius:13px; padding:15px;}
+  .gen-result.show{display:block;}
+  .gr-row{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+  .gr-row:last-child{margin-bottom:0;}
+  .gr-k{font-size:12px; color:var(--muted); width:44px; flex:0 0 auto;}
+  .gr-v{font-family:var(--serif); font-size:22px; font-weight:800; letter-spacing:.06em; color:var(--ink); flex:1;}
+  .gr-copy{font-size:12px; color:var(--coral); cursor:pointer; border:1px solid var(--coral); border-radius:8px; padding:5px 10px; background:var(--surface);}
+  .gr-note{font-size:12px; color:var(--muted); margin-top:10px;}
+
+  .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media(max-width:680px){ .cols{grid-template-columns:1fr;} }
+  .col{background:var(--surface); border:1px solid var(--hair); border-radius:14px; box-shadow:var(--shadow); padding:14px; min-height:120px;}
+  .col-h{display:flex; align-items:center; gap:7px; font-size:14px; font-weight:600; margin-bottom:12px;}
+  .col-h .dot{width:9px; height:9px; border-radius:50%;}
+  .col-h .cnt{margin-left:auto; font-size:12px; color:var(--muted); background:var(--soft); border-radius:999px; padding:2px 9px;}
+  .ucard{border:1px solid var(--hair); border-radius:11px; padding:10px 11px; margin-bottom:9px; background:var(--soft);}
+  .ucard:last-child{margin-bottom:0;}
+  .uc-top{display:flex; align-items:center; gap:8px;}
+  .uc-code{font-family:var(--serif); font-weight:800; font-size:15px; letter-spacing:.05em;}
+  .uc-name{font-size:12.5px; color:var(--muted); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .uc-del{color:#C0857A; cursor:pointer; font-size:15px;}
+  .uc-meta{font-size:11.5px; color:var(--muted); margin-top:4px; display:flex; gap:8px;}
+  .uc-dday{color:var(--coral); font-weight:500;}
+  .uc-dday.expired{color:#C0432B;}
+  .empty{color:var(--muted); font-size:12.5px; text-align:center; padding:18px 0;}
+
+  /* 워크스페이스 탭 */
+  .ws-tabs{position:sticky; top:56px; z-index:9; max-width:880px; margin:0 auto; display:flex; gap:8px; padding:4px 16px 14px; overflow-x:auto; scrollbar-width:none;}
+  .ws-tabs::-webkit-scrollbar{display:none;}
+  .ws-tab{flex:1; min-width:80px; display:flex; flex-direction:column; align-items:center; gap:4px; border:1px solid var(--hair); background:var(--surface); color:var(--muted); border-radius:13px; padding:11px 8px; font-size:12.5px; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
+  .ws-tab .ico{font-size:18px;}
+  .ws-tab.on{border-color:transparent; color:#fff; background:linear-gradient(95deg,rgba(61,123,255,.30),rgba(155,61,255,.30),rgba(255,61,192,.26)); font-weight:600; box-shadow:0 4px 14px rgba(123,60,230,.25);}
+  .ws-pane{display:none;}
+  .ws-pane.active{display:block; animation:wsIn .25s ease;}
+  @keyframes wsIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:11px; margin-bottom:18px;}
+  @media(max-width:560px){ .mgrid{grid-template-columns:repeat(2,1fr);} }
+  .mcard{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:15px 13px; box-shadow:var(--shadow);}
+  .mcard .mv{font-family:var(--serif); font-size:26px; font-weight:800; color:var(--coral); line-height:1;}
+  .mcard .ml{font-size:12px; color:var(--muted); margin-top:6px;}
+
+  /* 로그인 */
+  .login-ov{position:fixed; inset:0; z-index:100; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; overflow-y:auto;
+    background:radial-gradient(circle at 50% 16%, #241a52 0%, #120b2e 42%, #070418 100%);}
+  .ln-hub{position:relative; width:340px; max-width:100%; height:290px; flex:0 0 auto;}
+  .ln-links{position:absolute; inset:0; width:100%; height:100%;}
+  .ln-links line{stroke:#8a7fd6; stroke-width:1.2; stroke-dasharray:2 5; opacity:.5;}
+  .ln-pod{position:absolute; left:170px; top:176px; width:176px; height:44px; border-radius:50%; transform:translate(-50%,-50%); border:1px solid rgba(150,120,245,.5); box-shadow:0 0 28px rgba(125,90,235,.5);}
+  .ln-house{position:absolute; left:170px; top:140px; width:100px; transform:translate(-50%,-52%); animation:lnGlow 3.2s ease-in-out infinite;}
+  @keyframes lnGlow{0%,100%{filter:drop-shadow(0 0 15px rgba(155,90,255,.8)) drop-shadow(0 0 34px rgba(90,140,255,.5));} 50%{filter:drop-shadow(0 0 24px rgba(190,110,255,1)) drop-shadow(0 0 52px rgba(110,150,255,.6));}}
+  .ln-node{position:absolute; transform:translate(-50%,-50%);}
+  .ln-flo{display:flex; flex-direction:column; align-items:center; gap:5px; animation:lnFlo 3.2s ease-in-out infinite;}
+  @keyframes lnFlo{0%,100%{transform:translateY(0);} 50%{transform:translateY(-9px);}}
+  .ln-tile{width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; background:linear-gradient(155deg,rgba(255,255,255,.10),rgba(255,255,255,.02));}
+  .ln-tile svg{width:23px; height:23px;}
+  .ln-lab{font-size:11px; color:#b9b2d6; white-space:nowrap;}
+  .k-ig{border:1px solid rgba(214,41,118,.7); box-shadow:0 0 15px rgba(214,41,118,.5); color:#FF7FC4;}
+  .k-yt{border:1px solid rgba(255,70,70,.7); box-shadow:0 0 15px rgba(255,70,70,.45); color:#FF5C5C;}
+  .k-mail{border:1px solid rgba(255,90,180,.7); box-shadow:0 0 15px rgba(255,90,180,.5); color:#FF7FC4;}
+  .k-news{border:1px solid rgba(99,201,89,.7); box-shadow:0 0 15px rgba(99,201,89,.4); color:#8BD673;}
+  .k-book{border:1px solid rgba(176,111,232,.7); box-shadow:0 0 15px rgba(176,111,232,.5); color:#C79CF0;}
+  .k-port{border:1px solid rgba(255,154,61,.7); box-shadow:0 0 15px rgba(255,154,61,.45); color:#FFB266;}
+  .login-card{width:100%; max-width:330px; text-align:center;}
+  .login-t{font-family:var(--serif); font-size:22px; font-weight:800; color:#F0ECFA;}
+  .login-s{font-size:12.5px; color:#9388b0; margin:4px 0 18px;}
+  .login-card input{width:100%; border:1px solid rgba(160,140,230,.28); background:rgba(255,255,255,.05); border-radius:11px; padding:12px 14px; font-size:15px; color:#e7e2f5; font-family:var(--sans); margin-bottom:11px; text-align:center;}
+  .login-card input::placeholder{color:#8a7fa8;}
+  .login-btn{width:100%; border:none; color:#fff; border-radius:11px; padding:13px; font-size:15px; font-weight:600; font-family:var(--sans); cursor:pointer; margin-top:3px;
+    background:linear-gradient(95deg,#3D7BFF,#9B3DFF,#FF3DC0); box-shadow:0 6px 20px rgba(123,60,230,.4);}
+  .login-btn:disabled{opacity:.6;}
+  .login-err{font-size:12.5px; color:#FF8A8A; min-height:18px;}
+  .login-hint{font-size:11.5px; color:#7a6fa0; margin-top:14px;}
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); background:#2a2350; color:#fff; font-size:12.5px; padding:9px 16px; border-radius:999px; z-index:120; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}
+  .toast.show{opacity:.95;}
+</style>
+</head>
+<body>
+
+  <!-- 마스터 로그인 (다크 네온 허브 + 떠다니는 아이콘) -->
+  <div class="login-ov" id="login-ov">
+    <a href="edit.html" aria-label="뒤로" title="뒤로 (로그인 화면)" style="position:absolute; top:16px; left:16px; z-index:2; color:#c2bce0; font-size:13px; text-decoration:none; background:rgba(255,255,255,.08); border:1px solid rgba(160,140,230,.3); border-radius:999px; padding:7px 14px;">← 뒤로</a>
+    <div class="ln-hub">
+      <svg class="ln-links" viewBox="0 0 340 290" aria-hidden="true">
+        <line x1="170" y1="140" x2="170" y2="30"/><line x1="170" y1="140" x2="78" y2="80"/><line x1="170" y1="140" x2="262" y2="80"/><line x1="170" y1="140" x2="78" y2="202"/><line x1="170" y1="140" x2="262" y2="202"/><line x1="170" y1="140" x2="170" y2="258"/>
+      </svg>
+      <span class="ln-pod"></span>
+      <img class="ln-house" src="la-mark.png" alt="컨텐츠 허브">
+      <div class="ln-node" style="left:170px; top:30px;"><div class="ln-flo" style="animation-delay:0s"><span class="ln-tile k-ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg></span><span class="ln-lab">인스타그램</span></div></div>
+      <div class="ln-node" style="left:78px; top:80px;"><div class="ln-flo" style="animation-delay:.5s"><span class="ln-tile k-yt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.2 9.3l4.8 2.7-4.8 2.7z" fill="currentColor" stroke="none"/></svg></span><span class="ln-lab">유튜브</span></div></div>
+      <div class="ln-node" style="left:262px; top:80px;"><div class="ln-flo" style="animation-delay:.9s"><span class="ln-tile k-port"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="7.5" width="17" height="11" rx="2.5"/><path d="M9 7.5V6.2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.3"/><path d="M3.5 12h17"/></svg></span><span class="ln-lab">포트폴리오</span></div></div>
+      <div class="ln-node" style="left:78px; top:202px;"><div class="ln-flo" style="animation-delay:.3s"><span class="ln-tile k-mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.6 7.2l8.4 5.8 8.4-5.8"/></svg></span><span class="ln-lab">뉴스레터</span></div></div>
+      <div class="ln-node" style="left:262px; top:202px;"><div class="ln-flo" style="animation-delay:.7s"><span class="ln-tile k-news"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M7.5 9h9M7.5 12h9M7.5 15h6"/></svg></span><span class="ln-lab">카드뉴스</span></div></div>
+      <div class="ln-node" style="left:170px; top:258px;"><div class="ln-flo" style="animation-delay:1.1s"><span class="ln-tile k-book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 6.2C10 5 7 5 5 5.7v12C7 17 10 17 12 18.2 14 17 17 17 19 17.7v-12C17 5 14 5 12 6.2z"/><path d="M12 6.2v12"/></svg></span><span class="ln-lab">전자책</span></div></div>
+    </div>
+    <div class="login-card">
+      <div class="login-t">마스터 관리자</div>
+      <div class="login-s">콘텐츠가 모이는 허브를 관리하세요</div>
+      <input id="lg-code" placeholder="마스터 코드" autocapitalize="characters" autocomplete="off">
+      <input id="lg-pin" type="password" inputmode="numeric" placeholder="PIN" autocomplete="off">
+      <div class="login-err" id="lg-err"></div>
+      <button class="login-btn" id="lg-btn">로그인</button>
+    </div>
+  </div>
+
+  <div class="topbar">
+    <a class="btn" href="edit.html" title="뒤로 (로그인 화면)" style="text-decoration:none; color:var(--ink); padding:8px 12px;">←</a>
+    <img src="la-192.png" width="28" height="28" alt="컨텐츠 허브">
+    <span class="title">마스터 관리자</span>
+    <button class="btn" id="logout">로그아웃</button>
+  </div>
+
+  <div class="ws-tabs" id="ws-tabs">
+    <button class="ws-tab on" data-ws="home"><span class="ico">📊</span>현황</button>
+    <button class="ws-tab" data-ws="issue"><span class="ico">➕</span>코드 발급</button>
+    <button class="ws-tab" data-ws="list"><span class="ico">📋</span>발급 목록</button>
+    <button class="ws-tab" data-ws="settings"><span class="ico">⚙</span>설정</button>
+  </div>
+
+  <div class="wrap">
+
+    <!-- 현황 (대시보드) -->
+    <div class="ws-pane active" data-pane="home">
+      <h2 style="font-family:var(--serif); font-size:18px; margin:6px 2px 14px;">한눈에 보기</h2>
+      <div class="mgrid">
+        <div class="mcard"><div class="mv" id="m-total">0</div><div class="ml">총 발급</div></div>
+        <div class="mcard"><div class="mv" id="m-soon" style="color:#FF8FA6;">0</div><div class="ml">만료 임박 (D-30)</div></div>
+        <div class="mcard"><div class="mv" id="m-life">0</div><div class="ml">평생 회원</div></div>
+        <div class="mcard"><div class="mv" id="m-personal" style="color:#5B8CFF;">0</div><div class="ml">개인용</div></div>
+        <div class="mcard"><div class="mv" id="m-beauty" style="color:#E5708C;">0</div><div class="ml">뷰티용</div></div>
+        <div class="mcard"><div class="mv" id="m-brand" style="color:#B06FE8;">0</div><div class="ml">브랜드용</div></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; margin:4px 2px 12px;">
+        <span style="font-size:13px; font-weight:600; color:var(--muted);">최근 발급</span>
+        <button class="btn" id="refresh2" style="padding:5px 11px; font-size:12px;">새로고침</button>
+      </div>
+      <div id="recent-list"><div class="empty">아직 없어요</div></div>
+      <button class="btn primary" id="go-issue" style="width:100%; padding:13px; margin-top:14px;">➕ 새 코드 발급하러 가기</button>
+    </div>
+
+    <!-- 코드 생성 -->
+    <div class="ws-pane" data-pane="issue">
+    <div class="card">
+      <h2>＋ 새 코드 발급</h2>
+      <div class="field">
+        <label>이름 (회원 식별용)</label>
+        <input id="f-name" placeholder="예: 리지 헤어 / 김크리에이터">
+      </div>
+      <div class="field">
+        <label>분야</label>
+        <div class="seg" id="seg-industry">
+          <button data-ind="personal"><span class="ico">✍️</span>개인용</button>
+          <button data-ind="beauty"><span class="ico">✂️</span>뷰티용</button>
+          <button data-ind="brand"><span class="ico">🏪</span>브랜드용</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>기간</label>
+        <div class="seg period" id="seg-period">
+          <button data-days="30">1개월</button>
+          <button data-days="90">3개월</button>
+          <button data-days="180">6개월</button>
+          <button data-days="365">1년</button>
+          <button data-days="0">평생</button>
+        </div>
+      </div>
+      <button class="btn primary" id="gen-btn" style="width:100%; padding:13px; font-size:14px;">코드 생성</button>
+
+      <div class="gen-result" id="gen-result">
+        <div class="gr-row"><span class="gr-k">코드</span><span class="gr-v" id="r-code">—</span><span class="gr-copy" id="copy-code">복사</span></div>
+        <div class="gr-row"><span class="gr-k">PIN</span><span class="gr-v" id="r-pin">—</span><span class="gr-copy" id="copy-pin">복사</span></div>
+        <div class="gr-note" id="r-note">고객에게 코드와 PIN을 전달하세요. 고객은 edit.html에서 로그인합니다.</div>
+        <button class="gr-copy" id="copy-both" style="margin-top:10px; width:100%; padding:9px;">코드+PIN 함께 복사</button>
+      </div>
+    </div>
+    </div><!-- /issue pane -->
+
+    <!-- 발급된 코드 (분야별) -->
+    <div class="ws-pane" data-pane="list">
+    <div style="display:flex; align-items:center; gap:10px; margin:4px 2px 12px;">
+      <span style="font-size:13px; font-weight:600; color:var(--muted);">발급된 코드</span>
+      <button class="btn" id="refresh" style="padding:5px 11px; font-size:12px;">새로고침</button>
+    </div>
+    <div class="cols">
+      <div class="col"><div class="col-h"><span class="dot" style="background:#5B8CFF;"></span>개인용<span class="cnt" id="cnt-personal">0</span></div><div id="list-personal"><div class="empty">아직 없어요</div></div></div>
+      <div class="col"><div class="col-h"><span class="dot" style="background:#E5708C;"></span>뷰티용<span class="cnt" id="cnt-beauty">0</span></div><div id="list-beauty"><div class="empty">아직 없어요</div></div></div>
+      <div class="col"><div class="col-h"><span class="dot" style="background:#B06FE8;"></span>브랜드용<span class="cnt" id="cnt-brand">0</span></div><div id="list-brand"><div class="empty">아직 없어요</div></div></div>
+    </div>
+    </div><!-- /list pane -->
+
+    <!-- 설정 (비밀번호 변경 인라인) -->
+    <div class="ws-pane" data-pane="settings">
+      <div class="card" style="max-width:400px;">
+        <h2>⚙ 마스터 비밀번호 변경</h2>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:14px;">숫자·문자 4자 이상 (강력하게 바꾸세요)</div>
+        <div class="field"><label>새 비밀번호</label><input id="np1" type="password" placeholder="새 비밀번호"></div>
+        <div class="field"><label>새 비밀번호 확인</label><input id="np2" type="password" placeholder="다시 입력"></div>
+        <div id="np-err" style="font-size:12px; color:#FF8A8A; min-height:16px;"></div>
+        <button class="btn primary" id="np-save" style="width:100%; padding:12px; margin-top:4px;">변경하기</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var AUTH=null; try{ AUTH=JSON.parse(sessionStorage.getItem('cmh-master')||'null'); }catch(e){}
+  var industry='personal', days=90;
+  function $(id){ return document.getElementById(id); }
+  function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2000); }
+  function copy(s){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(s).then(function(){ toast('복사됨'); },function(){ toast(s); }); } else toast(s); }
+
+  // 분야/기간 세그먼트
+  function bindSeg(box, attr, cb){
+    var btns=box.querySelectorAll('button');
+    btns.forEach(function(b){ b.onclick=function(){ btns.forEach(function(x){ x.classList.toggle('on', x===b); }); cb(b.getAttribute(attr)); }; });
+  }
+  bindSeg($('seg-industry'),'data-ind',function(v){ industry=v; });
+  bindSeg($('seg-period'),'data-days',function(v){ days=parseInt(v,10); });
+  $('seg-industry').querySelector('[data-ind="personal"]').classList.add('on');
+  $('seg-period').querySelector('[data-days="90"]').classList.add('on');
+
+  // 코드/PIN 생성
+  function genCode(){ var a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789', s=''; for(var i=0;i<6;i++) s+=a[Math.floor(Math.random()*a.length)]; return s; }
+  function genPin(){ return ''+Math.floor(1000+Math.random()*9000); }
+  function expiresFromDays(d){ return d>0 ? (Date.now()+d*86400000) : null; }
+  var lastCode='', lastPin='';
+
+  $('gen-btn').addEventListener('click', async function(){
+    if(!AUTH){ toast('로그인이 필요해요'); return; }
+    var name=($('f-name').value||'').trim();
+    if(!name){ toast('이름을 입력하세요'); return; }
+    var btn=this; btn.disabled=true; var o=btn.textContent; btn.textContent='생성 중...';
+    try{
+      var pin=genPin(); var pinHash=await window.laSha256(pin);
+      var exp=expiresFromDays(days);
+      var res=null, code='';
+      for(var tries=0; tries<5; tries++){
+        code=genCode();
+        res=await window.laRpc('li_master_create',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:code, p_pin_hash:pinHash, p_name:name, p_industry:industry, p_expires_at:exp });
+        if(res&&res.ok) break;
+        if(res&&res.reason==='exists') continue;     // 중복이면 재생성
+        break;
+      }
+      if(res&&res.ok){
+        lastCode=code; lastPin=pin;
+        $('r-code').textContent=code; $('r-pin').textContent=pin;
+        $('gen-result').classList.add('show');
+        $('f-name').value='';
+        toast('코드 생성 완료 ✓');
+        loadList();
+      } else if(res&&res.reason==='auth'){ toast('마스터 인증 만료 · 다시 로그인'); }
+      else { toast('생성 실패 ('+((res&&res.reason)||'SQL 미실행?')+')'); }
+    }catch(e){ toast('오류: '+e.message); }
+    btn.disabled=false; btn.textContent=o;
+  });
+  $('copy-code').onclick=function(){ copy(lastCode); };
+  $('copy-pin').onclick=function(){ copy(lastPin); };
+  $('copy-both').onclick=function(){ copy('코드 '+lastCode+' / PIN '+lastPin); };
+
+  // 목록
+  function dday(exp){
+    if(!exp) return {t:'평생', cls:''};
+    var d=Math.ceil((exp-Date.now())/86400000);
+    if(d<0) return {t:'만료됨', cls:'expired'};
+    return {t:'D-'+d, cls:''};
+  }
+  function ucard(u){
+    var dd=dday(u.expires_at);
+    var div=document.createElement('div'); div.className='ucard';
+    div.innerHTML='<div class="uc-top"><span class="uc-code">'+u.code+'</span><span class="uc-name">'+(u.name||'')+'</span><span class="uc-del" title="삭제">×</span></div>'
+      +'<div class="uc-meta"><span class="uc-dday '+dd.cls+'">'+dd.t+'</span>'+(u.handle?'<span>/u/'+u.handle+'</span>':'<span>주소 미설정</span>')+'</div>';
+    div.querySelector('.uc-del').onclick=async function(){
+      if(!confirm(u.code+' 코드를 삭제할까요? (되돌릴 수 없어요)')) return;
+      var r=await window.laRpc('li_master_delete',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:u.code });
+      if(r&&r.ok){ toast('삭제됨'); loadList(); } else toast('삭제 실패');
+    };
+    return div;
+  }
+  async function loadList(){
+    if(!AUTH) return;
+    var res=await window.laRpc('li_master_list',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash });
+    var all=(res&&res.ok&&res.list)?res.list:[];
+    var groups={personal:[],beauty:[],brand:[]};
+    all.forEach(function(u){ var k=groups[u.industry]?u.industry:'personal'; groups[k].push(u); });
+    ['personal','beauty','brand'].forEach(function(k){
+      var box=$('list-'+k); box.innerHTML=''; $('cnt-'+k).textContent=groups[k].length;
+      if(!groups[k].length){ box.innerHTML='<div class="empty">아직 없어요</div>'; return; }
+      groups[k].forEach(function(u){ box.appendChild(ucard(u)); });
+    });
+    // 현황(대시보드) 지표
+    var soon=0, life=0;
+    all.forEach(function(u){ if(!u.expires_at){ life++; } else { var d=Math.ceil((u.expires_at-Date.now())/86400000); if(d>=0&&d<=30) soon++; } });
+    if($('m-total')){ $('m-total').textContent=all.length; $('m-personal').textContent=groups.personal.length; $('m-beauty').textContent=groups.beauty.length; $('m-brand').textContent=groups.brand.length; $('m-soon').textContent=soon; $('m-life').textContent=life; }
+    var rl=$('recent-list');
+    if(rl){ rl.innerHTML=''; if(!all.length){ rl.innerHTML='<div class="empty">아직 없어요</div>'; } else { all.slice(0,5).forEach(function(u){ rl.appendChild(ucard(u)); }); } }
+  }
+  $('refresh').onclick=loadList;
+  if($('refresh2')) $('refresh2').onclick=loadList;
+  if($('go-issue')) $('go-issue').onclick=function(){ switchWs('issue'); };
+  // 워크스페이스 탭 전환
+  function switchWs(name){
+    document.querySelectorAll('.ws-tab').forEach(function(t){ t.classList.toggle('on', t.getAttribute('data-ws')===name); });
+    document.querySelectorAll('.ws-pane').forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-pane')===name); });
+    try{ window.scrollTo(0,0); }catch(e){}
+  }
+  document.querySelectorAll('.ws-tab').forEach(function(t){ t.onclick=function(){ switchWs(t.getAttribute('data-ws')); }; });
+
+  // 로그인
+  function enter(){ $('login-ov').style.display='none'; loadList(); }
+  var lb=$('lg-btn');
+  lb.addEventListener('click', async function(){
+    var code=($('lg-code').value||'').trim().toUpperCase(), pin=($('lg-pin').value||'').trim();
+    var err=$('lg-err'); err.textContent='';
+    if(!code||!pin){ err.textContent='코드와 PIN을 입력하세요'; return; }
+    lb.disabled=true; lb.textContent='확인 중...';
+    try{
+      var hash=await window.laSha256(pin);
+      var res=await window.laRpc('li_master_login',{ p_code:code, p_pin_hash:hash });
+      if(res&&res.ok){ AUTH={code:code, pinHash:hash}; try{ sessionStorage.setItem('cmh-master',JSON.stringify(AUTH)); }catch(e){} enter(); }
+      else err.textContent=(res&&res.reason==='auth')?'마스터 코드/PIN이 맞지 않아요':'로그인 실패 ('+((res&&res.reason)||'SQL 미실행?')+')';
+    }catch(e){ err.textContent='연결 오류: '+e.message; }
+    lb.disabled=false; lb.textContent='로그인';
+  });
+  ['lg-code','lg-pin'].forEach(function(id){ $(id).addEventListener('keydown', function(e){ if(e.key==='Enter') lb.click(); }); });
+  $('logout').onclick=function(){ try{ sessionStorage.removeItem('cmh-master'); }catch(e){} location.reload(); };
+
+  // 비밀번호 변경 (설정 탭 인라인)
+  $('np-save').onclick=async function(){
+    if(!AUTH){ toast('로그인이 필요해요'); return; }
+    var a=$('np1').value, b=$('np2').value, e=$('np-err'); e.textContent='';
+    if(a.length<4){ e.textContent='4자 이상 입력하세요'; return; }
+    if(a!==b){ e.textContent='두 입력이 서로 달라요'; return; }
+    var btn=this; btn.disabled=true; var o=btn.textContent; btn.textContent='변경 중...';
+    try{
+      var nh=await window.laSha256(a);
+      var r=await window.laRpc('li_master_changepin',{ p_code:AUTH.code, p_old_hash:AUTH.pinHash, p_new_hash:nh });
+      if(r&&r.ok){ AUTH.pinHash=nh; try{ sessionStorage.setItem('cmh-master',JSON.stringify(AUTH)); }catch(_){}; $('np1').value=''; $('np2').value=''; toast('비밀번호 변경됨 ✓'); switchWs('home'); }
+      else e.textContent='변경 실패 ('+((r&&r.reason)||'SQL 미실행?')+')';
+    }catch(ex){ e.textContent='오류: '+ex.message; }
+    btn.disabled=false; btn.textContent=o;
+  };
+
+  // 자동 로그인 (저장된 마스터 재검증)
+  (async function(){ if(AUTH&&AUTH.code){ var r=await window.laRpc('li_master_login',{ p_code:AUTH.code, p_pin_hash:AUTH.pinHash }); if(r&&r.ok) enter(); } })();
+})();
+</script>
+</body>
+</html>
