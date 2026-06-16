@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 컨텐츠 허브 사이트맵 · 공개 핸들 페이지는 발행(pre-render, B단계) 때 자동 추가 -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://isuseong454-hub.github.io/content-hub/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

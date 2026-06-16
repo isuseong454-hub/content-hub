@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# 관리자/편집기는 색인 제외 (검색 노출 불필요)
+Disallow: /admin.html
+Disallow: /edit.html
+
+Sitemap: https://isuseong454-hub.github.io/content-hub/sitemap.xml
