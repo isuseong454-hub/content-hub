@@ -12,6 +12,7 @@
 <meta property="og:type" content="profile" />
 <meta property="og:site_name" content="컨텐츠 허브" />
 <meta property="og:title" content="컨텐츠 허브 · 나만의 콘텐츠 공간" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <meta property="og:description" content="콘텐츠로 안심을 쌓고, 예약·문의로 이어지는 나만의 공간" />
 <meta property="og:image" content="la-512.png" />
 <meta name="twitter:card" content="summary" />
@@ -36,7 +37,7 @@
   :root{
     /* 제목: 고전 세리프(영문 Newsreader) + 한글 명조(Nanum Myeongjo) */
     --serif:'Newsreader','Nanum Myeongjo','Iowan Old Style',Georgia,serif;
-    --sans:'Apple SD Gothic Neo','Malgun Gothic','Pretendard',system-ui,sans-serif;
+    --sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
     --shadow:0 2px 10px rgba(60,48,32,.06), 0 1px 3px rgba(60,48,32,.05);
   }
   /* ════ 분위기 테마 (개인이 설정에서 선택 · 10종 중 우선 5종) ════
@@ -53,6 +54,8 @@
   /* 밝은 라벤더 포인트색(brand·midnight) — 평평한 연보라 버튼은 흰 글자가 안 보이고 검은 글자는 칙칙함
      → 버튼 배경만 브랜드 그라데이션(파랑→보라→핑크)으로, 글자는 흰색. 포인트 텍스트색(--coral)은 그대로 밝게 유지 */
   html[data-theme="brand"], html[data-theme="midnight"]{ --coral-fill:linear-gradient(95deg,#3D7BFF,#9B3DFF,#FF3DC0); --on-coral:#fff; }
+  /* 버터플라이 — 형광 주황 단색이 너무 쨍 → 버튼만 깊은 앰버→번트오렌지 그라데이션 + 흰 글자 (강조 텍스트색 --coral은 유지) */
+  html[data-theme="butterfly"]{ --coral-fill:linear-gradient(100deg,#E2933E,#CF6B33,#B0492A); --on-coral:#fff; }
   html[data-theme="olive"]{
     --paper:#4B4D32; --surface:#F4F0E4; --ink:#2B2C1E; --muted:#7C7A63; --hair:#E2DCC9;
     --coral:#BE9242; --coral-soft:#EAE1C7;
@@ -158,6 +161,21 @@
     background-attachment:fixed;
   }
   html[data-theme="midnight"] .hh-text .kw{ background:linear-gradient(95deg,#7AA8FF,#A77BF0,#FF6FC0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; text-shadow:none; }
+  /* 버터플라이 (앰버 카오스 — 다크 웜블랙 + 황금→오렌지→레드 글로우 그라데이션) */
+  html[data-theme="butterfly"]{
+    --paper:#0a0612; --surface:#19101a; --ink:#F6ECDD; --muted:#b69d86; --hair:rgba(255,170,90,.16);
+    --coral:#FF9D3C; --coral-soft:rgba(255,140,50,.16);
+    --on-strong:#F6ECDD; --on-soft:#b69d86;
+    --ph1:#241526; --ph2:#2a1820; --ph3:#1c1018;
+  }
+  html[data-theme="butterfly"] body{
+    background:
+      radial-gradient(540px 540px at 50% 28%, rgba(255,160,60,.24), transparent 62%),
+      radial-gradient(420px 420px at 84% 86%, rgba(255,80,40,.16), transparent 64%),
+      radial-gradient(circle at 50% 0%, #1a0e1e 0%, #0a0612 56%, #05030a 100%);
+    background-attachment:fixed;
+  }
+  html[data-theme="butterfly"] .hh-text .kw{ background:linear-gradient(95deg,#FFD56A,#FF9D3C,#FF5E3A); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; text-shadow:none; }
   /* 엔비디아 (NVIDIA DNA 레퍼 — 다크 그린블랙 + 야광 초록 글로우) */
   html[data-theme="nvidia"]{
     --paper:#0A120B; --surface:#16231A; --ink:#EFF5EC; --muted:#93AC97; --hair:rgba(160,210,160,.20);
@@ -327,6 +345,7 @@
     color:var(--ink);
     line-height:1.6;
     padding:env(safe-area-inset-top) 0 96px;
+    font-variant-numeric:tabular-nums;
     -webkit-font-smoothing:antialiased;
     position:relative;
   }
@@ -394,6 +413,24 @@
   .pane{display:none;}
   .pane.active{display:block; animation:fade .22s ease;}
   @keyframes fade{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;}}
+
+  /* ── 스크롤 환영 모션 (구간마다 스르륵 등장) ── */
+  .reveal{opacity:0; transform:translateY(28px); will-change:opacity,transform;
+    transition:opacity .66s cubic-bezier(.22,1,.36,1), transform .66s cubic-bezier(.22,1,.36,1);}
+  .reveal.in{opacity:1; transform:none;}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
+  }
+
+  /* ── 편집 브릿지(?edit=1): 섹션 탭 편집 시안 B ── */
+  html[data-edit] .reveal{opacity:1 !important; transform:none !important;}
+  html[data-edit] .la-ed-sec{position:relative; cursor:pointer; outline:1.5px dashed transparent; outline-offset:4px; border-radius:13px;
+    transition:outline .14s ease, background .14s ease;}
+  html[data-edit] .la-ed-sec:hover, html[data-edit] .la-ed-sec.tapped{outline-color:rgba(167,139,255,.6); background:rgba(123,90,255,.06);}
+  html[data-edit] .la-ed-pen{position:absolute; top:7px; right:9px; z-index:6; background:#7B5AFF; color:#fff; font-size:10.5px; font-weight:700;
+    padding:3px 10px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .14s; box-shadow:0 3px 10px rgba(0,0,0,.4);}
+  html[data-edit] .la-ed-sec:hover .la-ed-pen{opacity:1;}
+  @media (hover:none){ html[data-edit] .la-ed-pen{opacity:.85;} }
 
   /* ── 콘텐츠 갤러리 캐러셀 (레퍼런스: 둥근 사진카드 가로 스크롤 + 높이 물결) ── */
   .gallery{
@@ -707,6 +744,9 @@
   .vid-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
   .cta-btn{display:inline-block; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:16px; font-weight:700; padding:15px 38px; border-radius:14px; text-decoration:none; box-shadow:0 8px 22px rgba(0,0,0,.18);}
   .cta-btn:active{transform:scale(.97);}
+  /* ── 토스식 누름 피드백 (전역) ── */
+  button,.cta-btn,.hh-cta,.resv-cta-btn,.loc-btn,.lead-btn,.cd-btn,.ev-s-btn,.svc2-btn,.navitem{transition:transform .08s ease;}
+  button:active,.cta-btn:active,.hh-cta:active,.resv-cta-btn:active,.loc-btn:active,.lead-btn:active,.cd-btn:active,.ev-s-btn:active,.navitem:active{transform:scale(.96);}
   .cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:62px; width:100%; max-width:520px; padding:8px 14px calc(8px + env(safe-area-inset-bottom)); z-index:33; box-sizing:border-box; pointer-events:none;}
   .cta-sticky a{pointer-events:auto; display:block; text-align:center; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:15.5px; font-weight:700; padding:14px; border-radius:14px; text-decoration:none; box-shadow:0 6px 22px rgba(0,0,0,.32);}
   .cd-card{text-align:center;}
@@ -912,6 +952,51 @@
   .ic-go{flex:0 0 auto; background:var(--coral-fill,var(--coral)); color:var(--on-coral); border:none; font-size:12px; font-weight:500; padding:8px 13px; border-radius:10px; cursor:pointer; font-family:var(--sans);}
 
   svg{display:block;}
+
+  /* 에디토리얼 룩북 */
+  .lookbook{margin:6px 0 16px;}
+  .lb-credit{text-align:center; font-size:11px; letter-spacing:.12em; color:var(--muted);}
+  .lb-credit b{color:var(--ink); font-weight:700;}
+  .lb-title{text-align:center; font-size:18px; font-weight:800; margin:6px 0 14px; color:var(--ink);}
+  .lb-title span{color:var(--coral); font-size:12px;}
+  .lb-grid{display:grid; grid-template-columns:1fr 1fr; gap:11px;}
+  .lbc{position:relative; aspect-ratio:3/4; border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:0 8px 24px rgba(0,0,0,.28); cursor:pointer;}
+  .lbc-photo{position:absolute; inset:0; background-size:cover; background-position:center;}
+  .lbc-empty{display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:30px;}
+  .lbc-video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .35s;}
+  .lbc[data-hasvid]:hover .lbc-video, .lbc.vplay .lbc-video{opacity:1;}
+  .lbc-corner{position:absolute; top:9px; left:9px; width:20px; height:20px; border-top:2px solid var(--coral); border-left:2px solid var(--coral); border-radius:3px 0 0 0; opacity:.9;}
+  .lbc-wm{position:absolute; top:10px; right:11px; font-size:8px; letter-spacing:.13em; color:rgba(255,255,255,.62); font-weight:700;}
+  .lbc-num{position:absolute; left:11px; bottom:44px; font-size:13px; font-weight:800; color:rgba(255,255,255,.85); z-index:1;}
+  .lbc-label{position:absolute; left:0; right:0; bottom:0; padding:10px 11px 11px; background:linear-gradient(to top, rgba(0,0,0,.82), transparent); z-index:1;}
+  .lbc-kr{font-size:14px; font-weight:800; color:#fff;}
+  .lbc-en{font-size:9px; letter-spacing:.15em; color:rgba(255,255,255,.72); margin-top:1px;}
+  .lbc-play{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.45); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; z-index:1; transition:.2s;}
+  .lbc.vplay .lbc-play{opacity:0;}
+
+  /* 랭킹 가격 */
+  .rank{margin:6px 0 16px;}
+  .rank-eyebrow{text-align:center; font-size:11px; letter-spacing:.16em; color:var(--coral); font-weight:700;}
+  .rank-title{text-align:center; font-size:20px; font-weight:800; margin:5px 0 14px; color:var(--ink);}
+  .rank-list{display:flex; flex-direction:column; gap:10px;}
+  .rk-row{display:flex; align-items:center; gap:13px; background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:11px 14px;}
+  .rk-th{width:52px; height:52px; border-radius:11px; flex:0 0 auto; background-size:cover; background-position:center; background-color:var(--coral-soft);}
+  .rk-th-e{display:flex; align-items:center; justify-content:center; color:var(--coral); font-weight:800; font-size:17px;}
+  .rk-info{flex:1; min-width:0;}
+  .rk-rank{font-size:10px; letter-spacing:.12em; color:var(--muted); font-weight:700;}
+  .rk-nm{font-size:15px; font-weight:800; color:var(--ink); margin-top:1px;}
+  .rk-mt{font-size:11.5px; color:var(--muted); margin-top:1px;}
+  .rk-pr{flex:0 0 auto; font-size:17px; font-weight:800; color:var(--coral); text-align:right; line-height:1;}
+  .rk-pr small{display:block; font-size:8.5px; letter-spacing:.08em; color:var(--on-coral); background:var(--coral-fill,var(--coral)); padding:2px 6px; border-radius:5px; margin-top:5px; font-weight:800;}
+
+  /* 매장 / 위치 */
+  .loc{margin:6px 0 16px; background:var(--surface); border:1px solid var(--hair); border-radius:16px; overflow:hidden;}
+  .loc-photo{width:100%; height:150px; background-size:cover; background-position:center;}
+  .loc-body{padding:15px 16px 16px;}
+  .loc-nm{font-size:16px; font-weight:800; color:var(--ink); letter-spacing:.02em;}
+  .loc-addr{font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5;}
+  .loc-hours{font-size:12.5px; color:var(--muted); margin-top:4px;}
+  .loc-btn{display:inline-block; margin-top:13px; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:13.5px; font-weight:700; padding:11px 20px; border-radius:11px; text-decoration:none;}
 </style>
 </head>
 <body>
@@ -1178,8 +1263,31 @@
       var hero = document.getElementById('home-hero');
       if(hero && hero.dataset.global){ hero.style.display = (id === 'home' && !hero.hidden) ? '' : 'none'; }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      var ap = document.querySelector('.pane.active'); if(ap){ setTimeout(function(){ revealScan(ap.children); }, 40); }
     });
   });
+
+  // ── 스크롤 환영 모션: 화면에 들어오는 구간을 스르륵 등장시킴 ──
+  var _rvIO=null;
+  function revealScan(els){
+    if(!('IntersectionObserver' in window) || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+    if(!_rvIO){
+      _rvIO=new IntersectionObserver(function(ents){
+        ents.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); _rvIO.unobserve(e.target); } });
+      }, {threshold:0.12, rootMargin:'0px 0px -7% 0px'});
+    }
+    var vh=window.innerHeight||800, n=0;
+    [].forEach.call(els, function(el){
+      if(!el || el.nodeType!==1 || el.classList.contains('reveal') || el.hidden) return;
+      var cs=getComputedStyle(el); if(cs.display==='none' || cs.visibility==='hidden') return;
+      el.classList.add('reveal');
+      var r=el.getBoundingClientRect();
+      if(r.top < vh*0.92 && r.bottom > 0){
+        (function(x,d){ setTimeout(function(){ x.classList.add('in'); }, 70+d*85); })(el, n++);
+      } else { _rvIO.observe(el); }
+    });
+  }
+  window.__revealScan = revealScan;
   // 아카이브 카테고리 칩 (지금은 보기용)
   document.querySelectorAll('.chip').forEach(function(c){
     c.addEventListener('click', function(){
@@ -1807,6 +1915,53 @@
       baToggle(gridEl);
       return wrap;
     },
+    lookbook: function(c){
+      var title=c[0]||'', credit=c[1]||'', wm=c[2]||'', cards=c[3]||[];
+      if(!cards.length) return null;
+      var wrap=document.createElement('div'); wrap.className='lookbook';
+      var head='';
+      if(credit) head+='<div class="lb-credit">BY <b>'+esc(credit)+'</b></div>';
+      if(title) head+='<h3 class="lb-title"><span>✦</span> '+esc(title)+' <span>✦</span></h3>';
+      var grid=cards.map(function(it,i){
+        var ph=it[0]||'', vid=it[1]||'', kr=it[2]||'', en=it[3]||'';
+        var num=(i+1<10?'0':'')+(i+1);
+        var media= ph?'<div class="lbc-photo" style="background-image:url('+esc(ph)+')"></div>':'<div class="lbc-photo lbc-empty">▦</div>';
+        var hasV= vid && /\.mp4($|\?|#)/i.test(vid);
+        var video= hasV ? '<video class="lbc-video" muted loop playsinline preload="metadata" src="'+esc(vid)+'"></video>' : '';
+        return '<article class="lbc"'+(hasV?' data-hasvid="1"':'')+'>'+media+video+'<div class="lbc-corner"></div>'+(wm?'<div class="lbc-wm">'+esc(wm)+'</div>':'')+'<div class="lbc-num">'+num+'</div><div class="lbc-label"><div class="lbc-kr">'+esc(kr)+'</div>'+(en?'<div class="lbc-en">'+esc(en)+'</div>':'')+'</div>'+(hasV?'<div class="lbc-play">▶</div>':'')+'</article>';
+      }).join('');
+      wrap.innerHTML=head+'<div class="lb-grid">'+grid+'</div>';
+      [].forEach.call(wrap.querySelectorAll('.lbc[data-hasvid]'), function(card){
+        var v=card.querySelector('.lbc-video'); if(!v) return;
+        card.addEventListener('mouseenter', function(){ v.play().catch(function(){}); });
+        card.addEventListener('mouseleave', function(){ if(!card.classList.contains('vplay')) v.pause(); });
+        card.addEventListener('click', function(){ if(v.paused){ v.play().catch(function(){}); card.classList.add('vplay'); } else { v.pause(); card.classList.remove('vplay'); } });
+      });
+      return wrap;
+    },
+    ranking: function(c){
+      var eyebrow=c[0]||'', title=c[1]||'', items=c[2]||[];
+      if(!items.length) return null;
+      var wrap=document.createElement('div'); wrap.className='rank';
+      var head=(eyebrow?'<div class="rank-eyebrow">— '+esc(eyebrow)+' —</div>':'')+(title?'<h3 class="rank-title">'+esc(title)+'</h3>':'');
+      var rows=items.map(function(it,i){
+        var th=it[0]||'', nm=it[1]||'', mt=it[2]||'', pr=it[3]||'', bd=it[4]||'';
+        var rank=(i+1<10?'0':'')+(i+1);
+        var thumb= th?'<div class="rk-th" style="background-image:url('+esc(th)+')"></div>':'<div class="rk-th rk-th-e">'+rank+'</div>';
+        return '<div class="rk-row">'+thumb+'<div class="rk-info"><div class="rk-rank">RANK '+rank+'</div><div class="rk-nm">'+esc(nm)+'</div>'+(mt?'<div class="rk-mt">'+esc(mt)+'</div>':'')+'</div>'+(pr?'<div class="rk-pr">'+esc(pr)+(bd?'<small>'+esc(bd)+'</small>':'')+'</div>':'')+'</div>';
+      }).join('');
+      wrap.innerHTML=head+'<div class="rank-list">'+rows+'</div>';
+      return wrap;
+    },
+    location: function(c){
+      var name=c[0]||'', addr=c[1]||'', hours=c[2]||'', link=c[3]||'', photo=c[4]||'';
+      if(!name && !addr) return null;
+      var wrap=document.createElement('div'); wrap.className='loc';
+      var ph= photo?'<div class="loc-photo" style="background-image:url('+esc(photo)+')"></div>':'';
+      var btn= link?'<a class="loc-btn" href="'+esc(link)+'" target="_blank" rel="noopener">📍 네이버 지도로 보기 →</a>':'';
+      wrap.innerHTML=ph+'<div class="loc-body">'+(name?'<div class="loc-nm">'+esc(name)+'</div>':'')+(addr?'<div class="loc-addr">'+esc(addr)+'</div>':'')+(hours?'<div class="loc-hours">'+esc(hours)+'</div>':'')+btn+'</div>';
+      return wrap;
+    },
     cardnews: function(c){
       var posts=c[0]||[]; if(!posts.length) return null;
       var wrap=document.createElement('div'); wrap.style.margin='4px 0 13px';
@@ -1854,8 +2009,10 @@
     var sampleHome={gallery:1,links:1,channels:1};
     blocks.forEach(function(b){
       if(b.on===false) return;
-      if(sampleHome[b.type]){ var el=home.querySelector('[data-block="'+b.type+'"]'); if(el) home.appendChild(el); }
-      else if(EXTRA[b.type]){ var ex=EXTRA[b.type](b.content||[], b.layout||''); if(ex) home.appendChild(ex); }
+      var node=null;
+      if(sampleHome[b.type]){ node=home.querySelector('[data-block="'+b.type+'"]'); if(node) home.appendChild(node); }
+      else if(EXTRA[b.type]){ var ex=EXTRA[b.type](b.content||[], b.layout||''); if(ex){ home.appendChild(ex); node=ex; } }
+      if(node && typeof EDIT_MODE!=='undefined' && EDIT_MODE) node.setAttribute('data-bt', b.type);
     });
   }
 
@@ -2137,9 +2294,9 @@
     sec.querySelectorAll('[data-pid]').forEach(function(a){ a.onclick=function(){ openPostModal(a.getAttribute('data-pid')); }; });
   }
 
-  window.laRpc('li_public_get', { p_handle: handle }).then(function(res){
-    if(!res || !res.ok || !res.data) return;   // 저장된 데이터 없으면 기존 샘플 유지
-    var d = res.data, p = d.profile || {};
+  function applyPublicData(d){
+    if(!d) return;
+    var p = d.profile || {};
     var nm = p.name || d.name;
     var nameEl = document.querySelector('.name'); if(nameEl && nm) nameEl.textContent = nm;
     var tagEl = document.querySelector('.tag'); if(tagEl && p.bio) tagEl.innerHTML = esc(p.bio).replace(/\n/g, '<br>');
@@ -2174,7 +2331,47 @@
         if(post) setTimeout(function(){ showIntentCard(post); }, 850);
       }
     }
-  }).catch(function(){});
+    // 스크롤 환영 모션 — 모든 블록·예약 렌더 후 한 번에 스캔 (편집 모드에선 끔)
+    if(!EDIT_MODE) setTimeout(function(){
+      var els=[];
+      var heroG=document.getElementById('home-hero'); if(heroG && heroG.dataset.global && !heroG.hidden) els.push(heroG);
+      var prof=document.querySelector('.profile'); if(prof) els.push(prof);
+      var home=document.querySelector('[data-pane="home"]'); if(home) [].push.apply(els, [].slice.call(home.children));
+      if(window.__revealScan) window.__revealScan(els);
+    }, 70);
+  }
+  window.__applyPublicData = applyPublicData;
+
+  // ── 편집 브릿지(?edit=1): 부모(편집기)가 보낸 데이터를 실시간 렌더 + 섹션 탭 보고 ──
+  var EDIT_MODE=false; try{ EDIT_MODE = new URLSearchParams(location.search).get('edit')==='1'; }catch(e){}
+  if(EDIT_MODE){
+    document.documentElement.setAttribute('data-edit','1');
+    window.addEventListener('message', function(ev){
+      var m=ev.data||{};
+      if(m && m.type==='la-edit-data'){ try{ applyPublicData(m.data); }catch(e){} setTimeout(setupEditTaps, 160); }
+    });
+    try{ parent.postMessage({type:'la-edit-ready'}, '*'); }catch(e){}
+  } else {
+    window.laRpc('li_public_get', { p_handle: handle }).then(function(res){
+      if(!res || !res.ok || !res.data) return;   // 저장된 데이터 없으면 기존 샘플 유지
+      applyPublicData(res.data);
+    }).catch(function(){});
+  }
+
+  // 편집 모드: 섹션마다 탭하면 부모(편집기)에 알림 — data-bt = 블록 타입
+  function setupEditTaps(){
+    if(!EDIT_MODE) return;
+    var prof=document.querySelector('.profile'); if(prof && !prof.getAttribute('data-bt')) prof.setAttribute('data-bt','profile');
+    var heroEl=document.getElementById('home-hero'); if(heroEl && !heroEl.hidden && getComputedStyle(heroEl).display!=='none' && !heroEl.getAttribute('data-bt')) heroEl.setAttribute('data-bt','hero');
+    [].forEach.call(document.querySelectorAll('[data-bt]'), function(el){
+      if(getComputedStyle(el).display==='none') return;
+      if(el.__taps) return; el.__taps=1;
+      el.classList.add('la-ed-sec');
+      var pen=document.createElement('span'); pen.className='la-ed-pen'; pen.textContent='✎ 수정'; el.appendChild(pen);
+      el.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-tap', bt:el.getAttribute('data-bt')}, '*'); }catch(_){} }, true);
+    });
+  }
+  window.__setupEditTaps = setupEditTaps;
 })();
 </script>
 </body>

@@ -244,9 +244,8 @@
 
       <div class="gen-result" id="gen-result">
         <div class="gr-row"><span class="gr-k">코드</span><span class="gr-v" id="r-code">—</span><span class="gr-copy" id="copy-code">복사</span></div>
-        <div class="gr-row"><span class="gr-k">PIN</span><span class="gr-v" id="r-pin">—</span><span class="gr-copy" id="copy-pin">복사</span></div>
-        <div class="gr-note" id="r-note">고객에게 코드와 PIN을 전달하세요. 고객은 edit.html에서 로그인합니다.</div>
-        <button class="gr-copy" id="copy-both" style="margin-top:10px; width:100%; padding:9px;">코드+PIN 함께 복사</button>
+        <div class="gr-note" id="r-note">고객에게 <b>코드만</b> 전달하세요. 고객이 edit.html에서 첫 로그인 때 <b>PIN을 직접 설정</b>합니다.</div>
+        <button class="gr-copy" id="copy-both" style="margin-top:10px; width:100%; padding:9px;">코드 복사</button>
       </div>
     </div>
     </div><!-- /issue pane -->
@@ -309,22 +308,21 @@
     if(!name){ toast('이름을 입력하세요'); return; }
     var btn=this; btn.disabled=true; var o=btn.textContent; btn.textContent='생성 중...';
     try{
-      var pin=genPin(); var pinHash=await window.laSha256(pin);
       var exp=expiresFromDays(days);
       var res=null, code='';
       for(var tries=0; tries<5; tries++){
         code=genCode();
-        res=await window.laRpc('li_master_create',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:code, p_pin_hash:pinHash, p_name:name, p_industry:industry, p_expires_at:exp });
+        res=await window.laRpc('li_master_create',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:code, p_pin_hash:'', p_name:name, p_industry:industry, p_expires_at:exp });
         if(res&&res.ok) break;
         if(res&&res.reason==='exists') continue;     // 중복이면 재생성
         break;
       }
       if(res&&res.ok){
-        lastCode=code; lastPin=pin;
-        $('r-code').textContent=code; $('r-pin').textContent=pin;
+        lastCode=code;
+        $('r-code').textContent=code;
         $('gen-result').classList.add('show');
         $('f-name').value='';
-        toast('코드 생성 완료 ✓');
+        toast('코드 생성 완료 ✓ (PIN은 고객이 첫 로그인 때 설정)');
         loadList();
       } else if(res&&res.reason==='auth'){ toast('마스터 인증 만료 · 다시 로그인'); }
       else { toast('생성 실패 ('+((res&&res.reason)||'SQL 미실행?')+')'); }
@@ -332,8 +330,7 @@
     btn.disabled=false; btn.textContent=o;
   });
   $('copy-code').onclick=function(){ copy(lastCode); };
-  $('copy-pin').onclick=function(){ copy(lastPin); };
-  $('copy-both').onclick=function(){ copy('코드 '+lastCode+' / PIN '+lastPin); };
+  var _cb=$('copy-both'); if(_cb) _cb.onclick=function(){ copy(lastCode); };
 
   // 목록
   function dday(exp){
