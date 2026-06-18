@@ -244,7 +244,48 @@
     background:linear-gradient(135deg, rgba(61,123,255,.32), rgba(255,61,192,.32)); box-shadow:0 0 16px rgba(123,60,230,.4);}
   .onb-card .onb-h{display:block; font-size:15.5px; font-weight:700; color:#F0ECFA;}
   .onb-card .onb-d{display:block; font-size:12px; color:#9b94b8; margin-top:3px; line-height:1.45;}
+  /* 홈 시작 스타일 카드 (세로형 + 미니 미리보기) */
+  .onb-card.sty{flex-direction:column; align-items:stretch; gap:9px; padding:13px 13px 11px; margin-bottom:10px;}
+  .onb-card.sty .onb-top{display:flex; align-items:center; gap:9px;}
+  .onb-card.sty .onb-ico{width:34px; height:34px; flex:0 0 34px; font-size:18px; border-radius:10px;}
+  .onb-card.sty .onb-h{flex:1; font-size:14.5px;}
+  .onb-card .onb-go{color:#A78BFF; font-size:16px;}
+  .onb-card .onb-who{display:block; font-size:11px; color:#9b94b8; text-align:left;}
+  .onb-mini{display:flex; gap:7px; height:62px; padding:8px; border-radius:11px; background:rgba(10,8,32,.6); border:1px solid rgba(160,140,230,.16); overflow:hidden;}
+  .omph{flex:1; border-radius:7px;}
+  .omph.g1{background:linear-gradient(150deg,#3a2d6e,#241a48);} .omph.g2{background:linear-gradient(150deg,#5b3a6e,#2c1a40);}
+  .omph.g3{background:linear-gradient(150deg,#2d4a6e,#1a2640);} .omph.g6{background:linear-gradient(150deg,#6e3a52,#401a2e);}
+  .omav{width:34px; height:34px; flex:0 0 34px; border-radius:50%; background:linear-gradient(135deg,#3a2d6e,#1f1840);}
+  .omlines{flex:1; display:flex; flex-direction:column; justify-content:center; gap:5px;}
+  .omline{height:6px; border-radius:4px; background:rgba(160,140,230,.22);}
+  .omline.lg{height:10px; background:rgba(167,139,255,.5); width:80%;}
+  .omline.sm{width:55%;}
+  .ombtn{height:16px; width:60px; border-radius:6px; background:linear-gradient(95deg,#5B8CFF,#9B5AFF,#FF6FC0); margin-top:3px;}
+  .omquote{flex:1; display:flex; align-items:center; font-size:11.5px; color:#A78BFF; font-weight:700;}
+  .onb-card.sty.blank .onb-mini{display:none;}
+  .onb-x{position:absolute; top:12px; right:14px; z-index:3; background:rgba(255,255,255,.06); border:1px solid rgba(160,140,230,.2); color:#cdc4ee; width:30px; height:30px; border-radius:50%; font-size:14px; cursor:pointer; display:none;}
+  .onb-ov.can-cancel .onb-x{display:block;}
+  .onb-warn{display:none; background:rgba(255,180,80,.1); border:1px solid rgba(255,180,80,.32); color:#FFCE85; font-size:11.5px; line-height:1.5; border-radius:10px; padding:9px 11px; margin:0 0 12px; text-align:left;}
+  .onb-ov.restart .onb-warn{display:block;}
   .onb-skip{margin-top:8px; background:none; border:none; color:#7a6fa0; font-size:12px; cursor:pointer; font-family:var(--sans);}
+  /* 해시태그 예시·작성법 가이드 */
+  .mini-guide-btn{font-size:10.5px; color:var(--coral); background:var(--coral-soft); border:1px solid rgba(167,139,255,.35); border-radius:7px; padding:2px 8px; cursor:pointer; font-family:var(--sans); font-weight:600; vertical-align:middle;}
+  .mini-guide-btn:active{transform:scale(.96);}
+  .tg-sheet .tg-h{font-size:13px; font-weight:700; margin:15px 0 7px; color:var(--ink);}
+  .tg-sheet p{font-size:12.5px; color:var(--muted); line-height:1.6; margin:0 0 6px;}
+  .tg-sheet p b, .tg-src b{color:var(--ink);}
+  .tg-src{font-size:12px; color:var(--muted); line-height:1.8; margin:0 0 4px;}
+  .tg-exlbl{font-size:12px; color:var(--ink); font-weight:600; margin:11px 0 6px;}
+  .tg-chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .tg-chip{font-size:11.5px; color:var(--coral); background:var(--coral-soft); border:1px solid rgba(167,139,255,.3); border-radius:999px; padding:5px 11px; cursor:pointer; font-family:var(--sans);}
+  .tg-chip:active{transform:scale(.95);}
+  .tg-hint{font-size:11px; color:var(--muted); margin-top:10px; text-align:center;}
+  .tg-hint b{color:var(--coral);}
+  .pg-item{display:flex; align-items:flex-start; gap:11px; padding:10px 2px; border-bottom:1px solid var(--hair);}
+  .pg-item:last-of-type{border-bottom:none;}
+  .pg-ic{font-size:20px; flex:0 0 auto; line-height:1.3;}
+  .pg-item b{font-size:13px; color:var(--ink); display:block;}
+  .pg-d{font-size:11.5px; color:var(--muted); display:block; margin-top:2px;}
   .lg-admin{position:absolute; top:14px; right:14px; display:flex; align-items:center; gap:5px; color:#d6d0ee; font-size:12.5px; text-decoration:none;
     background:rgba(255,255,255,.08); border:1px solid rgba(160,140,230,.3); border-radius:999px; padding:7px 13px; transition:background .15s;}
   .lg-admin:hover{background:rgba(255,255,255,.16);}
@@ -426,6 +467,15 @@
   .le-bar .le-save:active{transform:scale(.96);}
   .le-bar .le-x{font-size:23px; color:var(--ink); cursor:pointer; line-height:1; background:none; border:none; padding:0 2px;}
   .le-hint{flex:0 0 auto; text-align:center; font-size:11.5px; color:var(--muted); padding:8px 12px; background:var(--surface2,#1e1840); border-bottom:1px solid var(--hair);}
+  .le-tip{font-size:11.5px; color:var(--muted); margin-left:auto; margin-right:6px;}
+  .le-tip b{color:var(--coral);}
+  /* 하단 독 (토스식 · 아이콘 + 글자) */
+  .le-dock{flex:0 0 auto; display:flex; align-items:center; justify-content:space-around; gap:3px; padding:8px 8px calc(10px + env(safe-area-inset-bottom)); background:var(--surface); border-top:1px solid var(--hair);}
+  .le-d{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:var(--muted); font-size:10.5px; font-family:var(--sans); font-weight:600; cursor:pointer; padding:4px 2px; min-width:0;}
+  .le-d .di{font-size:19px; line-height:1;}
+  .le-d.main{color:var(--coral);}
+  .le-d.is-on{color:var(--ink);}
+  .le-d:active{transform:scale(.92);}
   .le-frame{flex:1; position:relative; background:#0a0820; overflow:hidden;}
   .le-frame iframe{width:100%; height:100%; border:0; display:block; background:#0a0820;}
   .le-load{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; z-index:2;}
@@ -639,19 +689,32 @@
   <!-- 온보딩 (첫 진입 시 분야 선택 → 프리셋 자동) -->
   <div class="onb-ov" id="onboard-ov">
     <div class="onb-wrap">
-      <div class="onb-t">어떤 분야로 시작할까요?</div>
-      <div class="onb-s">고르면 그 분야에 맞는 페이지가 자동으로 준비돼요<br>나중에 언제든 바꿀 수 있어요</div>
-      <button class="onb-card" data-ind="personal">
-        <span class="onb-ico">👤</span>
-        <span><span class="onb-h">개인 크리에이터</span><span class="onb-d">공부·콘텐츠가 자산으로 쌓이는 나만의 허브</span></span>
+      <button type="button" class="onb-x" id="onb-x" aria-label="닫기">✕</button>
+      <div class="onb-t">어떤 모습으로 시작할까요?</div>
+      <div class="onb-s">지금 골라도 나중에 다 바꿀 수 있어요</div>
+      <div class="onb-warn" id="onb-warn">⚠️ 새 스타일을 고르면 <b>지금 홈 구성이 바뀌어요</b> (채운 내용이 지워질 수 있어요)</div>
+      <button class="onb-card sty" data-style="photo">
+        <span class="onb-top"><span class="onb-ico">📸</span><span class="onb-h">사진으로 보여줄래요</span><span class="onb-go">›</span></span>
+        <span class="onb-mini"><span class="omph g1"></span><span class="omph g2"></span><span class="omph g6"></span></span>
+        <span class="onb-who">뷰티·헤어·시술·음식·공간</span>
       </button>
-      <button class="onb-card" data-ind="beauty">
-        <span class="onb-ico">💇</span>
-        <span><span class="onb-h">뷰티 크리에이터</span><span class="onb-d">헤어·뷰티 전문성과 신뢰를 쌓아 예약으로</span></span>
+      <button class="onb-card sty" data-style="profile">
+        <span class="onb-top"><span class="onb-ico">👤</span><span class="onb-h">나를 믿고 맡기게 할래요</span><span class="onb-go">›</span></span>
+        <span class="onb-mini"><span class="omav"></span><span class="omlines"><span class="omline lg"></span><span class="omline"></span><span class="omline sm"></span></span></span>
+        <span class="onb-who">코칭·PT·세무·1인 전문가</span>
       </button>
-      <button class="onb-card" data-ind="brand">
-        <span class="onb-ico">🏪</span>
-        <span><span class="onb-h">브랜드·매장</span><span class="onb-d">매장·브랜드 소개와 예약·문의로 연결</span></span>
+      <button class="onb-card sty" data-style="hook">
+        <span class="onb-top"><span class="onb-ico">✨</span><span class="onb-h">한 줄로 꽂고 바로 받을래요</span><span class="onb-go">›</span></span>
+        <span class="onb-mini"><span class="omlines"><span class="omline lg" style="width:92%"></span><span class="omline lg" style="width:66%;background:rgba(167,139,255,.3)"></span><span class="ombtn"></span></span></span>
+        <span class="onb-who">강의·전자책·이벤트·단일상품</span>
+      </button>
+      <button class="onb-card sty" data-style="content">
+        <span class="onb-top"><span class="onb-ico">✍️</span><span class="onb-h">콘텐츠로 팬을 모을래요</span><span class="onb-go">›</span></span>
+        <span class="onb-mini"><span class="omquote">"내 관점을 한 문장으로"</span><span class="omph g3" style="flex:0 0 64px;height:40px"></span></span>
+        <span class="onb-who">작가·유튜버·뉴스레터</span>
+      </button>
+      <button class="onb-card sty blank" data-style="blank">
+        <span class="onb-top"><span class="onb-ico">✏️</span><span class="onb-h">빈 페이지로 직접 만들래요</span><span class="onb-go">›</span></span>
       </button>
       <button class="onb-skip" id="onb-skip">일단 둘러볼게요 →</button>
     </div>
@@ -726,8 +789,8 @@
       </div>
       <div id="home-version-ui">
       <div class="tpl-bar" id="tpl-bar">
-        <span class="tpl-bar-l">🏠 홈 템플릿 · <b id="tpl-cur-name">문제 기반 랜딩</b><span class="vs-live" id="tpl-live-mark" style="display:none;">● 공개중</span></span>
-        <button type="button" class="tpl-bar-btn" id="tpl-toggle">다른 템플릿 ▾</button>
+        <span class="tpl-bar-l">🏠 내 홈 구성</span>
+        <button type="button" class="tpl-bar-btn" id="restart-style">🎨 다른 스타일로 다시 시작</button>
       </div>
       <div class="ver-seg collapsed" id="ver-seg">
         <button class="ht-card" data-ht="creator"><span class="seg-ic">🎨</span>크리에이터 홈</button>
@@ -789,7 +852,8 @@
     <div id="pw-featured" style="display:none;"></div>
 
     <div class="pw-pane on" data-pwpane="archive">
-      <div class="vhint" style="margin:2px 2px 12px; line-height:1.5;">랜딩·후기·스타일·공지·글을 <b>게시물</b>로. 손님 홈에 <b>카드</b>로 뜨고 눌러 펼쳐져요. (꾹 눌러 순서 변경)</div>
+      <div class="vhint" style="margin:2px 2px 8px; line-height:1.5;">랜딩·후기·스타일·공지·글을 <b>게시물</b>로. 손님 홈에 <b>카드</b>로 뜨고 눌러 펼쳐져요. (꾹 눌러 순서 변경)</div>
+      <button type="button" id="arc-guide-btn" class="secbtn" style="width:100%; margin-bottom:12px; justify-content:center; gap:6px; background:var(--coral-soft); border:1px solid rgba(167,139,255,.35); color:var(--coral);">✨ 뭘 올리지? · 아카이브 채우는 법</button>
       <div class="grp-h-lbl">아카이브 보기 방식 <span style="font-weight:400;">· 손님 아카이브 탭에 보이는 형태</span></div>
       <div class="rs-tabs" id="arcview-seg" style="margin-bottom:14px;">
         <button type="button" class="av-tab on" data-av="cards">🃏 카드</button>
@@ -801,7 +865,8 @@
     </div>
 
     <div class="pw-pane" data-pwpane="product">
-      <div class="vhint" style="margin:2px 2px 12px; line-height:1.5;">손님 <b>제품</b> 탭에 뜨는 추천. <b>쿠팡 파트너</b>(수수료 고지 자동)와 <b>내 제품</b>을 따로 관리해요. 사진도 넣을 수 있어요.</div>
+      <div class="vhint" style="margin:2px 2px 8px; line-height:1.5;">손님 <b>제품</b> 탭에 뜨는 추천. <b>쿠팡 파트너</b>(수수료 고지 자동)와 <b>내 제품</b>을 따로 관리해요. 사진도 넣을 수 있어요.</div>
+      <button type="button" id="prod-guide-btn" class="secbtn" style="width:100%; margin-bottom:12px; justify-content:center; gap:6px; background:var(--coral-soft); border:1px solid rgba(167,139,255,.35); color:var(--coral);">✨ 어떤 걸 팔 수 있나요? · 예시 보기</button>
       <div id="prod-lib"></div>
     </div>
 
@@ -911,6 +976,13 @@
       <button type="button" id="add-more-btn" style="width:100%; margin:8px 0 2px; padding:11px; background:transparent; border:1px dashed var(--hair); border-radius:11px; color:var(--coral); font-family:var(--sans); font-size:12.5px; font-weight:600; cursor:pointer;">＋ 전체 구성 보기 ▾</button>
 
       <div id="add-all" style="display:none;">
+      <div class="tcat">✨ 통째로 추가 <span style="font-weight:400; color:var(--muted);">· 검증된 순서대로 쫙</span></div>
+      <div class="tgrid">
+        <div class="tpl imp" data-set="hook"><span class="tic">✨</span><span><span class="tn">문제 기반 랜딩 (전체)</span><span class="ts">공감→원인→전문가→해결→예약 풀세트</span></span></div>
+        <div class="tpl" data-set="photo"><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
+        <div class="tpl" data-set="profile"><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
+        <div class="tpl" data-set="content"><span class="tic">✍️</span><span><span class="tn">콘텐츠·구독형 세트</span><span class="ts">세계관→콘텐츠→구독</span></span></div>
+      </div>
       <div class="tcat">전문가 · 신뢰 <span style="font-weight:400; color:var(--muted);">· 설득 비용을 줄여요</span></div>
       <div class="tgrid">
         <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력·숫자</span></span></div>
@@ -971,6 +1043,59 @@
     </div>
   </div>
 
+  <!-- 고민 해시태그 예시·작성법 가이드 -->
+  <div class="ov" id="tag-guide-ov">
+    <div class="sheet tg-sheet">
+      <div class="sheet-h"><span class="t">✨ 고민 해시태그 — 예시·작성법</span><span class="x" data-tgclose>×</span></div>
+      <div class="tg-h">핵심 — 손님이 검색창에 치는 단어 그대로</div>
+      <p>예쁜 꾸밈말(❌ <b>#예쁜머리</b>)보다, 손님 머릿속 <b>고민 단어</b>(✅ <b>#갈라지는앞머리</b>)가 훨씬 강해요. "어 이거 내 얘긴데?" 하고 멈춰요. <b>추측 말고 손님 말 그대로.</b></p>
+      <div class="tg-h">어디서 뽑나</div>
+      <div class="tg-src">① 네이버·유튜브 <b>검색 자동완성</b><br>② 상담 때 <b>손님이 한 말</b> 그대로 메모<br>③ 댓글·리뷰·DM에서 <b>반복되는 단어</b><br>④ 사진 찍었으면 그 사진의 <b>고민/결과</b>를 태그로 (전후사진 → <b>#앞머리교정전후</b>)</div>
+      <div class="tg-h">눌러서 바로 채우기</div>
+      <div class="tg-exlbl">💇 헤어·뷰티</div>
+      <div class="tg-chips"><span class="tg-chip">갈라지는앞머리</span><span class="tg-chip">앞머리교정</span><span class="tg-chip">묶을때이쁜머리</span><span class="tg-chip">얼굴형커버컷</span><span class="tg-chip">시스루뱅</span></div>
+      <div class="tg-exlbl">🏋️ 운동·PT</div>
+      <div class="tg-chips"><span class="tg-chip">무릎안아픈운동</span><span class="tg-chip">직장인다이어트</span><span class="tg-chip">식단없이감량</span><span class="tg-chip">자세교정</span></div>
+      <div class="tg-exlbl">☕ 카페·음식</div>
+      <div class="tg-chips"><span class="tg-chip">혼자가기좋은</span><span class="tg-chip">콘센트있는카페</span><span class="tg-chip">디저트맛집</span><span class="tg-chip">분위기좋은</span></div>
+      <div class="tg-hint">칩을 누르면 위 "고민 해시태그" 칸에 바로 들어가요 · 3~5개가 적당</div>
+    </div>
+  </div>
+
+  <!-- 상품화 예시 가이드 -->
+  <div class="ov" id="prod-guide-ov">
+    <div class="sheet tg-sheet">
+      <div class="sheet-h"><span class="t">✨ 어떤 걸 팔 수 있나요?</span><span class="x" data-pgclose>×</span></div>
+      <p>신뢰가 쌓인 사람에게 <b>자연스럽게 연결</b>되는 게 핵심이에요. 거창할 필요 없어요 — 정리된 노하우 하나면 시작이에요.</p>
+      <div class="pg-item"><span class="pg-ic">📕</span><span><b>전자책 · PDF</b><span class="pg-d">정리된 노하우·가이드 (가장 시작하기 쉬움)</span></span></div>
+      <div class="pg-item"><span class="pg-ic">🎓</span><span><b>온라인 강의</b><span class="pg-d">체계적 교육 콘텐츠 · 클래스</span></span></div>
+      <div class="pg-item"><span class="pg-ic">💬</span><span><b>컨설팅 · 코칭</b><span class="pg-d">1:1 맞춤 · 단가 높음</span></span></div>
+      <div class="pg-item"><span class="pg-ic">👥</span><span><b>멤버십 · 커뮤니티</b><span class="pg-d">같은 관심사 사람들 · 반복 수익</span></span></div>
+      <div class="pg-item"><span class="pg-ic">🧰</span><span><b>디지털 제품</b><span class="pg-d">템플릿 · 노션 · 도구 · 자동 판매</span></span></div>
+      <div class="pg-item"><span class="pg-ic">🎁</span><span><b>서비스</b><span class="pg-d">대행 · 제작 · 맞춤 작업</span></span></div>
+      <div class="pg-item"><span class="pg-ic">🛒</span><span><b>추천 제품 (쿠팡)</b><span class="pg-d">내가 안 만들어도 됨 · 수수료 수익</span></span></div>
+      <div class="tg-hint">처음엔 <b>1개만.</b> 전자책·강의가 진입이 제일 쉬워요 · "＋ 내 제품 추가"로 등록</div>
+    </div>
+  </div>
+
+  <!-- 아카이브 채우는 법 가이드 -->
+  <div class="ov" id="arc-guide-ov">
+    <div class="sheet tg-sheet">
+      <div class="sheet-h"><span class="t">✨ 아카이브, 뭘 올리지?</span><span class="x" data-acclose>×</span></div>
+      <p>손님이 <b>"오 도움되네!"</b> 하고 신뢰가 쌓이는 글들이에요. 거창할 필요 없어요 — 하나씩 쌓으면 그게 <b>자산</b>이 돼요.</p>
+      <div class="tg-h">이런 걸 올려요 (먼저 가치 주기)</div>
+      <div class="pg-item"><span class="pg-ic">📘</span><span><b>가이드 · 튜토리얼</b><span class="pg-d">"이렇게 하면 돼요" 노하우</span></span></div>
+      <div class="pg-item"><span class="pg-ic">✅</span><span><b>체크리스트</b><span class="pg-d">놓치기 쉬운 것 정리</span></span></div>
+      <div class="pg-item"><span class="pg-ic">📝</span><span><b>정리 글 · 요약</b><span class="pg-d">복잡한 걸 쉽게 풀어주기</span></span></div>
+      <div class="pg-item"><span class="pg-ic">📸</span><span><b>사례 · 후기</b><span class="pg-d">전후·결과 (가장 강력)</span></span></div>
+      <div class="pg-item"><span class="pg-ic">🎁</span><span><b>무료 자료</b><span class="pg-d">양식·템플릿·체크표</span></span></div>
+      <div class="pg-item"><span class="pg-ic">💬</span><span><b>자주 받는 질문 답</b><span class="pg-d">상담 때 반복되는 것</span></span></div>
+      <div class="tg-h">주제(카테고리)는 손님이 칩으로 골라봐요</div>
+      <div class="tg-src">글마다 "주제"를 적으면 아카이브에 <b>탭(칩)</b>이 자동 생겨요. 본인 분야로:<br>💇 헤어 → <b>앞머리 · 펌 · 염색 · 홈케어</b><br>✍️ 크리에이터 → <b>공부법 · 마케팅 · 생산성 · 후기</b></div>
+      <div class="tg-hint">처음엔 <b>1~2개만.</b> 제목엔 손님이 검색하는 "고민 단어"를 넣으면 잘 띄어요</div>
+    </div>
+  </div>
+
   <!-- 비밀번호(PIN) 변경 -->
   <div class="ov" id="pinchg-ov">
     <div class="sheet">
@@ -1020,7 +1145,7 @@
         <div class="fld"><input id="hero-text" placeholder="후킹 문구 (예: 공부가 *돈이 되는* 순간)" value="공부가 *돈이 되는* 순간"></div>
         <div class="vhint" style="text-align:left; margin:-4px 2px 0;">*별표*로 감싼 단어는 포인트 색으로 강조돼요</div>
 
-        <div class="fld" style="margin-top:10px;"><label>고민 해시태그 <span style="color:var(--muted);">· 쉼표로 구분 (선택)</span></label><input id="hero-tags" placeholder="예: 갈라지는앞머리, 앞머리교정, 헤어고민"></div>
+        <div class="fld" style="margin-top:10px;"><label>고민 해시태그 <span style="color:var(--muted);">· 쉼표로 구분 (선택)</span> <button type="button" id="tag-guide-btn" class="mini-guide-btn">✨ 예시·작성법</button></label><input id="hero-tags" placeholder="예: 갈라지는앞머리, 앞머리교정, 헤어고민"></div>
         <div class="fld"><label>히어로 버튼 글자 <span style="color:var(--muted);">· 선택</span></label><input id="hero-cta-text" placeholder="예: 상담 · 예약하기"></div>
         <div class="fld"><label>히어로 버튼 링크</label><input id="hero-cta-link" placeholder="네이버 예약 / 카톡 상담 링크"></div>
 
@@ -1269,12 +1394,18 @@
   <div id="live-edit-ov">
     <div class="le-bar">
       <span class="le-t">✎ 보면서 수정</span>
-      <button class="le-save" id="le-save">저장 · 공개</button>
+      <span class="le-tip">고치고 싶은 곳을 <b>톡</b> 누르세요</span>
       <button class="le-x" id="le-x" aria-label="닫기">×</button>
     </div>
-    <div class="le-hint">고치고 싶은 곳을 화면에서 <b style="color:var(--coral)">톡 누르세요</b> · 그 부분만 떠서 수정돼요</div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe></div>
-    <div class="le-add"><button id="le-add-btn">＋ 새 구성(섹션) 추가</button></div>
+    <!-- 하단 독 (토스식 · 아이콘 + 글자) -->
+    <div class="le-dock">
+      <button class="le-d main" id="le-add-btn"><span class="di">＋</span>구성 추가</button>
+      <button class="le-d" id="le-design"><span class="di">🎨</span>디자인</button>
+      <button class="le-d" id="le-preview"><span class="di">👁</span>미리보기</button>
+      <button class="le-d" id="le-settings"><span class="di">⚙</span>설정</button>
+      <button class="le-d main" id="le-save"><span class="di">💾</span>저장·공개</button>
+    </div>
   </div>
 
 <script>
@@ -1289,6 +1420,8 @@
       try{ window.scrollTo(0,0); }catch(e){}
       // 고객 화면(게시물) → 편집실(내 페이지) 돌아올 때 허브 전환 모션
       if(name==='page' && prevWs==='posts' && window.__playHubTransition){ window.__playHubTransition(); }
+      // 내 페이지로 들어오면 "보면서 수정"이 기본 진입 (다른 탭에서 올 때)
+      if(name==='page' && prevWs && prevWs!=='page' && window.__openLiveAuto){ setTimeout(window.__openLiveAuto, 360); }
     }
     window.__switchWs=switchWs;
     document.querySelectorAll('.ws-tab').forEach(function(t){ t.onclick=function(){ switchWs(t.getAttribute('data-ws')); }; });
@@ -1299,10 +1432,12 @@
   function closeAdd(){ ov.classList.remove('open'); window.__insertBeforeRow=null; if(window.__liveEditActive && window.__liveRefresh) setTimeout(window.__liveRefresh, 40); }
   // ── 토스식 점진 공개: 추천 3개 먼저, "전체 보기"로 펼침 ──
   var REC_BY_IND={ beauty:['스타일 갤러리','전문가 증명','서비스 · 상품'], personal:['콘텐츠 갤러리','전문가 증명','단골 등록'], brand:['매장 · 위치','후기','서비스 · 상품'] };
+  var REC_BY_STYLE={ photo:['스타일 갤러리','후기','서비스 · 상품'], profile:['전문가 증명','후기','단골 등록'], hook:['서비스 · 상품','후기','카운트다운'], content:['카드뉴스','콘텐츠 갤러리','뉴스레터'] };
   function buildRecommended(){
     var grid=document.getElementById('rec-grid'); if(!grid) return;
-    var ind=(window.AUTH&&window.AUTH.industry)||(typeof AUTH!=='undefined'&&AUTH&&AUTH.industry)||'beauty';
-    var names=REC_BY_IND[ind]||REC_BY_IND.beauty;
+    var A=(typeof AUTH!=='undefined'&&AUTH)?AUTH:(window.AUTH||null);
+    var st=A&&A.starterStyle, ind=(A&&A.industry)||'beauty';
+    var names=(st && REC_BY_STYLE[st]) || REC_BY_IND[ind] || REC_BY_IND.beauty;
     grid.innerHTML='';
     names.forEach(function(nm){
       var orig=ov.querySelector('#add-all .tpl[data-nm="'+nm+'"]'); if(!orig) return;
@@ -2070,6 +2205,7 @@
   };
   // 템플릿 선택 → 전환 흐름 리스트에 새 행 추가 (맨 아래)
   ov.querySelectorAll('.tpl').forEach(function(t){
+    if(t.dataset.set) return;   // 세트 타일은 아래에서 별도 처리(통째로 추가)
     t.addEventListener('click', function(){
       var row = document.createElement('div');
       row.className = 'row';
@@ -2088,6 +2224,27 @@
       closeAdd();
       try{ refreshBuilder(); }catch(e){}
       row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+  // 통째로 추가(세트) — STYLE_PRESETS 순서대로 여러 블록을 한 번에
+  function insertSet(setKey){
+    var SP = window.__STYLE_PRESETS || {};
+    var list = SP[setKey] || null;
+    if(!list) return;
+    list.forEach(function(item){
+      var b = (typeof item==='string') ? { type:item, name:(TYPE_NAME[item]||item), on:true, content:[] }
+                                       : { type:item.type, name:item.name||(TYPE_NAME[item.type]||item.type), on:true, content:(item.content||[]).slice(), layout:item.layout||'' };
+      if(window.__createRow){ var row=window.__createRow(b); if(row){ row._content=b.content; if(b.layout) row._layout=b.layout; if(window.__refreshRowSub) window.__refreshRowSub(row); } }
+    });
+    try{ updateHomeProgress(); }catch(e){}
+    try{ refreshBuilder(); }catch(e){}
+  }
+  ov.querySelectorAll('.tpl[data-set]').forEach(function(t){
+    t.addEventListener('click', function(){
+      insertSet(t.getAttribute('data-set'));
+      closeAdd();
+      try{ var nm=t.querySelector('.tn'); toast('"'+(nm?nm.textContent:'세트')+'" 순서대로 추가했어요'); }catch(e){}
+      var last=document.querySelector('#rows .row:last-child'); if(last) last.scrollIntoView({ behavior:'smooth', block:'center' });
     });
   });
 
@@ -2794,6 +2951,22 @@
     // 브랜드·매장 = 매장·위치 먼저 → 퍼널 + 예약
     brand:    [{type:'location',name:'매장 · 위치',content:[]}, P_EMPATHY, P_EXPERT, P_SOLVE, {type:'highlights',name:'변화 · 하이라이트',content:[]}, P_REVIEW, P_OBJECTION, P_URGENCY, {type:'service',name:'서비스 · 예약',content:[]}, P_LEAD]
   };
+  // ════ 홈 시작 스타일 4종 (온보딩 — 채워진 시작 프리셋) ════
+  var STYLE_PRESETS = {
+    // 📸 사진형 — 갤러리 먼저 → 후킹 → 후기 → 가격 → 예약
+    photo:   [{type:'stylegallery',layout:'search',name:'스타일 갤러리',content:[]}, {type:'lookbook',name:'룩북 · 베스트',content:[]}, P_EMPATHY, P_REVIEW, {type:'ranking',name:'시그니처 · 가격',content:[]}, P_OBJECTION, P_SERVICE, P_LEAD],
+    // 👤 프로필·가치형 — 가치 한 줄 → 내 방식 → 사례·후기 → 자격(보조) → 상담
+    profile: [{type:'text',layout:'quote',name:'가치 한 줄',content:['무리 없이, **이런 변화**를 만듭니다','내가 약속하는 결과를 한 문장으로 적어요.']}, P_SOLVE, {type:'review',name:'사례 · 후기',content:[]}, P_EXPERT, P_OBJECTION, P_SERVICE, P_LEAD],
+    // ✨ 후킹·랜딩형 — 설득 퍼널 풀버전(전환 집중)
+    hook:    [P_EMPATHY, P_CAUSE, P_EXPERT, P_SOLVE, P_DESIRE, P_REVIEW, P_OBJECTION, P_URGENCY, P_SERVICE, P_LEAD],
+    // ✍️ 콘텐츠·구독형 — 세계관 → 정체성 → 대표콘텐츠 → 갤러리 → 구독
+    content: [{type:'text',layout:'quote',name:'세계관 한 줄',content:['내 관점을 **한 문장**으로','사람들이 나를 따르는 이유를 적어요.']}, {type:'text',name:'나는 누구 · 무엇을 믿나',content:['','내가 무엇을 하고 무엇을 믿는지 짧게.']}, {type:'cardnews',name:'대표 콘텐츠',content:[]}, {type:'gallery',name:'콘텐츠 갤러리',content:[]}, {type:'authority',name:'영향력 · 증명',content:[]}, {type:'links',name:'뉴스레터 · 구독',content:[]}, P_LEAD],
+    blank:   []
+  };
+  var STYLE_LABEL={photo:'사진형',profile:'프로필·가치형',hook:'후킹·랜딩형',content:'콘텐츠·구독형',blank:'빈 페이지'};
+  var INDUSTRY_DEFAULT_STYLE={beauty:'photo',brand:'profile',personal:'content'};
+  function applyStyle(style){ return applyComposition(STYLE_PRESETS[style] || STYLE_PRESETS.hook); }
+  window.__STYLE_PRESETS = STYLE_PRESETS;   // add-ov 등 다른 스코프에서 세트 추가용
   // 구성 배열 → #rows에 깔기 (공통)
   function applyComposition(list){
     var box=document.getElementById('rows'); if(!box) return false;
@@ -2842,7 +3015,7 @@
     });
     try{ updateHomeProgress(); refreshBuilder(); }catch(e){}
   }
-  function defaultCompositionFor(v){ if(v==='funnel') applyPreset((AUTH&&AUTH.industry)||'beauty'); else applyComposition(HOME_TYPES[v]||[]); }
+  function defaultCompositionFor(v){ if(v==='funnel'){ var st=(AUTH&&AUTH.starterStyle); if(st && STYLE_PRESETS[st]) applyStyle(st); else applyPreset((AUTH&&AUTH.industry)||'beauty'); } else applyComposition(HOME_TYPES[v]||[]); }
   function captureCurrentVersion(){ if(postEditId!=null){ var p=postById(postEditId); if(p) p.blocks=collectRowsArray(); } else { homeVersions[curVersion]=collectRowsArray(); } }
   function updateVersionUI(){
     [].forEach.call(document.querySelectorAll('.ht-card'),function(c){ var v=c.getAttribute('data-ht');
@@ -3088,25 +3261,62 @@
   })();
   // ── 온보딩 (첫 진입 분야 선택 → 프리셋 자동) ──
   var onbOv=document.getElementById('onboard-ov');
-  function showOnboarding(){ if(onbOv) onbOv.classList.add('open'); }
-  function hideOnboarding(){ if(onbOv) onbOv.classList.remove('open'); }
+  function showOnboarding(){ if(onbOv){ onbOv.classList.remove('restart'); onbOv.classList.remove('can-cancel'); onbOv.classList.add('open'); } }
+  function showRestartPicker(){ if(onbOv){ onbOv.classList.add('restart'); onbOv.classList.add('can-cancel'); onbOv.classList.add('open'); try{ window.scrollTo(0,0); }catch(e){} } }
+  function hideOnboarding(){ if(onbOv){ onbOv.classList.remove('open'); onbOv.classList.remove('restart'); onbOv.classList.remove('can-cancel'); } }
   function onbKey(){ return 'cm-onboarded-'+((AUTH&&AUTH.code)||''); }
-  function chooseIndustry(ind){
-    if(AUTH){ AUTH.industry=ind; try{ localStorage.setItem('la-auth', JSON.stringify(AUTH)); }catch(e){} }
+  function chooseStyle(style){
+    if(AUTH){ AUTH.starterStyle=style; try{ localStorage.setItem('la-auth', JSON.stringify(AUTH)); }catch(e){} }
     try{ localStorage.setItem(onbKey(), '1'); }catch(e){}
-    applyPreset(ind);
+    applyStyle(style);
     try{ curVersion='funnel'; activeVersion='funnel'; captureCurrentVersion(); updateVersionUI(); }catch(e){}
-    // 로그인 분야 세그도 동기화 (있으면)
-    try{ var seg=document.getElementById('lg-seg'); if(seg) [].forEach.call(seg.querySelectorAll('button'), function(b){ b.classList.toggle('on', b.getAttribute('data-ind')===ind); }); }catch(e){}
     hideOnboarding(); try{ window.scrollTo(0,0); }catch(e){}
-    var L={personal:'개인',beauty:'뷰티',brand:'브랜드·매장'};
-    try{ notify((L[ind]||'')+' 페이지를 준비했어요 · 각 블록을 채워보세요'); }catch(e){}
+    try{ notify('"'+(STYLE_LABEL[style]||'')+'" 으로 홈을 준비했어요 · 보면서 채워보세요'); }catch(e){}
+    if(window.__openLiveAuto) setTimeout(window.__openLiveAuto, 500);   // 고른 스타일 바로 보면서 수정으로
   }
   if(onbOv){
-    [].forEach.call(onbOv.querySelectorAll('.onb-card'), function(c){ c.onclick=function(){ chooseIndustry(c.getAttribute('data-ind')); }; });
+    [].forEach.call(onbOv.querySelectorAll('.onb-card'), function(c){ c.onclick=function(){ chooseStyle(c.getAttribute('data-style')); }; });
     var sk=document.getElementById('onb-skip');
-    if(sk) sk.onclick=function(){ try{ localStorage.setItem(onbKey(),'1'); }catch(e){} applyPreset((AUTH&&AUTH.industry)||selInd||'beauty'); hideOnboarding(); };
+    if(sk) sk.onclick=function(){ if(onbOv.classList.contains('restart')){ hideOnboarding(); return; } var def=INDUSTRY_DEFAULT_STYLE[(AUTH&&AUTH.industry)||'']||'photo'; chooseStyle(def); };
+    var ox=document.getElementById('onb-x'); if(ox) ox.onclick=hideOnboarding;
+    var rsb=document.getElementById('restart-style'); if(rsb) rsb.onclick=function(){ showRestartPicker(); };
   }
+
+  // ── 고민 해시태그 예시·작성법 가이드 ──
+  (function(){
+    var btn=document.getElementById('tag-guide-btn'), tov=document.getElementById('tag-guide-ov');
+    if(!btn || !tov) return;
+    btn.onclick=function(){ tov.classList.add('open'); };
+    var x=tov.querySelector('[data-tgclose]'); if(x) x.onclick=function(){ tov.classList.remove('open'); };
+    tov.addEventListener('click', function(e){ if(e.target===tov) tov.classList.remove('open'); });
+    [].forEach.call(tov.querySelectorAll('.tg-chip'), function(c){
+      c.onclick=function(){
+        var inp=document.getElementById('hero-tags'); if(!inp) return;
+        var cur=String(inp.value||'').split(/[,#\n]/).map(function(s){ return s.trim(); }).filter(Boolean);
+        var w=c.textContent.trim();
+        if(cur.indexOf(w)<0){ cur.push(w); inp.value=cur.join(', '); try{ inp.dispatchEvent(new Event('input',{bubbles:true})); }catch(_){}; try{ toast('"'+w+'" 추가됨'); }catch(_){} }
+        else { try{ toast('이미 있어요'); }catch(_){} }
+      };
+    });
+  })();
+
+  // ── 상품화 예시 가이드 ──
+  (function(){
+    var btn=document.getElementById('prod-guide-btn'), pov=document.getElementById('prod-guide-ov');
+    if(!btn || !pov) return;
+    btn.onclick=function(){ pov.classList.add('open'); };
+    var x=pov.querySelector('[data-pgclose]'); if(x) x.onclick=function(){ pov.classList.remove('open'); };
+    pov.addEventListener('click', function(e){ if(e.target===pov) pov.classList.remove('open'); });
+  })();
+
+  // ── 아카이브 채우는 법 가이드 ──
+  (function(){
+    var btn=document.getElementById('arc-guide-btn'), aov=document.getElementById('arc-guide-ov');
+    if(!btn || !aov) return;
+    btn.onclick=function(){ aov.classList.add('open'); };
+    var x=aov.querySelector('[data-acclose]'); if(x) x.onclick=function(){ aov.classList.remove('open'); };
+    aov.addEventListener('click', function(e){ if(e.target===aov) aov.classList.remove('open'); });
+  })();
 
   async function loadPage(){
     if(!AUTH) return;
@@ -3116,13 +3326,18 @@
     else {
       if(res.name) sv('pf-name', res.name);
       var done=false; try{ done=!!localStorage.getItem(onbKey()); }catch(e){}
-      if(!res.industry && !done){ showOnboarding(); }                                   // 첫 진입 → 분야 선택
-      else { applyPreset(res.industry || (AUTH&&AUTH.industry) || selInd); }             // 분야 정해짐 → 바로 프리셋
+      var st0=(AUTH&&AUTH.starterStyle);
+      if(!done && !st0){ showOnboarding(); }                                             // 첫 진입 → 홈 시작 스타일 선택
+      else if(st0 && STYLE_PRESETS[st0]){ applyStyle(st0); }                              // 고른 스타일로
+      else { applyPreset(res.industry || (AUTH&&AUTH.industry) || selInd); }             // 레거시 분야 폴백
       try{ curVersion='funnel'; activeVersion='funnel'; captureCurrentVersion(); updateVersionUI(); }catch(e){}
     }
     // 주소(핸들): 계정에 등록된 실제 핸들을 우선 표시. 없으면 빈칸→직접 정하도록 placeholder 노출
     var hEl=document.getElementById('pf-handle');
     if(hEl){ if(res.handle) hEl.value=res.handle; else if(!hEl.value || hEl.value==='jigi') hEl.value=''; }
+    // 기본 진입: 로그인 후 "보면서 수정"으로 (온보딩 중이 아니면)
+    var onbOpenNow=false; try{ onbOpenNow=document.getElementById('onboard-ov').classList.contains('open'); }catch(_){}
+    if(!onbOpenNow && window.__openLiveAuto) setTimeout(window.__openLiveAuto, 600);
   }
   function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; loadPage(); }
 
@@ -3542,6 +3757,8 @@
     function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; loadFrame(); ov.classList.add('open'); }
     function closeLive(){ window.__liveEditActive=false; ov.classList.remove('open'); ifr.src='about:blank'; }
     window.__liveRefresh=function(){ if(window.__liveEditActive) loadFrame(); };
+    window.__openLive=openLive;
+    window.__openLiveAuto=function(){ if(AUTH && !window.__liveEditActive && !ov.classList.contains('open')) openLive(); };  // 기본 진입용(자동)
 
     // 자식(iframe)에서 오는 메시지
     window.addEventListener('message', function(ev){
@@ -3570,6 +3787,11 @@
     var xb=document.getElementById('le-x'); if(xb) xb.onclick=closeLive;
     var sv=document.getElementById('le-save'); if(sv) sv.onclick=function(){ var top=document.querySelector('.topbar .btn.primary'); if(top) top.click(); };
     var addb=document.getElementById('le-add-btn'); if(addb) addb.onclick=function(){ var ab=document.getElementById('add-block-btn'); if(ab) ab.click(); };
+    // 하단 독: 디자인 → 디자인 탭으로 / 설정 → 설정 시트 / 미리보기 → 편집 표시 끄고 손님 화면 그대로
+    var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ closeLive(); var dt=document.querySelector('.ws-tab[data-ws="design"]'); if(dt) dt.click(); };
+    var stb=document.getElementById('le-settings'); if(stb) stb.onclick=function(){ var os=document.getElementById('open-settings'); if(os) os.click(); };
+    var pvb=document.getElementById('le-preview'); var _clean=false;
+    if(pvb) pvb.onclick=function(){ _clean=!_clean; try{ ifr.contentWindow.postMessage({type:'la-edit-preview', on:_clean}, '*'); }catch(e){} pvb.classList.toggle('is-on', _clean); pvb.innerHTML='<span class="di">'+(_clean?'✏️':'👁')+'</span>'+(_clean?'편집하기':'미리보기'); };
   })();
 })();
 </script>

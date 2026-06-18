@@ -2013,6 +2013,7 @@
       if(sampleHome[b.type]){ node=home.querySelector('[data-block="'+b.type+'"]'); if(node) home.appendChild(node); }
       else if(EXTRA[b.type]){ var ex=EXTRA[b.type](b.content||[], b.layout||''); if(ex){ home.appendChild(ex); node=ex; } }
       if(node && typeof EDIT_MODE!=='undefined' && EDIT_MODE) node.setAttribute('data-bt', b.type);
+      if(node && (b.type==='gallery'||b.type==='stylegallery'||b.type==='lookbook')) node.setAttribute('data-galblock','1');   // 예약 CTA를 이 아래에 꽂기 위한 표식
     });
   }
 
@@ -2096,16 +2097,14 @@
     closeBtn.onclick=closeModal;
     ov.addEventListener('click', function(e){ if(e.target===ov) closeModal(); });
 
-    // 홈 섹션 = 예약 CTA 카드 (눌러서 팝업 열기)
+    // 홈 섹션 = 예약 CTA 카드 (눌러서 팝업 열기) — 갤러리(사진 나열) 바로 아래에 꽂기
     var cta=document.createElement('div'); cta.className='block resv-cta';
     cta.innerHTML='<div class="block-h">'+emph(cfg.title||'예약하기')+'</div><div class="sub" style="margin-top:4px;">날짜·시간 골라 카톡으로 간편 예약</div><button type="button" class="resv-cta-btn">📅 '+esc(cfg.title||'예약하기')+'</button>';
     cta.querySelector('.resv-cta-btn').onclick=openModal;
-    home.appendChild(cta);
-
-    // 플로팅 버튼
-    var fab=document.createElement('button'); fab.type='button'; fab.className='resv-fab'; fab.innerHTML='📅 '+esc(cfg.title||'예약하기');
-    fab.onclick=openModal;
-    document.body.appendChild(fab);
+    var lastGal=null; [].forEach.call(home.querySelectorAll('[data-galblock]'), function(g){ if(g.parentNode===home) lastGal=g; });
+    if(lastGal){ if(lastGal.nextSibling) home.insertBefore(cta, lastGal.nextSibling); else home.appendChild(cta); }
+    else home.appendChild(cta);
+    // 플로팅 예약 버튼은 만들지 않음(네이버 등 채널 플로팅과 겹침 방지) — 예약은 위 인라인 버튼으로
 
     var state={ y:0, m:0, date:null, time:null, svc:null, visit:'' };
     var now=new Date(); state.y=now.getFullYear(); state.m=now.getMonth();
@@ -2349,6 +2348,7 @@
     window.addEventListener('message', function(ev){
       var m=ev.data||{};
       if(m && m.type==='la-edit-data'){ try{ applyPublicData(m.data); }catch(e){} setTimeout(setupEditTaps, 160); }
+      else if(m && m.type==='la-edit-preview'){ if(m.on){ document.documentElement.removeAttribute('data-edit'); } else { document.documentElement.setAttribute('data-edit','1'); } }
     });
     try{ parent.postMessage({type:'la-edit-ready'}, '*'); }catch(e){}
   } else {
