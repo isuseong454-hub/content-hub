@@ -2295,6 +2295,7 @@
     nextBtn.onclick=function(){ d.querySelector('.rv-chosen').textContent='📅 '+(state.m+1)+'월 '+state.date.getDate()+'일 ('+DOW[state.date.getDay()]+') '+state.time; showStep('form'); try{ track('resv',{step:'pick'}); }catch(_){} };
 
     var nameEl=d.querySelector('.rv-name'), phoneEl=d.querySelector('.rv-phone'), memoEl=d.querySelector('.rv-memo'), agreeEl=d.querySelector('.rv-agree'), formMsg=d.querySelector('.rv-form-step .rv-msg');
+    var pendingBooking=null;   // 카톡 버튼 누를 때 슬롯 선점에 쓸 예약 정보
     var genBtn=d.querySelector('.rv-gen-btn');
     genBtn.onclick=function(){
       var nm=(nameEl.value||'').trim(), ph=(phoneEl.value||'').trim();
@@ -2304,32 +2305,23 @@
       formMsg.textContent='';
       var svcName=state.svc?state.svc.name:'(미선택)';
       var memoV=(memoEl.value||'').trim(), bookDate=ymd(state.date), bookTime=state.time;
-      genBtn.disabled=true;
-      function proceed(){
-        genBtn.disabled=false;
-        var dateStr=state.y+'년 '+(state.m+1)+'월 '+state.date.getDate()+'일 ('+DOW[state.date.getDay()]+')';
-        var msg=tpl.replace(/\{날짜\}/g,dateStr).replace(/\{시간\}/g,bookTime||'').replace(/\{시술\}/g,svcName).replace(/\{이름\}/g,nm).replace(/\{연락처\}/g,ph).replace(/\{방문\}/g,state.visit||'-').replace(/\{메모\}/g,memoV||'-');
-        d.querySelector('.rv-preview').value=msg;
-        showStep('done');
-        try{ track('resv',{step:'submit', svc:svcName}); track('click',{kind:'cta', label:'예약하기'}); }catch(_){}
-        try{ if(window.laRpc){ window.laRpc('li_lead_add',{ p_handle:window.HANDLE, p_name:'[예약] '+(state.m+1)+'/'+state.date.getDate()+' '+bookTime+' · '+svcName+' · '+nm, p_phone:ph }); } }catch(_){}
-      }
-      function blockTaken(){
-        genBtn.disabled=false;
-        showStep('cal');
-        var sb=slotsEl.querySelector('.rv-slot[data-t="'+bookTime+'"]'); if(sb){ sb.classList.add('full'); sb.removeAttribute('data-t'); sb.disabled=true; sb.textContent=bookTime+' 마감'; }
-        if(state.time===bookTime){ state.time=null; syncNext(); }
-        slotBox.scrollIntoView({behavior:'smooth', block:'center'});
-      }
-      // 실시간 슬롯(v2): 슬롯 선점 시도 → 'taken'이면 막고, 그 외(성공·SQL 미실행·오류)는 진행
-      if(window.laRpc){
-        window.laRpc('li_resv_book',{ p_handle:window.HANDLE, p_date:bookDate, p_time:bookTime, p_name:nm, p_phone:ph, p_menu:svcName, p_visit:state.visit||'', p_memo:memoV })
-          .then(function(r){ if(r && r.ok===false && r.reason==='taken'){ blockTaken(); } else { proceed(); } })
-          .catch(function(){ proceed(); });
-      } else proceed();
+      // 슬롯 마감은 '카톡 방 연결' 버튼을 누를 때 → 여기선 메시지 생성 + 명단 기록만
+      pendingBooking={ date:bookDate, time:bookTime, name:nm, phone:ph, menu:svcName, visit:state.visit||'', memo:memoV };
+      var dateStr=state.y+'년 '+(state.m+1)+'월 '+state.date.getDate()+'일 ('+DOW[state.date.getDay()]+')';
+      var msg=tpl.replace(/\{날짜\}/g,dateStr).replace(/\{시간\}/g,bookTime||'').replace(/\{시술\}/g,svcName).replace(/\{이름\}/g,nm).replace(/\{연락처\}/g,ph).replace(/\{방문\}/g,state.visit||'-').replace(/\{메모\}/g,memoV||'-');
+      d.querySelector('.rv-preview').value=msg;
+      showStep('done');
+      try{ track('resv',{step:'submit', svc:svcName}); track('click',{kind:'cta', label:'예약하기'}); }catch(_){}
+      try{ if(window.laRpc){ window.laRpc('li_lead_add',{ p_handle:window.HANDLE, p_name:'[예약] '+(state.m+1)+'/'+state.date.getDate()+' '+bookTime+' · '+svcName+' · '+nm, p_phone:ph }); } }catch(_){}
     };
     d.querySelector('.rv-copy').onclick=function(){ var ta=d.querySelector('.rv-preview'), btn=this; function ok(){ btn.textContent='✓ 복사됐어요'; setTimeout(function(){ btn.textContent='📋 전체 복사하기'; },1800); } try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(ok,function(){ ta.select(); document.execCommand('copy'); ok(); }); } else { ta.select(); document.execCommand('copy'); ok(); } }catch(_){ ta.select(); } };
-    var kkBtn=d.querySelector('.rv-kakao'); if(kkBtn) kkBtn.addEventListener('click', function(){ try{ track('resv',{step:'kakao'}); }catch(_){} });
+    // 카톡 방 연결 버튼 = 이 순간 슬롯 선점(마감). 링크는 바로 열리고, 예약은 백그라운드로 잡음(중복은 DB가 방어).
+    var kkBtn=d.querySelector('.rv-kakao'); if(kkBtn) kkBtn.addEventListener('click', function(){
+      try{ track('resv',{step:'kakao'}); }catch(_){}
+      try{ if(window.laRpc && pendingBooking && pendingBooking.date && pendingBooking.time){
+        window.laRpc('li_resv_book',{ p_handle:window.HANDLE, p_date:pendingBooking.date, p_time:pendingBooking.time, p_name:pendingBooking.name, p_phone:pendingBooking.phone, p_menu:pendingBooking.menu, p_visit:pendingBooking.visit, p_memo:pendingBooking.memo }).catch(function(){});
+      } }catch(_){}
+    });
     renderCal();
   }
 

@@ -1526,6 +1526,8 @@
     .rs-appl .who{flex:1; min-width:0;}
     .rs-appl .who b{font-size:13.5px;} .rs-appl .who span{font-size:12px; color:var(--muted);}
     .rs-appl .ph{font-size:12px; color:var(--coral); flex:0 0 auto;}
+    .rs-appl-cancel{flex:0 0 auto; padding:6px 10px; border:1px solid rgba(224,90,110,.5); border-radius:8px; background:rgba(224,90,110,.12); color:#e0788c; font-size:11.5px; font-weight:700; cursor:pointer; white-space:nowrap;}
+    .rs-appl-cancel:active{transform:scale(.95);} .rs-appl-cancel:disabled{opacity:.6; cursor:default;}
     .rs-daybtn{padding:8px 11px; border:1px solid var(--hair); border-radius:9px; background:var(--paper); color:var(--ink); font-size:12.5px; cursor:pointer; margin:0 6px 6px 0;}
     .rs-daybtn.full{background:var(--grad); color:#fff; border-color:var(--coral); text-decoration:line-through;}
     .rss-cal-head{display:flex; align-items:center; justify-content:space-between; margin:2px 2px 8px;}
@@ -4128,11 +4130,14 @@
       if(!m) return null;
       return { mon:+m[1], day:+m[2], time:m[3], menu:m[4], who:m[5], phone:x.phone||'', created:x.created_at };
     }
-    var rssVY, rssVM, rssResvs=[], rssSelKey=null;
+    var rssVY, rssVM, rssResvs=[], rssSelKey=null, rssBookings=null;  // rssBookings=실시간 예약(li_resv_list, v2 켜졌을 때만). null=v2 미적용(명단 기반 폴백)
+    function bookingsForKey(key){ if(!rssBookings) return null; return rssBookings.filter(function(b){ return b.rdate===key && b.status!=='cancelled'; }); }
     function renderMiniCal(){
       var box=document.getElementById('rss-cal'); if(!box) return;
       var closed=parseClosed(resvCfg.closedDays), blocked={}; (resvCfg.blockedDates||[]).forEach(function(d){ blocked[d]=1; });
-      var counts={}; rssResvs.forEach(function(r){ if(r.mon===rssVM+1) counts[r.day]=(counts[r.day]||0)+1; });
+      var counts={};
+      if(rssBookings){ rssBookings.forEach(function(b){ if(b.status==='cancelled'||!b.rdate) return; var p=b.rdate.split('-'); if(+p[1]===rssVM+1 && +p[0]===rssVY) counts[+p[2]]=(counts[+p[2]]||0)+1; }); }
+      else { rssResvs.forEach(function(r){ if(r.mon===rssVM+1) counts[r.day]=(counts[r.day]||0)+1; }); }
       var now=new Date(), tY=now.getFullYear(), tM=now.getMonth(), tD=now.getDate();
       var first=new Date(rssVY,rssVM,1).getDay(), days=new Date(rssVY,rssVM+1,0).getDate();
       var h='<div class="rss-cal-head"><button type="button" class="rss-nav" data-nav="-1">‹</button><span>'+rssVY+'년 '+(rssVM+1)+'월</span><button type="button" class="rss-nav" data-nav="1">›</button></div>';
@@ -4154,10 +4159,14 @@
       var box=document.getElementById('rss-day-panel'); if(!box) return;
       if(!rssSelKey){ box.innerHTML='<div style="font-size:12px;color:var(--muted);padding:4px 2px 2px;">↑ 캘린더에서 날짜를 누르면 그 날 신청·시간 마감을 관리해요</div>'; return; }
       var parts=rssSelKey.split('-'), mon=+parts[1], day=+parts[2], dowK=new Date(+parts[0],mon-1,day).getDay();
-      var dayResvs=rssResvs.filter(function(r){ return r.mon===mon && r.day===day; });
+      var books=bookingsForKey(rssSelKey);   // null이면 v2 미적용 → 명단 폴백
+      var dayItems = (books!==null)
+        ? books.map(function(b){ return { time:b.rtime, who:b.name, menu:b.menu, phone:b.phone, cancel:true }; })
+        : rssResvs.filter(function(r){ return r.mon===mon && r.day===day; }).map(function(r){ return { time:r.time, who:r.who, menu:r.menu, phone:r.phone, cancel:false }; });
+      dayItems.sort(function(a,b){ return String(a.time).localeCompare(String(b.time)); });
       var isClosedDay=resvCfg.blockedDates.indexOf(rssSelKey)>=0, closedDow=parseClosed(resvCfg.closedDays)[dowK];
       var h='<div class="rss-dp-h">📅 '+mon+'월 '+day+'일 ('+DOW[dowK]+')'+(closedDow?' <span style="color:var(--muted);font-size:11px;font-weight:400;">· 정기 휴무</span>':'')+'</div>';
-      if(dayResvs.length){ h+=dayResvs.map(function(r){ return '<div class="rs-appl"><div class="when"><b>'+escT(r.time)+'</b></div><div class="who"><b>'+escT(r.who)+'</b> <span>· '+escT(r.menu)+'</span></div><div class="ph">'+escT(r.phone)+'</div></div>'; }).join(''); }
+      if(dayItems.length){ h+=dayItems.map(function(r){ return '<div class="rs-appl"><div class="when"><b>'+escT(r.time)+'</b></div><div class="who"><b>'+escT(r.who)+'</b> <span>· '+escT(r.menu)+'</span></div><div class="ph">'+escT(r.phone)+'</div>'+(r.cancel?'<button type="button" class="rs-appl-cancel" data-canceltime="'+escT(r.time)+'">예약 취소</button>':'')+'</div>'; }).join(''); }
       else { h+='<div style="font-size:12px;color:var(--muted);margin:2px 2px 10px;">이 날 신청 없음</div>'; }
       h+='<button type="button" class="btn" id="rss-dayoff" style="width:100%; padding:10px; margin:6px 0 4px;'+(isClosedDay?' background:var(--grad); color:#fff; border-color:var(--coral);':'')+'">'+(isClosedDay?'✓ 이 날 휴무 중 · 눌러서 해제':'이 날 전체 휴무로 막기')+'</button>';
       if(!isClosedDay && !closedDow){
@@ -4179,11 +4188,22 @@
         if(arr.length) resvCfg.blockedSlots[rssSelKey]=arr; else delete resvCfg.blockedSlots[rssSelKey];
         renderDayPanel(); topSave();
       }; });
+      // 손님 예약 취소 → 슬롯 다시 열림(li_resv_cancel)
+      box.querySelectorAll('[data-canceltime]').forEach(function(b){ b.onclick=function(){
+        var t=b.dataset.canceltime;
+        if(!confirm(mon+'월 '+day+'일 '+t+' 예약을 취소하고 그 시간을 다시 열까요?')) return;
+        var auth=getAuth(); if(!auth) return;
+        b.disabled=true; b.textContent='취소 중…';
+        window.laRpc('li_resv_cancel',{ p_code:auth.code, p_pin_hash:auth.pinHash, p_date:rssSelKey, p_time:t }).then(function(r){
+          if(r && r.ok){ if(rssBookings) rssBookings=rssBookings.filter(function(x){ return !(x.rdate===rssSelKey && x.rtime===t && x.status!=='cancelled'); }); renderMiniCal(); renderDayPanel(); try{ window.toast&&window.toast('예약을 취소하고 슬롯을 열었어요'); }catch(_){} }
+          else { b.disabled=false; b.textContent='예약 취소'; try{ window.toast&&window.toast('취소 실패 — 예약 SQL 적용을 확인해주세요'); }catch(_){} }
+        }).catch(function(){ b.disabled=false; b.textContent='예약 취소'; try{ window.toast&&window.toast('취소 실패 — 다시 시도해주세요'); }catch(_){} });
+      }; });
     }
-    function renderStatus(list){
+    function renderStatus(list, bookings){
       var body=document.getElementById('resv-status-body');
       var resvs=list.map(parseResvLead).filter(Boolean);
-      rssResvs=resvs; rssSelKey=null; var rsnow=new Date(); rssVY=rsnow.getFullYear(); rssVM=rsnow.getMonth();
+      rssResvs=resvs; rssBookings=(bookings&&bookings.length!==undefined)?bookings:null; rssSelKey=null; var rsnow=new Date(); rssVY=rsnow.getFullYear(); rssVM=rsnow.getMonth();
       var closed=parseClosed(resvCfg.closedDays);
       var h='<div class="rs-lbl">정기 휴무 요일 <span>· 매주 쉬는 날 (자동 마감)</span></div><div class="rs-dow" id="rss-dow">'+DOW.map(function(d,i){ return '<button data-dow="'+i+'"'+(closed[i]?' class="on"':'')+'>'+d+'</button>'; }).join('')+'</div>';
       h+='<div class="rs-lbl">예약 현황 <span>· 날짜 누르면 그 날 관리</span></div><div id="rss-cal"></div><div id="rss-day-panel" style="margin-top:6px;"></div>';
@@ -4201,8 +4221,14 @@
       var auth=getAuth();
       if(!auth){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">로그인 후 이용할 수 있어요</div>'; return; }
       body.innerHTML='<div style="padding:30px 0;text-align:center;color:var(--muted);font-size:13px;">불러오는 중…</div>';
-      window.laRpc('li_leads_get',{ p_code:auth.code, p_pin_hash:auth.pinHash }).then(function(res){
-        renderStatus((res&&res.ok&&res.list)?res.list:[]);
+      Promise.all([
+        window.laRpc('li_leads_get',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; }),
+        window.laRpc('li_resv_list',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; })
+      ]).then(function(arr){
+        var leadRes=arr[0], resvRes=arr[1];
+        var leads=(leadRes&&leadRes.ok&&leadRes.list)?leadRes.list:[];
+        var bookings=(resvRes&&resvRes.ok&&resvRes.list&&resvRes.list.length!==undefined)?resvRes.list:null;
+        renderStatus(leads, bookings);
       }).catch(function(){ renderStatus([]); });
     };
     document.getElementById('resv-status-x').onclick=function(){ closeOv('resv-status-ov'); };
