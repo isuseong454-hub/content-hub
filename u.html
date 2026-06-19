@@ -507,12 +507,8 @@
   @media (hover:none){ html[data-edit] .la-galcard .la-gpen{opacity:.9;} }
   html[data-edit] .la-galadd{border:2px dashed rgba(167,139,255,.7)!important; background:rgba(123,90,255,.08)!important; color:var(--coral)!important; font-size:13px!important; font-weight:800; gap:0;}
   /* 대표 사진 쇼케이스 — 홈에서 바로 편집 */
-  html[data-edit] .lbc .lbc-photo{cursor:pointer;}
+  html[data-edit] .lbc{cursor:pointer;}
   html[data-edit] .lbc .lbc-photo.lbc-empty{display:flex; align-items:center; justify-content:center; color:var(--coral); font-size:14px; font-weight:800; border:1.5px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07);}
-  html[data-edit] .lbc .lbc-photo:not(.lbc-empty)::after{content:'✎ 바꾸기'; position:absolute; left:50%; bottom:8px; transform:translateX(-50%); background:rgba(0,0,0,.6); color:#fff; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:999px; opacity:0; transition:opacity .14s; pointer-events:none;}
-  html[data-edit] .lbc{position:relative;}
-  html[data-edit] .lbc .lbc-photo{position:relative;}
-  html[data-edit] .lbc:hover .lbc-photo:not(.lbc-empty)::after{opacity:1;}
   html[data-edit] .lbc-kr.la-ed-inline:empty::before{content:attr(data-ph); color:var(--muted); opacity:.7;}
   html[data-edit] .lbc-del{position:absolute; top:8px; right:8px; z-index:5; width:24px; height:24px; border-radius:50%; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:15px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;}
   html[data-edit] .lb-addcard{display:block; width:100%; margin-top:12px; padding:14px; border-radius:14px; border:2px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07); color:var(--coral); font-size:13.5px; font-weight:800; font-family:inherit; cursor:pointer;}
@@ -885,10 +881,15 @@
   .rv-slot{padding:9px 0; border:1px solid var(--hair); border-radius:9px; background:var(--surface); color:var(--ink); font-size:13px; cursor:pointer;}
   .rv-slot:active{transform:scale(.97);}
   .rv-slot.on{background:var(--coral-fill,var(--coral)); color:var(--on-coral); border-color:var(--coral); font-weight:700;}
+  .rv-steps{display:flex; align-items:center; justify-content:center; gap:6px; margin:4px 0 14px; flex-wrap:wrap;}
+  .rv-st{font-size:11.5px; font-weight:700; color:var(--muted); background:var(--surface); border:1px solid var(--hair); border-radius:999px; padding:5px 10px; cursor:pointer;}
+  .rv-st.on{color:#fff; background:var(--coral); border-color:var(--coral);}
+  .rv-st.done-step{color:var(--coral); border-color:var(--coral);}
+  .rv-st-ar{color:var(--muted); font-size:11px;}
   .rv-next-btn,.rv-gen-btn,.rv-copy{width:100%; margin-top:14px; padding:14px; border:none; border-radius:12px; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:14.5px; font-weight:700; cursor:pointer;}
   .rv-next-btn:disabled{opacity:.4; cursor:default;}
   .rv-next-btn:active:not(:disabled),.rv-gen-btn:active,.rv-copy:active{transform:scale(.99);}
-  .rv-back{position:absolute; top:15px; right:14px; background:var(--paper); border:1px solid var(--hair); color:var(--muted); font-size:11.5px; cursor:pointer; padding:6px 11px; border-radius:8px; z-index:3;}
+  .rv-back{display:inline-flex; align-items:center; gap:4px; margin-bottom:11px; background:var(--paper); border:1px solid var(--hair); color:var(--muted); font-size:12px; font-weight:600; cursor:pointer; padding:8px 13px; border-radius:9px;}
   .rv-back:active{transform:scale(.96);}
   .rv-slots-h{font-size:11.5px; color:var(--muted); margin:2px 0 8px;}
   .rv-day.rv-sun{color:#e0607a;} .rv-day.rv-sat{color:#5b8def;}
@@ -912,6 +913,7 @@
   .rv-done-guide span{font-size:11.5px; color:var(--ink);}
   .rv-preview{font-family:inherit; line-height:1.6; resize:none;}
   .rv-kakao{display:block; width:100%; margin-top:9px; padding:14px; border-radius:12px; background:#FEE500; color:#3C1E1E; font-size:14.5px; font-weight:700; text-align:center; text-decoration:none;}
+  .rv-kakao-off{display:block; width:100%; margin-top:9px; padding:14px; border:1px solid var(--hair); border-radius:12px; background:var(--surface); color:var(--muted); font-size:14px; font-weight:600; text-align:center; cursor:not-allowed;}
   .rv-note{margin-top:14px; font-size:11.5px; line-height:1.6; color:var(--muted); background:var(--paper); border:1px solid var(--hair); border-radius:11px; padding:11px 13px;}
   .rv-day.rv-holi{color:#e0607a; opacity:.5;}
   .rv-slot.full{background:var(--paper); color:var(--muted); border:1px dashed var(--hair); text-decoration:line-through; cursor:default;}
@@ -1055,9 +1057,9 @@
   .lbc[data-hasvid]:hover .lbc-video, .lbc.vplay .lbc-video{opacity:1;}
   .lbc-corner{position:absolute; top:9px; left:9px; width:20px; height:20px; border-top:2px solid var(--coral); border-left:2px solid var(--coral); border-radius:3px 0 0 0; opacity:.9;}
   .lbc-wm{position:absolute; top:10px; right:11px; font-size:8px; letter-spacing:.13em; color:rgba(255,255,255,.62); font-weight:700;}
-  .lbc-num{position:absolute; left:11px; bottom:44px; font-size:13px; font-weight:800; color:rgba(255,255,255,.85); z-index:1;}
+  .lbc-num{position:absolute; left:11px; bottom:44px; font-size:13px; font-weight:800; color:var(--coral); z-index:1; text-shadow:0 1px 4px rgba(0,0,0,.6);}
   .lbc-label{position:absolute; left:0; right:0; bottom:0; padding:10px 11px 11px; background:linear-gradient(to top, rgba(0,0,0,.82), transparent); z-index:1;}
-  .lbc-kr{font-size:14px; font-weight:800; color:#fff;}
+  .lbc-kr{font-size:14px; font-weight:800; color:var(--coral); text-shadow:0 1px 4px rgba(0,0,0,.6);}
   .lbc-en{font-size:9px; letter-spacing:.15em; color:rgba(255,255,255,.72); margin-top:1px;}
   .lbc-play{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.45); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; z-index:1; transition:.2s;}
   .lbc.vplay .lbc-play{opacity:0;}
@@ -2176,6 +2178,7 @@
     var d=document.createElement('div'); d.className='block resv'; d.id='resv-section';
     var hintTxt=(cfg.closedDays?DOW.filter(function(_,i){return closedSet[i];}).join('·')+' 휴무 · ':'')+'영업 '+esc(cfg.start||'11:00')+' — '+esc(cfg.end||'17:00');
     d.innerHTML = '<div class="block-h" style="margin-bottom:6px;">'+emph(cfg.title||'예약하기')+'</div><div class="rv-hint">'+hintTxt+'</div>'
+      + '<div class="rv-steps"><span class="rv-st on" data-rvst="cal">📅 날짜·시간</span><span class="rv-st-ar">→</span><span class="rv-st" data-rvst="form">✍️ 정보</span><span class="rv-st-ar">→</span><span class="rv-st" data-rvst="done">💬 카톡 전송</span></div>'
       + '<div class="rv-step rv-cal-step">'
         +   '<div class="rv-calhead"><button type="button" class="rv-nav rv-prev" aria-label="이전 달">‹</button><span class="rv-month"></span><button type="button" class="rv-nav rv-next" aria-label="다음 달">›</button></div>'
         +   '<div class="rv-dow">'+DOW.map(function(x,i){ return '<span'+(i===0?' class="sun"':(i===6?' class="sat"':''))+'>'+x+'</span>'; }).join('')+'</div>'
@@ -2202,7 +2205,7 @@
         +   '<div class="rv-done-guide"><b>마지막 단계예요!</b><span>① 복사 → ② 카톡방 이동 → ③ 붙여넣고 전송</span></div>'
         +   '<textarea class="rv-preview" readonly rows="9"></textarea>'
         +   '<button type="button" class="rv-copy">📋 전체 복사하기</button>'
-        +   (kakao?'<a class="rv-kakao" href="'+esc(kakao)+'" target="_blank" rel="noopener">💬 카카오톡으로 보내기 →</a>':'<div class="rv-msg" style="color:var(--muted)">※ 편집기에서 카카오 오픈채팅 링크를 넣어주세요</div>')
+        +   (kakao?'<a class="rv-kakao" href="'+esc(kakao)+'" target="_blank" rel="noopener">💬 카카오톡으로 보내기 →</a>':(isEdit()?'<div class="rv-msg" style="color:var(--coral)">※ 편집기 → 예약 설정 → ③ 신청·카톡에서 카카오 오픈채팅 링크를 넣어주세요</div>':'<button type="button" class="rv-kakao-off" disabled>💬 카카오톡 연결 준비 중</button>'))
         +   (note?'<div class="rv-note">⏰ '+esc(note).replace(/\n/g,'<br>')+'</div>':'')
       + '</div>';
     // 예약 흐름을 팝업(모달)에 담기 — 버튼 누르면 떠서 진행
@@ -2271,7 +2274,7 @@
     d.querySelector('.rv-prev').onclick=function(){ if(state.y<today.getFullYear()||(state.y===today.getFullYear()&&state.m<=today.getMonth())) return; state.m--; if(state.m<0){state.m=11;state.y--;} renderCal(); };
     d.querySelector('.rv-next').onclick=function(){ state.m++; if(state.m>11){state.m=0;state.y++;} renderCal(); };
 
-    function showStep(name){ d.querySelector('.rv-cal-step').hidden=name!=='cal'; d.querySelector('.rv-form-step').hidden=name!=='form'; d.querySelector('.rv-done-step').hidden=name!=='done'; }
+    function showStep(name){ d.querySelector('.rv-cal-step').hidden=name!=='cal'; d.querySelector('.rv-form-step').hidden=name!=='form'; d.querySelector('.rv-done-step').hidden=name!=='done'; [].forEach.call(d.querySelectorAll('.rv-st'), function(s){ s.classList.toggle('on', s.getAttribute('data-rvst')===name); }); }
     [].forEach.call(d.querySelectorAll('.rv-back'), function(b){ b.onclick=function(){ showStep(b.getAttribute('data-to')); }; });
 
     // 시술 주제 탭
@@ -2532,7 +2535,7 @@
       }
       el.appendChild(bar);
       // 탭하면 그 구성만 선택(강조) → 수정·삭제 노출. 빈 구성은 바로 편집창.
-      el.addEventListener('click', function(e){ if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-photo,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add')) return; e.preventDefault(); e.stopPropagation();
+      el.addEventListener('click', function(e){ if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add')) return; e.preventDefault(); e.stopPropagation();
         if(el.classList.contains('la-empty-block')){ try{ parent.postMessage({type:'la-edit-tap', bt:bt}, '*'); }catch(_){} return; }
         selectBlock(el);
       }, true);
@@ -2578,9 +2581,7 @@
     [].forEach.call(document.querySelectorAll('[data-bt="lookbook"]'), function(block){
       [].forEach.call(block.querySelectorAll('.lbc'), function(card){
         var i=parseInt(card.getAttribute('data-lbi'),10)||0;
-        var photo=card.querySelector('.lbc-photo');
-        if(photo && !photo.__lk){ photo.__lk=1; photo.style.cursor='pointer';
-          photo.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-lookimg', idx:i}, '*'); }catch(_){} }); }
+        // 사진 탭은 직접 바꾸지 않고 → 구성 선택(줄선)으로 흐르게 (사진 변경은 ✎수정에서)
         var kr=card.querySelector('.lbc-kr');
         if(kr && !kr.__lk){ kr.__lk=1; kr.setAttribute('contenteditable','true'); kr.setAttribute('spellcheck','false'); kr.classList.add('la-ed-inline'); if(!kr.textContent.trim()) kr.setAttribute('data-ph','이름 입력');
           kr.addEventListener('click', function(e){ e.stopPropagation(); });

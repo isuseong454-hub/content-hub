@@ -1459,6 +1459,23 @@
     .rs-tabs{display:flex; gap:6px; margin:8px 0 14px;}
     .rs-tab{flex:1; padding:9px 0; border:1px solid var(--hair); border-radius:10px; background:var(--paper); color:var(--muted); font-size:13px; cursor:pointer;}
     .rs-tab.on{background:var(--grad); color:#fff; border-color:var(--coral); font-weight:600;}
+    /* 예약 특정일 휴무 미니 캘린더 */
+    .rs-mini{margin-top:8px; background:var(--soft); border:1px solid var(--hair); border-radius:12px; padding:8px; max-width:248px;}
+    .rs-cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
+    .rs-cal-head b{font-size:12.5px; color:var(--ink); font-weight:800;}
+    .rs-cal-nav{width:24px; height:24px; border-radius:7px; border:1px solid var(--hair); background:var(--surface); color:var(--ink); font-size:14px; cursor:pointer; padding:0; line-height:1;}
+    .rs-cal-dow{display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:2px;}
+    .rs-cal-dow span{text-align:center; font-size:9.5px; color:var(--muted);}
+    .rs-cal-dow .sun{color:#e57373;} .rs-cal-dow .sat{color:#64b5f6;}
+    .rs-cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:2px;}
+    .rs-cal-cell{aspect-ratio:1; border:none; border-radius:6px; background:var(--surface); color:var(--ink); font-size:10.5px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+    .rs-cal-cell.empty{background:transparent; cursor:default;}
+    .rs-cal-cell.closed{color:var(--muted); opacity:.4;}
+    .rs-cal-cell.holi{color:#e57373;}
+    .rs-cal-cell.today{outline:1.5px solid var(--coral); outline-offset:-1.5px;}
+    .rs-cal-cell.blocked{background:var(--grad); color:#fff; font-weight:800;}
+    .rs-cal-cell:active{transform:scale(.9);}
+    .rs-cal-hint{font-size:10px; color:var(--muted); margin-top:6px; text-align:center;}
     .av-tab{flex:1; padding:9px 0; border:1px solid var(--hair); border-radius:10px; background:var(--paper); color:var(--muted); font-size:12.5px; cursor:pointer; font-family:var(--sans);}
     .av-tab.on{background:var(--grad); border-color:transparent; font-weight:800;}
     .rs-lbl{font-size:12px; font-weight:600; color:var(--ink); margin:14px 2px 7px;}
@@ -1466,6 +1483,23 @@
     .rs-lbl span{font-weight:400; color:var(--muted); font-size:11px;}
     .rs-in{width:100%; border:1px solid var(--hair); background:var(--soft); border-radius:9px; padding:10px 11px; font-size:13.5px; color:var(--ink); font-family:var(--sans);}
     textarea.rs-in{resize:vertical; min-height:60px; line-height:1.55;}
+    /* 카카오 링크 카드 — "여기가 카톡 넣는 곳" 한눈에 */
+    .rs-kakao-card{background:rgba(254,229,0,.08); border:1.5px solid rgba(254,229,0,.55); border-radius:14px; padding:13px 13px 14px; margin:2px 0 4px;}
+    .rs-kakao-card.need{animation:rsKakaoGlow 1.5s ease-in-out 3;}
+    @keyframes rsKakaoGlow{0%,100%{box-shadow:0 0 0 0 rgba(254,229,0,0);}50%{box-shadow:0 0 0 5px rgba(254,229,0,.22);}}
+    .rs-kakao-head{display:flex; align-items:center; gap:9px; margin-bottom:9px;}
+    .rs-kakao-ic{flex:none; width:34px; height:34px; border-radius:10px; background:#FEE500; display:flex; align-items:center; justify-content:center;}
+    .rs-kakao-ic svg{width:21px; height:21px; display:block;}
+    .rs-kakao-tt{font-size:13px; font-weight:800; color:var(--ink); line-height:1.3;}
+    .rs-kakao-tt b{color:#E0B400;}
+    .rs-kakao-sub{font-size:11px; color:var(--muted); margin-top:1px;}
+    .rs-kakao-card .rs-in{background:var(--surface); border-color:rgba(254,229,0,.4);}
+    .rs-kakao-need{display:none; font-size:11.5px; color:#E0B400; font-weight:600; margin-top:7px; align-items:center; gap:5px;}
+    .rs-kakao-card.need .rs-kakao-need{display:flex;}
+    .rs-kakao-ok{display:none; font-size:11.5px; color:#3CB44A; font-weight:600; margin-top:7px;}
+    .rs-kakao-card.ok .rs-kakao-ok{display:block;}
+    .rs-kakao-help{font-size:11px; color:var(--muted); margin-top:8px; line-height:1.6;}
+    .rs-kakao-help b{color:var(--ink);}
     .rs-row3{display:flex; gap:7px;}
     .rs-ttabs{display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 12px;}
     .rs-ttab{padding:7px 14px; border:1px solid var(--hair); border-radius:999px; background:var(--paper); color:var(--muted); font-size:13px; cursor:pointer;}
@@ -1582,13 +1616,15 @@
     <div class="sheet">
       <div class="sheet-h"><span class="t">예약 화면 설정</span><span class="x" id="resv-setup-x">×</span></div>
       <div class="desc">고객이 보는 예약 화면을 만들어요 · 다 채우면 위 [저장]을 눌러주세요</div>
+      <div class="desc" style="margin:2px 0 8px; color:var(--coral); font-size:11.5px;">손님 예약 순서: ① 날짜·시간 → ② 시술 → ③ 신청·카톡</div>
       <div class="rs-tabs">
-        <button class="rs-tab on" data-rstab="menu">시술</button>
-        <button class="rs-tab" data-rstab="time">시간 · 휴무</button>
-        <button class="rs-tab" data-rstab="msg">메시지 · 안내</button>
+        <button class="rs-tab on" data-rstab="time">① 날짜·시간</button>
+        <button class="rs-tab" data-rstab="menu">② 시술</button>
+        <button class="rs-tab" data-rstab="msg">③ 신청·카톡</button>
       </div>
       <div id="resv-setup-body"></div>
-      <button class="btn primary" id="resv-setup-save" style="width:100%; padding:13px; margin-top:14px;">💾 저장하기</button>
+      <button class="btn" id="resv-setup-preview" style="width:100%; padding:11px; margin-top:14px;">👁 고객 예약화면 미리보기 (새 탭)</button>
+      <button class="btn primary" id="resv-setup-save" style="width:100%; padding:13px; margin-top:9px;">💾 저장하기</button>
     </div>
   </div>
 
@@ -1623,7 +1659,7 @@
   <div id="live-edit-ov">
     <div class="le-bar">
       <span class="le-t" id="le-mode-label">✎ 편집 중</span>
-      <button class="le-toptoggle" id="le-toptoggle">👁 미리보기</button>
+      <button class="le-toptoggle" id="le-home" title="고객이 보는 실제 페이지(새 탭)">🏠 고객 홈</button>
       <button class="le-x" id="le-x">💾 저장</button>
       <button class="le-exit" id="le-exit" title="나가기">✕</button>
     </div>
@@ -1635,7 +1671,6 @@
     <div class="le-dock">
       <button class="le-d" id="le-design"><span class="di">🎨</span>디자인</button>
       <button class="le-d" id="le-library"><span class="di">🖼</span>사진 보관함</button>
-      <button class="le-d main" id="le-save"><span class="di">💾</span>저장·공개</button>
     </div>
   </div>
 
@@ -1908,9 +1943,9 @@
       var it=document.createElement('div'); it.className='sg-item';
       var photo=makePhotoBtn('＋ 사진', v[0]||''); photo.classList.add('lb-photo-btn');
       var kr=document.createElement('input'); kr.className='lb-kr'; kr.placeholder='이름 (예: 시스루뱅)'; kr.value=v[2]||'';
-      // mp4 영상(선택) — 영문 라벨 제거, 빈 en 자리는 보존(인덱스 유지)
+      // 영문·영상mp4 칸 제거(카드=사진+이름만, 영상은 「영상」 구성으로). 데이터 인덱스 보존 위해 hidden 유지
       var en=document.createElement('input'); en.className='lb-en'; en.type='hidden'; en.value=v[3]||'';
-      var vid=document.createElement('input'); vid.className='lb-vid'; vid.placeholder='＋ 영상 mp4 넣기 (선택·마우스 올리면 재생)'; vid.value=v[1]||'';
+      var vid=document.createElement('input'); vid.className='lb-vid'; vid.type='hidden'; vid.value=v[1]||'';
       var del=document.createElement('button'); del.type='button'; del.className='lb-del'; del.textContent='🗑 이 카드 삭제';
       var tab=document.createElement('button'); tab.type='button'; tab.className='lb-tab'; tab.__it=it; tab.onclick=function(){ show(it); };
       del.onclick=function(){ var n=bodyBox.querySelectorAll('.sg-item').length; if(n<=1){ toast('카드는 최소 1개 필요해요'); return; } it.remove(); tab.remove(); renumber(); var first=bodyBox.querySelector('.sg-item'); if(first) show(first); };
@@ -4020,39 +4055,72 @@
     }
     function renderTimeTab(){
       var closed=parseClosed(resvCfg.closedDays);
-      var h='<div class="rs-lbl">영업 시간 · 간격</div><div class="rs-row3"><input class="rs-in" id="rs-start" placeholder="시작" value="'+esc(resvCfg.start)+'"><input class="rs-in" id="rs-end" placeholder="종료" value="'+esc(resvCfg.end)+'"><input class="rs-in" id="rs-interval" placeholder="간격(분)" value="'+esc(resvCfg.interval)+'"></div>';
+      var h='<div class="rs-lbl">특정일 임시 휴무 <span>· 달력에서 날짜를 눌러 막아요</span></div><div class="rs-mini" id="rs-bd-cal"></div><div id="rs-bd-chips" style="margin-top:9px;"></div>';
+      h+='<div class="rs-lbl">영업 시간 · 간격</div><div class="rs-row3"><input class="rs-in" id="rs-start" placeholder="시작" value="'+esc(resvCfg.start)+'"><input class="rs-in" id="rs-end" placeholder="종료" value="'+esc(resvCfg.end)+'"><input class="rs-in" id="rs-interval" placeholder="간격(분)" value="'+esc(resvCfg.interval)+'"></div>';
       h+='<div class="rs-lbl">정기 휴무 요일</div><div class="rs-dow" id="rs-dow">'+DOW.map(function(d,i){ return '<button data-dow="'+i+'"'+(closed[i]?' class="on"':'')+'>'+d+'</button>'; }).join('')+'</div>';
       h+='<div class="rs-lbl">표시</div><div class="rs-toggle-row"><span class="nm">공휴일 자동 표시 (빨강·휴무)</span><span class="sw'+(resvCfg.showHolidays?' on':'')+'" id="rs-holi"><i></i></span></div>';
       h+='<div class="rs-lbl">예약 가능 기간 <span>· 오늘부터 N일까지만</span></div><input class="rs-in" id="rs-lead" placeholder="예: 30" value="'+esc(resvCfg.leadDays)+'">';
-      h+='<div class="rs-lbl">특정일 임시 휴무 <span>· 휴가·마감일</span></div><div class="rs-row3"><input class="rs-in" type="date" id="rs-bd-date"><button class="btn" id="rs-bd-add" style="flex:0 0 auto; padding:9px 14px;">추가</button></div><div id="rs-bd-chips" style="margin-top:9px;"></div>';
       setupBody.innerHTML=h;
       document.getElementById('rs-start').oninput=function(){ resvCfg.start=this.value; };
       document.getElementById('rs-end').oninput=function(){ resvCfg.end=this.value; };
       document.getElementById('rs-interval').oninput=function(){ resvCfg.interval=parseInt(this.value,10)||60; };
       document.getElementById('rs-lead').oninput=function(){ resvCfg.leadDays=parseInt(this.value,10)||0; };
-      document.querySelectorAll('#rs-dow button').forEach(function(b){ b.onclick=function(){ b.classList.toggle('on'); resvCfg.closedDays=collectClosed(); }; });
-      var holi=document.getElementById('rs-holi'); holi.onclick=function(){ resvCfg.showHolidays=!resvCfg.showHolidays; holi.classList.toggle('on', resvCfg.showHolidays); };
-      document.getElementById('rs-bd-add').onclick=function(){ var v=document.getElementById('rs-bd-date').value; if(v && resvCfg.blockedDates.indexOf(v)<0){ resvCfg.blockedDates.push(v); resvCfg.blockedDates.sort(); renderBdChips(); } };
-      renderBdChips();
+      document.querySelectorAll('#rs-dow button').forEach(function(b){ b.onclick=function(){ b.classList.toggle('on'); resvCfg.closedDays=collectClosed(); renderResvMiniCal(); }; });
+      var holi=document.getElementById('rs-holi'); holi.onclick=function(){ resvCfg.showHolidays=!resvCfg.showHolidays; holi.classList.toggle('on', resvCfg.showHolidays); renderResvMiniCal(); };
+      renderResvMiniCal(); renderBdChips();
+    }
+    var rsCalY=null, rsCalM=null;
+    function renderResvMiniCal(){
+      var box=document.getElementById('rs-bd-cal'); if(!box) return;
+      var now=new Date(); if(rsCalY==null){ rsCalY=now.getFullYear(); rsCalM=now.getMonth(); }
+      var startDow=new Date(rsCalY,rsCalM,1).getDay(), days=new Date(rsCalY,rsCalM+1,0).getDate();
+      var closed=parseClosed(resvCfg.closedDays);
+      var tY=now.getFullYear(),tMo=now.getMonth(),tD=now.getDate();
+      function p2(n){ return (n<10?'0':'')+n; }
+      var h='<div class="rs-cal-head"><button type="button" class="rs-cal-nav" data-rscal="-1">‹</button><b>'+rsCalY+'년 '+(rsCalM+1)+'월</b><button type="button" class="rs-cal-nav" data-rscal="1">›</button></div>';
+      h+='<div class="rs-cal-dow">'+DOW.map(function(d,i){ return '<span'+(i===0?' class="sun"':(i===6?' class="sat"':''))+'>'+d+'</span>'; }).join('')+'</div><div class="rs-cal-grid">';
+      for(var i=0;i<startDow;i++) h+='<span class="rs-cal-cell empty"></span>';
+      for(var d=1;d<=days;d++){ var ds=rsCalY+'-'+p2(rsCalM+1)+'-'+p2(d); var dow=new Date(rsCalY,rsCalM,d).getDay();
+        var cls='rs-cal-cell'+(resvCfg.blockedDates.indexOf(ds)>=0?' blocked':'')+(closed[dow]?' closed':'')+((resvCfg.showHolidays&&HOLIDAYS_KR&&HOLIDAYS_KR[ds])?' holi':'')+((rsCalY===tY&&rsCalM===tMo&&d===tD)?' today':'');
+        h+='<button type="button" class="'+cls+'" data-rsd="'+ds+'">'+d+'</button>'; }
+      h+='</div><div class="rs-cal-hint">날짜를 누르면 그날만 휴무 · 다시 누르면 해제</div>';
+      box.innerHTML=h;
+      box.querySelectorAll('[data-rscal]').forEach(function(b){ b.onclick=function(){ rsCalM+=(+b.dataset.rscal); if(rsCalM<0){rsCalM=11;rsCalY--;} else if(rsCalM>11){rsCalM=0;rsCalY++;} renderResvMiniCal(); }; });
+      box.querySelectorAll('[data-rsd]').forEach(function(b){ b.onclick=function(){ var ds=b.dataset.rsd, i=resvCfg.blockedDates.indexOf(ds); if(i>=0) resvCfg.blockedDates.splice(i,1); else { resvCfg.blockedDates.push(ds); resvCfg.blockedDates.sort(); } renderResvMiniCal(); renderBdChips(); }; });
+    }
+    var KAKAO_SVG='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.2C6.9 3.2 2.8 6.4 2.8 10.3c0 2.5 1.7 4.7 4.2 6-.2.6-.7 2.5-.8 2.9 0 0 0 .3.2.4.2 0 .3-.1.4-.2.3-.2 2.8-1.9 3.4-2.3.5.1 1.1.1 1.6.1 5.1 0 9.2-3.2 9.2-7.1S17.1 3.2 12 3.2Z" fill="#3A1D1D"/></svg>';
+    function refreshKakaoState(){
+      var card=document.getElementById('rs-kakao-card'); if(!card) return;
+      var has=!!(resvCfg.kakao||'').trim();
+      card.classList.toggle('ok', has); card.classList.toggle('need', !has);
     }
     function renderMsgTab(){
-      var h='<div class="rs-lbl">카카오 오픈채팅 링크 <span>· 손님이 신청 보낼 곳</span></div><input class="rs-in" id="rs-kakao" placeholder="https://open.kakao.com/o/..." value="'+esc(resvCfg.kakao)+'">';
+      var h='<div class="rs-kakao-card" id="rs-kakao-card">'
+        + '<div class="rs-kakao-head"><span class="rs-kakao-ic">'+KAKAO_SVG+'</span>'
+        +   '<div><div class="rs-kakao-tt"><b>카톡</b> 받을 곳 · 여기에 넣어요</div><div class="rs-kakao-sub">손님이 예약 신청을 보낼 카카오 오픈채팅 링크</div></div></div>'
+        + '<input class="rs-in" id="rs-kakao" placeholder="https://open.kakao.com/o/..." value="'+esc(resvCfg.kakao)+'">'
+        + '<div class="rs-kakao-need">⚠️ 비어 있어요 — 이 링크를 넣어야 손님이 예약을 보낼 수 있어요</div>'
+        + '<div class="rs-kakao-ok">✓ 연결됨 — 손님 예약화면에 「💬 카카오톡으로 보내기」 버튼이 떠요</div>'
+        + '<div class="rs-kakao-help"><b>링크 만드는 법:</b> 카톡 → 채팅 → ＋ → 오픈채팅 → 방 만들기 → <b>링크 복사</b> → 여기 붙여넣기</div>'
+        + '</div>';
       h+='<div class="rs-lbl">카톡 안내 메시지 <span>· {날짜}{시간}{시술}{이름}{연락처}{방문}{메모}</span></div><textarea class="rs-in" id="rs-msg" rows="8">'+escT(resvCfg.msgTpl)+'</textarea>';
       h+='<div class="rs-lbl">예약 주의사항 <span>· 노쇼·취소 정책 등</span></div><textarea class="rs-in" id="rs-notice" rows="3">'+escT(resvCfg.notice)+'</textarea>';
       h+='<div class="rs-lbl">답변 시간 안내 <span>· 선택</span></div><textarea class="rs-in" id="rs-note" rows="2">'+escT(resvCfg.note)+'</textarea>';
       setupBody.innerHTML=h;
-      document.getElementById('rs-kakao').oninput=function(){ resvCfg.kakao=this.value.trim(); };
+      document.getElementById('rs-kakao').oninput=function(){ resvCfg.kakao=this.value.trim(); refreshKakaoState(); };
       document.getElementById('rs-msg').oninput=function(){ resvCfg.msgTpl=this.value; };
       document.getElementById('rs-notice').oninput=function(){ resvCfg.notice=this.value; };
       document.getElementById('rs-note').oninput=function(){ resvCfg.note=this.value; };
+      refreshKakaoState();
     }
     function renderTab(){ if(curTab==='menu') renderMenuTab(); else if(curTab==='time') renderTimeTab(); else renderMsgTab(); }
     document.querySelectorAll('.rs-tab').forEach(function(t){ t.onclick=function(){ curTab=t.dataset.rstab; document.querySelectorAll('.rs-tab').forEach(function(x){ x.classList.toggle('on', x===t); }); renderTab(); }; });
     var setupBtn=document.getElementById('open-resv-setup');
-    if(setupBtn) setupBtn.onclick=function(){ curTab='menu'; document.querySelectorAll('.rs-tab').forEach(function(x){ x.classList.toggle('on', x.dataset.rstab==='menu'); }); renderTab(); openOv('resv-setup-ov'); };
+    if(setupBtn) setupBtn.onclick=function(){ var needKakao=!(resvCfg.kakao||'').trim(); curTab=needKakao?'msg':'time'; document.querySelectorAll('.rs-tab').forEach(function(x){ x.classList.toggle('on', x.dataset.rstab===curTab); }); renderTab(); openOv('resv-setup-ov'); if(needKakao){ setTimeout(function(){ var c=document.getElementById('rs-kakao-card'); if(c){ c.classList.add('need'); c.scrollIntoView({block:'start'}); } var k=document.getElementById('rs-kakao'); if(k) k.focus(); }, 250); } };
     document.getElementById('resv-setup-x').onclick=function(){ closeOv('resv-setup-ov'); };
     document.getElementById('resv-setup-ov').addEventListener('click', function(e){ if(e.target.id==='resv-setup-ov') closeOv('resv-setup-ov'); });
     document.getElementById('resv-setup-save').onclick=function(){ closeOv('resv-setup-ov'); topSave(); };
+    var rsPv=document.getElementById('resv-setup-preview'); if(rsPv) rsPv.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
 
     // ════ 예약 현황 · 명단 ════
     function parseResvLead(x){
@@ -4247,7 +4315,10 @@
     function sendData(){ try{ ifr.contentWindow.postMessage({type:'la-edit-data', data:curData()}, '*'); }catch(e){} }
     function loadFrame(){ if(frame) frame.classList.remove('loaded'); ifr.onload=function(){ if(frame) frame.classList.add('loaded'); }; ifr.src='u.html?edit=1&u='+encodeURIComponent(curHandle())+'&cb='+Date.now(); }
     window.__liveEditActive=false;
-    function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); loadFrame(); ov.classList.add('open'); }
+    function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); ov.classList.add('open');
+      // 진입 시 최신 저장본을 다시 불러와 편집기를 '공개'와 일치시킴 (공개엔 있는데 편집엔 없는 어긋남 방지)
+      (async function(){ try{ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } }catch(e){} loadFrame(); })();
+    }
     function closeLive(){ window.__liveEditActive=false; if(window.__setFabInsert) try{ window.__setFabInsert(false); }catch(e){} ov.classList.remove('open'); ifr.src='about:blank'; }
     // 편집 후 새로고침: iframe 통째 reload(스크롤 튐) 대신 데이터만 재전송 → 보던 위치 그대로 유지
     window.__liveRefresh=function(){ if(!window.__liveEditActive) return; try{ if(ifr && ifr.contentWindow && ifr.contentWindow.__applyPublicData){ sendData(); } else { loadFrame(); } }catch(e){ loadFrame(); } };
@@ -4430,11 +4501,11 @@
     var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ if(window.__openHomeDeco) window.__openHomeDeco('all'); };
     var lib=document.getElementById('le-library'); if(lib) lib.onclick=function(){ if(window.openVault) window.openVault(null); };
     // 상단 우측 미리보기/편집 토글 (손님 화면 그대로 보기 ↔ 편집)
-    var pvb=document.getElementById('le-toptoggle'); var _clean=false; var ml=document.getElementById('le-mode-label');
+    // 🏠 고객 홈 = 저장·공개 후 실제 손님 페이지(새 탭)로 — '미리보기' 대체
+    var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+    var ml=document.getElementById('le-mode-label');
     var EDIT_LBL='✎ 편집 중 <span style="font-weight:400; color:var(--muted); font-size:11px;">· 톡 눌러 고치기</span>';
-    var PV_LBL='👁 미리보기 중 <span style="font-weight:400; color:var(--muted); font-size:11px;">· 손님이 보는 그대로</span>';
-    if(pvb) pvb.onclick=function(){ _clean=!_clean; try{ ifr.contentWindow.postMessage({type:'la-edit-preview', on:_clean}, '*'); }catch(e){} pvb.textContent=_clean?'✎ 편집하기':'👁 미리보기'; if(ml) ml.innerHTML=_clean?PV_LBL:EDIT_LBL; };
-    window.__leResetToggle=function(){ _clean=false; if(pvb) pvb.textContent='👁 미리보기'; if(ml) ml.innerHTML=EDIT_LBL; };
+    window.__leResetToggle=function(){ if(ml) ml.innerHTML=EDIT_LBL; };
   })();
 })();
 </script>
