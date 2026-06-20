@@ -207,9 +207,22 @@
   .lb-del{display:block; width:100%; margin-top:12px; background:none; border:1px solid var(--hair); color:#FF8C8C; border-radius:10px; padding:9px; font-size:12.5px; font-weight:700; font-family:var(--sans); cursor:pointer;}
   /* 룩 카드: 세로로 쌓기 (기존 .sg-item 가로 flex 무시) */
   .lb-body .sg-item{display:block; border:none !important; padding:0 !important; margin:0 !important;}
+  .lb-vidhint{font-size:11.5px; color:var(--muted); background:var(--soft); border:1px solid var(--hair); border-radius:9px; padding:8px 10px; margin-bottom:9px; line-height:1.5;}
+  .lb-vidhint b{color:var(--ink);}
+  .lb-ytguide{margin-left:4px; font-size:11px; font-weight:700; color:var(--coral); background:var(--coral-soft); border:1px solid var(--coral); border-radius:8px; padding:3px 9px; cursor:pointer; font-family:var(--sans);}
+  .lb-vid-lock{opacity:.6; cursor:pointer; color:var(--muted) !important;}
+  .vg-dlg{max-width:340px;}
+  .vg-t{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:7px;}
+  .vg-s{font-size:12.5px; color:var(--muted); line-height:1.6; margin-bottom:15px;} .vg-s b{color:var(--ink);}
+  .vg-step{display:flex; gap:10px; align-items:flex-start; margin-bottom:9px; font-size:12.5px; color:var(--ink); line-height:1.5;}
+  .vg-step b{color:var(--coral);}
+  .vg-step span{flex:0 0 auto; width:20px; height:20px; border-radius:50%; background:var(--grad); color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px;}
+  .vg-note{font-size:11px; color:var(--muted); line-height:1.7; margin:13px 0; padding:11px; background:var(--soft); border-radius:10px;} .vg-note b{color:var(--ink);}
   .lb-body .lb-photo-btn{width:100% !important; height:190px; background-size:contain !important; background-repeat:no-repeat; background-position:center; background-color:var(--soft);}
   .lb-body .lb-kr, .lb-body .lb-en, .lb-body .lb-vid{display:block; width:100%; box-sizing:border-box; margin-top:8px; border:1px solid var(--hair); background:var(--soft); border-radius:8px; padding:9px 11px; font-size:13px; font-family:var(--sans); color:var(--ink);}
   .vup{width:100%; border:1.5px dashed #CFC6B6; background:transparent; color:var(--muted); border-radius:12px; padding:16px; font-size:13px; font-family:var(--sans); cursor:pointer; margin-bottom:14px;}
+  .vlib-h{font-size:12.5px; font-weight:700; color:var(--coral); margin:2px 2px 9px;}
+  .vlib-h span{font-weight:400; color:var(--muted); font-size:11px;}
   .vgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
   .vph{position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; background:var(--soft); cursor:pointer; border:1px solid var(--hair);}
   .vph img{width:100%; height:100%; object-fit:cover; display:block;}
@@ -309,9 +322,69 @@
   .lock-ic{font-size:34px; margin-bottom:10px;}
   .lock-t{font-size:15.5px; font-weight:800; color:var(--ink); margin-bottom:8px; line-height:1.4;}
   .lock-s{font-size:12.5px; color:var(--muted); line-height:1.6; margin-bottom:16px;}
+  .lock-perks{list-style:none; margin:4px 0 14px; padding:12px 13px; background:var(--soft); border:1px solid var(--hair); border-radius:12px; text-align:left;}
+  .lock-perks li{font-size:12.5px; color:var(--ink); padding:4px 0; line-height:1.4;}
+  .lock-cmp{display:block; width:100%; text-align:center; margin-bottom:8px; padding:10px; border:1px solid var(--hair); border-radius:11px; background:transparent; color:var(--muted); font-size:12.5px; font-weight:700; cursor:pointer;}
+  .lock-cmp:active{transform:scale(.99);}
   .lock-go{display:block; width:100%; padding:13px; border-radius:12px; background:#FEE500; color:#3C1E1E; font-size:14px; font-weight:800; text-decoration:none; margin-bottom:8px;}
   .lock-go:active{transform:scale(.99);}
   .lock-close{display:block; width:100%; padding:10px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer;}
+  /* 템플릿 섹션 (구성추가 안에서 색 구분) */
+  .tpl-section{background:linear-gradient(180deg, rgba(167,139,255,.10), rgba(167,139,255,.03)); border:1px solid rgba(167,139,255,.28); border-radius:14px; padding:11px 11px 13px; margin-bottom:14px;}
+  .tcat-tpl{color:#A78BFF !important; margin-top:2px !important;}
+  .tpl-set{position:relative; border-color:rgba(167,139,255,.35) !important;}
+  .tpl-badge{position:absolute; top:-8px; right:9px; font-size:9px; font-weight:800; color:#fff; background:#A78BFF; padding:2px 8px; border-radius:999px; letter-spacing:.02em;}
+  .tpl-prem{border-color:rgba(125,191,142,.45) !important; background:linear-gradient(180deg, rgba(125,191,142,.12), rgba(6,11,8,.04)) !important;}
+  .tpl-badge-prem{background:#A78BFF; color:#fff;}
+  /* 프로 전용 블록 (베이직일 때 자물쇠) */
+  .tpl-pro{position:relative; opacity:.62;}
+  .tpl-pro::after{content:'🔒 프로'; position:absolute; top:6px; right:7px; font-size:8.5px; font-weight:800; color:#3C1E1E; background:#FEE500; padding:2px 6px; border-radius:999px; letter-spacing:.02em;}
+  .tpl-pro .tic{filter:grayscale(.5);}
+  /* 템플릿 완성 예시 미리보기 */
+  #tpl-preview-ov{background:rgba(0,0,0,.7);}
+  .tpp-dlg{max-width:340px; max-height:90vh; display:flex; flex-direction:column; padding:16px 16px 16px; overflow-y:auto;}
+  .tpp-t{font-size:15px; font-weight:800; color:var(--ink);}
+  .tpp-s{font-size:11.5px; color:var(--muted); margin:3px 0 12px;}
+  .tpp-phone{flex:0 0 auto; height:320px; overflow-y:auto; background:#0e0e12; border:1px solid var(--hair); border-radius:18px; padding:0;}
+  .mp{background:#fbf8f3; color:#1f1d18; padding:16px 14px 22px; font-size:12px; min-height:100%;}
+  .mp-eyebrow{font-size:9px; font-weight:800; letter-spacing:.12em; color:#cc785c; margin-bottom:5px;}
+  .mp-h1{font-size:17px; font-weight:800; line-height:1.3; letter-spacing:-.02em; margin-bottom:7px;}
+  .mp-sub{font-size:11px; color:#7a746a; line-height:1.6; margin-bottom:14px;}
+  .mp-img{height:104px; border-radius:11px; background:linear-gradient(135deg,#d9c7f0,#f0c8d8); margin-bottom:12px; display:flex; align-items:center; justify-content:center; color:rgba(0,0,0,.28); font-size:20px;}
+  .mp-imgs{display:flex; gap:7px; margin-bottom:14px;}
+  .mp-imgs i{flex:1; height:74px; border-radius:9px; background:linear-gradient(135deg,#d9c7f0,#f0c8d8);}
+  .mp-imgs i:nth-child(2){background:linear-gradient(135deg,#cfe3d6,#e9dfc6);}
+  .mp-imgs i:nth-child(3){background:linear-gradient(135deg,#f0d8c8,#e0c8e8);}
+  .mp-card{background:#fff; border:1px solid #ece4d6; border-radius:11px; padding:11px 12px; margin-bottom:11px;}
+  .mp-card b{font-size:11.5px; color:#1f1d18;}
+  .mp-card p{margin:5px 0 0; font-size:10.5px; color:#7a746a; line-height:1.55;}
+  .mp-stars{color:#e6a23c; font-size:11px; letter-spacing:1px;}
+  .mp-row{display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid #efe7da; font-size:11px;}
+  .mp-row b{color:#cc785c;}
+  .mp-cta{display:block; text-align:center; margin-top:14px; padding:12px; border-radius:11px; background:linear-gradient(135deg,#cc785c,#c06a4a); color:#fff; font-size:12.5px; font-weight:800;}
+  .mp-sec-h{font-size:12.5px; font-weight:800; margin:16px 0 8px; padding-top:14px; border-top:1px solid #efe7da;}
+  /* 프리미엄(뱅하우스) 미리보기 목업 */
+  .mp-prem{background:radial-gradient(ellipse 80% 50% at 50% 0%, rgba(125,191,142,.20), transparent 70%), #060B08; color:#F2F4F0;}
+  .mp-prem .mp-sec-h{border-top-color:rgba(255,255,255,.08);}
+  .mp-prem .mp-row{border-bottom-color:rgba(255,255,255,.08);} .mp-prem .mp-row b{color:#7DBF8E;}
+  .mp-mq{display:flex; gap:6px; overflow:hidden; margin-bottom:16px; -webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);}
+  .mp-mq span{flex:0 0 auto; font-size:9.5px; font-weight:700; color:#7DBF8E; background:rgba(125,191,142,.12); border:1px solid rgba(255,255,255,.08); border-radius:999px; padding:4px 9px; white-space:nowrap;}
+  .mp-glow-eb{text-align:center; font-size:9px; font-weight:800; letter-spacing:.2em; color:rgba(242,244,240,.5); margin-bottom:2px;}
+  .mp-glow{text-align:center; font-size:52px; font-weight:900; color:#7DBF8E; line-height:1; letter-spacing:-.02em; text-shadow:0 0 22px rgba(125,191,142,.45), 0 0 44px rgba(125,191,142,.25);}
+  .mp-glow-sub{text-align:center; font-size:11px; color:#F2F4F0; margin-top:8px;}
+  .mp-prem .mp-imgs i{height:88px; background:linear-gradient(135deg,#16221A,#1A2A20);}
+  .tpp-why{margin-top:13px; background:var(--soft); border:1px solid var(--hair); border-radius:13px; padding:13px 14px;}
+  .tpw-h{font-size:13px; font-weight:800; color:var(--ink); margin-bottom:5px;}
+  .tpw-intro{font-size:11.5px; color:var(--coral); font-weight:600; line-height:1.5; margin-bottom:11px;}
+  .tpw-step{display:flex; gap:9px; align-items:flex-start; margin-bottom:9px;}
+  .tpw-n{flex:0 0 auto; width:18px; height:18px; border-radius:50%; background:var(--coral-soft); color:var(--coral); font-size:10.5px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px;}
+  .tpw-step b{display:block; font-size:12px; font-weight:700; color:var(--ink);}
+  .tpw-step span{font-size:11px; color:var(--muted); line-height:1.45;}
+  .tpw-foot{font-size:11px; color:var(--muted); margin-top:4px; padding-top:9px; border-top:1px solid var(--hair);}
+  .tpw-foot b{color:var(--ink);}
+  .tpp-use{width:100%; padding:13px; border:0; border-radius:12px; background:var(--grad); color:#fff; font-size:14.5px; font-weight:800; cursor:pointer; margin-top:13px;}
+  .tpp-use:active{transform:scale(.99);}
+  .tpp-close{width:100%; padding:10px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer; margin-top:8px;}
   .plan-box{background:var(--soft); border:1px solid var(--hair); border-radius:13px; padding:13px 14px; margin-bottom:9px;}
   .pb-row{display:flex; align-items:center; justify-content:space-between; gap:8px;}
   .pb-tier{font-size:13px; font-weight:800; padding:3px 11px; border:1.5px solid; border-radius:999px;}
@@ -544,9 +617,9 @@
   .ff input{flex:1; border:1px solid var(--hair); background:var(--soft); border-radius:9px; padding:9px 11px; font-size:13px; color:var(--ink); font-family:var(--sans);}
 
   /* 구성 추가 모달 */
-  .ov{position:fixed; inset:0; background:rgba(40,32,20,.45); z-index:120; display:none; align-items:flex-end; justify-content:center;}
+  .ov{position:fixed; inset:0; background:rgba(40,32,20,.45); z-index:120; display:none; align-items:center; justify-content:center; padding:16px;}
   .ov.open{display:flex;}
-  .sheet{background:var(--paper); width:100%; max-width:520px; border-radius:20px 20px 0 0; padding:18px 16px 28px; max-height:84vh; overflow-y:auto;}
+  .sheet{background:var(--paper); width:100%; max-width:480px; border-radius:20px; padding:18px 16px 22px; max-height:88vh; overflow-y:auto;}
   .sheet-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
   .sheet-h .t{font-family:var(--serif); font-size:18px; font-weight:600;}
   .sheet-h .x{font-size:22px; color:var(--muted); cursor:pointer; line-height:1;}
@@ -736,6 +809,11 @@
   .tf-seg{display:flex; gap:8px; margin-bottom:10px;}
   .tf-btn{flex:1; border:1px solid var(--hair); background:var(--surface); color:var(--muted); border-radius:10px; padding:9px; font-size:12.5px; font-family:var(--sans); cursor:pointer;}
   .tf-btn.on{border-color:var(--coral); color:var(--coral); background:var(--coral-soft); font-weight:500;}
+  .hs-seg{display:flex; flex-direction:column; gap:7px; margin-bottom:10px;}
+  .hs-btn{display:flex; flex-direction:column; gap:2px; text-align:left; border:1.5px solid var(--hair); background:var(--surface); color:var(--ink); border-radius:11px; padding:10px 12px; font-family:var(--sans); cursor:pointer;}
+  .hs-btn b{font-size:13px; font-weight:700;} .hs-btn span{font-size:11px; color:var(--muted);}
+  .hs-btn.on{border-color:var(--coral); background:var(--coral-soft);} .hs-btn.on b{color:var(--coral);}
+  .hs-btn:active{transform:scale(.99);}
   .tf-prev{background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:7px; margin-bottom:14px;}
   .tf-row{background:var(--surface); border:1px solid var(--hair); border-radius:8px; padding:8px 10px; display:flex; align-items:center; gap:8px;}
   .tf-row.tf-hero{justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:13px; color:var(--ink);}
@@ -1381,18 +1459,22 @@
       <div class="sheet-h"><span class="t">구성 추가</span><span class="x" data-close>×</span></div>
       <div class="desc">골라서 추가 → 사진·글만 채우면 완성</div>
 
-      <div class="tcat">✨ 추천 <span style="font-weight:400; color:var(--muted);">· 지금 더하면 좋은 것</span></div>
+      <div class="tpl-section">
+      <div class="tcat tcat-tpl">📐 준비된 템플릿 <span style="font-weight:400; color:var(--muted);">· 눌러서 완성 예시 보기</span></div>
+      <div class="tgrid">
+        <div class="tpl tpl-set imp" data-set="hook"><span class="tpl-badge">템플릿</span><span class="tic">✨</span><span><span class="tn">문제 기반 랜딩 (전체)</span><span class="ts">공감→원인→전문가→해결→예약 풀세트</span></span></div>
+        <div class="tpl tpl-set" data-set="photo"><span class="tpl-badge">템플릿</span><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
+        <div class="tpl tpl-set" data-set="profile"><span class="tpl-badge">템플릿</span><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
+        <div class="tpl tpl-set" data-set="content"><span class="tpl-badge">템플릿</span><span class="tic">✍️</span><span><span class="tn">콘텐츠·구독형 세트</span><span class="ts">세계관→콘텐츠→구독</span></span></div>
+        <div class="tpl tpl-set tpl-prem" data-set="premium"><span class="tpl-badge tpl-badge-prem">프로</span><span class="tic">🖤</span><span><span class="tn">프리미엄 헤어샵 (뱅하우스 톤)</span><span class="ts">다크 그린·글로우·흐르는 태그·쇼케이스 영상 — 테마·폰트까지 한 번에</span></span></div>
+      </div>
+      </div><!-- /.tpl-section -->
+
+      <div class="tcat">✨ 지금 가장 추천 <span style="font-weight:400; color:var(--muted);">· 지금 더하면 좋은 것</span></div>
       <div class="tgrid" id="rec-grid"></div>
       <button type="button" id="add-more-btn" style="width:100%; margin:8px 0 2px; padding:11px; background:transparent; border:1px dashed var(--hair); border-radius:11px; color:var(--coral); font-family:var(--sans); font-size:12.5px; font-weight:600; cursor:pointer;">＋ 전체 구성 보기 ▾</button>
 
       <div id="add-all" style="display:none;">
-      <div class="tcat">✨ 통째로 추가 <span style="font-weight:400; color:var(--muted);">· 검증된 순서대로 쫙</span></div>
-      <div class="tgrid">
-        <div class="tpl imp" data-set="hook"><span class="tic">✨</span><span><span class="tn">문제 기반 랜딩 (전체)</span><span class="ts">공감→원인→전문가→해결→예약 풀세트</span></span></div>
-        <div class="tpl" data-set="photo"><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
-        <div class="tpl" data-set="profile"><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
-        <div class="tpl" data-set="content"><span class="tic">✍️</span><span><span class="tn">콘텐츠·구독형 세트</span><span class="ts">세계관→콘텐츠→구독</span></span></div>
-      </div>
       <div class="tcat">전문가 · 신뢰 <span style="font-weight:400; color:var(--muted);">· 설득 비용을 줄여요</span></div>
       <div class="tgrid">
         <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력·숫자</span></span></div>
@@ -1418,6 +1500,8 @@
         <div class="tpl" data-ic="▦" data-nm="콘텐츠 갤러리"><span class="tic">▦</span><span><span class="tn">콘텐츠 갤러리</span><span class="ts">사진 가로 스크롤</span></span></div>
         <div class="tpl" data-ic="▤" data-nm="아카이브"><span class="tic">▤</span><span><span class="tn">아카이브</span><span class="ts">매거진형 글</span></span></div>
         <div class="tpl" data-ic="❝" data-nm="인용구"><span class="tic">❝</span><span><span class="tn">인용구</span><span class="ts">한 문장 강조</span></span></div>
+        <div class="tpl" data-ic="🏷" data-nm="흐르는 태그 띠"><span class="tic">🏷</span><span><span class="tn">흐르는 태그 띠</span><span class="ts">키워드가 좌우로 흐름 (감성)</span></span></div>
+        <div class="tpl" data-ic="✦" data-nm="글로우 후킹"><span class="tic">✦</span><span><span class="tn">글로우 후킹</span><span class="ts">큰 숫자·단어가 빛나게 (임팩트)</span></span></div>
         <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전후사진</span><span class="ts">비포·애프터</span></span></div>
         <div class="tpl" data-ic="¶" data-nm="자유 텍스트"><span class="tic">¶</span><span><span class="tn">자유 텍스트</span><span class="ts">제목·설명</span></span></div>
         <div class="tpl" data-ic="▥" data-nm="이미지 + 글"><span class="tic">▥</span><span><span class="tn">이미지 + 글</span><span class="ts">좌우 분할</span></span></div>
@@ -1555,6 +1639,7 @@
       <div class="vrow" id="vault-cats"></div>
       <input type="file" id="vault-file" accept="image/*" multiple hidden>
       <button class="vup" id="vault-up">＋ 사진 올리기</button>
+      <div class="vlib-h" id="vault-lib-h" style="display:none;">🖼 라이브러리에서 가져오기 <span>· 눌러서 선택</span></div>
       <div class="vgrid" id="vault-grid"></div>
       <div class="vhint">올린 사진은 갤러리·표지·카드뉴스 어디서나 골라 쓸 수 있어요</div>
     </div>
@@ -1594,10 +1679,11 @@
       <div class="desc">고르면 공개 페이지에 바로 적용돼요 (방문자가 보는 첫 화면)</div>
 
       <div data-hsec="home">
-        <div class="tcat" style="margin-top:2px">홈 맨 위에 보여줄 것</div>
-        <div class="tf-seg" id="topfirst-seg">
-          <button class="tf-btn" data-tf="profile">프로필 먼저</button>
-          <button class="tf-btn" data-tf="hero">후킹 문구 먼저</button>
+        <div class="tcat" style="margin-top:2px">홈 시작 스타일 <span style="font-weight:400; color:var(--muted);">· 방문자가 보는 첫 화면</span></div>
+        <div class="hs-seg" id="homestyle-seg">
+          <button class="hs-btn" data-style="profile"><b>프로필형</b><span>사진 + 이름 + 소개 · 추천</span></button>
+          <button class="hs-btn" data-style="both"><b>후킹 + 프로필</b><span>후킹 문구 먼저, 그 아래 프로필</span></button>
+          <button class="hs-btn" data-style="hook"><b>후킹 문구만</b><span>사진·소개 없이 한 줄로 (뱅하우스식)</span></button>
         </div>
         <div class="tf-prev" id="topfirst-prev"></div>
 
@@ -1828,6 +1914,8 @@
     .post-card .pc-feat{color:#F5C84B; font-size:10.5px;}
     .post-card .pc-acts{display:flex; align-items:center; gap:10px; flex:0 0 auto;}
     .post-card .pc-edit{color:var(--muted); cursor:pointer; font-size:15px;}
+    .post-card .pc-link{cursor:pointer; font-size:14px; opacity:.7;}
+    .post-card .pc-link:active{transform:scale(.9);}
     .post-card.dragging{opacity:.5; outline:1px dashed var(--coral);}
     .post-empty{font-size:12.5px; color:var(--muted); text-align:center; padding:16px; border:1px dashed var(--hair); border-radius:12px; margin-bottom:10px;}
     .post-types{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:4px;}
@@ -1962,6 +2050,7 @@
     var all=document.getElementById('add-all'); if(all) all.style.display='none';
     var mb=document.getElementById('add-more-btn'); if(mb){ mb.style.display=''; mb.textContent='＋ 전체 구성 보기 ▾'; }
     buildRecommended();
+    try{ if(window.__decorateProTiles) window.__decorateProTiles(); }catch(e){}
     ov.classList.add('open');
     var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
   }
@@ -2020,10 +2109,10 @@
     '강의 · 전자책':'link','숫자 스탯':'stat','후기':'review','문의 폼':'contact',
     '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service',
     '대표 사진 쇼케이스':'lookbook','랭킹 · 가격':'ranking','매장 · 위치':'location',
-    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','카운트다운':'countdown','이용 방법':'steps','보장 배지':'guarantee','예약 신청':'reservation'
+    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','카운트다운':'countdown','이용 방법':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook'
   };
   var SCHEMA = {
-    event:[['text','태그','이번 달'],['text','제목','6월 신규 등록 시 1:1 컨설팅 무료'],['date','종료일','2026-06-30'],['url','링크(선택)','']],
+    event:[['text','태그','이번 달'],['text','제목','6월 신규 등록 시 1:1 컨설팅 무료'],['date','종료일','2026-06-30'],['url','링크(선택)',''],['photo','사진 (선택 · 은은한 리본에 작은 썸네일)','']],
     gallery:[['photos','사진 (보관함에서 선택)','']],
     links:[['list','링크 버튼들','제목|링크(URL)']],
     link:[['text','제목',''],['url','링크(URL)','']],
@@ -2053,6 +2142,8 @@
     countdown:[['text','제목','마감 임박! 지금 신청하세요'],['date','마감일','2026-06-30'],['text','버튼 글자(선택)','지금 신청'],['url','링크(선택)','']],
     steps:[['text','제목','이렇게 진행돼요'],['list','단계 (제목·설명)','단계 제목|설명']],
     guarantee:[['text','제목','100% 환불 보장'],['textarea','설명','마음에 안 드시면 100% 환불해드려요. 부담 없이 시작하세요.']],
+    marquee:[['list','흐르는 태그 (좌→우 무한 흐름)','태그 (예: #앞머리펌)']],
+    glowhook:[['text','큰 글자 (숫자·한 단어, 빛나게)','70%'],['text','위 작은 라벨 (선택)','REBONDING'],['textarea','아래 설명 (선택)','**재방문**하는 단골 비율']],
     reservation:[
       ['text','제목','예약하기'],
       ['text','휴무 요일 (쉼표로, 예: 월,화)','월,화'],
@@ -2169,6 +2260,11 @@
     var bodyBox=document.createElement('div'); bodyBox.className='lb-body';
     var addTab=document.createElement('button'); addTab.type='button'; addTab.className='lb-tab lb-addtab'; addTab.textContent='＋ 카드';
     tabs.appendChild(addTab);
+    var vhint=document.createElement('div'); vhint.className='lb-vidhint';
+    var _pro=(typeof tierOK==='function' && tierOK('pro'));
+    vhint.innerHTML = _pro ? '▶ 사진은 <b>썸네일</b>, 영상 링크를 넣으면 <b>탭하면 재생</b>돼요 <button type="button" class="lb-ytguide">📺 유튜브 넣는 법</button>' : '🔒 <b>쇼케이스 영상</b>은 프로 기능이에요 · 사진은 누구나 OK <button type="button" class="lb-ytguide">📺 어떻게?</button>';
+    box.appendChild(vhint);
+    var _gb=vhint.querySelector('.lb-ytguide'); if(_gb) _gb.onclick=function(){ if(window.__openVideoGuide) window.__openVideoGuide(); };
     box.appendChild(tabs); box.appendChild(bodyBox);
     function show(it){
       [].forEach.call(bodyBox.querySelectorAll('.sg-item'), function(x){ x.style.display=(x===it)?'':'none'; });
@@ -2181,7 +2277,9 @@
       var kr=document.createElement('input'); kr.className='lb-kr'; kr.placeholder='이름 (예: 시스루뱅)'; kr.value=v[2]||'';
       // 영문·영상mp4 칸 제거(카드=사진+이름만, 영상은 「영상」 구성으로). 데이터 인덱스 보존 위해 hidden 유지
       var en=document.createElement('input'); en.className='lb-en'; en.type='hidden'; en.value=v[3]||'';
-      var vid=document.createElement('input'); vid.className='lb-vid'; vid.type='hidden'; vid.value=v[1]||'';
+      var vid=document.createElement('input'); vid.className='lb-vid'; vid.type='text'; vid.value=v[1]||'';
+      if(typeof tierOK==='function' && !tierOK('pro')){ vid.readOnly=true; vid.placeholder='🔒 영상 링크 (프로 기능)'; vid.classList.add('lb-vid-lock'); vid.onclick=function(){ if(window.__cmShowLock) window.__cmShowLock('쇼케이스 영상','pro'); }; }
+      else { vid.placeholder='▶ 영상 링크 — 유튜브·쇼츠 (선택)'; }
       var del=document.createElement('button'); del.type='button'; del.className='lb-del'; del.textContent='🗑 이 카드 삭제';
       var tab=document.createElement('button'); tab.type='button'; tab.className='lb-tab'; tab.__it=it; tab.onclick=function(){ show(it); };
       del.onclick=function(){ var n=bodyBox.querySelectorAll('.sg-item').length; if(n<=1){ toast('카드는 최소 1개 필요해요'); return; } it.remove(); tab.remove(); renumber(); var first=bodyBox.querySelector('.sg-item'); if(first) show(first); };
@@ -2495,7 +2593,7 @@
     review:    [['cards','후기 카드','별점+아바타'],['quotes','인용형','큰 따옴표'],['spotlight','대표 강조','1개 크게'],['list','리스트','슬림']],
     qna:       [['bubble','말풍선','채팅형'],['accordion','아코디언','Q·A'],['cards','카드','박스'],['simple','심플','목록']],
     service:   [['grid','가격 카드','2열'],['feature','피처','강조 카드'],['list','리스트','가로'],['mini','미니','알약']],
-    event:     [['banner','배너','태그+제목'],['spotlight','스포트라이트','크게 강조'],['urgent','긴급','마감 임박'],['minimal','미니','한 줄']],
+    event:     [['soft','은은한 리본','티 안 나게 · 추천'],['banner','배너','태그+제목'],['spotlight','스포트라이트','크게 강조'],['urgent','긴급','마감 임박'],['minimal','미니','한 줄']],
     lead:      [['form','등록폼','이름+연락처'],['banner','배너','강조 배경'],['compact','컴팩트','한 줄'],['minimal','미니','연락처만']],
     stylegallery: [['search','검색형','검색+칩'],['bigba','전후 강조','크게 비교'],['grid','그리드','2열'],['strip','가로 스크롤','옆으로']]
   };
@@ -2543,6 +2641,7 @@
       if(k==='spotlight') return box+'<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><div style="height:5px;width:55%;background:#7FE8D8;border-radius:2px;"></div><div style="height:8px;width:35%;background:#2DD4BF;border-radius:4px;"></div></div></div>';
       if(k==='urgent') return box+'<div style="flex:1;padding:6px;display:flex;flex-direction:column;gap:4px;justify-content:center;background:linear-gradient(135deg,#3a1730,#1c1230);"><div style="height:5px;width:30%;background:#FF4D6D;border-radius:3px;"></div><div style="height:5px;width:70%;background:#fff;border-radius:2px;opacity:.85;"></div></div></div>';
       if(k==='minimal') return box+'<div style="flex:1;display:flex;align-items:center;gap:5px;padding:0 8px;"><div style="height:5px;width:18%;background:#7FE8D8;border-radius:2px;"></div><div style="flex:1;height:4px;background:#9b94b8;border-radius:2px;"></div></div></div>';
+      if(k==='soft') return box+'<div style="flex:1;display:flex;align-items:center;gap:5px;padding:0 8px;"><div style="width:5px;height:5px;border-radius:50%;background:#2DD4BF;flex:0 0 auto;"></div><div style="flex:1;height:4px;background:#6b6f7a;border-radius:2px;opacity:.7;"></div></div></div>';
       return box+'<div style="flex:1;display:flex;align-items:center;gap:5px;padding:0 7px;"><div style="width:20%;height:9px;background:#2DD4BF;border-radius:5px;"></div><div style="flex:1;height:5px;background:#9b94b8;border-radius:2px;"></div></div></div>';
     }
     if(type==='lead'){
@@ -2586,7 +2685,7 @@
       if(box3) [].forEach.call(box3.querySelectorAll('.litem'),function(it){ var ins=it.querySelectorAll('input'); if(ins[0]&&ins[0].value) items3.push([ins[0].value, ins[1]?ins[1].value:'', ins[2]?ins[2].value:'', ins[3]?ins[3].value:'']); });
       return { title:t, items:items3 };
     }
-    if(type==='event'){ return { tag:v(0,'input'), title:v(1,'input'), date:v(2,'input') }; }
+    if(type==='event'){ return { tag:v(0,'input'), title:v(1,'input'), date:v(2,'input'), img:ph(4) }; }
     if(type==='lead'){ return { title:v(0,'input'), btn:v(1,'input'), note:v(2,'input') }; }
     if(type==='stylegallery'){
       var items4=[]; var box4=ebody.querySelector('[data-fi="0"][data-sg]');
@@ -2646,6 +2745,7 @@
       if(layout==='spotlight') html='<div style="text-align:center;padding:22px 16px;border-radius:16px;background:radial-gradient(circle at 50% -10%,'+hexA(c.ac,.28)+','+c.surf+' 72%);border:1px solid '+c.hair+';"><div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:'+c.ac+';">'+e(etag)+'</div><div style="font-family:\'Nanum Myeongjo\',serif;font-size:19px;font-weight:800;color:'+c.ink+';margin:8px 0;">'+em(etitle)+'</div>'+(edate?'<div style="font-size:12px;color:'+c.sub+';">'+e(edate)+'</div>':'')+'<div style="display:inline-block;margin-top:12px;background:'+gb+';color:#fff;font-size:12.5px;font-weight:700;padding:10px 22px;border-radius:12px;">지금 신청 →</div></div>';
       else if(layout==='urgent') html='<div style="padding:16px;border-radius:15px;background:linear-gradient(135deg,#3a1730,#1c1230);border:1px solid rgba(255,90,140,.45);"><span style="display:inline-block;background:#FF4D6D;color:#fff;font-size:11px;font-weight:700;padding:4px 11px;border-radius:999px;">🔥 '+e(etag)+'</span><div style="font-size:16px;font-weight:800;color:#fff;margin-top:9px;">'+e(etitle)+'</div>'+(edate?'<div style="font-size:12px;color:#FFB0C2;margin-top:5px;">⏳ '+e(edate)+'</div>':'')+'</div>';
       else if(layout==='minimal') html='<div style="display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:11px;background:'+hexA(c.ac,.13)+';border:1px solid '+c.hair+';"><span style="color:'+c.ac+';font-weight:700;font-size:12px;">'+e(etag)+'</span><span style="flex:1;color:'+c.ink+';font-size:12.5px;font-weight:600;">'+e(etitle)+'</span><span style="color:'+c.ac+';">→</span></div>';
+      else if(layout==='soft'){ var evLead=v.img?'<span style="width:40px;height:40px;border-radius:50%;flex:0 0 auto;background:url('+v.img+') center/cover;"></span>':'<span style="width:6px;height:6px;border-radius:50%;background:'+c.ac+';flex:0 0 auto;"></span>'; html='<div style="display:flex;align-items:center;gap:9px;padding:'+(v.img?'6px 14px 6px 6px':'9px 14px')+';border-radius:999px;background:'+hexA(c.ac,.07)+';border:1px solid '+hexA(c.ac,.18)+';">'+evLead+'<span style="flex:1;color:'+c.sub+';font-size:11.5px;font-weight:500;"><b style="color:'+c.ac+';font-weight:700;">'+e(etag)+'</b> · '+e(etitle)+'</span><span style="color:'+hexA(c.ac,.7)+';font-size:11px;">자세히</span></div>'; }
       else html='<div style="display:flex;align-items:center;gap:11px;padding:15px;border-radius:15px;background:'+hexA(c.ac,.13)+';border:1px solid '+c.hair+';"><span style="background:'+c.ac+';color:#fff;font-size:11px;font-weight:700;padding:5px 11px;border-radius:999px;">'+e(etag)+'</span><div style="flex:1;"><div style="font-size:14px;font-weight:700;color:'+c.ink+';">'+e(etitle)+'</div>'+(edate?'<div style="font-size:11.5px;color:'+c.sub+';margin-top:2px;">'+e(edate)+'</div>':'')+'</div><span style="color:'+c.ac+';font-size:18px;">→</span></div>';
     } else if(type==='lead'){
       var ltitle=v.title||'단골 등록하고 소식 받기', lbtn=v.btn||'등록하기', lnote=v.note||'';
@@ -2748,12 +2848,28 @@
       '카톡 DM이 많아 실시간 답변은 어려워요. 오전 11시·저녁 10시에 모아서 답변드립니다 🙏'],
     '랭킹 · 가격': ['SIGNATURE FILM','TOP 3',
       [['','히메허쉬','가장 인기','55,000원','HOT'],['','슬릭컷','시그니처','55,000원',''],['','허쉬컷','트렌디','55,000원','']]],
-    '매장 · 위치': ['LEAVE A BLANK','서울 강남구 압구정로 00','수–일 · 11:00–17:00','','']
+    '매장 · 위치': ['LEAVE A BLANK','서울 강남구 압구정로 00','수–일 · 11:00–17:00','',''],
+    '흐르는 태그 띠': [[['#앞머리펌'],['#레이어드컷'],['#내추럴웨이브'],['#두피케어'],['#트렌드컬러'],['#홈케어팁']]],
+    '글로우 후킹': ['70%','REBONDING','**재방문**하는 단골 비율']
   };
+  // ── 프로 등급 전용 블록 (판매·전환) — 데이터 모델/그림 그대로, 추가만 잠금 ──
+  // 판매: 추천 제품(쿠팡)·강의/전자책   전환: 전문가 증명·후기·랭킹·쇼케이스·반박 제거·보장 배지
+  var PRO_NM = { '추천 제품':'판매','강의 · 전자책':'판매','전문가 증명':'전환','후기':'전환','랭킹 · 가격':'전환','대표 사진 쇼케이스':'전환','반박 제거':'전환','보장 배지':'전환' };
+  function blockLocked(nm){ return !!PRO_NM[nm] && typeof tierOK==='function' && !tierOK('pro'); }
+  // 카탈로그 타일에 🔒 뱃지 표시 (베이직일 때만)
+  function decorateProTiles(){
+    var basic = (typeof tierOK==='function' && !tierOK('pro'));
+    ov.querySelectorAll('.tpl[data-nm]').forEach(function(t){
+      var nm=t.getAttribute('data-nm'); var on = basic && !!PRO_NM[nm];
+      t.classList.toggle('tpl-pro', on);
+    });
+  }
+  window.__decorateProTiles=decorateProTiles;
   // 템플릿 선택 → 전환 흐름 리스트에 새 행 추가 (맨 아래)
   ov.querySelectorAll('.tpl').forEach(function(t){
     if(t.dataset.set) return;   // 세트 타일은 아래에서 별도 처리(통째로 추가)
     t.addEventListener('click', function(){
+      if(blockLocked(t.dataset.nm)){ if(window.__cmShowLock) window.__cmShowLock(PRO_NM[t.dataset.nm]+' 블록 ('+t.dataset.nm+')','pro'); return; }
       var row = document.createElement('div');
       row.className = 'row';
       row.innerHTML =
@@ -2774,7 +2890,11 @@
     });
   });
   // 통째로 추가(세트) — STYLE_PRESETS 순서대로 여러 블록을 한 번에
+  var SET_PRO = { hook:1, photo:1, profile:1, premium:1 };   // 전환·세일즈 풀세트 = 프로 (content는 베이직 OK)
+  // 통째 템플릿이 테마·폰트까지 같이 바꾸는 경우 (뱅하우스 톤)
+  var SET_LOOK = { premium:{ theme:'banghouse', font:'impact' } };
   function insertSet(setKey){
+    if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':'전환 템플릿 (풀세트)','pro'); return; }
     var SP = window.__STYLE_PRESETS || {};
     var list = SP[setKey] || null;
     if(!list) return;
@@ -2783,16 +2903,69 @@
                                        : { type:item.type, name:item.name||(TYPE_NAME[item.type]||item.type), on:true, content:(item.content||[]).slice(), layout:item.layout||'' };
       if(window.__createRow){ var row=window.__createRow(b); if(row){ row._content=b.content; if(b.layout) row._layout=b.layout; if(window.__refreshRowSub) window.__refreshRowSub(row); } }
     });
+    // 통째 템플릿: 테마·폰트도 같이 적용
+    var look=SET_LOOK[setKey];
+    if(look){ try{
+      if(typeof home!=='undefined' && home){ home.theme=look.theme; home.font=look.font; }
+      if(typeof renderThemes==='function') renderThemes();
+      if(typeof renderFonts==='function') renderFonts();
+      if(window.__saveHome) window.__saveHome();
+    }catch(e){} }
     try{ updateHomeProgress(); }catch(e){}
     try{ refreshBuilder(); }catch(e){}
   }
-  ov.querySelectorAll('.tpl[data-set]').forEach(function(t){
-    t.addEventListener('click', function(){
-      insertSet(t.getAttribute('data-set'));
-      closeAdd();
-      try{ var nm=t.querySelector('.tn'); toast('"'+(nm?nm.textContent:'세트')+'" 순서대로 추가했어요'); }catch(e){}
+  // 템플릿 완성 예시 미리보기 (눌러서 결과 보고 → 시작)
+  var TPL_PREVIEW={
+    hook:{ title:'문제 기반 랜딩', desc:'공감→원인→전문가→해결→예약 · 설득 풀세트', html:
+      '<div class="mp"><div class="mp-eyebrow">왜 예약이 안 쌓일까</div><div class="mp-h1">"열심히 올리는데<br>왜 문의가 없을까요?"</div><div class="mp-sub">문제는 노력보다 구조예요. 신뢰가 먼저 쌓여야 예약이 됩니다.</div><div class="mp-img">🖼</div><div class="mp-sec-h">왜 이런 일이 생길까</div><div class="mp-card"><b>① 콘텐츠가 흩어져 있어요</b><p>여기저기 올린 글이 신뢰로 쌓이지 않아요.</p></div><div class="mp-sec-h">그래서, 전문가는</div><div class="mp-card"><b>🏅 8년 경력 · 수상 3회</b><p>믿고 맡길 수 있는 이유를 한눈에.</p></div><a class="mp-cta">📅 지금 예약하기</a></div>' },
+    photo:{ title:'사진형', desc:'갤러리→후킹→후기→가격→예약', html:
+      '<div class="mp"><div class="mp-eyebrow">PORTFOLIO</div><div class="mp-imgs"><i></i><i></i><i></i></div><div class="mp-h1">한 번의 시술로<br>분위기가 달라져요</div><div class="mp-sub">결이 맞는 분들과 오래 함께해요.</div><div class="mp-sec-h">후기</div><div class="mp-card"><div class="mp-stars">★★★★★</div><p>"인생 머리예요. 결이 너무 좋아요!" — 김○○</p></div><div class="mp-sec-h">가격</div><div class="mp-row"><span>앞머리 컷</span><b>30,000원</b></div><div class="mp-row"><span>전체 스타일링</span><b>120,000원</b></div><a class="mp-cta">📅 예약하기</a></div>' },
+    profile:{ title:'프로필·가치형', desc:'가치→방식→사례→상담', html:
+      '<div class="mp"><div class="mp-eyebrow">MY VALUE</div><div class="mp-h1">결과로 증명하는<br>1:1 코칭</div><div class="mp-sub">당신의 문제를 정확히 짚고, 끝까지 함께합니다.</div><div class="mp-sec-h">제 방식</div><div class="mp-card"><b>진단 → 설계 → 실행 → 점검</b><p>막연한 조언이 아니라 단계별로.</p></div><div class="mp-sec-h">사례</div><div class="mp-card"><b>3개월 만에 매출 2배</b><p>"방향이 명확해졌어요." — 박○○ 대표</p></div><a class="mp-cta">💬 무료 상담 신청</a></div>' },
+    content:{ title:'콘텐츠·구독형', desc:'세계관→콘텐츠→구독', html:
+      '<div class="mp"><div class="mp-eyebrow">MANIFESTO</div><div class="mp-h1">콘텐츠는<br>쌓일수록 강해진다</div><div class="mp-sub">매주, 깊이 있는 생각을 나눕니다.</div><div class="mp-sec-h">대표 콘텐츠</div><div class="mp-imgs"><i></i><i></i><i></i></div><div class="mp-card"><b>📝 콘텐츠를 자산으로 만드는 법</b><p>읽는 순간 관점이 바뀌어요.</p></div><a class="mp-cta">✉️ 뉴스레터 구독하기</a></div>' },
+    premium:{ title:'프리미엄 헤어샵', desc:'뱅하우스 톤 · 다크 그린 + 글로우 + 흐르는 태그 + 쇼케이스 영상', html:
+      '<div class="mp mp-prem"><div class="mp-mq"><span>#앞머리펌</span><span>#레이어드컷</span><span>#시그니처컷</span><span>#두피케어</span></div><div class="mp-glow-eb">SIGNATURE</div><div class="mp-glow">70%</div><div class="mp-glow-sub">재방문하는 단골 비율</div><div class="mp-sec-h" style="color:#7DBF8E">SIGNATURE FILM</div><div class="mp-imgs"><i></i><i></i></div><div class="mp-row"><span>히메허쉬 <b style="color:#7DBF8E">HOT</b></span><b>55,000원</b></div><div class="mp-row"><span>슬릭컷</span><b>55,000원</b></div><a class="mp-cta" style="background:#7DBF8E;color:#060B08">📅 예약하기</a></div>' }
+  };
+  // 템플릿이 왜 이 순서인지 (사람 마음 흐름 = 신뢰 → 저항 제거 → 행동)
+  var TPL_WHY={
+    hook:{ intro:'사람은 ① 공감되고 ② 믿음이 생겨야 ③ 행동해요. 그 순서로 짰어요.', steps:[
+      ['후킹·공감','"내 얘기네" — 멈추고 읽게 만들어요'],['원인 짚기','문제의 진짜 이유를 알려 신뢰를 줘요'],['전문가 증명','"이 사람이면 믿을 만하다"'],['해결·후기','마음의 벽(저항)을 없애요'],['예약','확신이 선 그 순간 바로 행동'] ] },
+    photo:{ intro:'보여주고 → 믿게 하고 → 행동하게. 사진이 가장 빠른 신뢰예요.', steps:[
+      ['갤러리','실력을 한눈에 — 말보다 사진'],['후킹 한 줄','"나도 저렇게?" 기대를 켜요'],['후기','"진짜 되는구나" 저항을 없애요'],['가격','망설임 없이 비교·결정'],['예약','바로 행동으로'] ] },
+    profile:{ intro:'"왜 당신인가"에 답하는 순서 — 신뢰부터 쌓아요.', steps:[
+      ['가치 한 줄','신뢰의 첫 문장 — 왜 당신인지'],['내 방식','믿고 맡길 근거를 보여줘요'],['사례','"실제로 됐다" 저항 제거'],['상담','부담 낮은 첫걸음'] ] },
+    content:{ intro:'팬이 되는 순서 — 공감으로 끌어당기고 꾸준함으로 믿게 해요.', steps:[
+      ['세계관','"결이 맞네" 공감으로 끌어당김'],['대표 콘텐츠','실력·관점을 증명해요'],['콘텐츠 갤러리','꾸준함 = 신뢰'],['구독','팬으로 이어지는 행동'] ] },
+    premium:{ intro:'"고급 헤어샵"의 첫인상 — 분위기로 압도하고 실력으로 증명, 바로 예약까지.', steps:[
+      ['글로우 후킹','큰 숫자 하나로 "이 집 잘하네" 첫인상'],['흐르는 태그','전문 분야가 감각적으로 흘러가요'],['쇼케이스 영상','움직이는 작업 = 가장 강한 실력 증명'],['시그니처·가격','대표 메뉴를 망설임 없이 비교'],['후기','"진짜 되는구나" 저항 제거'],['예약','확신이 선 순간 바로 행동'] ] }
+  };
+  function openTplPreview(setKey){
+    var d=TPL_PREVIEW[setKey]; if(!d){ insertSet(setKey); closeAdd(); return; }
+    var pov=document.getElementById('tpl-preview-ov');
+    if(!pov){
+      pov=document.createElement('div'); pov.id='tpl-preview-ov'; pov.className='dlg-ov';
+      pov.innerHTML='<div class="dlg tpp-dlg"><div class="tpp-t" id="tpp-t"></div><div class="tpp-s" id="tpp-s"></div><div class="tpp-phone" id="tpp-phone"></div><div class="tpp-why" id="tpp-why"></div><button type="button" class="tpp-use" id="tpp-use">✨ 이 템플릿으로 시작</button><button type="button" class="tpp-close" id="tpp-close">닫기</button></div>';
+      document.body.appendChild(pov);
+      pov.addEventListener('click', function(e){ if(e.target===pov) pov.style.display='none'; });
+      document.getElementById('tpp-close').onclick=function(){ pov.style.display='none'; };
+    }
+    document.getElementById('tpp-t').textContent='📐 '+d.title+' 템플릿 · 완성 예시';
+    document.getElementById('tpp-s').textContent=d.desc;
+    var ph=document.getElementById('tpp-phone'); ph.innerHTML=d.html; ph.scrollTop=0;
+    var why=document.getElementById('tpp-why'), w=TPL_WHY[setKey];
+    if(why){ if(w){ why.innerHTML='<div class="tpw-h">왜 이 흐름일까?</div><div class="tpw-intro">'+w.intro+'</div>'+w.steps.map(function(s,i){ return '<div class="tpw-step"><span class="tpw-n">'+(i+1)+'</span><div><b>'+s[0]+'</b><span>'+s[1]+'</span></div></div>'; }).join('')+'<div class="tpw-foot">순서는 추가 후 <b>드래그로 변경</b>할 수 있어요</div>'; why.style.display=''; } else why.style.display='none'; }
+    document.getElementById('tpp-use').onclick=function(){
+      if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ pov.style.display='none'; if(window.__cmShowLock) window.__cmShowLock('전환 템플릿 (풀세트)','pro'); return; }
+      pov.style.display='none';
+      insertSet(setKey); closeAdd();
+      try{ toast('"'+d.title+'" 템플릿을 추가했어요'); }catch(e){}
       if(window.__liveEditActive && window.__liveScrollNew){ window.__liveScrollNew(); } else { var last=document.querySelector('#rows .row:last-child'); if(last) last.scrollIntoView({ behavior:'smooth', block:'center' }); }
-    });
+    };
+    pov.style.display='flex';
+  }
+  ov.querySelectorAll('.tpl[data-set]').forEach(function(t){
+    t.addEventListener('click', function(){ openTplPreview(t.getAttribute('data-set')); });
   });
 
   // ════ 사진 보관함 + 이미지 압축 ════
@@ -2874,7 +3047,8 @@
   function renderGrid(){
     var grid=document.getElementById('vault-grid'); grid.innerHTML='';
     var ps=curPhotos();
-    if(!ps.length){ grid.innerHTML='<div class="vempty">아직 사진이 없어요 · 위 버튼으로 올려보세요</div>'; return; }
+    var libh=document.getElementById('vault-lib-h'); if(libh) libh.style.display=(pickCb && ps.length)?'':'none';
+    if(!ps.length){ grid.innerHTML='<div class="vempty">'+(pickCb?'라이브러리가 비어 있어요 · 「＋ 새로 올리기」로 추가하면 다음부턴 여기서 바로 골라요':'아직 사진이 없어요 · 위 버튼으로 올려보세요')+'</div>'; return; }
     ps.forEach(function(url,i){
       var d=document.createElement('div'); d.className='vph'+(pickCb?' pickable':'');
       var moveBtn = (!pickCb && vault.cats.length>1) ? '<span class="vmove" title="다른 폴더로 이동">📁 이동</span>' : '';
@@ -2916,7 +3090,8 @@
   mvOv.addEventListener('click', function(e){ if(e.target===mvOv) closeMoveDialog(); });
   function openVault(cb){
     pickCb = cb || null;
-    document.getElementById('vault-desc').textContent = pickCb ? '사진을 눌러 선택하세요 · 없으면 올리기' : '올리면 자동 압축돼 저장돼요 · 분류 최대 5개';
+    document.getElementById('vault-desc').textContent = pickCb ? '라이브러리에서 골라 가져오거나, 새로 올리세요' : '올리면 자동 압축돼 저장돼요 · 분류 최대 5개';
+    var up=document.getElementById('vault-up'); if(up) up.textContent = pickCb ? '＋ 새로 올리기' : '＋ 사진 올리기';
     renderCats(); renderGrid(); vov.classList.add('open');
   }
   function closeVault(){ vov.classList.remove('open'); pickCb=null; }
@@ -3257,14 +3432,24 @@
   function heroMarkup(t){ return String(t||'').replace(/\*([^*]+)\*/g, '<span class="kw">$1</span>'); }
 
   // 홈 맨 위: 프로필 먼저 vs 후킹문구 먼저 + 미리보기
+  function curHomeStyle(){ return (home.profileOn===false && home.heroOn) ? 'hook' : (home.heroOn && home.topFirst==='hero') ? 'both' : 'profile'; }
   function renderTopFirst(){
-    var seg=document.getElementById('topfirst-seg'); if(!seg) return;
-    var tf = home.topFirst || 'profile';
-    [].forEach.call(seg.querySelectorAll('.tf-btn'), function(b){ b.classList.toggle('on', b.dataset.tf===tf); });
+    var seg=document.getElementById('homestyle-seg'); if(!seg) return;
+    var style = curHomeStyle();
+    [].forEach.call(seg.querySelectorAll('.hs-btn'), function(b){ b.classList.toggle('on', b.dataset.style===style); });
     var prev=document.getElementById('topfirst-prev'); if(!prev) return;
     var profileRow='<div class="tf-row"><span class="tf-ava"></span><span class="tf-lines"><b></b><i></i></span></div>';
     var heroRow='<div class="tf-row tf-hero">'+heroMarkup(home.heroText||'후킹 문구')+'</div>';
-    prev.innerHTML = (tf==='hero') ? heroRow+profileRow : profileRow+heroRow;
+    prev.innerHTML = (style==='hook') ? heroRow : (style==='both') ? heroRow+profileRow : profileRow;
+  }
+  function applyHomeStyle(style){
+    if(style==='profile'){ home.profileOn=true; home.heroOn=false; home.topFirst='profile'; }
+    else if(style==='both'){ home.profileOn=true; home.heroOn=true; home.topFirst='hero'; }
+    else { home.profileOn=false; home.heroOn=true; home.topFirst='hero'; }
+    try{ saveProfileOn(home.profileOn); }catch(e){}
+    try{ syncProfileSwitch(); }catch(e){}
+    try{ renderHero(); }catch(e){}
+    renderTopFirst();
   }
 
   // 테마 스와치 (u.html 25종 중 대표 — [키,종이색,포인트색])
@@ -3277,7 +3462,7 @@
     ['spring','#D9ECE8','#E58AA4'],['butter','#F5F1D6','#CF9E2A'],
     ['sage','#DEE4DA','#7C8C6A'],['clay','#E4D7C4','#A86A45'],['camel','#E6D6BD','#B07D43'],
     ['greige','#DCD5C9','#8C7E69'],['lavender','#F0EEF9','#8E7BD6'],['pearl','#EEF1F6','#8499C2'],
-    ['olive','#4B4D32','#BE9242'],['forest','#0C140D','#74DB86'],['nvidia','#0A120B','#BEF24A'],
+    ['olive','#4B4D32','#BE9242'],['forest','#0C140D','#74DB86'],['banghouse','#060B08','#7DBF8E','radial-gradient(ellipse at 50% 0%, rgba(125,191,142,.4), transparent 62%), #060B08'],['nvidia','#0A120B','#BEF24A'],
     ['violet','#14101F','#A87CF0'],['aurora','#0E1424','#7AA8FF'],['glacier','#08161A','#36C6D9'],
     ['framer','#171717','#2D9CFF'],['neon','#0A0810','#E06FC8'],['prism','#0A0712','#C66BE8'],
     ['cobalt','#070A18','#6F8AFF'],['bokeh','#0A0A0C','#6FD6A0']
@@ -3287,21 +3472,48 @@
   var CM_TIER_RANK={basic:0, pro:1, premium:2};
   function tierOK(need){ return CM_TIER_RANK[cmTier()] >= (CM_TIER_RANK[need]||0); }
   window.__cmTier=cmTier;
+  var TIER_PERKS={
+    pro:['📅 예약 시스템 (캘린더·실시간 슬롯)','🛒 판매 블록 (쿠팡·내 제품)','⭐ 전환 블록 (증거·후기·랭킹·쇼케이스)','🎬 쇼케이스 영상 (탭→재생)','🎨 디자인 테마 전체 + 움직이는 모션'],
+    premium:['✨ 프로의 모든 기능','🏷 화이트라벨 (하단 표시 제거)','🌐 커스텀 도메인','🤖 AI 카드뉴스 자동생성','⚡ 우선 지원·신기능 먼저']
+  };
   function showLock(name, need){
     var lbl=(need==='premium')?'프리미엄':'프로';
     var ov=document.getElementById('cm-lock-ov');
     if(!ov){
       ov=document.createElement('div'); ov.id='cm-lock-ov'; ov.className='dlg-ov';
-      ov.innerHTML='<div class="dlg lock-dlg"><div class="lock-ic">🔒</div><div class="lock-t" id="cm-lock-t"></div><div class="lock-s" id="cm-lock-s"></div><a class="lock-go" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">💬 업그레이드 문의 →</a><button type="button" class="lock-close" id="cm-lock-x">닫기</button></div>';
+      ov.innerHTML='<div class="dlg lock-dlg"><div class="lock-ic">🔒</div><div class="lock-t" id="cm-lock-t"></div><div class="lock-s" id="cm-lock-s"></div><ul class="lock-perks" id="cm-lock-perks"></ul><a class="lock-go" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">💬 업그레이드 문의 →</a><button type="button" class="lock-cmp" id="cm-lock-cmp">📊 등급 비교표 보기</button><button type="button" class="lock-close" id="cm-lock-x">닫기</button></div>';
       document.body.appendChild(ov);
       ov.addEventListener('click', function(e){ if(e.target===ov) ov.style.display='none'; });
       document.getElementById('cm-lock-x').onclick=function(){ ov.style.display='none'; };
+      document.getElementById('cm-lock-cmp').onclick=function(){ ov.style.display='none'; var c=document.getElementById('tiercmp-ov'); if(c) c.style.display='flex'; };
     }
     document.getElementById('cm-lock-t').textContent='🔒 '+name+'은(는) '+lbl+' 기능이에요';
-    document.getElementById('cm-lock-s').textContent=lbl+' 등급으로 올리면 바로 쓸 수 있어요. 카톡으로 문의해 주세요.';
+    document.getElementById('cm-lock-s').textContent=lbl+' 등급으로 올리면 이런 걸 쓸 수 있어요 ↓';
+    var perks=TIER_PERKS[need]||TIER_PERKS.pro;
+    document.getElementById('cm-lock-perks').innerHTML=perks.map(function(p){ return '<li>'+p+'</li>'; }).join('');
     ov.style.display='flex';
   }
   window.__cmShowLock=showLock;
+  // 유튜브 영상 넣는 법 안내 (쇼케이스 영상용)
+  function openVideoGuide(){
+    var ov=document.getElementById('vidguide-ov');
+    if(!ov){
+      ov=document.createElement('div'); ov.id='vidguide-ov'; ov.className='dlg-ov';
+      ov.innerHTML='<div class="dlg vg-dlg"><div class="vg-t">📺 유튜브 영상 넣는 법</div>'
+        +'<div class="vg-s">사진은 <b>썸네일</b>, 영상은 <b>유튜브·쇼츠 링크</b>만 붙이면 끝. 손님이 카드를 <b>탭하면 자동 재생·반복</b>돼요(음소거).</div>'
+        +'<div class="vg-step"><span>1</span><div>유튜브 앱·웹에서 넣을 영상(또는 <b>쇼츠</b>)을 열어요</div></div>'
+        +'<div class="vg-step"><span>2</span><div><b>공유 → 링크 복사</b></div></div>'
+        +'<div class="vg-step"><span>3</span><div>카드의 <b>영상 링크 칸</b>에 붙여넣어요</div></div>'
+        +'<div class="vg-step"><span>4</span><div>끝! 평소엔 사진, 탭하면 영상이 돌아가요</div></div>'
+        +'<div class="vg-note">· 짧은 영상(5~15초)이 가장 좋아요<br>· 영상은 <b>공개·일부공개</b>여야 재생돼요(비공개 X)<br>· 유튜브가 호스팅 → <b>우리 용량 0</b>, 무제한</div>'
+        +'<button type="button" class="join-close" id="vg-close">닫기</button></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov) ov.style.display='none'; });
+      document.getElementById('vg-close').onclick=function(){ ov.style.display='none'; };
+    }
+    ov.style.display='flex';
+  }
+  window.__openVideoGuide=openVideoGuide;
   // 내 등급·사용기간 (설정 카드)
   function renderMyPlan(){
     var box=document.getElementById('my-plan'); if(!box) return;
@@ -3501,8 +3713,8 @@
       }).catch(function(e){ delGo.disabled=false; delGo.textContent='영구 삭제'; try{ notify('탈퇴 실패: '+e.message); }catch(_){} });
     };
   }
-  var tfSeg=document.getElementById('topfirst-seg');
-  if(tfSeg) tfSeg.addEventListener('click', function(e){ var b=e.target.closest('.tf-btn'); if(!b) return; home.topFirst=b.dataset.tf; renderTopFirst(); });
+  var tfSeg=document.getElementById('homestyle-seg');
+  if(tfSeg) tfSeg.addEventListener('click', function(e){ var b=e.target.closest('.hs-btn'); if(!b) return; applyHomeStyle(b.dataset.style); });
   document.querySelector('[data-hclose]').onclick = function(){ hov.classList.remove('open'); };
   hov.addEventListener('click', function(e){ if(e.target===hov) hov.classList.remove('open'); });
   document.getElementById('hero-sw').onclick = function(){ home.heroOn = !home.heroOn; renderHero(); };
@@ -3671,6 +3883,15 @@
     hook:    [P_EMPATHY, P_CAUSE, P_EXPERT, P_SOLVE, P_DESIRE, P_REVIEW, P_OBJECTION, P_URGENCY, P_SERVICE, P_LEAD],
     // ✍️ 콘텐츠·구독형 — 세계관 → 정체성 → 대표콘텐츠 → 갤러리 → 구독
     content: [{type:'text',layout:'quote',name:'세계관 한 줄',content:['내 관점을 **한 문장**으로','사람들이 나를 따르는 이유를 적어요.']}, {type:'text',name:'나는 누구 · 무엇을 믿나',content:['','내가 무엇을 하고 무엇을 믿는지 짧게.']}, {type:'cardnews',name:'대표 콘텐츠',content:[]}, {type:'gallery',name:'콘텐츠 갤러리',content:[]}, {type:'authority',name:'영향력 · 증명',content:[]}, {type:'links',name:'뉴스레터 · 구독',content:[]}, P_LEAD],
+    // 🖤 프리미엄 헤어샵 (뱅하우스 톤) — 다크 그린 + Archivo Black + 글로우/마퀴/쇼케이스영상
+    premium: [
+      {type:'glowhook',name:'글로우 후킹',content:['70%','SIGNATURE','**재방문**하는 단골 비율']},
+      {type:'marquee',name:'흐르는 태그 띠',content:[[['#앞머리펌'],['#레이어드컷'],['#내추럴웨이브'],['#두피케어'],['#트렌드컬러'],['#시그니처컷']]]},
+      {type:'lookbook',name:'대표 쇼케이스 (영상)',content:['SIGNATURE FILM','','BANG HOUSE',[]]},
+      {type:'ranking',name:'시그니처 · 가격',content:['SIGNATURE FILM','TOP 3',[['','히메허쉬','가장 인기','55,000원','HOT'],['','슬릭컷','시그니처','55,000원',''],['','허쉬컷','트렌디','55,000원','']]]},
+      P_REVIEW,
+      {type:'reservation',name:'예약 신청',content:[]}
+    ],
     blank:   []
   };
   var STYLE_LABEL={photo:'사진형',profile:'프로필·가치형',hook:'후킹·랜딩형',content:'콘텐츠·구독형',blank:'빈 페이지'};
@@ -3791,15 +4012,25 @@
         +'<span class="pc-grip">⋮⋮</span>'
         +'<span class="pc-thumb"'+thumb+'>'+thumbInner+'</span>'
         +'<div class="pc-meta"><div class="pc-title">'+escT(p.title||'(제목 없음)')+'<span class="pc-type">'+(POST_TYPE_LABEL[p.type]||'')+'</span>'+(p.featured?' <span class="pc-feat">★대표</span>':'')+'</div><div class="pc-sub">'+escT(sub)+'</div></div>'
-        +'<div class="pc-acts"><span class="sw'+(p.on!==false?' on':'')+'" data-pon="'+p.id+'"><i></i></span><span class="pc-edit" data-pedit="'+p.id+'">✎</span></div>'
+        +'<div class="pc-acts"><span class="pc-link" data-plink="'+p.id+'" title="개인 링크 복사">🔗</span><span class="sw'+(p.on!==false?' on':'')+'" data-pon="'+p.id+'"><i></i></span><span class="pc-edit" data-pedit="'+p.id+'">✎</span></div>'
         +'</div>';
     }).join('');
+    box.querySelectorAll('[data-plink]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); copyPostLink(b.getAttribute('data-plink')); }; });
     box.querySelectorAll('[data-pedit]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openPostEdit(b.getAttribute('data-pedit')); }; });
     box.querySelectorAll('[data-pon]').forEach(function(s){ s.onclick=function(e){ e.stopPropagation(); var p=postById(s.getAttribute('data-pon')); if(p){ p.on=!(p.on!==false); renderPostsLibrary(); } }; });
     box.querySelectorAll('.post-card').forEach(function(c){ c.onclick=function(e){ if(e.target.closest('.pc-acts')||e.target.closest('.pc-grip')) return; openPostEdit(c.getAttribute('data-pid')); }; });
     wirePostDrag(box);
   }
   window.__renderPostsLib=renderPostsLibrary;
+  // 게시물 개인 링크 = 홈 착지 + 그 글 이어보기 (?p=)
+  function copyPostLink(id){
+    var handle=((document.getElementById('pf-handle')||{}).value||'').trim() || (AUTH&&AUTH.handle) || '';
+    if(!handle){ try{ notify('먼저 ⚙설정·내 프로필에서 주소(핸들)를 정해주세요'); }catch(_){} return; }
+    var dir=location.pathname.replace(/[^\/]*$/, '');
+    var link=location.origin+dir+'u.html?u='+encodeURIComponent(handle)+'&p='+encodeURIComponent(id);
+    function ok(){ try{ notify('개인 링크 복사됨 · 저장(공개)돼 있어야 열려요'); }catch(_){} }
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(link).then(ok,function(){ prompt('이 링크를 복사하세요', link); }); } else { prompt('이 링크를 복사하세요', link); } }catch(_){ try{ prompt('이 링크를 복사하세요', link); }catch(e){} }
+  }
 
   function wirePostDrag(box){
     function getAfter(y){ var els=[].slice.call(box.querySelectorAll('.post-card:not(.dragging)')); var best=null,bestOff=-Infinity; els.forEach(function(ch){ var r=ch.getBoundingClientRect(); var off=y-r.top-r.height/2; if(off<0&&off>bestOff){bestOff=off;best=ch;} }); return best; }
@@ -4053,6 +4284,7 @@
     ov.addEventListener('click', function(e){ if(e.target===ov) ov.classList.remove('open'); });
     [].forEach.call(ov.querySelectorAll('[data-cadd]'), function(t){ t.onclick=function(){
       var k=t.getAttribute('data-cadd'); ov.classList.remove('open');
+      if(k==='product' && window.__cmTier && {basic:0,pro:1,premium:2}[window.__cmTier()]<1){ if(window.__cmShowLock) window.__cmShowLock('판매 블록 (제품)','pro'); return; }
       if(window.__showPwTab) window.__showPwTab(k==='post'?'archive':k);
       setTimeout(function(){
         if(k==='post'){ var b=document.getElementById('add-post-btn'); if(b) b.click(); }
