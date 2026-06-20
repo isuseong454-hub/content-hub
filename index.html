@@ -3,24 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>컨텐츠 허브</title>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<!-- 루트(/) 진입 → 편집기로 자동 연결 -->
-<meta http-equiv="refresh" content="0; url=edit.html">
-<script>location.replace('edit.html');</script>
-<style>
-  html,body{margin:0;height:100%;background:radial-gradient(circle at 50% 30%, #15123a 0%, #0a0820 55%, #050310 100%);
-    color:#9388b0;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
-    display:flex;align-items:center;justify-content:center;text-align:center;}
-  a{color:#A78BFF;text-decoration:none;font-weight:600;}
-</style>
+<title>컨텐츠 허브 — 콘텐츠가 자산이 되는 곳</title>
+<meta name="description" content="열심히 올리는데 왜 고객은 남지 않을까요? 콘텐츠를 신뢰와 매출로 잇는 컨텐츠 허브.">
+<link rel="icon" href="la-192.png">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div>
-    <div style="font-size:15px;">컨텐츠 허브로 이동 중…</div>
-    <div style="font-size:12.5px;margin-top:10px;">자동으로 안 넘어가면 <a href="edit.html">여기를 눌러주세요</a></div>
-  </div>
+<header class="nav">
+  <a class="brand" href="#"><img src="la-192.png" alt="컨텐츠 허브"><strong>컨텐츠 허브</strong></a>
+  <nav class="nav-anchors"><a href="#story">스토리</a><a href="#start">시작하기</a></nav>
+  <a class="nav-login" href="edit.html">로그인 →</a>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">CONTENT ASSET HUB</p>
+      <h1>인스타 열심히 해도<br><span>반응 없는 이유</span></h1>
+      <p class="lead">열심히 올리는데 왜 고객은 남지 않을까요? 문제는 노력보다 콘텐츠가 신뢰와 매출로 이어지는 구조입니다.</p>
+      <div class="buttons">
+        <a class="btn primary" href="#story">스토리 보기</a>
+        <a class="btn ghost" href="#start">시작하기</a>
+      </div>
+    </div>
+    <div class="hero-img"><img src="assets/hero.jpg" alt="컨텐츠 허브"></div>
+  </section>
+  <div id="story"></div>
+  <section class="image-section story"><img loading="lazy" src="assets/story_01.jpg" alt=""></section><section class="image-section story"><img loading="lazy" src="assets/story_02.jpg" alt=""></section><section class="image-section story"><img loading="lazy" src="assets/story_03.jpg" alt=""></section><section class="image-section bridge-img"><img loading="lazy" src="assets/transition.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_04.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_02.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_03.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_05.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_06.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_07.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_08.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_09.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_10.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_11.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_12.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_13.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_14.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_15.jpg" alt=""></section>
+  <section class="final" id="start">
+    <p class="eyebrow">START HOME</p>
+    <h2>오늘 만든 콘텐츠가<br><span>내일의 자산</span>이 되게 만드세요.</h2>
+    <div class="final-buttons">
+      <a class="btn primary big" href="edit.html">시작하기</a>
+    </div>
+    <p class="final-note">이미 코드가 있으면 로그인, 처음이면 로그인 화면에서 <b>회원가입</b>을 눌러주세요.</p>
+  </section>
+</main>
 </body>
 </html>

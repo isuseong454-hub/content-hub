@@ -1,0 +1,87 @@
+
+:root{
+  --line:rgba(255,255,255,.09);
+  --muted:#c3c6d8;
+  --purple:#8a5cff;
+  --pink:#ff4faf;
+  --cyan:#49ddff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:#fff;
+  background-color:#02040b;
+  background-image:linear-gradient(180deg,rgba(2,4,11,.05),rgba(2,4,11,.86)),url("assets/bg.png");
+  background-size:100% auto;
+  background-repeat:repeat-y;
+  font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Segoe UI",Arial,sans-serif;
+  word-break:keep-all;
+}
+.nav{
+  position:sticky;top:0;z-index:20;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 6vw;background:rgba(2,4,11,.78);
+  backdrop-filter:blur(18px);border-bottom:1px solid var(--line)
+}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}
+.brand img{width:28px;height:28px;object-fit:contain;border-radius:8px}
+.brand strong{font-size:16px;letter-spacing:-.02em}
+.nav-anchors{display:flex;gap:18px;align-items:center}
+.nav a{color:var(--muted);text-decoration:none;font-size:14px}
+.nav .nav-login{flex:none;color:#fff;font-weight:800;font-size:13.5px;padding:8px 16px;border-radius:999px;background:linear-gradient(135deg,var(--purple),var(--pink));box-shadow:0 0 22px rgba(138,92,255,.30)}
+.nav .nav-login:active{transform:scale(.96)}
+.hero{
+  min-height:82vh;display:grid;grid-template-columns:.92fr 1.08fr;
+  align-items:center;gap:42px;padding:68px 7vw 70px;
+}
+.eyebrow{color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.16em;margin:0 0 12px}
+h1,h2,p{margin-top:0}
+h1{font-size:clamp(42px,5.1vw,78px);line-height:1.05;letter-spacing:-.065em;margin-bottom:20px}
+h2{font-size:clamp(30px,3.5vw,52px);line-height:1.15;letter-spacing:-.055em;margin-bottom:24px}
+h1 span,h2 span{background:linear-gradient(90deg,var(--purple),var(--pink),var(--cyan));-webkit-background-clip:text;color:transparent}
+p{font-size:17px;line-height:1.7;color:var(--muted)}
+.lead{font-size:20px;max-width:630px}
+.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 21px;border-radius:999px;color:#fff;text-decoration:none;font-weight:900;font-size:15px;border:1px solid var(--line)}
+.primary{background:linear-gradient(135deg,var(--purple),var(--pink));box-shadow:0 0 34px rgba(138,92,255,.34)}
+.ghost{background:rgba(255,255,255,.055)}
+.kakao{background:#FEE500;color:#3C1E1E;border-color:#FEE500}
+.big{padding:16px 30px;font-size:18px}
+.hero-img{border:1px solid var(--line);background:rgba(255,255,255,.025);box-shadow:0 22px 80px rgba(0,0,0,.35),0 0 45px rgba(138,92,255,.10);border-radius:28px;padding:7px;overflow:hidden}
+.hero-img img{display:block;width:100%;height:auto;border-radius:21px}
+#story{height:0}
+.image-section{padding:38px 7vw}
+.image-section img{display:block;width:100%;max-width:620px;height:auto;margin:0 auto;border-radius:18px;box-shadow:0 22px 80px rgba(0,0,0,.34),0 0 30px rgba(138,92,255,.07)}
+.bridge-img{padding:26px 7vw}
+.final{min-height:58vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:82px 7vw;text-align:center;border-top:1px solid var(--line);background:radial-gradient(circle at 50% 38%,rgba(138,92,255,.18),transparent 42%)}
+.final-buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.final-note{font-size:13.5px;color:var(--muted);margin-top:16px}
+.final-note b{color:#fff}
+
+/* 스토리 구간 */
+.image-section.story{padding-top:24px;padding-bottom:24px}
+.image-section.story img{max-width:min(70vw,742px);width:100%;height:auto}
+/* 전환 카드는 크게 유지 */
+.image-section.bridge-img{padding-top:32px;padding-bottom:32px}
+.bridge-img img{max-width:1240px}
+/* 전환 카드 아래(콘텐츠 허브란?~) = 적당히 축소 */
+.bridge-img ~ .image-section{padding-top:26px;padding-bottom:26px}
+.bridge-img ~ .image-section img{max-width:min(49vw,735px);width:100%;height:auto}
+
+@media(max-width:900px){
+  .nav-anchors{display:none}
+  .nav{padding:0 5vw}
+  .nav .nav-login{font-size:13px;padding:7px 14px}
+  .hero{grid-template-columns:1fr;min-height:auto;padding:48px 20px 56px}
+  .image-section{padding:26px 14px}
+  .image-section img{border-radius:12px}
+  h1{font-size:42px}
+  h2{font-size:31px}
+  .lead,p{font-size:16px}
+  .image-section.story img{max-width:86vw}
+  .bridge-img img{max-width:88vw}
+  .bridge-img ~ .image-section img{max-width:88vw}
+  .final-buttons{flex-direction:column;width:100%}
+  .final-buttons .btn{width:100%}
+}

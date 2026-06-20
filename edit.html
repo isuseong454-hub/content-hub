@@ -252,6 +252,22 @@
   #lg-setpin, #lg-next, #lg-backlogin, #lg-signup-note{display:none;}
   .lg-switch{background:none; border:none; color:var(--muted); font-size:12.5px; margin-top:12px; cursor:pointer; width:100%; padding:6px;}
   .lg-switch b{color:var(--coral);}
+  .lg-join{display:block; width:100%; text-align:center; margin-top:14px; padding:7px; font-size:12.5px; font-weight:600; color:var(--muted); background:none; border:none; cursor:pointer;}
+  .lg-join b{color:var(--coral);}
+  .lg-join:active{transform:scale(.99);}
+  .lg-about{display:inline-block; text-align:center; margin:8px auto 0; padding:5px 12px; font-size:11.5px; font-weight:600; color:var(--muted); text-decoration:none;}
+  .lg-about:active{transform:scale(.98);}
+  /* 카톡 회원가입 안내 다이얼로그 */
+  .join-dlg{text-align:center;}
+  .join-ic{width:54px; height:54px; margin:0 auto 14px; border-radius:16px; background:#FEE500; display:flex; align-items:center; justify-content:center;}
+  .join-ic svg{width:32px; height:32px;}
+  .join-t{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:8px;}
+  .join-s{font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:16px;}
+  .join-s b{color:var(--ink);}
+  .join-room{font-size:12.5px; font-weight:700; color:var(--ink); background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:9px; margin-bottom:12px;}
+  .join-go{display:block; width:100%; padding:13px; border-radius:12px; background:#FEE500; color:#3C1E1E; font-size:14.5px; font-weight:800; text-decoration:none; margin-bottom:8px;}
+  .join-go:active{transform:scale(.99);}
+  .join-close{display:block; width:100%; padding:10px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer;}
   .lg-signup-note{font-size:12.5px; color:var(--muted); line-height:1.6; text-align:center; margin:0 0 12px; background:var(--coral-soft, rgba(123,90,255,.12)); padding:11px 13px; border-radius:11px;}
   .lg-signup-note b{color:var(--ink);}
   /* 시작하기 — 코드 입력 단계 */
@@ -804,6 +820,8 @@
       <button class="login-btn" id="lg-next">다음 →</button>
       <button type="button" class="lg-switch" id="lg-tolink">코드 받고 처음이신가요? <b>시작하기 →</b></button>
       <button type="button" class="lg-switch" id="lg-backlogin">← 이미 PIN이 있어요 (로그인)</button>
+      <button type="button" class="lg-join" id="lg-join">🙋 처음이신가요? · <b>회원가입(코드 받기) 문의 →</b></button>
+      <a class="lg-about" href="index.html" target="_blank" rel="noopener">📖 컨텐츠 허브란?</a>
 
       <!-- 첫 로그인: 본인이 PIN 직접 설정 -->
       <div id="lg-setpin">
@@ -815,6 +833,18 @@
         <button class="login-btn" id="sp-btn">PIN 설정하고 시작</button>
         <button type="button" class="sp-back" id="sp-back">← 다른 코드로</button>
       </div>
+    </div>
+  </div>
+
+  <!-- 회원가입(코드 받기) 카톡 문의 안내 -->
+  <div class="dlg-ov" id="join-ov">
+    <div class="dlg join-dlg">
+      <div class="join-ic"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.2C6.9 3.2 2.8 6.4 2.8 10.3c0 2.5 1.7 4.7 4.2 6-.2.6-.7 2.5-.8 2.9 0 0 0 .3.2.4.2 0 .3-.1.4-.2.3-.2 2.8-1.9 3.4-2.3.5.1 1.1.1 1.6.1 5.1 0 9.2-3.2 9.2-7.1S17.1 3.2 12 3.2Z" fill="#3A1D1D"/></svg></div>
+      <div class="join-t">회원가입은 카톡으로 문의해요</div>
+      <div class="join-s">컨텐츠 허브는 발급받은 <b>코드</b>로 시작해요.<br>아래 <b>카톡 문의방</b>으로 신청하면 코드를 보내드려요 😊</div>
+      <div class="join-room">💬 컨텐츠 허브 구매·문의방</div>
+      <a class="join-go" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">카톡 문의방 열기 →</a>
+      <button type="button" class="join-close" id="join-close">닫기</button>
     </div>
   </div>
 
@@ -3820,6 +3850,11 @@
     var toSignup=document.getElementById('lg-tolink'), toLogin=document.getElementById('lg-backlogin'), nx=document.getElementById('lg-next');
     if(toSignup) toSignup.addEventListener('click', function(){ if(card) card.classList.add('mode-signup'); if(sub) sub.textContent='발급받은 코드로 시작하기'; var e=document.getElementById('lg-err'); if(e)e.textContent=''; var c=document.getElementById('lg-code'); if(c){ c.value=''; setTimeout(function(){ c.focus(); },50); } });
     if(toLogin) toLogin.addEventListener('click', function(){ if(card) card.classList.remove('mode-signup'); if(sub) sub.textContent='내 코드와 PIN으로 로그인하세요'; var e=document.getElementById('lg-err'); if(e)e.textContent=''; });
+    // 회원가입 카톡 문의 안내 팝업
+    var joinBtn=document.getElementById('lg-join'), joinOv=document.getElementById('join-ov'), joinClose=document.getElementById('join-close');
+    if(joinBtn && joinOv){ joinBtn.addEventListener('click', function(){ joinOv.style.display='flex'; }); }
+    if(joinClose && joinOv){ joinClose.addEventListener('click', function(){ joinOv.style.display='none'; }); }
+    if(joinOv){ joinOv.addEventListener('click', function(e){ if(e.target===joinOv) joinOv.style.display='none'; }); }
     if(nx) nx.addEventListener('click', async function(){
       var code=(gv('lg-code')||'').trim().toUpperCase(), err=document.getElementById('lg-err'); err.textContent='';
       if(!code){ err.textContent='발급받은 코드를 입력하세요'; return; }
