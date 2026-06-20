@@ -72,6 +72,8 @@
   .seg{display:flex; gap:8px; flex-wrap:wrap;}
   .seg button{flex:1; min-width:90px; border:1px solid var(--hair); background:var(--surface); color:var(--muted); border-radius:11px; padding:11px; font-size:13px; font-family:var(--sans); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px;}
   .seg button .ico{font-size:18px;}
+  .seg button small{font-size:10.5px; color:var(--muted); font-weight:600;}
+  .seg button.on small{color:var(--coral);}
   .seg button.on{border-color:var(--coral); color:var(--coral); background:var(--coral-soft); font-weight:600;}
   .seg.period button{flex-direction:row; min-width:0;}
 
@@ -96,7 +98,20 @@
   .uc-code{font-family:var(--serif); font-weight:800; font-size:15px; letter-spacing:.05em;}
   .uc-name{font-size:12.5px; color:var(--muted); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
   .uc-del{color:#C0857A; cursor:pointer; font-size:15px;}
-  .uc-meta{font-size:11.5px; color:var(--muted); margin-top:4px; display:flex; gap:8px;}
+  .uc-meta{font-size:11.5px; color:var(--muted); margin-top:4px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .uc-tier{font-size:10px; font-weight:800; padding:1px 7px; border:1px solid; border-radius:999px;}
+  .uc-edit{margin-left:auto; color:var(--muted); cursor:pointer; font-size:13px; padding:0 4px;}
+  .uc-edit:hover{color:var(--coral);}
+  .uc-del{color:var(--muted); cursor:pointer; font-size:16px; line-height:1; padding:0 2px;}
+  .uc-del:hover{color:#FF8A8A;}
+  .uc-top{display:flex; align-items:center; gap:8px;}
+  .plan-ov{position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.6); padding:22px;}
+  .plan-ov.show{display:flex;}
+  .plan-dlg{width:100%; max-width:360px; background:var(--surface); border:1px solid var(--hair); border-radius:18px; padding:22px 20px;}
+  .plan-t{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:5px;}
+  .plan-sub{font-size:12.5px; color:var(--muted); margin-bottom:16px;}
+  .plan-sub b{color:var(--coral); letter-spacing:.04em;}
+  .plan-btns{display:flex; gap:9px; margin-top:18px;}
   .uc-dday{color:var(--coral); font-weight:500;}
   .uc-dday.expired{color:#C0432B;}
   .empty{color:var(--muted); font-size:12.5px; text-align:center; padding:18px 0;}
@@ -202,9 +217,9 @@
         <div class="mcard"><div class="mv" id="m-total">0</div><div class="ml">총 발급</div></div>
         <div class="mcard"><div class="mv" id="m-soon" style="color:#FF8FA6;">0</div><div class="ml">만료 임박 (D-30)</div></div>
         <div class="mcard"><div class="mv" id="m-life">0</div><div class="ml">평생 회원</div></div>
-        <div class="mcard"><div class="mv" id="m-personal" style="color:#5B8CFF;">0</div><div class="ml">개인용</div></div>
-        <div class="mcard"><div class="mv" id="m-beauty" style="color:#E5708C;">0</div><div class="ml">뷰티용</div></div>
-        <div class="mcard"><div class="mv" id="m-brand" style="color:#B06FE8;">0</div><div class="ml">브랜드용</div></div>
+        <div class="mcard"><div class="mv" id="m-basic" style="color:#5B8CFF;">0</div><div class="ml">베이직</div></div>
+        <div class="mcard"><div class="mv" id="m-pro" style="color:#A78BFF;">0</div><div class="ml">프로</div></div>
+        <div class="mcard"><div class="mv" id="m-premium" style="color:#E0B84A;">0</div><div class="ml">프리미엄</div></div>
       </div>
       <div style="display:flex; align-items:center; gap:10px; margin:4px 2px 12px;">
         <span style="font-size:13px; font-weight:600; color:var(--muted);">최근 발급</span>
@@ -223,11 +238,11 @@
         <input id="f-name" placeholder="예: 리지 헤어 / 김크리에이터">
       </div>
       <div class="field">
-        <label>분야</label>
+        <label>등급</label>
         <div class="seg" id="seg-industry">
-          <button data-ind="personal"><span class="ico">✍️</span>개인용</button>
-          <button data-ind="beauty"><span class="ico">✂️</span>뷰티용</button>
-          <button data-ind="brand"><span class="ico">🏪</span>브랜드용</button>
+          <button data-ind="basic"><span class="ico">🌱</span>베이직<small>99,000</small></button>
+          <button data-ind="pro"><span class="ico">🚀</span>프로<small>149,000</small></button>
+          <button data-ind="premium"><span class="ico">👑</span>프리미엄<small>199,000</small></button>
         </div>
       </div>
       <div class="field">
@@ -257,9 +272,9 @@
       <button class="btn" id="refresh" style="padding:5px 11px; font-size:12px;">새로고침</button>
     </div>
     <div class="cols">
-      <div class="col"><div class="col-h"><span class="dot" style="background:#5B8CFF;"></span>개인용<span class="cnt" id="cnt-personal">0</span></div><div id="list-personal"><div class="empty">아직 없어요</div></div></div>
-      <div class="col"><div class="col-h"><span class="dot" style="background:#E5708C;"></span>뷰티용<span class="cnt" id="cnt-beauty">0</span></div><div id="list-beauty"><div class="empty">아직 없어요</div></div></div>
-      <div class="col"><div class="col-h"><span class="dot" style="background:#B06FE8;"></span>브랜드용<span class="cnt" id="cnt-brand">0</span></div><div id="list-brand"><div class="empty">아직 없어요</div></div></div>
+      <div class="col"><div class="col-h"><span class="dot" style="background:#5B8CFF;"></span>베이직<span class="cnt" id="cnt-basic">0</span></div><div id="list-basic"><div class="empty">아직 없어요</div></div></div>
+      <div class="col"><div class="col-h"><span class="dot" style="background:#A78BFF;"></span>프로<span class="cnt" id="cnt-pro">0</span></div><div id="list-pro"><div class="empty">아직 없어요</div></div></div>
+      <div class="col"><div class="col-h"><span class="dot" style="background:#E0B84A;"></span>프리미엄<span class="cnt" id="cnt-premium">0</span></div><div id="list-premium"><div class="empty">아직 없어요</div></div></div>
     </div>
     </div><!-- /list pane -->
 
@@ -278,10 +293,40 @@
   </div>
   <div class="toast" id="toast"></div>
 
+  <!-- 등급·기간 변경 (승급·연장) -->
+  <div class="plan-ov" id="plan-ov">
+    <div class="plan-dlg">
+      <div class="plan-t">등급 · 기간 변경</div>
+      <div class="plan-sub"><b id="plan-code">CODE</b> <span id="plan-name"></span></div>
+      <div class="field"><label>등급</label>
+        <div class="seg" id="plan-seg-tier">
+          <button data-ind="basic"><span class="ico">🌱</span>베이직</button>
+          <button data-ind="pro"><span class="ico">🚀</span>프로</button>
+          <button data-ind="premium"><span class="ico">👑</span>프리미엄</button>
+        </div>
+      </div>
+      <div class="field"><label>기간</label>
+        <div class="seg period" id="plan-seg-period">
+          <button data-mode="keep">그대로</button>
+          <button data-mode="365">1년</button>
+          <button data-mode="ext365">1년 연장</button>
+          <button data-mode="life">평생</button>
+        </div>
+      </div>
+      <div class="plan-btns">
+        <button class="btn" id="plan-cancel" style="flex:1; padding:11px;">취소</button>
+        <button class="btn primary" id="plan-save" style="flex:1.4; padding:11px;">저장</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (function(){
   var AUTH=null; try{ AUTH=JSON.parse(sessionStorage.getItem('cmh-master')||'null'); }catch(e){}
-  var industry='personal', days=90;
+  var industry='basic', days=365;   // industry 필드를 '등급'으로 재활용 (basic/pro/premium)
+  var TIER_LBL={basic:'베이직', pro:'프로', premium:'프리미엄'};
+  var TIER_COLOR={basic:'#5B8CFF', pro:'#A78BFF', premium:'#E0B84A'};
+  function tierOf(u){ return TIER_LBL[u.industry] ? u.industry : 'basic'; }   // 레거시(personal/beauty/brand)=베이직 폴백
   function $(id){ return document.getElementById(id); }
   function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); },2000); }
   function copy(s){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(s).then(function(){ toast('복사됨'); },function(){ toast(s); }); } else toast(s); }
@@ -293,8 +338,8 @@
   }
   bindSeg($('seg-industry'),'data-ind',function(v){ industry=v; });
   bindSeg($('seg-period'),'data-days',function(v){ days=parseInt(v,10); });
-  $('seg-industry').querySelector('[data-ind="personal"]').classList.add('on');
-  $('seg-period').querySelector('[data-days="90"]').classList.add('on');
+  $('seg-industry').querySelector('[data-ind="basic"]').classList.add('on');
+  $('seg-period').querySelector('[data-days="365"]').classList.add('on');
 
   // 코드/PIN 생성
   function genCode(){ var a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789', s=''; for(var i=0;i<6;i++) s+=a[Math.floor(Math.random()*a.length)]; return s; }
@@ -322,7 +367,7 @@
         $('r-code').textContent=code;
         $('gen-result').classList.add('show');
         $('f-name').value='';
-        toast('코드 생성 완료 ✓ (PIN은 고객이 첫 로그인 때 설정)');
+        toast(TIER_LBL[industry]+' · '+(days>0?(days>=365?'1년':days+'일'):'평생')+' 코드 생성 완료 ✓');
         loadList();
       } else if(res&&res.reason==='auth'){ toast('마스터 인증 만료 · 다시 로그인'); }
       else { toast('생성 실패 ('+((res&&res.reason)||'SQL 미실행?')+')'); }
@@ -340,10 +385,11 @@
     return {t:'D-'+d, cls:''};
   }
   function ucard(u){
-    var dd=dday(u.expires_at);
+    var dd=dday(u.expires_at); var tk=tierOf(u);
     var div=document.createElement('div'); div.className='ucard';
-    div.innerHTML='<div class="uc-top"><span class="uc-code">'+u.code+'</span><span class="uc-name">'+(u.name||'')+'</span><span class="uc-del" title="삭제">×</span></div>'
-      +'<div class="uc-meta"><span class="uc-dday '+dd.cls+'">'+dd.t+'</span>'+(u.handle?'<span>/u/'+u.handle+'</span>':'<span>주소 미설정</span>')+'</div>';
+    div.innerHTML='<div class="uc-top"><span class="uc-code">'+u.code+'</span><span class="uc-name">'+(u.name||'')+'</span><span class="uc-edit" title="등급·기간 변경">✎</span><span class="uc-del" title="삭제">×</span></div>'
+      +'<div class="uc-meta"><span class="uc-tier" style="color:'+TIER_COLOR[tk]+'; border-color:'+TIER_COLOR[tk]+'66;">'+TIER_LBL[tk]+'</span><span class="uc-dday '+dd.cls+'">'+dd.t+'</span>'+(u.handle?'<span>/u/'+u.handle+'</span>':'<span>주소 미설정</span>')+'</div>';
+    div.querySelector('.uc-edit').onclick=function(){ openPlan(u); };
     div.querySelector('.uc-del').onclick=async function(){
       if(!confirm(u.code+' 코드를 삭제할까요? (되돌릴 수 없어요)')) return;
       var r=await window.laRpc('li_master_delete',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:u.code });
@@ -351,13 +397,44 @@
     };
     return div;
   }
+  // 등급·기간 변경 (승급·연장)
+  var planTarget=null, planTier='basic', planMode='keep';
+  bindSeg($('plan-seg-tier'),'data-ind',function(v){ planTier=v; });
+  bindSeg($('plan-seg-period'),'data-mode',function(v){ planMode=v; });
+  function planSegOn(box,attr,val){ box.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute(attr)===val); }); }
+  function openPlan(u){
+    planTarget=u; planTier=tierOf(u); planMode='keep';
+    $('plan-code').textContent=u.code; $('plan-name').textContent=u.name||'';
+    planSegOn($('plan-seg-tier'),'data-ind',planTier);
+    planSegOn($('plan-seg-period'),'data-mode','keep');
+    $('plan-ov').classList.add('show');
+  }
+  function closePlan(){ $('plan-ov').classList.remove('show'); planTarget=null; }
+  $('plan-cancel').onclick=closePlan;
+  $('plan-ov').addEventListener('click', function(e){ if(e.target===$('plan-ov')) closePlan(); });
+  $('plan-save').onclick=async function(){
+    if(!planTarget||!AUTH) return;
+    var now=Date.now(), DAY=86400000, exp;
+    if(planMode==='keep') exp=planTarget.expires_at||null;
+    else if(planMode==='365') exp=now+365*DAY;
+    else if(planMode==='life') exp=null;
+    else if(planMode==='ext365'){ var base=(planTarget.expires_at&&planTarget.expires_at>now)?planTarget.expires_at:now; exp=base+365*DAY; }
+    var btn=this; btn.disabled=true; var o=btn.textContent; btn.textContent='저장 중...';
+    try{
+      var r=await window.laRpc('li_master_set_plan',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:planTarget.code, p_industry:planTier, p_expires_at:exp });
+      if(r&&r.ok){ toast(TIER_LBL[planTier]+'(으)로 변경됨 ✓'); closePlan(); loadList(); }
+      else { toast('변경 실패 ('+((r&&r.reason)||'SQL 미실행?')+')'); }
+    }catch(e){ toast('오류: '+e.message); }
+    btn.disabled=false; btn.textContent=o;
+  };
+
   async function loadList(){
     if(!AUTH) return;
     var res=await window.laRpc('li_master_list',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash });
     var all=(res&&res.ok&&res.list)?res.list:[];
-    var groups={personal:[],beauty:[],brand:[]};
-    all.forEach(function(u){ var k=groups[u.industry]?u.industry:'personal'; groups[k].push(u); });
-    ['personal','beauty','brand'].forEach(function(k){
+    var groups={basic:[],pro:[],premium:[]};
+    all.forEach(function(u){ groups[tierOf(u)].push(u); });
+    ['basic','pro','premium'].forEach(function(k){
       var box=$('list-'+k); box.innerHTML=''; $('cnt-'+k).textContent=groups[k].length;
       if(!groups[k].length){ box.innerHTML='<div class="empty">아직 없어요</div>'; return; }
       groups[k].forEach(function(u){ box.appendChild(ucard(u)); });
@@ -365,7 +442,7 @@
     // 현황(대시보드) 지표
     var soon=0, life=0;
     all.forEach(function(u){ if(!u.expires_at){ life++; } else { var d=Math.ceil((u.expires_at-Date.now())/86400000); if(d>=0&&d<=30) soon++; } });
-    if($('m-total')){ $('m-total').textContent=all.length; $('m-personal').textContent=groups.personal.length; $('m-beauty').textContent=groups.beauty.length; $('m-brand').textContent=groups.brand.length; $('m-soon').textContent=soon; $('m-life').textContent=life; }
+    if($('m-total')){ $('m-total').textContent=all.length; $('m-basic').textContent=groups.basic.length; $('m-pro').textContent=groups.pro.length; $('m-premium').textContent=groups.premium.length; $('m-soon').textContent=soon; $('m-life').textContent=life; }
     var rl=$('recent-list');
     if(rl){ rl.innerHTML=''; if(!all.length){ rl.innerHTML='<div class="empty">아직 없어요</div>'; } else { all.slice(0,5).forEach(function(u){ rl.appendChild(ucard(u)); }); } }
   }

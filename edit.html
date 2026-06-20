@@ -257,17 +257,98 @@
   .lg-join:active{transform:scale(.99);}
   .lg-about{display:inline-block; text-align:center; margin:8px auto 0; padding:5px 12px; font-size:11.5px; font-weight:600; color:var(--muted); text-decoration:none;}
   .lg-about:active{transform:scale(.98);}
-  /* 카톡 회원가입 안내 다이얼로그 */
-  .join-dlg{text-align:center;}
-  .join-ic{width:54px; height:54px; margin:0 auto 14px; border-radius:16px; background:#FEE500; display:flex; align-items:center; justify-content:center;}
-  .join-ic svg{width:32px; height:32px;}
-  .join-t{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:8px;}
-  .join-s{font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:16px;}
-  .join-s b{color:var(--ink);}
-  .join-room{font-size:12.5px; font-weight:700; color:var(--ink); background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:9px; margin-bottom:12px;}
-  .join-go{display:block; width:100%; padding:13px; border-radius:12px; background:#FEE500; color:#3C1E1E; font-size:14.5px; font-weight:800; text-decoration:none; margin-bottom:8px;}
+  /* 회원가입 신청 폼 */
+  #join-ov{align-items:flex-start; overflow-y:auto;}
+  .join-dlg{max-width:400px; max-height:none; margin:0 auto; text-align:left;}
+  .terms-dlg{max-width:400px; max-height:84vh; overflow-y:auto;}
+  .join-head{display:flex; align-items:center; gap:11px; margin-bottom:6px;}
+  .join-ic{flex:none; width:42px; height:42px; border-radius:13px; background:#FEE500; display:flex; align-items:center; justify-content:center;}
+  .join-ic svg{width:25px; height:25px;}
+  .join-t{font-size:17px; font-weight:800; color:var(--ink);}
+  .join-s2{font-size:11.5px; color:var(--muted); line-height:1.5; margin-top:3px;}
+  .jf-lbl{font-size:12px; font-weight:700; color:var(--ink); margin:16px 1px 8px;}
+  .jf-lbl span{font-weight:400; color:var(--muted); font-size:11px;}
+  .tier-list{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .tier{position:relative; display:flex; flex-direction:column; gap:2px; text-align:left; padding:12px 12px 11px; border:1.5px solid var(--hair); border-radius:13px; background:var(--soft); color:var(--ink); font-family:var(--sans); cursor:pointer; transition:border-color .12s, background .12s;}
+  .tier.tier-wide{grid-column:1 / -1; flex-direction:row; align-items:center; gap:8px;}
+  .tier b{font-size:14px; font-weight:800;}
+  .tier .tprice{font-size:13px; font-weight:800; color:var(--coral);}
+  .tier .tprice i{font-size:10.5px; font-weight:500; color:var(--muted); font-style:normal;}
+  .tier .tdesc{font-size:10.5px; color:var(--muted); line-height:1.35;}
+  .tier.tier-wide b{font-size:13px;} .tier.tier-wide .tdesc{margin-left:auto;}
+  .tier .tbadge{position:absolute; top:-7px; right:9px; font-size:9.5px; font-weight:800; color:#fff; background:var(--grad); padding:2px 7px; border-radius:999px;}
+  .tier.on{border-color:var(--coral); background:var(--coral-soft);}
+  .tier:active{transform:scale(.98);}
+  .jf-cmp{display:block; width:100%; text-align:center; margin-top:9px; padding:9px; border:1px solid var(--hair); border-radius:10px; background:var(--soft); color:var(--coral); font-size:12.5px; font-weight:700; cursor:pointer;}
+  .jf-cmp:active{transform:scale(.99);}
+  .cmp-dlg{max-width:380px; max-height:88vh; overflow-y:auto;}
+  .cmp-t{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:4px;}
+  .cmp-sub{font-size:12px; color:var(--muted); margin-bottom:14px;} .cmp-sub b{color:var(--ink);}
+  .cmp-wrap{overflow-x:auto; margin:0 -4px;}
+  .cmp-tbl{width:100%; border-collapse:collapse; font-size:11.5px;}
+  .cmp-tbl th,.cmp-tbl td{padding:8px 5px; text-align:center; border-bottom:1px solid var(--hair);}
+  .cmp-tbl thead th{font-size:11px; color:var(--muted); font-weight:700; line-height:1.5;}
+  .cmp-tbl thead th b{color:var(--ink); font-size:12.5px;}
+  .cmp-tbl td:first-child,.cmp-tbl th:first-child{text-align:left; color:var(--ink); font-weight:600; white-space:nowrap; padding-left:2px;}
+  .cmp-tbl .cmp-hot{background:var(--coral-soft);}
+  .cmp-tbl thead .cmp-hot b{color:var(--coral);}
+  .cmp-note{font-size:11px; color:var(--muted); line-height:1.6; margin:13px 0; padding:10px; background:var(--soft); border-radius:10px; text-align:center;}
+  .jf-in{width:100%; border:1px solid var(--hair); background:var(--soft); border-radius:10px; padding:11px 12px; font-size:14px; color:var(--ink); font-family:var(--sans); margin-bottom:8px;}
+  .jf-agree{display:flex; align-items:flex-start; gap:9px; padding:4px 1px; font-size:12px; color:var(--ink); line-height:1.45; cursor:pointer;}
+  .jf-agree input{margin-top:2px; width:16px; height:16px; flex:none; accent-color:var(--coral);}
+  .jf-agree b{color:var(--coral);}
+  .jf-terms{display:block; width:100%; text-align:center; margin-top:8px; padding:9px; border:1px solid var(--hair); border-radius:10px; background:var(--soft); color:var(--muted); font-size:12px; font-weight:600; cursor:pointer;}
+  .jf-make{width:100%; padding:14px; border:0; border-radius:12px; background:var(--grad); color:#fff; font-size:15px; font-weight:800; cursor:pointer; margin-top:16px;}
+  .jf-make:disabled{opacity:.4; cursor:not-allowed;}
+  .jf-make:not(:disabled):active{transform:scale(.99);}
+  #join-result-ov{background:rgba(0,0,0,.78);}
+  /* 등급 잠금 */
+  .hm-locked{position:relative; opacity:.55;}
+  .hm-locked::after{content:'🔒'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:15px; filter:drop-shadow(0 1px 3px rgba(0,0,0,.6)); z-index:2;}
+  .lock-dlg{max-width:330px; text-align:center;}
+  .lock-ic{font-size:34px; margin-bottom:10px;}
+  .lock-t{font-size:15.5px; font-weight:800; color:var(--ink); margin-bottom:8px; line-height:1.4;}
+  .lock-s{font-size:12.5px; color:var(--muted); line-height:1.6; margin-bottom:16px;}
+  .lock-go{display:block; width:100%; padding:13px; border-radius:12px; background:#FEE500; color:#3C1E1E; font-size:14px; font-weight:800; text-decoration:none; margin-bottom:8px;}
+  .lock-go:active{transform:scale(.99);}
+  .lock-close{display:block; width:100%; padding:10px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer;}
+  .plan-box{background:var(--soft); border:1px solid var(--hair); border-radius:13px; padding:13px 14px; margin-bottom:9px;}
+  .pb-row{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .pb-tier{font-size:13px; font-weight:800; padding:3px 11px; border:1.5px solid; border-radius:999px;}
+  .pb-dday{font-size:13px; font-weight:800; color:var(--coral);}
+  .pb-dday.urgent{color:#e0788c;}
+  .pb-exp{font-size:11.5px; color:var(--muted); margin-top:8px;}
+  .pb-upgrade{display:block; text-align:center; margin-top:11px; padding:9px; border-radius:9px; background:var(--coral-soft,rgba(167,139,255,.12)); color:var(--coral); font-size:12px; font-weight:700; text-decoration:none;}
+  .pb-upgrade:active{transform:scale(.99);}
+  .set-danger .nm{color:#e0788c;}
+  .set-danger .ic{filter:grayscale(.1);}
+  .del-t{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:8px;}
+  .del-s{font-size:12.5px; color:var(--muted); line-height:1.6; margin-bottom:14px;}
+  .del-s b{color:#e0788c;}
+  .del-export{display:block; width:100%; padding:11px; border:1px solid var(--hair); border-radius:10px; background:var(--soft); color:var(--ink); font-size:13px; font-weight:700; cursor:pointer; margin-bottom:14px;}
+  .del-confirm-lbl{font-size:12px; color:var(--muted); margin-bottom:7px;}
+  .del-confirm-lbl b{color:var(--coral); font-weight:800; letter-spacing:.04em;}
+  .del-in{width:100%; border:1px solid var(--hair); background:var(--soft); border-radius:10px; padding:11px 12px; font-size:14px; color:var(--ink); font-family:var(--sans); margin-bottom:14px; text-transform:uppercase;}
+  .del-btns{display:flex; gap:9px;}
+  .del-go{flex:1.4; padding:12px; border-radius:12px; border:0; background:#d24b63; color:#fff; font-size:14px; font-weight:800; cursor:pointer;}
+  .del-go:disabled{opacity:.4; cursor:not-allowed;}
+  .del-go:not(:disabled):active{transform:scale(.98);}
+  .jr-dlg{max-width:400px;}
+  .jr-t{font-size:17px; font-weight:800; color:var(--ink); margin-bottom:5px;}
+  .jr-s{font-size:12.5px; color:var(--muted); line-height:1.5; margin-bottom:14px;}
+  .jr-s b{color:var(--ink);}
+  .jr-back{display:block; width:100%; padding:11px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer; margin-top:12px;}
+  .jf-msg{width:100%; border:1px solid var(--hair); background:var(--soft); border-radius:11px; padding:12px; font-size:13px; color:var(--ink); font-family:var(--sans); line-height:1.6; resize:vertical;}
+  .jf-copy{width:100%; padding:13px; border:0; border-radius:12px; background:var(--grad); color:#fff; font-size:14.5px; font-weight:800; cursor:pointer; margin-top:9px;}
+  .jf-copy:active{transform:scale(.99);}
+  .join-go{display:block; width:100%; padding:13px; border-radius:12px; background:#FEE500; color:#3C1E1E; font-size:14.5px; font-weight:800; text-decoration:none; text-align:center; margin-top:8px;}
   .join-go:active{transform:scale(.99);}
-  .join-close{display:block; width:100%; padding:10px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer;}
+  .jf-room{font-size:11px; color:var(--muted); text-align:center; margin-top:7px;}
+  .join-close{display:block; width:100%; padding:11px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:13px; font-weight:700; cursor:pointer; margin-top:14px;}
+  .terms-t{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:12px;}
+  .terms-body{font-size:12px; color:var(--muted); line-height:1.6;}
+  .terms-body b{color:var(--ink); font-size:12.5px;}
+  .terms-note{display:block; margin-top:12px; padding-top:10px; border-top:1px solid var(--hair); color:var(--muted); font-size:11px;}
   .lg-signup-note{font-size:12.5px; color:var(--muted); line-height:1.6; text-align:center; margin:0 0 12px; background:var(--coral-soft, rgba(123,90,255,.12)); padding:11px 13px; border-radius:11px;}
   .lg-signup-note b{color:var(--ink);}
   /* 시작하기 — 코드 입력 단계 */
@@ -803,7 +884,7 @@
     <a class="lg-admin" href="admin.html" aria-label="관리자 페이지" title="관리자 페이지"><span>⚙</span> 관리자</a>
     <div class="login-card">
       <img class="login-house" src="la-mark.png" alt="컨텐츠 허브">
-      <div class="login-t">🔑 운영자 로그인</div>
+      <div class="login-t">컨텐츠 허브</div>
       <div class="login-s" id="lg-sub">컨텐츠 허브 운영자 페이지 · 코드와 PIN으로 들어가면 편집·설정을 할 수 있어요</div>
       <div class="lg-signup-note" id="lg-signup-note">발급받은 <b>코드</b>를 입력하면, 다음 화면에서 <b>나만의 PIN</b>을 정해요.<br>가입은 이 한 번이면 끝이에요 😊</div>
       <input id="lg-code" placeholder="발급받은 코드" autocapitalize="characters" autocomplete="off">
@@ -818,10 +899,9 @@
       <div class="login-err" id="lg-err"></div>
       <button class="login-btn" id="lg-btn">로그인</button>
       <button class="login-btn" id="lg-next">다음 →</button>
-      <button type="button" class="lg-switch" id="lg-tolink">코드 받고 처음이신가요? <b>시작하기 →</b></button>
       <button type="button" class="lg-switch" id="lg-backlogin">← 이미 PIN이 있어요 (로그인)</button>
-      <button type="button" class="lg-join" id="lg-join">🙋 처음이신가요? · <b>회원가입(코드 받기) 문의 →</b></button>
-      <a class="lg-about" href="index.html" target="_blank" rel="noopener">📖 컨텐츠 허브란?</a>
+      <button type="button" class="lg-join" id="lg-join">처음이신가요? <b>회원가입 문의 →</b></button>
+      <a class="lg-about" href="index.html" target="_blank" rel="noopener">컨텐츠 허브란?</a>
 
       <!-- 첫 로그인: 본인이 PIN 직접 설정 -->
       <div id="lg-setpin">
@@ -836,15 +916,109 @@
     </div>
   </div>
 
-  <!-- 회원가입(코드 받기) 카톡 문의 안내 -->
+  <!-- 회원가입 신청 (등급선택 → 정보·동의 → 신청서 → 카톡 복사) -->
   <div class="dlg-ov" id="join-ov">
     <div class="dlg join-dlg">
-      <div class="join-ic"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.2C6.9 3.2 2.8 6.4 2.8 10.3c0 2.5 1.7 4.7 4.2 6-.2.6-.7 2.5-.8 2.9 0 0 0 .3.2.4.2 0 .3-.1.4-.2.3-.2 2.8-1.9 3.4-2.3.5.1 1.1.1 1.6.1 5.1 0 9.2-3.2 9.2-7.1S17.1 3.2 12 3.2Z" fill="#3A1D1D"/></svg></div>
-      <div class="join-t">회원가입은 카톡으로 문의해요</div>
-      <div class="join-s">컨텐츠 허브는 발급받은 <b>코드</b>로 시작해요.<br>아래 <b>카톡 문의방</b>으로 신청하면 코드를 보내드려요 😊</div>
-      <div class="join-room">💬 컨텐츠 허브 구매·문의방</div>
-      <a class="join-go" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">카톡 문의방 열기 →</a>
+      <div class="join-head">
+        <span class="join-ic"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.2C6.9 3.2 2.8 6.4 2.8 10.3c0 2.5 1.7 4.7 4.2 6-.2.6-.7 2.5-.8 2.9 0 0 0 .3.2.4.2 0 .3-.1.4-.2.3-.2 2.8-1.9 3.4-2.3.5.1 1.1.1 1.6.1 5.1 0 9.2-3.2 9.2-7.1S17.1 3.2 12 3.2Z" fill="#3A1D1D"/></svg></span>
+        <div><div class="join-t">회원가입 신청</div><div class="join-s2">정보를 입력하면 신청서가 만들어져요 · 카톡 문의방에 붙여넣으면 끝</div></div>
+      </div>
+
+      <div class="jf-lbl">① 등급 선택 <span>· 연 1회 결제</span></div>
+      <div class="tier-list">
+        <button type="button" class="tier" data-tier="베이직" data-price="99,000원 / 1년"><b>베이직</b><span class="tprice">99,000원 <i>/ 1년</i></span><span class="tdesc">기본 기능 (콘텐츠·Q&A)</span></button>
+        <button type="button" class="tier" data-tier="프로" data-price="149,000원 / 1년"><span class="tbadge">인기</span><b>프로</b><span class="tprice">149,000원 <i>/ 1년</i></span><span class="tdesc">예약·판매·전환·모션</span></button>
+        <button type="button" class="tier" data-tier="프리미엄" data-price="199,000원 / 1년"><b>프리미엄</b><span class="tprice">199,000원 <i>/ 1년</i></span><span class="tdesc">화이트라벨·도메인·AI</span></button>
+        <button type="button" class="tier tier-wide" data-tier="상담 후 결정" data-price="상담 후 결정"><b>아직 못 정했어요</b><span class="tdesc">상담받고 정할게요</span></button>
+      </div>
+      <button type="button" class="jf-cmp" id="jf-cmp">📊 등급별 기능 자세히 비교하기</button>
+
+      <div class="jf-lbl">② 신청자 정보</div>
+      <input class="jf-in" id="jf-name" placeholder="성함" maxlength="40">
+      <input class="jf-in" id="jf-phone" type="tel" inputmode="numeric" placeholder="연락처 (예: 010-1234-5678)" maxlength="30">
+
+      <div class="jf-lbl">③ 동의 <span>· 가입에 꼭 필요해요</span></div>
+      <label class="jf-agree"><input type="checkbox" id="jf-agree1"><span><b>(필수)</b> 만 14세 이상이며, 이용약관·개인정보 수집·이용·처리위탁에 동의합니다.</span></label>
+      <label class="jf-agree"><input type="checkbox" id="jf-agree2"><span>(선택) 마케팅·뉴스레터 수신에 동의합니다.</span></label>
+      <button type="button" class="jf-terms" id="jf-terms">📄 약관·개인정보 처리방침 자세히 보기</button>
+
+      <button type="button" class="jf-make" id="jf-make" disabled>신청서 만들기 →</button>
       <button type="button" class="join-close" id="join-close">닫기</button>
+    </div>
+  </div>
+
+  <!-- 회원가입 신청서 결과 (정리본만 · 카톡 바로) -->
+  <div class="dlg-ov" id="join-result-ov">
+    <div class="dlg jr-dlg">
+      <div class="jr-t">✓ 신청서가 만들어졌어요</div>
+      <div class="jr-s">아래를 <b>복사</b>해서 카톡 문의방에 <b>붙여넣어</b> 주세요</div>
+      <textarea class="jf-msg" id="jf-msg" readonly rows="9"></textarea>
+      <button type="button" class="jf-copy" id="jf-copy">📋 신청서 복사하기</button>
+      <a class="join-go" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">💬 카톡 문의방 열고 붙여넣기 →</a>
+      <div class="jf-room">붙여넣을 곳: 컨텐츠 허브 구매·문의방</div>
+      <button type="button" class="jr-back" id="jr-back">← 신청 내용 수정</button>
+    </div>
+  </div>
+
+  <!-- 약관·개인정보 자세히 보기 -->
+  <div class="dlg-ov" id="terms-ov">
+    <div class="dlg terms-dlg">
+      <div class="terms-t">약관 · 개인정보 처리방침 (요약)</div>
+      <div class="terms-body">
+        <b>1. 수집 항목</b><br>(필수) 성함·연락처·로그인 코드/PIN · (선택) 프로필·콘텐츠·연락 링크 · (자동) 접속기록·익명 집계 통계<br><br>
+        <b>2. 이용 목적</b><br>회원 식별·로그인, 페이지 제작·저장·공개, 문의 대응, (유료 시) 결제·분석, 서비스 개선<br><br>
+        <b>3. 보유 기간</b><br>탈퇴·동의 철회 시 지체 없이 파기 (법령상 보존 의무 정보는 해당 기간 보관 후 파기)<br><br>
+        <b>4. 처리위탁 ★</b><br>Supabase(DB·사진 저장·호스팅), 결제대행사(유료 시), 배포·호스팅 업체. 회원 데이터가 해당 업체에 저장됩니다.<br><br>
+        <b>5. 제3자 제공</b><br>동의 없이 제3자 제공 안 함. 단 공개 페이지(/u/핸들)는 회원이 스스로 외부 공개하는 것이라 담긴 정보는 누구나 볼 수 있어요.<br><br>
+        <b>6. 회원의 권리 ★</b><br>언제든 열람·정정·삭제·처리정지 요청 가능, 데이터 내보내기(HTML·MD·JSON)로 직접 회수 가능<br><br>
+        <b>7. 콘텐츠 권리 ★</b><br>회원이 올린 콘텐츠의 저작권·소유권은 전적으로 회원에게 있어요. 운영자는 서비스 제공 목적으로만 처리.<br><br>
+        <b>8. 유료 결제 · 환불 · 청약철회 ★</b><br>
+        · 유료 플랜은 <b>연 1회 결제</b>이며 가격·내용은 결제 시 표시합니다.<br>
+        · 결제일로부터 <b>7일 이내</b>, 서비스를 이용하지 않은(코드 미사용·콘텐츠 미발행) 경우 <b>전액 환불(청약철회)</b>이 가능합니다.<br>
+        · 단 <b>코드 발급·로그인·페이지 발행 등 서비스 이용이 개시된 후</b>에는 디지털 콘텐츠 특성상 청약철회가 제한될 수 있습니다(전자상거래법 제17조 등).<br>
+        · 이용 중 환불은 잔여 기간을 일할 계산하여 환불할 수 있으며, 구체 기준은 결제 안내에 따릅니다.<br>
+        · 환불 신청은 <b>카톡 문의방</b>으로 접수합니다.<br><br>
+        <b>9. 회원 탈퇴 · 데이터 요청 ★</b><br>
+        · <b>탈퇴(계정·데이터 삭제)</b>, <b>데이터 내보내기(HTML·MD·JSON)</b>, 열람·정정·처리정지는 언제든 <b>카톡 문의방</b>으로 요청하시면 처리해 드립니다.<br>
+        · 탈퇴 시 회원 정보·콘텐츠는 지체 없이 파기합니다(법령상 보존 의무 정보는 해당 기간 보관 후 파기).<br><br>
+        <b>10. 사업자 정보</b><br>
+        상호: [               ] · 대표자: [          ]<br>
+        사업자등록번호: [               ]<br>
+        통신판매업 신고번호: [               ]<br>
+        주소: [                              ]<br>
+        개인정보 보호책임자: [          ] · 문의: 카톡 문의방<br><br>
+        <span class="terms-note">※ 본 요약은 초안이며, 사업자 정보·환불 정책은 정식 유료 출시 전 변호사 검토를 거쳐 최종 확정됩니다.</span>
+      </div>
+      <button type="button" class="join-close" id="terms-close">닫기</button>
+    </div>
+  </div>
+
+  <!-- 등급 비교표 -->
+  <div class="dlg-ov" id="tiercmp-ov">
+    <div class="dlg cmp-dlg">
+      <div class="cmp-t">등급별 기능 비교</div>
+      <div class="cmp-sub">모두 <b>연 1회 결제</b> · 언제든 승급 가능</div>
+      <div class="cmp-wrap">
+        <table class="cmp-tbl">
+          <thead><tr><th></th><th>베이직<br><b>99,000</b></th><th class="cmp-hot">프로<br><b>149,000</b></th><th>프리미엄<br><b>199,000</b></th></tr></thead>
+          <tbody>
+            <tr><td>공개 허브 페이지</td><td>✓</td><td class="cmp-hot">✓</td><td>✓</td></tr>
+            <tr><td>콘텐츠·아카이브·Q&A</td><td>✓</td><td class="cmp-hot">✓</td><td>✓</td></tr>
+            <tr><td>사진 보관함</td><td>✓</td><td class="cmp-hot">✓</td><td>✓</td></tr>
+            <tr><td>디자인 테마</td><td>3종</td><td class="cmp-hot">전체</td><td>전체</td></tr>
+            <tr><td>예약 시스템</td><td>—</td><td class="cmp-hot">✓</td><td>✓</td></tr>
+            <tr><td>판매 블록(쿠팡·내 제품)</td><td>—</td><td class="cmp-hot">✓</td><td>✓</td></tr>
+            <tr><td>전환 블록(증거·후기·랭킹)</td><td>—</td><td class="cmp-hot">✓</td><td>✓</td></tr>
+            <tr><td>움직이는 모션</td><td>—</td><td class="cmp-hot">✓</td><td>✓</td></tr>
+            <tr><td>방문 분석</td><td>기본</td><td class="cmp-hot">상세</td><td>상세+</td></tr>
+            <tr><td>화이트라벨(표시 제거)</td><td>—</td><td class="cmp-hot">—</td><td>✓</td></tr>
+            <tr><td>커스텀 도메인</td><td>—</td><td class="cmp-hot">—</td><td>✓</td></tr>
+            <tr><td>AI 카드뉴스</td><td>—</td><td class="cmp-hot">—</td><td>✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cmp-note">베이직=콘텐츠 쌓기 · 프로=예약·판매로 전환 · 프리미엄=완전한 내 브랜드</div>
+      <button type="button" class="join-close" id="cmp-close">닫기</button>
     </div>
   </div>
 
@@ -1113,6 +1287,11 @@
     </div>
 
     <div class="grp-h-lbl" style="margin-top:16px;">계정 · 자료</div>
+    <div class="plan-box" id="my-plan">
+      <div class="pb-row"><span class="pb-tier" id="my-plan-tier">—</span><span class="pb-dday" id="my-plan-dday"></span></div>
+      <div class="pb-exp" id="my-plan-exp">사용기간 확인 중…</div>
+      <a class="pb-upgrade" id="my-plan-up" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">등급 올리기 · 갱신 문의 →</a>
+    </div>
     <div class="set" id="set-vault">
       <span class="ic">▦</span>
       <span class="meta"><span class="nm">사진 보관함</span><span class="sb">올린 사진 관리 · 자동 압축</span></span>
@@ -1121,6 +1300,11 @@
     <div class="set" id="set-pin">
       <span class="ic">🔒</span>
       <span class="meta"><span class="nm">비밀번호(PIN) 변경</span><span class="sb">로그인 PIN을 새로 설정</span></span>
+      <span class="chev">›</span>
+    </div>
+    <div class="set" id="set-export">
+      <span class="ic">📤</span>
+      <span class="meta"><span class="nm">내 데이터 내보내기</span><span class="sb">내 콘텐츠·설정을 파일(JSON)로 저장</span></span>
       <span class="chev">›</span>
     </div>
     <a class="set" id="set-admin" href="admin.html" style="text-decoration:none; color:inherit;">
@@ -1133,7 +1317,27 @@
       <span class="meta"><span class="nm">로그아웃</span><span class="sb">이 기기에서 로그아웃</span></span>
       <span class="chev">›</span>
     </div>
+    <div class="set set-danger" id="set-delete">
+      <span class="ic">🗑</span>
+      <span class="meta"><span class="nm">회원 탈퇴</span><span class="sb">계정·콘텐츠·사진·예약 영구 삭제 (되돌릴 수 없음)</span></span>
+      <span class="chev">›</span>
+    </div>
     </div><!-- /⚙ 설정 pane -->
+
+    <!-- 회원 탈퇴 확인 -->
+    <div class="dlg-ov" id="del-ov">
+      <div class="dlg del-dlg">
+        <div class="del-t">정말 탈퇴하시겠어요?</div>
+        <div class="del-s"><b>계정·콘텐츠·사진·예약·명단</b>이 모두 <b>영구 삭제</b>되고 되돌릴 수 없어요. 탈퇴 전에 「내 데이터 내보내기」를 권장해요.</div>
+        <button type="button" class="del-export" id="del-export">📤 먼저 내 데이터 내보내기</button>
+        <div class="del-confirm-lbl">확인을 위해 내 코드 <b id="del-mycode">CODE</b> 를 입력하세요</div>
+        <input class="del-in" id="del-code" placeholder="코드 입력" autocapitalize="characters" autocomplete="off">
+        <div class="del-btns">
+          <button type="button" class="dlg-cancel" id="del-cancel">취소</button>
+          <button type="button" class="del-go" id="del-go" disabled>영구 삭제</button>
+        </div>
+      </div>
+    </div>
 
     <!-- (설정 항목은 '설정' 탭으로 이동함 — 빈 셸 유지: 참조 안전용) -->
     <div class="ov" id="settings-ov" style="display:none;"><div class="sheet"></div></div>
@@ -3078,14 +3282,50 @@
     ['framer','#171717','#2D9CFF'],['neon','#0A0810','#E06FC8'],['prism','#0A0712','#C66BE8'],
     ['cobalt','#070A18','#6F8AFF'],['bokeh','#0A0A0C','#6FD6A0']
   ];
+  // ─── 등급(요금제) 기능 잠금 ─── (AUTH는 다른 스크립트 블록이라 window.__authTier로 받음)
+  function cmTier(){ var t=window.__authTier||'basic'; return (t==='pro'||t==='premium')?t:'basic'; }
+  var CM_TIER_RANK={basic:0, pro:1, premium:2};
+  function tierOK(need){ return CM_TIER_RANK[cmTier()] >= (CM_TIER_RANK[need]||0); }
+  window.__cmTier=cmTier;
+  function showLock(name, need){
+    var lbl=(need==='premium')?'프리미엄':'프로';
+    var ov=document.getElementById('cm-lock-ov');
+    if(!ov){
+      ov=document.createElement('div'); ov.id='cm-lock-ov'; ov.className='dlg-ov';
+      ov.innerHTML='<div class="dlg lock-dlg"><div class="lock-ic">🔒</div><div class="lock-t" id="cm-lock-t"></div><div class="lock-s" id="cm-lock-s"></div><a class="lock-go" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">💬 업그레이드 문의 →</a><button type="button" class="lock-close" id="cm-lock-x">닫기</button></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov) ov.style.display='none'; });
+      document.getElementById('cm-lock-x').onclick=function(){ ov.style.display='none'; };
+    }
+    document.getElementById('cm-lock-t').textContent='🔒 '+name+'은(는) '+lbl+' 기능이에요';
+    document.getElementById('cm-lock-s').textContent=lbl+' 등급으로 올리면 바로 쓸 수 있어요. 카톡으로 문의해 주세요.';
+    ov.style.display='flex';
+  }
+  window.__cmShowLock=showLock;
+  // 내 등급·사용기간 (설정 카드)
+  function renderMyPlan(){
+    var box=document.getElementById('my-plan'); if(!box) return;
+    var tier=cmTier(), exp=(window.__authExpires!=null?window.__authExpires:null);
+    var TL={basic:'베이직',pro:'프로',premium:'프리미엄'}, TC={basic:'#5B8CFF',pro:'#A78BFF',premium:'#E0B84A'};
+    var tEl=document.getElementById('my-plan-tier'); tEl.textContent='🏅 '+TL[tier]; tEl.style.color=TC[tier]; tEl.style.borderColor=TC[tier]+'66';
+    var ddEl=document.getElementById('my-plan-dday'), expEl=document.getElementById('my-plan-exp');
+    if(!exp){ ddEl.textContent='평생'; ddEl.className='pb-dday'; expEl.textContent='만료 없는 평생 이용이에요'; return; }
+    var d=new Date(exp), ymd=d.getFullYear()+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2);
+    var left=Math.ceil((exp-Date.now())/86400000);
+    if(left<0){ ddEl.textContent='만료됨'; ddEl.className='pb-dday urgent'; expEl.textContent=ymd+' 만료 · 갱신이 필요해요'; }
+    else { ddEl.textContent='D-'+left; ddEl.className='pb-dday'+(left<=30?' urgent':''); expEl.textContent=ymd+' 까지 이용 ('+left+'일 남음)'; }
+  }
+  window.__renderMyPlan=renderMyPlan;
   function renderThemes(){
     var g=document.getElementById('theme-grid'); if(!g) return; g.innerHTML='';
-    THEMES.forEach(function(t){
+    var thLocked=!tierOK('pro');
+    THEMES.forEach(function(t, idx){
       var o=document.createElement('div');
-      o.className='hm-th'+(home.theme===t[0]?' sel':'');
-      o.style.background=t[3]||t[1]; o.title=t[0];
+      var lk=thLocked && idx>=3;
+      o.className='hm-th'+(home.theme===t[0]?' sel':'')+(lk?' hm-locked':'');
+      o.style.background=t[3]||t[1]; o.title=lk?'프로 기능':t[0];
       o.innerHTML='<span style="background:'+t[2]+'"></span>';
-      o.onclick=function(){ home.theme=t[0]; renderThemes(); };
+      o.onclick=function(){ if(lk){ showLock('전체 테마','pro'); return; } home.theme=t[0]; renderThemes(); };
       g.appendChild(o);
     });
     renderThemePreview();
@@ -3150,11 +3390,13 @@
   function blocks(n){ var s=''; for(var i=0;i<n;i++) s+='<b></b>'; return s; }
   function renderMotions(){
     var g=document.getElementById('motion-grid'); g.innerHTML='';
+    var mLocked=!tierOK('pro');
     MOTIONS.forEach(function(m){
       var o=document.createElement('div');
-      o.className='hm-opt hm-'+m[0]+(home.gmotion===m[0]?' sel':'');
+      var lk=mLocked && m[0]!==home.gmotion;
+      o.className='hm-opt hm-'+m[0]+(home.gmotion===m[0]?' sel':'')+(lk?' hm-locked':'');
       o.innerHTML='<div class="hm-prev"><div class="hm-mini">'+blocks(m[2])+'</div></div><div class="hm-nm">'+m[1]+'</div>';
-      o.onclick=function(){ home.gmotion=m[0]; renderMotions(); };
+      o.onclick=function(){ if(lk){ showLock('움직이는 모션','pro'); return; } home.gmotion=m[0]; renderMotions(); };
       g.appendChild(o);
     });
   }
@@ -3216,6 +3458,49 @@
   var setFab=document.getElementById('set-fab'); if(setFab) setFab.onclick=function(){ openHome('fab'); };
   var setLogout=document.getElementById('set-logout');
   if(setLogout) setLogout.onclick=function(){ if(!confirm('로그아웃 할까요?')) return; try{ localStorage.removeItem('la-auth'); }catch(_){} location.reload(); };
+
+  // 내 데이터 내보내기 (셀프, 클라이언트 — 서버 불필요)
+  function exportMyData(){
+    try{
+      var data=serialize();
+      data._meta={ app:'컨텐츠 허브', code:(AUTH&&AUTH.code)||'', handle:(AUTH&&AUTH.handle)||'', exportedAt:new Date().toISOString() };
+      var blob=new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      var url=URL.createObjectURL(blob), a=document.createElement('a');
+      var d=new Date(), ymd=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+      a.href=url; a.download='컨텐츠허브_내보내기_'+((AUTH&&AUTH.handle)||(AUTH&&AUTH.code)||'data')+'_'+ymd+'.json';
+      document.body.appendChild(a); a.click(); setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+      try{ notify('내 데이터를 파일로 저장했어요 ✓'); }catch(_){}
+    }catch(e){ try{ notify('내보내기 실패: '+e.message); }catch(_){} }
+  }
+  var setExport=document.getElementById('set-export');
+  if(setExport) setExport.onclick=exportMyData;
+
+  // 회원 탈퇴 (셀프, 서버 li_delete_account)
+  var setDelete=document.getElementById('set-delete'), delOv=document.getElementById('del-ov'),
+      delCode=document.getElementById('del-code'), delGo=document.getElementById('del-go'),
+      delCancel=document.getElementById('del-cancel'), delExportBtn=document.getElementById('del-export');
+  if(setDelete && delOv){
+    setDelete.onclick=function(){
+      if(!AUTH){ try{ notify('로그인이 필요해요'); }catch(_){} return; }
+      var mc=document.getElementById('del-mycode'); if(mc) mc.textContent=AUTH.code;
+      if(delCode){ delCode.value=''; } if(delGo){ delGo.disabled=true; }
+      delOv.style.display='flex';
+      setTimeout(function(){ if(delCode) delCode.focus(); }, 60);
+    };
+    function closeDel(){ delOv.style.display='none'; }
+    if(delCancel) delCancel.onclick=closeDel;
+    delOv.addEventListener('click', function(e){ if(e.target===delOv) closeDel(); });
+    if(delExportBtn) delExportBtn.onclick=exportMyData;
+    if(delCode) delCode.addEventListener('input', function(){ delGo.disabled = (delCode.value||'').trim().toUpperCase() !== String(AUTH.code).toUpperCase(); });
+    if(delGo) delGo.onclick=function(){
+      if((delCode.value||'').trim().toUpperCase() !== String(AUTH.code).toUpperCase()) return;
+      delGo.disabled=true; delGo.textContent='삭제 중…';
+      window.laRpc('li_delete_account', { p_code:AUTH.code, p_pin_hash:AUTH.pinHash }).then(function(r){
+        if(r && r.ok){ try{ localStorage.removeItem('la-auth'); localStorage.removeItem('la-last-code'); }catch(_){} alert('탈퇴가 완료됐어요.\n그동안 이용해주셔서 감사합니다 🙏'); location.reload(); }
+        else { delGo.disabled=false; delGo.textContent='영구 삭제'; try{ notify('탈퇴 실패: '+((r&&r.reason==='auth')?'인증 오류':((r&&r.reason)||'SQL 미적용?'))); }catch(_){} }
+      }).catch(function(e){ delGo.disabled=false; delGo.textContent='영구 삭제'; try{ notify('탈퇴 실패: '+e.message); }catch(_){} });
+    };
+  }
   var tfSeg=document.getElementById('topfirst-seg');
   if(tfSeg) tfSeg.addEventListener('click', function(e){ var b=e.target.closest('.tf-btn'); if(!b) return; home.topFirst=b.dataset.tf; renderTopFirst(); });
   document.querySelector('[data-hclose]').onclick = function(){ hov.classList.remove('open'); };
@@ -3283,6 +3568,9 @@
 (function(){
   var AUTH = null;
   try { AUTH = JSON.parse(localStorage.getItem('la-auth')||'null'); } catch(e){}
+  // 등급 잠금/사용기간(블록 A)이 읽을 수 있게 window로 노출
+  function publishTier(){ window.__authTier=(AUTH&&AUTH.industry)||'basic'; window.__authExpires=(AUTH&&AUTH.expiresAt!=null)?AUTH.expiresAt:null; }
+  publishTier();
   function gv(id){ var e=document.getElementById(id); return e?e.value:''; }
   function sv(id,v){ var e=document.getElementById(id); if(e&&v!=null) e.value=v; }
   function notify(m){ if(window.toast) window.toast(m); else alert(m); }
@@ -3830,7 +4118,7 @@
     // 로그인하면 바로 편집/운영 게이트 (고객 홈 미리보기는 게이트나 '고객 홈으로'에서). 신규(온보딩 중)는 제외.
     if(hadPage){ if(window.__showModeGate) setTimeout(window.__showModeGate, 120); }
   }
-  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영 모드'; }catch(_){} loadPage(); }
+  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영 모드'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); }
 
   // 분야 선택 제거 — 로그인은 코드+PIN만. selInd=null이면 아래 분야 일치 검사들이 자동 통과
   var selInd=null;
@@ -3850,11 +4138,60 @@
     var toSignup=document.getElementById('lg-tolink'), toLogin=document.getElementById('lg-backlogin'), nx=document.getElementById('lg-next');
     if(toSignup) toSignup.addEventListener('click', function(){ if(card) card.classList.add('mode-signup'); if(sub) sub.textContent='발급받은 코드로 시작하기'; var e=document.getElementById('lg-err'); if(e)e.textContent=''; var c=document.getElementById('lg-code'); if(c){ c.value=''; setTimeout(function(){ c.focus(); },50); } });
     if(toLogin) toLogin.addEventListener('click', function(){ if(card) card.classList.remove('mode-signup'); if(sub) sub.textContent='내 코드와 PIN으로 로그인하세요'; var e=document.getElementById('lg-err'); if(e)e.textContent=''; });
-    // 회원가입 카톡 문의 안내 팝업
+    // 회원가입 신청 폼 (등급선택 → 정보·동의 → 신청서 생성 → 복사 → 카톡)
     var joinBtn=document.getElementById('lg-join'), joinOv=document.getElementById('join-ov'), joinClose=document.getElementById('join-close');
-    if(joinBtn && joinOv){ joinBtn.addEventListener('click', function(){ joinOv.style.display='flex'; }); }
-    if(joinClose && joinOv){ joinClose.addEventListener('click', function(){ joinOv.style.display='none'; }); }
-    if(joinOv){ joinOv.addEventListener('click', function(e){ if(e.target===joinOv) joinOv.style.display='none'; }); }
+    if(joinBtn && joinOv){
+      joinBtn.addEventListener('click', function(){ joinOv.style.display='flex'; joinOv.scrollTop=0; });
+      if(joinClose) joinClose.addEventListener('click', function(){ joinOv.style.display='none'; });
+      joinOv.addEventListener('click', function(e){ if(e.target===joinOv) joinOv.style.display='none'; });
+      var selTier=null, selPrice='';
+      var tiers=[].slice.call(joinOv.querySelectorAll('.tier'));
+      var nameEl=document.getElementById('jf-name'), phoneEl=document.getElementById('jf-phone'),
+          ag1=document.getElementById('jf-agree1'), ag2=document.getElementById('jf-agree2'),
+          makeBtn=document.getElementById('jf-make'), resultOv=document.getElementById('join-result-ov'),
+          msgEl=document.getElementById('jf-msg'), copyBtn=document.getElementById('jf-copy'), jrBack=document.getElementById('jr-back');
+      function refreshMake(){
+        var ok = !!selTier && !!(nameEl.value||'').trim() && (phoneEl.value||'').replace(/[^0-9]/g,'').length>=8 && ag1.checked;
+        makeBtn.disabled=!ok;
+      }
+      tiers.forEach(function(t){ t.addEventListener('click', function(){
+        tiers.forEach(function(x){ x.classList.remove('on'); }); t.classList.add('on');
+        selTier=t.getAttribute('data-tier'); selPrice=t.getAttribute('data-price'); refreshMake();
+      }); });
+      [nameEl,phoneEl].forEach(function(e){ e.addEventListener('input', refreshMake); });
+      ag1.addEventListener('change', refreshMake);
+      makeBtn.addEventListener('click', function(){
+        var d=new Date(), ymd=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+        var tierLine = (selPrice && selPrice!==selTier) ? (selTier+' ('+selPrice+')') : selTier;
+        var msg='[컨텐츠 허브 회원가입 신청]\n'
+          +'· 신청 등급: '+tierLine+'\n'
+          +'· 성함: '+(nameEl.value||'').trim()+'\n'
+          +'· 연락처: '+(phoneEl.value||'').trim()+'\n'
+          +'· 약관·개인정보 동의: 동의함\n'
+          +'· 마케팅 수신: '+(ag2.checked?'동의':'미동의')+'\n'
+          +'· 신청일: '+ymd+'\n\n'
+          +'위 내용으로 가입 신청합니다. 결제·코드 안내 부탁드려요 :)';
+        msgEl.value=msg;
+        if(resultOv){ joinOv.style.display='none'; resultOv.style.display='flex'; resultOv.scrollTop=0; }
+      });
+      function backToForm(){ if(resultOv) resultOv.style.display='none'; joinOv.style.display='flex'; joinOv.scrollTop=0; }
+      if(jrBack && resultOv){ jrBack.addEventListener('click', backToForm); }
+      if(resultOv){ resultOv.addEventListener('click', function(e){ if(e.target===resultOv) backToForm(); }); }
+      copyBtn.addEventListener('click', function(){
+        var ta=msgEl; function ok(){ copyBtn.textContent='✓ 복사됐어요'; setTimeout(function(){ copyBtn.textContent='📋 신청서 복사하기'; },1800); }
+        try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(ok,function(){ ta.select(); document.execCommand('copy'); ok(); }); } else { ta.select(); document.execCommand('copy'); ok(); } }catch(_){ ta.select(); }
+      });
+      var termsBtn=document.getElementById('jf-terms'), termsOv=document.getElementById('terms-ov'), termsClose=document.getElementById('terms-close');
+      if(termsBtn && termsOv){ termsBtn.addEventListener('click', function(){ termsOv.style.display='flex'; });
+        if(termsClose) termsClose.addEventListener('click', function(){ termsOv.style.display='none'; });
+        termsOv.addEventListener('click', function(e){ if(e.target===termsOv) termsOv.style.display='none'; });
+      }
+      var cmpBtn=document.getElementById('jf-cmp'), cmpOv=document.getElementById('tiercmp-ov'), cmpClose=document.getElementById('cmp-close');
+      if(cmpBtn && cmpOv){ cmpBtn.addEventListener('click', function(){ cmpOv.style.display='flex'; });
+        if(cmpClose) cmpClose.addEventListener('click', function(){ cmpOv.style.display='none'; });
+        cmpOv.addEventListener('click', function(e){ if(e.target===cmpOv) cmpOv.style.display='none'; });
+      }
+    }
     if(nx) nx.addEventListener('click', async function(){
       var code=(gv('lg-code')||'').trim().toUpperCase(), err=document.getElementById('lg-err'); err.textContent='';
       if(!code){ err.textContent='발급받은 코드를 입력하세요'; return; }
@@ -3886,7 +4223,7 @@
           err.textContent='이 코드는 “'+(INDLBL[res.industry]||res.industry)+'”용이에요.\n위에서 “'+(INDLBL[res.industry]||res.industry)+'”를 선택하고 다시 로그인하세요.';
           btn.disabled=false; btn.textContent='로그인'; return;
         }
-        AUTH={code:code, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null};
+        AUTH={code:code, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; publishTier();
         try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',code);}catch(e){} enter();
       }
       else if(res && res.reason==='nopin'){
@@ -3911,7 +4248,7 @@
         var hash=await window.laSha256(p1);
         var res=await window.laRpc('li_set_pin', { p_code:pendingCode, p_pin_hash:hash });
         if(res && res.ok){
-          AUTH={code:pendingCode, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null};
+          AUTH={code:pendingCode, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; publishTier();
           try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',pendingCode);}catch(e){}
           hideSetPin(); enter();
         } else if(res && res.reason==='already'){ se.textContent='이미 PIN이 설정된 코드예요. 로그인해 주세요'; setTimeout(hideSetPin, 1200); }
@@ -4153,7 +4490,7 @@
     function renderTab(){ if(curTab==='menu') renderMenuTab(); else if(curTab==='time') renderTimeTab(); else renderMsgTab(); }
     document.querySelectorAll('.rs-tab').forEach(function(t){ t.onclick=function(){ curTab=t.dataset.rstab; document.querySelectorAll('.rs-tab').forEach(function(x){ x.classList.toggle('on', x===t); }); renderTab(); }; });
     var setupBtn=document.getElementById('open-resv-setup');
-    if(setupBtn) setupBtn.onclick=function(){ var needKakao=!(resvCfg.kakao||'').trim(); curTab=needKakao?'msg':'time'; document.querySelectorAll('.rs-tab').forEach(function(x){ x.classList.toggle('on', x.dataset.rstab===curTab); }); renderTab(); openOv('resv-setup-ov'); if(needKakao){ setTimeout(function(){ var c=document.getElementById('rs-kakao-card'); if(c){ c.classList.add('need'); c.scrollIntoView({block:'start'}); } var k=document.getElementById('rs-kakao'); if(k) k.focus(); }, 250); } };
+    if(setupBtn) setupBtn.onclick=function(){ if(window.__cmTier && {basic:0,pro:1,premium:2}[window.__cmTier()]<1){ if(window.__cmShowLock) window.__cmShowLock('예약 시스템','pro'); return; } var needKakao=!(resvCfg.kakao||'').trim(); curTab=needKakao?'msg':'time'; document.querySelectorAll('.rs-tab').forEach(function(x){ x.classList.toggle('on', x.dataset.rstab===curTab); }); renderTab(); openOv('resv-setup-ov'); if(needKakao){ setTimeout(function(){ var c=document.getElementById('rs-kakao-card'); if(c){ c.classList.add('need'); c.scrollIntoView({block:'start'}); } var k=document.getElementById('rs-kakao'); if(k) k.focus(); }, 250); } };
     document.getElementById('resv-setup-x').onclick=function(){ closeOv('resv-setup-ov'); };
     document.getElementById('resv-setup-ov').addEventListener('click', function(e){ if(e.target.id==='resv-setup-ov') closeOv('resv-setup-ov'); });
     document.getElementById('resv-setup-save').onclick=function(){ closeOv('resv-setup-ov'); topSave(); };
