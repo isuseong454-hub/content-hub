@@ -1833,6 +1833,17 @@
     return a;
   }
   var EXTRA = {
+    postref: function(c){
+      var id=c[0], title=c[1]||'', cover=c[2]||'', summary=c[3]||'';
+      var p=null; (window.__POSTS||[]).forEach(function(x){ if(String(x.id)===String(id)) p=x; });
+      if(p){ title=p.title||title; cover=p.cover||cover; summary=p.summary||summary; }
+      window.__hasCurated=true;   // 큐레이션 모드 → 자동 전체 노출 끔
+      var a=document.createElement('a'); a.className='pg-card'; a.href='javascript:void 0'; a.setAttribute('data-pid', id); a.style.marginBottom='12px';
+      var cov = cover ? '<div class="pg-cov" style="background-image:url('+esc(cover)+')"></div>' : '<div class="pg-cov pg-noimg">📄</div>';
+      a.innerHTML=cov+'<div class="pg-body"><div class="pg-title">'+esc(title)+'</div>'+(summary?'<div class="pg-sum">'+esc(summary)+'</div>':'')+'<div class="pg-go">자세히 보기 →</div></div>';
+      a.onclick=function(e){ e.preventDefault(); try{ if(window.__openPostModal) window.__openPostModal(id); }catch(_){} };
+      return a;
+    },
     link: linkCard, newsletter: linkCard,
     video: function(c){
       var url=c[0]||''; if(!url) return null;
@@ -2643,6 +2654,7 @@
   window.__showResumePost=showResumePost;
   function buildPosts(posts){
     var home=document.querySelector('[data-pane="home"]'); if(!home) return;
+    if(window.__hasCurated) return;   // 큐레이션 모드(고른 글만 카드로 꽂음) → 자동 전체 노출 끔
     var live=(posts||[]).filter(function(p){ return p && p.on!==false && p.blocks && p.blocks.length; });
     if(!live.length) return;
     live = live.slice().sort(function(a,b){ return (b.featured?1:0)-(a.featured?1:0); });
@@ -2726,6 +2738,7 @@
     if(theme && window.setTheme){ window.setTheme(theme); }
     if(d.home){ try{ localStorage.setItem('cm-home-v1', JSON.stringify(d.home)); }catch(e){} if(window.applyHome) window.applyHome(); }
     window.__POSTS = d.posts || [];          // 베스트 블록이 읽으므로 블록 렌더 '전'에 세팅
+    window.__hasCurated = false;             // postref(가져온 글) 있으면 렌더 중 true → 자동 전체 노출 끔
     window.__PRODUCTS = d.products || [];
     window.__QNA = d.qna || [];
     window.__resvOn = !!(d.reservation && d.reservation.on);   // '이 스타일로 예약' 버튼 노출 조건 (블록 렌더 전 세팅)

@@ -1362,6 +1362,7 @@
 
       <div class="grp-h-lbl">구성 요소 <span style="font-weight:400;">· ✍ 표시를 채울수록 완성도가 올라가요 · 꾹 눌러 순서 변경</span></div>
       <button id="add-block-btn" class="add" style="margin-bottom:10px;">＋ 구성 추가</button>
+      <button id="import-content-btn" class="add" style="margin-bottom:10px; background:rgba(155,61,255,.08); border-color:rgba(155,61,255,.45); color:#C77DFF;">📚 콘텐츠 가져오기 <span style="font-weight:400; font-size:11px; opacity:.85;">· 발행한 글을 골라 카드로</span></button>
       <div class="row" id="profile-row">
         <span class="grip" style="visibility:hidden;">⋮⋮</span>
         <span class="ic">★</span>
@@ -1981,6 +1982,31 @@
     .pw-tabs{display:flex; gap:5px; margin:4px 0 0;}
     .pw-tab{flex:1; padding:9px 0; border:1px solid var(--hair); border-radius:10px; background:var(--paper); color:var(--muted); font-size:12px; cursor:pointer; white-space:nowrap; font-family:var(--sans);}
     .pw-tab.on{background:var(--grad); border-color:transparent; font-weight:800;}
+    /* 콘텐츠 가져오기 picker */
+    .imp-tabs{display:flex; gap:6px; overflow-x:auto; padding-bottom:11px; margin-bottom:4px; -webkit-overflow-scrolling:touch;}
+    .imp-tabs::-webkit-scrollbar{display:none;}
+    .imp-tab{flex:0 0 auto; padding:7px 13px; border-radius:999px; border:1px solid var(--hair); background:var(--paper); color:var(--muted); font-size:12px; font-weight:700; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
+    .imp-tab.on{background:var(--coral); border-color:var(--coral); color:#fff;}
+    .imp-tcnt{opacity:.7; font-weight:600;}
+    .imp-tab.on .imp-tcnt{opacity:.95;}
+    .imp-folders{display:flex; flex-direction:column; gap:6px; max-height:64vh; overflow:auto;}
+    .imp-folder{border:1px solid var(--hair); border-radius:13px; overflow:hidden; background:var(--paper);}
+    .imp-fold-h{display:flex; align-items:center; gap:7px; padding:11px 13px; cursor:pointer; user-select:none;}
+    .imp-fold-h .imp-chev{font-size:11px; color:var(--muted); transition:transform .15s;}
+    .imp-folder.collapsed .imp-fold-h .imp-chev{transform:rotate(-90deg);}
+    .imp-fic{font-size:14px;}
+    .imp-flbl{font-size:13px; font-weight:800; color:var(--ink);}
+    .imp-fold-h .imp-cnt{margin-left:auto; font-size:11px; font-weight:700; color:var(--muted); background:var(--soft); padding:2px 9px; border-radius:999px;}
+    .imp-fold-b{display:flex; flex-direction:column; gap:7px; padding:0 10px 11px;}
+    .imp-folder.collapsed .imp-fold-b{display:none;}
+    .imp-list{display:flex; flex-direction:column; gap:8px; max-height:62vh; overflow:auto;}
+    .imp-card{display:flex; align-items:center; gap:11px; padding:9px; border:1px solid var(--hair); border-radius:12px; background:var(--surface); cursor:pointer; text-align:left; font-family:var(--sans); width:100%;}
+    .imp-card:active{transform:scale(.99);}
+    .imp-cov{flex:0 0 auto; width:46px; height:46px; border-radius:9px; background:var(--soft); background-size:cover; background-position:center;}
+    .imp-meta{flex:1; min-width:0;}
+    .imp-tt{display:block; font-size:13.5px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .imp-sm{display:block; font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px;}
+    .imp-add{flex:0 0 auto; font-size:12px; font-weight:800; color:#C77DFF;}
     /* 제품 안 폴더형 서브탭 (쿠팡/내 제품) — 메인앱 sc-tab 느낌 */
     .psub-tabs{display:flex; gap:6px; margin:2px 0 0; padding:0 2px;}
     .psub-tab{padding:9px 16px; border-radius:11px 11px 0 0; background:transparent; border:1px solid transparent; border-bottom:none; color:var(--muted); font-size:12.5px; font-weight:700; cursor:pointer; font-family:var(--sans); transition:color .15s, background .15s;}
@@ -2458,6 +2484,7 @@
   };
   function openEdit(row){
     var type = row.dataset.type || 'link';
+    if(type==='postref'){ try{ toast('가져온 글 카드예요 · 바꾸려면 ✕로 지우고 다시 가져오세요'); }catch(_){ } return; }
     var content = row._content || [];
     try{ eov._openSnapshot = JSON.stringify(content); }catch(_){ eov._openSnapshot='[]'; }
     etitle.textContent = row.querySelector('.nm').textContent + ' 편집';
@@ -2682,7 +2709,7 @@
   window.__refreshBuilder=refreshBuilder;
 
   // 저장된 블록이 기본 행에 없으면 새 행 생성 (불러오기 복원용)
-  var TYPE_ICON = { event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍' };
+  var TYPE_ICON = { event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍', postref:'📄' };
   window.__createRow = function(b){
     var row=document.createElement('div'); row.className='row'; row.dataset.type=b.type;
     if(b.layout) row._layout=b.layout;
@@ -4156,8 +4183,8 @@
   window.__captureForSave=function(){ try{ captureCurrentVersion(); if(postEditId==null){ activeVersion=curVersion; updateVersionUI(); } }catch(e){} };
 
   // ════ 내 게시물 (라이브러리 + 편집 스코프 전환) ════
-  var POST_TYPE_LABEL={landing:'랜딩',reviews:'후기',style:'스타일',notice:'공지',article:'일반글',insight:'정리글',checklist:'체크리스트',tip:'노하우'};
-  var POST_TYPE_ICON={landing:'🎯',reviews:'★',style:'✂',notice:'📢',article:'📝',insight:'📝',checklist:'✅',tip:'💡'};
+  var POST_TYPE_LABEL={blog:'블로그 글',landing:'랜딩',reviews:'후기',style:'스타일',notice:'공지',article:'일반글',insight:'정리글',checklist:'체크리스트',tip:'노하우'};
+  var POST_TYPE_ICON={blog:'✍️',landing:'🎯',reviews:'★',style:'✂',notice:'📢',article:'📝',insight:'📝',checklist:'✅',tip:'💡'};
   var POST_PRESETS={
     blog:function(){ return [{type:'text',name:'본문',on:true,content:['','여기에 글을 자유롭게 써보세요.\n\n생각나는 대로 길게 써도 좋아요. 문단은 줄바꿈으로 나눠요.'],layout:''}]; },
     landing:function(){ return JSON.parse(JSON.stringify([P_EMPATHY,P_CAUSE,P_EXPERT,P_SOLVE,P_DESIRE,P_SERVICE])); },
@@ -4298,6 +4325,45 @@
     try{ if(window.__sheetAfterCreate) window.__sheetAfterCreate(); }catch(_){}
   }
   (function(){ var ap=document.getElementById('add-post-btn'); if(ap) ap.onclick=showPostTypeChooser; })();
+
+  // ════ 콘텐츠 가져오기 picker (발행 글 → 홈에 카드로 꽂기 · 큐레이션) ════
+  (function(){
+    function E(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+    var btn=document.getElementById('import-content-btn'); if(!btn) return;
+    function insertPostCard(pid){
+      var p=null; (postsData||[]).forEach(function(x){ if(String(x.id)===String(pid)) p=x; });
+      if(!p) return;
+      var b={type:'postref', name:'📄 '+(p.title||'가져온 글'), content:[p.id, p.title||'', p.cover||'', p.summary||''], layout:''};
+      var row=window.__createRow ? window.__createRow(b) : null; if(!row) return;
+      row._content=b.content; row._filled=true;
+      var sb=row.querySelector('.sb'); if(sb) sb.textContent='가져온 글 · 카드로 표시';
+      try{ if(window.__refreshFillBadge) window.__refreshFillBadge(row); }catch(_){}
+      try{ if(window.__updateHomeProgress) window.__updateHomeProgress(); }catch(_){}
+      try{ toast('"'+(p.title||'글')+'" 카드를 홈에 꽂았어요'); }catch(_){}
+      try{ row.scrollIntoView({behavior:'smooth', block:'center'}); }catch(_){}
+    }
+    btn.onclick=function(){
+      var pubs=(postsData||[]).filter(function(p){ return p && p.on!==false && p.blocks && p.blocks.length; });
+      var ov=document.getElementById('import-ov');
+      if(!ov){ ov=document.createElement('div'); ov.className='ov'; ov.id='import-ov'; document.body.appendChild(ov);
+        ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='imp-x') ov.classList.remove('open'); }); }
+      var h='<div class="sheet"><div class="sheet-h"><span class="t">📚 콘텐츠 가져오기</span><span class="x" id="imp-x">×</span></div><div class="desc">발행한 글을 <b>유형별 폴더</b>에서 골라 홈에 카드로 꽂아요. 꽂은 뒤 꾹 눌러 위치 이동. <b>(고른 글만 홈에 떠요)</b></div>';
+      if(!pubs.length){ h+='<div style="font-size:13px;color:var(--muted);padding:22px 4px;text-align:center;line-height:1.6;">아직 발행한 글이 없어요.<br>콘텐츠 탭에서 <b>✍️ 글</b>을 먼저 써보세요.</div>'; }
+      else {
+        // 유형별 세그먼트 탭 (데이터 기반 — 유형 늘면 탭도 자동 증가). 탭 클릭 시 그 유형만 → 스크롤 ↓
+        var groups={}, order=[];
+        pubs.forEach(function(p){ var t=p.type||'etc'; if(!groups[t]){ groups[t]=[]; order.push(t); } groups[t].push(p); });
+        function cardHtml(p){ var cov=p.cover?(' style="background-image:url('+E(p.cover)+')"'):''; return '<button type="button" class="imp-card" data-pid="'+E(p.id)+'" data-ptype="'+E(p.type||'etc')+'"><span class="imp-cov"'+cov+'></span><span class="imp-meta"><span class="imp-tt">'+E(p.title||'무제')+'</span>'+(p.summary?'<span class="imp-sm">'+E(p.summary)+'</span>':'')+'</span><span class="imp-add">＋ 꽂기</span></button>'; }
+        var tabs='<button type="button" class="imp-tab on" data-type="__all">전체 <span class="imp-tcnt">'+pubs.length+'</span></button>'+order.map(function(t){ var lbl=POST_TYPE_LABEL[t]||t, ic=POST_TYPE_ICON[t]||'📄'; return '<button type="button" class="imp-tab" data-type="'+E(t)+'">'+ic+' '+E(lbl)+' <span class="imp-tcnt">'+groups[t].length+'</span></button>'; }).join('');
+        h+='<div class="imp-tabs">'+tabs+'</div><div class="imp-list">'+pubs.map(cardHtml).join('')+'</div>';
+      }
+      h+='</div>';
+      ov.innerHTML=h;
+      ov.querySelectorAll('.imp-tab').forEach(function(tb){ tb.onclick=function(){ ov.querySelectorAll('.imp-tab').forEach(function(x){x.classList.remove('on');}); tb.classList.add('on'); var ty=tb.getAttribute('data-type'); ov.querySelectorAll('.imp-card').forEach(function(cd){ cd.style.display=(ty==='__all'||cd.getAttribute('data-ptype')===ty)?'':'none'; }); }; });
+      ov.querySelectorAll('.imp-card').forEach(function(b2){ b2.onclick=function(){ insertPostCard(b2.getAttribute('data-pid')); ov.classList.remove('open'); }; });
+      ov.classList.add('open');
+    };
+  })();
   try{ renderPostsLibrary(); }catch(_){}
 
   // ════ 게시물 워크스페이스 4서브탭 + 제품/Q&A 매니저 + 대표 허브 ════
