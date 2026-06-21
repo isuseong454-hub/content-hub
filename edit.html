@@ -814,6 +814,7 @@
   .le-fab:active{transform:scale(.94);}
   .le-fab.cancel{background:rgba(40,30,55,.95); box-shadow:0 5px 16px rgba(0,0,0,.5);}
   .le-fab-del{background:rgba(40,30,55,.92); color:#FF8C8C; box-shadow:0 5px 16px rgba(0,0,0,.45); -webkit-text-stroke:0; text-shadow:none;}
+  .le-fab-import{background:rgba(40,30,55,.92); color:#C9B6FF; box-shadow:0 5px 16px rgba(0,0,0,.45); -webkit-text-stroke:0; text-shadow:none;}
   .le-fab-del.armed{background:#E0566E; color:#fff; box-shadow:0 5px 18px rgba(224,86,110,.55);}
   .le-add{flex:0 0 auto; padding:10px 14px calc(12px + env(safe-area-inset-bottom)); background:var(--surface); border-top:1px solid var(--hair);}
   .le-add button{width:100%; background:var(--coral-soft); color:var(--coral); border:1px dashed rgba(45,212,191,.5); border-radius:12px; padding:13px; font-size:13.5px; font-weight:700; font-family:var(--sans); cursor:pointer;}
@@ -829,8 +830,130 @@
   .ws-tab{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; border:none; background:transparent; color:var(--muted); border-radius:12px; padding:7px 4px; font-size:11.5px; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
   .ws-tab .ico{font-size:19px;}
   .ws-tab.on{color:var(--coral); background:var(--coral-soft); font-weight:700;}
+  /* 판매/예약 세그먼트 */
+  .sl-seg{display:flex; gap:6px; background:var(--soft); padding:5px; border-radius:13px; margin:0 0 16px;}
+  .sl-seg-b{flex:1; padding:11px 0; border:none; border-radius:9px; text-align:center; font-size:13px; font-weight:700; color:var(--muted); background:transparent; font-family:var(--sans); cursor:pointer;}
+  .sl-seg-b.on{background:var(--grad,linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); color:#fff; font-weight:800;}
+  .sl-pane{display:none;}
+  .sl-pane.on{display:block;}
+  /* 콘텐츠 유형 세그먼트 (가로 스크롤 칩) */
+  .ptype-seg{display:flex; gap:7px; overflow-x:auto; padding:0 0 11px; margin:0 0 4px; -ms-overflow-style:none; scrollbar-width:none;}
+  .ptype-seg::-webkit-scrollbar{display:none;}
+  .ptype-seg:empty{display:none;}
+  .ptype-b{flex:0 0 auto; padding:8px 13px; border-radius:11px; border:1px solid var(--hair); background:var(--surface); color:var(--muted); font-size:12px; font-weight:700; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
+  .ptype-b.on{background:var(--grad,linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); border-color:transparent; color:#fff; font-weight:800;}
+  .ptype-c{opacity:.75; font-weight:600; margin-left:4px;}
   .ws-pane{display:none;}
   .ws-pane.active{display:block; animation:wsIn .25s ease;}
+  /* 🏠 홈 허브 — 완성도 북극성 */
+  .ns{border-radius:18px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; background:radial-gradient(ellipse 90% 70% at 50% -20%, rgba(124,63,228,.22), transparent 60%), var(--surface); border:1px solid rgba(124,63,228,.3);}
+  .ns-h{font-size:14px; font-weight:800; color:var(--ink); margin-bottom:3px;}
+  .ns-h .ns-pct{color:var(--coral);}
+  .ns-sub{font-size:11.5px; color:var(--muted); margin-bottom:15px; line-height:1.5;}
+  .ns-sub b{color:#cdbff5;}
+  .ns-step{display:flex; align-items:center; gap:11px; margin-bottom:13px;}
+  .ns-step-n{flex:0 0 auto; width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:800; background:rgba(255,255,255,.08); color:var(--muted);}
+  .ns-step.done .ns-step-n{background:var(--grad); color:#fff;}
+  .ns-step-main{flex:1; min-width:0;}
+  .ns-step-top{display:flex; justify-content:space-between; align-items:baseline;}
+  .ns-step-t{font-size:13px; font-weight:700; color:var(--ink);}
+  .ns-step-p{font-size:11px; font-weight:700; color:var(--muted);}
+  .ns-bar{height:6px; border-radius:99px; background:rgba(255,255,255,.08); margin-top:6px; overflow:hidden;}
+  .ns-bar i{display:block; height:100%; border-radius:99px; background:var(--grad);}
+  .ns-why{font-size:10.5px; color:#7d7795; margin-top:5px;}
+  .ns-next{margin-top:6px; padding:13px 14px; border-radius:13px; background:rgba(124,63,228,.12); border:1px solid rgba(124,63,228,.3);}
+  .ns-next .nx-t{font-size:12.5px; line-height:1.5; color:var(--ink);}
+  .ns-next .nx-t b{color:#cdbff5;}
+  .ns-next .nx-btn{display:inline-block; margin-top:9px; background:var(--grad); color:#fff; font-size:12.5px; font-weight:700; padding:9px 16px; border-radius:10px; cursor:pointer; border:none; font-family:var(--sans);}
+  .hub-acts{display:flex; flex-direction:column; gap:9px;}
+  .hub-btn{display:flex; align-items:center; gap:9px; padding:15px; border-radius:14px; border:1px solid var(--hair); background:var(--surface); color:var(--ink); font-size:14px; font-weight:700; cursor:pointer; font-family:var(--sans); width:100%; text-align:left;}
+  .hub-btn:active{transform:scale(.99);}
+  .hub-btn.primary{background:var(--grad); border-color:transparent; color:#fff; justify-content:center;}
+  .hub-btn .hb-d{font-size:11px; font-weight:400; color:var(--muted);}
+  .hub-btn.primary .hb-d{color:rgba(255,255,255,.85);}
+  /* 홈 대시보드 — 등급 배너 + 빠른작업 아이콘 그리드 */
+  .mbr{display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:16px; margin-bottom:13px; overflow:hidden; background:radial-gradient(120% 130% at 0% 0%, rgba(124,63,228,.4), transparent 60%), linear-gradient(100deg,#2a2350,#1a1530); border:1px solid rgba(124,63,228,.25);}
+  .mbr-ic{font-size:22px;}
+  .mbr-m{flex:1; min-width:0;}
+  .mbr-t{font-size:13.5px; font-weight:800; color:#fff;}
+  .mbr-s{font-size:11.5px; color:#c9c2e8; margin-top:2px;}
+  .mbr-go{font-size:12px; font-weight:700; color:#fff; background:rgba(255,255,255,.14); border:none; padding:8px 13px; border-radius:10px; cursor:pointer; font-family:var(--sans); white-space:nowrap;}
+  .sec-t-h{font-size:12px; font-weight:800; color:var(--muted); margin:16px 4px 10px;}
+  .grid-card{background:var(--surface); border:1px solid var(--hair); border-radius:18px; padding:18px 8px;}
+  .qgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px 4px;}
+  .gi{display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; background:none; border:none; font-family:var(--sans);}
+  .gi:active{transform:scale(.94);}
+  .gi-ic{width:50px; height:50px; border-radius:16px; display:grid; place-items:center; font-size:22px;}
+  .gi-t{font-size:11px; color:#d6d6dc; font-weight:600; text-align:center; line-height:1.2;}
+  .gi-ic.c-purple{background:rgba(124,63,228,.18);}
+  .gi-ic.c-pink{background:rgba(193,59,158,.18);}
+  .gi-ic.c-green{background:rgba(45,200,140,.16);}
+  .gi-ic.c-blue{background:rgba(69,113,232,.18);}
+  .gi-ic.c-orange{background:rgba(255,150,60,.16);}
+  .gi-ic.c-teal{background:rgba(45,210,200,.16);}
+  .gi-ic.c-violet{background:rgba(150,90,255,.18);}
+  .gi-ic.c-gray{background:rgba(255,255,255,.08);}
+  /* 👤 프로필 대시보드 */
+  .pe-back{display:inline-flex; align-items:center; gap:4px; margin:0 0 12px; padding:9px 14px; border-radius:11px; border:1px solid var(--hair); background:var(--surface); color:var(--coral); font-size:12.5px; font-weight:700; font-family:var(--sans); cursor:pointer;}
+  .pv{border-radius:18px; padding:20px 18px 16px; margin-bottom:10px; position:relative; overflow:hidden; background:radial-gradient(130% 120% at 0% 0%, rgba(124,63,228,.32), transparent 58%), linear-gradient(160deg,#221c40,#15121f); border:1px solid rgba(124,63,228,.3);}
+  .pv-tag{position:absolute; top:12px; right:14px; font-size:10px; font-weight:700; color:#c9c2e8; background:rgba(255,255,255,.12); padding:4px 9px; border-radius:99px;}
+  .pv-ava{width:62px; height:62px; border-radius:50%; background:var(--grad,linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); display:grid; place-items:center; font-size:26px; color:#fff; margin-bottom:11px; background-size:cover; background-position:center; box-shadow:0 4px 18px rgba(124,63,228,.4);}
+  .pv-nm{font-size:19px; font-weight:800; color:#fff;}
+  .pv-val{font-size:13px; color:#d7d1ee; margin-top:5px; line-height:1.5;}
+  .pv-val b{color:#fff;}
+  .pv-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:13px;}
+  .pv-bd{font-size:11px; font-weight:700; color:#e8e3ff; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.14); padding:5px 11px; border-radius:99px;}
+  .pv-edit{display:flex; align-items:center; justify-content:center; gap:6px; width:100%; margin-top:16px; padding:12px; border-radius:12px; background:rgba(255,255,255,.14); color:#fff; font-size:13px; font-weight:700; border:1px solid rgba(255,255,255,.16); font-family:var(--sans); cursor:pointer;}
+  .ptrust{display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:13px; background:var(--surface); border:1px solid var(--hair); margin-bottom:16px;}
+  .ptrust-m{flex:1; min-width:0;}
+  .ptrust-t{font-size:11.5px; color:var(--muted);}
+  .ptrust-t b{color:var(--ink); font-weight:700;}
+  .ptrust-bar{height:6px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; margin-top:6px;}
+  .ptrust-bar i{display:block; height:100%; border-radius:99px; background:var(--grad,linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E));}
+  .ptrust-p{font-size:15px; font-weight:800; color:var(--coral);}
+  .ped{display:flex; align-items:center; gap:13px; padding:14px 15px; border-radius:15px; background:var(--surface); border:1px solid var(--hair); margin-bottom:9px; cursor:pointer; width:100%; text-align:left; font-family:var(--sans);}
+  .ped:active{transform:scale(.99);}
+  .ped-ic{flex:0 0 auto; width:44px; height:44px; border-radius:13px; display:grid; place-items:center; font-size:21px;}
+  .ped-ic.c-purple{background:rgba(124,63,228,.18);}
+  .ped-ic.c-gold{background:rgba(255,184,77,.16);}
+  .ped-ic.c-blue{background:rgba(69,113,232,.18);}
+  .ped-ic.c-pink{background:rgba(193,59,158,.18);}
+  .ped-m{flex:1; min-width:0;}
+  .ped-t{font-size:13.5px; font-weight:700; color:var(--ink);}
+  .ped-d{font-size:11px; color:var(--muted); margin-top:2px;}
+  .ped-st{font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:99px; white-space:nowrap;}
+  .ped-st.ok{color:#5fe0a8; background:rgba(45,200,140,.14);}
+  .ped-st.todo{color:#ffb86b; background:rgba(255,150,60,.14);}
+  .ped-ar{color:var(--muted); font-size:15px;}
+  /* 프로필 항목 세그먼트 */
+  .pseg{display:flex; gap:7px; overflow-x:auto; padding:0 0 4px; margin:0 0 4px; -ms-overflow-style:none; scrollbar-width:none;}
+  .pseg::-webkit-scrollbar{display:none;}
+  .pseg-b{flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; padding:9px 14px; border-radius:11px; border:1px solid var(--hair); background:var(--surface); color:var(--muted); font-size:12.5px; font-weight:700; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
+  .pseg-b.on{background:var(--grad,linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); border-color:transparent; color:#fff; font-weight:800;}
+  .pseg-dot{width:6px; height:6px; border-radius:50%; display:inline-block;}
+  .pseg-dot.ok{background:#5fe0a8;}
+  .pseg-dot.todo{background:#ffb86b;}
+  .pseg-b.on .pseg-dot.ok{background:#c7f6e0;}
+  .pseg-b.on .pseg-dot.todo{background:#ffe2c2;}
+  /* 게시물 편집 중엔 대시보드/편집 숨김 */
+  .ws-pane[data-pane="page"].editing-post #profile-dash,
+  .ws-pane[data-pane="page"].editing-post #profile-edit{ display:none !important; }
+  /* 📄 콘텐츠 탭 토스식 정돈 */
+  .pane-intro{margin:0 2px 14px; padding:12px 14px; border-radius:13px; background:rgba(124,63,228,.1); border:1px solid rgba(124,63,228,.28); font-size:12px; line-height:1.6; color:var(--muted);}
+  .pane-intro b{color:#cdbff5;}
+  .pw-previewrow{display:flex; justify-content:flex-end; margin:9px 2px 4px;}
+  .pw-mini{background:none; border:1px solid var(--hair); color:var(--muted); border-radius:999px; padding:6px 13px; font-size:11.5px; font-weight:600; cursor:pointer; font-family:var(--sans);}
+  .pw-mini:active{transform:scale(.97);}
+  .pw-lead{display:flex; align-items:center; justify-content:space-between; gap:8px; margin:12px 2px 12px;}
+  .pw-lead-t{font-size:14px; font-weight:800; color:var(--ink);}
+  .pw-lead-d{font-size:11px; color:var(--muted);}
+  .add.pw-add{display:block; width:100%; background:var(--grad); border:none; color:#fff; border-radius:13px; padding:14px; font-size:14px; font-weight:700; margin:6px 0 0; cursor:pointer; font-family:var(--sans); text-align:center;}
+  .add.pw-add:active{transform:scale(.99);}
+  .pw-foot{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:15px; padding-top:13px; border-top:1px solid var(--hair); flex-wrap:wrap;}
+  .pw-link{background:none; border:none; color:var(--coral); font-size:12px; font-weight:700; cursor:pointer; font-family:var(--sans); padding:4px 0;}
+  .pw-foot-seg{display:inline-flex; gap:3px; background:var(--soft); border-radius:999px; padding:3px;}
+  .pw-foot-seg .av-tab{border:none; background:none; color:var(--muted); font-size:11.5px; font-weight:600; padding:5px 11px; border-radius:999px; cursor:pointer; font-family:var(--sans); white-space:nowrap;}
+  .pw-foot-seg .av-tab.on{background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.3);}
   @keyframes wsIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
 
   /* 홈 맨 위 순서 (프로필 vs 후킹문구) */
@@ -1199,16 +1322,21 @@
   </div>
 
   <div class="ws-tabs" id="ws-tabs">
-    <button class="ws-tab on" data-ws="page"><span class="ico">👤</span>내 프로필</button>
+    <button class="ws-tab on" data-ws="home"><span class="ico">🏠</span>홈</button>
+    <button class="ws-tab" data-ws="page"><span class="ico">👤</span>프로필</button>
     <button class="ws-tab" data-ws="posts"><span class="ico">📄</span>콘텐츠</button>
-    <button class="ws-tab" data-ws="data"><span class="ico">📊</span>분석·고객</button>
-    <button class="ws-tab" data-ws="design"><span class="ico">⚙</span>설정</button>
+    <button class="ws-tab" data-ws="sales"><span class="ico">💰</span>판매·예약</button>
+    <button class="ws-tab" data-ws="data"><span class="ico">📊</span>고객·분석</button>
   </div>
 
   <div class="wrap">
 
     <!-- 📝 내 페이지 -->
-    <div class="ws-pane active" data-pane="page">
+    <div class="ws-pane active" data-pane="home">
+      <div id="home-hub"></div>
+    </div>
+
+    <div class="ws-pane" data-pane="page">
 
     <!-- 편집 모드 진입은 고객 홈 → 편집하기 → 게이트로 통일 (인페이지 버튼 제거) -->
     <button type="button" id="open-live-edit" style="display:none;">✎ 편집 모드</button>
@@ -1216,8 +1344,14 @@
     <!-- 고객 홈 바로가기 (상단 톱바로 이동 — 숨김) -->
     <button type="button" id="go-customer-home" class="secbtn" style="display:none;">🏠 고객이 보는 홈 화면으로 가기 →</button>
 
+    <!-- 프로필 대시보드 (보기 — 손님이 보는 모습 + 항목별 편집) -->
+    <div id="profile-dash"></div>
+
+    <!-- 프로필 편집 (대시보드 세그먼트로 한 항목씩) -->
+    <div id="profile-edit">
+
     <!-- 프로필 -->
-    <div class="card" id="profile-card">
+    <div class="card" id="profile-card" data-pseg="basic">
       <div class="prof">
         <div class="avatar">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 11.3 12 4l8.6 7.3"/><path d="M5.6 9.8v9.6h12.8V9.8"/><path d="M9.8 19.4v-5.2h4.4v5.2"/></svg>
@@ -1241,7 +1375,7 @@
     </div>
 
     <!-- 소개 페이지 꾸미기 (손님 '소개' 탭 = 프로필 신뢰 허브) -->
-    <div class="card" id="about-style-card">
+    <div class="card" id="about-style-card" data-pseg="style">
       <div class="sec-h" style="margin:0 0 9px;"><span class="t" style="font-size:14px;">🎨 소개 페이지 꾸미기</span></div>
       <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 6px; padding:11px 12px; background:var(--soft); border:1px solid var(--hair); border-radius:11px;">
         <span style="font-size:13px; font-weight:700; color:var(--ink);">소개 탭 손님에게 보이기</span>
@@ -1283,7 +1417,7 @@
     </div>
 
     <!-- 전문 이력 · 증거 만들기 (접이식 · 기본 접힘) -->
-    <div class="card acc-card" id="evidence-card">
+    <div class="card acc-card open" id="evidence-card" data-pseg="evidence">
       <div class="sec-h acc-h" style="margin:0;"><span class="t" style="font-size:14px;">🏅 전문 이력 · 증거 만들기</span><span class="acc-sub">권위·자격·성과</span><span class="acc-chev">▾</span></div>
       <div class="acc-bd">
         <div style="display:flex; gap:6px; align-items:center; justify-content:flex-end; margin:0 0 8px;"><button type="button" id="ev-guide-toggle" class="guide-pill on">💡 예시 <span class="gt-state">켜짐</span></button><button type="button" id="ev-guide-btn" class="mini-guide-btn">✨ 작성법</button></div>
@@ -1295,7 +1429,7 @@
     </div>
 
     <!-- 채널 · 연락처 (접이식 · 기본 접힘) -->
-    <div class="card acc-card" id="channels-card">
+    <div class="card acc-card open" id="channels-card" data-pseg="channels">
       <div class="sec-h acc-h" style="margin:0;"><span class="t" style="font-size:14px;">🔗 채널 · 연락처</span><span class="acc-sub">인스타·유튜브·카톡 …</span><span class="acc-chev">▾</span></div>
       <div class="acc-bd">
       <div class="vhint" style="text-align:left; margin:0 0 10px;">내가 활동하는 곳·연락 수단. 링크를 넣고 <b style="color:var(--coral)">켜면</b> 공개 페이지 <b>우측 하단 버튼</b>으로 떠요.</div>
@@ -1308,22 +1442,9 @@
       </div>
       </div>
     </div>
+    </div><!-- /#profile-edit -->
 
-    <!-- 🎁 첫 방문 쿠폰 + 추천 링크 (접이식) -->
-    <div class="card acc-card" id="coupon-card">
-      <div class="sec-h acc-h" style="margin:0;"><span class="t" style="font-size:14px;">🎁 첫 방문 혜택 · 추천</span><span class="acc-sub">처음 온 손님 쿠폰</span><span class="acc-chev">▾</span></div>
-      <div class="acc-bd">
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 10px; padding:11px 12px; background:var(--soft); border:1px solid var(--hair); border-radius:11px;">
-        <span style="font-size:13px; font-weight:700; color:var(--ink);">첫 방문 쿠폰 띄우기</span>
-        <span class="sw" id="coupon-sw"><i></i></span>
-      </div>
-      <div class="vhint" style="text-align:left; margin:0 0 10px;">처음 방문한 손님에게 <b>한 번만</b> 팝업으로 떠요. 입소문·재방문에 효과적이에요.</div>
-      <div class="field"><label>혜택 문구</label><input id="cp-title" placeholder="예: 첫 방문 10% 할인 / 1:1 컨설팅 무료"></div>
-      <div class="field"><label>설명 (선택)</label><input id="cp-desc" placeholder="예: 예약 시 '첫방문' 말씀해 주세요"></div>
-      <div class="field" style="margin-bottom:0;"><label>쿠폰 코드 (선택)</label><input id="cp-code" placeholder="예: FIRST10"></div>
-      <div class="vhint" style="text-align:left; margin:12px 0 0; padding-top:11px; border-top:1px solid var(--hair);"><b>🔗 추천 링크</b> — 손님이 친구에게 <b>내 주소?ref=이름</b>으로 공유하면, 친구가 들어올 때 "○○님 추천" 표시 + 예약·문의에 자동 기록돼요. (별도 설정 없음)</div>
-      </div>
-    </div>
+    <!-- (🎁 첫 방문 쿠폰 + 추천 링크 → 💰 판매·예약 탭으로 이동) -->
 
     <!-- 내 홈 구성 (헤더로 통째로 접기/펼치기) -->
     <div class="sec-h" id="home-sec-h"><span class="t ver-toggle" id="home-toggle" style="cursor:pointer;">🏠 내 홈(전시장) 구성 <span class="ver-chev" id="home-chev">▾</span></span><button id="home-prev-btn" class="secbtn">👁 홈 미리보기</button></div>
@@ -1372,74 +1493,105 @@
       <div id="rows"></div>
     </div><!-- /#home-body -->
 
-    <!-- 예약하기 (접이식 · 기본 접힘 · 헤더 토글로 켜기/끄기) -->
-    <div class="card acc-card" id="resv-section-wrap">
-    <div class="sec-h acc-h" style="margin:0;">
-      <span class="t" style="flex:1;">📅 예약하기 <span id="resv-on-lbl" style="font-size:11px; font-weight:400; color:var(--muted);">· 꺼짐</span></span>
-      <span class="sw" id="resv-onoff" title="예약 기능 켜기/끄기"><i></i></span>
-      <span class="acc-chev">▾</span>
-    </div>
-    <div class="acc-bd">
-    <div class="vhint" style="margin:2px 2px 10px; line-height:1.55;">손님이 <b>캘린더로 날짜·시간</b>을 고르고 <b>카톡</b>으로 신청해요. 켜면 공개 페이지에 <b>플로팅 예약 버튼 + 홈 섹션</b>으로 나와요.</div>
-    <div class="set" id="open-resv-setup">
-      <span class="ic">🛠</span>
-      <span class="meta"><span class="nm">예약 화면 설정</span><span class="sb">시술 · 시간 · 휴무 · 안내 — 고객이 보는 화면</span></span>
-      <span class="chev">›</span>
-    </div>
-    <div class="set" id="open-resv-status">
-      <span class="ic">📋</span>
-      <span class="meta"><span class="nm">예약 현황 · 명단</span><span class="sb">캘린더 현황 · 휴무 처리 · 신청 이력</span></span>
-      <span class="chev">›</span>
-    </div>
-    </div>
-    </div><!-- /#resv-section-wrap -->
+    <!-- (📅 예약하기 → 💰 판매·예약 탭으로 이동) -->
     </div><!-- /📝 내 페이지 pane -->
 
     <!-- 📄 게시물 (고객 화면과 똑같은 4탭) -->
     <div class="ws-pane" data-pane="posts">
-    <div class="sec-h" style="margin-bottom:8px;"><span class="t">📄 콘텐츠 <span style="font-size:11px; font-weight:400; color:var(--muted);">· 타입만 고르면 손님 화면에 자동 분류</span></span></div>
-    <button type="button" id="content-add" class="add" style="margin-bottom:10px;">＋ 콘텐츠 추가</button>
+    <!-- 동기 배너 ② 관심·공감 -->
+    <div class="pane-intro">📄 <b>콘텐츠 = 관심·공감</b> <span style="opacity:.75;">· 홈 여정 ②</span><br>손님이 "맞아, 내 얘기네" 하고 빠져드는 곳. 글·작업·후기를 쌓을수록 <b>신뢰가 깊어져요.</b></div>
+
     <div class="pw-tabs" id="pw-tabs">
       <button type="button" class="pw-tab on" data-pwtab="archive">📝 글</button>
-      <button type="button" class="pw-tab" data-pwtab="product">🛍 스토어</button>
-      <button type="button" class="pw-tab" data-pwtab="qna">❓ Q&amp;A</button>
       <button type="button" class="pw-tab" data-pwtab="cardnews">🎴 카드뉴스</button>
     </div>
-    <button type="button" id="pw-preview" class="secbtn" style="width:100%; margin-bottom:14px;">👁 손님처럼 미리보기</button>
+    <div class="pw-previewrow"><button type="button" id="pw-preview" class="pw-mini">👁 손님처럼 미리보기</button></div>
 
     <!-- 대표 게시물 픽커는 숨겨두되 유지(렌더러 안전용) -->
     <div id="pw-featured" style="display:none;"></div>
 
+    <!-- 글 -->
     <div class="pw-pane on" data-pwpane="archive">
-      <div class="vhint" style="margin:2px 2px 8px; line-height:1.5;">랜딩·후기·스타일·공지·글을 <b>게시물</b>로. 손님 홈에 <b>카드</b>로 뜨고 눌러 펼쳐져요. (꾹 눌러 순서 변경)</div>
-      <button type="button" id="arc-guide-btn" class="secbtn" style="width:100%; margin-bottom:12px; justify-content:center; gap:6px; background:var(--coral-soft); border:1px solid rgba(45,212,191,.35); color:var(--coral);">✨ 뭘 올리지? · 아카이브 채우는 법</button>
-      <div class="grp-h-lbl">아카이브 보기 방식 <span style="font-weight:400;">· 손님 아카이브 탭에 보이는 형태</span></div>
-      <div class="rs-tabs" id="arcview-seg" style="margin-bottom:14px;">
-        <button type="button" class="av-tab on" data-av="cards">🃏 카드</button>
-        <button type="button" class="av-tab" data-av="photo">📷 사진</button>
-        <button type="button" class="av-tab" data-av="list">📰 리스트</button>
-      </div>
+      <div class="pw-lead"><span class="pw-lead-t">📝 글 · 게시물</span><span class="pw-lead-d">홈에 카드로 떠요</span></div>
+      <div id="post-type-seg" class="ptype-seg"></div>
       <div id="posts-lib"></div>
-      <button id="add-post-btn" class="add" style="margin-bottom:12px;">＋ 글쓰기 / 새 게시물</button>
+      <button id="add-post-btn" class="add pw-add">＋ 글쓰기 · 새 게시물</button>
+      <div class="pw-foot">
+        <button type="button" id="arc-guide-btn" class="pw-link">✨ 뭘 올리지?</button>
+        <span class="pw-foot-seg" id="arcview-seg" title="손님 아카이브 탭에 보이는 형태">
+          <button type="button" class="av-tab on" data-av="cards">카드</button>
+          <button type="button" class="av-tab" data-av="photo">사진</button>
+          <button type="button" class="av-tab" data-av="list">리스트</button>
+        </span>
+      </div>
     </div>
 
-    <div class="pw-pane" data-pwpane="product">
-      <div class="vhint" style="margin:2px 2px 8px; line-height:1.5;">손님 <b>스토어</b> 탭에 뜨는 추천. <b>쿠팡 파트너</b>(수수료 고지 자동)와 <b>내 상품·클래스</b>(제품·강의·전자책·컨설팅)를 따로 관리해요. 사진도 넣을 수 있어요.</div>
-      <button type="button" id="prod-guide-btn" class="secbtn" style="width:100%; margin-bottom:12px; justify-content:center; gap:6px; background:var(--coral-soft); border:1px solid rgba(45,212,191,.35); color:var(--coral);">✨ 어떤 걸 팔 수 있나요? · 예시 보기</button>
-      <div id="prod-lib"></div>
-    </div>
+    <!-- (🛍 스토어 → 💰 판매·예약 탭으로 이동) -->
 
-    <div class="pw-pane" data-pwpane="qna">
-      <div class="vhint" style="margin:2px 2px 12px; line-height:1.5;">손님 <b>Q&amp;A</b> 탭에 뜨는 자주 묻는 질문.</div>
-      <div id="qna-lib"></div>
-      <button type="button" id="add-qna-btn" class="add" style="margin-bottom:12px;">＋ 질문 추가</button>
-    </div>
-
+    <!-- 카드뉴스 -->
     <div class="pw-pane" data-pwpane="cardnews">
-      <div class="vhint" style="margin:2px 2px 10px; line-height:1.5;">인스타 <b>카드뉴스·캐러셀</b>을 우리 톤(다크 프리미엄)으로. 글자만 바꾸고 사진·배경 넣어 <b>이미지로 저장</b> → 인스타 업로드. (필요할 때만 사용)</div>
+      <div class="pw-lead"><span class="pw-lead-t">🎴 카드뉴스</span><span class="pw-lead-d">인스타 캐러셀 · 이미지 저장</span></div>
       <iframe id="cardnews-frame" data-src="maker.html" title="카드뉴스 생성기" style="width:100%; height:78vh; border:1px solid var(--hair); border-radius:14px; background:#101216; display:block;"></iframe>
     </div>
     </div><!-- /📄 게시물 pane -->
+
+    <!-- 💰 판매·예약 (전환 — 스토어 + 예약 + 쿠폰) -->
+    <div class="ws-pane" data-pane="sales">
+    <div class="pane-intro">💰 <b>판매·예약 = 행동·전환</b> <span style="opacity:.75;">· 홈 여정 ③</span><br>마음 생긴 손님이 <b>지금 행동</b>하는 곳. 행동할 곳이 있어야 손님이 새어나가지 않아요.</div>
+
+    <div class="sl-seg" id="sl-seg">
+      <button type="button" class="sl-seg-b on" data-slseg="sell">🛍 판매</button>
+      <button type="button" class="sl-seg-b" data-slseg="book">📅 예약</button>
+    </div>
+
+    <!-- 판매 -->
+    <div class="sl-pane on" data-slpane="sell">
+      <div class="pw-lead"><span class="pw-lead-t">🛍 스토어 · 제품</span><span class="pw-lead-d">내 상품 · 쿠팡 추천</span></div>
+      <div id="prod-lib"></div>
+      <div class="pw-foot" style="margin-bottom:16px;"><button type="button" id="prod-guide-btn" class="pw-link">✨ 어떤 걸 팔 수 있나요?</button></div>
+
+      <!-- 🎁 첫 방문 쿠폰 + 추천 링크 (접이식) -->
+      <div class="card acc-card" id="coupon-card">
+        <div class="sec-h acc-h" style="margin:0;"><span class="t" style="font-size:14px;">🎁 첫 방문 혜택 · 추천</span><span class="acc-sub">처음 온 손님 쿠폰</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 10px; padding:11px 12px; background:var(--soft); border:1px solid var(--hair); border-radius:11px;">
+          <span style="font-size:13px; font-weight:700; color:var(--ink);">첫 방문 쿠폰 띄우기</span>
+          <span class="sw" id="coupon-sw"><i></i></span>
+        </div>
+        <div class="vhint" style="text-align:left; margin:0 0 10px;">처음 방문한 손님에게 <b>한 번만</b> 팝업으로 떠요. 입소문·재방문에 효과적이에요.</div>
+        <div class="field"><label>혜택 문구</label><input id="cp-title" placeholder="예: 첫 방문 10% 할인 / 1:1 컨설팅 무료"></div>
+        <div class="field"><label>설명 (선택)</label><input id="cp-desc" placeholder="예: 예약 시 '첫방문' 말씀해 주세요"></div>
+        <div class="field" style="margin-bottom:0;"><label>쿠폰 코드 (선택)</label><input id="cp-code" placeholder="예: FIRST10"></div>
+        <div class="vhint" style="text-align:left; margin:12px 0 0; padding-top:11px; border-top:1px solid var(--hair);"><b>🔗 추천 링크</b> — 손님이 친구에게 <b>내 주소?ref=이름</b>으로 공유하면, 친구가 들어올 때 "○○님 추천" 표시 + 예약·문의에 자동 기록돼요. (별도 설정 없음)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 예약 -->
+    <div class="sl-pane" data-slpane="book">
+      <!-- 예약하기 (헤더 토글로 켜기/끄기) -->
+      <div class="card acc-card" id="resv-section-wrap">
+      <div class="sec-h acc-h" style="margin:0;">
+        <span class="t" style="flex:1;">📅 예약 받기 <span id="resv-on-lbl" style="font-size:11px; font-weight:400; color:var(--muted);">· 꺼짐</span></span>
+        <span class="sw" id="resv-onoff" title="예약 기능 켜기/끄기"><i></i></span>
+        <span class="acc-chev">▾</span>
+      </div>
+      <div class="acc-bd">
+      <div class="vhint" style="margin:2px 2px 10px; line-height:1.55;">손님이 <b>캘린더로 날짜·시간</b>을 고르고 <b>카톡</b>으로 신청해요. 켜면 공개 페이지에 <b>플로팅 예약 버튼 + 홈 섹션</b>으로 나와요.</div>
+      <div class="set" id="open-resv-setup">
+        <span class="ic">🛠</span>
+        <span class="meta"><span class="nm">예약 화면 설정</span><span class="sb">시술 · 시간 · 휴무 · 안내 — 고객이 보는 화면</span></span>
+        <span class="chev">›</span>
+      </div>
+      <div class="set" id="open-resv-status">
+        <span class="ic">📋</span>
+        <span class="meta"><span class="nm">예약 현황 · 명단</span><span class="sb">캘린더 현황 · 휴무 처리 · 신청 이력</span></span>
+        <span class="chev">›</span>
+      </div>
+      </div>
+      </div><!-- /#resv-section-wrap -->
+    </div>
+    </div><!-- /💰 판매·예약 pane -->
 
     <!-- ⚙ 설정 (디자인 + 계정 · 관리) -->
     <div class="ws-pane" data-pane="design">
@@ -1455,6 +1607,12 @@
       <span class="ic">🎨</span>
       <span class="meta"><span class="nm">분위기 테마</span><span class="sb">페이지 전체 톤</span></span>
       <span class="val" id="set-theme-val">크림 클래식</span><span class="chev">›</span>
+    </div>
+
+    <div class="grp-h-lbl" style="margin-top:16px;">❓ 손님 Q&amp;A <span style="font-weight:400;">· 자주 묻는 질문 (손님 Q&amp;A 탭에 노출)</span></div>
+    <div id="qna-manage" style="margin-bottom:6px;">
+      <div id="qna-lib"></div>
+      <button type="button" id="add-qna-btn" class="add pw-add">＋ 질문 추가</button>
     </div>
 
     <div class="grp-h-lbl" style="margin-top:16px;">계정 · 자료</div>
@@ -2111,6 +2269,7 @@
       <!-- 우측 상단 고정: 구성 추가 / 구성 삭제(선택된 구성) -->
       <div class="le-fabwrap">
         <button class="le-fab" id="le-fab"><span class="le-fab-p">＋</span><span class="le-fab-t">구성 추가</span></button>
+        <button class="le-fab le-fab-import" id="le-fab-import"><span class="le-fab-p">📚</span><span class="le-fab-t">가져오기</span></button>
         <button class="le-fab le-fab-del" id="le-fab-del"><span class="le-fab-p">🗑</span><span class="le-fab-t">구성 삭제</span></button>
       </div>
     </div>
@@ -2137,10 +2296,15 @@
     var curWs='page';
     function switchWs(name){
       if(name!=='page' && window.__leavePostEdit) { try{ window.__leavePostEdit(); }catch(_){} }  // 게시물 편집 중 다른 탭 가면 저장하고 빠져나옴
+      // 게시물 편집 중 '프로필' 탭을 직접 누르면 편집 종료 (openPostEdit은 editing-post 설정 전에 호출하므로 안전)
+      var _pg=document.querySelector('.ws-pane[data-pane="page"]');
+      if(name==='page' && _pg && _pg.classList.contains('editing-post') && window.__leavePostEdit){ try{ window.__leavePostEdit(); }catch(_){} }
       var prevWs=curWs; curWs=name;
       document.querySelectorAll('.ws-tab').forEach(function(t){ t.classList.toggle('on', t.getAttribute('data-ws')===name); });
       document.querySelectorAll('.ws-pane').forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-pane')===name); });
       try{ window.scrollTo(0,0); }catch(e){}
+      if(name==='home' && window.__renderHomeHub){ try{ window.__renderHomeHub(); }catch(_){} }
+      if(name==='page' && window.__renderProfileDash){ try{ window.__renderProfileDash(); }catch(_){} }
       // 고객 화면(게시물) → 편집실(내 페이지) 돌아올 때 허브 전환 모션
       if(name==='page' && prevWs==='posts' && window.__playHubTransition){ window.__playHubTransition(); }
       // (자동 진입 제거 — 탭 누를 때 안 넘어감. 진입은 편집/설정 게이트로)
@@ -2149,6 +2313,16 @@
     document.querySelectorAll('.ws-tab').forEach(function(t){ t.onclick=function(){ switchWs(t.getAttribute('data-ws')); }; });
     var goCH=document.getElementById('go-customer-home'); if(goCH) goCH.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
     var goCT=document.getElementById('go-customer-top'); if(goCT) goCT.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+  })();
+
+  // 💰 판매·예약 세그먼트 (판매 / 예약)
+  (function(){
+    function showSalesSeg(seg){
+      document.querySelectorAll('.sl-seg-b').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-slseg')===seg); });
+      document.querySelectorAll('.sl-pane').forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-slpane')===seg); });
+    }
+    window.__showSalesSeg=showSalesSeg;
+    document.querySelectorAll('.sl-seg-b').forEach(function(b){ b.onclick=function(){ showSalesSeg(b.getAttribute('data-slseg')); }; });
   })();
 
   var ov = document.getElementById('add-ov');
@@ -3277,13 +3451,29 @@
     var bars=daily.map(function(x){ return '<span title="'+x.d+': '+x.n+'" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;"><span style="width:70%;min-height:2px;height:'+Math.round(x.n/max*46)+'px;background:var(--grad);border-radius:3px 3px 0 0;"></span><span style="font-size:8.5px;color:var(--muted);">'+x.d.slice(3)+'</span></span>'; }).join('');
     return '<div class="tcat">최근 방문 추이</div><div style="display:flex;align-items:flex-end;gap:3px;height:64px;padding:0 2px;">'+bars+'</div>';
   }
+  function statPostBars(arr){
+    if(!arr||!arr.length) return '<div style="color:var(--muted);font-size:12.5px;padding:8px 2px;">아직 조회된 게시물이 없어요</div>';
+    var max=1; arr.forEach(function(x){ if(x.n>max) max=x.n; });
+    var title=(window.__postTitleById)||function(id){return id;};
+    return arr.map(function(x,i){
+      var hot = i===0 ? '<span style="flex:0 0 auto;font-size:9.5px;font-weight:800;color:#fff;background:var(--grad);padding:2px 7px;border-radius:99px;margin-right:5px;">인기</span>' : '';
+      return '<div style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12.5px;">'
+        +'<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+hot+escT(title(x.pid))+'</span>'
+        +'<span style="flex:0 0 80px;height:9px;border-radius:5px;background:var(--coral-soft);overflow:hidden;"><span style="display:block;height:100%;width:'+Math.round(x.n/max*100)+'%;background:var(--grad);"></span></span>'
+        +'<b style="flex:0 0 auto;">👁 '+x.n+'</b></div>';
+    }).join('');
+  }
   function renderStats(s){
     var conv=0; (s.labels||[]).forEach(function(x){ if(x.label==='예약하기'||x.label==='상담하기') conv+=(x.n||0); });
     var rate = s.sessions ? Math.round(conv/s.sessions*100) : 0;
-    return '<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('방문',s.views)+statBox('방문자',s.sessions)+statBox('클릭',s.clicks)+'</div>'
+    return '<div class="tcat" style="margin-top:0;">📅 방문자</div>'
+      +'<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('오늘',s.today)+statBox('이번 달',s.month)+statBox('전체',s.sessions)+'</div>'
+      +'<div class="tcat" style="margin-top:6px;">전체 누적</div>'
+      +'<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('방문(페이지뷰)',s.views)+statBox('클릭',s.clicks)+'</div>'
       +'<div class="tcat" style="margin-top:6px;">🎯 전환 (예약·상담 버튼)</div>'
       +'<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('예약·상담 클릭',conv)+statBox('전환율',rate+'%')+'</div>'
       +statSpark(s.daily)
+      +'<div class="tcat">👁 많이 본 게시물 <span style="font-weight:400;color:var(--muted);">· 권위로 홈에 추천돼요</span></div>'+statPostBars(s.posts)
       +'<div class="tcat">유입 경로</div>'+statBars(s.sources,'src')
       +'<div class="tcat">많이 누른 것</div>'+statBars(s.labels,'label');
   }
@@ -4123,6 +4313,7 @@
   var postsData = [];           // [{id,type,title,cover,summary,on,featured,blocks:[]}]
   var postEditId = null;        // null=홈 편집, 아니면 그 게시물 id 편집중
   function postById(id){ for(var i=0;i<postsData.length;i++){ if(postsData[i].id===id) return postsData[i]; } return null; }
+  window.__postTitleById=function(id){ var p=postById(id); return p?(p.title||'(제목 없음)'):'(삭제된 글)'; };
   var productsData = [];        // [{name,price,url}] → 손님 제품 탭
   var qnaData = [];             // [{q,a}] → 손님 Q&A 탭
   var archiveView = 'cards';    // 'cards' | 'photo' | 'list' → 손님 아카이브 보기 방식
@@ -4198,10 +4389,24 @@
   };
   function newPostId(){ return 'p_'+Date.now().toString(36)+Math.floor(Math.random()*1000); }
 
+  var postTypeFilter=null;
   function renderPostsLibrary(){
     var box=document.getElementById('posts-lib'); if(!box) return;
+    var seg=document.getElementById('post-type-seg');
+    // 유형 칩 (게시물에 있는 유형만, POST_TYPE_LABEL 순서)
+    var counts={}; postsData.forEach(function(p){ var t=p.type||'article'; counts[t]=(counts[t]||0)+1; });
+    var present=Object.keys(POST_TYPE_LABEL).filter(function(t){ return counts[t]; });
+    Object.keys(counts).forEach(function(t){ if(present.indexOf(t)<0) present.push(t); });
+    if(postTypeFilter==null || present.indexOf(postTypeFilter)<0) postTypeFilter=present[0]||null;
+    if(seg){
+      seg.innerHTML = (present.length<=1) ? '' : present.map(function(t){
+        return '<button type="button" class="ptype-b'+(t===postTypeFilter?' on':'')+'" data-ptype="'+t+'">'+(POST_TYPE_ICON[t]||'📄')+' '+(POST_TYPE_LABEL[t]||t)+'<span class="ptype-c">'+counts[t]+'</span></button>';
+      }).join('');
+      seg.querySelectorAll('[data-ptype]').forEach(function(b){ b.onclick=function(){ postTypeFilter=b.getAttribute('data-ptype'); renderPostsLibrary(); }; });
+    }
     if(!postsData.length){ box.innerHTML='<div class="post-empty">아직 게시물이 없어요 · 아래 ＋새 게시물로 시작해보세요</div>'; return; }
-    box.innerHTML=postsData.map(function(p){
+    var filtered = (present.length<=1) ? postsData : postsData.filter(function(p){ return (p.type||'article')===postTypeFilter; });
+    box.innerHTML=filtered.map(function(p){
       var thumb=p.cover?(' style="background-image:url('+p.cover+')"'):'';
       var thumbInner=p.cover?'':(POST_TYPE_ICON[p.type]||'📄');
       var sub=p.summary||(p.on===false?'숨김 (off)':'블록 '+((p.blocks&&p.blocks.length)||0)+'개');
@@ -4237,8 +4442,12 @@
         e.preventDefault(); card.classList.add('dragging'); try{ grip.setPointerCapture(e.pointerId); }catch(_){}
         function move(ev){ var after=getAfter(ev.clientY); if(after==null) box.appendChild(card); else box.insertBefore(card, after); }
         function up(){ card.classList.remove('dragging'); grip.removeEventListener('pointermove',move); grip.removeEventListener('pointerup',up);
-          var order=[].map.call(box.querySelectorAll('.post-card'),function(c){return c.getAttribute('data-pid');});
-          postsData.sort(function(a,b){ return order.indexOf(a.id)-order.indexOf(b.id); }); }
+          // 보이는(필터된) 카드끼리만 재정렬, 숨은 게시물은 원래 자리 유지
+          var visIds=[].map.call(box.querySelectorAll('.post-card'),function(c){return c.getAttribute('data-pid');});
+          var visSet={}; visIds.forEach(function(id){ visSet[id]=1; });
+          var q=visIds.slice(), out=[];
+          postsData.forEach(function(p){ out.push(visSet[p.id] ? postById(q.shift()) : p); });
+          postsData.length=0; Array.prototype.push.apply(postsData, out); }
         grip.addEventListener('pointermove',move); grip.addEventListener('pointerup',up);
       });
     });
@@ -4271,6 +4480,8 @@
     if(window.__switchWs) window.__switchWs('page');
     postEditId=id;
     var pane=document.querySelector('.ws-pane[data-pane="page"]'); if(pane) pane.classList.add('editing-post');
+    // 게시물 편집은 콘텐츠의 일부 — 하단탭을 '콘텐츠'로 표시 (page pane은 빌더 공유용)
+    try{ document.querySelectorAll('.ws-tab').forEach(function(t){ t.classList.toggle('on', t.getAttribute('data-ws')==='posts'); }); }catch(_){}
     var hb=document.getElementById('home-body'); if(hb) hb.style.display='';
     renderPostMeta(p);
     renderSavedBlocks(p.blocks||[]);
@@ -4329,7 +4540,6 @@
   // ════ 콘텐츠 가져오기 picker (발행 글 → 홈에 카드로 꽂기 · 큐레이션) ════
   (function(){
     function E(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
-    var btn=document.getElementById('import-content-btn'); if(!btn) return;
     function insertPostCard(pid){
       var p=null; (postsData||[]).forEach(function(x){ if(String(x.id)===String(pid)) p=x; });
       if(!p) return;
@@ -4339,10 +4549,11 @@
       var sb=row.querySelector('.sb'); if(sb) sb.textContent='가져온 글 · 카드로 표시';
       try{ if(window.__refreshFillBadge) window.__refreshFillBadge(row); }catch(_){}
       try{ if(window.__updateHomeProgress) window.__updateHomeProgress(); }catch(_){}
+      try{ if(window.__liveEditActive && window.__liveRefresh) setTimeout(window.__liveRefresh, 50); }catch(_){}
       try{ toast('"'+(p.title||'글')+'" 카드를 홈에 꽂았어요'); }catch(_){}
       try{ row.scrollIntoView({behavior:'smooth', block:'center'}); }catch(_){}
     }
-    btn.onclick=function(){
+    function openImportPicker(){
       var pubs=(postsData||[]).filter(function(p){ return p && p.on!==false && p.blocks && p.blocks.length; });
       var ov=document.getElementById('import-ov');
       if(!ov){ ov=document.createElement('div'); ov.className='ov'; ov.id='import-ov'; document.body.appendChild(ov);
@@ -4362,9 +4573,120 @@
       ov.querySelectorAll('.imp-tab').forEach(function(tb){ tb.onclick=function(){ ov.querySelectorAll('.imp-tab').forEach(function(x){x.classList.remove('on');}); tb.classList.add('on'); var ty=tb.getAttribute('data-type'); ov.querySelectorAll('.imp-card').forEach(function(cd){ cd.style.display=(ty==='__all'||cd.getAttribute('data-ptype')===ty)?'':'none'; }); }; });
       ov.querySelectorAll('.imp-card').forEach(function(b2){ b2.onclick=function(){ insertPostCard(b2.getAttribute('data-pid')); ov.classList.remove('open'); }; });
       ov.classList.add('open');
-    };
+    }
+    window.__openImportPicker=openImportPicker;
+    var _ib=document.getElementById('import-content-btn'); if(_ib) _ib.onclick=openImportPicker;
   })();
   try{ renderPostsLibrary(); }catch(_){}
+
+  // ════ 🏠 홈 허브 — 완성도 북극성(실데이터) + 진입 ════
+  function renderHomeHub(){
+    var box=document.getElementById('home-hub'); if(!box) return;
+    function gv2(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+    var nm=gv2('pf-name'), bio=gv2('pf-bio'), avatar=window.__profileAvatar;
+    var trust=(nm?40:0)+(bio?30:0)+(avatar?30:0);
+    var pubs=0; try{ pubs=(postsData||[]).filter(function(p){ return p&&p.on!==false&&p.blocks&&p.blocks.length; }).length; }catch(_){}
+    var content=Math.round(Math.min(pubs,3)/3*100);
+    var actTypes={lead:1,service:1,cta:1,reservation:1}, hasAction=false;
+    try{ document.querySelectorAll('#rows .row').forEach(function(r){ if(actTypes[r.dataset.type]) hasAction=true; }); }catch(_){}
+    try{ var rsw=document.getElementById('resv-onoff'); if(rsw&&rsw.classList.contains('on')) hasAction=true; }catch(_){}
+    var action=hasAction?100:0;
+    var overall=Math.round((trust+content+action)/3);
+    var next;
+    if(action<100) next={t:'아직 <b>행동할 곳(예약·문의·CTA)</b>이 없어요. 손님이 마음 생겨도 누를 데가 없으면 그냥 나가요.', label:'✏️ 홈 편집해서 추가', go:'live'};
+    else if(content<100) next={t:'<b>콘텐츠가 적어요.</b> 글·작업을 올려 "맞아, 내 얘기네"를 만들어요.', label:'✍️ 콘텐츠 쓰러 가기', go:'posts'};
+    else if(trust<100) next={t:'<b>프로필·전문성</b>을 더 채우면 신뢰가 올라가요.', label:'👤 프로필 채우기', go:'page'};
+    else next={t:'좋아요! 페이지가 탄탄해요. 이제 <b>인스타에 홈 링크를 더 노출</b>해 유입을 늘려요.', label:null, go:null};
+    function step(n,t,p,why){ return '<div class="ns-step'+(p>=100?' done':'')+'"><div class="ns-step-n">'+n+'</div><div class="ns-step-main"><div class="ns-step-top"><span class="ns-step-t">'+t+'</span><span class="ns-step-p">'+p+'%</span></div><div class="ns-bar"><i style="width:'+Math.max(p,3)+'%;"></i></div><div class="ns-why">'+why+'</div></div></div>'; }
+    var tier=window.__authTier||'basic', exp=window.__authExpires;
+    var tierLbl=({basic:'베이직',pro:'프로',premium:'프리미엄'})[tier]||'베이직', dday;
+    if(exp){ var left=Math.ceil((exp-Date.now())/86400000); dday=left>0?('사용 D-'+left):'기간 만료'; } else { dday='평생 이용'; }
+    var TILES=[['✏️','홈 편집','c-purple','live'],['✍️','새 글','c-violet','newpost'],['🎴','카드뉴스','c-pink','cardnews'],['📥','가져오기','c-gray','import'],['💰','스토어','c-green','store'],['👁','손님 홈','c-orange','realhome'],['📊','고객·분석','c-teal','data'],['🎨','디자인','c-blue','design']];
+    box.innerHTML=''
+      +'<div class="mbr"><span class="mbr-ic">👑</span><div class="mbr-m"><div class="mbr-t">'+tierLbl+' 멤버십</div><div class="mbr-s">'+dday+'</div></div><button class="mbr-go" id="hub-plan">관리 →</button></div>'
+      +'<div class="ns">'
+      +'<div class="ns-h">🎯 손님을 단골로 — 내 페이지 완성도 <span class="ns-pct">· '+overall+'%</span></div>'
+      +'<div class="ns-sub">방문 → <b>신뢰</b> → <b>전환</b>. 이 세 칸을 채울수록 손님이 행동해요.</div>'
+      +step(1,'첫인상 · 신뢰',trust,'프로필·소개·전문성 = "이 사람 믿어도 돼"')
+      +step(2,'관심 · 공감',content,'글·작업·후기 = "맞아, 내 얘기네"')
+      +step(3,'행동 · 전환',action,'예약·문의·스토어 = "지금 신청할래"')
+      +(next.t?'<div class="ns-next"><div class="nx-t">📍 <b>다음 할 일</b> — '+next.t+'</div>'+(next.label?'<button class="nx-btn" id="hub-next">'+next.label+' →</button>':'')+'</div>':'')
+      +'</div>'
+      +'<div class="sec-t-h">⚡ 빠른 작업</div>'
+      +'<div class="grid-card"><div class="qgrid">'+TILES.map(function(t,i){ return '<button class="gi" data-tile="'+i+'"><span class="gi-ic '+t[2]+'">'+t[0]+'</span><span class="gi-t">'+t[1]+'</span></button>'; }).join('')+'</div></div>';
+    var ws=window.__switchWs, pw=window.__showPwTab;
+    function tileGo(k){
+      if(k==='live'){ if(window.__openLive) window.__openLive(); }
+      else if(k==='newpost'){ if(ws)ws('posts'); if(pw)pw('archive'); }
+      else if(k==='cardnews'){ if(ws)ws('posts'); if(pw)pw('cardnews'); }
+      else if(k==='import'){ if(window.__openImportPicker) window.__openImportPicker(); }
+      else if(k==='store'){ if(ws)ws('sales'); if(window.__showSalesSeg) window.__showSalesSeg('sell'); }
+      else if(k==='realhome'){ if(window.__openRealHome) window.__openRealHome(); }
+      else if(k==='data'){ if(ws)ws('data'); }
+      else if(k==='design'){ if(ws)ws('design'); }
+    }
+    box.querySelectorAll('.gi').forEach(function(g){ g.onclick=function(){ tileGo(TILES[+g.getAttribute('data-tile')][3]); }; });
+    var bp=document.getElementById('hub-plan'); if(bp) bp.onclick=function(){ if(ws)ws('design'); };
+    var bn=document.getElementById('hub-next'); if(bn) bn.onclick=function(){ if(next.go==='live'){ if(window.__openLive) window.__openLive(); } else if(next.go && ws){ ws(next.go); } };
+  }
+  window.__renderHomeHub=renderHomeHub;
+  try{ renderHomeHub(); }catch(_){}
+
+  // ════ 👤 프로필 대시보드 (보기 먼저 + 항목별 편집) ════
+  (function(){
+    function gv(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+    function escH(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];}); }
+    function mdBold(s){ return escH(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>'); }
+    function chCount(){ var n=0; ['fab-instagram','fab-youtube','fab-blog','fab-naver','fab-kakao'].forEach(function(id){ if(gv(id)) n++; }); return n; }
+    function badges(){
+      var out=[]; var au=gv('pf-authority'); if(au) out.push(au);
+      var st=gv('pf-stats'); if(st){ st.split('·').forEach(function(x){ x=x.trim(); if(x&&out.length<3) out.push(x); }); }
+      if(out.length<3){ var cr=gv('pf-creds'); if(cr){ cr.split(/\n/).forEach(function(x){ x=x.trim(); if(x&&out.length<3) out.push(x); }); } }
+      return out.slice(0,3);
+    }
+    var curPseg='basic';
+    function showProfileSeg(key){
+      curPseg=key;
+      document.querySelectorAll('#profile-dash .pseg-b').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-pseg')===key); });
+      document.querySelectorAll('#profile-edit [data-pseg]').forEach(function(c){ var on=(c.getAttribute('data-pseg')===key); c.style.display=on?'':'none'; if(on&&c.classList.contains('acc-card')) c.classList.add('open'); });
+    }
+    function pchip(key,ic,t,st){ return '<button type="button" class="pseg-b'+(key===curPseg?' on':'')+'" data-pseg="'+key+'">'+ic+' '+t+(st?'<span class="pseg-dot '+st+'"></span>':'')+'</button>'; }
+    // 호환: 옛 카드ID 호출 → 세그먼트 전환
+    window.__profileShowEdit=function(t){ var map={'profile-card':'basic','about-style-card':'style','evidence-card':'evidence','channels-card':'channels'}; showProfileSeg(map[t]||'basic'); try{ document.getElementById('profile-edit').scrollIntoView({behavior:'smooth',block:'start'}); }catch(_){} };
+    function renderProfileDash(){
+      var box=document.getElementById('profile-dash'); if(!box) return;
+      var nm=gv('pf-name'), bio=gv('pf-bio'), tag=gv('pf-tagline'), avatar=window.__profileAvatar;
+      var trust=(nm?40:0)+(bio?30:0)+(avatar?30:0);
+      var bds=badges();
+      var basicOk=(nm&&bio); var evOk=(gv('pf-authority')||gv('pf-creds')||gv('pf-stats')); var chN=chCount();
+      var tb=document.querySelector('.ab-tpl-btn.on'); var tplKey=tb?tb.getAttribute('data-abtpl'):'';
+      var tplLbl=({warm:'따뜻·친근',clean:'깔끔·전문',bold:'감각·임팩트',media:'미디어킷'})[tplKey]||'기본';
+      var avStyle = avatar ? (' style="background-image:url('+avatar+')"') : '';
+      var valHtml = tag ? mdBold(tag) : (bio?escH(bio):'<span style="opacity:.6;">한 줄 가치를 입력해보세요</span>');
+      box.innerHTML=''
+        +'<div class="pv">'
+        +'<span class="pv-tag">손님이 보는 모습</span>'
+        +'<div class="pv-ava"'+avStyle+'>'+(avatar?'':'🏠')+'</div>'
+        +'<div class="pv-nm">'+(nm?escH(nm):'<span style="opacity:.6;">이름을 입력하세요</span>')+'</div>'
+        +'<div class="pv-val">'+valHtml+'</div>'
+        +(bds.length?'<div class="pv-badges">'+bds.map(function(b){return '<span class="pv-bd">'+escH(b)+'</span>';}).join('')+'</div>':'')
+        +'<button type="button" class="pv-edit" data-pe="profile-card">✏️ 소개 페이지 수정</button>'
+        +'</div>'
+        +'<div class="ptrust"><div class="ptrust-m"><div class="ptrust-t"><b>신뢰</b> — 채울수록 손님이 믿어요</div><div class="ptrust-bar"><i style="width:'+Math.max(trust,3)+'%;"></i></div></div><span class="ptrust-p">'+trust+'%</span></div>'
+        +'<div class="sec-t-h">✏️ 항목별 편집 · 탭으로 골라요</div>'
+        +'<div class="pseg">'
+          +pchip('basic','🏠','기본 프로필', basicOk?'ok':'todo')
+          +pchip('evidence','🏅','전문 이력', evOk?'ok':'todo')
+          +pchip('channels','🔗','채널·연락처', chN?'ok':'todo')
+          +pchip('style','🎨','분위기·템플릿','ok')
+        +'</div>';
+      box.querySelectorAll('.pseg-b').forEach(function(b){ b.onclick=function(){ showProfileSeg(b.getAttribute('data-pseg')); }; });
+      box.querySelectorAll('[data-pe]').forEach(function(b){ b.onclick=function(){ showProfileSeg('basic'); try{ document.getElementById('profile-edit').scrollIntoView({behavior:'smooth',block:'start'}); }catch(_){} }; });
+      showProfileSeg(curPseg);
+    }
+    window.__renderProfileDash=renderProfileDash;
+    try{ renderProfileDash(); }catch(_){}
+  })();
 
   // ════ 게시물 워크스페이스 4서브탭 + 제품/Q&A 매니저 + 대표 허브 ════
   (function(){
@@ -4588,7 +4910,7 @@
     // 로그인하면 바로 편집/운영 게이트 (고객 홈 미리보기는 게이트나 '고객 홈으로'에서). 신규(온보딩 중)는 제외.
     if(hadPage){ if(window.__showModeGate) setTimeout(window.__showModeGate, 120); }
   }
-  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영 모드'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); }
+  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영 모드'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){} }
 
   // 분야 선택 제거 — 로그인은 코드+PIN만. selInd=null이면 아래 분야 일치 검사들이 자동 통과
   var selInd=null;
@@ -5163,7 +5485,7 @@
     window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '게시물 편집'); } };
     window.__openProfileSheet=function(){ _mode='profile'; moveIn(document.getElementById('profile-card'), '프로필 편집'); };
     window.__openProductsSheet=function(){ _mode='product'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.querySelector('.pw-pane[data-pwpane="product"]'), '스토어 편집'); };
-    window.__openQnaSheet=function(){ _mode='qna'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.querySelector('.pw-pane[data-pwpane="qna"]'), 'Q&A 편집'); };
+    window.__openQnaSheet=function(){ _mode='qna'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.getElementById('qna-manage'), 'Q&A 편집'); };
     window.__liveSheetOpen=function(){ return lsOv.classList.contains('open'); };
     window.__closeLiveSheet=function(){
       if(_mode==='post'){ try{ if(window.__leavePostEdit) window.__leavePostEdit(); }catch(e){} }
@@ -5370,6 +5692,7 @@
     }
     window.__setFabInsert=setFabInsert;
     if(addb) addb.onclick=function(){ setFabInsert(!fabInsert); };
+    var impb=document.getElementById('le-fab-import'); if(impb) impb.onclick=function(){ if(window.__openImportPicker) window.__openImportPicker(); };
     // 우측 상단 '구성 삭제' → 지금 선택(테두리)된 구성 삭제 (없으면 안내)
     var delb=document.getElementById('le-fab-del');
     if(delb) delb.onclick=function(){ try{ ifr.contentWindow.postMessage({type:'la-del-selected'}, '*'); }catch(e){} };

@@ -1105,6 +1105,9 @@
   /* 내 게시물 — 전시장 카드 그리드 + 임베드 */
   .posts-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:4px 0 16px;}
   .pg-card{display:block; text-decoration:none; color:inherit; border:1px solid var(--hair); border-radius:14px; overflow:hidden; background:var(--surface);}
+  .pg-views{display:flex; align-items:center; gap:7px; margin-top:8px;}
+  .pg-pop{font-size:10px; font-weight:800; color:#fff; background:var(--coral); padding:2px 8px; border-radius:99px; letter-spacing:.2px;}
+  .pg-eye{font-size:11px; font-weight:600; color:var(--muted);}
   .pg-card:active{transform:scale(.99);}
   .pg-card.pg-feat{grid-column:1 / -1; border-color:color-mix(in srgb, var(--coral) 45%, var(--hair));}
   .pg-cov{height:92px; background:var(--paper) center/cover;}
@@ -2635,9 +2638,31 @@
     document.getElementById('pm-title').textContent=p.title||'';
     renderPostBlocks(document.getElementById('pm-body'), p.blocks);
     ov.classList.add('open');
-    try{ track('post_open',{ id:id, title:p.title }); }catch(_){}
+    try{ track('postview',{ kind:'post', label:id }); }catch(_){}
   }
   window.__openPostModal=openPostModal;
+  // ── 👁 게시물 조회수 배지 + "인기" 표시 (손님 화면 권위 표시) ──
+  function fmtViews(n){ n=+n||0; return n>=1000 ? ((n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k') : (''+n); }
+  function decoratePostViews(){
+    if(typeof EDIT_MODE!=='undefined' && EDIT_MODE) return;   // 편집 모드선 숨김(손님 화면 전용)
+    if(!window.laRpc) return;
+    try{
+      window.laRpc('li_post_views',{ p_handle: window.HANDLE }).then(function(r){
+        if(!r||!r.ok||!r.posts||!r.posts.length) return;
+        var map={}, top=null, topN=0;
+        r.posts.forEach(function(x){ map[x.pid]=x.n; if(x.n>topN){ topN=x.n; top=x.pid; } });
+        document.querySelectorAll('[data-pid]').forEach(function(card){
+          var pid=card.getAttribute('data-pid'); var n=map[pid]; if(!n) return;
+          if(card.querySelector('.pg-views')) return;
+          var pop = (pid===top && topN>=3) ? '<span class="pg-pop">인기</span>' : '';
+          var badge=document.createElement('div'); badge.className='pg-views';
+          badge.innerHTML=pop+'<span class="pg-eye">조회 '+fmtViews(n)+'</span>';
+          (card.querySelector('.pg-body')||card).appendChild(badge);
+        });
+      }).catch(function(){});
+    }catch(_){}
+  }
+  window.__decoratePostViews=decoratePostViews;
   // 게시물 링크(?p=)로 옴 → 홈 착지 + 떠있는 '이어보기' 알약(인텐트 카드 재사용) → 탭하면 그 글
   function showResumePost(id){
     var p=null; (window.__POSTS||[]).forEach(function(x){ if(x.id===id) p=x; });
@@ -2744,6 +2769,7 @@
     window.__resvOn = !!(d.reservation && d.reservation.on);   // '이 스타일로 예약' 버튼 노출 조건 (블록 렌더 전 세팅)
     if(d.blocks && d.blocks.length){ renderBlocks(d.blocks); }
     if(d.posts && d.posts.length){ try{ buildPosts(d.posts); }catch(e){} try{ buildArchive(d.posts, d.archiveView||'cards'); }catch(e){} }
+    try{ setTimeout(decoratePostViews, 450); }catch(e){}
     // 제품·Q&A 탭 = 편집기 게시물 워크스페이스의 제품/Q&A 매니저 데이터로 렌더
     if(d.products && d.products.length){ try{ buildProductsPane(d.products); }catch(e){} }
     if(d.qna && d.qna.length){ try{ FILL.qna([ d.qna.map(function(x){ return [x.q||'', x.a||'']; }) ]); }catch(e){} }
