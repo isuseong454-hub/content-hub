@@ -3625,7 +3625,7 @@
     ['spring','#D9ECE8','#E58AA4'],['butter','#F5F1D6','#CF9E2A'],
     ['sage','#DEE4DA','#7C8C6A'],['clay','#E4D7C4','#A86A45'],['camel','#E6D6BD','#B07D43'],
     ['greige','#DCD5C9','#8C7E69'],['lavender','#F0EEF9','#8E7BD6'],['pearl','#EEF1F6','#8499C2'],
-    ['olive','#4B4D32','#BE9242'],['forest','#0C140D','#74DB86'],['banghouse','#060B08','#7DBF8E','radial-gradient(ellipse at 50% 0%, rgba(125,191,142,.4), transparent 62%), #060B08'],['nvidia','#0A120B','#BEF24A'],
+    ['olive','#4B4D32','#BE9242'],['forest','#0C140D','#74DB86'],['banghouse','#060B08','#7DBF8E','radial-gradient(ellipse at 50% 0%, rgba(125,191,142,.4), transparent 62%), #060B08'],['luxe','#0B0E12','#2DD4BF','radial-gradient(ellipse 90% 55% at 50% -5%, rgba(45,212,191,.42), transparent 60%), #0B0E12'],['nvidia','#0A120B','#BEF24A'],
     ['violet','#14101F','#A87CF0'],['aurora','#0E1424','#7AA8FF'],['glacier','#08161A','#36C6D9'],
     ['framer','#171717','#2D9CFF'],['neon','#0A0810','#E06FC8'],['prism','#0A0712','#C66BE8'],
     ['cobalt','#070A18','#6F8AFF'],['bokeh','#0A0A0C','#6FD6A0']
@@ -4159,6 +4159,7 @@
   var POST_TYPE_LABEL={landing:'랜딩',reviews:'후기',style:'스타일',notice:'공지',article:'일반글',insight:'정리글',checklist:'체크리스트',tip:'노하우'};
   var POST_TYPE_ICON={landing:'🎯',reviews:'★',style:'✂',notice:'📢',article:'📝',insight:'📝',checklist:'✅',tip:'💡'};
   var POST_PRESETS={
+    blog:function(){ return [{type:'text',name:'본문',on:true,content:['','여기에 글을 자유롭게 써보세요.\n\n생각나는 대로 길게 써도 좋아요. 문단은 줄바꿈으로 나눠요.'],layout:''}]; },
     landing:function(){ return JSON.parse(JSON.stringify([P_EMPATHY,P_CAUSE,P_EXPERT,P_SOLVE,P_DESIRE,P_SERVICE])); },
     reviews:function(){ return [{type:'review',name:'후기',on:true,content:[],layout:''}]; },
     style:function(){ return [{type:'stylegallery',name:'스타일 갤러리',on:true,content:[],layout:''}]; },
@@ -4276,6 +4277,7 @@
     if(!ov){
       ov=document.createElement('div'); ov.className='ov'; ov.id='post-type-ov';
       ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">새 게시물 유형</span><span class="x" id="pt-x">×</span></div><div class="desc">유형을 고르면 기본 블록이 채워져요 (나중에 자유 편집)</div><div class="post-types">'
+        +'<button class="post-type" data-pt="blog"><b>✍️ 블로그 글 · 술술 쓰기</b><span>제목 + 사진 + 긴 글 한 편 (가장 쉬움)</span></button>'
         +'<button class="post-type" data-pt="insight"><b>📝 정리글 · 인사이트</b><span>공부·관점·생각 정리</span></button>'
         +'<button class="post-type" data-pt="checklist"><b>✅ 체크리스트 · 템플릿</b><span>바로 쓰는 자료</span></button>'
         +'<button class="post-type" data-pt="tip"><b>💡 노하우 · 꿀팁</b><span>몰랐던 실전 팁</span></button>'
@@ -4288,7 +4290,7 @@
   }
   function createPost(type){
     var preset=(POST_PRESETS[type]?POST_PRESETS[type]():[]);
-    var titles={landing:'새 랜딩',reviews:'후기 모음',style:'스타일 갤러리',notice:'공지',article:'새 글',insight:'새 정리글',checklist:'체크리스트',tip:'노하우 · 꿀팁'};
+    var titles={blog:'새 글',landing:'새 랜딩',reviews:'후기 모음',style:'스타일 갤러리',notice:'공지',article:'새 글',insight:'새 정리글',checklist:'체크리스트',tip:'노하우 · 꿀팁'};
     var p={ id:newPostId(), type:type, title:titles[type]||'새 게시물', cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:preset };
     postsData.push(p);
     renderPostsLibrary();

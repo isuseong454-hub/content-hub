@@ -77,8 +77,25 @@
   .seg button.on{border-color:var(--coral); color:var(--coral); background:var(--coral-soft); font-weight:600;}
   .seg.period button{flex-direction:row; min-width:0;}
 
-  .gen-result{display:none; margin-top:14px; border:1.5px solid var(--coral); background:var(--coral-soft); border-radius:13px; padding:15px;}
+  .gen-result{display:none; margin-top:14px;}
   .gen-result.show{display:block;}
+  /* 프리미엄 코드 카드 (다크 + 에메랄드 · 카톡 전송용) */
+  .code-card{position:relative; border-radius:18px; padding:24px 22px; overflow:hidden; color:#F3F5F4;
+    background:radial-gradient(ellipse 95% 60% at 50% -12%, rgba(45,212,191,.22), transparent 60%), linear-gradient(160deg,#161b20 0%,#0b0e12 100%);
+    box-shadow:0 16px 38px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.06);}
+  .code-card::after{content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(120% 120% at 50% 25%, transparent 58%, rgba(0,0,0,.4) 100%);}
+  .code-card > *{position:relative; z-index:1;}
+  .cc-top{display:flex; justify-content:space-between; align-items:center;}
+  .cc-brand{font-size:12px; font-weight:800; letter-spacing:2px; color:#9aa4a3;}
+  .cc-tier{font-size:11px; font-weight:800; letter-spacing:1px; color:#06201c; background:#2DD4BF; padding:4px 11px; border-radius:999px;}
+  .cc-label{font-size:10px; font-weight:700; letter-spacing:3px; color:#2DD4BF; margin-top:20px;}
+  .cc-code{font-size:36px; font-weight:800; letter-spacing:7px; margin-top:5px; font-family:'JetBrains Mono','Courier New',monospace; text-shadow:0 0 24px rgba(45,212,191,.3);}
+  .cc-rows{margin-top:20px; display:flex; flex-direction:column; gap:8px;}
+  .cc-rows > div{display:flex; justify-content:space-between; font-size:12.5px;}
+  .cc-rows span{color:#8a938f;} .cc-rows b{color:#e9eceb; font-weight:700;}
+  .cc-foot{margin-top:20px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); font-size:10.5px; color:#76807c; line-height:1.5;}
+  .cc-actions{display:flex; gap:8px; margin-top:10px;}
+  .cc-actions .btn{flex:1; padding:11px; font-size:13px;}
   .gr-row{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
   .gr-row:last-child{margin-bottom:0;}
   .gr-k{font-size:12px; color:var(--muted); width:44px; flex:0 0 auto;}
@@ -258,9 +275,22 @@
       <button class="btn primary" id="gen-btn" style="width:100%; padding:13px; font-size:14px;">코드 생성</button>
 
       <div class="gen-result" id="gen-result">
-        <div class="gr-row"><span class="gr-k">코드</span><span class="gr-v" id="r-code">—</span><span class="gr-copy" id="copy-code">복사</span></div>
-        <div class="gr-note" id="r-note">고객에게 <b>코드만</b> 전달하세요. 고객이 edit.html에서 첫 로그인 때 <b>PIN을 직접 설정</b>합니다.</div>
-        <button class="gr-copy" id="copy-both" style="margin-top:10px; width:100%; padding:9px;">코드 복사</button>
+        <div class="code-card" id="code-card">
+          <div class="cc-top"><span class="cc-brand">컨텐츠 허브</span><span class="cc-tier" id="cc-tier">PRO</span></div>
+          <div class="cc-label">ACCESS CODE</div>
+          <div class="cc-code" id="cc-code">——————</div>
+          <div class="cc-rows">
+            <div><span>회원</span><b id="cc-name">—</b></div>
+            <div><span>유형</span><b id="cc-plan">—</b></div>
+            <div><span>이용 기간</span><b id="cc-exp">—</b></div>
+          </div>
+          <div class="cc-foot">첫 로그인 때 <b style="color:#bfeee6;">PIN을 직접 설정</b>하세요 · 문의 카카오톡</div>
+        </div>
+        <div class="cc-actions">
+          <button class="btn primary" id="cc-save">🖼 카드 이미지로 저장</button>
+          <button class="btn" id="cc-copy" style="background:var(--surface,#fff);border:1px solid #ddd;">코드 복사</button>
+        </div>
+        <div class="gr-note" id="r-note" style="margin-top:10px;">이 카드를 이미지로 저장해 <b>카카오톡으로 전달</b>하세요. (코드만 줘도 됩니다)</div>
       </div>
     </div>
     </div><!-- /issue pane -->
@@ -364,18 +394,33 @@
       }
       if(res&&res.ok){
         lastCode=code;
-        $('r-code').textContent=code;
+        var planL = days===30?'체험판 · 1개월': days===90?'3개월': days===180?'6개월': days===365?'정품 · 1년': days===0?'평생':days+'일';
+        $('cc-code').textContent=code;
+        $('cc-name').textContent=name;
+        $('cc-tier').textContent=(TIER_LBL[industry]||'베이직');
+        $('cc-plan').textContent=planL;
+        if(exp){ var dt=new Date(exp), z=function(n){return (n<10?'0':'')+n;}; $('cc-exp').textContent=dt.getFullYear()+'.'+z(dt.getMonth()+1)+'.'+z(dt.getDate())+' 까지'; }
+        else { $('cc-exp').textContent='무제한 (평생)'; }
         $('gen-result').classList.add('show');
         $('f-name').value='';
-        toast(TIER_LBL[industry]+' · '+(days>0?(days>=365?'1년':days+'일'):'평생')+' 코드 생성 완료 ✓');
+        toast(planL+' 코드 생성 완료 ✓');
         loadList();
       } else if(res&&res.reason==='auth'){ toast('마스터 인증 만료 · 다시 로그인'); }
       else { toast('생성 실패 ('+((res&&res.reason)||'SQL 미실행?')+')'); }
     }catch(e){ toast('오류: '+e.message); }
     btn.disabled=false; btn.textContent=o;
   });
-  $('copy-code').onclick=function(){ copy(lastCode); };
-  var _cb=$('copy-both'); if(_cb) _cb.onclick=function(){ copy(lastCode); };
+  $('cc-copy').onclick=function(){ copy(lastCode); };
+  function ensureH2C(){ return window.html2canvas?Promise.resolve():new Promise(function(res,rej){ var s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; s.onload=function(){res();}; s.onerror=function(){rej('html2canvas 로드 실패');}; document.head.appendChild(s); }); }
+  $('cc-save').onclick=function(){
+    var btn=this, o=btn.textContent; btn.disabled=true; btn.textContent='저장 중…';
+    ensureH2C().then(function(){
+      return window.html2canvas($('code-card'),{backgroundColor:null, scale:3, useCORS:true, logging:false});
+    }).then(function(canvas){
+      var a=document.createElement('a'); a.download='컨텐츠허브_코드_'+lastCode+'.png'; a.href=canvas.toDataURL('image/png'); a.click();
+      btn.textContent=o; btn.disabled=false; toast('카드 이미지 저장됨 ✓');
+    }).catch(function(e){ alert('저장 실패: '+e); btn.textContent=o; btn.disabled=false; });
+  };
 
   // 목록
   function dday(exp){
