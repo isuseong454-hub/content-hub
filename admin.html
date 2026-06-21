@@ -79,23 +79,38 @@
 
   .gen-result{display:none; margin-top:14px;}
   .gen-result.show{display:block;}
-  /* 프리미엄 코드 카드 (다크 + 에메랄드 · 카톡 전송용) */
-  .code-card{position:relative; border-radius:18px; padding:24px 22px; overflow:hidden; color:#F3F5F4;
-    background:radial-gradient(ellipse 95% 60% at 50% -12%, rgba(45,212,191,.22), transparent 60%), linear-gradient(160deg,#161b20 0%,#0b0e12 100%);
-    box-shadow:0 16px 38px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.06);}
-  .code-card::after{content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(120% 120% at 50% 25%, transparent 58%, rgba(0,0,0,.4) 100%);}
+  /* 프리미엄 멤버십 코드 카드 — 컨텐츠 허브 브랜드(다크 퍼플 #0b0720 + 네온 그라데이션 + 네온하우스 로고) */
+  .code-card{position:relative; border-radius:20px; padding:26px 24px; overflow:hidden; color:#F4F1FB;
+    background:
+      linear-gradient(125deg, rgba(155,61,255,.16) 0%, transparent 42%),
+      radial-gradient(ellipse 100% 60% at 50% -12%, rgba(61,123,255,.22), transparent 60%),
+      radial-gradient(ellipse 80% 70% at 92% 112%, rgba(255,61,192,.16), transparent 60%),
+      radial-gradient(ellipse at 50% 38%, #1b1038 0%, #0b0720 58%, #06040f 100%);
+    box-shadow:0 22px 52px rgba(0,0,0,.55), 0 0 0 1px rgba(155,91,240,.28), inset 0 1px 0 rgba(255,255,255,.07), inset 0 0 90px rgba(0,0,0,.4);}
+  /* 미세 격자 텍스처 */
+  .code-card::before{content:''; position:absolute; inset:0; pointer-events:none; opacity:.5; z-index:0;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:34px 34px;}
+  /* 대각선 광택(sheen) */
+  .code-card::after{content:''; position:absolute; top:-70%; left:-20%; width:60%; height:240%; pointer-events:none; z-index:0;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); transform:rotate(20deg);}
   .code-card > *{position:relative; z-index:1;}
   .cc-top{display:flex; justify-content:space-between; align-items:center;}
-  .cc-brand{font-size:12px; font-weight:800; letter-spacing:2px; color:#9aa4a3;}
-  .cc-tier{font-size:11px; font-weight:800; letter-spacing:1px; color:#06201c; background:#2DD4BF; padding:4px 11px; border-radius:999px;}
-  .cc-label{font-size:10px; font-weight:700; letter-spacing:3px; color:#2DD4BF; margin-top:20px;}
-  .cc-code{font-size:36px; font-weight:800; letter-spacing:7px; margin-top:5px; font-family:'JetBrains Mono','Courier New',monospace; text-shadow:0 0 24px rgba(45,212,191,.3);}
-  .cc-rows{margin-top:20px; display:flex; flex-direction:column; gap:8px;}
+  .cc-brandwrap{display:flex; align-items:center; gap:9px;}
+  .cc-logo{width:30px; height:30px; border-radius:8px; box-shadow:0 0 16px rgba(155,61,255,.45);}
+  .cc-brand{font-size:12.5px; font-weight:800; letter-spacing:1.5px; color:#cfc6ea;}
+  .cc-tier{font-size:11px; font-weight:800; letter-spacing:1px; color:#fff; padding:5px 13px; border-radius:999px;
+    background:linear-gradient(100deg,#3D7BFF,#9B3DFF,#FF3DC0); box-shadow:0 4px 16px rgba(155,61,255,.45);}
+  .cc-label{font-size:10px; font-weight:800; letter-spacing:3.5px; color:#C77DFF; margin-top:22px;}
+  .cc-code{font-size:39px; font-weight:800; letter-spacing:8px; margin-top:6px; padding-bottom:14px; line-height:1; color:#fff;
+    font-family:'JetBrains Mono','Courier New',monospace; text-shadow:0 0 22px rgba(155,61,255,.6), 0 0 44px rgba(255,61,192,.3);
+    border-bottom:1px dashed rgba(255,255,255,.14);}
+  .cc-rows{margin-top:18px; display:flex; flex-direction:column; gap:9px;}
   .cc-rows > div{display:flex; justify-content:space-between; font-size:12.5px;}
-  .cc-rows span{color:#8a938f;} .cc-rows b{color:#e9eceb; font-weight:700;}
-  .cc-foot{margin-top:20px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); font-size:10.5px; color:#76807c; line-height:1.5;}
-  .cc-actions{display:flex; gap:8px; margin-top:10px;}
-  .cc-actions .btn{flex:1; padding:11px; font-size:13px;}
+  .cc-rows span{color:#988fb8;} .cc-rows b{color:#efeaff; font-weight:700;}
+  .cc-foot{margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,.09); font-size:10.5px; color:#857da3; line-height:1.5;}
+  .cc-actions{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
+  .cc-actions .btn{flex:1; min-width:96px; padding:11px; font-size:13px;}
   .gr-row{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
   .gr-row:last-child{margin-bottom:0;}
   .gr-k{font-size:12px; color:var(--muted); width:44px; flex:0 0 auto;}
@@ -276,7 +291,7 @@
 
       <div class="gen-result" id="gen-result">
         <div class="code-card" id="code-card">
-          <div class="cc-top"><span class="cc-brand">컨텐츠 허브</span><span class="cc-tier" id="cc-tier">PRO</span></div>
+          <div class="cc-top"><span class="cc-brandwrap"><img class="cc-logo" src="la-512.png" alt=""><span class="cc-brand">컨텐츠 허브</span></span><span class="cc-tier" id="cc-tier">PRO</span></div>
           <div class="cc-label">ACCESS CODE</div>
           <div class="cc-code" id="cc-code">——————</div>
           <div class="cc-rows">
@@ -287,7 +302,8 @@
           <div class="cc-foot">첫 로그인 때 <b style="color:#bfeee6;">PIN을 직접 설정</b>하세요 · 문의 카카오톡</div>
         </div>
         <div class="cc-actions">
-          <button class="btn primary" id="cc-save">🖼 카드 이미지로 저장</button>
+          <button class="btn primary" id="cc-share">📤 카드 공유</button>
+          <button class="btn" id="cc-save" style="background:var(--surface,#fff);border:1px solid #ddd;">🖼 이미지 저장</button>
           <button class="btn" id="cc-copy" style="background:var(--surface,#fff);border:1px solid #ddd;">코드 복사</button>
         </div>
         <div class="gr-note" id="r-note" style="margin-top:10px;">이 카드를 이미지로 저장해 <b>카카오톡으로 전달</b>하세요. (코드만 줘도 됩니다)</div>
@@ -420,6 +436,23 @@
       var a=document.createElement('a'); a.download='컨텐츠허브_코드_'+lastCode+'.png'; a.href=canvas.toDataURL('image/png'); a.click();
       btn.textContent=o; btn.disabled=false; toast('카드 이미지 저장됨 ✓');
     }).catch(function(e){ alert('저장 실패: '+e); btn.textContent=o; btn.disabled=false; });
+  };
+  $('cc-share').onclick=function(){
+    var btn=this, o=btn.textContent; btn.disabled=true; btn.textContent='준비 중…';
+    ensureH2C().then(function(){
+      return window.html2canvas($('code-card'),{backgroundColor:null, scale:3, useCORS:true, logging:false});
+    }).then(function(canvas){
+      canvas.toBlob(function(blob){
+        btn.textContent=o; btn.disabled=false;
+        var file=new File([blob],'컨텐츠허브_코드_'+lastCode+'.png',{type:'image/png'});
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          navigator.share({files:[file], title:'컨텐츠 허브 이용 코드', text:'컨텐츠 허브 코드: '+lastCode}).catch(function(){});
+        } else {
+          var a=document.createElement('a'); a.download=file.name; a.href=URL.createObjectURL(blob); a.click();
+          toast('이 기기는 공유 미지원 → 이미지로 저장했어요');
+        }
+      },'image/png');
+    }).catch(function(e){ alert('공유 준비 실패: '+e); btn.textContent=o; btn.disabled=false; });
   };
 
   // 목록
