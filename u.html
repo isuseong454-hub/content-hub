@@ -1085,6 +1085,7 @@
   .rv-preview{font-family:inherit; line-height:1.6; resize:none;}
   .rv-kakao{display:block; width:100%; margin-top:9px; padding:14px; border-radius:12px; background:#FEE500; color:#3C1E1E; font-size:14.5px; font-weight:700; text-align:center; text-decoration:none;}
   .rv-kakao-off{display:block; width:100%; margin-top:9px; padding:14px; border:1px solid var(--hair); border-radius:12px; background:var(--surface); color:var(--muted); font-size:14px; font-weight:600; text-align:center; cursor:not-allowed;}
+  .rv-pay{display:block; width:100%; margin-top:9px; padding:14px; border-radius:12px; background:var(--ac,#CC785C); color:#fff; font-size:14.5px; font-weight:700; text-align:center; text-decoration:none;}
   .rv-note{margin-top:14px; font-size:11.5px; line-height:1.6; color:var(--muted); background:var(--paper); border:1px solid var(--hair); border-radius:11px; padding:11px 13px;}
   .rv-day.rv-holi{color:#e0607a; opacity:.5;}
   .rv-slot.full{background:var(--paper); color:var(--muted); border:1px dashed var(--hair); text-decoration:line-through; cursor:default;}
@@ -1108,6 +1109,20 @@
   .pg-views{display:flex; align-items:center; gap:7px; margin-top:8px;}
   .pg-pop{font-size:10px; font-weight:800; color:#fff; background:var(--coral); padding:2px 8px; border-radius:99px; letter-spacing:.2px;}
   .pg-eye{font-size:11px; font-weight:600; color:var(--muted);}
+  /* 소개 · 대표 콘텐츠 */
+  .ab-feat .abf-card{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; border:1px solid var(--hair); border-radius:13px; background:var(--surface); padding:9px; margin-top:8px;}
+  .ab-feat .abf-card:active{transform:scale(.99);}
+  .abf-cov{flex:0 0 auto; width:52px; height:52px; border-radius:10px; background-size:cover; background-position:center; background-color:var(--soft,rgba(0,0,0,.05)); display:grid; place-items:center; font-size:22px;}
+  .abf-m{flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;}
+  .abf-t{font-size:13.5px; font-weight:700; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .abf-s{font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .abf-go{flex:0 0 auto; color:var(--ac,var(--coral)); font-size:16px; font-weight:700;}
+  /* 소개 · 증거 갤러리 */
+  .ab-evgal .evg-grid{display:grid; grid-template-columns:1fr 1fr; gap:9px;}
+  .ab-evgal .evg-card{margin:0; border:1px solid var(--hair); border-radius:13px; overflow:hidden; background:var(--surface);}
+  .ab-evgal .evg-cov{display:block; height:108px; background-size:cover; background-position:center; background-color:var(--soft,rgba(0,0,0,.05));}
+  .ab-evgal .evg-cap{padding:9px 10px; font-size:11.5px; font-weight:700; line-height:1.4;}
+  .ab-evgal .evg-cap small{display:block; color:var(--muted); font-weight:400; font-size:10.5px; margin-top:2px;}
   .pg-card:active{transform:scale(.99);}
   .pg-card.pg-feat{grid-column:1 / -1; border-color:color-mix(in srgb, var(--coral) 45%, var(--hair));}
   .pg-cov{height:92px; background:var(--paper) center/cover;}
@@ -1712,7 +1727,8 @@
     if (!el) return;
     if (el.tagName === 'A' && (el.getAttribute('href')||'').slice(-1) === '#') e.preventDefault(); // 데모용 더미링크 점프 방지
     var kind = '', label = '';
-    if (el.closest('.fab')){                               kind = 'cta';     label = el.getAttribute('aria-label') || '전환'; }
+    if (el.dataset && el.dataset.ev){                      kind = el.dataset.ev; label = el.dataset.track || el.dataset.ev; }
+    else if (el.closest('.fab')){                               kind = 'cta';     label = el.getAttribute('aria-label') || '전환'; }
     else if (el.dataset && el.dataset.track){ kind = 'link';    label = el.dataset.track; }
     else if (el.matches && el.matches('.arc-feat, .arc-card')){ kind = 'post';    label = txt(el, '.arc-h'); }
     else if (el.matches && el.matches('.prod')){            kind = 'product'; label = txt(el, '.prod-name'); }
@@ -2457,7 +2473,7 @@
     var blockedSlots=cfg.blockedSlots||{};
     var showHoli=cfg.showHolidays!==false, leadDays=parseInt(cfg.leadDays,10)||0;
     var topics=(cfg.topics||[]).map(function(t){ return {name:t.name||'', services:(t.services||[]).filter(function(s){ return (s.name||'').trim(); })}; }).filter(function(t){ return t.services.length; });
-    var kakao=(cfg.kakao||'').trim(), tpl=cfg.msgTpl||'[예약 신청]\n날짜: {날짜}\n시간: {시간}', note=cfg.note||'', notice=cfg.notice||'';
+    var kakao=(cfg.kakao||'').trim(), tpl=cfg.msgTpl||'[예약 신청]\n날짜: {날짜}\n시간: {시간}', note=cfg.note||'', notice=cfg.notice||'', payUrl=(cfg.payUrl||'').trim();
     function parseT(s){ var m=String(s).match(/(\d{1,2}):?(\d{2})?/); if(!m) return 660; return +m[1]*60+(m[2]?+m[2]:0); }
     function fmtT(x){ var h=Math.floor(x/60),mm=x%60; return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm; }
     function allSlots(){ var out=[],sh=parseT(cfg.start||'11:00'),eh=parseT(cfg.end||'17:00'),iv=parseInt(cfg.interval,10)||60; for(var m=sh;m<eh;m+=iv) out.push(fmtT(m)); return out; }
@@ -2494,6 +2510,7 @@
         +   '<textarea class="rv-preview" readonly rows="9"></textarea>'
         +   '<button type="button" class="rv-copy">📋 전체 복사하기</button>'
         +   (kakao?'<a class="rv-kakao" href="'+esc(kakao)+'" target="_blank" rel="noopener">💬 카카오톡으로 보내기 →</a>':(isEdit()?'<div class="rv-msg" style="color:var(--coral)">※ 편집기 → 예약 설정 → ③ 신청·카톡에서 카카오 오픈채팅 링크를 넣어주세요</div>':'<button type="button" class="rv-kakao-off" disabled>💬 카카오톡 연결 준비 중</button>'))
+        +   (payUrl?'<a class="rv-pay" href="'+esc(payUrl)+'" target="_blank" rel="noopener" data-ev="pay" data-track="예약금 결제">💳 카카오페이로 예약금 결제 →</a>':'')
         +   (note?'<div class="rv-note">⏰ '+esc(note).replace(/\n/g,'<br>')+'</div>':'')
       + '</div>';
     // 예약 흐름을 팝업(모달)에 담기 — 버튼 누르면 떠서 진행
@@ -2684,9 +2701,11 @@
     if(!live.length) return;
     live = live.slice().sort(function(a,b){ return (b.featured?1:0)-(a.featured?1:0); });
     var grid=document.createElement('div'); grid.className='posts-grid la-dyn';
+    var bigUsed=false;   // 대표가 여러 개여도 홈 큰 카드는 1개만 (나머지는 보통 카드)
     grid.innerHTML=live.map(function(p){
+      var big=p.featured && !bigUsed; if(big) bigUsed=true;
       var cov=p.cover?('<div class="pg-cov" style="background-image:url('+esc(p.cover)+')"></div>'):('<div class="pg-cov pg-noimg">'+(POST_ICON[p.type]||'📄')+'</div>');
-      return '<a class="pg-card'+(p.featured?' pg-feat':'')+'" href="javascript:void 0" data-pid="'+esc(p.id)+'">'+cov+'<div class="pg-body"><div class="pg-title">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="pg-sum">'+esc(p.summary)+'</div>':'')+'<div class="pg-go">자세히 보기 →</div></div></a>';
+      return '<a class="pg-card'+(big?' pg-feat':'')+'" href="javascript:void 0" data-pid="'+esc(p.id)+'">'+cov+'<div class="pg-body"><div class="pg-title">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="pg-sum">'+esc(p.summary)+'</div>':'')+'<div class="pg-go">자세히 보기 →</div></div></a>';
     }).join('');
     var anchor=home.querySelector('#home-gallery');
     if(anchor) home.insertBefore(grid, anchor); else home.appendChild(grid);
@@ -2699,7 +2718,7 @@
     var blk=pane.querySelector('.block'); if(!blk) return;
     function row(p){
       var th=p.img?(' style="background-image:url('+esc(p.img)+');background-size:cover;background-position:center;"'):'';
-      return '<a class="prod" href="'+esc(p.url||'#')+'" target="_blank" rel="noopener" data-track="'+esc(p.name||'제품')+'" style="text-decoration:none;color:inherit;"><div class="prod-thumb"'+th+'></div><div><div class="prod-name">'+esc(p.name||'')+'</div><div class="prod-meta">'+esc(p.price||'')+'</div></div><span class="prod-go">↗</span></a>';
+      return '<a class="prod" href="'+esc(p.url||'#')+'" target="_blank" rel="noopener" data-track="'+esc(p.name||'제품')+'"'+(p.kind==='mine'?' data-ev="pay"':'')+' style="text-decoration:none;color:inherit;"><div class="prod-thumb"'+th+'></div><div><div class="prod-name">'+esc(p.name||'')+'</div><div class="prod-meta">'+esc(p.price||'')+'</div></div><span class="prod-go">↗</span></a>';
     }
     var mine=list.filter(function(p){ return p.kind==='mine'; });
     var coupang=list.filter(function(p){ return (p.kind||'coupang')==='coupang'; });
@@ -2864,7 +2883,20 @@
     ['naver','kakao'].forEach(function(k){ if(!cta && fab[k] && fabOn[k]!==false) cta='<a class="ab-cta" href="'+esc(fab[k])+'" target="_blank" rel="noopener">'+CT[k]+'</a>'; });
     var chans=['instagram','youtube','blog','naver','kakao'].filter(function(k){ return fab[k] && fabOn[k]!==false; }).map(function(k){ return '<a class="ab-chan ab-ch-'+k+'" href="'+esc(fab[k])+'" target="_blank" rel="noopener" aria-label="'+k+'">'+CI[k]+'</a>'; }).join('');
     var chansH= chans?'<div class="ab-chans">'+chans+'</div>':'';
-    pane.innerHTML= (hero+stats+auth+usecs+creds+chansH+cta) || '<div class="ab-empty">소개를 채워보세요 (내 프로필에서)</div>';
+    // 증거 갤러리 (자격증·수상·전후·후기캡처 사진+캡션)
+    var gal=((ev.gallery)||[]).filter(function(x){ return x && x.img; });
+    var evgalH = gal.length ? ('<div class="ab-sec ab-evgal"><div class="ab-sh">🏅 전문성 · 증거</div><div class="evg-grid">'+gal.map(function(g){
+      return '<figure class="evg-card"><span class="evg-cov" style="background-image:url('+esc(g.img)+')"></span>'+((g.cap||g.sub)?('<figcaption class="evg-cap">'+(g.cap?esc(g.cap):'')+(g.sub?('<small>'+esc(g.sub)+'</small>'):'')+'</figcaption>'):'')+'</figure>';
+    }).join('')+'</div></div>') : '';
+    // 대표 콘텐츠 (★대표 글, 최대 3) — 소개에 권위 있게 노출
+    var feats=((d&&d.posts)||[]).filter(function(x){ return x && x.featured && x.on!==false && x.blocks && x.blocks.length; }).slice(0,3);
+    var featH = feats.length ? ('<div class="ab-sec ab-feat"><div class="ab-sh">대표 콘텐츠</div>'+feats.map(function(p){
+      var cov=p.cover?('<span class="abf-cov" style="background-image:url('+esc(p.cover)+')"></span>'):('<span class="abf-cov abf-noimg">'+(POST_ICON[p.type]||'📄')+'</span>');
+      return '<a class="abf-card" href="javascript:void 0" data-pid="'+esc(p.id)+'">'+cov+'<span class="abf-m"><span class="abf-t">'+esc(p.title||'')+'</span>'+(p.summary?'<span class="abf-s">'+esc(p.summary)+'</span>':'')+'</span><span class="abf-go">→</span></a>';
+    }).join('')+'</div>') : '';
+    pane.innerHTML= (hero+stats+auth+evgalH+featH+usecs+creds+chansH+cta) || '<div class="ab-empty">소개를 채워보세요 (내 프로필에서)</div>';
+    if(!EDIT_MODE){ pane.querySelectorAll('.abf-card[data-pid]').forEach(function(a){ a.onclick=function(e){ e.preventDefault(); try{ openPostModal(a.getAttribute('data-pid')); }catch(_){} }; }); }
+    try{ setTimeout(decoratePostViews, 120); }catch(e){}
   }
   window.__buildAbout=buildAbout;
   function applyAvatar(url){

@@ -90,6 +90,7 @@
   .cc-logo{width:27px; height:27px; border-radius:7px; opacity:.95;}
   .cc-brand{font-size:11.5px; font-weight:800; letter-spacing:2px; color:#b9b1d6;}
   .cc-tier{margin-left:auto; font-size:10.5px; font-weight:800; letter-spacing:1px; color:#C77DFF;}
+  .cc-invite{width:100%; margin-top:8px; background:var(--surface,#fff); border:1px solid #ddd; border-radius:12px; padding:12px; font-size:12.5px; line-height:1.6; color:#222; font-family:inherit; resize:vertical; box-sizing:border-box;}
   .cc-label{font-size:9.5px; font-weight:700; letter-spacing:4px; color:#6f6790; margin-top:34px; text-align:center;}
   .cc-code{font-size:42px; font-weight:800; letter-spacing:10px; margin-top:8px; color:#fff; text-align:center; line-height:1;
     font-family:'JetBrains Mono','Courier New',monospace; text-shadow:0 0 28px rgba(155,61,255,.45);}
@@ -295,6 +296,14 @@
           <button class="btn" id="cc-copy" style="background:var(--surface,#fff);border:1px solid #ddd;">코드 복사</button>
         </div>
         <div class="gr-note" id="r-note" style="margin-top:10px;">이 카드를 이미지로 저장해 <b>카카오톡으로 전달</b>하세요. (코드만 줘도 됩니다)</div>
+        <div class="cc-invite-wrap" id="cc-invite-wrap" style="display:none;">
+          <div class="gr-note" style="margin-top:16px;">📨 함께 보낼 초대 메시지 <span style="font-weight:400;color:#9aa;">· 소개 + 코드 + 시작 링크 (그대로 복사해 보내세요)</span></div>
+          <textarea id="cc-invite" class="cc-invite" rows="11" readonly></textarea>
+          <div class="cc-actions">
+            <button class="btn primary" id="cc-invite-copy">📋 초대 메시지 복사</button>
+            <button class="btn" id="cc-intro-copy" style="background:var(--surface,#fff);border:1px solid #ddd;">📖 소개 링크만</button>
+          </div>
+        </div>
       </div>
     </div>
     </div><!-- /issue pane -->
@@ -406,6 +415,7 @@
         if(exp){ var dt=new Date(exp), z=function(n){return (n<10?'0':'')+n;}; $('cc-exp').textContent=dt.getFullYear()+'.'+z(dt.getMonth()+1)+'.'+z(dt.getDate())+' 까지'; }
         else { $('cc-exp').textContent='무제한 (평생)'; }
         $('gen-result').classList.add('show');
+        try{ $('cc-invite').value=buildInvite(code, name, planL); $('cc-invite-wrap').style.display=''; }catch(_){}
         $('f-name').value='';
         toast(planL+' 코드 생성 완료 ✓');
         loadList();
@@ -415,6 +425,28 @@
     btn.disabled=false; btn.textContent=o;
   });
   $('cc-copy').onclick=function(){ copy(lastCode); };
+  // 초대 메시지 (소개 + 코드 + 시작 링크) — 환영 카피
+  function siteBase(){ return location.origin + location.pathname.replace(/[^\/]*$/, ''); }
+  function introUrl(){ return siteBase()+'index.html?intro=1'; }
+  function buildInvite(code, name, planL){
+    var nm=(name&&name.trim())?name.trim()+'님, ':'';
+    return '🎁 컨텐츠 허브에 초대합니다'+(nm?(', '+nm.replace(/,?\s*$/,'')):'')+'!\n'
+      +'\n'
+      +'인스타·콘텐츠는 열심히 하는데\n'
+      +'고객으로는 남지 않아 고민이셨다면 —\n'
+      +'흩어진 콘텐츠를 ‘신뢰와 매출’로 잇는 공간이에요.\n'
+      +'\n'
+      +'📖 우린 이런 곳이에요 (1분 소개)\n'+introUrl()+'\n'
+      +'\n'
+      +'🔑 시작하기 (로그인)\n'+siteBase()+'edit.html\n'
+      +'\n'
+      +'🎟 내 코드: '+code+'  ('+planL+')\n'
+      +'첫 로그인 때 PIN(숫자 4자리)만 직접 정하면 끝이에요.\n'
+      +'\n'
+      +'궁금한 건 편하게 카톡 주세요 :)';
+  }
+  $('cc-invite-copy').onclick=function(){ copy($('cc-invite').value); toast('초대 메시지 복사됨 ✓'); };
+  $('cc-intro-copy').onclick=function(){ copy(introUrl()); toast('소개 링크 복사됨 ✓'); };
   function ensureH2C(){ return window.html2canvas?Promise.resolve():new Promise(function(res,rej){ var s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; s.onload=function(){res();}; s.onerror=function(){rej('html2canvas 로드 실패');}; document.head.appendChild(s); }); }
   $('cc-save').onclick=function(){
     var btn=this, o=btn.textContent; btn.disabled=true; btn.textContent='저장 중…';
@@ -525,17 +557,29 @@
 
   // 로그인
   function enter(){ $('login-ov').style.display='none'; loadList(); }
+  // ── 무차별 대입 방지: 5회 실패 → 시간 잠금 (재시도할수록 길어짐) ──
+  var LK='cmh-lock';
+  function getLock(){ try{ return JSON.parse(localStorage.getItem(LK)||'{}'); }catch(_){ return {}; } }
+  function setLock(o){ try{ localStorage.setItem(LK, JSON.stringify(o)); }catch(_){} }
+  function lockMinsLeft(){ var o=getLock(); return (o.until && Date.now()<o.until) ? Math.ceil((o.until-Date.now())/60000) : 0; }
   var lb=$('lg-btn');
   lb.addEventListener('click', async function(){
-    var code=($('lg-code').value||'').trim().toUpperCase(), pin=($('lg-pin').value||'').trim();
     var err=$('lg-err'); err.textContent='';
+    var left=lockMinsLeft();
+    if(left>0){ err.textContent='시도가 많아 잠겼어요 🔒 약 '+left+'분 후 다시 시도하세요.'; return; }
+    var code=($('lg-code').value||'').trim().toUpperCase(), pin=($('lg-pin').value||'').trim();
     if(!code||!pin){ err.textContent='코드와 PIN을 입력하세요'; return; }
     lb.disabled=true; lb.textContent='확인 중...';
     try{
       var hash=await window.laSha256(pin);
       var res=await window.laRpc('li_master_login',{ p_code:code, p_pin_hash:hash });
-      if(res&&res.ok){ AUTH={code:code, pinHash:hash}; try{ sessionStorage.setItem('cmh-master',JSON.stringify(AUTH)); }catch(e){} enter(); }
-      else err.textContent=(res&&res.reason==='auth')?'마스터 코드/PIN이 맞지 않아요':'로그인 실패 ('+((res&&res.reason)||'SQL 미실행?')+')';
+      if(res&&res.ok){ try{ localStorage.removeItem(LK); }catch(_){} AUTH={code:code, pinHash:hash}; try{ sessionStorage.setItem('cmh-master',JSON.stringify(AUTH)); }catch(e){} enter(); }
+      else if(res&&res.reason==='auth'){
+        var o=getLock(); o.fails=(o.fails||0)+1;
+        if(o.fails>=5){ o.tier=(o.tier||0)+1; var mins=Math.min(5*Math.pow(2,o.tier-1),60); o.until=Date.now()+mins*60000; o.fails=0; setLock(o); err.textContent='5회 틀렸어요 🔒 '+mins+'분간 잠깁니다.'; }
+        else { setLock(o); err.textContent='마스터 코드/PIN이 맞지 않아요 ('+o.fails+'/5)'; }
+      }
+      else err.textContent='로그인 실패 ('+((res&&res.reason)||'SQL 미실행?')+')';
     }catch(e){ err.textContent='연결 오류: '+e.message; }
     lb.disabled=false; lb.textContent='로그인';
   });
