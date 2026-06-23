@@ -35,8 +35,8 @@
 </script>
 <style>
   :root{
-    /* 제목: 고전 세리프(영문 Newsreader) + 한글 명조(Nanum Myeongjo) */
-    --serif:'Newsreader','Nanum Myeongjo','Iowan Old Style',Georgia,serif;
+    /* 제목·본문 모두 Pretendard (깔끔한 모던 산스 · 시안 톤 통일) */
+    --serif:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
     --sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
     --shadow:0 2px 10px rgba(60,48,32,.06), 0 1px 3px rgba(60,48,32,.05);
   }
@@ -166,6 +166,60 @@
     --on-strong:#2A2622; --on-soft:#8A7F6E;
     --ph1:#E5D9C5; --ph2:#D8C3A8; --ph3:#E9D4C0;
   }
+  /* 히어로 오렌지 (BRAND HERO 레퍼 — 샌드 크림 + 비비드 오렌지) */
+  html[data-theme="hero"]{
+    --paper:#EFE7DA; --surface:#FCF8F1; --ink:#33281C; --muted:#9A8B72; --hair:#E6DCC9;
+    --coral:#EF7A33; --coral-soft:#FBE6D5;
+    --on-strong:#33281C; --on-soft:#9A8B72;
+    --ph1:#E7DAC5; --ph2:#F1E5D4; --ph3:#E3D4BD;
+  }
+  /* 한방 그린 (건강·한방 레퍼 — 웜 아이보리 + 세이지 올리브) */
+  html[data-theme="herb"]{
+    --paper:#EEEDE3; --surface:#FBFAF4; --ink:#34392C; --muted:#82856E; --hair:#E2E0D2;
+    --coral:#7E8C63; --coral-soft:#E7E9DB;
+    --on-strong:#34392C; --on-soft:#82856E;
+    --ph1:#E2E1D2; --ph2:#ECEADD; --ph3:#D9D9C8;
+  }
+  /* 모카 살롱 (헤어살롱 레퍼 — 아이보리 + 웜 모카 토프) */
+  html[data-theme="mocha"]{
+    --paper:#EDE7DE; --surface:#FBF7F1; --ink:#39322B; --muted:#8C7D6E; --hair:#E5DCD0;
+    --coral:#9C8268; --coral-soft:#EEE6DC;
+    --on-strong:#39322B; --on-soft:#8C7D6E;
+    --ph1:#E5DCCE; --ph2:#EFE7DB; --ph3:#DDD2C2;
+  }
+  /* 아쿠아 미스트 (소프트 민트 그라데이션 — 아쿠아 → 화이트) */
+  html[data-theme="aqua"]{
+    --paper:#E6F4F3; --surface:#FAFEFE; --ink:#2E4140; --muted:#7A9594; --hair:#D6EAE9;
+    --coral:#4FA1A0; --coral-soft:#D5EEED;
+    --on-strong:#2E4140; --on-soft:#7A9594;
+    --ph1:#CDEDED; --ph2:#E0FCFC; --ph3:#BCE5E5;
+  }
+  html[data-theme="aqua"] body{ background:linear-gradient(180deg,#CDEDED 0%,#E2F7F6 52%,#EFF5F4 100%); }
+  html[data-theme="aqua"] body::before{ background:radial-gradient(circle at 50% 2%, #BFEBEB 0%, transparent 66%); opacity:.4; }
+  html[data-theme="aqua"] .hh-text .kw{ background:linear-gradient(95deg,#3E9D9C,#7FD0CE); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; text-shadow:none; }
+
+  /* 버터 크림 (웜 버터 그라데이션 — 골든 → 크림) */
+  html[data-theme="lemon"]{
+    --paper:#FCEFCF; --surface:#FFFEF8; --ink:#4A3D1E; --muted:#A6926A; --hair:#F2E7C6;
+    --coral:#D9A23A; --coral-soft:#FAEBC8;
+    --on-strong:#4A3D1E; --on-soft:#A6926A;
+    --ph1:#F8D89A; --ph2:#FCEACA; --ph3:#F3D29A;
+  }
+  html[data-theme="lemon"] body{ background:linear-gradient(180deg,#F8D89A 0%,#FCEACA 50%,#FEF8E8 100%); }
+  html[data-theme="lemon"] body::before{ background:radial-gradient(circle at 50% 2%, #F6D896 0%, transparent 66%); opacity:.42; }
+  html[data-theme="lemon"] .hh-text .kw{ background:linear-gradient(95deg,#D9A23A,#F3C969); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; text-shadow:none; }
+
+  /* 스프링 그린 (소프트 세이지 그라데이션 — 올리브 → 크림) */
+  html[data-theme="celadon"]{
+    --paper:#E8EAD3; --surface:#FBFCF5; --ink:#3C402C; --muted:#8C9070; --hair:#DCE0C5;
+    --coral:#8A9A54; --coral-soft:#E6E9CF;
+    --on-strong:#3C402C; --on-soft:#8C9070;
+    --ph1:#E1E4C8; --ph2:#ECEED9; --ph3:#D6DAB8;
+  }
+  html[data-theme="celadon"] body{ background:linear-gradient(180deg,#DDE1C2 0%,#E8EAD3 52%,#F2F3E6 100%); }
+  html[data-theme="celadon"] body::before{ background:radial-gradient(circle at 50% 2%, #CFD4A8 0%, transparent 66%); opacity:.36; }
+  html[data-theme="celadon"] .hh-text .kw{ background:linear-gradient(95deg,#7A8A44,#A8B870); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; text-shadow:none; }
+
   /* 퍼플 네온 (VOSIS 영상 레퍼 — 다크 퍼플 + 보라 네온 글로우) */
   html[data-theme="violet"]{
     --paper:#14101F; --surface:#221C33; --ink:#ECE8F5; --muted:#8E84A8; --hair:rgba(160,150,200,.18);
@@ -373,7 +427,7 @@
 
   /* ════ 폰트 프리셋 3종 (무료·랜딩용, 색테마와 별개) ════ */
   html[data-font="modern"]{ --serif:'Pretendard',sans-serif; --sans:'Pretendard',sans-serif; }
-  html[data-font="serif"]{ --serif:'Newsreader','Nanum Myeongjo','Iowan Old Style',serif; --sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif; }
+  html[data-font="serif"]{ --serif:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif; --sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif; }
   html[data-font="impact"]{ --serif:'Archivo Black','Black Han Sans','Gmarket Sans',sans-serif; --sans:'Pretendard','Apple SD Gothic Neo',sans-serif; }
   *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
   html,body{background:var(--paper);}
@@ -431,6 +485,15 @@
   .sym{width:38px; height:38px; color:var(--coral);}
   .name{font-family:var(--serif); font-size:27px; font-weight:600; letter-spacing:-.01em; color:var(--on-strong);}
   .tag{font-size:14px; color:var(--on-soft); margin-top:7px; line-height:1.5;}
+
+  /* ── 커버 사진 히어로 (홈 꾸미기 → 커버 사진) ── */
+  .prof-cover{position:relative; margin:-8px -22px -64px; height:300px; overflow:hidden; border-radius:0 0 30px 30px;}
+  .profile.cover-full .prof-cover{height:430px; margin-bottom:-84px;}
+  .prof-cover .pc-img{position:absolute; inset:0; background-size:cover; background-position:center; transform-origin:center; will-change:transform;}
+  .prof-cover::after{content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 42%, var(--paper) 95%); pointer-events:none;}
+  .profile.cover-on .avatar{display:none;}
+  .profile.cover-on .name, .profile.cover-on .tag{position:relative; z-index:2;}
+  .profile.cover-on .name{text-shadow:0 1px 16px rgba(0,0,0,.16);}
 
   /* ── 파트 전환 탭 (sticky) ── */
   .tabs{
@@ -1752,13 +1815,30 @@
     s.addEventListener('click', function(){ setTheme(s.getAttribute('data-theme')); });
   });
   var saved; try { saved = localStorage.getItem('u-theme'); } catch(e){}
-  if (saved) setTheme(saved); else document.documentElement.setAttribute('data-theme','prism');
+  if (saved) setTheme(saved); else document.documentElement.setAttribute('data-theme','hero');
 
   // ── 홈 꾸미기 설정 적용 (폰트 / 사진 모션 / 히어로) ──
   function applyHome(){
     var h; try{ h = JSON.parse(localStorage.getItem('cm-home-v1')) || {}; }catch(e){ h = {}; }
     document.documentElement.setAttribute('data-font', h.font || 'serif');
     var profEl = document.querySelector('.profile'); if(profEl){ profEl.style.display = (h.profileOn===false) ? 'none' : ''; }
+    // 커버 사진 히어로 — cover.on && photo 일 때만 (없으면 기존 원형 아바타 그대로)
+    if(profEl){
+      var cov = h.cover || {};
+      var pc = profEl.querySelector('.prof-cover');
+      if(cov.on && cov.photo){
+        if(!pc){ pc=document.createElement('div'); pc.className='prof-cover'; var im=document.createElement('div'); im.className='pc-img'; pc.appendChild(im); profEl.insertBefore(pc, profEl.firstChild); }
+        var pcimg=pc.querySelector('.pc-img');
+        pcimg.style.backgroundImage='url('+cov.photo+')';
+        var f=cov.fit||{};
+        pcimg.style.transform='scale('+(f.z||1)+') translate('+(f.x||0)+'px,'+(f.y||0)+'px)';
+        profEl.classList.add('cover-on');
+        profEl.classList.toggle('cover-full', cov.layout==='full');
+      } else {
+        if(pc) pc.remove();
+        profEl.classList.remove('cover-on','cover-full');
+      }
+    }
     var gm = h.gmotion || 'none';
     document.documentElement.setAttribute('data-gmotion', gm);
     var track = document.querySelector('#home-gallery .gtrack');

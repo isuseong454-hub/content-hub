@@ -50,7 +50,7 @@
 </script>
 <style>
   :root{
-    --serif:'Iowan Old Style','Apple Garamond','Times New Roman',Georgia,serif;
+    --serif:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
     --sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
     --paper:#16161A; --surface:#1F1F24; --soft:#26262C;
     --ink:#F2F2F4; --muted:#9296A0; --hair:rgba(255,255,255,.08);
@@ -887,11 +887,26 @@
   .ephoto-x{position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; cursor:pointer;}
   .ephoto-add{width:64px; height:64px; border-radius:10px; border:1.5px dashed #CFC6B6; background:transparent; color:var(--muted); font-size:20px; cursor:pointer;}
 
-  /* 홈 꾸미기 — 테마 스와치 */
-  .hm-themes{display:flex; flex-wrap:wrap; gap:9px;}
-  .hm-th{width:34px; height:34px; border-radius:50%; cursor:pointer; position:relative; border:1px solid rgba(0,0,0,.08);}
-  .hm-th span{position:absolute; right:1px; bottom:1px; width:12px; height:12px; border-radius:50%; border:1.5px solid #fff;}
-  .hm-th.sel{outline:2px solid var(--coral); outline-offset:2px;}
+  /* 홈 꾸미기 — 커버 사진 편집기 */
+  .cov-prev{position:relative; width:100%; height:200px; border-radius:16px; overflow:hidden; background:#26262c; border:1px solid var(--hair); margin-bottom:10px; touch-action:none; cursor:grab;}
+  .cov-prev.dragging{cursor:grabbing;}
+  .cov-prev-img{position:absolute; inset:0; background-size:cover; background-position:center; transform-origin:center; will-change:transform;}
+  .cov-prev::after{content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, rgba(20,20,24,.55)); pointer-events:none;}
+  .cov-empty{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; color:var(--muted); font-size:12px; line-height:1.6; pointer-events:none;}
+  .cov-prev.has-photo .cov-empty{display:none;}
+  .cov-ctrls{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .cov-seg{display:inline-flex; background:var(--soft); border-radius:10px; padding:3px; gap:2px;}
+  .cov-seg button{border:none; background:transparent; color:var(--muted); font:600 12px var(--sans); padding:7px 13px; border-radius:8px; cursor:pointer;}
+  .cov-seg button.on{background:var(--coral); color:#fff;}
+
+  /* 홈 꾸미기 — 테마 스와치 (원 + 아래 이름, 안 겹치게 컬럼 배열) */
+  .hm-themes{display:flex; flex-wrap:wrap; gap:12px 4px;}
+  .hm-th-item{width:60px; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer;}
+  .hm-th-sw{width:38px; height:38px; border-radius:50%; position:relative; border:1px solid rgba(0,0,0,.08);}
+  .hm-th-sw span{position:absolute; right:0; bottom:0; width:13px; height:13px; border-radius:50%; border:1.5px solid #fff;}
+  .hm-th-item.sel .hm-th-sw{outline:2px solid var(--coral); outline-offset:2px;}
+  .hm-th-nm{font-size:9.5px; color:var(--muted); text-align:center; line-height:1.25; word-break:keep-all;}
+  .hm-th-item.sel .hm-th-nm{color:var(--coral); font-weight:700;}
   .th-prev{border-radius:18px; padding:22px 18px 20px; text-align:center; margin-bottom:13px; border:1px solid var(--hair); max-height:46vh; overflow-y:auto; transition:background .25s;}
   .th-prev::-webkit-scrollbar{width:5px;} .th-prev::-webkit-scrollbar-thumb{background:rgba(45,212,191,.3); border-radius:3px;}
   .th-prev .thp-av{width:56px; height:56px; border-radius:50%; margin:0 auto 11px; display:flex; align-items:center; justify-content:center; font-size:25px;}
@@ -2326,6 +2341,18 @@
         </div>
         <div class="tf-prev" id="topfirst-prev"></div>
 
+        <div class="tcat">커버 사진 <span style="font-weight:400; color:var(--muted);">· 맨 위 큰 사진 (선택)</span></div>
+        <div class="cov-prev" id="cov-prev">
+          <div class="cov-prev-img" id="cov-prev-img"></div>
+          <span class="cov-empty">사진을 올리면 여기 미리보기<br>사진을 끌어서 위치 · 휠·두 손가락으로 확대</span>
+        </div>
+        <div class="cov-ctrls">
+          <button type="button" class="btn" id="cov-pick" style="flex:1;">📷 사진 올리기</button>
+          <div class="cov-seg" id="cov-layout"><button type="button" data-cl="half" class="on">반 화면</button><button type="button" data-cl="full">꽉 채움</button></div>
+        </div>
+        <button type="button" class="btn" id="cov-clear" style="width:100%; margin-top:7px; display:none; color:var(--muted);">사진 빼기</button>
+        <div class="vhint" style="text-align:left; margin:6px 2px 0;">밝은 사진엔 밝은 테마, 어두운 사진엔 딥 테마가 어울려요 (분위기 테마에서)</div>
+
         <div class="hero-prev" id="hero-prev">공부가 <span class="kw">돈이 되는</span> 순간</div>
         <div class="set" style="cursor:default; box-shadow:none;">
           <span class="meta"><span class="nm">후킹 한 줄 보이기</span><span class="sb">들어오자마자 큰 헤드라인</span></span>
@@ -2349,9 +2376,6 @@
 
         <div class="tcat">사진 모션</div>
         <div class="hm-grid" id="motion-grid"></div>
-
-        <div class="tcat">폰트</div>
-        <div class="hm-fonts" id="font-grid"></div>
       </div>
 
 
@@ -4962,7 +4986,9 @@
   var hov = document.getElementById('home-ov');
   var HKEY = 'cm-home-v1';
   function hLoad(){ try{ return JSON.parse(localStorage.getItem(HKEY)) || {}; }catch(e){ return {}; } }
-  var home = Object.assign({ font:'serif', gmotion:'none', heroOn:false, heroText:'공부가 *돈이 되는* 순간', theme:'prism', topFirst:'profile', heroTags:'', heroCtaText:'', heroCtaLink:'', profileOn:true }, hLoad());
+  var home = Object.assign({ font:'serif', gmotion:'none', heroOn:false, heroText:'공부가 *돈이 되는* 순간', theme:'cream', topFirst:'profile', heroTags:'', heroCtaText:'', heroCtaLink:'', profileOn:true, cover:{on:false,photo:'',layout:'half',fit:{z:1,x:0,y:0}} }, hLoad());
+  if(!home.cover || typeof home.cover!=='object') home.cover={on:false,photo:'',layout:'half',fit:{z:1,x:0,y:0}};
+  if(!home.cover.fit) home.cover.fit={z:1,x:0,y:0};
 
   // 프로필 헤더 켜기/끄기 (내 페이지 구성 맨 위 행)
   function saveProfileOn(on){ home.profileOn = on; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.profileOn=on; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} }
@@ -4998,18 +5024,13 @@
 
   // 테마 스와치 (u.html 25종 중 대표 — [키,종이색,포인트색])
   var THEMES = [
-    ['cream','#16161A','#CC785C'],['brand','#15123A','#A77BF0','linear-gradient(135deg,#3D7BFF,#9B3DFF,#FF3DC0)'],
+    ['cream','#EFEAE0','#CC785C'],['hero','#EFE7DA','#EF7A33'],['herb','#EEEDE3','#7E8C63'],['mocha','#EDE7DE','#9C8268'],
     ['midnight','#16161A','#A78BFF','radial-gradient(circle at 28% 26%, rgba(61,123,255,.85), transparent 55%), radial-gradient(circle at 76% 78%, rgba(255,61,192,.72), transparent 55%), #16161A'],
-    ['butterfly','#0a0612','#FF9D3C','radial-gradient(circle at 50% 44%, rgba(255,210,110,.95), rgba(255,110,50,.55) 42%, transparent 74%), #0a0612'],
-    ['peach','#F3E4D6','#C8825E'],['sand','#E7DECD','#C0875A'],
-    ['rose','#E8D9D6','#AA6379'],['pink','#FBEDF1','#E5708C'],['sunset','#FCEFE9','#F0795F'],
-    ['spring','#D9ECE8','#E58AA4'],['butter','#F5F1D6','#CF9E2A'],
-    ['sage','#DEE4DA','#7C8C6A'],['clay','#E4D7C4','#A86A45'],['camel','#E6D6BD','#B07D43'],
-    ['greige','#DCD5C9','#8C7E69'],['lavender','#F0EEF9','#8E7BD6'],['pearl','#EEF1F6','#8499C2'],
-    ['olive','#4B4D32','#BE9242'],['forest','#0C140D','#74DB86'],['banghouse','#060B08','#7DBF8E','radial-gradient(ellipse at 50% 0%, rgba(125,191,142,.4), transparent 62%), #060B08'],['luxe','#0B0E12','#2DD4BF','radial-gradient(ellipse 90% 55% at 50% -5%, rgba(45,212,191,.42), transparent 60%), #0B0E12'],['nvidia','#0A120B','#BEF24A'],
-    ['violet','#14101F','#A87CF0'],['aurora','#0E1424','#7AA8FF'],['glacier','#08161A','#36C6D9'],
-    ['framer','#171717','#2D9CFF'],['neon','#0A0810','#E06FC8'],['prism','#0A0712','#C66BE8'],
-    ['cobalt','#070A18','#6F8AFF'],['bokeh','#0A0A0C','#6FD6A0']
+    ['pink','#FBEDF1','#E5708C'],
+    ['lavender','#F0EEF9','#8E7BD6'],['pearl','#EEF1F6','#8499C2'],
+    ['forest','#0C140D','#74DB86'],['luxe','#0B0E12','#2DD4BF','radial-gradient(ellipse 90% 55% at 50% -5%, rgba(45,212,191,.42), transparent 60%), #0B0E12'],
+    ['violet','#14101F','#A87CF0'],['aurora','#0E1424','#7AA8FF'],
+    ['framer','#171717','#2D9CFF'],['bokeh','#0A0A0C','#6FD6A0']
   ];
   // ─── 등급(요금제) 기능 잠금 ─── (AUTH는 다른 스크립트 블록이라 window.__authTier로 받음)
   function cmTier(){ var t=window.__authTier||'basic'; return (t==='pro'||t==='premium')?t:'basic'; }
@@ -5077,14 +5098,14 @@
   window.__renderMyPlan=renderMyPlan;
   function renderThemes(){
     var g=document.getElementById('theme-grid'); if(!g) return; g.innerHTML='';
-    var thLocked=false;   // 분위기 테마는 전체 등급 사용 가능
+    var NM=(typeof THEME_NAMES!=='undefined')?THEME_NAMES:{};
     THEMES.forEach(function(t, idx){
       var o=document.createElement('div');
-      var lk=thLocked && idx>=3;
-      o.className='hm-th'+(home.theme===t[0]?' sel':'')+(lk?' hm-locked':'');
-      o.style.background=t[3]||t[1]; o.title=lk?'프로 기능':t[0];
-      o.innerHTML='<span style="background:'+t[2]+'"></span>';
-      o.onclick=function(){ if(lk){ showLock('전체 테마','pro'); return; } home.theme=t[0]; renderThemes(); };
+      o.className='hm-th-item'+(home.theme===t[0]?' sel':'');
+      o.title=t[0];
+      var nm=NM[t[0]]||t[0];
+      o.innerHTML='<div class="hm-th-sw" style="background:'+(t[3]||t[1])+'"><span style="background:'+t[2]+'"></span></div><div class="hm-th-nm">'+nm+'</div>';
+      o.onclick=function(){ home.theme=t[0]; renderThemes(); };
       g.appendChild(o);
     });
     renderThemePreview();
@@ -5160,7 +5181,8 @@
     });
   }
   function renderFonts(){
-    var g=document.getElementById('font-grid'); g.innerHTML='';
+    var g=document.getElementById('font-grid'); if(!g) return;   // 폰트 picker 제거됨 (글꼴=Pretendard 고정)
+    g.innerHTML='';
     FONTS.forEach(function(f){
       var o=document.createElement('div');
       o.className='hm-font f-'+f[0]+(home.font===f[0]?' sel':'');
@@ -5179,6 +5201,37 @@
     pv.innerHTML = heroMarkup(home.heroText);
     pv.style.opacity = home.heroOn ? '1' : '.4';
   }
+  // ── 커버 사진 편집기 ──
+  function renderCover(){
+    var c=home.cover; if(!c){ c=home.cover={on:false,photo:'',layout:'half',fit:{z:1,x:0,y:0}}; } if(!c.fit) c.fit={z:1,x:0,y:0};
+    var prev=document.getElementById('cov-prev'), img=document.getElementById('cov-prev-img'); if(!prev||!img) return;
+    if(c.photo){ img.style.backgroundImage='url('+c.photo+')'; prev.classList.add('has-photo'); } else { img.style.backgroundImage=''; prev.classList.remove('has-photo'); }
+    img.style.transform='scale('+(c.fit.z||1)+') translate('+(c.fit.x||0)+'px,'+(c.fit.y||0)+'px)';
+    document.querySelectorAll('#cov-layout button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-cl')===(c.layout||'half')); });
+    var clr=document.getElementById('cov-clear'); if(clr) clr.style.display=c.photo?'block':'none';
+  }
+  // 편집 중 즉시 반영 — cover를 localStorage(cm-home-v1)에 바로 써서 라이브 미리보기 갱신
+  function coverPersist(){ try{ home.cover.on=!!home.cover.photo; var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+  (function coverInit(){
+    var prev=document.getElementById('cov-prev'); if(!prev) return;
+    var img=document.getElementById('cov-prev-img');
+    function applyT(){ var f=home.cover.fit; img.style.transform='scale('+(f.z||1)+') translate('+(f.x||0)+'px,'+(f.y||0)+'px)'; }
+    function clampZ(z){ return Math.max(1, Math.min(4, z)); }
+    var pick=document.getElementById('cov-pick');
+    if(pick) pick.onclick=function(){ if(!window.openVault) return; window.openVault(function(u){ home.cover.photo=u; home.cover.on=true; home.cover.fit={z:1,x:0,y:0}; renderCover(); coverPersist(); }); };
+    var clr=document.getElementById('cov-clear');
+    if(clr) clr.onclick=function(){ home.cover.photo=''; home.cover.on=false; renderCover(); coverPersist(); };
+    document.querySelectorAll('#cov-layout button').forEach(function(b){ b.onclick=function(){ home.cover.layout=b.getAttribute('data-cl'); renderCover(); coverPersist(); }; });
+    var pts=new Map(), last=null, baseDist=0, baseZ=1;
+    prev.addEventListener('pointerdown', function(e){ if(!home.cover.photo) return; e.preventDefault(); try{ prev.setPointerCapture(e.pointerId); }catch(_){} pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); prev.classList.add('dragging'); if(pts.size===1){ last={x:e.clientX,y:e.clientY}; } else if(pts.size===2){ var arr=[]; pts.forEach(function(v){arr.push(v);}); baseDist=Math.hypot(arr[0].x-arr[1].x,arr[0].y-arr[1].y); baseZ=home.cover.fit.z||1; } });
+    prev.addEventListener('pointermove', function(e){ if(!pts.has(e.pointerId)) return; pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(pts.size>=2){ var arr=[]; pts.forEach(function(v){arr.push(v);}); var d=Math.hypot(arr[0].x-arr[1].x,arr[0].y-arr[1].y); if(baseDist>0){ home.cover.fit.z=clampZ(baseZ*(d/baseDist)); applyT(); } }
+      else if(last){ var z=home.cover.fit.z||1; home.cover.fit.x=(home.cover.fit.x||0)+(e.clientX-last.x)/z; home.cover.fit.y=(home.cover.fit.y||0)+(e.clientY-last.y)/z; last={x:e.clientX,y:e.clientY}; applyT(); } });
+    function end(e){ pts.delete(e.pointerId); if(pts.size<2) baseDist=0; if(pts.size===0){ prev.classList.remove('dragging'); last=null; coverPersist(); } else { var arr=[]; pts.forEach(function(v){arr.push(v);}); last={x:arr[0].x,y:arr[0].y}; } }
+    prev.addEventListener('pointerup', end); prev.addEventListener('pointercancel', end);
+    var wheelT=null;
+    prev.addEventListener('wheel', function(e){ if(!home.cover.photo) return; e.preventDefault(); home.cover.fit.z=clampZ((home.cover.fit.z||1)+(e.deltaY<0?0.12:-0.12)); applyT(); clearTimeout(wheelT); wheelT=setTimeout(coverPersist, 260); }, {passive:false});
+  })();
   var FAB_KEYS = ['instagram','youtube','blog','naver','kakao'];
   function fillFab(){
     var f=home.fab||{}, on=home.fabOn||{};
@@ -5255,7 +5308,7 @@
   var HSEC_TITLE={ home:'홈 꾸미기', fab:'채널 · 연락처', theme:'분위기 테마' };
   function openHome(mode){
     mode = mode || 'home';
-    renderMotions(); renderFonts(); renderHero(); fillFab(); renderThemes(); renderTopFirst();
+    renderMotions(); renderFonts(); renderHero(); renderCover(); fillFab(); renderThemes(); renderTopFirst();
     // 누른 버튼에 해당하는 섹션만 보이게 (나머지 숨김). mode='all'이면 전부
     [].forEach.call(hov.querySelectorAll('[data-hsec]'), function(s){ s.style.display = (mode==='all'||s.dataset.hsec===mode) ? '' : 'none'; });
     var tEl=hov.querySelector('.sheet-h .t'); if(tEl) tEl.textContent = (mode==='all'?'홈 꾸미기':(HSEC_TITLE[mode] || '홈 꾸미기'));
@@ -5357,7 +5410,8 @@
       var sw=document.querySelector('[data-fabsw="'+k+'"]'); fabOn[k] = sw ? sw.classList.contains('on') : true;
     });
     home.fab = fab; home.fabOn = fabOn;
-    try{ localStorage.setItem(HKEY, JSON.stringify({ font:home.font, gmotion:home.gmotion, heroOn:home.heroOn, heroText:home.heroText, heroTags:home.heroTags, heroCtaText:home.heroCtaText, heroCtaLink:home.heroCtaLink, fab:fab, fabOn:fabOn, theme:home.theme, topFirst:home.topFirst, profileOn:home.profileOn })); }catch(e){}
+    if(home.cover){ home.cover.on = !!home.cover.photo; }
+    try{ localStorage.setItem(HKEY, JSON.stringify({ font:home.font, gmotion:home.gmotion, heroOn:home.heroOn, heroText:home.heroText, heroTags:home.heroTags, heroCtaText:home.heroCtaText, heroCtaLink:home.heroCtaLink, fab:fab, fabOn:fabOn, theme:home.theme, topFirst:home.topFirst, profileOn:home.profileOn, cover:home.cover })); }catch(e){}
     hov.classList.remove('open');
     if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh();
     updateSettingLabels();
@@ -5365,7 +5419,7 @@
   };
 
   // 설정 행 라벨(테마 이름 · 플로팅 켜짐/꺼짐)을 실제 상태로 동기화
-  var THEME_NAMES={cream:'크림 클래식',brand:'브랜드 그라데이션',midnight:'미드나잇 (딥 퍼플)',butterfly:'버터플라이 (앰버)',peach:'피치',sand:'샌드',rose:'로즈',pink:'핑크',sunset:'선셋',sage:'세이지',clay:'클레이',camel:'카멜',greige:'그레이지',lavender:'라벤더',pearl:'펄',olive:'올리브',forest:'포레스트',nvidia:'네온 그린',violet:'바이올렛',aurora:'오로라',glacier:'글래시어',framer:'프레이머',neon:'네온',prism:'프리즘',cobalt:'코발트',bokeh:'보케',spring:'봄 파스텔',butter:'버터 크림'};
+  var THEME_NAMES={hero:'히어로 오렌지',herb:'한방 그린',mocha:'모카 살롱',luxe:'럭스',cream:'크림 클래식',brand:'브랜드 그라데이션',midnight:'미드나잇 (딥 퍼플)',butterfly:'버터플라이 (앰버)',peach:'피치',sand:'샌드',rose:'로즈',pink:'핑크',sunset:'선셋',sage:'세이지',clay:'클레이',camel:'카멜',greige:'그레이지',lavender:'라벤더',pearl:'펄',olive:'올리브',forest:'포레스트',nvidia:'네온 그린',violet:'바이올렛',aurora:'오로라',glacier:'글래시어',framer:'프레이머',neon:'네온',prism:'프리즘',cobalt:'코발트',bokeh:'보케',spring:'봄 파스텔',butter:'버터 크림'};
   function updateSettingLabels(){
     var tv=document.getElementById('set-theme-val'); if(tv) tv.textContent=THEME_NAMES[home.theme]||home.theme||'테마';
     var fv=document.getElementById('set-fab-val'); if(fv){ var f=home.fab||{}; var on=FAB_KEYS.some(function(k){ return f[k]; }); fv.textContent=on?'켜짐':'꺼짐'; }
