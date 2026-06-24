@@ -899,6 +899,76 @@
   .cov-seg button{border:none; background:transparent; color:var(--muted); font:600 12px var(--sans); padding:7px 13px; border-radius:8px; cursor:pointer;}
   .cov-seg button.on{background:var(--coral); color:#fff;}
 
+  /* 새 디자인 화면 (분위기 — 시안 포팅, 모바일 세로) */
+  .dz-steps{display:flex; gap:18px; justify-content:center; margin:2px 0 16px;}
+  .dz-step{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--muted);}
+  .dz-step.on{color:var(--coral);}
+  .dz-step .n{display:grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--soft); color:var(--muted); font-size:11px;}
+  .dz-step.on .n{background:var(--coral); color:#fff;}
+  .dz-phone{width:240px; height:432px; margin:0 auto 18px; border-radius:32px; overflow:hidden; position:relative; box-shadow:0 18px 44px rgba(0,0,0,.45); background:var(--dzbg);}
+  .dz-phone[data-bright="dark"]{ --dzbg:#15110d; --dztxt:#fff; --dzsub:rgba(255,255,255,.8); }
+  .dz-phone.dz-grad{ background:radial-gradient(circle at 32% -2%, color-mix(in srgb, var(--dzac) 34%, var(--dzbg)) 0%, var(--dzbg) 58%); }   /* 그라데이션 = 다크 테마만 */
+  .dz-phone[data-bright="light"]{ --dzbg:#efe7da; --dztxt:#33281c; --dzsub:#9c8e7c; }
+  .dz-photo{position:absolute; left:0; right:0; top:0; overflow:hidden; touch-action:none; cursor:grab; background:#00000022;}
+  .dz-phone[data-layout="full"] .dz-photo{ bottom:0; }
+  .dz-phone[data-layout="half"] .dz-photo{ height:54%; }
+  .dz-phone[data-layout="bg"] .dz-photo{ inset:0; }
+  .dz-photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform-origin:center; transform:scale(var(--z,1)) translate(var(--px,0px),var(--py,0px)); user-select:none; -webkit-user-drag:none;}
+  .dz-ph-empty{position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.55); font-size:12px; pointer-events:none;}
+  .dz-scrim{position:absolute; left:0; right:0; pointer-events:none;}
+  .dz-phone[data-layout="full"] .dz-scrim{ inset:0; background:linear-gradient(to bottom,transparent 30%,var(--dzbg) 86%); }
+  .dz-phone[data-layout="half"] .dz-scrim{ top:34%; height:24%; background:linear-gradient(to bottom,transparent,var(--dzbg)); }
+  .dz-phone[data-layout="bg"] .dz-scrim{ inset:0; background:linear-gradient(to bottom, color-mix(in srgb, var(--dzbg) 10%, transparent) 0%, color-mix(in srgb, var(--dzbg) 34%, transparent) 50%, color-mix(in srgb, var(--dzbg) 78%, transparent) 100%); }
+  .dz-content{position:absolute; left:0; right:0; bottom:0; padding:0 18px 20px; text-align:center; color:var(--dztxt); pointer-events:none;}
+  .dz-nm{font-size:18px; font-weight:800; letter-spacing:.03em;}
+  .dz-tg{font-size:10.5px; color:var(--dzsub); margin:5px 0 12px;}
+  .dz-b{display:block; padding:12px; border-radius:13px; font-size:12px; font-weight:700; margin-bottom:7px;}
+  .dz-b.p{background:var(--dzac); color:#fff; box-shadow:0 8px 18px color-mix(in srgb,var(--dzac) 32%,transparent);}
+  .dz-phone[data-bright="dark"] .dz-b.s{background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.25);}
+  .dz-phone[data-bright="light"] .dz-b.s{background:#fff; color:var(--dztxt); box-shadow:0 3px 10px rgba(0,0,0,.06);}
+  .dz-cg{margin-bottom:15px;}
+  .dz-cg .gl{font-size:11px; font-weight:800; color:var(--muted); margin-bottom:7px; display:block;}
+  .dz-seg{display:flex; gap:6px;}
+  .dz-seg button{flex:1; padding:11px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font:700 12.5px var(--sans); cursor:pointer;}
+  .dz-seg button.on{background:var(--coral); color:#fff; border-color:var(--coral);}
+  .dz-sws{display:flex; gap:9px; flex-wrap:wrap;}
+  .dz-sw{width:32px; height:32px; border-radius:50%; cursor:pointer; border:2px solid #fff; box-shadow:0 0 0 1px var(--hair);}
+  .dz-sw-reset{background:var(--soft); color:var(--muted); display:grid; place-items:center; font-size:15px; border:1px dashed var(--hair); box-shadow:none;}
+  .dz-sw.on{box-shadow:0 0 0 2px var(--coral);}
+  /* 페이지2 — 메뉴 + 직업 추천 */
+  .dz-phone2{height:auto; min-height:280px;}
+  .dz2-hero{height:118px; background:linear-gradient(135deg,#cdb9a3,#a98f72); display:grid; place-items:center; color:rgba(255,255,255,.72); font-size:12px; font-weight:700;}
+  .dz2-pbody{padding:14px 16px 20px; text-align:center;}
+  .dz2-pnm{font-size:17px; font-weight:800; letter-spacing:.03em; color:var(--dztxt);}
+  .dz2-ptg{font-size:10.5px; color:var(--dzsub); margin:4px 0 12px;}
+  .dz2-btns{display:flex; flex-direction:column; gap:8px; text-align:left;}
+  .dz2-bn{display:flex; align-items:center; gap:9px; padding:12px 13px; border-radius:14px; background:var(--surface); cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; animation:dzpop .25s ease;}
+  .dz2-bn.dragging{opacity:.85; transform:scale(1.03); box-shadow:0 14px 30px rgba(0,0,0,.25); z-index:3; cursor:grabbing;}
+  .dz2-bn:first-child{background:var(--dzac); color:#fff;}
+  .dz2-bn .grip{color:#c4c4cc; font-size:13px; letter-spacing:-2px; flex:none;}
+  .dz2-bn:first-child .grip{color:rgba(255,255,255,.6);}
+  .dz2-bn .bic{width:28px; height:28px; flex:none; border-radius:8px; background:color-mix(in srgb,var(--dzac) 13%,transparent); display:grid; place-items:center; font-size:13px;}
+  .dz2-bn:first-child .bic{background:rgba(255,255,255,.22);}
+  .dz2-bn .bt{flex:1; font-size:12px; font-weight:800; color:var(--dztxt);}
+  .dz2-bn:first-child .bt{color:#fff;}
+  .dz2-bn .bs{display:block; font-size:9.5px; color:var(--dzsub); margin-top:1px; font-weight:600;}
+  .dz2-bn:first-child .bs{color:rgba(255,255,255,.85);}
+  @keyframes dzpop{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  .dz2-empty{padding:28px 14px; color:var(--dzsub); font-size:12px; line-height:1.6; border:1px dashed var(--hair); border-radius:12px; text-align:center;}
+  .dz2-jobs{display:flex; flex-wrap:wrap; gap:7px;}
+  .dz2-job{padding:9px 13px; border-radius:999px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font:700 12px var(--sans); cursor:pointer;}
+  .dz2-job.on{background:var(--coral); color:#fff; border-color:var(--coral);}
+  .dz2-mlist{display:flex; flex-direction:column; gap:7px;}
+  .dz2-mi{display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:13px; border:1px solid var(--hair); background:var(--soft); cursor:pointer;}
+  .dz2-mi.on{border-color:var(--coral); background:color-mix(in srgb,var(--coral) 8%,var(--surface));}
+  .dz2-mi .ic{width:32px; height:32px; flex:none; border-radius:9px; background:var(--paper); display:grid; place-items:center; font-size:15px;}
+  .dz2-mi .mt{flex:1; min-width:0;}
+  .dz2-mi .mt b{font-size:12.5px; display:block;}
+  .dz2-mi .mt span{font-size:10.5px; color:var(--muted);}
+  .dz2-mi .rec{font-size:9px; font-weight:800; color:#fff; background:var(--coral); border-radius:5px; padding:2px 6px; margin-left:4px;}
+  .dz2-mi .chk{width:22px; height:22px; flex:none; border-radius:50%; border:2px solid var(--hair); display:grid; place-items:center; color:#fff; font-size:12px;}
+  .dz2-mi.on .chk{background:var(--coral); border-color:var(--coral);}
+
   /* 홈 꾸미기 — 테마 스와치 (원 + 아래 이름, 안 겹치게 컬럼 배열) */
   .hm-themes{display:flex; flex-wrap:wrap; gap:12px 4px;}
   .hm-th-item{width:60px; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer;}
@@ -1616,6 +1686,7 @@
       <img src="la-192.png" width="27" height="27" alt="컨텐츠 허브" style="border-radius:7px; display:block;">
     </span>
     <span class="title" id="ws-title">운영 모드</span>
+    <button class="btn" id="top-edit" title="홈 구성 (보면서 수정)">🪄 홈 구성</button>
     <button class="btn" id="go-customer-top">🏠 고객 홈으로</button>
     <button class="btn primary" id="top-save" title="내 홈에 적용 (저장 + 손님 페이지 반영)">✓ 내 홈에 적용</button>
     <button class="tb-logout" id="open-settings" title="설정" aria-label="설정">⚙</button>
@@ -2007,9 +2078,14 @@
       <span class="meta"><span class="nm">홈 꾸미기</span><span class="sb">후킹 한 줄 · 사진 모션 · 폰트</span></span>
       <span class="chev">›</span>
     </div>
+    <div class="set" id="set-design2">
+      <span class="ic">🪄</span>
+      <span class="meta"><span class="nm">디자인 (직접 꾸미기)</span><span class="sb">사진+밝기+포인트색+메뉴 · 시안식</span></span>
+      <span class="chev">›</span>
+    </div>
     <div class="set" id="set-theme">
       <span class="ic">🎨</span>
-      <span class="meta"><span class="nm">분위기 테마</span><span class="sb">페이지 전체 톤</span></span>
+      <span class="meta"><span class="nm">분위기 테마 (빠른 프리셋)</span><span class="sb">16가지 톤 중 한 번에 고르기</span></span>
       <span class="val" id="set-theme-val">크림 클래식</span><span class="chev">›</span>
     </div>
 
@@ -2365,15 +2441,6 @@
         <div class="fld"><label>히어로 버튼 글자 <span style="color:var(--muted);">· 선택</span></label><input id="hero-cta-text" placeholder="예: 상담 · 예약하기"></div>
         <div class="fld"><label>히어로 버튼 링크</label><input id="hero-cta-link" placeholder="네이버 예약 / 카톡 상담 링크"></div>
 
-        <div class="tcat">타겟 메시지 도우미 <span style="font-weight:400; color:var(--muted);">· 채우면 후킹·소개 자동 초안</span></div>
-        <div class="tm-help">
-          <input id="tm-who" placeholder="① 누구에게? (예: 앞머리 고민인 2030 여성)">
-          <input id="tm-pain" placeholder="② 무슨 고민? (예: 얼굴형 커버가 안 돼요)">
-          <input id="tm-promise" placeholder="③ 무슨 약속? (예: 얼굴이 반쪽 되는 커트)">
-          <button type="button" class="btn" id="tm-gen" style="width:100%;">✨ 후킹 문구 · 소개 자동 만들기</button>
-          <div class="vhint" style="margin:2px 0 0;">누를 때마다 다른 버전 · 위 후킹칸과 한 줄 소개에 들어가요</div>
-        </div>
-
         <div class="tcat">사진 모션</div>
         <div class="hm-grid" id="motion-grid"></div>
       </div>
@@ -2386,6 +2453,45 @@
       </div>
 
       <button class="btn primary" id="home-save" style="width:100%; margin-top:20px; padding:12px;">저장</button>
+    </div>
+  </div>
+
+  <!-- 🎨 새 디자인 화면 (분위기 + 메뉴) -->
+  <div class="ov" id="dz-ov">
+    <div class="sheet">
+      <div class="sheet-h"><span class="t">디자인</span><span class="x" id="dz-close">×</span></div>
+      <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>커버 사진</span><span class="dz-step" id="dz-st2"><span class="n">2</span>테마</span></div>
+
+      <!-- 공유 미리보기 (커버 + 테마 색이 실시간 반영) -->
+      <div class="dz-phone" id="dz-phone" data-layout="full" data-bright="light" style="--dzac:#ef7a33;">
+        <div class="dz-photo" id="dz-photo"><img id="dz-img" alt="" draggable="false"><div class="dz-ph-empty" id="dz-ph-empty">사진 없음 · 위에서 선택</div></div>
+        <div class="dz-scrim"></div>
+        <div class="dz-content">
+          <div class="dz-nm" id="dz-nm">내 이름</div>
+          <div class="dz-tg">한 줄 소개 · 여기에</div>
+          <div class="dz-b p">예약하기</div>
+          <div class="dz-b s">포트폴리오</div>
+          <div class="dz-b s">고객 후기</div>
+        </div>
+      </div>
+
+      <div data-dzpage="1">
+        <div class="dz-cg"><span class="gl">사진</span><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">사진 없음</button><button type="button" data-pm="own">📷 내 사진</button><button type="button" data-pm="char">🏠 캐릭터</button></div></div>
+        <div class="dz-cg" id="dz-bg-cg"><span class="gl">기본 배경 <span style="font-weight:400; color:var(--muted);">· 사진 없어도 안 휑하게 (테마 색)</span></span><div class="dz-seg dz-pm-seg" id="dz-bgstyle"><button type="button" data-bg="" class="on">없음</button><button type="button" data-bg="glow">은은한 글로우</button><button type="button" data-bg="mesh">소프트 메쉬</button></div></div>
+        <div class="dz-cg" id="dz-range-cg" style="display:none;"><span class="gl">사진 범위 <span style="font-weight:400; color:var(--muted);">· 어디까지 채울지</span></span><div class="dz-seg" data-dzgrp="layout"><button type="button" data-v="full" class="on">풀(전체)</button><button type="button" data-v="half">반</button><button type="button" data-v="bg">배경</button></div></div>
+        <div class="dz-cg" id="dz-zoom-cg" style="display:none;">
+          <input type="range" id="dz-zoom" min="100" max="260" value="118" style="width:100%; accent-color:var(--coral);">
+          <div class="vhint" style="text-align:left; margin-top:5px;">사진 끌어서 위치 · 휠·두 손가락 확대 · <b>색·분위기는 ②테마</b>에서</div>
+        </div>
+        <div class="vhint" style="text-align:left; margin-top:2px; line-height:1.6;">💻 <b>가로로 넓은 사진</b>이 컴퓨터에서 예뻐요 · 양옆은 자동으로 자연스럽게 채워져요</div>
+      </div>
+
+      <div data-dzpage="2" style="display:none;">
+        <div class="dz-cg"><span class="gl">테마 <span style="font-weight:400; color:var(--muted);">· 완성된 분위기 (라이트·다크·그라데이션)</span></span><div class="hm-themes" id="dz-theme-grid"></div></div>
+        <div class="dz-cg"><span class="gl">버튼 색 <span style="font-weight:400; color:var(--muted);">· 테마는 그대로, 버튼만 내 색으로 (선택)</span></span><div class="dz-sws" id="dz-accent"><span class="dz-sw dz-sw-reset" data-ac="" title="테마 기본색으로">↺</span></div></div>
+      </div>
+
+      <button class="btn primary" id="dz-next" style="width:100%; margin-top:8px; padding:13px;">다음: 테마 →</button>
     </div>
   </div>
 
@@ -3025,10 +3131,10 @@
   <!-- 시안 B: 보면서 수정 라이브 캔버스 -->
   <div id="live-edit-ov">
     <div class="le-bar">
-      <span class="le-t" id="le-mode-label">✎ 편집 중</span>
+      <button class="le-toptoggle" id="le-homeconfig" title="디자인 — 분위기·메뉴·테마">🎨 디자인</button>
       <button class="le-toptoggle" id="le-home" title="고객이 보는 실제 페이지(새 탭)">🏠 고객 홈</button>
-      <button class="le-x" id="le-x">💾 저장</button>
-      <button class="le-exit" id="le-exit" title="나가기">✕</button>
+      <button class="le-toptoggle" id="le-opmode" title="운영 모드 — 예약·분석·설정">⚙ 운영</button>
+      <button class="le-x" id="le-x" style="margin-left:auto;">💾 저장</button>
     </div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe>
       <!-- 우측 상단 고정: 구성 추가 / 구성 삭제(선택된 구성) -->
@@ -3077,6 +3183,7 @@
     document.querySelectorAll('.ws-tab').forEach(function(t){ t.onclick=function(){ switchWs(t.getAttribute('data-ws')); }; });
     var goCH=document.getElementById('go-customer-home'); if(goCH) goCH.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
     var goCT=document.getElementById('go-customer-top'); if(goCT) goCT.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+    var topEd=document.getElementById('top-edit'); if(topEd) topEd.onclick=function(){ if(window.__openLive) window.__openLive(); };   // 운영→편집 모드
   })();
 
   // 💰 판매·예약 세그먼트 (판매 / 예약)
@@ -3955,6 +4062,10 @@
       wireRow(row);
       if(t.dataset.layout){ row._layout = t.dataset.layout; }
       var preset = TPL_PRESET[t.dataset.nm];
+      if(!preset){ preset = (function(nm){ try{ var ty=(typeof NAME_TYPE!=='undefined')?NAME_TYPE[nm]:null; var sc=(typeof SCHEMA!=='undefined'&&ty)?SCHEMA[ty]:null; if(!sc) return null;
+        var SIMPLE={text:1,textarea:1}; var has=false;   // 단순 텍스트만 예시 채움 (list/포맷힌트 제외)
+        var arr=sc.map(function(f){ var d=f[2]||''; if(SIMPLE[f[0]] && d && d.indexOf('|')<0 && d.indexOf('...')<0 && d.indexOf('예:')<0){ has=true; return d; } return ''; });
+        return has?arr:null; }catch(e){ return null; } })(t.dataset.nm); }
       if(preset){ row._content = preset.slice(); if(window.__refreshRowSub) window.__refreshRowSub(row); }
       closeAdd();
       try{ refreshBuilder(); }catch(e){}
@@ -5027,6 +5138,7 @@
     ['cream','#EFEAE0','#CC785C'],['hero','#EFE7DA','#EF7A33'],['herb','#EEEDE3','#7E8C63'],['mocha','#EDE7DE','#9C8268'],
     ['midnight','#16161A','#A78BFF','radial-gradient(circle at 28% 26%, rgba(61,123,255,.85), transparent 55%), radial-gradient(circle at 76% 78%, rgba(255,61,192,.72), transparent 55%), #16161A'],
     ['pink','#FBEDF1','#E5708C'],
+    ['hub','#F2F0FD','#6C4EE6'],
     ['lavender','#F0EEF9','#8E7BD6'],['pearl','#EEF1F6','#8499C2'],
     ['forest','#0C140D','#74DB86'],['luxe','#0B0E12','#2DD4BF','radial-gradient(ellipse 90% 55% at 50% -5%, rgba(45,212,191,.42), transparent 60%), #0B0E12'],
     ['violet','#14101F','#A87CF0'],['aurora','#0E1424','#7AA8FF'],
@@ -5105,7 +5217,7 @@
       o.title=t[0];
       var nm=NM[t[0]]||t[0];
       o.innerHTML='<div class="hm-th-sw" style="background:'+(t[3]||t[1])+'"><span style="background:'+t[2]+'"></span></div><div class="hm-th-nm">'+nm+'</div>';
-      o.onclick=function(){ home.theme=t[0]; renderThemes(); };
+      o.onclick=function(){ home.theme=t[0]; if(home.design) home.design.on=false; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=t[0]; if(cur.design) cur.design.on=false; localStorage.setItem(HKEY,JSON.stringify(cur)); }catch(e){} renderThemes(); if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); };
       g.appendChild(o);
     });
     renderThemePreview();
@@ -5232,6 +5344,94 @@
     var wheelT=null;
     prev.addEventListener('wheel', function(e){ if(!home.cover.photo) return; e.preventDefault(); home.cover.fit.z=clampZ((home.cover.fit.z||1)+(e.deltaY<0?0.12:-0.12)); applyT(); clearTimeout(wheelT); wheelT=setTimeout(coverPersist, 260); }, {passive:false});
   })();
+
+  // ── 🪄 새 디자인 화면 (분위기 — 시안 포팅) ──
+  (function dzInit(){
+    var ov=document.getElementById('dz-ov'); if(!ov) return;
+    var BTNCOLORS=['#ef7a33','#E0A36B','#a08a73','#7c8c6a','#2db3a6','#4571E8','#8e6fd6','#c2607a','#b5653f','#2a2a2e'];
+    var DARK_THEMES={midnight:1,forest:1,luxe:1,violet:1,aurora:1,framer:1,bokeh:1,brand:1,prism:1,banghouse:1,nvidia:1,neon:1,cobalt:1,butterfly:1,glacier:1,olive:1};
+    var phone=document.getElementById('dz-phone'), img=document.getElementById('dz-img'), photo=document.getElementById('dz-photo'), zoomEl=document.getElementById('dz-zoom'), empty=document.getElementById('dz-ph-empty');
+    // 커버 사진 = home.cover {on,photo,layout,fit}
+    function cov(){ if(!home.cover||typeof home.cover!=='object') home.cover={on:false,photo:'',layout:'full',fit:{z:1.18,x:0,y:0}}; if(!home.cover.fit) home.cover.fit={z:1.18,x:0,y:0}; if(!home.cover.layout) home.cover.layout='full'; return home.cover; }
+    function clampZ(v){ return Math.max(1, Math.min(4, v)); }
+    function themeAccent(){ for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme) return THEMES[i][2]; } return '#ef7a33'; }
+    function isDark(){ return !!DARK_THEMES[home.theme]; }
+    var CHAR_IMG='samples/'+encodeURIComponent('캐릭터 배경깔끔')+'.png';   // 브랜드 캐릭터 (배경용 · 글자 최소)
+    function photoMode(){ var p=cov().photo||''; if(!p) return 'none'; return (p===CHAR_IMG)?'char':'own'; }
+    var accBox=document.getElementById('dz-accent');
+    BTNCOLORS.forEach(function(c){ var s=document.createElement('span'); s.className='dz-sw'; s.setAttribute('data-ac',c); s.style.background=c; accBox.appendChild(s); });
+
+    function renderPreview(){ var c=cov();
+      phone.setAttribute('data-bright', isDark()?'dark':'light');
+      phone.setAttribute('data-layout', c.layout);
+      phone.classList.toggle('dz-grad', isDark());   // 그라데이션은 다크 테마만
+      phone.style.setProperty('--dzac', home.accentOverride || themeAccent());
+      ov.querySelectorAll('.dz-seg').forEach(function(seg){ var g=seg.getAttribute('data-dzgrp'); seg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-v')===c[g]); }); });
+      accBox.querySelectorAll('.dz-sw').forEach(function(s){ s.classList.toggle('on', (s.getAttribute('data-ac')||'')===(home.accentOverride||'')); });
+      // 사진 모드(없음/내사진/캐릭터) 표시 + 범위·줌은 사진 있을 때만
+      var pm=photoMode();
+      var pmSeg=document.getElementById('dz-photo-mode'); if(pmSeg){ pmSeg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-pm')===pm); }); }
+      var rcg=document.getElementById('dz-range-cg'), zcg=document.getElementById('dz-zoom-cg');
+      if(rcg) rcg.style.display=(pm==='none')?'none':''; if(zcg) zcg.style.display=(pm==='none')?'none':'';
+      // 기본 배경 칩 = 사진 없을 때만, 현재값 표시
+      var bcg=document.getElementById('dz-bg-cg'); if(bcg) bcg.style.display=(pm==='none')?'':'none';
+      var bseg=document.getElementById('dz-bgstyle'); if(bseg){ bseg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', (b.getAttribute('data-bg')||'')===(c.bg||'')); }); }
+      var showSrc = c.photo||'';
+      if(showSrc){ img.src=showSrc; img.style.display=''; empty.style.display='none'; } else { img.removeAttribute('src'); img.style.display='none'; empty.style.display=''; }
+      img.style.setProperty('--z', c.fit.z||1); img.style.setProperty('--px', (c.fit.x||0)+'px'); img.style.setProperty('--py', (c.fit.y||0)+'px'); if(zoomEl) zoomEl.value=Math.round((c.fit.z||1)*100);
+      var nm=document.getElementById('dz-nm'); var pn=(document.getElementById('pf-name')||{}).value; if(nm&&pn) nm.textContent=pn;
+    }
+    function persistCover(){ cov().on=!!cov().photo; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+    function persistTheme(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=home.theme; cur.accentOverride=home.accentOverride||''; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+
+    // 사진 범위(풀/반/배경) — data-dzgrp 있는 세그만 (사진 모드 세그는 제외)
+    ov.querySelectorAll('.dz-seg').forEach(function(seg){ var grp=seg.getAttribute('data-dzgrp'); if(!grp) return; seg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; cov()[grp]=b.getAttribute('data-v'); renderPreview(); persistCover(); }); });
+    // 버튼색 오버라이드 (빈값 = 테마 기본색)
+    accBox.addEventListener('click', function(e){ var s=e.target.closest('.dz-sw'); if(!s) return; home.accentOverride=s.getAttribute('data-ac')||''; renderPreview(); persistTheme(); });
+    // 기본 배경(글로우/메쉬) — 사진 없을 때 테마색으로 채움
+    var bgSeg=document.getElementById('dz-bgstyle'); if(bgSeg) bgSeg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; cov().bg=b.getAttribute('data-bg')||''; renderPreview(); persistCover(); });
+    // 사진 선택: 없음 / 내 사진 / 캐릭터
+    var pmSeg=document.getElementById('dz-photo-mode'); if(pmSeg) pmSeg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; var m=b.getAttribute('data-pm');
+      if(m==='none'){ cov().photo=''; renderPreview(); persistCover(); }
+      else if(m==='char'){ cov().photo=CHAR_IMG; cov().layout='bg'; cov().fit={z:1,x:0,y:0}; renderPreview(); persistCover(); }   // 캐릭터=세로 포스터 → 배경 모드 기본(잘림 방지)
+      else if(m==='own'){ if(!window.openVault){ if(window.toast) toast('사진 보관함을 열 수 없어요'); return; } window.openVault(function(u){ cov().photo=u; cov().fit={z:1.18,x:0,y:0}; renderPreview(); persistCover(); }); }
+    });
+    // 줌·드래그·핀치
+    zoomEl.addEventListener('input', function(){ cov().fit.z=clampZ(this.value/100); img.style.setProperty('--z', cov().fit.z); });
+    zoomEl.addEventListener('change', persistCover);
+    photo.addEventListener('wheel', function(e){ if(!cov().photo) return; e.preventDefault(); cov().fit.z=clampZ((cov().fit.z||1) - e.deltaY*0.0016); img.style.setProperty('--z', cov().fit.z); zoomEl.value=Math.round(cov().fit.z*100); clearTimeout(photo._wt); photo._wt=setTimeout(persistCover,260); }, {passive:false});
+    var pts=new Map(), sd=0, sz=1, pan=null;
+    function D(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
+    photo.addEventListener('pointerdown', function(e){ if(!cov().photo) return; e.preventDefault(); try{photo.setPointerCapture(e.pointerId);}catch(_){} pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size===1){ pan={x:e.clientX,y:e.clientY,px:cov().fit.x||0,py:cov().fit.y||0}; } else if(pts.size===2){ var a=Array.from(pts.values()); sd=D(a[0],a[1]); sz=cov().fit.z||1; pan=null; } });
+    photo.addEventListener('pointermove', function(e){ if(!pts.has(e.pointerId)) return; pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size>=2){ var a=Array.from(pts.values()); if(sd>0){ cov().fit.z=clampZ(sz*(D(a[0],a[1])/sd)); img.style.setProperty('--z',cov().fit.z); zoomEl.value=Math.round(cov().fit.z*100); } } else if(pan){ cov().fit.x=pan.px+(e.clientX-pan.x); cov().fit.y=pan.py+(e.clientY-pan.y); img.style.setProperty('--px',cov().fit.x+'px'); img.style.setProperty('--py',cov().fit.y+'px'); } });
+    function up(e){ pts.delete(e.pointerId); if(pts.size<2) sd=0; if(pts.size===1){ var a=Array.from(pts.values())[0]; pan={x:a.x,y:a.y,px:cov().fit.x||0,py:cov().fit.y||0}; } else if(pts.size===0){ pan=null; persistCover(); } }
+    photo.addEventListener('pointerup', up); photo.addEventListener('pointercancel', up);
+    document.getElementById('dz-close').onclick=function(){ ov.classList.remove('open'); };
+
+    // 테마 그리드 (프리셋)
+    function renderDzThemes(){ var g=document.getElementById('dz-theme-grid'); if(!g) return; g.innerHTML='';
+      var NM=(typeof THEME_NAMES!=='undefined')?THEME_NAMES:{};
+      THEMES.forEach(function(t){ var o=document.createElement('div'); o.className='hm-th-item'+((home.theme===t[0])?' sel':''); o.title=t[0];
+        o.innerHTML='<div class="hm-th-sw" style="background:'+(t[3]||t[1])+'"><span style="background:'+t[2]+'"></span></div><div class="hm-th-nm">'+(NM[t[0]]||t[0])+'</div>';
+        o.onclick=function(){ home.theme=t[0]; persistTheme(); renderDzThemes(); renderPreview(); };
+        g.appendChild(o);
+      });
+    }
+    var dzPage=1;
+    function showPage(n){ dzPage=n;
+      for(var i=1;i<=2;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }
+      document.getElementById('dz-next').textContent = n===1?'다음: 테마 →':'✓ 완료';
+      if(n===2) renderDzThemes();
+      renderPreview();
+      var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
+    }
+    document.getElementById('dz-st1').onclick=function(){ showPage(1); };
+    document.getElementById('dz-st2').onclick=function(){ showPage(2); };
+    document.getElementById('dz-next').onclick=function(){ if(dzPage<2){ showPage(2); } else { ov.classList.remove('open'); if(window.toast) toast('디자인 저장됨 · 상단 [저장]으로 공개 반영'); } };
+    window.__openDesign=function(){ cov(); renderPreview(); showPage(1); ov.classList.add('open'); };
+    var entry=document.getElementById('set-design2'); if(entry) entry.onclick=function(){ window.__openDesign(); };
+  })();
+
   var FAB_KEYS = ['instagram','youtube','blog','naver','kakao'];
   function fillFab(){
     var f=home.fab||{}, on=home.fabOn||{};
@@ -5419,7 +5619,7 @@
   };
 
   // 설정 행 라벨(테마 이름 · 플로팅 켜짐/꺼짐)을 실제 상태로 동기화
-  var THEME_NAMES={hero:'히어로 오렌지',herb:'한방 그린',mocha:'모카 살롱',luxe:'럭스',cream:'크림 클래식',brand:'브랜드 그라데이션',midnight:'미드나잇 (딥 퍼플)',butterfly:'버터플라이 (앰버)',peach:'피치',sand:'샌드',rose:'로즈',pink:'핑크',sunset:'선셋',sage:'세이지',clay:'클레이',camel:'카멜',greige:'그레이지',lavender:'라벤더',pearl:'펄',olive:'올리브',forest:'포레스트',nvidia:'네온 그린',violet:'바이올렛',aurora:'오로라',glacier:'글래시어',framer:'프레이머',neon:'네온',prism:'프리즘',cobalt:'코발트',bokeh:'보케',spring:'봄 파스텔',butter:'버터 크림'};
+  var THEME_NAMES={hero:'히어로 오렌지',herb:'한방 그린',mocha:'모카 살롱',luxe:'럭스',cream:'크림 클래식',hub:'허브 퍼플',brand:'브랜드 그라데이션',midnight:'미드나잇 (딥 퍼플)',butterfly:'버터플라이 (앰버)',peach:'피치',sand:'샌드',rose:'로즈',pink:'핑크',sunset:'선셋',sage:'세이지',clay:'클레이',camel:'카멜',greige:'그레이지',lavender:'라벤더',pearl:'펄',olive:'올리브',forest:'포레스트',nvidia:'네온 그린',violet:'바이올렛',aurora:'오로라',glacier:'글래시어',framer:'프레이머',neon:'네온',prism:'프리즘',cobalt:'코발트',bokeh:'보케',spring:'봄 파스텔',butter:'버터 크림'};
   function updateSettingLabels(){
     var tv=document.getElementById('set-theme-val'); if(tv) tv.textContent=THEME_NAMES[home.theme]||home.theme||'테마';
     var fv=document.getElementById('set-fab-val'); if(fv){ var f=home.fab||{}; var on=FAB_KEYS.some(function(k){ return f[k]; }); fv.textContent=on?'켜짐':'꺼짐'; }
@@ -7352,7 +7552,7 @@
     if(!AUTH){ notify('로그인이 필요해요'); return; }
     var handle=((document.getElementById('pf-handle')||{}).value||'').trim() || AUTH.handle || '';
     if(!handle){ notify('먼저 ⚙설정·내 프로필에서 주소(핸들)를 정해주세요'); return; }
-    var win=null; try{ win=window.open('', '_blank'); }catch(e){}   // 클릭 동기 시점에 열어 팝업차단 회피
+    var win=null; try{ win=window.open('', 'cmhub_customer'); }catch(e){}   // 고정 이름 → 누를 때마다 같은 탭 재사용 (새 창 안 쌓임)
     try{
       var data=serialize();
       if(data.profile.handle && data.profile.handle!==AUTH.handle){
@@ -7362,7 +7562,7 @@
       await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
       await window.laRpc('li_publish',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_published:true});
       var url='u.html?u='+encodeURIComponent(handle);
-      if(win){ win.location.href=url; } else { window.open(url,'_blank'); }
+      if(win){ win.location.href=url; } else { window.open(url,'cmhub_customer'); }
     }catch(e){ if(win){ try{ win.close(); }catch(_){} } notify('이동 실패: '+e.message); }
   };
   if(prevBtn) prevBtn.addEventListener('click', window.__openCustomerPreview);
@@ -7628,6 +7828,8 @@
     // 상단 우측 미리보기/편집 토글 (손님 화면 그대로 보기 ↔ 편집)
     // 🏠 고객 홈 = 저장·공개 후 실제 손님 페이지(새 탭)로 — '미리보기' 대체
     var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+    var hc=document.getElementById('le-homeconfig'); if(hc) hc.onclick=function(){ if(window.__openDesign) window.__openDesign(); };   // 🪄 홈 구성 → 디자인 3단계
+    var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영 → 편집모드 닫고 운영 화면
     var ml=document.getElementById('le-mode-label');
     var EDIT_LBL='✎ 편집 중 <span style="font-weight:400; color:var(--muted); font-size:11px;">· 톡 눌러 고치기</span>';
     window.__leResetToggle=function(){ if(ml) ml.innerHTML=EDIT_LBL; };
