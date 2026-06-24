@@ -508,10 +508,11 @@
   .tag{font-size:14px; color:var(--on-soft); margin-top:7px; line-height:1.5;}
 
   /* ── 커버 사진 히어로 (홈 꾸미기 → 커버 사진) ── */
-  .prof-cover{position:relative; margin:-8px -22px -64px; height:300px; overflow:hidden; border-radius:0 0 30px 30px;}
-  .profile.cover-full .prof-cover{height:430px; margin-bottom:-84px;}
+  .prof-cover{position:relative; margin:-26px -22px -64px; height:330px; overflow:hidden; border-radius:0;}
+  .profile.cover-full .prof-cover{height:450px; margin-bottom:-84px;}
   .prof-cover .pc-img{position:absolute; inset:0; background-size:cover; background-position:center; transform-origin:center; will-change:transform;}
-  .prof-cover::after{content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 42%, var(--paper) 95%); pointer-events:none;}
+  /* 위·아래 모두 페이지색으로 페이드 → 딱딱한 테두리 없이 자연스럽게 녹아듦 */
+  .prof-cover::after{content:''; position:absolute; inset:0; background:linear-gradient(to bottom, var(--paper) 0%, transparent 20%, transparent 50%, var(--paper) 93%); pointer-events:none;}
   .profile.cover-on .avatar{display:none;}
   .profile.cover-on .name, .profile.cover-on .tag{position:relative; z-index:2;}
   /* ── 배경 사진 (커버 범위=배경) — 페이지 전체 뒤에 깔기 ── */
@@ -1909,8 +1910,8 @@
         if(!pageCov){ pageCov=document.createElement('div'); pageCov.id='page-cover'; pageCov.className='page-cover'; var pim=document.createElement('div'); pim.className='pcv-img'; pageCov.appendChild(pim); document.body.insertBefore(pageCov, document.body.firstChild); }
         var pimg=pageCov.querySelector('.pcv-img');
         pimg.style.backgroundImage='url('+cov.photo+')';
-        var bf=cov.fit||{};
-        pimg.style.transform='scale('+(bf.z||1)+') translate('+(bf.x||0)+'px,'+(bf.y||0)+'px)';
+        var bf=cov.fit||{}; var bfp=(bf.u==='pct');   // %단위(신규)면 위치 적용, 레거시 px면 중앙(0)으로 안전 렌더
+        pimg.style.transform='scale('+(bf.z||1)+') translate('+(bfp?(bf.x||0):0)+'%,'+(bfp?(bf.y||0):0)+'%)';
         rootEl.classList.add('cover-bg');
       } else {
         if(pageCov) pageCov.remove();
@@ -1921,8 +1922,8 @@
         if(!pc){ pc=document.createElement('div'); pc.className='prof-cover'; var im=document.createElement('div'); im.className='pc-img'; pc.appendChild(im); profEl.insertBefore(pc, profEl.firstChild); }
         var pcimg=pc.querySelector('.pc-img');
         pcimg.style.backgroundImage='url('+cov.photo+')';
-        var f=cov.fit||{};
-        pcimg.style.transform='scale('+(f.z||1)+') translate('+(f.x||0)+'px,'+(f.y||0)+'px)';
+        var f=cov.fit||{}; var fp=(f.u==='pct');   // %단위(신규)면 위치 적용, 레거시 px면 중앙(0)으로 안전 렌더
+        pcimg.style.transform='scale('+(f.z||1)+') translate('+(fp?(f.x||0):0)+'%,'+(fp?(f.y||0):0)+'%)';
         profEl.classList.add('cover-on');
         profEl.classList.toggle('cover-full', cov.layout==='full');
       } else {
