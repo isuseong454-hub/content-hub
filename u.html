@@ -50,7 +50,13 @@
     --ph1:#E7E1D2; --ph2:#F0E2D7; --ph3:#EAE0D6;
   }
   /* 디스플레이 숫자용 '진한 테마색' — 테마 강조색을 글자색 쪽으로 섞어 대비↑ (모든 테마 자동) */
-  html{ --cm-disp:color-mix(in srgb, var(--coral) 80%, var(--ink)); }
+  html{ --cm-disp:color-mix(in srgb, var(--coral) 80%, var(--ink)); --cm-glow:color-mix(in srgb, var(--coral) 38%, transparent); }
+  /* 뱅하우스식 카드 글로우 — 호버/탭 시 테마색으로 빛남 (중요 카드 강조 + 반응) */
+  .pg-card, .lbc, .best-hcard, .gcard, .arc-card{ transition:box-shadow .25s ease, border-color .25s ease, transform .18s ease; }
+  .pg-card:hover, .arc-card:hover, .pg-card:active, .arc-card:active{ border-color:color-mix(in srgb, var(--coral) 55%, var(--hair)); box-shadow:0 0 22px var(--cm-glow); }
+  .lbc:hover, .best-hcard:hover, .gcard:hover, .lbc:active, .best-hcard:active, .gcard:active{ box-shadow:0 0 24px var(--cm-glow); }
+  .pg-card.pg-feat{ box-shadow:0 0 16px var(--cm-glow); }
+  .pg-card.pg-feat:hover, .pg-card.pg-feat:active{ box-shadow:0 0 26px var(--cm-glow); }
   /* 밝은 포인트색(민트·라임·골드 등) 테마는 강조 배경 위 글자를 어둡게 — 흰 글자 안 보임 방지 */
   html[data-theme="bokeh"], html[data-theme="forest"], html[data-theme="nvidia"], html[data-theme="butter"], html[data-theme="glacier"], html[data-theme="olive"], html[data-theme="spring"]{ --on-coral:#191712; }
   /* 밝은 라벤더 포인트색(brand·midnight) — 평평한 연보라 버튼은 흰 글자가 안 보이고 검은 글자는 칙칙함
@@ -3531,9 +3537,12 @@
       el.appendChild(head);
       // 컨트롤바: 수정만 (선택 시 · 오른쪽 세로 중앙) — ▲▼·삭제는 제거(삭제는 상단 '구성 삭제')
       var bar=document.createElement('span'); bar.className='la-ed-bar';
-      var edit=document.createElement('button'); edit.type='button'; edit.className='la-ed-btn'; edit.textContent='✎ 수정';
-      edit.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-tap', bt:bt}, '*'); }catch(_){} });
-      bar.appendChild(edit);
+      // 글로우 후킹은 글자를 직접 탭해서 인라인 편집 → 어려운 ✎수정 모달 버튼 숨김
+      if(bt!=='glowhook'){
+        var edit=document.createElement('button'); edit.type='button'; edit.className='la-ed-btn'; edit.textContent='✎ 수정';
+        edit.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-tap', bt:bt}, '*'); }catch(_){} });
+        bar.appendChild(edit);
+      }
       el.appendChild(bar);
       // 탭하면 그 구성만 선택(강조) → 수정·삭제 노출. 빈 구성은 바로 편집창.
       el.addEventListener('click', function(e){ if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add,.gh-big,.gh-eyebrow,.gh-sub')) return; e.preventDefault(); e.stopPropagation();
