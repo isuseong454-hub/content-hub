@@ -7653,6 +7653,7 @@
       else if(m.type==='la-edit-del'){ handleDel(m.bt, m.nth); }
       else if(m.type==='la-del-none'){ toast('삭제할 구성을 먼저 탭해서 선택하세요'); }
       else if(m.type==='la-del-core'){ toast('이 구성(프로필·후킹)은 삭제할 수 없어요'); }
+      else if(m.type==='la-edit-glowfield'){ handleGlowField(m.fi, m.value); }
       else if(m.type==='la-edit-galimg'){ handleGalImg(m.idx); }
       else if(m.type==='la-insert-slot'){ handleInsertSlot(m.beforeType, m.beforeNth); }
       else if(m.type==='la-edit-lookimg'){ handleLookImg(m.idx); }
@@ -7685,12 +7686,10 @@
       var onRows=rows.filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw || sw.classList.contains('on'); });
       var target=(typeof nth==='number' && nth>=0 && nth<onRows.length) ? onRows[nth] : (onRows[0]||rows[0]);
       if(!target){ toast('이 구성은 목록에서 관리해요'); return; }
-      var nm=''; try{ var t=target.querySelector('.nm'); nm=t?t.textContent.trim():''; }catch(_){}
-      if(!window.confirm('"'+(nm||'이 구성')+'"을(를) 삭제할까요?')) return;
+      // 확인은 iframe(미리보기)에서 이미 받음 · iframe이 그 자리서 직접 제거하므로 여기선 데이터만 갱신(전체 재렌더 X = 스크롤 유지·잔여 없음)
       target.remove();
       try{ updateHomeProgress(); }catch(e){}
       try{ refreshBuilder(); }catch(e){}
-      if(window.__liveRefresh) setTimeout(window.__liveRefresh, 40);
       toast('구성을 삭제했어요');
     }
     // ① 갤러리 사진 카드 탭 → 보관함에서 골라 그 자리에 넣기
@@ -7758,6 +7757,16 @@
       if(!L.cards[idx]) L.cards[idx]=['','','',''];
       L.cards[idx][2]=value||'';   // kr 이름 (재렌더 안 함 = 인라인 입력 유지)
       lookSync(L.row, false);
+    }
+    // 글로우 후킹 인라인 편집 — content[0]큰글자/[1]라벨/[2]설명 (재렌더 안 함 = 입력 유지)
+    function handleGlowField(fi, value){
+      var row=document.querySelector('#rows .row[data-type="glowhook"]'); if(!row) return;
+      var c=row._content; if(!Array.isArray(c)) c=row._content=['','',''];
+      while(c.length<3) c.push('');
+      c[fi]=value||'';
+      try{ var sw=row.querySelector('[data-sw]'); if(sw && !sw.classList.contains('on')) sw.classList.add('on'); }catch(e){}
+      try{ if(window.__refreshRowSub) window.__refreshRowSub(row); }catch(e){}
+      try{ refreshBuilder(); updateHomeProgress(); }catch(e){}
     }
     function handleLookAdd(){
       var L=lookRowCards(); if(!L){ toast('쇼케이스 구성이 없어요'); return; }
