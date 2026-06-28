@@ -614,9 +614,10 @@
   html[data-edit] #home-gallery.la-hb .la-ed-head, html[data-edit] .mq-band.la-hb .la-ed-head{top:7px; left:8px; right:8px;}
   /* 수정 버튼: 선택된 구성에만 · 오른쪽 세로 중앙 */
   html[data-edit] .la-ed-bar{position:absolute; top:50%; right:8px; transform:translateY(-50%); z-index:8; display:none;}
-  html[data-edit] .la-hb.la-ed-sel .la-ed-bar{display:block;}
+  html[data-edit] .la-hb.la-ed-sel .la-ed-bar{display:flex; flex-direction:column; gap:6px; align-items:flex-end;}
   html[data-edit] .la-ed-btn{background:#7B5AFF; color:#fff; font-size:11px; font-weight:800; padding:8px 14px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 4px 14px rgba(123,90,255,.5); white-space:nowrap;}
   html[data-edit] .la-ed-btn:active{transform:scale(.94);}
+  html[data-edit] .la-ed-del{background:#E0556B; box-shadow:0 4px 14px rgba(224,85,107,.5);}
   /* 프로필도 다른 구성처럼: 작은 '✕ 빼기' (다시 넣기는 구성 추가에서) */
   .la-prof-hide{display:none;}
   html[data-edit] .la-prof-hide{display:inline-flex; position:absolute; top:0; right:0; z-index:7; align-items:center; gap:3px; background:rgba(40,30,55,.92); color:#FFC9C9; font-size:10px; font-weight:700; padding:4px 9px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.4);}
@@ -3646,6 +3647,10 @@
         edit.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-tap', bt:bt}, '*'); }catch(_){} });
         bar.appendChild(edit);
       }
+      // 🗑 삭제 — 선택한 구성을 바로 없애기 (상단 '구성 삭제' 안 찾아도 되게)
+      var del=document.createElement('button'); del.type='button'; del.className='la-ed-btn la-ed-del'; del.textContent='🗑 삭제'; del.title='이 구성 삭제';
+      del.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if(!el.classList.contains('la-ed-sel')) el.classList.add('la-ed-sel'); delSelectedBlock(); });
+      bar.appendChild(del);
       el.appendChild(bar);
       // 탭하면 그 구성만 선택(강조) → 수정·삭제 노출. 빈 구성은 바로 편집창.
       el.addEventListener('click', function(e){ if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add,.gh-big,.gh-eyebrow,.gh-sub')) return; e.preventDefault(); e.stopPropagation();

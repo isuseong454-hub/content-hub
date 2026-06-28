@@ -1569,7 +1569,7 @@
 
   <!-- 로그인 화면 (로그인 전까지 편집기 덮음) -->
   <div class="login-ov" id="login-ov">
-    <div style="position:absolute; bottom:8px; right:11px; font-size:9.5px; color:rgba(255,255,255,.3); z-index:3; letter-spacing:.03em;">build 06·29 ⑤</div>
+    <div style="position:absolute; bottom:8px; right:11px; font-size:9.5px; color:rgba(255,255,255,.3); z-index:3; letter-spacing:.03em;">build 06·29 ⑥</div>
     <a class="lg-admin" href="admin.html" aria-label="관리자 페이지" title="관리자"><span>⚙</span></a>
     <div class="login-card">
       <img class="login-house" src="la-mark.png" alt="컨텐츠 허브">
@@ -1578,10 +1578,10 @@
       <div class="lg-signup-note" id="lg-signup-note">발급받은 <b>코드</b>를 입력하면, 다음 화면에서 <b>나만의 PIN</b>을 정해요.<br>가입은 이 한 번이면 끝이에요 😊</div>
       <input id="lg-code" placeholder="발급받은 코드 (6자리)" autocapitalize="characters" autocomplete="off" maxlength="6">
       <div class="pin-box" id="lg-pin-box">
-        <input class="pin-d" type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 1번째">
-        <input class="pin-d" type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 2번째">
-        <input class="pin-d" type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 3번째">
-        <input class="pin-d" type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 4번째">
+        <input class="pin-d" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 1번째">
+        <input class="pin-d" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 2번째">
+        <input class="pin-d" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 3번째">
+        <input class="pin-d" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 4번째">
       </div>
       <input id="lg-pin" type="hidden">
       <div class="pin-hint">PIN · 숫자 4자리</div>
@@ -5853,6 +5853,7 @@
   document.querySelector('[data-hclose]').onclick = function(){ hov.classList.remove('open'); };
   hov.addEventListener('click', function(e){ if(e.target===hov) hov.classList.remove('open'); });
   document.getElementById('hero-sw').onclick = function(){ home.heroOn = !home.heroOn; renderHero(); };
+  window.__setHeroOn=function(on){ home.heroOn=!!on; try{ var cur=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); cur.heroOn=!!on; localStorage.setItem('cm-home-v1', JSON.stringify(cur)); }catch(e){} try{ if(typeof renderHero==='function') renderHero(); }catch(e){} };   // 후킹문구 삭제(숨김)/켜기 — la-del-core에서 호출 (HKEY 직접 저장 → serialize 반영)
   document.getElementById('hero-text').oninput = function(){ home.heroText = this.value; document.getElementById('hero-prev').innerHTML = heroMarkup(this.value); renderTopFirst(); };
   // 타겟 메시지 도우미: 누구에게/고민/약속 → 후킹문구·소개 자동 초안
   (function(){
@@ -6026,12 +6027,18 @@
     content: [{type:'text',layout:'quote',name:'세계관 한 줄',content:['내 관점을 **한 문장**으로','사람들이 나를 따르는 이유를 적어요.']}, {type:'text',name:'나는 누구 · 무엇을 믿나',content:['','내가 무엇을 하고 무엇을 믿는지 짧게.']}, {type:'cardnews',name:'대표 컨텐츠',content:[]}, {type:'gallery',name:'컨텐츠 갤러리',content:[]}, {type:'authority',name:'영향력 · 증명',content:[]}, {type:'links',name:'뉴스레터 · 구독',content:[]}, P_LEAD],
     // 🖤 프리미엄 헤어샵 (뱅하우스 톤) — 다크 그린 + Archivo Black + 글로우/마퀴/쇼케이스영상
     premium: [
-      {type:'glowhook',name:'글로우 후킹',content:['70%','SIGNATURE','**재방문**하는 단골 비율']},
-      {type:'marquee',name:'흐르는 태그 띠',content:[[['#앞머리펌'],['#레이어드컷'],['#내추럴웨이브'],['#두피케어'],['#트렌드컬러'],['#시그니처컷']]]},
-      {type:'lookbook',name:'대표 쇼케이스 (영상)',content:['SIGNATURE FILM','','BANG HOUSE',[]]},
-      {type:'ranking',name:'시그니처 · 가격',content:['SIGNATURE FILM','TOP 3',[['','히메허쉬','가장 인기','55,000원','HOT'],['','슬릭컷','시그니처','55,000원',''],['','허쉬컷','트렌디','55,000원','']]]},
+      {type:'glowhook',name:'글로우 후킹',content:['70%','WELCOME TO BANG HOUSE','첫인상의 앞머리 디자인']},
+      {type:'marquee',name:'흐르는 태그 띠',content:[[['#얼굴보완'],['#앞머리유선생'],['#묶을때이쁜머리'],['#시스루뱅'],['#히메허쉬'],['#슬릭컷']]]},
+      {type:'lookbook',name:'베스트 앞머리 (LOOKBOOK)',content:['베스트 앞머리 디자인','by 유수 디자이너','BANG HOUSE',[]]},
+      {type:'text',layout:'quote',name:'스토리',content:['"앞머리 한번 망치면 3달 고생이야"','고객 한 마디로 시작된 5년차 노하우 · by YOOSU @ 압구정']},
+      {type:'stylegallery',name:'8 LOOKS',content:[]},
+      {type:'ranking',name:'시그니처 TOP 3',content:['SIGNATURE FILM','TOP 3',[['','히메허쉬','히메허쉬 · 가장 인기','55,000원','HOT'],['','슬릭컷','슬릭컷 · 시그니처','55,000원',''],['','허쉬컷','허쉬컷 · 트렌디','55,000원','']]]},
+      {type:'service',name:'예약 메뉴',content:['예약하기 · 수–일 11:00–17:00',[['앞머리 컷 (약 20분)','30,000원','예약',''],['전체 컷 (약 60분 · 샴푸 포함)','55,000원','네이버 예약','https://map.naver.com/p/entry/place/1200619533']]]},
+      {type:'reservation',name:'예약 신청',content:[]},
+      {type:'text',name:'방문 가이드',content:['방문 가이드','잘 맞는 손님이 따로 있어요. 사진·영상으로 "이런 느낌이에요" 보여주시는 분께 5년차 노하우로 맞춰드려요.']},
       P_REVIEW,
-      {type:'reservation',name:'예약 신청',content:[]}
+      {type:'channels',name:'채널',content:['https://instagram.com/la.b_yoosu','','','https://open.kakao.com/o/sZsUOcui']},
+      {type:'location',name:'매장 · 위치',content:['압구정 라브 (LEAVE A BLANK)','서울 강남구 신사동 563-18','수–일 · 11:00–17:00 · 월·화 휴무','https://map.naver.com/p/entry/place/1200619533','','']}
     ],
     blank:   []
   };
@@ -7960,7 +7967,11 @@
       else if(m.type==='la-edit-tap'){ handleTap(m.bt); }
       else if(m.type==='la-edit-del'){ handleDel(m.bt, m.nth); }
       else if(m.type==='la-del-none'){ toast('삭제할 구성을 먼저 탭해서 선택하세요'); }
-      else if(m.type==='la-del-core'){ toast('이 구성(프로필·후킹)은 삭제할 수 없어요'); }
+      else if(m.type==='la-del-core'){
+        if(m.bt==='hero'){ if(window.__setHeroOn) window.__setHeroOn(false); try{ sendData(); }catch(_){} toast('후킹 문구를 숨겼어요 · 분위기·설정에서 다시 켤 수 있어요'); }
+        else if(m.bt==='profile'){ if(window.__setProfileOn) window.__setProfileOn(false); try{ sendData(); }catch(_){} toast('프로필을 숨겼어요 · "구성 추가 → 프로필"에서 다시 넣을 수 있어요'); }
+        else { toast('이 구성은 삭제할 수 없어요'); }
+      }
       else if(m.type==='la-edit-glowfield'){ handleGlowField(m.fi, m.value); }
       else if(m.type==='la-edit-galimg'){ handleGalImg(m.idx); }
       else if(m.type==='la-insert-slot'){ handleInsertSlot(m.beforeType, m.beforeNth); }
