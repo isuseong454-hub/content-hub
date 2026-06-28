@@ -617,9 +617,9 @@
   html[data-edit] .la-hb.la-ed-sel .la-ed-bar{display:block;}
   html[data-edit] .la-ed-btn{background:#7B5AFF; color:#fff; font-size:11px; font-weight:800; padding:8px 14px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 4px 14px rgba(123,90,255,.5); white-space:nowrap;}
   html[data-edit] .la-ed-btn:active{transform:scale(.94);}
-  /* 프로필 숨기기 / 다시 보이기 (프로필도 구성처럼) */
+  /* 프로필도 다른 구성처럼: 작은 '✕ 빼기' (다시 넣기는 구성 추가에서) */
   .la-prof-hide{display:none;}
-  html[data-edit] .la-prof-hide{display:inline-flex; position:absolute; top:0; right:0; z-index:7; align-items:center; background:rgba(40,30,55,.92); color:#FF8C8C; font-size:10.5px; font-weight:700; padding:5px 11px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.4);}
+  html[data-edit] .la-prof-hide{display:inline-flex; position:absolute; top:0; right:0; z-index:7; align-items:center; gap:3px; background:rgba(40,30,55,.92); color:#FFC9C9; font-size:10px; font-weight:700; padding:4px 9px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.4);}
   html[data-edit] .la-prof-hide:active{transform:scale(.94);}
   .la-prof-readd{display:none;}
   html[data-edit] .la-prof-readd{display:block; width:100%; margin:6px 0 14px; padding:14px; background:rgba(123,90,255,.10); border:1.5px dashed rgba(167,139,255,.6); border-radius:14px; color:#A78BFF; font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer;}
@@ -3773,11 +3773,11 @@
       var pen=document.createElement('span'); pen.className='la-av-pen'; pen.textContent='📷'; av.appendChild(pen);
       av.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-avatar'}, '*'); }catch(_){} });
     }
-    // 프로필도 구성처럼 숨기기 (없애기)
+    // 프로필도 다른 구성처럼: 작은 '✕ 빼기' (다시 넣기는 구성 추가 → 프로필)
     var prof=document.querySelector('.profile');
     if(prof && !prof.__hideBtn){ prof.__hideBtn=1; if(getComputedStyle(prof).position==='static') prof.style.position='relative';
-      var hb=document.createElement('button'); hb.type='button'; hb.className='la-prof-hide'; hb.textContent='🙈 프로필 숨기기'; hb.title='프로필 숨기기';
-      hb.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if(!window.confirm('프로필이 있으면 고객이 "누구인지" 알고 더 믿어요 — 예약·문의가 올라가요.\n그래도 숨길까요? (언제든 다시 켤 수 있어요)')) return; try{ parent.postMessage({type:'la-edit-profile', on:false}, '*'); }catch(_){} });
+      var hb=document.createElement('button'); hb.type='button'; hb.className='la-prof-hide'; hb.textContent='✕ 빼기'; hb.title='프로필 빼기';
+      hb.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if(!window.confirm('프로필을 뺄까요?\n(구성 추가 → "프로필"에서 언제든 다시 넣을 수 있어요)')) return; try{ parent.postMessage({type:'la-edit-profile', on:false}, '*'); }catch(_){} });
       prof.appendChild(hb);
     }
   }
@@ -3789,7 +3789,7 @@
     var hidden = !prof || getComputedStyle(prof).display==='none';
     var ex=document.getElementById('la-prof-readd');
     if(EDIT_MODE && hidden){
-      if(!ex){ var b=document.createElement('button'); b.type='button'; b.id='la-prof-readd'; b.className='la-prof-readd'; b.textContent='＋ 프로필 다시 보이기';
+      if(!ex){ var b=document.createElement('button'); b.type='button'; b.id='la-prof-readd'; b.className='la-prof-readd'; b.textContent='＋ 프로필 다시 넣기';
         b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-profile', on:true}, '*'); }catch(_){} });
         home.insertBefore(b, home.firstChild);
       }

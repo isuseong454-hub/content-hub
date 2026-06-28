@@ -880,6 +880,81 @@
   .tpl .tic{width:30px; height:30px; flex-shrink:0; border-radius:8px; background:var(--coral-soft); color:var(--coral); display:flex; align-items:center; justify-content:center; font-size:15px;}
   .tpl .tn{display:block; font-size:13px; font-weight:500;}
   .tpl .ts{display:block; font-size:10.5px; color:var(--muted);}
+  /* 구성추가 — 5단계 흐름 + 목적별 색 (타일은 다크, 아이콘·번호에만 의미색) */
+  .addsec{display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:var(--ink); margin:18px 0 9px;}
+  .addsec.first{margin-top:4px;}
+  .addnum{flex:0 0 22px; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; background:var(--coral-soft); color:var(--coral);}
+  .addwhy{font-weight:400; font-size:11.5px; color:var(--muted);}
+  .s1 .addnum,.s1 .tic{background:rgba(167,139,255,.16); color:#A78BFF;}
+  .s2 .addnum,.s2 .tic{background:rgba(91,184,245,.16); color:#5BB8F5;}
+  .s3 .addnum,.s3 .tic{background:rgba(70,214,166,.16); color:#46D6A6;}
+  .s4 .addnum,.s4 .tic{background:rgba(245,200,75,.16); color:#F5C84B;}
+  .s5 .addnum,.s5 .tic{background:rgba(255,142,114,.18); color:#FF8E72;}
+  .addadv{border:1px dashed var(--hair); border-radius:13px; padding:12px 14px; margin-top:16px;}
+  .addadv-h{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer;}
+  .addadv-arr{margin-left:auto; transition:transform .2s;}
+  .addadv.open .addadv-arr{transform:rotate(180deg);}
+  .addadv-sub{font-size:11px; color:var(--muted); margin-top:5px; line-height:1.4;}
+  .addadv-body{display:none; margin-top:11px;}
+  .addadv.open .addadv-body{display:block;}
+  .add-noresult{display:none; text-align:center; color:var(--muted); font-size:13px; padding:26px 0;}
+  /* 🔎 검색 */
+  .add-search{position:relative; margin:2px 0 13px;}
+  .add-search input{width:100%; background:var(--soft); border:1px solid var(--hair); border-radius:12px; color:var(--ink); font-family:var(--sans); font-size:14px; padding:11px 13px 11px 38px;}
+  .add-search input:focus{outline:none; border-color:var(--coral);}
+  .add-search .ass-ic{position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:14px; color:var(--muted);}
+  /* 🎯 내 홈 진단 */
+  .add-diag{background:linear-gradient(180deg, rgba(167,139,255,.10), rgba(167,139,255,.02)); border:1px solid rgba(167,139,255,.30); border-radius:15px; padding:13px 14px; margin-bottom:14px;}
+  .add-diag-h{display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:700; cursor:pointer; margin-bottom:11px;}
+  .add-diag-arr{margin-left:auto; color:var(--muted); font-size:12px; transition:transform .2s;}
+  .add-diag.collapsed .add-diag-h{margin-bottom:0;}
+  .add-diag.collapsed .add-diag-arr{transform:rotate(-90deg);}
+  .add-diag.collapsed .add-diag-body{display:none;}
+  .add-diag-mini{display:none; font-size:12px; color:var(--muted); margin-top:9px; line-height:1.5;}
+  .add-diag.collapsed .add-diag-mini{display:block;}
+  .add-diag-mini b{color:#F5C84B;}
+  .add-dots{display:flex; gap:7px; margin-bottom:11px;}
+  .add-dot{flex:1; display:flex; flex-direction:column; align-items:center; gap:5px;}
+  .add-dot .b{width:100%; height:7px; border-radius:99px; background:var(--soft);}
+  .add-dot.rec .b{background:#F5C84B !important; animation:addpulse 1.5s ease-in-out infinite;}
+  @keyframes addpulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+  .add-dot .l{font-size:9.5px; color:var(--muted); white-space:nowrap;}
+  .add-dot.on .l{color:var(--ink);}
+  .add-dot.rec .l{color:#F5C84B; font-weight:700;}
+  .add-diag-msg{font-size:12.5px; color:var(--ink); line-height:1.5; margin-bottom:11px;}
+  .add-diag-msg b{color:#F5C84B;}
+  .add-diag-btn{width:100%; background:var(--coral); color:#15101f; border:none; border-radius:11px; padding:11px; font-family:var(--sans); font-size:13px; font-weight:800; cursor:pointer;}
+  .add-diag-btn:active{transform:scale(.98);}
+  .addsec.flash{animation:addflash 1.4s ease; border-radius:8px;}
+  @keyframes addflash{0%,100%{background:transparent;}25%{background:rgba(245,200,75,.12);}}
+  /* 👁 구성 미리보기 팝업 */
+  .addpv-ov{position:fixed; inset:0; background:rgba(0,0,0,.66); display:none; align-items:center; justify-content:center; padding:24px; z-index:200;}
+  .addpv-ov.open{display:flex;}
+  .addpv{background:var(--paper); border:1px solid var(--hair); border-radius:18px; width:100%; max-width:330px; padding:16px; box-shadow:var(--shadow);}
+  .addpv-h{display:flex; align-items:center; gap:9px; margin-bottom:3px;}
+  .addpv-h .tic{flex:0 0 30px; width:30px; height:30px; border-radius:9px; background:var(--coral-soft); color:var(--coral); display:flex; align-items:center; justify-content:center; font-size:15px;}
+  .addpv-h .t{font-size:15px; font-weight:700;}
+  .addpv-sub{font-size:11.5px; color:var(--muted); margin:0 0 12px 39px;}
+  .addpv-label{font-size:10.5px; color:var(--muted); margin-bottom:6px;}
+  .addpv-frame{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:13px; margin-bottom:14px;}
+  .addpv-btns{display:flex; gap:8px;}
+  .addpv-btns button{flex:1; border-radius:11px; padding:11px; font-family:var(--sans); font-size:13px; font-weight:700; cursor:pointer; border:none;}
+  .addpv-add{background:var(--coral); color:#15101f;}
+  .addpv-cancel{background:var(--soft); color:var(--muted);}
+  .addpv-add:active,.addpv-cancel:active{transform:scale(.98);}
+  .m-stars{color:#F5C84B; font-size:13px; letter-spacing:1px;}
+  .m-q{font-size:12px; color:var(--ink); line-height:1.5;}
+  .m-q b{color:var(--coral);}
+  .m-by{font-size:10.5px; color:var(--muted); margin-top:5px;}
+  .m-imgs{display:flex; gap:6px;}
+  .m-imgs i{flex:1; aspect-ratio:3/4; border-radius:8px; background:linear-gradient(135deg,#2c2c33,#3a3142); display:block;}
+  .m-badge{display:inline-flex; align-items:center; gap:5px; background:var(--coral-soft); color:var(--coral); font-size:11px; font-weight:700; border-radius:8px; padding:5px 10px;}
+  .m-row{display:flex; justify-content:space-between; align-items:center; font-size:12px; padding:6px 0; border-bottom:1px solid var(--hair);}
+  .m-row:last-child{border-bottom:none;}
+  .m-row b{color:var(--coral);}
+  .m-cta{display:block; text-align:center; background:var(--coral); color:#15101f; font-size:12px; font-weight:800; border-radius:9px; padding:9px; margin-top:9px;}
+  .m-num{font-size:24px; font-weight:800; color:var(--coral);}
+  .m-numl{font-size:10px; color:var(--muted); margin-top:2px;}
 
   /* 편집 패널 — 다중 사진 그리드 */
   .ephoto-grid{display:flex; flex-wrap:wrap; gap:8px;}
@@ -1902,7 +1977,7 @@
       <!-- 📣 랜딩 전용: B·랜딩형 인라인 캔버스 (채워진 진짜 랜딩 모양을 그 자리서 수정) -->
       <div id="landing-canvas"></div>
       <div id="home-version-ui">
-      <div class="tpl-bar" id="tpl-bar">
+      <div class="tpl-bar" id="tpl-bar" style="display:none;"><!-- 온보딩(홈 시작 스타일 카드) 진입 — 사용자 요청으로 잠시 숨김. 나중에 온보딩 재정비 후 style 제거로 복원 -->
         <span class="tpl-bar-l">🏠 내 홈 구성</span>
         <button type="button" class="tpl-bar-btn" id="restart-style">🎨 다른 스타일로 다시 시작</button>
       </div>
@@ -2076,9 +2151,9 @@
 
     <!-- ⚙ 설정 (디자인 + 계정 · 관리) -->
     <div class="ws-pane" data-pane="design">
-    <div class="sec-h"><span class="t">설정</span><span class="hint">디자인 · 계정 · 관리</span></div>
+    <div class="sec-h"><span class="t">설정</span><span class="hint">분위기 · 계정 · 관리</span></div>
 
-    <div class="grp-h-lbl">디자인 <span style="font-weight:400;">· 공개 페이지 모양·톤</span></div>
+    <div class="grp-h-lbl">분위기 <span style="font-weight:400;">· 공개 페이지 모양·톤</span></div>
     <div class="set" id="set-home">
       <span class="ic">✦</span>
       <span class="meta"><span class="nm">홈 꾸미기</span><span class="sb">후킹 한 줄 · 사진 모션 · 폰트</span></span>
@@ -2086,7 +2161,7 @@
     </div>
     <div class="set" id="set-design2">
       <span class="ic">🪄</span>
-      <span class="meta"><span class="nm">디자인 (직접 꾸미기)</span><span class="sb">사진+밝기+포인트색+메뉴 · 시안식</span></span>
+      <span class="meta"><span class="nm">분위기 (커버·색·테마)</span><span class="sb">사진+밝기+포인트색+메뉴 · 시안식</span></span>
       <span class="chev">›</span>
     </div>
     <div class="set" id="set-theme">
@@ -2189,87 +2264,114 @@
   <div class="ov" id="add-ov">
     <div class="sheet">
       <div class="sheet-h"><span class="t">구성 추가</span><span class="x" data-close>×</span></div>
-      <div class="desc">골라서 추가 → 사진·글만 채우면 완성</div>
+      <div class="desc">무엇을 보여줄지 — 위에서 아래로 담으면 홈이 완성돼요</div>
 
-      <button type="button" class="add-import-row" id="add-import-row"><span class="air-ic">📚</span><span class="air-m"><b>발행한 글 가져오기</b><small>컨텐츠 탭의 글을 홈에 카드로 꽂기</small></span><span class="air-go">›</span></button>
+      <div class="add-search"><span class="ass-ic">🔎</span><input type="text" id="add-search" placeholder="필요한 걸 검색 — 후기·예약·사진·갤러리" autocomplete="off"></div>
 
-      <div class="tpl-section">
-      <div class="tcat tcat-tpl">📐 준비된 템플릿 <span style="font-weight:400; color:var(--muted);">· 눌러서 완성 예시 보기</span></div>
-      <div class="tgrid">
-        <div class="tpl tpl-set imp" data-set="hook"><span class="tpl-badge">템플릿</span><span class="tic">✨</span><span><span class="tn">문제 기반 랜딩 (전체)</span><span class="ts">공감→원인→전문가→해결→예약 풀세트</span></span></div>
-        <div class="tpl tpl-set" data-set="photo"><span class="tpl-badge">템플릿</span><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
-        <div class="tpl tpl-set" data-set="profile"><span class="tpl-badge">템플릿</span><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
-        <div class="tpl tpl-set" data-set="content"><span class="tpl-badge">템플릿</span><span class="tic">✍️</span><span><span class="tn">컨텐츠·구독형 세트</span><span class="ts">세계관→컨텐츠→구독</span></span></div>
-        <div class="tpl tpl-set tpl-prem" data-set="premium"><span class="tpl-badge tpl-badge-prem">프로</span><span class="tic">🖤</span><span><span class="tn">프리미엄 헤어샵 (뱅하우스 톤)</span><span class="ts">다크 그린·글로우·흐르는 태그·쇼케이스 영상 — 테마·폰트까지 한 번에</span></span></div>
-      </div>
-      </div><!-- /.tpl-section -->
-
-      <div class="tcat">✨ 지금 가장 추천 <span style="font-weight:400; color:var(--muted);">· 지금 더하면 좋은 것</span></div>
-      <div class="tgrid" id="rec-grid"></div>
-      <button type="button" id="add-more-btn" style="width:100%; margin:8px 0 2px; padding:11px; background:transparent; border:1px dashed var(--hair); border-radius:11px; color:var(--coral); font-family:var(--sans); font-size:12.5px; font-weight:600; cursor:pointer;">＋ 전체 구성 보기 ▾</button>
-
-      <div id="add-all" style="display:none;">
-      <div class="tcat">전문가 · 신뢰 <span style="font-weight:400; color:var(--muted);">· 설득 비용을 줄여요</span></div>
-      <div class="tgrid">
-        <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력·숫자</span></span></div>
-        <div class="tpl imp" data-ic="★" data-nm="후기"><span class="tic">★</span><span><span class="tn">후기</span><span class="ts">고객 후기</span></span></div>
-        <div class="tpl imp" data-ic="🛡" data-nm="반박 제거"><span class="tic">🛡</span><span><span class="tn">반박 제거</span><span class="ts">"이래서 망설여요" 미리 해소</span></span></div>
-        <div class="tpl imp" data-ic="📇" data-nm="문의·신청"><span class="tic">📇</span><span><span class="tn">문의·신청 받기</span><span class="ts">이름·연락처 받기 (상담·예약·문의)</span></span></div>
-        <div class="tpl imp" data-ic="🎓" data-nm="강의 신청"><span class="tic">🎓</span><span><span class="tn">강의 신청</span><span class="ts">이름·연락처로 신청 받기</span></span></div>
+      <div class="add-diag" id="add-diag">
+        <div class="add-diag-h" id="add-diag-h">🎯 내 홈 진단 <span class="add-diag-arr">▾</span></div>
+        <div class="add-diag-mini" id="add-diag-mini"></div>
+        <div class="add-diag-body">
+          <div class="add-dots" id="add-dots"></div>
+          <div class="add-diag-msg" id="add-diag-msg"></div>
+          <button type="button" class="add-diag-btn" id="add-diag-btn"></button>
+        </div>
       </div>
 
-      <div class="tcat">헤어 · 뷰티</div>
-      <div class="tgrid">
-        <div class="tpl" data-ic="✂" data-nm="스타일 갤러리"><span class="tic">✂</span><span><span class="tn">스타일 갤러리</span><span class="ts">분류·검색·전후</span></span></div>
-        <div class="tpl" data-ic="◍" data-nm="하이라이트"><span class="tic">◍</span><span><span class="tn">하이라이트</span><span class="ts">후기·가격·메뉴 버블</span></span></div>
-        <div class="tpl" data-ic="🎞" data-nm="대표 사진 쇼케이스"><span class="tic">🎞</span><span><span class="tn">대표 사진 쇼케이스</span><span class="ts">대표 작업·디자인 카드</span></span></div>
-        <div class="tpl" data-ic="🏆" data-nm="랭킹 · 가격"><span class="tic">🏆</span><span><span class="tn">랭킹 · 가격</span><span class="ts">TOP 메뉴 랭킹+가격</span></span></div>
-        <div class="tpl" data-ic="📍" data-nm="매장 · 위치"><span class="tic">📍</span><span><span class="tn">매장 · 위치</span><span class="ts">주소·지도·매장사진</span></span></div>
-      </div>
+      <div id="add-all">
 
-      <div class="tcat">컨텐츠</div>
-      <div class="tgrid">
-        <div class="tpl imp" data-ic="🔥" data-nm="베스트·대표 작업"><span class="tic">🔥</span><span><span class="tn">베스트 · 대표 작업</span><span class="ts">대표·인기 컨텐츠를 크게 (사회적 증명)</span></span></div>
-        <div class="tpl imp" data-ic="🎬" data-nm="영상"><span class="tic">🎬</span><span><span class="tn">영상 (VSL)</span><span class="ts">유튜브·비메오 임베드</span></span></div>
-        <div class="tpl" data-ic="🗞" data-nm="카드뉴스"><span class="tic">🗞</span><span><span class="tn">카드뉴스</span><span class="ts">글마다 링크 복사</span></span></div>
-        <div class="tpl" data-ic="▦" data-nm="컨텐츠 갤러리"><span class="tic">▦</span><span><span class="tn">컨텐츠 갤러리</span><span class="ts">사진 가로 스크롤</span></span></div>
-        <div class="tpl" data-ic="▤" data-nm="아카이브"><span class="tic">▤</span><span><span class="tn">아카이브</span><span class="ts">매거진형 글</span></span></div>
-        <div class="tpl" data-ic="❝" data-nm="인용구"><span class="tic">❝</span><span><span class="tn">인용구</span><span class="ts">한 문장 강조</span></span></div>
-        <div class="tpl" data-ic="🏷" data-nm="흐르는 태그 띠"><span class="tic">🏷</span><span><span class="tn">흐르는 태그 띠</span><span class="ts">키워드가 좌우로 흐름 (감성)</span></span></div>
-        <div class="tpl" data-ic="✦" data-nm="글로우 후킹"><span class="tic">✦</span><span><span class="tn">글로우 후킹</span><span class="ts">큰 숫자·단어가 빛나게 (임팩트)</span></span></div>
-        <div class="tpl" data-ic="🖼" data-nm="사진"><span class="tic">🖼</span><span><span class="tn">사진</span><span class="ts">성과·포트폴리오 + 꾸미기(프레임)</span></span></div>
-        <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전후사진</span><span class="ts">비포·애프터</span></span></div>
+      <div class="tcat addsec first s1"><span class="addnum">1</span>첫인상 <span class="addwhy">· 나는 누구인가</span></div>
+      <div class="tgrid s1">
+        <div class="tpl imp" data-special="profile"><span class="tic">👤</span><span><span class="tn">프로필</span><span class="ts">동그란 사진·이름·소개 (맨 위)</span></span></div>
+        <div class="tpl" data-ic="✦" data-nm="글로우 후킹"><span class="tic">✦</span><span><span class="tn">후킹·공감 한 줄</span><span class="ts">"맞아, 내 얘기야"</span></span></div>
+        <div class="tpl" data-ic="❝" data-nm="인용구"><span class="tic">❝</span><span><span class="tn">가치·세계관 한 줄</span><span class="ts">내가 믿는 것</span></span></div>
         <div class="tpl" data-ic="¶" data-nm="자유 텍스트"><span class="tic">¶</span><span><span class="tn">자유 텍스트</span><span class="ts">제목·설명</span></span></div>
+      </div>
+
+      <div class="tcat addsec s2"><span class="addnum">2</span>시선 잡기 <span class="addwhy">· 사진·영상으로</span></div>
+      <div class="tgrid s2">
+        <div class="tpl" data-ic="✂" data-nm="스타일 갤러리"><span class="tic">✂</span><span><span class="tn">스타일 갤러리</span><span class="ts">분류·검색·전후</span></span></div>
+        <div class="tpl imp" data-ic="🎞" data-nm="대표 사진 쇼케이스"><span class="tic">🎞</span><span><span class="tn">대표 쇼케이스</span><span class="ts">대표 작업 카드</span></span></div>
+        <div class="tpl imp" data-ic="🔥" data-nm="베스트·대표 작업"><span class="tic">🔥</span><span><span class="tn">베스트 · 대표 작업</span><span class="ts">인기 컨텐츠를 크게</span></span></div>
+        <div class="tpl imp" data-ic="🎬" data-nm="영상"><span class="tic">🎬</span><span><span class="tn">영상 (VSL)</span><span class="ts">유튜브·릴스 임베드</span></span></div>
+        <div class="tpl" data-ic="🖼" data-nm="사진"><span class="tic">🖼</span><span><span class="tn">사진</span><span class="ts">포트폴리오 + 프레임</span></span></div>
+        <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전후사진</span><span class="ts">비포·애프터</span></span></div>
+        <div class="tpl" data-ic="◍" data-nm="하이라이트"><span class="tic">◍</span><span><span class="tn">하이라이트</span><span class="ts">후기·가격·메뉴 버블</span></span></div>
         <div class="tpl" data-ic="▥" data-nm="이미지 + 글"><span class="tic">▥</span><span><span class="tn">이미지 + 글</span><span class="ts">좌우 분할</span></span></div>
       </div>
 
-      <div class="tcat">링크 · 채널</div>
-      <div class="tgrid">
-        <div class="tpl" data-ic="🔗" data-nm="링크 버튼"><span class="tic">🔗</span><span><span class="tn">링크 버튼</span><span class="ts">주소 붙여넣기</span></span></div>
-        <div class="tpl" data-ic="✉" data-nm="뉴스레터"><span class="tic">✉</span><span><span class="tn">뉴스레터</span><span class="ts">구독 받기</span></span></div>
-      </div>
-
-      <div class="tcat">판매 <span style="font-weight:400; color:var(--muted);">· 예약 결정 단계</span></div>
-      <div class="tgrid">
-        <div class="tpl imp" data-ic="🛒" data-nm="서비스 · 상품"><span class="tic">🛒</span><span><span class="tn">서비스 · 상품</span><span class="ts">예약·신청·결제 버튼</span></span></div>
-        <div class="tpl imp" data-ic="👆" data-nm="CTA 버튼"><span class="tic">👆</span><span><span class="tn">CTA 버튼</span><span class="ts">"지금 예약" 행동유도 버튼</span></span></div>
-        <div class="tpl imp" data-ic="📌" data-nm="하단 고정 CTA" data-layout="sticky"><span class="tic">📌</span><span><span class="tn">하단 고정 CTA</span><span class="ts">항상 보이는 예약 바</span></span></div>
-        <div class="tpl imp" data-ic="⏳" data-nm="카운트다운"><span class="tic">⏳</span><span><span class="tn">카운트다운</span><span class="ts">마감까지 실시간 긴박감</span></span></div>
-        <div class="tpl imp" data-ic="🔢" data-nm="이용 방법"><span class="tic">🔢</span><span><span class="tn">이용 방법</span><span class="ts">1·2·3 진행 단계</span></span></div>
-        <div class="tpl imp" data-ic="🛡" data-nm="보장 배지"><span class="tic">🛡</span><span><span class="tn">보장 배지</span><span class="ts">환불·만족 보장으로 불안 ↓</span></span></div>
-        <div class="tpl" data-ic="🛍" data-nm="추천 제품"><span class="tic">🛍</span><span><span class="tn">추천 제품</span><span class="ts">쿠팡 파트너스</span></span></div>
-        <div class="tpl" data-ic="◇" data-nm="강의 · 전자책"><span class="tic">◇</span><span><span class="tn">강의 · 전자책</span><span class="ts">판매 버튼</span></span></div>
-        <div class="tpl" data-ic="％" data-nm="숫자 스탯"><span class="tic">％</span><span><span class="tn">숫자 스탯</span><span class="ts">성과 강조</span></span></div>
-      </div>
-
-      <div class="tcat">소통</div>
-      <div class="tgrid">
-        <div class="tpl" data-ic="📣" data-nm="이벤트 배너"><span class="tic">📣</span><span><span class="tn">이벤트 배너</span><span class="ts">기간 프로모션</span></span></div>
-        <div class="tpl" data-ic="？" data-nm="Q&amp;A"><span class="tic">？</span><span><span class="tn">Q&amp;A</span><span class="ts">자주 묻는 질문</span></span></div>
+      <div class="tcat addsec s3"><span class="addnum">3</span>믿게 하기 <span class="addwhy">· 신뢰·증거</span></div>
+      <div class="tgrid s3">
         <div class="tpl imp" data-ic="★" data-nm="후기"><span class="tic">★</span><span><span class="tn">후기</span><span class="ts">고객 후기</span></span></div>
-        <div class="tpl" data-ic="✎" data-nm="문의 폼"><span class="tic">✎</span><span><span class="tn">문의 폼</span><span class="ts">1:1 문의</span></span></div>
+        <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력</span></span></div>
+        <div class="tpl" data-ic="％" data-nm="숫자 스탯"><span class="tic">％</span><span><span class="tn">숫자 스탯</span><span class="ts">누적·재방문율</span></span></div>
       </div>
+
+      <div class="tcat addsec s4"><span class="addnum">4</span>더 보여주기 <span class="addwhy">· 내 콘텐츠</span></div>
+      <div class="tgrid s4">
+        <div class="tpl" data-ic="▦" data-nm="컨텐츠 갤러리"><span class="tic">▦</span><span><span class="tn">컨텐츠 갤러리</span><span class="ts">사진 가로 스크롤</span></span></div>
+        <div class="tpl" data-ic="🗞" data-nm="카드뉴스"><span class="tic">🗞</span><span><span class="tn">카드뉴스</span><span class="ts">글마다 링크 복사</span></span></div>
+        <div class="tpl" data-ic="▤" data-nm="아카이브"><span class="tic">▤</span><span><span class="tn">아카이브</span><span class="ts">매거진형 글</span></span></div>
+      </div>
+      <button type="button" class="add-import-row" id="add-import-row"><span class="air-ic">📚</span><span class="air-m"><b>발행한 글 가져오기</b><small>컨텐츠 탭의 글을 홈에 카드로 꽂기</small></span><span class="air-go">›</span></button>
+
+      <div class="tcat addsec s5"><span class="addnum">5</span>연결하기 <span class="addwhy">· 행동으로</span></div>
+      <div class="tgrid s5">
+        <div class="tpl imp" data-ic="🛒" data-nm="서비스 · 상품"><span class="tic">🛒</span><span><span class="tn">서비스 · 상품</span><span class="ts">예약·결제 버튼</span></span></div>
+        <div class="tpl" data-ic="🔗" data-nm="링크 버튼"><span class="tic">🔗</span><span><span class="tn">링크 버튼</span><span class="ts">인스타·유튜브·카톡</span></span></div>
+        <div class="tpl" data-ic="✉" data-nm="뉴스레터"><span class="tic">✉</span><span><span class="tn">뉴스레터</span><span class="ts">구독 받기</span></span></div>
+        <div class="tpl" data-ic="📍" data-nm="매장 · 위치"><span class="tic">📍</span><span><span class="tn">매장 · 위치</span><span class="ts">주소·지도</span></span></div>
+        <div class="tpl" data-ic="🏆" data-nm="랭킹 · 가격"><span class="tic">🏆</span><span><span class="tn">랭킹 · 가격</span><span class="ts">TOP 메뉴+가격</span></span></div>
+        <div class="tpl imp" data-ic="📇" data-nm="문의·신청"><span class="tic">📇</span><span><span class="tn">문의·신청 받기</span><span class="ts">이름·연락처 받기</span></span></div>
+        <div class="tpl" data-ic="✎" data-nm="문의 폼"><span class="tic">✎</span><span><span class="tn">문의 폼</span><span class="ts">1:1 문의</span></span></div>
+        <div class="tpl" data-ic="？" data-nm="Q&amp;A"><span class="tic">？</span><span><span class="tn">Q&amp;A</span><span class="ts">자주 묻는 질문</span></span></div>
+        <div class="tpl" data-ic="🎓" data-nm="강의 신청"><span class="tic">🎓</span><span><span class="tn">강의 신청</span><span class="ts">이름·연락처로 신청</span></span></div>
+        <div class="tpl" data-ic="◇" data-nm="강의 · 전자책"><span class="tic">◇</span><span><span class="tn">강의 · 전자책</span><span class="ts">판매 버튼</span></span></div>
+        <div class="tpl" data-ic="📣" data-nm="이벤트 배너"><span class="tic">📣</span><span><span class="tn">이벤트 배너</span><span class="ts">기간 프로모션</span></span></div>
+        <div class="tpl" data-ic="🛍" data-nm="추천 제품"><span class="tic">🛍</span><span><span class="tn">추천 제품</span><span class="ts">쿠팡 파트너스</span></span></div>
+      </div>
+
+      <div class="add-noresult" id="add-noresult">검색 결과가 없어요 · 다른 단어로 찾아보세요</div>
+
+      <div class="addadv" id="add-adv">
+        <div class="addadv-h" id="add-adv-h">🧩 고급 · 랜딩 장치 <span class="addadv-arr">▾</span></div>
+        <div class="addadv-sub">전환에 진심일 때만 · 또는 「컨텐츠 글」로 랜딩 따로</div>
+        <div class="addadv-body">
+          <div class="tgrid">
+            <div class="tpl" data-ic="🛡" data-nm="반박 제거"><span class="tic">🛡</span><span><span class="tn">반박 제거</span><span class="ts">"이래서 망설여요" 해소</span></span></div>
+            <div class="tpl" data-ic="🛡" data-nm="보장 배지"><span class="tic">🛡</span><span><span class="tn">보장 배지</span><span class="ts">환불·만족 보장</span></span></div>
+            <div class="tpl" data-ic="⏳" data-nm="카운트다운"><span class="tic">⏳</span><span><span class="tn">카운트다운</span><span class="ts">마감 긴박감</span></span></div>
+            <div class="tpl" data-ic="📌" data-nm="하단 고정 CTA" data-layout="sticky"><span class="tic">📌</span><span><span class="tn">하단 고정 CTA</span><span class="ts">항상 보이는 예약 바</span></span></div>
+            <div class="tpl" data-ic="🔢" data-nm="이용 방법"><span class="tic">🔢</span><span><span class="tn">이용 방법</span><span class="ts">1·2·3 단계</span></span></div>
+            <div class="tpl" data-ic="👆" data-nm="CTA 버튼"><span class="tic">👆</span><span><span class="tn">CTA 버튼</span><span class="ts">행동유도 버튼</span></span></div>
+            <div class="tpl" data-ic="🏷" data-nm="흐르는 태그 띠"><span class="tic">🏷</span><span><span class="tn">흐르는 태그 띠</span><span class="ts">키워드가 흐름</span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcat" style="margin-top:16px;">✨ 통째로 시작 <span style="font-weight:400; color:var(--muted);">· 검증된 순서로 한 번에</span></div>
+      <div class="tgrid">
+        <div class="tpl tpl-set" data-set="photo"><span class="tpl-badge">템플릿</span><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
+        <div class="tpl tpl-set" data-set="profile"><span class="tpl-badge">템플릿</span><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
+        <div class="tpl tpl-set" data-set="content"><span class="tpl-badge">템플릿</span><span class="tic">✍️</span><span><span class="tn">컨텐츠·구독형 세트</span><span class="ts">세계관→컨텐츠→구독</span></span></div>
+        <div class="tpl tpl-set tpl-prem" data-set="premium"><span class="tpl-badge tpl-badge-prem">프로</span><span class="tic">🖤</span><span><span class="tn">프리미엄 헤어샵 (뱅하우스 톤)</span><span class="ts">다크 그린·글로우·쇼케이스 — 테마까지 한 번에</span></span></div>
+      </div>
+
       </div><!-- /#add-all -->
+    </div>
+  </div>
+
+  <!-- 👁 구성 미리보기 팝업 -->
+  <div class="addpv-ov" id="addpv-ov">
+    <div class="addpv">
+      <div class="addpv-h"><span class="tic" id="addpv-ic">＋</span><span class="t" id="addpv-t"></span></div>
+      <div class="addpv-sub" id="addpv-sub"></div>
+      <div class="addpv-label">👁 채우면 이렇게 보여요</div>
+      <div class="addpv-frame" id="addpv-frame"></div>
+      <div class="addpv-btns">
+        <button type="button" class="addpv-cancel" id="addpv-cancel">닫기</button>
+        <button type="button" class="addpv-add" id="addpv-add">＋ 이 자리에 넣기</button>
+      </div>
     </div>
   </div>
 
@@ -2465,7 +2567,8 @@
   <!-- 🎨 새 디자인 화면 (분위기 + 메뉴) -->
   <div class="ov" id="dz-ov">
     <div class="sheet">
-      <div class="sheet-h"><span class="t">디자인</span><span class="x" id="dz-close">×</span></div>
+      <div class="sheet-h"><span class="t">분위기</span><span class="x" id="dz-close">×</span></div>
+      <div class="desc">어떤 톤으로 보일지 — 커버 사진 · 색 · 테마</div>
       <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>커버 사진</span><span class="dz-step" id="dz-st2"><span class="n">2</span>테마</span><button class="btn primary dz-next-top" id="dz-next">다음 →</button></div>
 
       <!-- 공유 미리보기 (커버 + 테마 색이 실시간 반영) -->
@@ -3137,7 +3240,7 @@
   <!-- 시안 B: 보면서 수정 라이브 캔버스 -->
   <div id="live-edit-ov">
     <div class="le-bar">
-      <button class="le-toptoggle" id="le-homeconfig" title="디자인 — 분위기·메뉴·테마">🎨 디자인</button>
+      <button class="le-toptoggle" id="le-homeconfig" title="분위기 — 커버·색·테마">🎨 분위기</button>
       <button class="le-toptoggle" id="le-home" title="고객이 보는 실제 페이지(새 탭)">🏠 고객 홈</button>
       <button class="le-toptoggle" id="le-opmode" title="운영 모드 — 예약·분석·설정">⚙ 운영</button>
       <button class="le-x" id="le-x" style="margin-left:auto;">💾 저장</button>
@@ -3151,7 +3254,7 @@
     </div>
     <!-- 하단 독 (토스식 · 아이콘 + 글자) -->
     <div class="le-dock">
-      <button class="le-d" id="le-design"><span class="di">🎨</span>디자인</button>
+      <button class="le-d" id="le-design"><span class="di">🎨</span>분위기</button>
       <button class="le-d" id="le-library"><span class="di">🖼</span>사진 보관함</button>
     </div>
   </div>
@@ -3219,15 +3322,83 @@
       c.addEventListener('click', function(){ orig.click(); });
     });
   }
+  // ── 🎯 내 홈 진단 (현재 구성 → 빈 목적 추천) ──
+  var STAGE_BY_TYPE={ glowhook:1,quote:1,text:1, stylegallery:2,lookbook:2,best:2,video:2,photocard:2,beforeafter:2,highlights:2,imagetext:2, review:3,authority:3,stat:3, gallery:4,cardnews:4,archive:4, service:5,link:5,newsletter:5,location:5,ranking:5,lead:5,contact:5,qna:5,event:5,products:5,reservation:5,channels:5 };
+  var STAGE_LABEL={1:'첫인상',2:'시선',3:'신뢰',4:'콘텐츠',5:'연결'};
+  var STAGE_SECNAME={1:'첫인상',2:'시선 잡기',3:'믿게 하기',4:'더 보여주기',5:'연결하기'};
+  var STAGE_REC_MSG={1:'맨 위에서 "내가 누구"인지 보여주세요',2:'사진·영상으로 시선을 잡으세요',3:'후기 하나면 예약이 가장 많이 올라가요',4:'콘텐츠로 꾸준함을 보여주세요',5:'예약·문의 받을 곳을 만드세요'};
+  var STAGE_COLOR={1:'#A78BFF',2:'#5BB8F5',3:'#46D6A6',4:'#F5C84B',5:'#FF8E72'};
+  var REC_PRIORITY=[3,2,5,1,4];
+  function renderHomeDiag(){
+    var diag=document.getElementById('add-diag'); if(!diag) return;
+    var filled={};
+    [].forEach.call(document.querySelectorAll('#rows .row'), function(r){
+      var sw=r.querySelector('[data-sw]'); if(sw && !sw.classList.contains('on')) return;   // 꺼진 구성 제외
+      var st=STAGE_BY_TYPE[r.getAttribute('data-type')]; if(st) filled[st]=true;
+    });
+    try{ var h=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); if(h.profileOn!==false) filled[1]=true; }catch(e){}
+    var filledCount=[1,2,3,4,5].filter(function(s){return filled[s];}).length;
+    var rec=0; for(var i=0;i<REC_PRIORITY.length;i++){ if(!filled[REC_PRIORITY[i]]){ rec=REC_PRIORITY[i]; break; } }
+    var dots=document.getElementById('add-dots'); if(dots){ dots.innerHTML='';
+      [1,2,3,4,5].forEach(function(s){
+        var on=!!filled[s], isRec=(s===rec);
+        var bstyle=on?('background:'+STAGE_COLOR[s]):'';
+        dots.insertAdjacentHTML('beforeend','<div class="add-dot'+(on?' on':'')+(isRec?' rec':'')+'"><span class="b" style="'+bstyle+'"></span><span class="l">'+STAGE_LABEL[s]+'</span></div>');
+      });
+    }
+    var msg=document.getElementById('add-diag-msg'), btn=document.getElementById('add-diag-btn'), mini=document.getElementById('add-diag-mini');
+    if(rec===0){
+      if(msg) msg.innerHTML='🎉 5단계가 다 채워졌어요 — 홈이 완성됐어요!';
+      if(btn) btn.style.display='none';
+      if(mini) mini.innerHTML='홈 완성 <b>5/5</b> · 완성!';
+    } else {
+      if(msg) msg.innerHTML='홈 완성 <b style="color:var(--ink)">'+filledCount+'/5</b> · <b>'+STAGE_SECNAME[rec]+'</b>가 비었어요 — '+STAGE_REC_MSG[rec];
+      if(btn){ btn.style.display=''; btn.textContent=STAGE_LABEL[rec]+' 채우러 가기 →';
+        btn.onclick=function(){ var sec=document.querySelector('#add-all .addsec.s'+rec); if(sec){ sec.scrollIntoView({behavior:'smooth',block:'center'}); sec.classList.remove('flash'); void sec.offsetWidth; sec.classList.add('flash'); } }; }
+      if(mini) mini.innerHTML='홈 완성 <b>'+filledCount+'/5</b> · <b>'+STAGE_SECNAME[rec]+'</b> 비었어요 — 펴서 보기';
+    }
+  }
+  // ── 🔎 검색 필터 ──
+  function tileHay(t){ return ((t.getAttribute('data-nm')||'')+' '+((t.querySelector('.tn')||{}).textContent||'')+' '+((t.querySelector('.ts')||{}).textContent||'')).toLowerCase(); }
+  function filterAddCatalog(q){
+    q=(q||'').trim().toLowerCase(); var searching=!!q, any=false, el;
+    if(el=document.getElementById('add-diag')) el.style.display=searching?'none':'';
+    if(el=document.getElementById('add-import-row')) el.style.display=searching?'none':'';
+    [].forEach.call(document.querySelectorAll('#add-all .addsec'), function(h){
+      var grid=h.nextElementSibling; if(!grid) return; var vis=0;
+      [].forEach.call(grid.querySelectorAll('.tpl[data-nm]'), function(t){ var ok=!q||tileHay(t).indexOf(q)!==-1; t.style.display=ok?'':'none'; if(ok){vis++; any=true;} });
+      h.style.display=vis?'':'none'; grid.style.display=vis?'':'none';
+    });
+    var adv=document.getElementById('add-adv');
+    if(adv){ var avis=0;
+      [].forEach.call(adv.querySelectorAll('.tpl[data-nm]'), function(t){ var ok=!q||tileHay(t).indexOf(q)!==-1; t.style.display=ok?'':'none'; if(ok){avis++; any=true;} });
+      if(searching){ adv.style.display=avis?'':'none'; if(avis) adv.classList.add('open'); } else { adv.style.display=''; }
+    }
+    var sg=document.querySelector('#add-all .tpl-set'), setGrid=sg?sg.closest('.tgrid'):null, setHdr=setGrid?setGrid.previousElementSibling:null;
+    if(setGrid) setGrid.style.display=searching?'none':'';
+    if(setHdr && setHdr.classList.contains('tcat')) setHdr.style.display=searching?'none':'';
+    var nr=document.getElementById('add-noresult'); if(nr) nr.style.display=(searching && !any)?'block':'none';
+  }
   function openAddCatalog(){
     window.__insertBeforeRow=null;
-    var all=document.getElementById('add-all'); if(all) all.style.display='none';
-    var mb=document.getElementById('add-more-btn'); if(mb){ mb.style.display=''; mb.textContent='＋ 전체 구성 보기 ▾'; }
-    buildRecommended();
+    var adv=document.getElementById('add-adv'); if(adv) adv.classList.remove('open');   // 고급은 기본 접힘
+    var dg=document.getElementById('add-diag'); if(dg) dg.classList.remove('collapsed');
+    var s=document.getElementById('add-search'); if(s) s.value='';
+    try{ filterAddCatalog(''); }catch(e){}
+    try{ renderHomeDiag(); }catch(e){}
     try{ if(window.__decorateProTiles) window.__decorateProTiles(); }catch(e){}
     ov.classList.add('open');
     var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
   }
+  // 고급·랜딩 접기/펼치기
+  var advH=document.getElementById('add-adv-h');
+  if(advH) advH.addEventListener('click', function(){ var a=document.getElementById('add-adv'); if(a) a.classList.toggle('open'); });
+  // 진단 접기/펼치기
+  var diagH=document.getElementById('add-diag-h');
+  if(diagH) diagH.addEventListener('click', function(){ var d=document.getElementById('add-diag'); if(d) d.classList.toggle('collapsed'); });
+  // 검색 입력
+  var addSearch=document.getElementById('add-search');
+  if(addSearch) addSearch.addEventListener('input', function(){ filterAddCatalog(this.value); });
   window.__openAddCatalog=openAddCatalog;
   var addMoreBtn=document.getElementById('add-more-btn');
   if(addMoreBtn) addMoreBtn.addEventListener('click', function(){ var all=document.getElementById('add-all'); if(all) all.style.display=''; this.style.display='none'; });
@@ -4053,8 +4224,11 @@
   // 템플릿 선택 → 전환 흐름 리스트에 새 행 추가 (맨 아래)
   ov.querySelectorAll('.tpl').forEach(function(t){
     if(t.dataset.set) return;   // 세트 타일은 아래에서 별도 처리(통째로 추가)
-    t.addEventListener('click', function(){
-      if(blockLocked(t.dataset.nm)){ if(window.__cmShowLock) window.__cmShowLock(PRO_NM[t.dataset.nm]+' 블록 ('+t.dataset.nm+')','pro'); return; }
+    if(t.dataset.special) return;   // 프로필 등 특수 구성은 별도 핸들러
+    t.addEventListener('click', function(){ openBlockPreview(t); });   // 탭 → 미리보기 → 넣기
+  });
+  // 실제 추가 (미리보기 "넣기" 또는 직접)
+  function addBlockFromTile(t){
       var row = document.createElement('div');
       row.className = 'row';
       row.innerHTML =
@@ -4076,8 +4250,52 @@
       closeAdd();
       try{ refreshBuilder(); }catch(e){}
       if(window.__liveEditActive && window.__liveScrollNew){ window.__liveScrollNew(row); } else { row.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-    });
-  });
+  }
+  // 👁 구성 미리보기 — "채우면 이렇게 보여요"
+  var IMG3='<div class="m-imgs"><i></i><i></i><i></i></div>', IMG2='<div class="m-imgs"><i></i><i></i></div>';
+  var PREVIEW_HTML = {
+    '후기':'<div class="m-stars">★★★★★</div><div class="m-q" style="margin-top:5px">"인생 머리예요. 결이 너무 좋아져서 매일 거울 봐요!"</div><div class="m-by">— 김○○ 고객</div>',
+    '전문가 증명':'<div class="m-badge">🏅 8년 경력 · 수상 3회</div><div class="m-q" style="margin-top:8px">믿고 맡길 이유를 한눈에 보여줘요.</div>',
+    '숫자 스탯':'<div style="display:flex; gap:14px; justify-content:center; text-align:center"><div><div class="m-num">1,800</div><div class="m-numl">누적 고객</div></div><div><div class="m-num">82%</div><div class="m-numl">재방문율</div></div></div>',
+    '스타일 갤러리':IMG3+'<div class="m-q" style="margin-top:8px">분류·검색으로 손님이 원하는 스타일을 바로 찾아요.</div>',
+    '대표 사진 쇼케이스':IMG2+'<div class="m-q" style="margin-top:8px">대표 작업을 크게 — 실력을 말없이 증명.</div>',
+    '베스트·대표 작업':IMG2+'<div class="m-q" style="margin-top:8px">🔥 인기 컨텐츠를 크게 (사회적 증명).</div>',
+    '영상':'<div style="aspect-ratio:16/9; border-radius:9px; background:linear-gradient(135deg,#2c2c33,#3a3142); display:flex; align-items:center; justify-content:center; font-size:26px; color:rgba(255,255,255,.6)">▶</div><div class="m-q" style="margin-top:8px">유튜브·릴스를 홈에서 바로 재생.</div>',
+    '사진':'<div style="aspect-ratio:4/5; border-radius:9px; background:linear-gradient(135deg,#2c2c33,#3a3142)"></div><div class="m-q" style="margin-top:8px">성과·포트폴리오 한 장 + 프레임 꾸미기.</div>',
+    '전후사진':IMG2+'<div class="m-q" style="margin-top:8px">비포 → 애프터, 변화가 가장 강한 증거.</div>',
+    '서비스 · 상품':'<div class="m-row"><span>앞머리 컷</span><b>30,000원</b></div><div class="m-row"><span>전체 스타일링</span><b>120,000원</b></div><span class="m-cta">📅 지금 예약하기</span>',
+    '랭킹 · 가격':'<div class="m-row"><span>🥇 히메허쉬 <b style="color:#F5C84B">HOT</b></span><b>55,000원</b></div><div class="m-row"><span>🥈 슬릭컷</span><b>55,000원</b></div>',
+    '링크 버튼':'<div class="m-row"><span>📷 인스타그램</span><b>›</b></div><div class="m-row"><span>▶ 유튜브</span><b>›</b></div><div class="m-row"><span>💬 카카오 상담</span><b>›</b></div>',
+    '카드뉴스':IMG3+'<div class="m-q" style="margin-top:8px">📝 글마다 링크 — 모은 콘텐츠가 자산이 돼요.</div>',
+    '컨텐츠 갤러리':IMG3+'<div class="m-q" style="margin-top:8px">사진을 가로로 쓱 넘겨보게 해요.</div>',
+    '글로우 후킹':'<div style="text-align:center"><div style="font-size:30px; font-weight:800; color:var(--coral)">70%</div><div class="m-numl">재방문하는 단골 비율</div></div>',
+    '인용구':'<div style="font-size:14px; font-weight:700; line-height:1.5; color:var(--coral)">"무리 없이, 결을 살리는 변화를 만듭니다."</div>',
+    '후킹·공감 한 줄':'<div style="font-size:15px; font-weight:800; line-height:1.4">"앞머리만 자르면 얼굴이<br>더 커 보여 늘 고민이셨죠?"</div>',
+    '뉴스레터':'<div class="m-q">✉ 이메일 구독 받기</div><span class="m-cta">구독하기</span>',
+    '매장 · 위치':'<div style="aspect-ratio:5/3; border-radius:9px; background:linear-gradient(135deg,#22303a,#2c2c33); display:flex; align-items:center; justify-content:center; font-size:22px">📍</div><div class="m-q" style="margin-top:8px">주소·지도·길찾기를 한 번에.</div>',
+    '문의·신청':'<div class="m-row" style="border:none"><span style="color:var(--muted)">이름 · 연락처 입력칸</span></div><span class="m-cta">신청하기</span>',
+    '문의 폼':'<div class="m-row" style="border:none"><span style="color:var(--muted)">이름 · 이메일 · 메시지</span></div><span class="m-cta">보내기</span>'
+  };
+  var addpvTile=null, addpvOv=document.getElementById('addpv-ov');
+  function openBlockPreview(t){
+    if(blockLocked(t.dataset.nm)){ if(window.__cmShowLock) window.__cmShowLock(PRO_NM[t.dataset.nm]+' 블록 ('+t.dataset.nm+')','pro'); return; }
+    addpvTile=t;
+    var nm=t.dataset.nm, tn=((t.querySelector('.tn')||{}).textContent||nm), ts=((t.querySelector('.ts')||{}).textContent||'');
+    var icEl=document.getElementById('addpv-ic'); if(icEl) icEl.textContent=t.dataset.ic||'＋';
+    var tEl=document.getElementById('addpv-t'); if(tEl) tEl.textContent=tn;
+    var sEl=document.getElementById('addpv-sub'); if(sEl) sEl.textContent=ts;
+    var frame=document.getElementById('addpv-frame');
+    var pv=PREVIEW_HTML[nm];
+    if(!pv){ var ty=(typeof NAME_TYPE!=='undefined')?NAME_TYPE[nm]:null; var intro=(typeof EDIT_INTRO!=='undefined' && ty && EDIT_INTRO[ty])?EDIT_INTRO[ty]:null;
+      pv= intro ? ('<div class="m-q">'+intro.what+'</div>') : ('<div class="m-q">이 구성을 추가하면 홈에 <b>'+tn+'</b> 영역이 생겨요.<br>사진·글만 채우면 바로 완성돼요.</div>'); }
+    if(frame) frame.innerHTML=pv;
+    if(addpvOv) addpvOv.classList.add('open');
+  }
+  if(addpvOv){
+    var pvAdd=document.getElementById('addpv-add'); if(pvAdd) pvAdd.addEventListener('click', function(){ addpvOv.classList.remove('open'); if(addpvTile) addBlockFromTile(addpvTile); });
+    var pvCancel=document.getElementById('addpv-cancel'); if(pvCancel) pvCancel.addEventListener('click', function(){ addpvOv.classList.remove('open'); });
+    addpvOv.addEventListener('click', function(e){ if(e.target===addpvOv) addpvOv.classList.remove('open'); });
+  }
   // 통째로 추가(세트) — STYLE_PRESETS 순서대로 여러 블록을 한 번에
   var SET_PRO = { hook:1, photo:1, profile:1, premium:1 };   // 전환·세일즈 풀세트 = 프로 (content는 베이직 OK)
   // 통째 템플릿이 테마·폰트까지 같이 바꾸는 경우 (뱅하우스 톤)
@@ -4158,6 +4376,15 @@
   }
   ov.querySelectorAll('.tpl[data-set]').forEach(function(t){
     t.addEventListener('click', function(){ openTplPreview(t.getAttribute('data-set')); });
+  });
+  // 프로필 = 특수 구성 (일반 블록 아님) — 맨 위 프로필 켜기
+  ov.querySelectorAll('.tpl[data-special="profile"]').forEach(function(t){
+    t.addEventListener('click', function(){
+      var was = !(typeof home!=='undefined' && home && home.profileOn===false);
+      if(window.__setProfileOn) window.__setProfileOn(true);
+      closeAdd();   // 라이브 편집 중이면 closeAdd가 미리보기 새로고침까지
+      try{ toast(was?'프로필이 이미 맨 위에 있어요':'프로필을 넣었어요 · 맨 위에서 사진·이름·소개를 채워보세요'); }catch(e){}
+    });
   });
 
   // ════ 사진 보관함 + 이미지 압축 ════
@@ -5460,7 +5687,7 @@
     }
     document.getElementById('dz-st1').onclick=function(){ showPage(1); };
     document.getElementById('dz-st2').onclick=function(){ showPage(2); };
-    document.getElementById('dz-next').onclick=function(){ if(dzPage<2){ showPage(2); } else { ov.classList.remove('open'); if(window.toast) toast('디자인 저장됨 · 상단 [저장]으로 공개 반영'); } };
+    document.getElementById('dz-next').onclick=function(){ if(dzPage<2){ showPage(2); } else { ov.classList.remove('open'); if(window.toast) toast('분위기 저장됨 · 상단 [저장]으로 공개 반영'); } };
     window.__openDesign=function(){ cov(); loadLive(); renderPreview(); showPage(1); ov.classList.add('open'); };
     var entry=document.getElementById('set-design2'); if(entry) entry.onclick=function(){ window.__openDesign(); };
   })();
@@ -6533,7 +6760,7 @@
     var tier=window.__authTier||'basic', exp=window.__authExpires;
     var tierLbl=({basic:'베이직',pro:'프로',premium:'프리미엄'})[tier]||'베이직', dday;
     if(exp){ var left=Math.ceil((exp-Date.now())/86400000); dday=left>0?('사용 D-'+left):'기간 만료'; } else { dday='평생 이용'; }
-    var TILES=[['✏️','홈 편집','c-purple','live'],['✍️','새 글','c-violet','newpost'],['🎴','카드뉴스','c-pink','cardnews'],['📥','가져오기','c-gray','import'],['💰','스토어','c-green','store'],['👁','손님 홈','c-orange','realhome'],['📊','고객·분석','c-teal','data'],['🎨','디자인','c-blue','design']];
+    var TILES=[['✏️','홈 편집','c-purple','live'],['✍️','새 글','c-violet','newpost'],['🎴','카드뉴스','c-pink','cardnews'],['📥','가져오기','c-gray','import'],['💰','스토어','c-green','store'],['👁','손님 홈','c-orange','realhome'],['📊','고객·분석','c-teal','data'],['🎨','분위기','c-blue','design']];
     var fold; try{ fold=JSON.parse(localStorage.getItem('cm-hub-fold')||'null'); }catch(_){ fold=null; } if(!fold) fold={ns:true,q:true};   // 기본 접힘
     box.innerHTML=''
       +'<div class="mbr"><span class="mbr-ic">👑</span><div class="mbr-m"><div class="mbr-t">'+tierLbl+' 멤버십</div><div class="mbr-s">'+dday+'</div></div><button class="mbr-go" id="hub-plan">관리 →</button></div>'
@@ -7867,14 +8094,14 @@
       if(addb){ var p=addb.querySelector('.le-fab-p'), t=addb.querySelector('.le-fab-t');
         if(on){ if(p)p.textContent='✕'; if(t)t.textContent='취소'; addb.classList.add('cancel'); }
         else { if(p)p.textContent='＋'; if(t)t.textContent='구성 추가'; addb.classList.remove('cancel'); } }
-      try{ ifr.contentWindow.postMessage({type: on?'la-enter-insert':'la-exit-insert'}, '*'); }catch(e){}
+      try{ (document.getElementById('le-iframe')||ifr).contentWindow.postMessage({type: on?'la-enter-insert':'la-exit-insert'}, '*'); }catch(e){}   // 항상 현재 iframe을 찾아 전송(재로드돼도 먹통 안 되게)
     }
     window.__setFabInsert=setFabInsert;
     if(addb) addb.onclick=function(){ setFabInsert(!fabInsert); };
     var impb=document.getElementById('le-fab-import'); if(impb) impb.onclick=function(){ if(window.__openImportPicker) window.__openImportPicker(); };
     // 우측 상단 '구성 삭제' → 지금 선택(테두리)된 구성 삭제 (없으면 안내)
     var delb=document.getElementById('le-fab-del');
-    if(delb) delb.onclick=function(){ try{ ifr.contentWindow.postMessage({type:'la-del-selected'}, '*'); }catch(e){} };
+    if(delb) delb.onclick=function(){ try{ (document.getElementById('le-iframe')||ifr).contentWindow.postMessage({type:'la-del-selected'}, '*'); }catch(e){} };
     // 하단 독: 🎨디자인 → 홈 꾸미기(라이브 위) / 🖼사진 보관함 → 보관함(라이브 위, 폴더·업로드·삭제)
     var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ if(window.__openHomeDeco) window.__openHomeDeco('all'); };
     var lib=document.getElementById('le-library'); if(lib) lib.onclick=function(){ if(window.openVault) window.openVault(null); };
