@@ -624,6 +624,12 @@
   .la-prof-readd{display:none;}
   html[data-edit] .la-prof-readd{display:block; width:100%; margin:6px 0 14px; padding:14px; background:rgba(123,90,255,.10); border:1.5px dashed rgba(167,139,255,.6); border-radius:14px; color:#A78BFF; font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer;}
   html[data-edit] .la-prof-readd:active{transform:scale(.99);}
+  /* ✨ 스크롤 등장 효과 (home.reveal · 기본 켜짐, 편집모드·모션줄이기는 자동 꺼짐) — 베스트 조합: 블록 줌인 + 여러 항목 스태거 */
+  html.has-reveal .reveal-blk{opacity:0; transform:scale(.95); transition:opacity .5s ease, transform .65s cubic-bezier(.2,.7,.2,1); will-change:opacity, transform;}
+  html.has-reveal .reveal-blk.in{opacity:1; transform:none;}
+  html.has-reveal .reveal-blk.has-items{opacity:1; transform:none;}   /* 여러 항목 블록: 컨테이너는 즉시, 항목이 차르륵 */
+  html.has-reveal .reveal-blk.has-items .reveal-si{opacity:0; transform:translateY(15px); transition:opacity .45s ease, transform .55s cubic-bezier(.2,.7,.2,1);}
+  html.has-reveal .reveal-blk.has-items.in .reveal-si{opacity:1; transform:none;}
   /* ③ '여기' 끼워넣기 슬롯 */
   .la-slot{display:none;}
   html[data-edit][data-inserting] .la-slot{display:flex; align-items:center; gap:9px; width:100%; margin:2px 0; padding:6px 0; background:none; border:none; cursor:pointer; font-family:inherit;}
@@ -2917,6 +2923,54 @@
     layoutHome(blocks);
   }
 
+  // ✨ 스크롤 등장 효과 — 블록이 뷰포트에 들어오면 떠오름 (home.reveal · 기본 켜짐, 편집모드/모션줄이기는 끔)
+  function setupReveal(){
+    var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
+    var root=document.documentElement;
+    var h; try{ h=JSON.parse(localStorage.getItem('cm-home-v1'))||{}; }catch(e){ h={}; }
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var on = (h.reveal!==false) && !reduce && !EDIT;
+    // 이전 상태 정리 (토글/재렌더 대응)
+    if(window.__revealIO){ try{ window.__revealIO.disconnect(); }catch(e){} window.__revealIO=null; }
+    [].forEach.call(document.querySelectorAll('.reveal-blk'), function(el){ el.classList.remove('reveal-blk','in','has-items'); });
+    [].forEach.call(document.querySelectorAll('.reveal-si'), function(el){ el.classList.remove('reveal-si'); el.style.transitionDelay=''; });
+    root.classList.remove('has-reveal');
+    if(!on) return;
+    var home=document.querySelector('[data-pane="home"]'); if(!home) return;
+    var kids=[].filter.call(home.children, function(el){
+      if(el.id==='home-promo') return false;
+      if(el.classList && el.classList.contains('la-slot')) return false;
+      var cs=getComputedStyle(el); if(cs.display==='none') return false;
+      if(el.offsetHeight===0) return false;
+      return true;
+    });
+    if(!kids.length) return;
+    root.classList.add('has-reveal');
+    var io=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold:0.1, rootMargin:'0px 0px -6% 0px' });
+    // 스태거 항목 자동 감지: 블록 안에서 '같은 클래스 자식 3개+'인 컨테이너를 찾아 그 항목들을 차르륵 (클래스 몰라도 작동 — 갤러리·카드·랭킹·리스트 등)
+    function staggerItemsOf(block){
+      var pools=[block]; [].forEach.call(block.children, function(c){ if(c.nodeType===1){ pools.push(c); [].forEach.call(c.children, function(g){ if(g.nodeType===1) pools.push(g); }); } });
+      var best=null, bestN=2;
+      pools.forEach(function(p){
+        var ch=[].filter.call(p.children, function(k){ return k.nodeType===1 && k.offsetHeight>0; });
+        if(ch.length<3) return;
+        var byCls={}; ch.forEach(function(k){ var c=((k.className||'').toString().split(' ')[0])||k.tagName; byCls[c]=(byCls[c]||0)+1; });
+        var top=0, topCls=null; for(var c in byCls){ if(byCls[c]>top){ top=byCls[c]; topCls=c; } }
+        if(top>bestN){ bestN=top; best=ch.filter(function(k){ return (((k.className||'').toString().split(' ')[0])||k.tagName)===topCls; }); }
+      });
+      return best;
+    }
+    kids.forEach(function(el){
+      el.classList.add('reveal-blk'); io.observe(el);
+      var items=staggerItemsOf(el);
+      if(items && items.length>=3){ el.classList.add('has-items');
+        items.slice(0,14).forEach(function(it,i){ it.classList.add('reveal-si'); it.style.transitionDelay=(0.04+i*0.07).toFixed(2)+'s'; });
+      }
+    });
+    window.__revealIO=io;
+  }
+  window.__setupReveal=setupReveal;
+
   // ════ 예약하기 (단독 기능 · d.reservation config) ════
   var HOLIDAYS_KR = {
     '2026-01-01':1,'2026-02-16':1,'2026-02-17':1,'2026-02-18':1,'2026-03-01':1,'2026-03-02':1,'2026-05-05':1,'2026-05-24':1,'2026-05-25':1,
@@ -3315,6 +3369,7 @@
     window.__QNA = d.qna || [];
     window.__resvOn = !!(d.reservation && d.reservation.on);   // '이 스타일로 예약' 버튼 노출 조건 (블록 렌더 전 세팅)
     if(d.blocks && d.blocks.length){ renderBlocks(d.blocks); }
+    try{ setTimeout(setupReveal, 230); }catch(e){}   // ✨ 스크롤 등장 효과 (블록 렌더 후)
     if(d.posts && d.posts.length){ try{ buildPosts(d.posts); }catch(e){} try{ buildArchive(d.posts, d.archiveView||'cards'); }catch(e){} }
     try{ setTimeout(decoratePostViews, 450); }catch(e){}
     // 제품·Q&A 탭 = 편집기 게시물 워크스페이스의 제품/Q&A 매니저 데이터로 렌더

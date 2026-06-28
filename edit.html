@@ -1008,6 +1008,14 @@
   .dz-phone[data-bright="dark"] .dz-b.s{background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.25);}
   .dz-phone[data-bright="light"] .dz-b.s{background:#fff; color:var(--dztxt); box-shadow:0 3px 10px rgba(0,0,0,.06);}
   .dz-cg{margin-bottom:15px;}
+  .dz-motion-btn{display:inline-flex; align-items:center; gap:9px; background:var(--soft); border:1px solid var(--hair); border-radius:11px; padding:8px 12px; cursor:pointer; font-family:var(--sans);}
+  .dz-motion-btn:active{transform:scale(.98);}
+  .dzm-sw{width:38px; height:22px; border-radius:99px; background:var(--coral); position:relative; transition:background .2s; flex:0 0 38px;}
+  .dzm-sw i{position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform .2s;}
+  .dz-motion-btn.off .dzm-sw{background:#3a3a42;}
+  .dz-motion-btn.off .dzm-sw i{transform:translateX(16px);}
+  .dzm-lbl{font-size:12.5px; font-weight:700; color:var(--coral);}
+  .dz-motion-btn.off .dzm-lbl{color:var(--muted);}
   .dz-cg .gl{font-size:11px; font-weight:800; color:var(--muted); margin-bottom:7px; display:block;}
   .dz-seg{display:flex; gap:6px;}
   .dz-seg button{flex:1; padding:11px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font:700 12.5px var(--sans); cursor:pointer;}
@@ -2600,6 +2608,9 @@
       <div data-dzpage="2" style="display:none;">
         <div class="dz-cg"><span class="gl">테마 <span style="font-weight:400; color:var(--muted);">· 완성된 분위기 (라이트·다크·그라데이션)</span></span><div class="hm-themes" id="dz-theme-grid"></div></div>
         <div class="dz-cg"><span class="gl">버튼 색 <span style="font-weight:400; color:var(--muted);">· 테마는 그대로, 버튼만 내 색으로 (선택)</span></span><div class="dz-sws" id="dz-accent"><span class="dz-sw dz-sw-reset" data-ac="" title="테마 기본색으로">↺</span></div></div>
+        <div class="dz-cg"><span class="gl">✨ 스크롤 움직임 <span style="font-weight:400; color:var(--muted);">· 내리면 블록이 스윽 떠올라요 (공개 페이지)</span></span>
+          <button type="button" id="dz-motion" class="dz-motion-btn"><span class="dzm-sw"><i></i></span><span class="dzm-lbl">켜짐</span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -5638,6 +5649,10 @@
     }
     function persistCover(){ cov().on=!!cov().photo; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
     function persistTheme(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=home.theme; cur.accentOverride=home.accentOverride||''; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+    // ✨ 스크롤 움직임(등장 효과) 토글 — home.reveal (기본 켜짐)
+    function persistMotion(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.reveal=home.reveal; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+    function renderDzMotion(){ var b=document.getElementById('dz-motion'); if(!b) return; var on=(home.reveal!==false); b.classList.toggle('off', !on); var lbl=b.querySelector('.dzm-lbl'); if(lbl) lbl.textContent=on?'켜짐':'꺼짐'; }
+    (function(){ var mb=document.getElementById('dz-motion'); if(mb) mb.addEventListener('click', function(){ home.reveal=(home.reveal===false); renderDzMotion(); persistMotion(); if(window.toast) toast(home.reveal!==false?'스크롤 움직임 켜짐 · 공개 페이지에서 보여요':'스크롤 움직임 꺼짐'); }); })();
 
     // 사진 범위(풀/반/배경) — data-dzgrp 있는 세그만 (사진 모드 세그는 제외)
     ov.querySelectorAll('.dz-seg').forEach(function(seg){ var grp=seg.getAttribute('data-dzgrp'); if(!grp) return; seg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; cov()[grp]=b.getAttribute('data-v'); renderPreview(); persistCover(); }); });
@@ -5681,7 +5696,7 @@
     function showPage(n){ dzPage=n;
       for(var i=1;i<=2;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }
       document.getElementById('dz-next').textContent = n===1?'다음 →':'완료 ✓';
-      if(n===2) renderDzThemes();
+      if(n===2){ renderDzThemes(); renderDzMotion(); }
       renderPreview();
       var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
     }
@@ -7393,6 +7408,15 @@
   })();
   // 코드 자동완성 — 한번 로그인하면 다음엔 코드 미리 채움
   (function(){ try{ var lc=localStorage.getItem('la-last-code'); var c=document.getElementById('lg-code'); if(lc && c && !c.value){ c.value=lc; } }catch(e){} })();
+  // 🔧 테스트 전용(localhost에서만): localStorage cm-devedit='1' 이면 로그인 화면 건너뛰고 바로 편집모드 진입 (배포엔 영향 없음 — hostname 가드)
+  (function(){ try{
+    var isLocal=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+    var wantDev = localStorage.getItem('cm-devedit')==='1' || location.hash.indexOf('dev')!==-1;
+    if(isLocal && wantDev && AUTH && AUTH.code && AUTH.pinHash){
+      enter();
+      setTimeout(function(){ try{ if(window.__openLive) window.__openLive(); }catch(e){} }, 900);
+    }
+  }catch(e){} })();
   // 한글 자판으로 쳐도 같은 키의 영문으로 변환 (ㄷ→e, 데→ep 식; 두벌식 매핑)
   function hangulToQwerty(str){
     var CHO=['r','R','s','e','E','f','a','q','Q','t','T','d','w','W','c','z','x','v','g'];
