@@ -487,6 +487,7 @@
   .terms-note{display:block; margin-top:12px; padding-top:10px; border-top:1px solid var(--hair); color:var(--muted); font-size:11px;}
   .lg-signup-note{font-size:12.5px; color:var(--muted); line-height:1.6; text-align:center; margin:0 0 12px; background:var(--coral-soft, rgba(123,90,255,.12)); padding:11px 13px; border-radius:11px;}
   .lg-signup-note b{color:var(--ink);}
+  .pin-d{-webkit-text-security:disc;}   /* 모바일 '마지막 글자 잠깐 보이기' 방지 — 입력 즉시 ● 로 가림 */
   /* 시작하기 — 코드 입력 단계 */
   .login-card.mode-signup #lg-pin-box, .login-card.mode-signup .pin-hint, .login-card.mode-signup #lg-btn, .login-card.mode-signup #lg-tolink{display:none;}
   .login-card.mode-signup #lg-next, .login-card.mode-signup #lg-backlogin, .login-card.mode-signup #lg-signup-note{display:block;}
@@ -4377,11 +4378,18 @@
     var why=document.getElementById('tpp-why'), w=TPL_WHY[setKey];
     if(why){ if(w){ why.innerHTML='<div class="tpw-h">왜 이 흐름일까?</div><div class="tpw-intro">'+w.intro+'</div>'+w.steps.map(function(s,i){ return '<div class="tpw-step"><span class="tpw-n">'+(i+1)+'</span><div><b>'+s[0]+'</b><span>'+s[1]+'</span></div></div>'; }).join('')+'<div class="tpw-foot">순서는 추가 후 <b>드래그로 변경</b>할 수 있어요</div>'; why.style.display=''; } else why.style.display='none'; }
     document.getElementById('tpp-use').onclick=function(){
-      if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ pov.style.display='none'; if(window.__cmShowLock) window.__cmShowLock('전환 템플릿 (풀세트)','pro'); return; }
+      if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ pov.style.display='none'; if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':'전환 템플릿 (풀세트)','pro'); return; }
+      // 템플릿 = 완성된 페이지 그 자체로 시작 (이어붙이기 X → 교체) · 기존 구성 있으면 확인
+      var hasContent = document.querySelectorAll('#rows .row').length>0;
+      if(hasContent && !window.confirm('이 템플릿으로 홈을 새로 시작해요.\n지금 구성은 사라지고 템플릿으로 바뀌어요 — 계속할까요?')) return;
       pov.style.display='none';
+      if(rowsBox) rowsBox.innerHTML='';   // 교체: 기존 구성 비우기
+      window.__insertBeforeRow=null;
       insertSet(setKey); closeAdd();
-      try{ toast('"'+d.title+'" 템플릿을 추가했어요'); }catch(e){}
-      if(window.__liveEditActive && window.__liveScrollNew){ window.__liveScrollNew(); } else { var last=document.querySelector('#rows .row:last-child'); if(last) last.scrollIntoView({ behavior:'smooth', block:'center' }); }
+      try{ toast('"'+d.title+'" 템플릿으로 시작했어요 · 사진·글만 채우면 완성'); }catch(e){}
+      // 빌더 목록이 아니라 '완성된 페이지'로 보여주기
+      if(window.__liveEditActive){ if(window.__liveRefresh) window.__liveRefresh(); }
+      else if(window.__openLive){ setTimeout(window.__openLive, 60); }
     };
     pov.style.display='flex';
   }
@@ -7246,10 +7254,13 @@
     var hadPage = !!(res.data && res.data.blocks && res.data.blocks.length);
     // 로그인 후: 먼저 고객이 보는 내 화면을 보여줌 (확인) → 편집하기로 게이트 진입. 핸들 없으면 게이트로 폴백
     // 로그인하면 바로 편집/운영 게이트 (고객 홈 미리보기는 게이트나 '고객 홈으로'에서). 신규(온보딩 중)는 제외.
-    if(hadPage){ if(window.__showModeGate) setTimeout(window.__showModeGate, 120); }
+    // 로그인 직후 화면은 enter()에서 '고객 홈'으로 처리 (운영 깜빡임 제거) — 게이트는 고객 홈 닫을 때 뜸
     try{ if(window.__updateDraftsBtn) window.__updateDraftsBtn(); }catch(_){}
   }
-  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){} }
+  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
+    // 로그인 직후 → 운영 화면 노출 없이 바로 '고객 홈'(공개 미리보기). dev 자동편집(localhost)은 제외
+    if(!window.__devEnter){ try{ if(window.__showCustomerHome) window.__showCustomerHome(true); }catch(_){} }
+  }
 
   // 분야 선택 제거 — 로그인은 코드+PIN만. selInd=null이면 아래 분야 일치 검사들이 자동 통과
   var selInd=null;
@@ -7413,6 +7424,7 @@
     var isLocal=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
     var wantDev = localStorage.getItem('cm-devedit')==='1' || location.hash.indexOf('dev')!==-1;
     if(isLocal && wantDev && AUTH && AUTH.code && AUTH.pinHash){
+      window.__devEnter=true;   // 고객 홈 건너뛰고 바로 편집모드 (테스트용)
       enter();
       setTimeout(function(){ try{ if(window.__openLive) window.__openLive(); }catch(e){} }, 900);
     }
