@@ -508,11 +508,24 @@
   .tag{font-size:14px; color:var(--on-soft); margin-top:7px; line-height:1.5;}
 
   /* ── 커버 사진 히어로 (홈 꾸미기 → 커버 사진) ── */
-  .prof-cover{position:relative; margin:-26px -22px -64px; height:330px; overflow:hidden; border-radius:0;}
-  .profile.cover-full .prof-cover{height:450px; margin-bottom:-84px;}
+  .prof-cover{position:relative; margin:-26px -22px -64px; aspect-ratio:1/1; overflow:hidden; border-radius:0;}   /* 미리보기 '반'과 동일 비율 → 잘림 일치 */
+  .profile.cover-full .prof-cover{aspect-ratio:5/9; margin-bottom:-84px;}   /* 미리보기 '전체'(폰 240x432=5/9)와 동일 비율 → 캐릭터 위치 WYSIWYG */
   .prof-cover .pc-img{position:absolute; inset:0; background-size:cover; background-position:center; transform-origin:center; will-change:transform;}
   /* 위·아래 모두 페이지색으로 페이드 → 딱딱한 테두리 없이 자연스럽게 녹아듦 */
   .prof-cover::after{content:''; position:absolute; inset:0; background:linear-gradient(to bottom, var(--paper) 0%, transparent 20%, transparent 50%, var(--paper) 93%); pointer-events:none;}
+  /* ── 커버 사진 = 페이지 맨 위 전체 (후킹문구·이름은 아래로 흐름) ── */
+  .top-cover{position:relative; margin:0 -22px 8px; overflow:hidden; border-radius:0 0 20px 20px;}   /* 맨 위 끝까지 채움 — 위 모서리 직각, 아래만 둥글게 */
+  .top-cover.tc-full{aspect-ratio:3/2;}    /* 가로 와이드 커버 — 세로 짧아서 후킹문구가 바로 같이 보임 (가로 사진 권장) */
+  .top-cover.tc-half{aspect-ratio:2/1;}    /* 더 얇은 띠 배너 */
+  .top-cover .pc-img{position:absolute; inset:0; width:100%; height:100%; max-width:none; aspect-ratio:auto; background-size:cover; background-position:center; transform-origin:center; will-change:transform;}   /* 다른 .pc-img(max-width:340) 규칙 무력화 → 박스 꽉 채움 */
+  .top-cover::after{content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 0%, transparent 82%, var(--paper) 100%); pointer-events:none;}   /* 아래로 페이지색에 자연스럽게 녹아듦 */
+  html.has-topcover .avatar{display:none;}   /* 커버 있으면 기본 집 아이콘(아바타) 숨김 */
+  html.has-topcover .profile{padding-top:2px;}
+  /* 커버를 화면 맨 위 끝까지 — 주소바는 사진 위에 얹힘 */
+  html.has-topcover .wrap{padding-top:0;}
+  html.has-topcover .topbar{position:absolute; top:0; left:0; right:0; padding:14px 22px 0; margin:0; z-index:6;}
+  html.has-topcover .handle{text-shadow:0 1px 4px rgba(255,255,255,.55);}
+  html.has-topcover .top-cover::before{content:''; position:absolute; top:0; left:0; right:0; height:64px; background:linear-gradient(to bottom, rgba(255,255,255,.45), transparent); pointer-events:none; z-index:1;}   /* 주소 글자 가독성용 살짝 밝은 띠 */
   .profile.cover-on .avatar{display:none;}
   .profile.cover-on .name, .profile.cover-on .tag{position:relative; z-index:2;}
   /* ── 배경 사진 (커버 범위=배경) — 페이지 전체 뒤에 깔기 ── */
@@ -533,9 +546,10 @@
     var(--paper); }
   #cover-amb{display:none;}
   @media (min-width:680px){
-    html.has-amb, html.has-amb body{ background:transparent; }
-    html.has-amb #cover-amb{display:block; position:fixed; inset:-60px; z-index:-2; background-size:cover; background-position:center; filter:blur(64px) saturate(1.35); opacity:.55; pointer-events:none;}
-    html.has-amb #cover-amb::after{content:''; position:absolute; inset:0; background:color-mix(in srgb, var(--paper) 28%, transparent);}
+    html.has-amb{ background:var(--paper); }            /* 사진 흐린 부분 뒤 = 테마 종이색 */
+    html.has-amb body{ background:transparent; }
+    html.has-amb #cover-amb{display:block; position:fixed; inset:-60px; z-index:-2; background-size:cover; background-position:center; filter:blur(72px) saturate(.9); opacity:.5; pointer-events:none;}   /* D안: 흐린 사진 + 테마 틴트 — 사람 분위기는 살리되 차분하게 */
+    html.has-amb #cover-amb::after{content:''; position:absolute; inset:0; background:color-mix(in srgb, var(--paper) 50%, transparent);}
     html.has-amb .wrap{ background:var(--paper); }
   }
   .profile.cover-on .name{text-shadow:0 1px 16px rgba(0,0,0,.16);}
@@ -586,7 +600,7 @@
   html[data-edit] .la-hb:not(#home-gallery):not(.mq-band){overflow:visible;}   /* overflow:hidden 카드의 라벨 잘림 방지 (단 마퀴는 hidden 유지=태그 삐져나옴 방지) */
   html[data-edit] .la-hb.la-ed-sel{outline-color:rgba(167,139,255,.9); outline-width:2px; background:rgba(123,90,255,.07);}
   /* 구성 구분 헤더 (항상 보임 · 각 구성 위): 이름 + 회색 힌트 + 하어라인 */
-  .la-ed-head{display:none;}
+  .la-ed-head, .la-ed-bar{display:none;}   /* 편집모드(data-edit) 아닐 땐 편집 UI 숨김 — 디자인 미리보기·손님화면 깨끗하게 */
   html[data-edit] .la-ed-head{position:absolute; top:-42px; left:4px; right:4px; display:flex; flex-direction:column; gap:2px; pointer-events:none; user-select:none;}
   html[data-edit] .la-ed-hrow{display:flex; align-items:center; gap:8px;}
   html[data-edit] .la-ed-hrow::before{content:''; width:3px; height:12px; border-radius:2px; background:rgba(167,139,255,.85); flex:0 0 auto;}
@@ -1875,7 +1889,9 @@
 
   // 분위기 테마 전환 (나중엔 편집기 설정에서 저장 → 방문자 페이지에 적용)
   var swatches = document.querySelectorAll('.sw');
+  var DEPRECATED_THEMES = { lemon:'cream' };   // 편집기 테마 그리드에서 빠진 옛 테마 → 기본 크림으로 자동 전환 (노란색으로 굳던 버그)
   function setTheme(t){
+    if(t && DEPRECATED_THEMES[t]) t = DEPRECATED_THEMES[t];
     document.documentElement.setAttribute('data-theme', t);
     swatches.forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-theme') === t); });
     try { localStorage.setItem('u-theme', t); } catch(e){}
@@ -1885,6 +1901,23 @@
   });
   var saved; try { saved = localStorage.getItem('u-theme'); } catch(e){}
   if (saved) setTheme(saved); else document.documentElement.setAttribute('data-theme','cream');
+
+  // ── 커버 사진 핏 적용 (초점=background-position 0~100%, 줌=background-size로 → 어떤 비율·범위든 드래그로 위치 조정 가능, 항상 꽉 참) ──
+  var __ia={};   // 이미지 가로/세로 비율 캐시
+  function __coverPhotoOf(el){ var bg=(el&&el.style.backgroundImage)||''; var m=bg.match(/url\((['"]?)(.*?)\1\)/); return m?m[2]:''; }
+  function applyCoverFit(el, fit){
+    if(!el) return; fit=fit||{};
+    var z=fit.z||1; if(z<1)z=1;
+    var x=(fit.u==='bgpos'&&fit.x!=null)?Math.max(0,Math.min(100,fit.x)):50;
+    var y=(fit.u==='bgpos'&&fit.y!=null)?Math.max(0,Math.min(100,fit.y)):50;
+    el.style.transform='none';
+    el.style.backgroundPosition=x+'% '+y+'%';
+    var photo=__coverPhotoOf(el);
+    var r=el.getBoundingClientRect(); var boxA=(r.width&&r.height)?(r.width/r.height):1;
+    function sz(ia){ var bw,bh; if(ia>=boxA){ bh=z*100; bw=z*(ia/boxA)*100; } else { bw=z*100; bh=z*(boxA/ia)*100; } el.style.backgroundSize=bw.toFixed(2)+'% '+bh.toFixed(2)+'%'; }
+    if(__ia[photo]){ sz(__ia[photo]); }
+    else { el.style.backgroundSize='cover'; if(photo){ var im=new Image(); im.onload=function(){ if(im.naturalWidth&&im.naturalHeight){ __ia[photo]=im.naturalWidth/im.naturalHeight; if(__coverPhotoOf(el)===photo) sz(__ia[photo]); } }; im.src=photo; } }
+  }
 
   // ── 홈 꾸미기 설정 적용 (폰트 / 사진 모션 / 히어로) ──
   function applyHome(){
@@ -1902,32 +1935,37 @@
     if(profEl){
       var cov = (h.design && h.design.on && h.design.photo) ? { on:true, photo:h.design.photo, layout:h.design.layout, fit:h.design.fit } : (h.cover || {});
       var rootEl = document.documentElement;
-      var pc = profEl.querySelector('.prof-cover');
+      var pc = document.querySelector('.top-cover');
       var pageCov = document.getElementById('page-cover');
       var isBg = !!(cov.on && cov.photo && cov.layout==='bg');
+      var isChar = !!(cov.photo && (cov.photo.indexOf('%EC%BA%90')!==-1 || cov.photo.indexOf('캐릭터')!==-1));   // 우리 기본 캐릭터(세로 포스터) = 마스코트가 정중앙·꽉 차게 A프레이밍 자동(줌1.42·우7.5%·상14%)·옛 드래그 무시
       // 배경 모드 — 사진을 페이지 전체 뒤에 깔기
       if(isBg){
         if(!pageCov){ pageCov=document.createElement('div'); pageCov.id='page-cover'; pageCov.className='page-cover'; var pim=document.createElement('div'); pim.className='pcv-img'; pageCov.appendChild(pim); document.body.insertBefore(pageCov, document.body.firstChild); }
         var pimg=pageCov.querySelector('.pcv-img');
         pimg.style.backgroundImage='url('+cov.photo+')';
-        var bf=cov.fit||{}; var bfp=(bf.u==='pct');   // %단위(신규)면 위치 적용, 레거시 px면 중앙(0)으로 안전 렌더
-        pimg.style.transform='scale('+(bf.z||1)+') translate('+(bfp?(bf.x||0):0)+'%,'+(bfp?(bf.y||0):0)+'%)';
+        applyCoverFit(pimg, cov.fit||{});
         rootEl.classList.add('cover-bg');
       } else {
         if(pageCov) pageCov.remove();
         rootEl.classList.remove('cover-bg');
       }
-      // 히어로 모드 (풀/반)
+      // 커버 사진 = 페이지 맨 위 전체 (topbar 다음) → 후킹문구·이름은 그 아래로 자연스럽게 흐름
       if(cov.on && cov.photo && !isBg){
-        if(!pc){ pc=document.createElement('div'); pc.className='prof-cover'; var im=document.createElement('div'); im.className='pc-img'; pc.appendChild(im); profEl.insertBefore(pc, profEl.firstChild); }
+        var staleC=document.querySelector('.prof-cover'); if(staleC) staleC.remove();   // 구버전(프로필 안 커버) 제거
+        var wrapEl=profEl.parentNode||document.querySelector('.wrap'); var tb=wrapEl?wrapEl.querySelector('.topbar'):null;
+        if(!pc){ pc=document.createElement('div'); var im=document.createElement('div'); im.className='pc-img'; pc.appendChild(im); }
+        if(wrapEl && pc.parentNode!==wrapEl){ wrapEl.insertBefore(pc, wrapEl.firstChild); }   /* 커버 = 페이지 맨 위 (주소바 위로) full-bleed */
+        pc.className='top-cover'+(cov.layout==='full'?' tc-full':' tc-half');
         var pcimg=pc.querySelector('.pc-img');
         pcimg.style.backgroundImage='url('+cov.photo+')';
-        var f=cov.fit||{}; var fp=(f.u==='pct');   // %단위(신규)면 위치 적용, 레거시 px면 중앙(0)으로 안전 렌더
-        pcimg.style.transform='scale('+(f.z||1)+') translate('+(fp?(f.x||0):0)+'%,'+(fp?(f.y||0):0)+'%)';
-        profEl.classList.add('cover-on');
-        profEl.classList.toggle('cover-full', cov.layout==='full');
+        applyCoverFit(pcimg, cov.fit||{});
+        rootEl.classList.add('has-topcover');
+        profEl.classList.remove('cover-on','cover-full');
       } else {
         if(pc) pc.remove();
+        var staleC2=document.querySelector('.prof-cover'); if(staleC2) staleC2.remove();
+        rootEl.classList.remove('has-topcover');
         profEl.classList.remove('cover-on','cover-full');
       }
       // 기본 배경 (사진 없을 때 · 테마색 그라데이션)
@@ -3474,6 +3512,8 @@
 
   // ── 편집 브릿지(?edit=1): 부모(편집기)가 보낸 데이터를 실시간 렌더 + 섹션 탭 보고 ──
   var EDIT_MODE=false; try{ EDIT_MODE = new URLSearchParams(location.search).get('edit')==='1'; }catch(e){}
+  // 디자인 모달 라이브 미리보기: 커버 위치/줌만 실시간 갱신 (전체 재렌더 없이 부드럽게)
+  function updateCoverFit(f){ if(!f) return; var el=document.querySelector('.top-cover .pc-img')||document.querySelector('.page-cover .pcv-img'); if(!el) return; applyCoverFit(el, f); }
   // 💬 상담 신청폼 (성함·연락처·문의 → 명단 저장 + 카톡 이어주기)
   function openConsultForm(kakao){
     var ov=document.createElement('div'); ov.className='consult-ov';
@@ -3500,10 +3540,12 @@
   document.addEventListener('click', function(e){ var b=e.target.closest?e.target.closest('[data-consult]'):null; if(!b) return; e.preventDefault(); if(EDIT_MODE) return; openConsultForm(b.getAttribute('data-consult')); });
   if(EDIT_MODE){
     document.documentElement.setAttribute('data-edit','1');
+    var __bridgeGot=false;
     window.addEventListener('message', function(ev){
       var m=ev.data||{};
-      if(m && m.type==='la-edit-data'){ try{ applyPublicData(m.data); }catch(e){} setTimeout(setupEditTaps, 160); }
+      if(m && m.type==='la-edit-data'){ __bridgeGot=true; try{ applyPublicData(m.data); }catch(e){} setTimeout(setupEditTaps, 160); }
       else if(m && m.type==='la-edit-preview'){ if(m.on){ document.documentElement.removeAttribute('data-edit'); } else { document.documentElement.setAttribute('data-edit','1'); } }
+      else if(m && m.type==='la-cover-fit'){ try{ updateCoverFit(m.fit); }catch(e){} }
       else if(m && m.type==='la-set-avatar'){ try{ applyAvatar(m.url); }catch(e){} }
       else if(m && m.type==='la-scroll-new'){ try{ scrollToNewBlock(m.idx); }catch(e){} }
       else if(m && m.type==='la-enter-insert'){ try{ showInsertSlots(); }catch(e){} }
@@ -3513,6 +3555,11 @@
       else if(m && m.type==='la-edit-nopreview'){ try{ document.querySelector('.bottom-nav')&&(document.querySelector('.bottom-nav').style.display='none'); }catch(e){} }
     });
     try{ parent.postMessage({type:'la-edit-ready'}, '*'); }catch(e){}
+    // 편집모드에서도 발행된 실데이터를 베이스로 로드 → 하드코딩 샘플("탐구자 리지") 대신 진짜가 보임. 브릿지(la-edit-data)가 오면 그게 우선이라 덮지 않음.
+    try{ window.laRpc('li_public_get', { p_handle: handle }).then(function(res){
+      if(__bridgeGot) return; if(!res || !res.ok || !res.data) return;
+      try{ applyPublicData(res.data); }catch(e){}
+    }).catch(function(){}); }catch(e){}
   } else {
     window.laRpc('li_public_get', { p_handle: handle }).then(function(res){
       if(!res || !res.ok || !res.data) return;   // 저장된 데이터 없으면 기존 샘플 유지

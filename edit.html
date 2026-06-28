@@ -900,26 +900,32 @@
   .cov-seg button.on{background:var(--coral); color:#fff;}
 
   /* 새 디자인 화면 (분위기 — 시안 포팅, 모바일 세로) */
-  .dz-steps{display:flex; gap:18px; justify-content:center; margin:2px 0 16px;}
+  .dz-steps{display:flex; gap:18px; justify-content:center; margin:2px 0 16px; position:relative;}
+  .dz-next-top{position:absolute; right:0; top:50%; transform:translateY(-50%); width:auto !important; margin:0 !important; padding:7px 15px !important; font-size:12.5px !important; border-radius:999px;}
   .dz-step{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--muted);}
   .dz-step.on{color:var(--coral);}
   .dz-step .n{display:grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--soft); color:var(--muted); font-size:11px;}
   .dz-step.on .n{background:var(--coral); color:#fff;}
-  .dz-phone{width:240px; height:432px; margin:0 auto 18px; border-radius:32px; overflow:hidden; position:relative; box-shadow:0 18px 44px rgba(0,0,0,.45); background:var(--dzbg);}
+  .dz-phone{width:240px; height:500px; margin:0 auto 18px; border-radius:32px; overflow:hidden; position:relative; box-shadow:0 18px 44px rgba(0,0,0,.45); background:var(--dzbg);}
   .dz-phone[data-bright="dark"]{ --dzbg:#15110d; --dztxt:#fff; --dzsub:rgba(255,255,255,.8); }
   .dz-phone.dz-grad{ background:radial-gradient(circle at 32% -2%, color-mix(in srgb, var(--dzac) 34%, var(--dzbg)) 0%, var(--dzbg) 58%); }   /* 그라데이션 = 다크 테마만 */
   .dz-phone[data-bright="light"]{ --dzbg:#efe7da; --dztxt:#33281c; --dzsub:#9c8e7c; }
   .dz-photo{position:absolute; left:0; right:0; top:0; overflow:hidden; touch-action:none; cursor:grab; background:#00000022;}
   .dz-phone[data-layout="full"] .dz-photo{ bottom:0; }
-  .dz-phone[data-layout="half"] .dz-photo{ height:54%; }
+  .dz-phone[data-layout="half"] .dz-photo{ height:240px; }   /* 240폭 → 1:1, 실제 .prof-cover(aspect 1/1)와 일치 */
   .dz-phone[data-layout="bg"] .dz-photo{ inset:0; }
-  .dz-photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform-origin:center; transform:scale(var(--z,1)) translate(var(--px,0%),var(--py,0%)); user-select:none; -webkit-user-drag:none;}
+  .dz-photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:var(--px,50%) var(--py,50%); transform-origin:center; transform:scale(var(--z,1)); user-select:none; -webkit-user-drag:none;}
   .dz-ph-empty{position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.55); font-size:12px; pointer-events:none;}
   .dz-scrim{position:absolute; left:0; right:0; pointer-events:none;}
-  .dz-phone[data-layout="full"] .dz-scrim{ inset:0; background:linear-gradient(to bottom,transparent 30%,var(--dzbg) 86%); }
+  .dz-phone[data-layout="full"] .dz-scrim{ inset:0; background:linear-gradient(to bottom, var(--dzbg) 0%, transparent 20%, transparent 50%, var(--dzbg) 93%); }   /* 실제 .prof-cover::after 페이드와 동일하게 → 캐릭터 보이는 구간 일치 */
   .dz-phone[data-layout="half"] .dz-scrim{ top:34%; height:24%; background:linear-gradient(to bottom,transparent,var(--dzbg)); }
   .dz-phone[data-layout="bg"] .dz-scrim{ inset:0; background:linear-gradient(to bottom, color-mix(in srgb, var(--dzbg) 10%, transparent) 0%, color-mix(in srgb, var(--dzbg) 34%, transparent) 50%, color-mix(in srgb, var(--dzbg) 78%, transparent) 100%); }
   .dz-content{position:absolute; left:0; right:0; bottom:0; padding:0 18px 20px; text-align:center; color:var(--dztxt); pointer-events:none;}
+  /* 라이브 미리보기 = 실제 u.html 페이지 (가짜 폰 위에 덮음) */
+  .dz-live-ifr{position:absolute; inset:0; width:100%; height:100%; border:0; z-index:3; background:var(--dzbg); display:none;}
+  .dz-live-drag{position:absolute; inset:0; z-index:4; cursor:grab; touch-action:none; display:none;}
+  .dz-live-drag:active{cursor:grabbing;}
+  #dz-phone.dz-live .dz-live-ifr, #dz-phone.dz-live .dz-live-drag{display:block;}
   .dz-nm{font-size:18px; font-weight:800; letter-spacing:.03em;}
   .dz-tg{font-size:10.5px; color:var(--dzsub); margin:5px 0 12px;}
   .dz-b{display:block; padding:12px; border-radius:13px; font-size:12px; font-weight:700; margin-bottom:7px;}
@@ -1485,7 +1491,7 @@
       <div class="login-t">컨텐츠 허브</div>
       <div class="login-s" id="lg-sub">컨텐츠 허브 운영자 페이지 · 코드와 PIN으로 들어가면 편집·설정을 할 수 있어요</div>
       <div class="lg-signup-note" id="lg-signup-note">발급받은 <b>코드</b>를 입력하면, 다음 화면에서 <b>나만의 PIN</b>을 정해요.<br>가입은 이 한 번이면 끝이에요 😊</div>
-      <input id="lg-code" placeholder="발급받은 코드" autocapitalize="characters" autocomplete="off">
+      <input id="lg-code" placeholder="발급받은 코드 (6자리)" autocapitalize="characters" autocomplete="off" maxlength="6">
       <div class="pin-box" id="lg-pin-box">
         <input class="pin-d" type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 1번째">
         <input class="pin-d" type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 2번째">
@@ -2460,7 +2466,7 @@
   <div class="ov" id="dz-ov">
     <div class="sheet">
       <div class="sheet-h"><span class="t">디자인</span><span class="x" id="dz-close">×</span></div>
-      <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>커버 사진</span><span class="dz-step" id="dz-st2"><span class="n">2</span>테마</span></div>
+      <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>커버 사진</span><span class="dz-step" id="dz-st2"><span class="n">2</span>테마</span><button class="btn primary dz-next-top" id="dz-next">다음 →</button></div>
 
       <!-- 공유 미리보기 (커버 + 테마 색이 실시간 반영) -->
       <div class="dz-phone" id="dz-phone" data-layout="full" data-bright="light" style="--dzac:#ef7a33;">
@@ -2473,25 +2479,25 @@
           <div class="dz-b s">포트폴리오</div>
           <div class="dz-b s">고객 후기</div>
         </div>
+        <!-- 실제 페이지 라이브 미리보기 (가짜 폰 위에 덮음) + 투명 드래그 레이어 -->
+        <iframe id="dz-live-ifr" class="dz-live-ifr" title="실시간 미리보기" scrolling="no"></iframe>
+        <div id="dz-live-drag" class="dz-live-drag"></div>
       </div>
 
       <div data-dzpage="1">
         <div class="dz-cg"><span class="gl">사진</span><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">사진 없음</button><button type="button" data-pm="own">📷 내 사진</button><button type="button" data-pm="char">🏠 캐릭터</button></div></div>
         <div class="dz-cg" id="dz-bg-cg"><span class="gl">기본 배경 <span style="font-weight:400; color:var(--muted);">· 사진 없어도 안 휑하게 (테마 색)</span></span><div class="dz-seg dz-pm-seg" id="dz-bgstyle"><button type="button" data-bg="" class="on">없음</button><button type="button" data-bg="glow">은은한 글로우</button><button type="button" data-bg="mesh">소프트 메쉬</button></div></div>
-        <div class="dz-cg" id="dz-range-cg" style="display:none;"><span class="gl">사진 범위 <span style="font-weight:400; color:var(--muted);">· 어디까지 채울지</span></span><div class="dz-seg" data-dzgrp="layout"><button type="button" data-v="full" class="on">풀(전체)</button><button type="button" data-v="half">반</button><button type="button" data-v="bg">배경</button></div></div>
+        <div class="dz-cg" id="dz-range-cg" style="display:none;"><span class="gl">커버 모양 <span style="font-weight:400; color:var(--muted);">· 어떻게 보여줄지</span></span><div class="dz-seg" data-dzgrp="layout"><button type="button" data-v="full" class="on">커버 (가로 와이드)</button><button type="button" data-v="bg">배경 (전체화면)</button></div></div>
         <div class="dz-cg" id="dz-zoom-cg" style="display:none;">
-          <input type="range" id="dz-zoom" min="100" max="260" value="118" style="width:100%; accent-color:var(--coral);">
-          <div class="vhint" style="text-align:left; margin-top:5px;">사진 끌어서 위치 · 휠·두 손가락 확대 · <b>색·분위기는 ②테마</b>에서</div>
+          <div class="vhint" style="text-align:center; padding:8px 2px; font-size:13px; line-height:1.7;">👆 <b>끌어서</b> 위치 맞추기 &nbsp;·&nbsp; 🔍 <b>두 손가락</b>(또는 휠)로 확대<br><span style="color:var(--muted);">색·분위기는 ② 테마에서</span></div>
         </div>
-        <div class="vhint" style="text-align:left; margin-top:2px; line-height:1.6;">💻 <b>가로로 넓은 사진</b>이 컴퓨터에서 예뻐요 · 양옆은 자동으로 자연스럽게 채워져요</div>
+        <div class="vhint" id="dz-size-hint" style="text-align:left; margin-top:2px; line-height:1.6;">🖼 <b>가로로 넓은 사진</b>(예: 1200×800)이 커버에 좋아요 — 세로가 짧아 후킹 문구가 바로 같이 보여요 · 항상 꽉 채워져요</div>
       </div>
 
       <div data-dzpage="2" style="display:none;">
         <div class="dz-cg"><span class="gl">테마 <span style="font-weight:400; color:var(--muted);">· 완성된 분위기 (라이트·다크·그라데이션)</span></span><div class="hm-themes" id="dz-theme-grid"></div></div>
         <div class="dz-cg"><span class="gl">버튼 색 <span style="font-weight:400; color:var(--muted);">· 테마는 그대로, 버튼만 내 색으로 (선택)</span></span><div class="dz-sws" id="dz-accent"><span class="dz-sw dz-sw-reset" data-ac="" title="테마 기본색으로">↺</span></div></div>
       </div>
-
-      <button class="btn primary" id="dz-next" style="width:100%; margin-top:8px; padding:13px;">다음: 테마 →</button>
     </div>
   </div>
 
@@ -5144,6 +5150,9 @@
     ['violet','#14101F','#A87CF0'],['aurora','#0E1424','#7AA8FF'],
     ['framer','#171717','#2D9CFF'],['bokeh','#0A0A0C','#6FD6A0']
   ];
+  // 폐기된(그리드에 없는) 옛 테마 — 예: lemon — 가 저장돼 있으면 기본 크림으로 마이그레이션.
+  // 안 그러면 편집기에서 선택 표시가 안 되고(아무 칸도 sel 안 됨) 저장 때 그 옛 테마가 그대로 다시 발행됨 → "크림 저장했는데 노랑" 버그.
+  (function(){ var ok=false; for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme){ ok=true; break; } } if(!ok){ home.theme='cream'; try{ var c=JSON.parse(localStorage.getItem(HKEY)||'{}'); c.theme='cream'; localStorage.setItem(HKEY, JSON.stringify(c)); }catch(e){} } })();
   // ─── 등급(요금제) 기능 잠금 ─── (AUTH는 다른 스크립트 블록이라 window.__authTier로 받음)
   function cmTier(){ var t=window.__authTier||'basic'; return (t==='pro'||t==='premium')?t:'basic'; }
   var CM_TIER_RANK={basic:0, pro:1, premium:2};
@@ -5352,14 +5361,28 @@
     var DARK_THEMES={midnight:1,forest:1,luxe:1,violet:1,aurora:1,framer:1,bokeh:1,brand:1,prism:1,banghouse:1,nvidia:1,neon:1,cobalt:1,butterfly:1,glacier:1,olive:1};
     var phone=document.getElementById('dz-phone'), img=document.getElementById('dz-img'), photo=document.getElementById('dz-photo'), zoomEl=document.getElementById('dz-zoom'), empty=document.getElementById('dz-ph-empty');
     // 커버 사진 = home.cover {on,photo,layout,fit}
-    function cov(){ if(!home.cover||typeof home.cover!=='object') home.cover={on:false,photo:'',layout:'full',fit:{z:1.18,x:0,y:0,u:'pct'}}; var c=home.cover; if(!c.fit) c.fit={z:1.18,x:0,y:0,u:'pct'}; if(c.fit.u!=='pct'){ c.fit.x=0; c.fit.y=0; c.fit.u='pct'; }  /* 레거시 px값 → 1회 중앙 리셋 */ if(!c.layout) c.layout='full'; return c; }
+    function cov(){ if(!home.cover||typeof home.cover!=='object') home.cover={on:false,photo:'',layout:'full',fit:{z:1,x:50,y:50,u:'bgpos'}}; var c=home.cover; if(!c.fit) c.fit={z:1,x:50,y:50,u:'bgpos'}; if(c.fit.u!=='bgpos'){ c.fit={z:c.fit.z||1, x:50, y:50, u:'bgpos'}; }  /* 옛 단위(px/pct)는 중앙 bgpos로 1회 마이그(초점은 드래그로 다시) */ if(!c.layout) c.layout='full'; return c; }
     function clampZ(v){ return Math.max(1, Math.min(4, v)); }
+    // 크롭 제한 — 사진이 항상 프레임을 꽉 채우게(빈 여백 방지). 줌 z에서 이동 가능 최대치 = 50*(z-1)/z %.
+    // (z=1이면 0 → 이동 불가, 자르려면 살짝 확대 후 이동. translate가 scale 뒤에 곱해지므로 이 식이 가장자리 딱 맞음)
+    function clampFit(f){ if(!f) return; var z=f.z; if(!(z>=1)) z=1; if(z>4) z=4; f.z=z; if(f.u==='bgpos'){ if(f.x>100)f.x=100; else if(f.x<0)f.x=0; if(f.y>100)f.y=100; else if(f.y<0)f.y=0; } }   // 초점=background-position 0~100%(항상 꽉 참, 여백 0)
     function themeAccent(){ for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme) return THEMES[i][2]; } return '#ef7a33'; }
     function isDark(){ return !!DARK_THEMES[home.theme]; }
     var CHAR_IMG='samples/'+encodeURIComponent('캐릭터 배경깔끔')+'.png';   // 브랜드 캐릭터 (배경용 · 글자 최소)
     function photoMode(){ var p=cov().photo||''; if(!p) return 'none'; return (p===CHAR_IMG)?'char':'own'; }
     var accBox=document.getElementById('dz-accent');
     BTNCOLORS.forEach(function(c){ var s=document.createElement('span'); s.className='dz-sw'; s.setAttribute('data-ac',c); s.style.background=c; accBox.appendChild(s); });
+
+    // ── 라이브 미리보기(실제 u.html 페이지) 연동 — 미리보기=발행 100% 일치 ──
+    var lifr=document.getElementById('dz-live-ifr'), ldrag=document.getElementById('dz-live-drag');
+    if(phone) phone.classList.add('dz-live');
+    var _liveReady=false, _liveT=null;
+    function liveHandle(){ var pf=(((document.getElementById('pf-handle')||{}).value||'').trim()); if(pf) return pf; if(window.AUTH&&window.AUTH.handle) return window.AUTH.handle; try{ var la=JSON.parse(localStorage.getItem('la-auth')||'null'); if(la&&la.handle) return la.handle; }catch(e){} return 'preview'; }   // window.AUTH가 undefined여도 la-auth에서 핸들 찾기 → 미리보기가 샘플('preview')로 빠지지 않게
+    function sendLive(){ if(!_liveReady||!lifr) return; var data=null; try{ data=(window.__serialize?window.__serialize():(typeof serialize==='function'?serialize():null)); }catch(e){} if(!data) return; try{ lifr.contentWindow.postMessage({type:'la-edit-data', data:data}, '*'); setTimeout(function(){ try{ lifr.contentWindow.postMessage({type:'la-edit-preview', on:true}, '*'); }catch(e){} }, 220); }catch(e){} }   // 데이터 갱신 후 편집 UI 숨겨 깨끗한 미리보기 유지
+    function sendLiveSoon(){ clearTimeout(_liveT); _liveT=setTimeout(sendLive, 90); }
+    function sendFit(){ if(!_liveReady||!lifr) return; var f=cov().fit; try{ lifr.contentWindow.postMessage({type:'la-cover-fit', fit:{z:f.z||1,x:(f.x==null?50:f.x),y:(f.y==null?50:f.y),u:f.u||'bgpos'}}, '*'); }catch(e){} }
+    function loadLive(){ _liveReady=false; if(lifr){ lifr.onload=function(){ setTimeout(function(){ if(!_liveReady){ _liveReady=true; } try{ sendLive(); sendFit(); }catch(e){} }, 400); }; lifr.src='u.html?edit=1&u='+encodeURIComponent(liveHandle())+'&cb='+Date.now(); } }   // 안전망: la-edit-ready 누락돼도 로드 후 데이터 전송(샘플로 남는 것 방지)
+    window.addEventListener('message', function(ev){ var m=ev.data||{}; if(m.type==='la-edit-ready' && lifr && ev.source===lifr.contentWindow){ _liveReady=true; try{ lifr.contentWindow.postMessage({type:'la-edit-preview', on:true}, '*'); }catch(e){} sendLive(); } });
 
     function renderPreview(){ var c=cov();
       phone.setAttribute('data-bright', isDark()?'dark':'light');
@@ -5372,14 +5395,19 @@
       var pm=photoMode();
       var pmSeg=document.getElementById('dz-photo-mode'); if(pmSeg){ pmSeg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-pm')===pm); }); }
       var rcg=document.getElementById('dz-range-cg'), zcg=document.getElementById('dz-zoom-cg');
-      if(rcg) rcg.style.display=(pm==='none')?'none':''; if(zcg) zcg.style.display=(pm==='none')?'none':'';
+      if(rcg) rcg.style.display=(pm==='none')?'none':''; if(zcg) zcg.style.display=(pm==='none')?'none':'';   // 사진 있으면(캐릭터 포함) 범위·줌·드래그 컨트롤 표시
+      var cnote=document.getElementById('dz-char-note'); if(cnote) cnote.style.display='none';
+      var shint=document.getElementById('dz-size-hint'); if(shint) shint.style.display=(pm==='none')?'none':'';
       // 기본 배경 칩 = 사진 없을 때만, 현재값 표시
       var bcg=document.getElementById('dz-bg-cg'); if(bcg) bcg.style.display=(pm==='none')?'':'none';
       var bseg=document.getElementById('dz-bgstyle'); if(bseg){ bseg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', (b.getAttribute('data-bg')||'')===(c.bg||'')); }); }
       var showSrc = c.photo||'';
       if(showSrc){ img.src=showSrc; img.style.display=''; empty.style.display='none'; } else { img.removeAttribute('src'); img.style.display='none'; empty.style.display=''; }
-      img.style.setProperty('--z', c.fit.z||1); img.style.setProperty('--px', (c.fit.x||0)+'%'); img.style.setProperty('--py', (c.fit.y||0)+'%'); if(zoomEl) zoomEl.value=Math.round((c.fit.z||1)*100);
+      clampFit(c.fit);   // 표시 전 크롭 제한(여백 방지) — 기존 데이터도 교정
+      var _fx=(c.fit.u==='bgpos'&&c.fit.x!=null)?c.fit.x:50, _fy=(c.fit.u==='bgpos'&&c.fit.y!=null)?c.fit.y:50;   // 가짜폰 object-position(초점)
+      img.style.setProperty('--z', c.fit.z||1); img.style.setProperty('--px', _fx+'%'); img.style.setProperty('--py', _fy+'%'); if(zoomEl) zoomEl.value=Math.round((c.fit.z||1)*100);
       var nm=document.getElementById('dz-nm'); var pn=(document.getElementById('pf-name')||{}).value; if(nm&&pn) nm.textContent=pn;
+      sendLiveSoon();   // 라이브 iframe에도 현재 커버/테마 반영
     }
     function persistCover(){ cov().on=!!cov().photo; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
     function persistTheme(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=home.theme; cur.accentOverride=home.accentOverride||''; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
@@ -5393,20 +5421,24 @@
     // 사진 선택: 없음 / 내 사진 / 캐릭터
     var pmSeg=document.getElementById('dz-photo-mode'); if(pmSeg) pmSeg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; var m=b.getAttribute('data-pm');
       if(m==='none'){ cov().photo=''; renderPreview(); persistCover(); }
-      else if(m==='char'){ cov().photo=CHAR_IMG; cov().layout='bg'; cov().fit={z:1,x:0,y:0,u:'pct'}; renderPreview(); persistCover(); }   // 캐릭터=세로 포스터 → 배경 모드 기본(잘림 방지)
-      else if(m==='own'){ if(!window.openVault){ if(window.toast) toast('사진 보관함을 열 수 없어요'); return; } window.openVault(function(u){ cov().photo=u; cov().fit={z:1.18,x:0,y:0,u:'pct'}; renderPreview(); persistCover(); }); }
+      else if(m==='char'){ cov().photo=CHAR_IMG; cov().layout='full'; cov().fit={z:1,x:50,y:60,u:'bgpos'}; renderPreview(); persistCover(); }   // 캐릭터 기본 프레임(와이드 커버=마스코트 가로 슬라이스) — 드래그로 직접 조정 가능
+      else if(m==='own'){ if(!window.openVault){ if(window.toast) toast('사진 보관함을 열 수 없어요'); return; } window.openVault(function(u){ cov().photo=u; cov().fit={z:1,x:50,y:50,u:'bgpos'}; renderPreview(); persistCover(); if(window.toast) toast('사진을 드래그해 원하는 부분을 가운데로'); }); }
     });
-    // 줌·드래그·핀치
-    zoomEl.addEventListener('input', function(){ cov().fit.z=clampZ(this.value/100); img.style.setProperty('--z', cov().fit.z); });
-    zoomEl.addEventListener('change', persistCover);
-    photo.addEventListener('wheel', function(e){ if(!cov().photo) return; e.preventDefault(); cov().fit.z=clampZ((cov().fit.z||1) - e.deltaY*0.0016); img.style.setProperty('--z', cov().fit.z); zoomEl.value=Math.round(cov().fit.z*100); clearTimeout(photo._wt); photo._wt=setTimeout(persistCover,260); }, {passive:false});
+    // 줌·드래그·핀치 (라이브 iframe 위 투명 레이어에서 → 실제 커버를 실시간 이동)
+    if(zoomEl){ zoomEl.addEventListener('input', function(){ cov().fit.z=clampZ(this.value/100); clampFit(cov().fit); sendFit(); });
+      zoomEl.addEventListener('change', persistCover); }
+    // ↻ 가운데로 — 사진 위치·줌을 정중앙 초기화 (드래그가 어긋났을 때 한 번에 복구)
+    var fitCenterBtn=document.getElementById('dz-fit-center');
+    if(fitCenterBtn) fitCenterBtn.addEventListener('click', function(){ if(!cov().photo){ if(window.toast) toast('먼저 사진을 넣어주세요'); return; } cov().fit={z:1,x:0,y:0,u:'pct'}; if(zoomEl) zoomEl.value=100; sendFit(); renderPreview(); persistCover(); if(window.toast) toast('커버를 가운데로 맞췄어요'); });
+    ldrag.addEventListener('wheel', function(e){ if(!cov().photo) return; e.preventDefault(); cov().fit.z=clampZ((cov().fit.z||1) - e.deltaY*0.0016); clampFit(cov().fit); if(zoomEl) zoomEl.value=Math.round(cov().fit.z*100); sendFit(); clearTimeout(ldrag._wt); ldrag._wt=setTimeout(persistCover,260); }, {passive:false});
     var pts=new Map(), sd=0, sz=1, pan=null;
     function D(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
-    function mkPan(cx,cy){ var r=photo.getBoundingClientRect(); return {x:cx,y:cy,px:cov().fit.x||0,py:cov().fit.y||0,w:r.width||1,h:r.height||1}; }   // 위치는 컨테이너 너비 기준 %로 저장 (폭이 달라도 미리보기=실제 일치)
-    photo.addEventListener('pointerdown', function(e){ if(!cov().photo) return; e.preventDefault(); try{photo.setPointerCapture(e.pointerId);}catch(_){} pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size===1){ pan=mkPan(e.clientX,e.clientY); } else if(pts.size===2){ var a=Array.from(pts.values()); sd=D(a[0],a[1]); sz=cov().fit.z||1; pan=null; } });
-    photo.addEventListener('pointermove', function(e){ if(!pts.has(e.pointerId)) return; pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size>=2){ var a=Array.from(pts.values()); if(sd>0){ cov().fit.z=clampZ(sz*(D(a[0],a[1])/sd)); img.style.setProperty('--z',cov().fit.z); zoomEl.value=Math.round(cov().fit.z*100); } } else if(pan){ var z=cov().fit.z||1; cov().fit.x=pan.px+(e.clientX-pan.x)/z/pan.w*100; cov().fit.y=pan.py+(e.clientY-pan.y)/z/pan.h*100; cov().fit.u='pct'; img.style.setProperty('--px',cov().fit.x+'%'); img.style.setProperty('--py',cov().fit.y+'%'); } });
+    function coverRect(){ try{ var d=lifr.contentDocument; var el=d&&(d.querySelector('.top-cover .pc-img')||d.querySelector('.page-cover .pcv-img')); if(el){ var r=el.getBoundingClientRect(); if(r.width&&r.height) return {w:r.width,h:r.height}; } }catch(e){} var r2=ldrag.getBoundingClientRect(); return {w:r2.width||1,h:r2.height||1}; }
+    function mkPan(cx,cy){ var f=cov().fit; if(f.u!=='bgpos'){ f.x=50; f.y=50; f.u='bgpos'; } var cr=coverRect(); return {x:cx,y:cy,px:f.x,py:f.y,w:cr.w,h:cr.h}; }   // 초점=background-position 0~100%
+    ldrag.addEventListener('pointerdown', function(e){ if(!cov().photo) return; e.preventDefault(); try{ldrag.setPointerCapture(e.pointerId);}catch(_){} pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size===1){ pan=mkPan(e.clientX,e.clientY); } else if(pts.size===2){ var a=Array.from(pts.values()); sd=D(a[0],a[1]); sz=cov().fit.z||1; pan=null; } });
+    ldrag.addEventListener('pointermove', function(e){ if(!pts.has(e.pointerId)) return; pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size>=2){ var a=Array.from(pts.values()); if(sd>0){ cov().fit.z=clampZ(sz*(D(a[0],a[1])/sd)); clampFit(cov().fit); if(zoomEl) zoomEl.value=Math.round(cov().fit.z*100); sendFit(); } } else if(pan){ cov().fit.x=pan.px-(e.clientX-pan.x)/pan.w*100; cov().fit.y=pan.py-(e.clientY-pan.y)/pan.h*100; cov().fit.u='bgpos'; clampFit(cov().fit); sendFit(); } });
     function up(e){ pts.delete(e.pointerId); if(pts.size<2) sd=0; if(pts.size===1){ var a=Array.from(pts.values())[0]; pan=mkPan(a.x,a.y); } else if(pts.size===0){ pan=null; persistCover(); } }
-    photo.addEventListener('pointerup', up); photo.addEventListener('pointercancel', up);
+    ldrag.addEventListener('pointerup', up); ldrag.addEventListener('pointercancel', up);
     document.getElementById('dz-close').onclick=function(){ ov.classList.remove('open'); };
 
     // 테마 그리드 (프리셋)
@@ -5421,7 +5453,7 @@
     var dzPage=1;
     function showPage(n){ dzPage=n;
       for(var i=1;i<=2;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }
-      document.getElementById('dz-next').textContent = n===1?'다음: 테마 →':'✓ 완료';
+      document.getElementById('dz-next').textContent = n===1?'다음 →':'완료 ✓';
       if(n===2) renderDzThemes();
       renderPreview();
       var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
@@ -5429,7 +5461,7 @@
     document.getElementById('dz-st1').onclick=function(){ showPage(1); };
     document.getElementById('dz-st2').onclick=function(){ showPage(2); };
     document.getElementById('dz-next').onclick=function(){ if(dzPage<2){ showPage(2); } else { ov.classList.remove('open'); if(window.toast) toast('디자인 저장됨 · 상단 [저장]으로 공개 반영'); } };
-    window.__openDesign=function(){ cov(); renderPreview(); showPage(1); ov.classList.add('open'); };
+    window.__openDesign=function(){ cov(); loadLive(); renderPreview(); showPage(1); ov.classList.add('open'); };
     var entry=document.getElementById('set-design2'); if(entry) entry.onclick=function(){ window.__openDesign(); };
   })();
 
@@ -7152,7 +7184,9 @@
   // 코드 칸: 한글로 쳐도 영문 대문자+숫자로 (한글 자판 그대로 입력 OK)
   (function(){ var c=document.getElementById('lg-code'); if(!c) return; c.setAttribute('autocapitalize','characters'); c.setAttribute('autocomplete','off'); c.setAttribute('spellcheck','false');
     var comp=false;
-    function fix(){ var nv=hangulToQwerty(c.value).toUpperCase().replace(/[^A-Z0-9]/g,''); if(c.value!==nv){ c.value=nv; } }
+    function fix(){ var nv=hangulToQwerty(c.value).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6); if(c.value!==nv){ c.value=nv; }
+      // 코드 6자리 다 채우면 자동으로 PIN 첫 칸으로 이동 (PIN을 아직 안 건드렸을 때만)
+      if(nv.length===6){ var d0=document.querySelector('#lg-pin-box .pin-d'); if(d0 && !d0.value){ try{ d0.focus(); }catch(_){} } } }
     c.addEventListener('compositionstart', function(){ comp=true; });
     c.addEventListener('compositionend', function(){ comp=false; fix(); });
     c.addEventListener('input', function(e){ if(comp || (e&&e.isComposing)) return; fix(); }); })();
@@ -7219,6 +7253,12 @@
     try{
       if(window.__captureForSave) window.__captureForSave();   // 편집 중인 내용을 먼저 담음 (누락 방지)
       var data=serialize();
+      // ★안전장치: 데이터가 덜 불러와진 채 저장하면 게시물이 날아감(과거 사고 방지). 스냅샷엔 내용이 있는데 지금 빈값이면 차단.
+      try{ var _snap=JSON.parse(localStorage.getItem('la-snap-'+AUTH.code)||'null');
+        var _snapHas=_snap&&_snap.data&&(((_snap.data.posts||[]).length)||((_snap.data.blocks||[]).length));
+        var _nowEmpty=((data.posts||[]).length===0)&&((data.blocks||[]).length===0);
+        if(_snapHas&&_nowEmpty){ notify('데이터가 아직 다 안 불러와졌어요 · 새로고침 후 다시 저장해주세요 (게시물 보호)'); saveBtn.disabled=false; saveBtn.textContent=o; return; }
+      }catch(_g){}
       if(data.profile.handle && data.profile.handle!==AUTH.handle){
         var hr=await window.laRpc('li_set_handle',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_handle:data.profile.handle});
         if(hr&&hr.ok){ AUTH.handle=hr.handle; try{localStorage.setItem('la-auth',JSON.stringify(AUTH));}catch(e){} }
@@ -7634,7 +7674,10 @@
     window.__liveEditActive=false;
     function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); ov.classList.add('open');
       // 진입 시 최신 저장본을 다시 불러와 편집기를 '공개'와 일치시킴 (공개엔 있는데 편집엔 없는 어긋남 방지)
-      (async function(){ try{ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } }catch(e){} loadFrame(); })();
+      // ★ li_get_own 응답이 느리거나 안 와도 편집 화면(iframe)은 무조건 띄운다 — 안 그러면 까만 화면으로 멈춤
+      var _framed=false; function _go(){ if(_framed) return; _framed=true; loadFrame(); }
+      var _t=setTimeout(_go, 2500);   // 2.5초 안에 저장본 못 받으면 그냥 띄움
+      (async function(){ try{ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } }catch(e){} clearTimeout(_t); _go(); })();
     }
     function closeLive(){ window.__liveEditActive=false; if(window.__setFabInsert) try{ window.__setFabInsert(false); }catch(e){} ov.classList.remove('open'); ifr.src='about:blank'; }
     // 편집 후 새로고침: iframe 통째 reload(스크롤 튐) 대신 데이터만 재전송 → 보던 위치 그대로 유지
