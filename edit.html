@@ -1189,9 +1189,23 @@
   .le-bar .le-topadd:active{transform:scale(.96);}
   .le-bar .le-toptoggle{background:var(--surface2,#26262C); color:var(--ink); border:1px solid var(--hair); border-radius:9px; padding:7px 11px; font-size:12px; font-weight:600; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
   .le-bar .le-toptoggle:active{transform:scale(.96);}
+  .le-bar .le-icon-btn{background:var(--surface2,#26262C); color:var(--ink); border:1px solid var(--hair); border-radius:9px; padding:6px 11px; font-size:16px; font-weight:700; font-family:var(--sans); cursor:pointer; line-height:1; min-width:36px;}
+  .le-bar .le-icon-btn:active{transform:scale(.92);}
+  .le-bar .le-icon-btn:disabled{opacity:.3; cursor:default; transform:none;}
   .le-bar .le-x{background:var(--grad); color:#fff; border:none; border-radius:9px; padding:7px 14px; font-size:12.5px; font-weight:800; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
   .le-bar .le-exit{background:var(--surface2,#26262C); color:var(--muted); border:1px solid var(--hair); border-radius:9px; padding:7px 11px; font-size:13px; font-weight:700; font-family:var(--sans); cursor:pointer;}
   .le-bar .le-x:active{transform:scale(.96);}
+  /* 자동 저장 상태 칩 */
+  .le-bar .le-autosave{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; font-family:var(--sans); color:#46D6A6; background:rgba(70,214,166,.13); padding:6px 10px; border-radius:8px; white-space:nowrap; user-select:none; transition:color .2s ease, background .2s ease;}
+  .le-bar .le-autosave .as-dot{width:6px; height:6px; border-radius:50%; background:currentColor; flex:0 0 auto;}
+  .le-bar .le-autosave.is-saving{color:#F5C84B; background:rgba(245,200,75,.15);}
+  .le-bar .le-autosave.is-saving .as-dot{animation:asPulse .8s ease-in-out infinite;}
+  .le-bar .le-autosave.is-dirty{color:var(--muted); background:rgba(255,255,255,.06);}
+  .le-bar .le-autosave.is-error{color:#FF7A6B; background:rgba(255,122,107,.15); cursor:pointer;}
+  .le-bar .le-autosave.aspop{animation:asPop .42s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes asPop{0%{transform:scale(1);} 40%{transform:scale(1.13);} 100%{transform:scale(1);}}
+  @keyframes asPulse{0%,100%{opacity:.35; transform:scale(.75);} 50%{opacity:1; transform:scale(1.15);}}
+  @media (max-width:520px){ .le-bar .le-autosave{padding:6px 8px;} .le-bar .le-autosave .as-txt{display:none;} }
   .le-hint{flex:0 0 auto; text-align:center; font-size:11.5px; color:var(--muted); padding:8px 12px; background:var(--surface2,#26262C); border-bottom:1px solid var(--hair);}
   .le-tip{font-size:11.5px; color:var(--muted); margin-left:auto; margin-right:6px;}
   .le-tip b{color:var(--coral);}
@@ -3253,16 +3267,17 @@
   <!-- 시안 B: 보면서 수정 라이브 캔버스 -->
   <div id="live-edit-ov">
     <div class="le-bar">
-      <button class="le-toptoggle" id="le-homeconfig" title="분위기 — 커버·색·테마">🎨 분위기</button>
       <button class="le-toptoggle" id="le-home" title="고객이 보는 실제 페이지(새 탭)">🏠 고객 홈</button>
       <button class="le-toptoggle" id="le-opmode" title="운영 모드 — 예약·분석·설정">⚙ 운영</button>
-      <button class="le-x" id="le-x" style="margin-left:auto;">💾 저장</button>
+      <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" style="margin-left:auto;" disabled>↶</button>
+      <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
+      <span class="le-autosave is-saved" id="le-autosave" title="자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">저장됨 ✓</span></span>
+      <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
     </div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe>
-      <!-- 우측 상단 고정: 구성 추가 / 구성 삭제(선택된 구성) -->
+      <!-- 우측 상단 고정: 구성 추가 (삭제는 구성을 톡 누르면 그 자리에 🗑로 뜸) -->
       <div class="le-fabwrap">
         <button class="le-fab" id="le-fab"><span class="le-fab-p">＋</span><span class="le-fab-t">구성 추가</span></button>
-        <button class="le-fab le-fab-del" id="le-fab-del"><span class="le-fab-p">🗑</span><span class="le-fab-t">구성 삭제</span></button>
       </div>
     </div>
     <!-- 하단 독 (토스식 · 아이콘 + 글자) -->
@@ -6101,6 +6116,67 @@
     try{ updateHomeProgress(); refreshBuilder(); }catch(e){}
   }
   function defaultCompositionFor(v){ if(v==='funnel'){ var st=(AUTH&&AUTH.starterStyle); if(st && STYLE_PRESETS[st]) applyStyle(st); else applyPreset((AUTH&&AUTH.industry)||'beauty'); } else applyComposition(HOME_TYPES[v]||[]); }
+  // ─── 되돌리기 / 다시하기 (Undo·Redo) — #rows 스냅샷 히스토리 ───
+  var undoStack=[], redoStack=[], curHist=null, histRestoring=false, histTimer=null, HIST_MAX=60;
+  function histSnapshot(){ try{ return JSON.stringify(collectRowsArray()); }catch(e){ return null; } }
+  function updateUndoBtns(){ var u=document.getElementById('le-undo'), r=document.getElementById('le-redo'); if(u) u.disabled=!undoStack.length; if(r) r.disabled=!redoStack.length; }
+  function histInit(){ undoStack=[]; redoStack=[]; curHist=histSnapshot(); updateUndoBtns(); }
+  window.__histInit=histInit;
+  function histPush(){ if(histRestoring) return; var s=histSnapshot(); if(s==null||s===curHist) return; if(curHist!=null){ undoStack.push(curHist); if(undoStack.length>HIST_MAX) undoStack.shift(); } curHist=s; redoStack.length=0; updateUndoBtns(); try{ scheduleAutosave(); }catch(e){} }
+  function histMark(){ if(histRestoring) return; clearTimeout(histTimer); histTimer=setTimeout(histPush, 500); }
+  window.__histMark=histMark;
+  function histRestore(snap){ if(snap==null) return; histRestoring=true; clearTimeout(histTimer); try{ renderSavedBlocks(JSON.parse(snap)); }catch(e){} curHist=snap; updateUndoBtns(); if(window.__liveEditActive && window.__liveRefresh) setTimeout(window.__liveRefresh, 30); setTimeout(function(){ histRestoring=false; }, 120); }
+  function doUndo(){ if(!undoStack.length){ try{ toast('되돌릴 게 없어요'); }catch(e){} return; } redoStack.push(curHist); histRestore(undoStack.pop()); try{ toast('↶ 되돌렸어요'); }catch(e){} }
+  function doRedo(){ if(!redoStack.length){ try{ toast('다시 할 게 없어요'); }catch(e){} return; } undoStack.push(curHist); histRestore(redoStack.pop()); try{ toast('↷ 다시 했어요'); }catch(e){} }
+  window.__doUndo=doUndo; window.__doRedo=doRedo;
+  (function(){ var u=document.getElementById('le-undo'), r=document.getElementById('le-redo'); if(u) u.addEventListener('click', doUndo); if(r) r.addEventListener('click', doRedo); })();
+  document.addEventListener('keydown', function(e){ if(!(e.ctrlKey||e.metaKey)) return; var k=(e.key||'').toLowerCase(); if(k!=='z'&&k!=='y') return; var t=e.target; if(t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName||''))) return; if(!window.__liveEditActive) return; e.preventDefault(); if(k==='y'||e.shiftKey) doRedo(); else doUndo(); });
+  // 변경마다 히스토리 표시 (refreshBuilder = 추가·삭제·순서·항목편집 공통 신호 / collectEdit = 시트 저장)
+  (function(){ var _rb=refreshBuilder; refreshBuilder=function(){ var rv=_rb.apply(this, arguments); try{ histMark(); }catch(e){} return rv; }; window.__refreshBuilder=refreshBuilder; })();
+  (function(){ var _ce=window.__collectEdit; if(_ce){ window.__collectEdit=function(){ var rv=_ce.apply(this, arguments); try{ histMark(); }catch(e){} return rv; }; } })();
+  // ─── 진짜 자동 저장 (서버) + 상태 표시 ───  ("저장" 안 눌러도 바뀌면 1.5초 뒤 서버에 저장)
+  var asTimer=null, asInflight=false, asPendingAgain=false, asReady=false, AS_DELAY=1500;
+  function setAutosaveStatus(state, msg){
+    var el=document.getElementById('le-autosave'); if(!el) return;
+    var wasSaving=el.classList.contains('is-saving');
+    el.classList.remove('is-saving','is-dirty','is-saved','is-error','aspop');
+    var txt;
+    if(state==='saving'){ el.classList.add('is-saving'); txt='저장 중…'; }
+    else if(state==='dirty'){ el.classList.add('is-dirty'); txt='변경됨'; }
+    else if(state==='error'){ el.classList.add('is-error'); txt=msg||'저장 실패 · 다시'; }
+    else { el.classList.add('is-saved'); txt='저장됨 ✓'; if(wasSaving){ void el.offsetWidth; el.classList.add('aspop'); } }   // 저장 완료 순간만 살짝 팝
+    el.innerHTML='<i class="as-dot"></i><span class="as-txt">'+txt+'</span>';
+  }
+  function scheduleAutosave(){
+    if(!asReady || !window.__liveEditActive || !AUTH) return;   // 보면서 수정 중 + 로그인 상태에서만
+    setAutosaveStatus('dirty');
+    clearTimeout(asTimer); asTimer=setTimeout(doPageAutosave, AS_DELAY);
+  }
+  async function doPageAutosave(){
+    if(!window.__liveEditActive || !AUTH) return;
+    if(asInflight){ asPendingAgain=true; return; }              // 저장 중 또 바뀌면 끝나고 한 번 더
+    var data; try{ if(window.__captureForSave) window.__captureForSave(); data=serialize(); }catch(e){ return; }
+    // ★데이터 보호: 스냅샷엔 내용이 있는데 지금 빈값이면 저장 차단(과거 게시물 증발 사고 방지) — 수동 저장과 동일 가드
+    try{ var _snap=JSON.parse(localStorage.getItem('la-snap-'+AUTH.code)||'null');
+      var _snapHas=_snap&&_snap.data&&(((_snap.data.posts||[]).length)||((_snap.data.blocks||[]).length));
+      var _nowEmpty=((data.posts||[]).length===0)&&((data.blocks||[]).length===0);
+      if(_snapHas&&_nowEmpty){ setAutosaveStatus('dirty'); return; }   // 조용히 보류
+    }catch(_g){}
+    asInflight=true; asPendingAgain=false; setAutosaveStatus('saving');
+    try{
+      var res=await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
+      await window.laRpc('li_publish',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_published:true});
+      setAutosaveStatus((res&&res.ok)?'saved':'error');
+    }catch(e){ setAutosaveStatus('error'); }
+    asInflight=false;
+    if(asPendingAgain){ asPendingAgain=false; scheduleAutosave(); }
+  }
+  window.__pageAutosaveSchedule=scheduleAutosave;
+  window.__pageAutosaveSaved=function(){ clearTimeout(asTimer); asInflight=false; asPendingAgain=false; setAutosaveStatus('saved'); };  // 수동 저장 성공 시 칩 동기화
+  window.__pageAutosaveReady=function(){ asReady=true; clearTimeout(asTimer); asInflight=false; asPendingAgain=false; setAutosaveStatus('saved'); };
+  window.__pageAutosaveStop=function(){ asReady=false; clearTimeout(asTimer); asInflight=false; asPendingAgain=false; };
+  // 오류 칩 탭 → 즉시 재시도
+  document.addEventListener('click', function(e){ var p=e.target&&e.target.closest&&e.target.closest('#le-autosave.is-error'); if(p){ clearTimeout(asTimer); doPageAutosave(); } });
   function captureCurrentVersion(){ if(postEditId!=null){ var p=postById(postEditId); if(p) p.blocks=collectRowsArray(); } else { homeVersions[curVersion]=collectRowsArray(); } }
   function updateVersionUI(){
     [].forEach.call(document.querySelectorAll('.ht-card'),function(c){ var v=c.getAttribute('data-ht');
@@ -7538,7 +7614,7 @@
       }
       var res=await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
       await window.laRpc('li_publish',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_published:true});
-      if(res&&res.ok){ savedFx(); try{ if(window.__autosaveMarkSaved) window.__autosaveMarkSaved(); }catch(_){} } else { notify('저장 실패 — 다시 시도해주세요'); }
+      if(res&&res.ok){ savedFx(); try{ if(window.__autosaveMarkSaved) window.__autosaveMarkSaved(); }catch(_){} try{ if(window.__pageAutosaveSaved) window.__pageAutosaveSaved(); }catch(_){} } else { notify('저장 실패 — 다시 시도해주세요'); }
     }catch(e){ notify('저장 오류: '+e.message); }
     saveBtn.disabled=false; saveBtn.textContent=o;
   });
@@ -7948,11 +8024,11 @@
       // ★ li_get_own 응답이 느리거나 안 와도 편집 화면(iframe)은 무조건 띄운다 — 안 그러면 까만 화면으로 멈춤
       var _framed=false; function _go(){ if(_framed) return; _framed=true; loadFrame(); }
       var _t=setTimeout(_go, 2500);   // 2.5초 안에 저장본 못 받으면 그냥 띄움
-      (async function(){ try{ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } }catch(e){} clearTimeout(_t); _go(); })();
+      (async function(){ try{ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } }catch(e){} clearTimeout(_t); _go(); try{ if(window.__histInit) setTimeout(window.__histInit, 300); }catch(e){} try{ if(window.__pageAutosaveReady) setTimeout(window.__pageAutosaveReady, 350); }catch(e){} })();   // 로드 완료 후 되돌리기 기준선 + 자동저장 시작
     }
-    function closeLive(){ window.__liveEditActive=false; if(window.__setFabInsert) try{ window.__setFabInsert(false); }catch(e){} ov.classList.remove('open'); ifr.src='about:blank'; }
+    function closeLive(){ window.__liveEditActive=false; try{ if(window.__pageAutosaveStop) window.__pageAutosaveStop(); }catch(e){} if(window.__setFabInsert) try{ window.__setFabInsert(false); }catch(e){} ov.classList.remove('open'); ifr.src='about:blank'; }
     // 편집 후 새로고침: iframe 통째 reload(스크롤 튐) 대신 데이터만 재전송 → 보던 위치 그대로 유지
-    window.__liveRefresh=function(){ if(!window.__liveEditActive) return; try{ if(ifr && ifr.contentWindow && ifr.contentWindow.__applyPublicData){ sendData(); } else { loadFrame(); } }catch(e){ loadFrame(); } };
+    window.__liveRefresh=function(){ if(!window.__liveEditActive) return; try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(e){} try{ if(ifr && ifr.contentWindow && ifr.contentWindow.__applyPublicData){ sendData(); } else { loadFrame(); } }catch(e){ loadFrame(); } };
     // 새 구성 추가 후 손님 화면을 '그 새 구성' 자리로 스크롤 (끼워넣기면 그 위치로)
     window.__liveScrollNew=function(row){ if(!window.__liveEditActive) return;
       var idx=-1; try{ if(row){ var on=[].slice.call(document.querySelectorAll('#rows .row')).filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw||sw.classList.contains('on'); }); idx=on.indexOf(row); } }catch(e){}
@@ -7980,6 +8056,9 @@
       else if(m.type==='la-edit-lookadd'){ handleLookAdd(); }
       else if(m.type==='la-edit-lookdel'){ handleLookDel(m.idx); }
       else if(m.type==='la-edit-move'){ handleMove(m.bt, m.nth, m.dir); }
+      else if(m.type==='la-edit-reorder'){ handleReorder(m.order); }
+      else if(m.type==='la-undo'){ if(window.__doUndo) window.__doUndo(); }
+      else if(m.type==='la-redo'){ if(window.__doRedo) window.__doRedo(); }
       else if(m.type==='la-edit-item'){ handleItem(m); }
       else if(m.type==='la-edit-post'){ if(window.__openPostSheet) window.__openPostSheet(m.id); }
       else if(m.type==='la-edit-newpost'){ if(window.__newPostSheet) window.__newPostSheet(); }
@@ -8039,6 +8118,20 @@
       if(dir<0) rb.insertBefore(target, swap); else rb.insertBefore(swap, target);
       try{ refreshBuilder(); updateHomeProgress(); }catch(e){}
       if(window.__liveRefresh) setTimeout(window.__liveRefresh, 40);
+    }
+    // 🖐 드래그 순서 변경 — 미리보기에서 받은 새 순서(켜진 행 인덱스 순열)대로 #rows 재배치
+    function handleReorder(order){
+      if(!Array.isArray(order) || !order.length) return;
+      var rb=document.getElementById('rows'); if(!rb) return;
+      var allRows=[].slice.call(rb.querySelectorAll('.row'));
+      var onRows=allRows.filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw||sw.classList.contains('on'); });
+      var offRows=allRows.filter(function(r){ return onRows.indexOf(r)<0; });
+      if(order.length!==onRows.length) return;   // 블록↔행 매핑 불일치 → 안전하게 무시
+      var seen={}; for(var i=0;i<order.length;i++){ var v=order[i]; if(typeof v!=='number'||v<0||v>=onRows.length||seen[v]) return; seen[v]=1; }   // 0..n-1 순열 검증
+      order.forEach(function(idx){ rb.appendChild(onRows[idx]); });   // 새 순서대로 이동
+      offRows.forEach(function(r){ rb.appendChild(r); });
+      try{ refreshBuilder(); updateHomeProgress(); }catch(e){}
+      try{ toast('순서를 바꿨어요'); }catch(e){}
     }
     // 공용 아이템(카드/행) 편집 엔진 — 랭킹·스타일갤러리 (lookbook은 별도)
     var ITEM_CI={ ranking:2, stylegallery:0 };
@@ -8151,7 +8244,7 @@
     var delb=document.getElementById('le-fab-del');
     if(delb) delb.onclick=function(){ try{ (document.getElementById('le-iframe')||ifr).contentWindow.postMessage({type:'la-del-selected'}, '*'); }catch(e){} };
     // 하단 독: 🎨디자인 → 홈 꾸미기(라이브 위) / 🖼사진 보관함 → 보관함(라이브 위, 폴더·업로드·삭제)
-    var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ if(window.__openHomeDeco) window.__openHomeDeco('all'); };
+    var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ if(window.__openDesign) window.__openDesign(); else if(window.__openHomeDeco) window.__openHomeDeco('all'); };   // 분위기 = 라이브 미리보기 dz 편집기 (구 홈꾸미기는 설정에 보존)
     var lib=document.getElementById('le-library'); if(lib) lib.onclick=function(){ if(window.openVault) window.openVault(null); };
     // 상단 우측 미리보기/편집 토글 (손님 화면 그대로 보기 ↔ 편집)
     // 🏠 고객 홈 = 저장·공개 후 실제 손님 페이지(새 탭)로 — '미리보기' 대체

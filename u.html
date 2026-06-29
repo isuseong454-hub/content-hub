@@ -596,8 +596,9 @@
   /* ── 편집 브릿지(?edit=1): 섹션 탭 편집 시안 B ── */
   html[data-edit] .reveal{opacity:1 !important; transform:none !important;}
   /* ── 홈 구성(.la-hb): 평소 깔끔(손님 화면 그대로), 구분 헤더로 명확히 ── */
-  html[data-edit] .la-hb{position:relative; cursor:pointer; outline:1.5px dashed transparent; outline-offset:6px; border-radius:13px; transition:outline .14s ease, background .14s ease; margin:48px 0 16px;}
+  html[data-edit] .la-hb{position:relative; cursor:pointer; outline:1.5px dashed rgba(167,139,255,.16); outline-offset:6px; border-radius:13px; transition:outline .14s ease, background .14s ease; margin:48px 0 16px;}   /* 평소에도 아주 옅은 점선=만질 수 있는 카드란 신호(은은) */
   html[data-edit] .la-hb:not(#home-gallery):not(.mq-band){overflow:visible;}   /* overflow:hidden 카드의 라벨 잘림 방지 (단 마퀴는 hidden 유지=태그 삐져나옴 방지) */
+  html[data-edit] .la-hb:not(.la-ed-sel):hover{outline-color:rgba(167,139,255,.5); background:rgba(123,90,255,.04);}   /* 호버=상호작용 가능 드러냄 */
   html[data-edit] .la-hb.la-ed-sel{outline-color:rgba(167,139,255,.9); outline-width:2px; background:rgba(123,90,255,.07);}
   /* 구성 구분 헤더 (항상 보임 · 각 구성 위): 이름 + 회색 힌트 + 하어라인 */
   .la-ed-head, .la-ed-bar{display:none;}   /* 편집모드(data-edit) 아닐 땐 편집 UI 숨김 — 디자인 미리보기·손님화면 깨끗하게 */
@@ -607,6 +608,10 @@
   html[data-edit] .la-ed-hname{font-size:10.5px; font-weight:800; letter-spacing:.04em; color:rgba(190,172,255,.95); white-space:nowrap;}
   html[data-edit] .la-ed-hrow::after{content:''; flex:1; height:1px; background:linear-gradient(90deg, rgba(167,139,255,.32), rgba(167,139,255,0));}
   html[data-edit] .la-ed-hhint{font-size:10px; color:rgba(255,255,255,.42); margin-left:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  /* 상호작용 힌트(톡 수정 · 꾹 이동): 평소 숨김 → 호버/선택 시 은은히 */
+  html[data-edit] .la-ed-act{font-size:9.5px; font-weight:700; color:rgba(190,172,255,.9); margin-left:11px; white-space:nowrap; opacity:0; transform:translateY(-1px); transition:opacity .16s ease, transform .16s ease; pointer-events:none;}
+  html[data-edit] .la-hb:hover .la-ed-act, html[data-edit] .la-hb.la-ed-sel .la-ed-act{opacity:1; transform:none;}
+  html[data-edit].la-dragmode .la-ed-act{opacity:0 !important;}
   html[data-edit] .la-hb.la-ed-sel .la-ed-hrow::before{background:#A78BFF;}
   html[data-edit] .la-hb.la-ed-sel .la-ed-hname{color:#C9BBFF;}
   /* 갤러리·마퀴(overflow:hidden)는 위 라벨이 잘리니 안쪽 상단에 */
@@ -618,6 +623,13 @@
   html[data-edit] .la-ed-btn{background:#7B5AFF; color:#fff; font-size:11px; font-weight:800; padding:8px 14px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 4px 14px rgba(123,90,255,.5); white-space:nowrap;}
   html[data-edit] .la-ed-btn:active{transform:scale(.94);}
   html[data-edit] .la-ed-del{background:#E0556B; box-shadow:0 4px 14px rgba(224,85,107,.5);}
+  /* 🖐 드래그로 순서 변경 (꾹 눌러 끌기) */
+  html[data-edit] .la-hb{transition:opacity .14s ease, transform .14s ease, box-shadow .14s ease;}
+  html[data-edit] .la-hb.la-dragging{opacity:.96; transform:scale(1.025); box-shadow:0 16px 44px rgba(0,0,0,.55); z-index:40; position:relative; cursor:grabbing;}
+  html[data-edit].la-dragmode .la-hb:not(.la-dragging){opacity:.5;}
+  html[data-edit].la-dragmode{cursor:grabbing;}
+  html[data-edit].la-dragmode .la-ed-bar{display:none !important;}
+  html[data-edit].la-dragmode *{user-select:none !important;}
   /* 프로필도 다른 구성처럼: 작은 '✕ 빼기' (다시 넣기는 구성 추가에서) */
   .la-prof-hide{display:none;}
   html[data-edit] .la-prof-hide{display:inline-flex; position:absolute; top:0; right:0; z-index:7; align-items:center; gap:3px; background:rgba(40,30,55,.92); color:#FFC9C9; font-size:10px; font-weight:700; padding:4px 9px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.4);}
@@ -3624,6 +3636,46 @@
   }
 
   // 편집 모드: 섹션마다 탭하면 부모(편집기)에 알림 — data-bt = 블록 타입
+  // 🖐 드래그로 순서 변경 — 블록을 꾹 눌러(롱프레스 230ms) 끌어 옮기기 → 떼면 빌더에 동기화
+  function setupBlockDrag(){
+    if(!EDIT_MODE) return;
+    var home=document.querySelector('[data-pane="home"]'); if(!home) return;
+    function contentBlocks(){ return [].filter.call(home.children, function(b){ return b.nodeType===1 && b.getAttribute && b.getAttribute('data-bt') && b.getAttribute('data-bt')!=='hero' && getComputedStyle(b).display!=='none' && b.offsetHeight>0; }); }
+    contentBlocks().forEach(function(el){
+      if(el.__drag) return; el.__drag=1;
+      var lp=null, sy=0, sx=0;
+      el.addEventListener('pointerdown', function(e){
+        if(e.target.closest('.la-ed-bar, button, a, input, textarea, select, [contenteditable="true"], .la-galcard, .la-galadd, .rk-th, .rk-del, .rk-add, .sgc-del, .sg-add, .gh-big, .gh-eyebrow, .gh-sub')) return;
+        sy=e.clientY; sx=e.clientX;
+        lp=setTimeout(function(){ lp=null; beginDrag(el, e); }, 230);
+      });
+      el.addEventListener('pointermove', function(e){ if(lp && (Math.abs(e.clientY-sy)>9 || Math.abs(e.clientX-sx)>9)){ clearTimeout(lp); lp=null; } });
+      el.addEventListener('pointerup', function(){ if(lp){ clearTimeout(lp); lp=null; } });
+      el.addEventListener('pointercancel', function(){ if(lp){ clearTimeout(lp); lp=null; } });
+    });
+    function beginDrag(el, e){
+      var blocks=contentBlocks(); blocks.forEach(function(b,i){ b.setAttribute('data-dragidx', i); });
+      el.classList.add('la-dragging'); document.documentElement.classList.add('la-dragmode'); clearBlockSel();
+      try{ el.setPointerCapture(e.pointerId); }catch(_){}
+      function onMove(ev){
+        ev.preventDefault();
+        var y=ev.clientY, others=contentBlocks().filter(function(b){ return b!==el; }), placed=false;
+        for(var i=0;i<others.length;i++){ var r=others[i].getBoundingClientRect(); if(y < r.top + r.height/2){ if(others[i]!==el.nextSibling) home.insertBefore(el, others[i]); placed=true; break; } }
+        if(!placed){ var last=others[others.length-1]; if(last && el!==last){ if(last.nextSibling) home.insertBefore(el, last.nextSibling); else home.appendChild(el); } }
+      }
+      function onUp(){
+        document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp); document.removeEventListener('pointercancel', onUp);
+        el.classList.remove('la-dragging'); document.documentElement.classList.remove('la-dragmode');
+        var fin=contentBlocks(); var order=fin.map(function(b){ return parseInt(b.getAttribute('data-dragidx'),10); });
+        fin.forEach(function(b){ b.removeAttribute('data-dragidx'); });
+        el.__justDragged=true; setTimeout(function(){ el.__justDragged=false; }, 350);
+        var changed=false; for(var i=0;i<order.length;i++){ if(order[i]!==i){ changed=true; break; } }
+        if(changed){ try{ parent.postMessage({type:'la-edit-reorder', order:order}, '*'); }catch(_){} }
+      }
+      document.addEventListener('pointermove', onMove, {passive:false}); document.addEventListener('pointerup', onUp); document.addEventListener('pointercancel', onUp);
+    }
+  }
+  window.__setupBlockDrag=setupBlockDrag;
   function setupEditTaps(){
     if(!EDIT_MODE) return;
     setupProfileInline();   // 프로필(이름·소개·사진)은 그 자리에서 바로 수정 (시트로 안 넘어감)
@@ -3637,7 +3689,7 @@
       // 구성 구분 헤더: 이름 + 작은 회색 힌트(무엇을 넣는 구성인지) (항상 보임)
       var head=document.createElement('span'); head.className='la-ed-head';
       var _hint=BLOCK_HINT[bt]||'';
-      head.innerHTML='<span class="la-ed-hrow"><span class="la-ed-hname">'+esc(BLOCK_NAME[bt]||'구성')+'</span></span>'+(_hint?'<span class="la-ed-hhint">'+esc(_hint)+'</span>':'');
+      head.innerHTML='<span class="la-ed-hrow"><span class="la-ed-hname">'+esc(BLOCK_NAME[bt]||'구성')+'</span><span class="la-ed-act">톡 눌러 수정 · 꾹 눌러 이동</span></span>'+(_hint?'<span class="la-ed-hhint">'+esc(_hint)+'</span>':'');
       el.appendChild(head);
       // 컨트롤바: 수정만 (선택 시 · 오른쪽 세로 중앙) — ▲▼·삭제는 제거(삭제는 상단 '구성 삭제')
       var bar=document.createElement('span'); bar.className='la-ed-bar';
@@ -3653,15 +3705,18 @@
       bar.appendChild(del);
       el.appendChild(bar);
       // 탭하면 그 구성만 선택(강조) → 수정·삭제 노출. 빈 구성은 바로 편집창.
-      el.addEventListener('click', function(e){ if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add,.gh-big,.gh-eyebrow,.gh-sub')) return; e.preventDefault(); e.stopPropagation();
+      el.addEventListener('click', function(e){ if(el.__justDragged) return; if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add,.gh-big,.gh-eyebrow,.gh-sub')) return; e.preventDefault(); e.stopPropagation();
         if(el.classList.contains('la-empty-block')){ try{ parent.postMessage({type:'la-edit-tap', bt:bt}, '*'); }catch(_){} return; }
         selectBlock(el);
       }, true);
     });
     armGallery(); armLookbook(); armItems('ranking'); armItems('stylegallery'); armGlowhook();
+    setupBlockDrag();   // 🖐 꾹 눌러 드래그로 순서 변경
     if(_insertMode) showInsertSlots();   // 재렌더돼도 '여기' 슬롯 유지(각 구성 사이)
     // 구성 밖을 탭하면 선택 해제 (블록 클릭은 capture+stopPropagation이라 여기 안 옴)
     if(!document.__deselWired){ document.__deselWired=1; document.addEventListener('click', function(e){ if(e.target.closest('.la-hb')||e.target.closest('.la-ed-bar')) return; clearBlockSel(); }); }
+    // ⌨ Ctrl/Cmd+Z(되돌리기) · +Shift/Y(다시하기) → 부모로 전달 (텍스트 입력 중엔 네이티브 undo)
+    if(!document.__undoKeyWired){ document.__undoKeyWired=1; document.addEventListener('keydown', function(e){ if(!(e.ctrlKey||e.metaKey)) return; var k=(e.key||'').toLowerCase(); if(k!=='z'&&k!=='y') return; var t=e.target; if(t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName||''))) return; e.preventDefault(); try{ parent.postMessage({type:(k==='y'||e.shiftKey)?'la-redo':'la-undo'}, '*'); }catch(_){} }); }
     // 손님 내비(아카이브/제품/Q&A) → 손님처럼 그 탭으로 이동 + 그 안에서 바로 편집 (튕기지 않음)
     [].forEach.call(document.querySelectorAll('.navitem'), function(nv){
       if(nv.__etap) return; nv.__etap=1;
