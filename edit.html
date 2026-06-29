@@ -75,6 +75,18 @@
   /* 상단 바 */
   .topbar{position:sticky; top:0; z-index:10; background:var(--paper);
     display:flex; align-items:center; gap:10px; padding:14px 16px; max-width:520px; margin:0 auto;}
+  /* 손님 링크 카드 (운영 홈 대시보드 맨 위) */
+  .hub-link{display:flex; align-items:center; gap:11px; padding:13px 15px; margin-bottom:13px; border-radius:16px; background:radial-gradient(120% 130% at 0% 0%, rgba(126,191,142,.28), transparent 62%), linear-gradient(100deg,#1d3326,#142019); border:1px solid rgba(126,191,142,.32);}
+  .hub-link .hl-ic{font-size:18px; flex:0 0 auto;}
+  .hub-link .hl-m{display:flex; flex-direction:column; line-height:1.25; min-width:0; flex:1;}
+  .hub-link .hl-t{font-size:11px; color:#9fe0b3; font-weight:800; letter-spacing:.01em;}
+  .hub-link .hl-u{font-size:13.5px; color:#fff; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .hub-link button{flex:0 0 auto; border-radius:10px; padding:8px 13px; font-size:12.5px; font-weight:800; cursor:pointer; font-family:var(--sans); border:none;}
+  .hub-link .hl-copy{background:#4caf6e; color:#fff;}
+  .hub-link .hl-qr{background:rgba(255,255,255,.1); color:#fff; font-weight:700;}
+  .hub-link button:active{transform:scale(.95);}
+  .hub-link.hl-flash{animation:hlFlash 1.1s ease 2;}
+  @keyframes hlFlash{0%,100%{box-shadow:none;} 50%{box-shadow:0 0 0 2px rgba(126,191,142,.6);}}
   .topbar .back{font-size:20px; color:var(--muted); cursor:pointer; text-decoration:none;}
   .topbar .brand{display:flex; flex-shrink:0; text-decoration:none;}
   .topbar .brand svg{display:block;}
@@ -2216,7 +2228,7 @@
     </div>
     <div class="set" id="set-design2">
       <span class="ic">🪄</span>
-      <span class="meta"><span class="nm">분위기 (커버·색·테마)</span><span class="sb">사진+밝기+포인트색+메뉴 · 시안식</span></span>
+      <span class="meta"><span class="nm">직접 꾸미기 (커버·포인트색)</span><span class="sb">커버 사진 + 버튼 포인트색을 내 손으로</span></span>
       <span class="chev">›</span>
     </div>
     <div class="set" id="set-theme">
@@ -2233,7 +2245,6 @@
 
     <div class="grp-h-lbl" style="margin-top:16px;">계정 · 자료</div>
     <div class="plan-box" id="my-plan">
-      <div class="pb-row"><span class="pb-tier" id="my-plan-tier">—</span><span class="pb-dday" id="my-plan-dday"></span></div>
       <div class="pb-exp" id="my-plan-exp">사용기간 확인 중…</div>
       <a class="pb-upgrade" id="my-plan-up" href="https://open.kakao.com/o/sZAf6mAi" target="_blank" rel="noopener">등급 올리기 · 갱신 문의 →</a>
     </div>
@@ -4982,6 +4993,14 @@
   var setShare=document.getElementById('set-share');
   function openShare(){ shov.classList.add('open'); redrawShare(); }
   window.__openShare=openShare;
+
+  // ════ 손님에게 보낼 링크 바 (운영 화면 최상단) ════
+  function custHandle(){ var pf=((document.getElementById('pf-handle')||{}).value||'').trim(); if(pf) return pf; if(window.AUTH&&window.AUTH.handle) return window.AUTH.handle; try{ var la=JSON.parse(localStorage.getItem('la-auth')||'null'); if(la&&la.handle) return la.handle; }catch(e){} return ''; }
+  function copyMyLink(){ var h=custHandle(); if(!h||h==='preview'){ if(window.toast) toast('먼저 ⚙설정·프로필에서 내 주소(핸들)를 정해주세요'); return; }
+    var url='https://contenthub.kr/u/'+h;
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){ if(window.toast) toast('복사됐어요 · 인스타 프로필·손님에게 붙여넣기'); },function(){ if(window.toast) toast(url); }); }
+    else { try{ var ta=document.createElement('textarea'); ta.value=url; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); if(window.toast) toast('복사됐어요 · 손님에게 붙여넣기'); }catch(e){ if(window.toast) toast(url); } } }
+  window.__copyMyLink=copyMyLink; window.__custHandle=custHandle;
   if(setShare) setShare.onclick=openShare;
   var shSave=document.getElementById('sh-save');
   if(shSave) shSave.onclick=function(){ var d=shData(); try{ var a=document.createElement('a'); a.href=shCanvas.toDataURL('image/png'); a.download='공유카드_'+d.handle+'_'+shFmt+'.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a); toast('이미지 저장 완료'); }catch(e){ toast('저장 실패'); } };
@@ -5553,13 +5572,13 @@
     var box=document.getElementById('my-plan'); if(!box) return;
     var tier=cmTier(), exp=(window.__authExpires!=null?window.__authExpires:null);
     var TL={basic:'베이직',pro:'프로',premium:'프리미엄'}, TC={basic:'#5B8CFF',pro:'#A78BFF',premium:'#E0B84A'};
-    var tEl=document.getElementById('my-plan-tier'); tEl.textContent='🏅 '+TL[tier]; tEl.style.color=TC[tier]; tEl.style.borderColor=TC[tier]+'66';
-    var ddEl=document.getElementById('my-plan-dday'), expEl=document.getElementById('my-plan-exp');
-    if(!exp){ ddEl.textContent='평생'; ddEl.className='pb-dday'; expEl.textContent='만료 없는 평생 이용이에요'; return; }
+    var tEl=document.getElementById('my-plan-tier'); if(tEl){ tEl.textContent='🏅 '+TL[tier]; tEl.style.color=TC[tier]; tEl.style.borderColor=TC[tier]+'66'; }
+    var ddEl=document.getElementById('my-plan-dday'), expEl=document.getElementById('my-plan-exp'); if(!expEl) return;
+    if(!exp){ if(ddEl){ ddEl.textContent='평생'; ddEl.className='pb-dday'; } expEl.textContent='만료 없는 평생 이용이에요'; return; }
     var d=new Date(exp), ymd=d.getFullYear()+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2);
     var left=Math.ceil((exp-Date.now())/86400000);
-    if(left<0){ ddEl.textContent='만료됨'; ddEl.className='pb-dday urgent'; expEl.textContent=ymd+' 만료 · 갱신이 필요해요'; }
-    else { ddEl.textContent='D-'+left; ddEl.className='pb-dday'+(left<=30?' urgent':''); expEl.textContent=ymd+' 까지 이용 ('+left+'일 남음)'; }
+    if(left<0){ if(ddEl){ ddEl.textContent='만료됨'; ddEl.className='pb-dday urgent'; } expEl.textContent=ymd+' 만료 · 갱신이 필요해요'; }
+    else { if(ddEl){ ddEl.textContent='D-'+left; ddEl.className='pb-dday'+(left<=30?' urgent':''); } expEl.textContent=ymd+' 까지 이용 ('+left+'일 남음)'; }
   }
   window.__renderMyPlan=renderMyPlan;
   function renderThemes(){
@@ -6987,7 +7006,9 @@
     if(exp){ var left=Math.ceil((exp-Date.now())/86400000); dday=left>0?('사용 D-'+left):'기간 만료'; } else { dday='평생 이용'; }
     var TILES=[['✏️','홈 편집','c-purple','live'],['✍️','새 글','c-violet','newpost'],['🎴','카드뉴스','c-pink','cardnews'],['📥','가져오기','c-gray','import'],['💰','스토어','c-green','store'],['👁','손님 홈','c-orange','realhome'],['📊','고객·분석','c-teal','data'],['🎨','분위기','c-blue','design']];
     var fold; try{ fold=JSON.parse(localStorage.getItem('cm-hub-fold')||'null'); }catch(_){ fold=null; } if(!fold) fold={ns:true,q:true};   // 기본 접힘
+    var myH=(window.__custHandle?window.__custHandle():'');
     box.innerHTML=''
+      +((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">손님에게 보낼 내 링크</div><div class="hl-u">contenthub.kr/u/'+myH+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
       +'<div class="mbr"><span class="mbr-ic">👑</span><div class="mbr-m"><div class="mbr-t">'+tierLbl+' 멤버십</div><div class="mbr-s">'+dday+'</div></div><button class="mbr-go" id="hub-plan">관리 →</button></div>'
       +'<div id="hub-today" class="today-card"></div>'
       +'<div class="ns'+(fold.ns?' fold-collapsed':'')+'" id="hub-ns">'
@@ -7016,6 +7037,9 @@
     box.querySelectorAll('.gi').forEach(function(g){ g.onclick=function(){ tileGo(TILES[+g.getAttribute('data-tile')][3]); }; });
     var bp=document.getElementById('hub-plan'); if(bp) bp.onclick=function(){ if(ws)ws('design'); };
     var bn=document.getElementById('hub-next'); if(bn) bn.onclick=function(){ if(next.go==='live'){ if(window.__openLive) window.__openLive(); } else if(next.go && ws){ ws(next.go); } };
+    var hlc=document.getElementById('hub-link-copy'); if(hlc) hlc.onclick=function(){ if(window.__copyMyLink) window.__copyMyLink(); };
+    var hlq=document.getElementById('hub-link-qr'); if(hlq) hlq.onclick=function(){ if(window.__openShare) window.__openShare(); };
+    try{ if(myH&&myH!=='preview'&&!localStorage.getItem('clb-seen')){ localStorage.setItem('clb-seen','1'); var hlb=document.getElementById('hub-link'); if(hlb) setTimeout(function(){ hlb.classList.add('hl-flash'); if(window.toast) toast('👆 이게 손님에게 보낼 링크예요 · 복사해서 인스타·손님에게'); setTimeout(function(){ hlb.classList.remove('hl-flash'); }, 2500); }, 700); } }catch(e){}
     try{ renderTodayCard(); }catch(_){}
   }
   // ── 오늘의 현황 (동기 지표: 방문·성장·신기록·마일스톤·발행 스트릭) ──
@@ -7460,8 +7484,8 @@
     try{ if(window.__updateDraftsBtn) window.__updateDraftsBtn(); }catch(_){}
   }
   function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
-    // 로그인 직후 → 운영 화면 노출 없이 바로 '고객 홈'(공개 미리보기). dev 자동편집(localhost)은 제외
-    if(!window.__devEnter){ try{ if(window.__showCustomerHome) window.__showCustomerHome(true); }catch(_){} }
+    // 로그인 직후 → 바로 모드 선택 게이트(무엇부터 해볼까요?). 손님 미리보기는 게이트의 '고객용 화면' 타일에서. dev 자동편집(localhost)은 제외 (사용자 요청 2026-06-29: 미리보기 강제 노출 빼고 바로 게이트)
+    if(!window.__devEnter){ try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){} }
   }
 
   // 분야 선택 제거 — 로그인은 코드+PIN만. selInd=null이면 아래 분야 일치 검사들이 자동 통과
@@ -8191,6 +8215,7 @@
     function handleTap(bt){
       if(bt==='profile'){ if(window.__openProfileSheet) window.__openProfileSheet(); return; }   // 라이브 위 시트로 인라인 편집 (안 나감)
       if(bt==='hero'){ if(window.__openHomeDeco) window.__openHomeDeco('all'); return; }
+      if(bt==='reservation'){ var rs=document.getElementById('open-resv-setup'); if(rs){ rs.click(); return; } }   // 예약 = 좋은 전용 설정 UI(요일토글·시간·주제탭·카톡)로 (투박한 SCHEMA 폼 대신)
       var rows=[].slice.call(document.querySelectorAll('#rows .row[data-type="'+bt+'"]'));
       if(!rows.length){ toast('이 항목은 구성 목록에서 수정해요'); return; }
       var onRows=rows.filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw || sw.classList.contains('on'); });
