@@ -1635,15 +1635,17 @@
   .cp-box.s-premium .cp-code b{color:#E7C079;}
   .cp-box.s-premium .cp-x{background:transparent; border:1px solid #E7C079; color:#E7C079;}
   .lbc.vplay .lbc-resv{opacity:0; pointer-events:none;}
-  .lbc-num{position:absolute; left:11px; bottom:40px; font-family:'Archivo Black','Pretendard',sans-serif; font-size:26px; font-weight:400; color:var(--coral); z-index:1; letter-spacing:-.03em; text-shadow:0 0 16px var(--coral-soft), 0 2px 6px rgba(0,0,0,.55);}
-  .lbc-label{position:absolute; left:0; right:0; bottom:0; padding:10px 11px 11px; background:none; z-index:2;}
-  .lbc-kr{font-size:14px; font-weight:800; color:var(--coral); text-shadow:0 1px 4px rgba(0,0,0,.6);}
-  .lbc-en{font-size:9px; letter-spacing:.15em; color:rgba(255,255,255,.72); margin-top:1px;}
-  /* 재생 표시 = 우측 상단 작게·고급스럽게 (가운데 큰 버튼 X) */
-  .lbc-play{position:absolute; top:8px; right:8px; width:26px; height:26px; border-radius:50%; background:rgba(0,0,0,.42); color:#fff; display:flex; align-items:center; justify-content:center; font-size:8.5px; padding-left:1px; z-index:3; backdrop-filter:blur(3px); transition:.2s;}
-  .lbc[data-hasvid]:hover .lbc-play{background:rgba(0,0,0,.62); transform:scale(1.08);}
+  /* 숫자 = 좌상단 크게 (작품 느낌) */
+  .lbc-num{position:absolute; left:13px; top:9px; font-family:'Archivo Black','Pretendard',sans-serif; font-size:clamp(30px,8.5vw,42px); font-weight:400; color:#fff; z-index:2; letter-spacing:-.03em; line-height:1; text-shadow:0 2px 12px rgba(0,0,0,.65);}
+  /* 이름 = 하단, 가독 그라데 위 흰 글자 */
+  .lbc-label{position:absolute; left:0; right:0; bottom:0; padding:30px 13px 13px; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.12) 70%, transparent); z-index:2;}
+  .lbc-kr{font-size:16px; font-weight:800; color:#fff; text-shadow:0 1px 5px rgba(0,0,0,.7);}
+  .lbc-en{font-size:9.5px; letter-spacing:.15em; color:var(--coral); font-weight:700; margin-top:2px;}
+  /* 영상 표시 = 우하단 "▶ VIDEO" 작은 펜 (뱅하우스 그린 톤·간단히) — 호버하면 재생되므로 표시만 */
+  .lbc-play{position:absolute; right:9px; bottom:11px; z-index:3; display:inline-flex; align-items:center; gap:4px; background:var(--coral); color:var(--on-coral,#06140d); border-radius:999px; padding:4px 10px 4px 9px; font-size:9.5px; font-weight:800; letter-spacing:.06em; box-shadow:0 3px 10px rgba(0,0,0,.4); transition:.2s;}
+  .lbc[data-hasvid]:hover .lbc-play{transform:translateY(-1px); box-shadow:0 5px 14px rgba(0,0,0,.5);}
   .lbc.vplay .lbc-play{opacity:0;}
-  .lbc[data-hasvid] .lbc-wm{display:none;}   /* 영상 카드는 우측상단 = 재생표시가 차지 (워터마크 숨김) */
+  .lbc[data-hasvid] .lbc-wm{display:none;}   /* 영상 카드는 워터마크 숨김 (▶VIDEO 펜이 표시) */
   /* ── 쇼케이스 카드 = 테마 밝기 따라 톤 분리 (밝은 테마서 이름·숫자 안 보이던 문제) ── */
   .lbc::after{content:''; position:absolute; left:0; right:0; bottom:0; height:48%; z-index:1; pointer-events:none; background:linear-gradient(to top, rgba(0,0,0,.86) 0%, rgba(0,0,0,.45) 42%, transparent 78%);}
   .lbc.vplay::after{opacity:0;}
@@ -2901,20 +2903,19 @@
         var hasV = !!(emb || isMp4);
         var video= isMp4 ? '<video class="lbc-video" muted loop playsinline preload="metadata" src="'+esc(vid)+'"></video>' : '';
         var resvBtn = '';   // 쇼케이스 카드 '이 스타일로 예약' 버튼 제거 (사용자 요청 — 예약은 예약 블록에서)
-        return '<article class="lbc" data-lbi="'+i+'"'+(hasV?' data-hasvid="1"':'')+(emb?' data-emb="'+esc(emb)+'"':'')+'>'+media+video+'<div class="lbc-corner"></div>'+(wm?'<div class="lbc-wm">'+esc(wm)+'</div>':'')+'<div class="lbc-num">'+num+'</div><div class="lbc-label"><div class="lbc-kr">'+esc(kr)+'</div>'+(en?'<div class="lbc-en">'+esc(en)+'</div>':'')+'</div>'+resvBtn+(hasV?'<div class="lbc-play">▶</div>':'')+(EDIT?'<button type="button" class="lbc-del" title="이 카드 삭제">×</button>':'')+'</article>';
+        return '<article class="lbc" data-lbi="'+i+'"'+(hasV?' data-hasvid="1"':'')+(emb?' data-emb="'+esc(emb)+'"':'')+'>'+media+video+'<div class="lbc-corner"></div>'+(wm?'<div class="lbc-wm">'+esc(wm)+'</div>':'')+'<div class="lbc-num">'+num+'</div><div class="lbc-label"><div class="lbc-kr">'+esc(kr)+'</div>'+(en?'<div class="lbc-en">'+esc(en)+'</div>':'')+'</div>'+resvBtn+(hasV?'<div class="lbc-play">▶ VIDEO</div>':'')+(EDIT?'<button type="button" class="lbc-del" title="이 카드 삭제">×</button>':'')+'</article>';
       }).join('');
       wrap.innerHTML=head+'<div class="lb-grid">'+grid+'</div>'+(EDIT?'<button type="button" class="lb-addcard">＋ 카드 추가</button>':'');
       if(!EDIT){
         function stopLbc(card){ if(!card.classList.contains('vplay')) return; var ifr=card.querySelector('.lbc-embed'); if(ifr) ifr.remove(); var vv=card.querySelector('.lbc-video'); if(vv){ try{ vv.pause(); vv.currentTime=0; }catch(_){} } card.classList.remove('vplay'); }   // 영상 → 사진으로 복귀
+        function playLbc(card, emb){ if(card.classList.contains('vplay')) return; [].forEach.call(wrap.querySelectorAll('.lbc.vplay'), stopLbc);   // 한 번에 하나만
+          if(emb){ var f=document.createElement('iframe'); f.className='lbc-embed'; f.src=emb; f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture'); f.setAttribute('frameborder','0'); f.allowFullscreen=true; f.addEventListener('load', function(){ f.classList.add('ready'); }); card.appendChild(f); card.classList.add('vplay'); try{ track('lookvid',{i:card.getAttribute('data-lbi')}); }catch(_){} }
+          else { var v=card.querySelector('.lbc-video'); if(v){ v.play().catch(function(){}); card.classList.add('vplay'); } } }
         [].forEach.call(wrap.querySelectorAll('.lbc[data-hasvid]'), function(card){
-          var emb=card.getAttribute('data-emb');
-          card.addEventListener('click', function(){
-            if(card.classList.contains('vplay')){ stopLbc(card); return; }              // 재생 중 다시 누르면(일시정지) → 바로 사진으로
-            [].forEach.call(wrap.querySelectorAll('.lbc.vplay'), stopLbc);               // 다른 영상은 모두 사진으로 (한 번에 하나만 재생)
-            if(emb){ var f=document.createElement('iframe'); f.className='lbc-embed'; f.src=emb; f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture'); f.setAttribute('frameborder','0'); f.allowFullscreen=true; f.addEventListener('load', function(){ f.classList.add('ready'); }); card.appendChild(f); card.classList.add('vplay'); try{ track('lookvid',{i:card.getAttribute('data-lbi')}); }catch(_){} }
-            else { var v=card.querySelector('.lbc-video'); if(v){ v.play().catch(function(){}); card.classList.add('vplay'); } }
-          });
-          var v0=card.querySelector('.lbc-video'); if(v0 && !emb){ card.addEventListener('mouseenter', function(){ if(!card.classList.contains('vplay')) v0.play().catch(function(){}); }); card.addEventListener('mouseleave', function(){ if(!card.classList.contains('vplay')) v0.pause(); }); }
+          var emb=card.getAttribute('data-emb'), hoverT=null;
+          card.addEventListener('mouseenter', function(){ clearTimeout(hoverT); hoverT=setTimeout(function(){ playLbc(card, emb); }, 90); });   // 마우스 올리면 자동재생 (90ms — 스쳐 지나갈 땐 안 뜸)
+          card.addEventListener('mouseleave', function(){ clearTimeout(hoverT); stopLbc(card); });                                              // 내리면 다시 사진으로
+          card.addEventListener('click', function(){ clearTimeout(hoverT); if(card.classList.contains('vplay')) stopLbc(card); else playLbc(card, emb); });   // 모바일/터치 = 탭 토글
         });
       }
       return wrap;
