@@ -8058,6 +8058,10 @@
   // 전체 미리보기 — 저장 후 실제 공개 화면을 앱 안 iframe으로
   var prevBtn=document.getElementById('preview-btn');
   function closeAllPrev(){ var ov=document.getElementById('allprev-ov'); ov.classList.remove('open'); var fr=document.querySelector('.allprev-frame'); if(fr) fr.classList.remove('loaded'); document.getElementById('allprev-iframe').src='about:blank'; if(window.__playHubTransition) window.__playHubTransition(); }
+  // u.html이 실데이터 렌더를 마치면 'la-public-ready'를 보냄 → 그때 로딩막을 걷어 골격 깜빡임 제거 (각 열기마다 __apReveal 재설정)
+  window.addEventListener('message', function(ev){ var m=(ev&&ev.data)||{}; if(m.type==='la-public-ready' && window.__apReveal){ window.__apReveal(); } });
+  // iframe 미리보기 공개 무장: 실데이터 신호 우선, 못 받으면 onload 후 안전망으로 공개
+  function armApReveal(){ var _fr=document.querySelector('.allprev-frame'); if(_fr) _fr.classList.remove('loaded'); var _ifr=document.getElementById('allprev-iframe'); var done=false; window.__apReveal=function(){ if(done) return; done=true; if(_fr) _fr.classList.add('loaded'); }; _ifr.onload=function(){ setTimeout(window.__apReveal, 2500); }; return _ifr; }
   window.__openCustomerPreview=async function(){
     if(!AUTH){ notify('로그인이 필요해요'); return; }
     var handle=((document.getElementById('pf-handle')||{}).value||'').trim() || AUTH.handle || '';
@@ -8070,9 +8074,7 @@
       }
       await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
       await window.laRpc('li_publish',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_published:true});
-      var _fr=document.querySelector('.allprev-frame'); if(_fr) _fr.classList.remove('loaded');
-      var _ifr=document.getElementById('allprev-iframe');
-      _ifr.onload=function(){ if(_fr) _fr.classList.add('loaded'); };
+      var _ifr=armApReveal();
       _ifr.src='u.html?u='+encodeURIComponent(handle)+(window.__previewTab?('&tab='+window.__previewTab):'')+'&cb='+Date.now();
       document.getElementById('allprev-ov').classList.add('open');
     }catch(e){ notify('미리보기 실패: '+e.message); }
@@ -8102,8 +8104,7 @@
     var handle=((document.getElementById('pf-handle')||{}).value||'').trim()||AUTH.handle||'';
     if(!handle){ if(fromLogin && window.__showModeGate) window.__showModeGate(); return; }
     window.__apFromLogin = !!fromLogin;
-    var _fr=document.querySelector('.allprev-frame'); if(_fr) _fr.classList.remove('loaded');
-    var _ifr=document.getElementById('allprev-iframe'); _ifr.onload=function(){ if(_fr) _fr.classList.add('loaded'); };
+    var _ifr=armApReveal();
     _ifr.src='u.html?u='+encodeURIComponent(handle)+'&cb='+Date.now();
     document.getElementById('allprev-ov').classList.add('open');
   };
@@ -8159,7 +8160,12 @@
     function curHandle(){ return (((document.getElementById('pf-handle')||{}).value||'').trim()) || (AUTH&&AUTH.handle) || 'preview'; }
     function curData(){ try{ if(window.__captureForSave) window.__captureForSave(); }catch(e){} try{ return serialize(); }catch(e){ return null; } }
     function sendData(){ try{ ifr.contentWindow.postMessage({type:'la-edit-data', data:curData()}, '*'); }catch(e){} }
-    function loadFrame(){ if(frame) frame.classList.remove('loaded'); ifr.onload=function(){ if(frame) frame.classList.add('loaded'); }; ifr.src='u.html?edit=1&u='+encodeURIComponent(curHandle())+'&cb='+Date.now(); }
+    function loadFrame(){ if(frame) frame.classList.remove('loaded'); if(loadFrame._heal) clearTimeout(loadFrame._heal);
+      ifr.onload=function(){ if(frame) frame.classList.add('loaded'); };
+      ifr.src='u.html?edit=1&u='+encodeURIComponent(curHandle())+'&cb='+Date.now();
+      // ★ 자가복구: 3.5초 뒤에도 iframe이 비어 있으면(로드 실패·CDN 전파지연·캐시 깨짐) 자동 재시도 — 까만 미리보기 멈춤 방지 (최대 2회)
+      loadFrame._heal=setTimeout(function(){ var blank=true; try{ var d=ifr.contentDocument; blank = !d || !d.body || d.body.innerHTML.length<800 || d.querySelectorAll('[data-bt]').length===0; }catch(e){ blank=false; } if(blank && (loadFrame._tries||0)<2){ loadFrame._tries=(loadFrame._tries||0)+1; loadFrame(); } else { loadFrame._tries=0; } }, 3500);
+    }
     window.__liveEditActive=false;
     function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); ov.classList.add('open');
       // 진입 시 최신 저장본을 다시 불러와 편집기를 '공개'와 일치시킴 (공개엔 있는데 편집엔 없는 어긋남 방지)
