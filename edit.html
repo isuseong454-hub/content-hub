@@ -1187,6 +1187,12 @@
   /* ── 시안 B: 보면서 수정 라이브 캔버스 ── */
   #live-edit-ov{position:fixed; inset:0; z-index:45; background:#16161A; display:none; flex-direction:column;}
   #live-edit-ov.open{display:flex;}
+  /* 데스크탑 = 라이브 편집을 가운데 "폰 컬럼"으로 (넓은 화면서 바가 전체폭으로 늘어지는 것 방지 · 운영 chrome은 불투명 오버레이가 덮음) */
+  @media (min-width:680px){
+    #live-edit-ov{ align-items:center; background:#0d0d11; }
+    #live-edit-ov .le-bar, #live-edit-ov .le-frame, #live-edit-ov .le-dock{ width:100%; max-width:468px; }
+    #live-edit-ov .le-frame{ box-shadow:0 0 0 1px var(--hair); }
+  }
   /* 라이브 위 편집 시트 */
   #live-sheet-ov{position:fixed; inset:0; z-index:110; background:#16161A; display:none; flex-direction:column;}
   #live-sheet-ov.open{display:flex; animation:lsUp .26s cubic-bezier(.22,1,.36,1);}
@@ -6140,18 +6146,17 @@
     content: [{type:'text',layout:'quote',name:'세계관 한 줄',content:['내 관점을 **한 문장**으로','사람들이 나를 따르는 이유를 적어요.']}, {type:'text',name:'나는 누구 · 무엇을 믿나',content:['','내가 무엇을 하고 무엇을 믿는지 짧게.']}, {type:'cardnews',name:'대표 컨텐츠',content:[]}, {type:'gallery',name:'컨텐츠 갤러리',content:[]}, {type:'authority',name:'영향력 · 증명',content:[]}, {type:'links',name:'뉴스레터 · 구독',content:[]}, P_LEAD],
     // 🖤 프리미엄 헤어샵 (뱅하우스 톤) — 다크 그린 + Archivo Black + 글로우/마퀴/쇼케이스영상
     premium: [
-      {type:'glowhook',name:'글로우 후킹',content:['70%','WELCOME TO BANG HOUSE','앞머리 디자인','첫인상의','BY 유수 디자이너 · 압구정 라브']},
+      {type:'glowhook',name:'글로우 후킹',content:['70%','WELCOME TO BANG HOUSE','앞머리 디자인','첫인상의','BY ○○ 디자이너 · ○○ 헤어']},
       {type:'marquee',name:'흐르는 태그 띠',content:[[['#얼굴보완'],['#앞머리유선생'],['#묶을때이쁜머리'],['#시스루뱅'],['#히메허쉬'],['#슬릭컷']]]},
-      {type:'lookbook',name:'베스트 앞머리 (LOOKBOOK)',content:['베스트 앞머리 디자인','by 유수 디자이너','BANG HOUSE',[]]},
-      {type:'text',layout:'quote',name:'스토리',content:['"앞머리 한번 망치면 3달 고생이야"','고객 한 마디로 시작된 5년차 노하우 · by YOOSU @ 압구정']},
+      {type:'lookbook',name:'베스트 앞머리 (LOOKBOOK)',content:['베스트 앞머리 디자인','by ○○ 디자이너','SHOWCASE',[['','','시스루뱅','SEE-THROUGH'],['','','소프트 풀뱅','SOFT FULL'],['','','히메 풀뱅','HIME FULL'],['','','사이드뱅','SIDE BANGS']]]},
+      {type:'text',layout:'quote',name:'스토리',content:['"앞머리 한번 망치면 3달 고생이야"','고객 한 마디로 시작된 노하우 · by ○○ 디자이너']},
       {type:'stylegallery',name:'8 LOOKS',content:[]},
-      {type:'ranking',name:'시그니처 TOP 3',content:['SIGNATURE FILM','TOP 3',[['','히메허쉬','히메허쉬 · 가장 인기','55,000원','HOT'],['','슬릭컷','슬릭컷 · 시그니처','55,000원',''],['','허쉬컷','허쉬컷 · 트렌디','55,000원','']]]},
-      {type:'service',name:'예약 메뉴',content:['예약하기 · 수–일 11:00–17:00',[['앞머리 컷 (약 20분)','30,000원','예약',''],['전체 컷 (약 60분 · 샴푸 포함)','55,000원','네이버 예약','https://map.naver.com/p/entry/place/1200619533']]]},
+      {type:'ranking',name:'시그니처 TOP 3',content:['SIGNATURE','TOP 3',[['','히메허쉬','가장 인기','55,000원','HOT'],['','슬릭컷','시그니처','55,000원',''],['','허쉬컷','트렌디','55,000원','']]]},
+      {type:'service',name:'예약 메뉴',content:['예약하기 · 영업시간 입력',[['앞머리 컷 (약 20분)','30,000원','예약',''],['전체 컷 (약 60분 · 샴푸 포함)','55,000원','예약','']]]},
       {type:'reservation',name:'예약 신청',content:[]},
-      {type:'text',name:'방문 가이드',content:['방문 가이드','잘 맞는 손님이 따로 있어요. 사진·영상으로 "이런 느낌이에요" 보여주시는 분께 5년차 노하우로 맞춰드려요.']},
       P_REVIEW,
-      {type:'channels',name:'채널',content:['https://instagram.com/la.b_yoosu','','','https://open.kakao.com/o/sZsUOcui']},
-      {type:'location',name:'매장 · 위치',content:['압구정 라브 (LEAVE A BLANK)','서울 강남구 신사동 563-18','수–일 · 11:00–17:00 · 월·화 휴무','https://map.naver.com/p/entry/place/1200619533','','']}
+      {type:'channels',name:'채널',content:['','','','']},
+      {type:'location',name:'매장 · 위치',content:['○○ 헤어 (상호명)','서울 ○○구 ○○동','영업시간 · 휴무 입력','','','']}
     ],
     // ⚡ 트랜스폼 (결과형 — 비포애프터로 증명 · PT·다이어트·뷰티·코칭) — 다크 + 라임 accent, 같은 에디토리얼 가족
     transform: [
@@ -8239,8 +8244,8 @@
       if(!Array.isArray(order) || !order.length) return;
       var rb=document.getElementById('rows'); if(!rb) return;
       var allRows=[].slice.call(rb.querySelectorAll('.row'));
-      var onRows=allRows.filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw||sw.classList.contains('on'); });
-      var offRows=allRows.filter(function(r){ return onRows.indexOf(r)<0; });
+      var onRows=allRows.filter(function(r){ var sw=r.querySelector('[data-sw]'); var on=!sw||sw.classList.contains('on'); return on && r.getAttribute('data-type')!=='channels'; });   // channels=미리보기선 인라인 항상 숨김(드래그 목록에 없음) → 재정렬 대상 제외(끝으로)
+      var offRows=allRows.filter(function(r){ return onRows.indexOf(r)<0; });   // channels·off 행 = 끝에 배치
       if(order.length!==onRows.length) return;   // 블록↔행 매핑 불일치 → 안전하게 무시
       var seen={}; for(var i=0;i<order.length;i++){ var v=order[i]; if(typeof v!=='number'||v<0||v>=onRows.length||seen[v]) return; seen[v]=1; }   // 0..n-1 순열 검증
       order.forEach(function(idx){ rb.appendChild(onRows[idx]); });   // 새 순서대로 이동

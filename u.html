@@ -652,6 +652,15 @@
   .la-slot:active .la-slot-chip{transform:scale(.94);}
   /* 끼워넣기 모드: 블록은 흐리게 + 클릭막아 슬롯만 누르게 */
   html[data-edit][data-inserting] .la-hb{opacity:.45; pointer-events:none;}
+  /* 맨 아래 '＋ 구성 추가' 빈 슬롯 (항상 보임 · 탭하면 카탈로그) */
+  .la-addslot{display:none;}
+  html[data-edit] .la-addslot{display:flex; flex-direction:column; align-items:center; gap:3px; width:100%; margin:18px 0 10px; padding:24px 18px; background:rgba(123,90,255,.05); border:2px dashed rgba(167,139,255,.5); border-radius:16px; cursor:pointer; font-family:inherit; color:var(--coral); transition:background .14s, border-color .14s;}
+  html[data-edit] .la-addslot:hover{background:rgba(123,90,255,.1); border-color:rgba(167,139,255,.8);}
+  html[data-edit] .la-addslot:active{transform:scale(.99);}
+  html[data-edit] .la-addslot .las-plus{font-size:26px; line-height:1; font-weight:800;}
+  html[data-edit] .la-addslot .las-t{font-size:14.5px; font-weight:800;}
+  html[data-edit] .la-addslot .las-s{font-size:11px; color:var(--muted); font-weight:500;}
+  html[data-edit][data-inserting] .la-addslot{display:none;}
   /* 빈 구성 플레이스홀더 — 항상 자리 보임 */
   .la-empty-block{background:rgba(123,90,255,.06)!important; border:1.5px dashed rgba(167,139,255,.5)!important;}
   .la-empty-in{display:flex; flex-direction:column; align-items:center; gap:4px; padding:18px 12px; text-align:center;}
@@ -924,6 +933,48 @@
     box-shadow:var(--shadow);
   }
   .block-h{display:flex; align-items:center; gap:9px; font-size:14px; font-weight:500;}
+  /* ═══════ 스킨: 뱅하우스 (박스 탈출 · 에디토리얼 흐름) — 색은 테마, "구조"만 바꿈 ═══════ */
+  html.has-skin .block{ background:transparent; border:none; box-shadow:none; border-radius:0; padding:18px 4px; margin-bottom:2px; }
+  html.has-skin .pg-card, html.has-skin .gcard, html.has-skin .arc-card, html.has-skin .lbc{ box-shadow:none; }
+  html.has-skin .pane-title{ text-align:center; font-weight:800; }
+  /* 스킨(에디토리얼) = 위 "주소 바"(contenthub.kr/u/…) 숨겨 시안처럼 맨 위부터 깔끔하게 — 관리자 톱니만 살짝 떠 있게 (진입 유지) */
+  html.has-skin .topbar{ position:absolute; top:0; left:0; right:0; justify-content:flex-end; padding:12px 16px 0; margin:0; z-index:6; pointer-events:none; }
+  html.has-skin .topbar .handle{ display:none; }
+  html.has-skin .topbar .settings-link{ pointer-events:auto; }
+  /* 글로우 후킹 = 에디토리얼 히어로 (시안 그대로: ✱ + 「첫인상의 70%」 + 작가칩) */
+  html.has-skin .gh-hook{ padding:42px 14px 30px; }
+  html.has-skin .gh-star{ display:block; color:var(--coral); font-size:20px; line-height:1; margin-bottom:14px; text-shadow:0 0 18px var(--coral-soft); }
+  html.has-skin .gh-eyebrow{ margin-bottom:14px; }
+  html.has-skin .gh-big{ font-size:clamp(58px,21vw,78px); color:var(--coral); }   /* 큰 숫자 = 초록(테마 accent) 포인트 */
+  html.has-skin .gh-pre{ font-size:clamp(22px,7vw,30px); color:var(--ink); }   /* 앞말 = 흰색 (대비) */
+  html.has-skin .gh-sub{ font-size:clamp(22px,7vw,30px); font-weight:800; color:var(--ink); margin-top:4px; }   /* 설명 = 흰색 (대비 → 단조로운 초록 탈피) */
+  /* 트랜스폼(결과형) = 영문 라벨 대문자 */
+  html[data-skin="transform"] .gh-eyebrow{ text-transform:uppercase; }
+  /* 대비: 번호는 흰색 = 초록 일색 탈피, 숫자가 배경에서 확 튐 (사용자 "너무 초록만·단조로워" 피드백) */
+  html.has-skin .lbc-num{ color:#fff; }
+  html.has-skin .rk-th-e{ color:var(--ink); }
+  /* 두 번째 포인트색 — 초록 일색에 따뜻한 포인트 하나 (사용자 요청) */
+  html[data-skin="banghouse"]{ --accent2:#E3B563; }   /* 다크그린 + 골드 = 프리미엄 */
+  html[data-skin="transform"]{ --accent2:#F2F4F0; }    /* 라임은 강하니 흰색 보조 */
+  html.has-skin .gh-star{ color:var(--accent2); text-shadow:0 0 18px color-mix(in srgb, var(--accent2) 50%, transparent); }
+  html.has-skin .ly-q-mark{ color:var(--accent2); opacity:.92; }
+  html.has-skin .rk-pr small{ background:var(--accent2); color:#1a1a14; }   /* HOT 등 배지 = 골드 포인트 */
+  /* 인용구 = 또렷하게 (Pretendard·흰색·읽기 좋은 굵기 → "굵기 때문에 안 보임" 해결) */
+  html.has-skin .ly-quote-t{ font-family:var(--sans); color:var(--ink); font-weight:800; }
+  /* 쇼케이스 그리드 = 타이트 */
+  html.has-skin .lb-grid{ gap:6px; }
+  html.has-skin .lb-title{ margin:4px 0 14px; }
+  /* CTA·예약 등 행동 블록은 살짝 띄워 강조 유지 (전부 밋밋해지지 않게) */
+  html.has-skin .block.resv, html.has-skin .block.gtee, html.has-skin .block.cd-card{ background:color-mix(in srgb, var(--ink) 5%, transparent); border:1px solid var(--hair); border-radius:16px; padding:16px 18px; }
+  /* ④ 게시물 그리드 = 플랫(이미지 중심), 인용 = 박스 제거 가운데 */
+  html.has-skin .pg-card{ background:transparent; border:none; border-radius:0; }
+  html.has-skin .pg-card .pg-cov{ border-radius:12px; }
+  html.has-skin .pg-body{ padding:9px 3px 2px; }
+  html.has-skin .ly-quote{ background:none; border:none; box-shadow:none; padding:18px 8px; text-align:center; }
+  html.has-skin .arc-card{ background:transparent; border:none; }
+  /* 섹션 제목 = ✦ 양옆 라인 (에디토리얼 구분) */
+  html.has-skin .pane-title{ display:flex; align-items:center; justify-content:center; gap:10px; }
+  html.has-skin .pane-title::before, html.has-skin .pane-title::after{ content:''; width:26px; height:1px; background:var(--coral); opacity:.55; }
   .ic{
     width:30px; height:30px; flex-shrink:0; border-radius:9px;
     background:var(--coral-soft); color:var(--coral);
@@ -1241,6 +1292,13 @@
   .gh-sub{font-size:14.5px; color:var(--ink); margin-top:14px; line-height:1.55; letter-spacing:.01em;}
   html[data-edit] .gh-big.la-ed-inline:empty::before, html[data-edit] .gh-eyebrow.la-ed-inline:empty::before, html[data-edit] .gh-sub.la-ed-inline:empty::before{ content:attr(data-ph); color:var(--muted); opacity:.5; -webkit-text-fill-color:currentColor; text-shadow:none; letter-spacing:normal; font-family:var(--sans); font-size:14px; }
   html[data-edit] .gh-big.la-ed-inline:empty{ min-height:54px; }
+  /* 에디토리얼 히어로 추가 요소 (✱ 별·숫자 앞말·작가 칩) — 시안 그대로 */
+  .gh-star{ display:none; }
+  .gh-bigwrap{ display:flex; align-items:baseline; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .gh-pre{ font-size:22px; font-weight:800; color:var(--cm-disp); line-height:1.05; }
+  .gh-bychip{ display:inline-block; margin-top:18px; font-size:12px; font-weight:700; color:var(--muted); border:1px solid var(--hair); border-radius:99px; padding:8px 18px; letter-spacing:.01em;}
+  .gh-bychip b{ color:var(--coral); }
+  html[data-edit] .gh-pre.la-ed-inline:empty::before, html[data-edit] .gh-bychip.la-ed-inline:empty::before{ content:attr(data-ph); color:var(--muted); opacity:.5; font-weight:500; font-size:13px; letter-spacing:normal; }
   /* 흐르는 태그 띠 (마퀴) */
   .mq-band{overflow:hidden; padding:9px 0; margin:4px 0; background:transparent !important; border:none !important; -webkit-mask:linear-gradient(90deg,transparent,#000 11%,#000 89%,transparent); mask:linear-gradient(90deg,transparent,#000 11%,#000 89%,transparent);}
   .mq-track{display:inline-flex; gap:9px; white-space:nowrap; animation:mqScroll 24s linear infinite; will-change:transform;}
@@ -1419,6 +1477,11 @@
   .pg-feat .pg-title{font-size:15px;}
   .pg-sum{font-size:11.5px; color:var(--muted); margin-top:3px; line-height:1.4;}
   .pg-go{font-size:11px; color:var(--coral); margin-top:6px; font-weight:600;}
+  /* 프로필 카드 블록 (원형 사진 + 이름 + 설명) */
+  .pcard{text-align:center; padding:24px 18px; border:1px solid var(--hair); border-radius:16px; background:var(--surface);}
+  .pcard-av{width:96px; height:96px; border-radius:50%; margin:0 auto 13px; background:var(--coral-soft) center/cover no-repeat; border:1px solid var(--hair); display:grid; place-items:center; font-size:40px; color:var(--coral);}
+  .pcard-nm{font-size:17.5px; font-weight:800; color:var(--ink); letter-spacing:-.01em;}
+  .pcard-desc{font-size:13px; color:var(--muted); margin-top:7px; line-height:1.6;}
   .pm-title{font-size:17px; font-weight:700; color:var(--ink); margin:0 34px 14px 2px;}
   /* 아카이브 보기 방식: 사진 그리드 / 리스트 */
   .arc-photo{display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:4px;}
@@ -1569,11 +1632,21 @@
   .cp-box.s-premium .cp-x{background:transparent; border:1px solid #E7C079; color:#E7C079;}
   .lbc.vplay .lbc-resv{opacity:0; pointer-events:none;}
   .lbc-num{position:absolute; left:11px; bottom:40px; font-family:'Archivo Black','Pretendard',sans-serif; font-size:26px; font-weight:400; color:var(--coral); z-index:1; letter-spacing:-.03em; text-shadow:0 0 16px var(--coral-soft), 0 2px 6px rgba(0,0,0,.55);}
-  .lbc-label{position:absolute; left:0; right:0; bottom:0; padding:10px 11px 11px; background:linear-gradient(to top, rgba(0,0,0,.82), transparent); z-index:1;}
+  .lbc-label{position:absolute; left:0; right:0; bottom:0; padding:10px 11px 11px; background:none; z-index:2;}
   .lbc-kr{font-size:14px; font-weight:800; color:var(--coral); text-shadow:0 1px 4px rgba(0,0,0,.6);}
   .lbc-en{font-size:9px; letter-spacing:.15em; color:rgba(255,255,255,.72); margin-top:1px;}
   .lbc-play{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.45); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; z-index:1; transition:.2s;}
   .lbc.vplay .lbc-play{opacity:0;}
+  /* ── 쇼케이스 카드 = 테마 밝기 따라 톤 분리 (밝은 테마서 이름·숫자 안 보이던 문제) ── */
+  .lbc::after{content:''; position:absolute; left:0; right:0; bottom:0; height:48%; z-index:1; pointer-events:none; background:linear-gradient(to top, rgba(0,0,0,.86) 0%, rgba(0,0,0,.45) 42%, transparent 78%);}
+  .lbc.vplay::after{opacity:0;}
+  .lbc-num, .lbc-wm{z-index:2;}
+  /* 밝은 톤 테마: 스크림·글자를 밝게(흰 스크림 + 어두운 글자)로 뒤집어 가독성 확보 */
+  html[data-bright="light"] .lbc::after{background:linear-gradient(to top, rgba(255,255,255,.96) 0%, rgba(255,255,255,.6) 46%, transparent 80%);}
+  html[data-bright="light"] .lbc-num{color:var(--cm-disp); text-shadow:0 1px 3px rgba(255,255,255,.9);}
+  html[data-bright="light"] .lbc-kr{color:var(--cm-disp); text-shadow:0 1px 2px rgba(255,255,255,.85);}
+  html[data-bright="light"] .lbc-en{color:var(--muted); text-shadow:none;}
+  html[data-bright="light"] .lbc-wm{color:rgba(0,0,0,.34);}
 
   /* 랭킹 가격 */
   .rank{margin:6px 0 16px;}
@@ -1909,9 +1982,18 @@
   // 분위기 테마 전환 (나중엔 편집기 설정에서 저장 → 방문자 페이지에 적용)
   var swatches = document.querySelectorAll('.sw');
   var DEPRECATED_THEMES = { lemon:'cream' };   // 편집기 테마 그리드에서 빠진 옛 테마 → 기본 크림으로 자동 전환 (노란색으로 굳던 버그)
+  // 테마 밝기 자동 판별 (--surface 휘도) → data-bright = light/dark (쇼케이스 등 톤 분리에 사용, 새 테마도 자동 대응)
+  function __lum(c){ c=(c||'').trim(); var r,g,b;
+    if(c[0]==='#'){ if(c.length===4){ r=parseInt(c[1]+c[1],16); g=parseInt(c[2]+c[2],16); b=parseInt(c[3]+c[3],16); } else { r=parseInt(c.slice(1,3),16); g=parseInt(c.slice(3,5),16); b=parseInt(c.slice(5,7),16); } }
+    else { var m=c.match(/rgba?\(([^)]+)\)/); if(!m) return null; var p=m[1].split(','); r=+p[0]; g=+p[1]; b=+p[2]; }
+    if(isNaN(r)||isNaN(g)||isNaN(b)) return null;
+    return (0.2126*r + 0.7152*g + 0.0722*b)/255;
+  }
+  function applyBright(){ try{ var sf=getComputedStyle(document.documentElement).getPropertyValue('--surface'); var l=__lum(sf); document.documentElement.setAttribute('data-bright', (l!=null && l<0.5)?'dark':'light'); }catch(e){ document.documentElement.setAttribute('data-bright','light'); } }
   function setTheme(t){
     if(t && DEPRECATED_THEMES[t]) t = DEPRECATED_THEMES[t];
     document.documentElement.setAttribute('data-theme', t);
+    applyBright();
     swatches.forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-theme') === t); });
     try { localStorage.setItem('u-theme', t); } catch(e){}
   }
@@ -1919,7 +2001,7 @@
     s.addEventListener('click', function(){ setTheme(s.getAttribute('data-theme')); });
   });
   var saved; try { saved = localStorage.getItem('u-theme'); } catch(e){}
-  if (saved) setTheme(saved); else document.documentElement.setAttribute('data-theme','cream');
+  if (saved) setTheme(saved); else setTheme('cream');
 
   // ── 커버 사진 핏 적용 (초점=background-position 0~100%, 줌=background-size로 → 어떤 비율·범위든 드래그로 위치 조정 가능, 항상 꽉 참) ──
   var __ia={};   // 이미지 가로/세로 비율 캐시
@@ -1942,6 +2024,8 @@
   function applyHome(){
     var h; try{ h = JSON.parse(localStorage.getItem('cm-home-v1')) || {}; }catch(e){ h = {}; }
     document.documentElement.setAttribute('data-font', h.font || 'serif');
+    document.documentElement.setAttribute('data-skin', h.skin || '');   // 스킨 = 레이아웃(박스탈출·에디토리얼). 색은 테마가 담당
+    if(h.skin) document.documentElement.classList.add('has-skin'); else document.documentElement.classList.remove('has-skin');
     applyDesign(h);   // (레거시) 직접 디자인 활성 시 — 지금은 미사용
     // 버튼 색 오버라이드 — 테마는 그대로, --coral(버튼색)만 내 색으로
     (function(){ var r=document.documentElement;
@@ -2402,11 +2486,13 @@
       return d;
     },
     glowhook: function(c){
-      var big=c[0]||'', lab=c[1]||'', sub=c[2]||''; if(!big && !EDIT) return null;
+      var big=c[0]||'', lab=c[1]||'', sub=c[2]||'', pre=c[3]||'', by=c[4]||''; if(!big && !EDIT) return null;
       var d=document.createElement('div'); d.className='block gh-hook';
-      d.innerHTML=((lab||EDIT)?'<div class="gh-eyebrow">'+(lab?esc(lab):'')+'</div>':'')
-        +'<div class="gh-big">'+(big?emph(big):'')+'</div>'
-        +((sub||EDIT)?'<div class="gh-sub">'+(sub?emph(sub):'')+'</div>':'');
+      d.innerHTML='<div class="gh-star">✱</div>'
+        +((lab||EDIT)?'<div class="gh-eyebrow">'+(lab?esc(lab):'')+'</div>':'')
+        +'<div class="gh-bigwrap">'+((pre||EDIT)?'<span class="gh-pre">'+(pre?esc(pre):'')+'</span>':'')+'<span class="gh-big">'+(big?emph(big):'')+'</span></div>'
+        +((sub||EDIT)?'<div class="gh-sub">'+(sub?emph(sub):'')+'</div>':'')
+        +((by||EDIT)?'<div class="gh-bychip">'+(by?esc(by):'')+'</div>':'');
       return d;
     },
     marquee: function(c){
@@ -2424,7 +2510,13 @@
       d.innerHTML='<div class="gtee-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div><div class="gtee-t">'+emph(title||'100% 보장')+'</div>'+(desc?'<div class="sub gtee-d">'+esc(desc)+'</div>':'')+'</div>';
       return d;
     },
-    reservation: function(c){ return null; /* 단독 예약 기능(d.reservation)으로 이전 — buildReservation 사용 */
+    reservation: function(c){
+      // 예약 CTA 카드 = 블록으로 렌더(편집 모드서 드래그·순서변경 가능). 실제 캘린더·폼은 buildReservation이 모달로 만들고 이 버튼에 연결
+      var rtitle=(c&&c[0])||'예약하기';
+      var rd=document.createElement('div'); rd.className='block resv-cta';
+      rd.innerHTML='<div class="block-h">'+emph(rtitle)+'</div><div class="sub" style="margin-top:4px;">날짜·시간 골라 카톡으로 간편 예약</div><button type="button" class="resv-cta-btn">📅 '+esc(rtitle)+'</button>';
+      return rd;
+      /* ↓ 옛 단독 구현(미사용·도달 불가) — buildReservation으로 이전됨 */
       var title=c[0]||'예약하기';
       var closedStr=c[1]||'', startT=c[2]||'11:00', endT=c[3]||'17:00', interval=parseInt(c[4],10)||60;
       var menus=Array.isArray(c[5])?c[5].filter(function(m){return (m[0]||'').trim();}):[];
@@ -2691,6 +2783,14 @@
       var b=list.map(function(x){ return '<div class="qb"><div class="qb-q">'+esc(x[0]||'')+'</div><div class="qb-a">'+esc(x[1]||'')+'</div></div>'; }).join('');
       return card('<div class="block-h" style="margin-bottom:14px;">이런 걱정, 하시죠?</div>'+b);
     },
+    profilecard: function(c){
+      var url=c[0]||'', name=c[1]||'', desc=c[2]||'';
+      var d=document.createElement('div'); d.className='pcard';
+      var av = url ? '<div class="pcard-av" style="background-image:url('+esc(url)+')"></div>'
+                   : '<div class="pcard-av pcard-av-empty">👤</div>';
+      d.innerHTML = av + (name?'<div class="pcard-nm">'+esc(name)+'</div>':'') + (desc?'<div class="pcard-desc">'+richBody(desc)+'</div>':'');
+      return d;
+    },
     imagetext: function(c, layout){
       var url=c[0]||'', title=c[1]||'', desc=c[2]||'';
       var pf=pcStyle(c[3]); var fxC=pf.cls?(' '+pf.cls):'';
@@ -2793,7 +2893,7 @@
         var isMp4 = vid && /\.mp4($|\?|#)/i.test(vid);
         var hasV = !!(emb || isMp4);
         var video= isMp4 ? '<video class="lbc-video" muted loop playsinline preload="metadata" src="'+esc(vid)+'"></video>' : '';
-        var resvBtn = (!EDIT && window.__resvOn) ? '<button type="button" class="lbc-resv" data-style="'+esc(kr||title||'이 스타일')+'">📅 예약</button>' : '';
+        var resvBtn = '';   // 쇼케이스 카드 '이 스타일로 예약' 버튼 제거 (사용자 요청 — 예약은 예약 블록에서)
         return '<article class="lbc" data-lbi="'+i+'"'+(hasV?' data-hasvid="1"':'')+(emb?' data-emb="'+esc(emb)+'"':'')+'>'+media+video+'<div class="lbc-corner"></div>'+(wm?'<div class="lbc-wm">'+esc(wm)+'</div>':'')+'<div class="lbc-num">'+num+'</div><div class="lbc-label"><div class="lbc-kr">'+esc(kr)+'</div>'+(en?'<div class="lbc-en">'+esc(en)+'</div>':'')+'</div>'+resvBtn+(hasV?'<div class="lbc-play">▶</div>':'')+(EDIT?'<button type="button" class="lbc-del" title="이 카드 삭제">×</button>':'')+'</article>';
       }).join('');
       wrap.innerHTML=head+'<div class="lb-grid">'+grid+'</div>'+(EDIT?'<button type="button" class="lb-addcard">＋ 카드 추가</button>':'');
@@ -2891,8 +2991,8 @@
   (function(){ var x=document.getElementById('ic-x'); if(x) x.onclick=function(){ var c=document.getElementById('intent-card'); c.classList.remove('show'); setTimeout(function(){ c.hidden=true; }, 360); }; })();
 
   // 블록 타입 → 한글 이름 (빈 구성 플레이스홀더 라벨용)
-  var BLOCK_HINT={ hero:'한 줄로 시선을 잡는 후킹 문구', profile:'이름·소개·사진', best:'대표·인기 컨텐츠를 크게 (사회적 증명)', photocard:'성과·포트폴리오 사진 (프레임 꾸미기)', marquee:'키워드가 좌우로 흐르는 띠', glowhook:'큰 숫자·단어가 빛나게', lookbook:'대표 작업·디자인을 카드로', stylegallery:'분류·검색·전후 사진', gallery:'사진을 가로로 쭉', imagetext:'사진 + 설명 (좌우 분할)', authority:'수상·자격·경력·숫자로 신뢰', review:'고객 후기·진짜 변화', qna:'자주 묻는 질문·걱정 해소', ranking:'TOP 메뉴·시그니처 + 가격', event:'이번 달 이벤트·프로모션', service:'예약·신청·결제 버튼', lead:'상담·문의·신청 (연락처 받기)', location:'매장 주소·지도·사진', highlights:'후기·가격·메뉴 버블', cardnews:'카드뉴스 글 (링크 복사)', links:'뉴스레터·강의·전자책 버튼', newsletter:'구독 받기', video:'유튜브·비메오 영상', cta:'"지금 예약" 행동 버튼', countdown:'마감까지 실시간 카운트다운', steps:'1·2·3 진행 단계', guarantee:'환불·만족 보장으로 불안 ↓', text:'제목 + 설명', quote:'한 문장 강조', beforeafter:'비포·애프터 사진', products:'추천 제품 (쿠팡 등)', stat:'성과 숫자 강조', contact:'1:1 문의 폼', channels:'인스타·유튜브·카톡 링크' };
-  var BLOCK_NAME={ hero:'후킹 문구', best:'베스트·대표 작업', photocard:'사진', marquee:'흐르는 태그 띠', glowhook:'글로우 후킹', links:'뉴스레터·강의·전자책', newsletter:'뉴스레터', gallery:'컨텐츠 갤러리', stylegallery:'스타일 갤러리', lookbook:'대표 사진 쇼케이스', cardnews:'카드뉴스', highlights:'하이라이트', ranking:'랭킹·가격', authority:'전문가 증명', service:'서비스·상품', lead:'문의·신청', review:'후기', qna:'Q&A', event:'이벤트 배너', countdown:'카운트다운', steps:'이용 방법', guarantee:'보장 배지', video:'영상', imagetext:'이미지+글', text:'글', cta:'CTA 버튼', location:'매장·위치', reservation:'예약 신청' };
+  var BLOCK_HINT={ hero:'한 줄로 시선을 잡는 후킹 문구', profile:'이름·소개·사진', best:'대표·인기 컨텐츠를 크게 (사회적 증명)', photocard:'성과·포트폴리오 사진 (프레임 꾸미기)', marquee:'키워드가 좌우로 흐르는 띠', glowhook:'큰 숫자·단어가 빛나게', lookbook:'대표 작업·디자인을 카드로', stylegallery:'분류·검색·전후 사진', gallery:'사진을 가로로 쭉', profilecard:'원형 사진 + 이름 + 설명', imagetext:'사진 + 설명 (좌우 분할)', authority:'수상·자격·경력·숫자로 신뢰', review:'고객 후기·진짜 변화', qna:'자주 묻는 질문·걱정 해소', ranking:'TOP 메뉴·시그니처 + 가격', event:'이번 달 이벤트·프로모션', service:'예약·신청·결제 버튼', lead:'상담·문의·신청 (연락처 받기)', location:'매장 주소·지도·사진', highlights:'후기·가격·메뉴 버블', cardnews:'카드뉴스 글 (링크 복사)', links:'뉴스레터·강의·전자책 버튼', newsletter:'구독 받기', video:'유튜브·비메오 영상', cta:'"지금 예약" 행동 버튼', countdown:'마감까지 실시간 카운트다운', steps:'1·2·3 진행 단계', guarantee:'환불·만족 보장으로 불안 ↓', text:'제목 + 설명', quote:'한 문장 강조', beforeafter:'비포·애프터 사진', products:'추천 제품 (쿠팡 등)', stat:'성과 숫자 강조', contact:'1:1 문의 폼', channels:'인스타·유튜브·카톡 링크' };
+  var BLOCK_NAME={ hero:'후킹 문구', best:'베스트·대표 작업', photocard:'사진', marquee:'흐르는 태그 띠', glowhook:'글로우 후킹', links:'뉴스레터·강의·전자책', newsletter:'뉴스레터', gallery:'컨텐츠 갤러리', stylegallery:'스타일 갤러리', lookbook:'대표 사진 쇼케이스', cardnews:'카드뉴스', highlights:'하이라이트', ranking:'랭킹·가격', authority:'전문가 증명', service:'서비스·상품', lead:'문의·신청', review:'후기', qna:'Q&A', event:'이벤트 배너', countdown:'카운트다운', steps:'이용 방법', guarantee:'보장 배지', video:'영상', profilecard:'프로필 카드', imagetext:'이미지+글', text:'글', cta:'CTA 버튼', location:'매장·위치', reservation:'예약 신청' };
   function makeEmptyPlaceholder(type){
     var d=document.createElement('div'); d.className='block la-empty-block';
     var nm=BLOCK_NAME[type]||'새 구성';
@@ -3049,13 +3149,20 @@
     closeBtn.onclick=closeModal;
     ov.addEventListener('click', function(e){ if(e.target===ov) closeModal(); });
 
-    // 홈 섹션 = 예약 CTA 카드 (눌러서 팝업 열기) — 갤러리(사진 나열) 바로 아래에 꽂기
-    var cta=document.createElement('div'); cta.className='block resv-cta la-dyn';
-    cta.innerHTML='<div class="block-h">'+emph(cfg.title||'예약하기')+'</div><div class="sub" style="margin-top:4px;">날짜·시간 골라 카톡으로 간편 예약</div><button type="button" class="resv-cta-btn">📅 '+esc(cfg.title||'예약하기')+'</button>';
-    cta.querySelector('.resv-cta-btn').onclick=openModal;
-    var lastGal=null; [].forEach.call(home.querySelectorAll('[data-galblock]'), function(g){ if(g.parentNode===home) lastGal=g; });
-    if(lastGal){ if(lastGal.nextSibling) home.insertBefore(cta, lastGal.nextSibling); else home.appendChild(cta); }
-    else home.appendChild(cta);
+    // 예약 CTA: 'reservation' 블록(EXTRA.reservation 렌더)을 찾아 제목 갱신 + 버튼 연결 (블록이라 순서변경·드래그 가능)
+    var cta=home.querySelector('.resv-cta');
+    if(cta){
+      var _bh=cta.querySelector('.block-h'); if(_bh) _bh.innerHTML=emph(cfg.title||'예약하기');
+      var _btn=cta.querySelector('.resv-cta-btn'); if(_btn){ _btn.innerHTML='📅 '+esc(cfg.title||'예약하기'); _btn.onclick=openModal; }
+    } else {
+      // 레거시(예약 블록 없음): 새로 만들어 갤러리(사진 나열) 바로 아래에 꽂기
+      cta=document.createElement('div'); cta.className='block resv-cta la-dyn';
+      cta.innerHTML='<div class="block-h">'+emph(cfg.title||'예약하기')+'</div><div class="sub" style="margin-top:4px;">날짜·시간 골라 카톡으로 간편 예약</div><button type="button" class="resv-cta-btn">📅 '+esc(cfg.title||'예약하기')+'</button>';
+      cta.querySelector('.resv-cta-btn').onclick=openModal;
+      var lastGal=null; [].forEach.call(home.querySelectorAll('[data-galblock]'), function(g){ if(g.parentNode===home) lastGal=g; });
+      if(lastGal){ if(lastGal.nextSibling) home.insertBefore(cta, lastGal.nextSibling); else home.appendChild(cta); }
+      else home.appendChild(cta);
+    }
     // 플로팅 예약 버튼은 만들지 않음(네이버 등 채널 플로팅과 겹침 방지) — 예약은 위 인라인 버튼으로
 
     var state={ y:0, m:0, date:null, time:null, svc:null, visit:'' };
@@ -3291,6 +3398,7 @@
   function buildPosts(posts){
     var home=document.querySelector('[data-pane="home"]'); if(!home) return;
     if(window.__hasCurated) return;   // 큐레이션 모드(고른 글만 카드로 꽂음) → 자동 전체 노출 끔
+    if(document.documentElement.getAttribute('data-skin')) return;   // 스킨(통째 템플릿)=에디토리얼 홈 → 게시물 자동 그리드 끔 (게시물은 '컨텐츠' 탭에서, 홈엔 원하면 대표 블록으로)
     var live=(posts||[]).filter(function(p){ return p && p.on!==false && p.blocks && p.blocks.length; });
     if(!live.length) return;
     live = live.slice().sort(function(a,b){ return (b.featured?1:0)-(a.featured?1:0); });
@@ -3392,6 +3500,7 @@
     var tabParam = new URLSearchParams(location.search).get('tab');
     if(tabParam){ setTimeout(function(){ var nv=document.querySelector('.navitem[data-tab="'+tabParam+'"]'); if(nv) nv.click(); }, 250); }
     if(d.reservation && d.reservation.on){ try{ buildReservation(d.reservation); }catch(e){} }
+    else if(typeof EDIT_MODE==='undefined' || !EDIT_MODE){ var _rc=document.querySelector('.resv-cta'); if(_rc) _rc.style.display='none'; }   // 예약 미설정 = 공개페이지선 작동 안 하는 버튼 숨김 (편집 모드는 보여서 설정 가능)
     // 게시물 링크(?p=)로 들어오면 → 홈 착지 + '이어보기' 알약 (의도보존, 홈도 한번 보게)
     var pParam = new URLSearchParams(location.search).get('p');
     if(pParam){ setTimeout(function(){ try{ showResumePost(pParam); }catch(e){} }, 700); }
@@ -3645,7 +3754,7 @@
       if(el.__drag) return; el.__drag=1;
       var lp=null, sy=0, sx=0;
       el.addEventListener('pointerdown', function(e){
-        if(e.target.closest('.la-ed-bar, button, a, input, textarea, select, [contenteditable="true"], .la-galcard, .la-galadd, .rk-th, .rk-del, .rk-add, .sgc-del, .sg-add, .gh-big, .gh-eyebrow, .gh-sub')) return;
+        if(e.target.closest('.la-ed-bar, button, a, input, textarea, select, [contenteditable="true"], .la-galcard, .la-galadd, .rk-th, .rk-del, .rk-add, .sgc-del, .sg-add, .gh-big, .gh-eyebrow, .gh-sub, .gh-pre, .gh-bychip')) return;
         sy=e.clientY; sx=e.clientX;
         lp=setTimeout(function(){ lp=null; beginDrag(el, e); }, 230);
       });
@@ -3676,6 +3785,16 @@
     }
   }
   window.__setupBlockDrag=setupBlockDrag;
+  // 페이지 맨 아래 '＋ 구성 추가' 빈 슬롯 — 항상 보이는 슬롯(탭 → 부모 카탈로그). 재렌더마다 끝에 다시 붙임
+  function ensureAddSlot(){
+    if(!EDIT_MODE) return;
+    var home=document.querySelector('[data-pane="home"]'); if(!home) return;
+    var old=document.getElementById('la-addslot'); if(old) old.remove();
+    var s=document.createElement('button'); s.type='button'; s.id='la-addslot'; s.className='la-addslot';
+    s.innerHTML='<span class="las-plus">＋</span><span class="las-t">구성 추가</span><span class="las-s">탭해서 새 구성을 더해요 · 위치는 꾹 눌러 옮겨요</span>';
+    s.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-open-catalog'}, '*'); }catch(_){} });
+    home.appendChild(s);
+  }
   function setupEditTaps(){
     if(!EDIT_MODE) return;
     setupProfileInline();   // 프로필(이름·소개·사진)은 그 자리에서 바로 수정 (시트로 안 넘어감)
@@ -3705,13 +3824,14 @@
       bar.appendChild(del);
       el.appendChild(bar);
       // 탭하면 그 구성만 선택(강조) → 수정·삭제 노출. 빈 구성은 바로 편집창.
-      el.addEventListener('click', function(e){ if(el.__justDragged) return; if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add,.gh-big,.gh-eyebrow,.gh-sub')) return; e.preventDefault(); e.stopPropagation();
+      el.addEventListener('click', function(e){ if(el.__justDragged) return; if(e.target.closest('.la-ed-bar')) return; if(e.target.closest('.la-galcard,.la-galadd,.lbc-kr,.lbc-del,.lb-addcard,.rk-th,.rk-nm,.rk-pr-v,.rk-del,.rk-add,.sgc-before,.sgc-after,.sgc-title,.sgc-desc,.sgc-del,.sg-add,.gh-big,.gh-eyebrow,.gh-sub,.gh-pre,.gh-bychip')) return; e.preventDefault(); e.stopPropagation();
         if(el.classList.contains('la-empty-block')){ try{ parent.postMessage({type:'la-edit-tap', bt:bt}, '*'); }catch(_){} return; }
         selectBlock(el);
       }, true);
     });
     armGallery(); armLookbook(); armItems('ranking'); armItems('stylegallery'); armGlowhook();
     setupBlockDrag();   // 🖐 꾹 눌러 드래그로 순서 변경
+    ensureAddSlot();    // 페이지 맨 아래 '＋ 구성 추가' 빈 슬롯 (탭 → 카탈로그)
     if(_insertMode) showInsertSlots();   // 재렌더돼도 '여기' 슬롯 유지(각 구성 사이)
     // 구성 밖을 탭하면 선택 해제 (블록 클릭은 capture+stopPropagation이라 여기 안 옴)
     if(!document.__deselWired){ document.__deselWired=1; document.addEventListener('click', function(e){ if(e.target.closest('.la-hb')||e.target.closest('.la-ed-bar')) return; clearBlockSel(); }); }
@@ -3734,7 +3854,7 @@
   function armGlowhook(){
     if(!EDIT_MODE) return;
     [].forEach.call(document.querySelectorAll('.gh-hook'), function(hook){
-      var map=[['.gh-big',0,'큰 글자 (예: 70%)',false],['.gh-eyebrow',1,'위 라벨 (선택)',false],['.gh-sub',2,'아래 설명 (선택)',true]];
+      var map=[['.gh-big',0,'큰 글자 (예: 70%)',false],['.gh-eyebrow',1,'위 라벨 (선택)',false],['.gh-sub',2,'아래 설명 (선택)',true],['.gh-pre',3,'숫자 앞 작은 말',false],['.gh-bychip',4,'BY 작가·위치',false]];
       map.forEach(function(m){
         var el=hook.querySelector(m[0]); if(!el || el.__gce) return; el.__gce=1;
         el.classList.add('la-ed-inline'); el.setAttribute('contenteditable','true'); el.setAttribute('data-ph', m[2]);
