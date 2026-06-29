@@ -235,6 +235,13 @@
   .dlg-btns{display:flex; gap:9px; margin-top:6px;}
   .dlg-cancel{flex:1; padding:11px; border-radius:12px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); font-size:14px; font-weight:700; cursor:pointer;}
   .dlg-ok{flex:1.4; padding:11px; border-radius:12px; border:0; background:var(--grad); color:#fff; font-size:14px; font-weight:800; cursor:pointer;}
+  /* 고급 확인창 (cmConfirm) — 카드 중앙정렬 + 아이콘 */
+  #cm-confirm-ov{z-index:240;}   /* 템플릿 미리보기(200) 위로 */
+  .cmc-dlg{text-align:center; max-width:300px;}
+  .cmc-ic{font-size:30px; line-height:1; margin-bottom:10px; filter:drop-shadow(0 3px 10px var(--coral-soft));}
+  .cmc-dlg .dlg-t{font-size:16.5px;}
+  .cmc-dlg .dlg-d{font-size:12.8px; line-height:1.62; margin-top:8px;}
+  .cmc-dlg .dlg-cancel,.cmc-dlg .dlg-ok{padding:12px;}
   .mv-list{display:flex; flex-direction:column; gap:8px; margin-top:14px; max-height:46vh; overflow:auto;}
   .mv-folder{text-align:left; padding:13px 14px; border-radius:12px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font-size:14.5px; font-weight:700; cursor:pointer;}
   .mv-folder:hover{border-color:var(--coral);}
@@ -247,12 +254,25 @@
   .edit-intro .ei-rec{display:flex; align-items:center; gap:7px; margin-top:7px; font-size:11.5px; color:var(--muted); line-height:1.5;}
   .edit-intro .ei-rec b{color:var(--coral); font-weight:700;}
   .edit-intro .ei-rec-tag{flex:0 0 auto; background:var(--grad); color:#fff; font-size:10px; font-weight:800; padding:2px 8px; border-radius:999px;}
-  /* 룩 카드 탭 + 고급옵션 접기 */
-  .lb-tabs{display:flex; gap:6px; overflow-x:auto; margin-bottom:10px; padding-bottom:2px; scrollbar-width:none;}
-  .lb-tabs::-webkit-scrollbar{display:none;}
-  .lb-tab{flex:0 0 auto; background:var(--soft); color:var(--muted); border:1px solid var(--hair); border-radius:999px; padding:6px 13px; font-size:12px; font-weight:700; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
-  .lb-tab.on{background:var(--grad); color:#fff; border-color:transparent;}
-  .lb-tab.lb-addtab{color:var(--coral); border-style:dashed;}
+  /* 쇼케이스 카드 = 가로 썸네일 줄 (탭 대신 한눈에 · 탭하면 아래서 편집) */
+  .lb-strip{display:flex; gap:8px; overflow-x:auto; margin-bottom:12px; padding:2px 0 8px; scrollbar-width:none;}
+  .lb-strip::-webkit-scrollbar{display:none;}
+  .lb-tile{flex:0 0 auto; width:62px; padding:0; background:none; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; font-family:var(--sans);}
+  .lb-tile .lb-ti{width:62px; height:78px; border-radius:10px; background:var(--soft) center/cover no-repeat; border:2px solid transparent; box-sizing:border-box; position:relative;}
+  .lb-tile.empty .lb-ti::after{content:'📷'; position:absolute; inset:0; display:grid; place-items:center; font-size:18px; opacity:.4;}
+  .lb-tile.on .lb-ti{border-color:var(--coral); box-shadow:0 0 0 3px color-mix(in srgb,var(--coral) 22%, transparent);}
+  .lb-tile .lb-tn{font-size:11px; font-weight:800; color:var(--muted);}
+  .lb-tile.on .lb-tn{color:var(--coral);}
+  .lb-addtile .lb-tp{width:62px; height:78px; border-radius:10px; border:2px dashed var(--hair); display:grid; place-items:center; font-size:24px; color:var(--coral);}
+  .lb-addtile .lb-tn{color:var(--coral);}
+  /* 영상 링크 = 접기 (선택) */
+  .lb-vidwrap{margin-top:10px;}
+  .lb-vidtoggle{background:none; border:none; color:var(--muted); font-size:12px; font-weight:700; font-family:var(--sans); cursor:pointer; padding:5px 0;}
+  .lb-vidtoggle .lb-vo{font-weight:400; opacity:.8;}
+  .lb-body .lb-vidwrap .lb-vid{display:none;}
+  .lb-body .lb-vidwrap.open .lb-vid{display:block;}
+  .lb-vidwrap .lb-ytguide{display:none; margin:6px 0 0;}
+  .lb-vidwrap.open .lb-ytguide{display:inline-block;}
   .lb-adv-t{background:none; border:none; color:var(--coral); font-size:12px; font-weight:700; font-family:var(--sans); cursor:pointer; padding:8px 0 2px;}
   .lb-adv{display:none; flex-direction:column; gap:8px; margin-top:8px;}
   .lb-adv.open{display:flex;}
@@ -270,7 +290,7 @@
   .vg-step b{color:var(--coral);}
   .vg-step span{flex:0 0 auto; width:20px; height:20px; border-radius:50%; background:var(--grad); color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px;}
   .vg-note{font-size:11px; color:var(--muted); line-height:1.7; margin:13px 0; padding:11px; background:var(--soft); border-radius:10px;} .vg-note b{color:var(--ink);}
-  .lb-body .lb-photo-btn{width:100% !important; height:190px; background-size:contain !important; background-repeat:no-repeat; background-position:center; background-color:var(--soft);}
+  .lb-body .lb-photo-btn{width:100% !important; height:140px; background-size:contain !important; background-repeat:no-repeat; background-position:center; background-color:var(--soft);}
   .lb-body .lb-kr, .lb-body .lb-en, .lb-body .lb-vid{display:block; width:100%; box-sizing:border-box; margin-top:8px; border:1px solid var(--hair); background:var(--soft); border-radius:8px; padding:9px 11px; font-size:13px; font-family:var(--sans); color:var(--ink);}
   .vup{width:100%; border:1.5px dashed #CFC6B6; background:transparent; color:var(--muted); border-radius:12px; padding:16px; font-size:13px; font-family:var(--sans); cursor:pointer; margin-bottom:14px;}
   .vlib-h{font-size:12.5px; font-weight:700; color:var(--coral); margin:2px 2px 9px;}
@@ -1017,6 +1037,8 @@
   .dz-motion-btn.off .dzm-sw i{transform:translateX(16px);}
   .dzm-lbl{font-size:12.5px; font-weight:700; color:var(--coral);}
   .dz-motion-btn.off .dzm-lbl{color:var(--muted);}
+  .dz-skin-seg button.sk-locked{opacity:.7;}
+  .dz-skin-seg button.sk-locked::after{content:'🔒'; font-size:10px; margin-left:5px;}
   .dz-cg .gl{font-size:11px; font-weight:800; color:var(--muted); margin-bottom:7px; display:block;}
   .dz-seg{display:flex; gap:6px;}
   .dz-seg button{flex:1; padding:11px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font:700 12.5px var(--sans); cursor:pointer;}
@@ -1216,6 +1238,9 @@
   .le-d.main{color:var(--coral);}
   .le-d.is-on{color:var(--ink);}
   .le-d:active{transform:scale(.92);}
+  /* 구성 추가 = 워크스페이스 탭(은은한 강조) — 큰 그라데이션 알약 아님 */
+  .le-d.le-d-primary{flex:1; background:var(--coral-soft); color:var(--coral); border-radius:12px; padding:7px 2px; font-weight:800;}
+  .le-dock .le-d{flex:1;}
   .le-frame{flex:1; position:relative; background:#16161A; overflow:hidden;}
   .le-frame iframe{width:100%; height:100%; border:0; display:block; background:#16161A;}
   .le-load{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; z-index:2;}
@@ -2307,6 +2332,7 @@
       <div class="tcat addsec first s1"><span class="addnum">1</span>첫인상 <span class="addwhy">· 나는 누구인가</span></div>
       <div class="tgrid s1">
         <div class="tpl imp" data-special="profile"><span class="tic">👤</span><span><span class="tn">프로필</span><span class="ts">동그란 사진·이름·소개 (맨 위)</span></span></div>
+        <div class="tpl" data-ic="🪪" data-nm="프로필 카드"><span class="tic">🪪</span><span><span class="tn">프로필 카드</span><span class="ts">원형 사진 + 이름 + 설명</span></span></div>
         <div class="tpl" data-ic="✦" data-nm="글로우 후킹"><span class="tic">✦</span><span><span class="tn">후킹·공감 한 줄</span><span class="ts">"맞아, 내 얘기야"</span></span></div>
         <div class="tpl" data-ic="❝" data-nm="인용구"><span class="tic">❝</span><span><span class="tn">가치·세계관 한 줄</span><span class="ts">내가 믿는 것</span></span></div>
         <div class="tpl" data-ic="¶" data-nm="자유 텍스트"><span class="tic">¶</span><span><span class="tn">자유 텍스트</span><span class="ts">제목·설명</span></span></div>
@@ -2379,6 +2405,7 @@
         <div class="tpl tpl-set" data-set="profile"><span class="tpl-badge">템플릿</span><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
         <div class="tpl tpl-set" data-set="content"><span class="tpl-badge">템플릿</span><span class="tic">✍️</span><span><span class="tn">컨텐츠·구독형 세트</span><span class="ts">세계관→컨텐츠→구독</span></span></div>
         <div class="tpl tpl-set tpl-prem" data-set="premium"><span class="tpl-badge tpl-badge-prem">프로</span><span class="tic">🖤</span><span><span class="tn">프리미엄 헤어샵 (뱅하우스 톤)</span><span class="ts">다크 그린·글로우·쇼케이스 — 테마까지 한 번에</span></span></div>
+        <div class="tpl tpl-set tpl-prem" data-set="transform"><span class="tpl-badge tpl-badge-prem">프로</span><span class="tic">⚡</span><span><span class="tn">트랜스폼 (결과형)</span><span class="ts">비포·애프터로 증명 · PT·다이어트·코칭 — 색은 테마로</span></span></div>
       </div>
 
       </div><!-- /#add-all -->
@@ -2592,8 +2619,8 @@
   <div class="ov" id="dz-ov">
     <div class="sheet">
       <div class="sheet-h"><span class="t">분위기</span><span class="x" id="dz-close">×</span></div>
-      <div class="desc">어떤 톤으로 보일지 — 커버 사진 · 색 · 테마</div>
-      <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>커버 사진</span><span class="dz-step" id="dz-st2"><span class="n">2</span>테마</span><button class="btn primary dz-next-top" id="dz-next">다음 →</button></div>
+      <div class="desc">맘껏 바꿔보고 <b style="color:var(--coral)">✓ 저장</b>으로 고정 · ×로 닫으면 원래대로</div>
+      <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>커버</span><span class="dz-step" id="dz-st2"><span class="n">2</span>테마</span><span class="dz-step" id="dz-st3"><span class="n">3</span>스킨</span><button class="btn primary dz-next-top" id="dz-next">✓ 저장</button></div>
 
       <!-- 공유 미리보기 (커버 + 테마 색이 실시간 반영) -->
       <div class="dz-phone" id="dz-phone" data-layout="full" data-bright="light" style="--dzac:#ef7a33;">
@@ -2627,6 +2654,11 @@
         <div class="dz-cg"><span class="gl">✨ 스크롤 움직임 <span style="font-weight:400; color:var(--muted);">· 내리면 블록이 스윽 떠올라요 (공개 페이지)</span></span>
           <button type="button" id="dz-motion" class="dz-motion-btn"><span class="dzm-sw"><i></i></span><span class="dzm-lbl">켜짐</span></button>
         </div>
+      </div>
+
+      <div data-dzpage="3" style="display:none;">
+        <div class="dz-cg"><span class="gl">스킨 <span style="font-weight:400; color:var(--muted);">· 박스를 없애 "한 편의 페이지"로 (구조·레이아웃)</span></span><div class="dz-seg dz-skin-seg" id="dz-skin"><button type="button" data-sk="" class="on">기본</button><button type="button" data-sk="banghouse">✦ 뱅하우스</button><button type="button" data-sk="transform">⚡ 트랜스폼</button></div></div>
+        <div class="vhint" style="margin-top:2px; line-height:1.65;">✦ <b>프리미엄</b> 스킨 — 떠 있는 네모 박스를 없애 손으로 짠 듯 한 편으로 흐르게 해요. 색은 ② 테마에서 골라 조합하세요.</div>
       </div>
     </div>
   </div>
@@ -3275,15 +3307,12 @@
       <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
     </div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe>
-      <!-- 우측 상단 고정: 구성 추가 (삭제는 구성을 톡 누르면 그 자리에 🗑로 뜸) -->
-      <div class="le-fabwrap">
-        <button class="le-fab" id="le-fab"><span class="le-fab-p">＋</span><span class="le-fab-t">구성 추가</span></button>
-      </div>
+      <!-- 구성 추가는 하단 독으로 이동 · 삭제는 구성을 톡 누르면 그 자리에 🗑로 뜸 -->
     </div>
     <!-- 하단 독 (토스식 · 아이콘 + 글자) -->
     <div class="le-dock">
+      <button class="le-d le-d-primary" id="le-add"><span class="di">＋</span>구성 추가</button>
       <button class="le-d" id="le-design"><span class="di">🎨</span>분위기</button>
-      <button class="le-d" id="le-library"><span class="di">🖼</span>사진 보관함</button>
     </div>
   </div>
 
@@ -3351,7 +3380,7 @@
     });
   }
   // ── 🎯 내 홈 진단 (현재 구성 → 빈 목적 추천) ──
-  var STAGE_BY_TYPE={ glowhook:1,quote:1,text:1, stylegallery:2,lookbook:2,best:2,video:2,photocard:2,beforeafter:2,highlights:2,imagetext:2, review:3,authority:3,stat:3, gallery:4,cardnews:4,archive:4, service:5,link:5,newsletter:5,location:5,ranking:5,lead:5,contact:5,qna:5,event:5,products:5,reservation:5,channels:5 };
+  var STAGE_BY_TYPE={ profilecard:1,glowhook:1,quote:1,text:1, stylegallery:2,lookbook:2,best:2,video:2,photocard:2,beforeafter:2,highlights:2,imagetext:2, review:3,authority:3,stat:3, gallery:4,cardnews:4,archive:4, service:5,link:5,newsletter:5,location:5,ranking:5,lead:5,contact:5,qna:5,event:5,products:5,reservation:5,channels:5 };
   var STAGE_LABEL={1:'첫인상',2:'시선',3:'신뢰',4:'콘텐츠',5:'연결'};
   var STAGE_SECNAME={1:'첫인상',2:'시선 잡기',3:'믿게 하기',4:'더 보여주기',5:'연결하기'};
   var STAGE_REC_MSG={1:'맨 위에서 "내가 누구"인지 보여주세요',2:'사진·영상으로 시선을 잡으세요',3:'후기 하나면 예약이 가장 많이 올라가요',4:'콘텐츠로 꾸준함을 보여주세요',5:'예약·문의 받을 곳을 만드세요'};
@@ -3478,7 +3507,7 @@
     '프로필 헤더':'profile','이벤트 배너':'event','컨텐츠 갤러리':'gallery',
     '뉴스레터 · 강의 · 전자책':'links','아카이브':'archive','추천 제품':'products',
     'Q&A':'qna','반박 제거':'qna','채널 링크':'channels','링크 버튼':'link','뉴스레터':'newsletter',
-    '인용구':'quote','전후사진':'beforeafter','자유 텍스트':'text','이미지 + 글':'imagetext',
+    '인용구':'quote','전후사진':'beforeafter','자유 텍스트':'text','이미지 + 글':'imagetext','프로필 카드':'profilecard',
     '강의 · 전자책':'link','숫자 스탯':'stat','후기':'review','문의 폼':'contact',
     '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','문의·신청':'lead','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service',
     '대표 사진 쇼케이스':'lookbook','랭킹 · 가격':'ranking','매장 · 위치':'location',
@@ -3498,6 +3527,7 @@
     text:[['text','제목',''],['textarea','내용','']],
     stat:[['list','숫자 스탯','숫자 (예: 30+)|라벨']],
     imagetext:[['photo','이미지',''],['text','제목',''],['textarea','설명',''],['photofx','사진 꾸미기 (프레임·효과)','']],
+    profilecard:[['photo','프로필 사진 (원형)',''],['text','이름·제목',''],['textarea','설명','']],
     beforeafter:[['photo','전 (Before)',''],['photo','후 (After)',''],['text','설명',''],['photofx','사진 꾸미기 (전·후 공통)','']],
     review:[['list','후기','후기 내용|작성자']],
     contact:[['info','방문자에게 이름·이메일·메시지 입력칸이 표시됩니다','']],
@@ -3516,7 +3546,7 @@
     steps:[['text','제목','이렇게 진행돼요'],['list','단계 (제목·설명)','단계 제목|설명']],
     guarantee:[['text','제목','100% 환불 보장'],['textarea','설명','마음에 안 드시면 100% 환불해드려요. 부담 없이 시작하세요.']],
     marquee:[['list','흐르는 태그 (좌→우 무한 흐름)','태그 (예: #앞머리펌)']],
-    glowhook:[['text','큰 글자 (숫자·한 단어, 빛나게)','70%'],['text','위 작은 라벨 (선택)','REBONDING'],['textarea','아래 설명 (선택)','**재방문**하는 단골 비율']],
+    glowhook:[['text','큰 글자 (숫자·한 단어, 빛나게)','70%'],['text','위 작은 영문 라벨 (선택)','WELCOME TO BANG HOUSE'],['textarea','큰 글자 뒤 설명 (선택)','앞머리 디자인'],['text','큰 숫자 앞 작은 말 (선택)','첫인상의'],['text','BY 작가·위치 한 줄 (선택)','유수 디자이너 · 압구정 라브']],
     photocard:[['photo','사진',''],['text','캡션 (선택)',''],['photofx','꾸미기 (프레임·효과·색)','pc-shadow|']],
     best:[['text','제목','🏆 베스트 · 명예의 전당'],['lookcards','TOP 항목 (위→아래 = 1·2·3위, 최대 5 · 사진·영상·이름)','']],
     reservation:[
@@ -3639,40 +3669,48 @@
   }
   function buildLookCards(box, items){
     box.dataset.lb='1'; box.classList.add('lb-wrap');
-    var tabs=document.createElement('div'); tabs.className='lb-tabs';
+    var strip=document.createElement('div'); strip.className='lb-strip';
     var bodyBox=document.createElement('div'); bodyBox.className='lb-body';
-    var addTab=document.createElement('button'); addTab.type='button'; addTab.className='lb-tab lb-addtab'; addTab.textContent='＋ 카드';
-    tabs.appendChild(addTab);
-    var vhint=document.createElement('div'); vhint.className='lb-vidhint';
+    var addTile=document.createElement('button'); addTile.type='button'; addTile.className='lb-tile lb-addtile'; addTile.innerHTML='<span class="lb-tp">＋</span><span class="lb-tn">카드</span>';
+    strip.appendChild(addTile);
+    box.appendChild(strip); box.appendChild(bodyBox);
     var _pro=(typeof tierOK==='function' && tierOK('pro'));
-    vhint.innerHTML = _pro ? '▶ 사진은 <b>썸네일</b>, 영상 링크를 넣으면 <b>탭하면 재생</b>돼요 <button type="button" class="lb-ytguide">📺 유튜브 넣는 법</button>' : '🔒 <b>쇼케이스 영상</b>은 프로 기능이에요 · 사진은 누구나 OK <button type="button" class="lb-ytguide">📺 어떻게?</button>';
-    box.appendChild(vhint);
-    var _gb=vhint.querySelector('.lb-ytguide'); if(_gb) _gb.onclick=function(){ if(window.__openVideoGuide) window.__openVideoGuide(); };
-    box.appendChild(tabs); box.appendChild(bodyBox);
     function show(it){
       [].forEach.call(bodyBox.querySelectorAll('.sg-item'), function(x){ x.style.display=(x===it)?'':'none'; });
-      [].forEach.call(tabs.querySelectorAll('.lb-tab:not(.lb-addtab)'), function(t){ t.classList.toggle('on', t.__it===it); });
+      [].forEach.call(strip.querySelectorAll('.lb-tile:not(.lb-addtile)'), function(t){ t.classList.toggle('on', t.__it===it); });
     }
-    function renumber(){ [].forEach.call(tabs.querySelectorAll('.lb-tab:not(.lb-addtab)'), function(t,i){ t.textContent='카드 '+(i+1); }); }
+    function renumber(){ [].forEach.call(strip.querySelectorAll('.lb-tile:not(.lb-addtile)'), function(t,i){ var n=t.querySelector('.lb-tn'); if(n) n.textContent=(i+1); }); }
+    function syncTile(it){ var t=it.__tile; if(!t) return; var url=(it.querySelector('.lb-photo-btn').dataset.url)||''; var im=t.querySelector('.lb-ti'); if(im){ if(url){ im.style.backgroundImage='url("'+url.replace(/"/g,'%22')+'")'; t.classList.remove('empty'); } else { im.style.backgroundImage=''; t.classList.add('empty'); } } }
     function addItem(v, focus){ v=v||[];
       var it=document.createElement('div'); it.className='sg-item';
-      var photo=makePhotoBtn('＋ 사진', v[0]||''); photo.classList.add('lb-photo-btn');
+      var photo=makePhotoBtn('📷 사진 넣기 · 바꾸기', v[0]||''); photo.classList.add('lb-photo-btn');
+      // 사진 바꾸면 위 썸네일도 즉시 갱신
+      photo.onclick=function(){ openVault(function(u){ photo.dataset.url=u; photo.style.backgroundImage=u?('url("'+u.replace(/"/g,'%22')+'")'):''; photo.textContent=u?'':'📷 사진 넣기 · 바꾸기'; photo.classList.toggle('has',!!u); syncTile(it); }); };
       var kr=document.createElement('input'); kr.className='lb-kr'; kr.placeholder='이름 (예: 시스루뱅)'; kr.value=v[2]||'';
-      // 영문·영상mp4 칸 제거(카드=사진+이름만, 영상은 「영상」 구성으로). 데이터 인덱스 보존 위해 hidden 유지
       var en=document.createElement('input'); en.className='lb-en'; en.type='hidden'; en.value=v[3]||'';
+      // 영상 링크 = 접기 (대부분 안 써서 기본 숨김 · 있으면 펼침)
+      var vidWrap=document.createElement('div'); vidWrap.className='lb-vidwrap';
+      var vt=document.createElement('button'); vt.type='button'; vt.className='lb-vidtoggle';
       var vid=document.createElement('input'); vid.className='lb-vid'; vid.type='text'; vid.value=v[1]||'';
-      if(typeof tierOK==='function' && !tierOK('pro')){ vid.readOnly=true; vid.placeholder='🔒 영상 링크 (프로 기능)'; vid.classList.add('lb-vid-lock'); vid.onclick=function(){ if(window.__cmShowLock) window.__cmShowLock('쇼케이스 영상','pro'); }; }
-      else { vid.placeholder='▶ 영상 링크 — 유튜브·쇼츠 (선택)'; }
+      if(!_pro){ vid.readOnly=true; vid.placeholder='🔒 영상 링크 (프로 기능)'; vid.classList.add('lb-vid-lock'); vid.onclick=function(){ if(window.__cmShowLock) window.__cmShowLock('쇼케이스 영상','pro'); }; }
+      else { vid.placeholder='유튜브·쇼츠 링크 — 탭하면 재생'; }
+      var guide=document.createElement('button'); guide.type='button'; guide.className='lb-ytguide'; guide.textContent='📺 유튜브 넣는 법'; guide.onclick=function(){ if(window.__openVideoGuide) window.__openVideoGuide(); };
+      function vlabel(){ vt.innerHTML=(vidWrap.classList.contains('open')?'▾':'▸')+' 영상 링크 <span class="lb-vo">'+(_pro?'· 선택':'· 🔒 프로')+'</span>'; }
+      vt.onclick=function(){ vidWrap.classList.toggle('open'); vlabel(); };
+      if(v[1]) vidWrap.classList.add('open'); vlabel();
+      vidWrap.appendChild(vt); vidWrap.appendChild(vid); vidWrap.appendChild(guide);
       var del=document.createElement('button'); del.type='button'; del.className='lb-del'; del.textContent='🗑 이 카드 삭제';
-      var tab=document.createElement('button'); tab.type='button'; tab.className='lb-tab'; tab.__it=it; tab.onclick=function(){ show(it); };
-      del.onclick=function(){ var n=bodyBox.querySelectorAll('.sg-item').length; if(n<=1){ toast('카드는 최소 1개 필요해요'); return; } it.remove(); tab.remove(); renumber(); var first=bodyBox.querySelector('.sg-item'); if(first) show(first); };
-      it.appendChild(photo); it.appendChild(kr); it.appendChild(vid); it.appendChild(en); it.appendChild(del);
+      var tile=document.createElement('button'); tile.type='button'; tile.className='lb-tile empty'; tile.__it=it; it.__tile=tile;
+      tile.innerHTML='<span class="lb-ti"></span><span class="lb-tn"></span>';
+      tile.onclick=function(){ show(it); };
+      del.onclick=function(){ var n=bodyBox.querySelectorAll('.sg-item').length; if(n<=1){ toast('카드는 최소 1개 필요해요'); return; } it.remove(); tile.remove(); renumber(); var first=bodyBox.querySelector('.sg-item'); if(first) show(first); };
+      it.appendChild(photo); it.appendChild(kr); it.appendChild(vidWrap); it.appendChild(en); it.appendChild(del);
       bodyBox.appendChild(it);
-      tabs.insertBefore(tab, addTab);
-      renumber();
+      strip.insertBefore(tile, addTile);
+      renumber(); syncTile(it);
       if(focus) show(it);
     }
-    addTab.onclick=function(){ addItem(null, true); };
+    addTile.onclick=function(){ addItem(null, true); };
     if(items&&items.length) items.forEach(function(v){ addItem(v); }); else { addItem(); addItem(); }
     var first=bodyBox.querySelector('.sg-item'); if(first) show(first);
   }
@@ -4265,7 +4303,8 @@
         '<span class="meta"><span class="nm">' + t.dataset.nm + '</span><span class="sb">새 구성 · 편집해 채우기</span></span>' +
         '<span class="acts"><span class="edit">✎</span><span class="sw on" data-sw><i></i></span></span>';
       var ib=window.__insertBeforeRow;
-      if(ib && ib.parentNode===rowsBox){ rowsBox.insertBefore(row, ib); } else { rowsBox.appendChild(row); }
+      if(ib && ib.parentNode===rowsBox){ rowsBox.insertBefore(row, ib); }
+      else { rowsBox.appendChild(row); }   // 끼워넣기 위치 없으면 = 끝(맨 아래 '구성 추가 슬롯' 자리)에 추가 → 추가하면 그 자리로 스크롤, 위로는 드래그
       window.__insertBeforeRow=null;
       wireRow(row);
       if(t.dataset.layout){ row._layout = t.dataset.layout; }
@@ -4325,11 +4364,11 @@
     addpvOv.addEventListener('click', function(e){ if(e.target===addpvOv) addpvOv.classList.remove('open'); });
   }
   // 통째로 추가(세트) — STYLE_PRESETS 순서대로 여러 블록을 한 번에
-  var SET_PRO = { hook:1, photo:1, profile:1, premium:1 };   // 전환·세일즈 풀세트 = 프로 (content는 베이직 OK)
+  var SET_PRO = { hook:1, photo:1, profile:1, premium:1, transform:1 };   // 전환·세일즈 풀세트 = 프로 (content는 베이직 OK)
   // 통째 템플릿이 테마·폰트까지 같이 바꾸는 경우 (뱅하우스 톤)
-  var SET_LOOK = { premium:{ theme:'banghouse', font:'impact' } };
+  var SET_LOOK = { premium:{ theme:'banghouse', font:'impact', skin:'banghouse' }, transform:{ theme:'forest', font:'impact', skin:'transform', accent:'#C6FF4D' } };
   function insertSet(setKey){
-    if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':'전환 템플릿 (풀세트)','pro'); return; }
+    if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':(setKey==='transform'?'트랜스폼 템플릿':'전환 템플릿 (풀세트)'),'pro'); return; }
     var SP = window.__STYLE_PRESETS || {};
     var list = SP[setKey] || null;
     if(!list) return;
@@ -4341,16 +4380,23 @@
       if(window.__createRow){ var row=window.__createRow(b); if(row){ row._content=b.content; if(b.layout) row._layout=b.layout; if(window.__refreshRowSub) window.__refreshRowSub(row); if(ibOK) rowsBox.insertBefore(row, ib); } }   // "+여기"에 끼워넣기 (순서 유지)
     });
     window.__insertBeforeRow=null;
-    // 통째 템플릿: 테마·폰트도 같이 적용
+    // 템플릿 적용 = 기본 커버(캐릭터) 빼기 (템플릿이 자체 히어로를 가지므로 — 사용자가 분위기에서 다시 켤 수 있음)
+    try{ if(typeof home!=='undefined' && home){ home.cover={on:false, photo:'', layout:(home.cover&&home.cover.layout)||'full', fit:(home.cover&&home.cover.fit)||{z:1,x:50,y:50,u:'bgpos'}}; } }catch(e){}
+    // 통째 템플릿: 테마·폰트·스킨(박스탈출)도 같이 적용
     var look=SET_LOOK[setKey];
     if(look){ try{
-      if(typeof home!=='undefined' && home){ home.theme=look.theme; home.font=look.font; }
+      if(typeof home!=='undefined' && home){ home.theme=look.theme; home.font=look.font; if(look.skin) home.skin=look.skin; home.accentOverride=look.accent||''; }   // accent=포인트색(트랜스폼=라임), 없으면 테마색
+      // 통째 템플릿 = 글로우 후킹이 히어로 → 전역 후킹문구·프로필은 끔 (중복·박스 제거, 시안처럼 깔끔히 시작)
+      if(typeof window.__setHeroOn==='function') window.__setHeroOn(false);
+      if(typeof window.__setProfileOn==='function') window.__setProfileOn(false);
       if(typeof renderThemes==='function') renderThemes();
       if(typeof renderFonts==='function') renderFonts();
-      if(window.__saveHome) window.__saveHome();
     }catch(e){} }
+    // home(커버·테마·폰트·스킨) HKEY 저장 → serialize·공개에 반영
+    try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; if(look){ cur.theme=home.theme; cur.font=home.font; if(home.skin!=null) cur.skin=home.skin; cur.accentOverride=home.accentOverride||''; } localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){}
     try{ updateHomeProgress(); }catch(e){}
     try{ refreshBuilder(); }catch(e){}
+    try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(e){}
   }
   // 템플릿 완성 예시 미리보기 (눌러서 결과 보고 → 시작)
   var TPL_PREVIEW={
@@ -4363,7 +4409,9 @@
     content:{ title:'컨텐츠·구독형', desc:'세계관→컨텐츠→구독', html:
       '<div class="mp"><div class="mp-eyebrow">MANIFESTO</div><div class="mp-h1">컨텐츠는<br>쌓일수록 강해진다</div><div class="mp-sub">매주, 깊이 있는 생각을 나눕니다.</div><div class="mp-sec-h">대표 컨텐츠</div><div class="mp-imgs"><i></i><i></i><i></i></div><div class="mp-card"><b>📝 컨텐츠를 자산으로 만드는 법</b><p>읽는 순간 관점이 바뀌어요.</p></div><a class="mp-cta">✉️ 뉴스레터 구독하기</a></div>' },
     premium:{ title:'프리미엄 헤어샵', desc:'뱅하우스 톤 · 다크 그린 + 글로우 + 흐르는 태그 + 쇼케이스 영상', html:
-      '<div class="mp mp-prem"><div class="mp-mq"><span>#앞머리펌</span><span>#레이어드컷</span><span>#시그니처컷</span><span>#두피케어</span></div><div class="mp-glow-eb">SIGNATURE</div><div class="mp-glow">70%</div><div class="mp-glow-sub">재방문하는 단골 비율</div><div class="mp-sec-h" style="color:#7DBF8E">SIGNATURE FILM</div><div class="mp-imgs"><i></i><i></i></div><div class="mp-row"><span>히메허쉬 <b style="color:#7DBF8E">HOT</b></span><b>55,000원</b></div><div class="mp-row"><span>슬릭컷</span><b>55,000원</b></div><a class="mp-cta" style="background:#7DBF8E;color:#060B08">📅 예약하기</a></div>' }
+      '<div class="mp mp-prem"><div class="mp-mq"><span>#앞머리펌</span><span>#레이어드컷</span><span>#시그니처컷</span><span>#두피케어</span></div><div class="mp-glow-eb">SIGNATURE</div><div class="mp-glow">70%</div><div class="mp-glow-sub">재방문하는 단골 비율</div><div class="mp-sec-h" style="color:#7DBF8E">SIGNATURE FILM</div><div class="mp-imgs"><i></i><i></i></div><div class="mp-row"><span>히메허쉬 <b style="color:#7DBF8E">HOT</b></span><b>55,000원</b></div><div class="mp-row"><span>슬릭컷</span><b>55,000원</b></div><a class="mp-cta" style="background:#7DBF8E;color:#060B08">📅 예약하기</a></div>' },
+    transform:{ title:'트랜스폼 (결과형)', desc:'비포·애프터로 증명 → 프로그램 → 무료체험 · PT·다이어트·뷰티·코칭 (색은 테마로)', html:
+      '<div class="mp mp-prem"><div class="mp-mq"><span>#다이어트</span><span>#바디프로필</span><span>#체형교정</span><span>#식단코칭</span></div><div class="mp-glow-eb" style="color:#C6FF4D">RESULTS</div><div class="mp-glow" style="color:#C6FF4D">12주</div><div class="mp-glow-sub">면, 몸이 바뀝니다</div><div class="mp-sec-h" style="color:#C6FF4D">BEFORE &amp; AFTER</div><div class="mp-imgs"><i></i><i></i></div><div class="mp-sec-h" style="color:#C6FF4D">PROGRAM</div><div class="mp-row"><span>1:1 퍼스널 코칭 <b style="color:#C6FF4D">BEST</b></span><b>상담 후</b></div><div class="mp-row"><span>집중 8주 속성</span><b>상담 후</b></div><a class="mp-cta" style="background:#C6FF4D;color:#0C0F0E">⚡ 무료 체험 신청</a></div>' }
   };
   // 템플릿이 왜 이 순서인지 (사람 마음 흐름 = 신뢰 → 저항 제거 → 행동)
   var TPL_WHY={
@@ -4376,7 +4424,9 @@
     content:{ intro:'팬이 되는 순서 — 공감으로 끌어당기고 꾸준함으로 믿게 해요.', steps:[
       ['세계관','"결이 맞네" 공감으로 끌어당김'],['대표 컨텐츠','실력·관점을 증명해요'],['컨텐츠 갤러리','꾸준함 = 신뢰'],['구독','팬으로 이어지는 행동'] ] },
     premium:{ intro:'"고급 헤어샵"의 첫인상 — 분위기로 압도하고 실력으로 증명, 바로 예약까지.', steps:[
-      ['글로우 후킹','큰 숫자 하나로 "이 집 잘하네" 첫인상'],['흐르는 태그','전문 분야가 감각적으로 흘러가요'],['쇼케이스 영상','움직이는 작업 = 가장 강한 실력 증명'],['시그니처·가격','대표 메뉴를 망설임 없이 비교'],['후기','"진짜 되는구나" 저항 제거'],['예약','확신이 선 순간 바로 행동'] ] }
+      ['글로우 후킹','큰 숫자 하나로 "이 집 잘하네" 첫인상'],['흐르는 태그','전문 분야가 감각적으로 흘러가요'],['쇼케이스 영상','움직이는 작업 = 가장 강한 실력 증명'],['시그니처·가격','대표 메뉴를 망설임 없이 비교'],['후기','"진짜 되는구나" 저항 제거'],['예약','확신이 선 순간 바로 행동'] ] },
+    transform:{ intro:'"결과로 증명한다" — 비포·애프터로 신뢰를 만들고 바로 행동하게.', steps:[
+      ['결과 후킹','큰 숫자(12주)로 "되는구나" 첫인상'],['비포·애프터','말보다 사진 — 가장 강한 증명'],['프로그램','뭘 어떻게 하는지 한눈에'],['후기','"진짜 됐다" 저항 제거'],['무료 체험','부담 없는 첫걸음으로 전환'] ] }
   };
   function openTplPreview(setKey){
     var d=TPL_PREVIEW[setKey]; if(!d){ insertSet(setKey); closeAdd(); return; }
@@ -4394,18 +4444,23 @@
     var why=document.getElementById('tpp-why'), w=TPL_WHY[setKey];
     if(why){ if(w){ why.innerHTML='<div class="tpw-h">왜 이 흐름일까?</div><div class="tpw-intro">'+w.intro+'</div>'+w.steps.map(function(s,i){ return '<div class="tpw-step"><span class="tpw-n">'+(i+1)+'</span><div><b>'+s[0]+'</b><span>'+s[1]+'</span></div></div>'; }).join('')+'<div class="tpw-foot">순서는 추가 후 <b>드래그로 변경</b>할 수 있어요</div>'; why.style.display=''; } else why.style.display='none'; }
     document.getElementById('tpp-use').onclick=function(){
-      if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ pov.style.display='none'; if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':'전환 템플릿 (풀세트)','pro'); return; }
-      // 템플릿 = 완성된 페이지 그 자체로 시작 (이어붙이기 X → 교체) · 기존 구성 있으면 확인
+      if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ pov.style.display='none'; if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':(setKey==='transform'?'트랜스폼 템플릿':'전환 템플릿 (풀세트)'),'pro'); return; }
+      // 템플릿 = 완성된 페이지 그 자체로 시작 (이어붙이기 X → 교체)
+      function applyNow(){
+        pov.style.display='none';
+        if(rowsBox) rowsBox.innerHTML='';   // 교체: 기존 구성 비우기
+        window.__insertBeforeRow=null;
+        insertSet(setKey); closeAdd();
+        try{ toast('"'+d.title+'" 템플릿으로 시작했어요 · 사진·글만 채우면 완성'); }catch(e){}
+        // 빌더 목록이 아니라 '완성된 페이지'로 보여주기
+        if(window.__liveEditActive){ if(window.__liveRefresh) window.__liveRefresh(); }
+        else { window.__pendingTemplateApply=true; if(window.__openLive) setTimeout(window.__openLive, 60); }   // ★ 진입 시 서버 재조회로 방금 넣은 템플릿이 덮어써지지 않게 플래그
+      }
+      // 기존 구성 있으면 고급 확인창 (네이티브 confirm 대체)
       var hasContent = document.querySelectorAll('#rows .row').length>0;
-      if(hasContent && !window.confirm('이 템플릿으로 홈을 새로 시작해요.\n지금 구성은 사라지고 템플릿으로 바뀌어요 — 계속할까요?')) return;
-      pov.style.display='none';
-      if(rowsBox) rowsBox.innerHTML='';   // 교체: 기존 구성 비우기
-      window.__insertBeforeRow=null;
-      insertSet(setKey); closeAdd();
-      try{ toast('"'+d.title+'" 템플릿으로 시작했어요 · 사진·글만 채우면 완성'); }catch(e){}
-      // 빌더 목록이 아니라 '완성된 페이지'로 보여주기
-      if(window.__liveEditActive){ if(window.__liveRefresh) window.__liveRefresh(); }
-      else if(window.__openLive){ setTimeout(window.__openLive, 60); }
+      if(hasContent && window.cmConfirm){
+        window.cmConfirm('이 템플릿으로 새로 시작할까요?', '지금 홈 구성은 "'+d.title+'" 템플릿으로 바뀌어요. 되돌리기(↩)로 다시 복구할 수 있어요.', '✨ 템플릿으로 시작', '취소').then(function(ok){ if(ok) applyNow(); });
+      } else { applyNow(); }
     };
     pov.style.display='flex';
   }
@@ -4432,6 +4487,28 @@
 
   function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); }, 2000); }
   window.toast=toast;
+
+  // 고급 확인창 (네이티브 confirm 대체 · 앱 톤의 카드형 · 약속 반환)
+  function cmConfirm(title, desc, okLabel, cancelLabel){
+    return new Promise(function(resolve){
+      var ov=document.getElementById('cm-confirm-ov');
+      if(!ov){
+        ov=document.createElement('div'); ov.id='cm-confirm-ov'; ov.className='dlg-ov';
+        ov.innerHTML='<div class="dlg cmc-dlg"><div class="cmc-ic" id="cmc-ic">✨</div><div class="dlg-t" id="cmc-t"></div><div class="dlg-d" id="cmc-d"></div><div class="dlg-btns" style="margin-top:18px;"><button type="button" class="dlg-cancel" id="cmc-no"></button><button type="button" class="dlg-ok" id="cmc-yes"></button></div></div>';
+        document.body.appendChild(ov);
+      }
+      document.getElementById('cmc-t').textContent=title||'계속할까요?';
+      var dd=document.getElementById('cmc-d'); dd.textContent=desc||''; dd.style.display=desc?'':'none';
+      document.getElementById('cmc-no').textContent=cancelLabel||'취소';
+      document.getElementById('cmc-yes').textContent=okLabel||'계속';
+      function done(val){ ov.classList.remove('open'); var y=document.getElementById('cmc-yes'),n=document.getElementById('cmc-no'); if(y)y.onclick=null; if(n)n.onclick=null; ov.onclick=null; resolve(val); }
+      document.getElementById('cmc-yes').onclick=function(){ done(true); };
+      document.getElementById('cmc-no').onclick=function(){ done(false); };
+      ov.onclick=function(e){ if(e.target===ov) done(false); };
+      ov.classList.add('open');
+    });
+  }
+  window.cmConfirm=cmConfirm;
   function fmtSize(b){ return b>1048576 ? (b/1048576).toFixed(1)+'MB' : Math.round(b/1024)+'KB'; }
 
   // 핵심: 업로드 사진을 캔버스로 리사이즈+화질낮춰 압축
@@ -5651,7 +5728,7 @@
       phone.setAttribute('data-layout', c.layout);
       phone.classList.toggle('dz-grad', isDark());   // 그라데이션은 다크 테마만
       phone.style.setProperty('--dzac', home.accentOverride || themeAccent());
-      ov.querySelectorAll('.dz-seg').forEach(function(seg){ var g=seg.getAttribute('data-dzgrp'); seg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-v')===c[g]); }); });
+      ov.querySelectorAll('.dz-seg').forEach(function(seg){ var g=seg.getAttribute('data-dzgrp'); if(!g) return; seg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-v')===c[g]); }); });   // data-dzgrp 있는 세그만 (사진모드·스킨 세그는 자체 코드가 처리)
       accBox.querySelectorAll('.dz-sw').forEach(function(s){ s.classList.toggle('on', (s.getAttribute('data-ac')||'')===(home.accentOverride||'')); });
       // 사진 모드(없음/내사진/캐릭터) 표시 + 범위·줌은 사진 있을 때만
       var pm=photoMode();
@@ -5676,6 +5753,12 @@
     // ✨ 스크롤 움직임(등장 효과) 토글 — home.reveal (기본 켜짐)
     function persistMotion(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.reveal=home.reveal; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
     function renderDzMotion(){ var b=document.getElementById('dz-motion'); if(!b) return; var on=(home.reveal!==false); b.classList.toggle('off', !on); var lbl=b.querySelector('.dzm-lbl'); if(lbl) lbl.textContent=on?'켜짐':'꺼짐'; }
+    // 스킨(박스탈출 구조) 픽커 — 색 테마와 별개 (스킨=레이아웃, 테마=색)
+    function persistSkin(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.skin=home.skin||''; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+    function renderDzSkin(){ var seg=document.getElementById('dz-skin'); if(!seg) return; var pro=(typeof tierOK==='function'&&tierOK('pro')); seg.querySelectorAll('button').forEach(function(b){ var sk=b.getAttribute('data-sk')||''; b.classList.toggle('on', sk===(home.skin||'')); b.classList.toggle('sk-locked', !!sk && !pro); }); }
+    (function(){ var seg=document.getElementById('dz-skin'); if(seg) seg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; var sk=b.getAttribute('data-sk')||'';
+      if(sk && typeof tierOK==='function' && !tierOK('pro')){ if(window.__cmShowLock) window.__cmShowLock((b.textContent||'스킨').replace('✦','').trim()+' 스킨','pro'); return; }   // 기본 외 스킨 = 프리미엄(프로) 잠금
+      home.skin=sk; renderDzSkin(); persistSkin(); renderPreview(); if(window.toast) toast(home.skin?'✦ 뱅하우스 스킨 켜짐 · 박스 없이 흐르게':'기본 스킨'); }); })();
     (function(){ var mb=document.getElementById('dz-motion'); if(mb) mb.addEventListener('click', function(){ home.reveal=(home.reveal===false); renderDzMotion(); persistMotion(); if(window.toast) toast(home.reveal!==false?'스크롤 움직임 켜짐 · 공개 페이지에서 보여요':'스크롤 움직임 꺼짐'); }); })();
 
     // 사진 범위(풀/반/배경) — data-dzgrp 있는 세그만 (사진 모드 세그는 제외)
@@ -5705,7 +5788,7 @@
     ldrag.addEventListener('pointermove', function(e){ if(!pts.has(e.pointerId)) return; pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); if(pts.size>=2){ var a=Array.from(pts.values()); if(sd>0){ cov().fit.z=clampZ(sz*(D(a[0],a[1])/sd)); clampFit(cov().fit); if(zoomEl) zoomEl.value=Math.round(cov().fit.z*100); sendFit(); } } else if(pan){ cov().fit.x=pan.px-(e.clientX-pan.x)/pan.w*100; cov().fit.y=pan.py-(e.clientY-pan.y)/pan.h*100; cov().fit.u='bgpos'; clampFit(cov().fit); sendFit(); } });
     function up(e){ pts.delete(e.pointerId); if(pts.size<2) sd=0; if(pts.size===1){ var a=Array.from(pts.values())[0]; pan=mkPan(a.x,a.y); } else if(pts.size===0){ pan=null; persistCover(); } }
     ldrag.addEventListener('pointerup', up); ldrag.addEventListener('pointercancel', up);
-    document.getElementById('dz-close').onclick=function(){ ov.classList.remove('open'); };
+    document.getElementById('dz-close').onclick=function(){ dzCancel(); };
 
     // 테마 그리드 (프리셋)
     function renderDzThemes(){ var g=document.getElementById('dz-theme-grid'); if(!g) return; g.innerHTML='';
@@ -5716,18 +5799,33 @@
         g.appendChild(o);
       });
     }
-    var dzPage=1;
+    var dzPage=1, dzSnap=null;
     function showPage(n){ dzPage=n;
-      for(var i=1;i<=2;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }
-      document.getElementById('dz-next').textContent = n===1?'다음 →':'완료 ✓';
+      for(var i=1;i<=3;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }
       if(n===2){ renderDzThemes(); renderDzMotion(); }
+      if(n===3){ renderDzSkin(); }
       renderPreview();
       var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
     }
+    // ── 분위기 = 실험실: 열 때 스냅샷·자동저장 멈춤 → [✓ 저장]=고정 / [×]=원래대로 (실험이 자동저장되던 문제 해결) ──
+    function dzTakeSnapshot(){ try{ dzSnap=JSON.stringify({cover:home.cover, theme:home.theme, accentOverride:home.accentOverride||'', reveal:home.reveal, skin:home.skin||''}); }catch(e){ dzSnap=null; } }
+    function dzDirty(){ if(dzSnap==null) return false; try{ return JSON.stringify({cover:home.cover, theme:home.theme, accentOverride:home.accentOverride||'', reveal:home.reveal, skin:home.skin||''})!==dzSnap; }catch(e){ return false; } }
+    function dzPersistAll(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; cur.theme=home.theme; cur.accentOverride=home.accentOverride||''; cur.reveal=home.reveal; cur.skin=home.skin||''; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} }
+    function dzCommit(){ ov.classList.remove('open'); try{ if(window.__pageAutosaveResume) window.__pageAutosaveResume(true); }catch(e){} if(window.toast) toast('분위기를 저장했어요 ✓'); }
+    function dzCancel(){
+      if(dzDirty() && !confirm('바꾼 분위기를 저장하지 않고 닫을까요?')) return;
+      if(dzSnap){ try{ var s=JSON.parse(dzSnap); home.cover=s.cover; home.theme=s.theme; home.accentOverride=s.accentOverride||''; home.reveal=s.reveal; home.skin=s.skin||''; dzPersistAll(); }catch(e){} }
+      try{ renderDzThemes(); renderDzMotion(); renderDzSkin(); renderPreview(); }catch(e){}              // dz 미리보기 원복
+      try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(e){}   // 뒤 라이브 페이지도 원복
+      ov.classList.remove('open');
+      try{ if(window.__pageAutosaveResume) window.__pageAutosaveResume(false); }catch(e){}   // 재개(서버 안 바뀜=저장 불필요)
+      if(window.toast) toast('변경을 취소했어요 · 원래대로');
+    }
     document.getElementById('dz-st1').onclick=function(){ showPage(1); };
     document.getElementById('dz-st2').onclick=function(){ showPage(2); };
-    document.getElementById('dz-next').onclick=function(){ if(dzPage<2){ showPage(2); } else { ov.classList.remove('open'); if(window.toast) toast('분위기 저장됨 · 상단 [저장]으로 공개 반영'); } };
-    window.__openDesign=function(){ cov(); loadLive(); renderPreview(); showPage(1); ov.classList.add('open'); };
+    (function(){ var s3=document.getElementById('dz-st3'); if(s3) s3.onclick=function(){ showPage(3); }; })();
+    document.getElementById('dz-next').onclick=function(){ dzCommit(); };
+    window.__openDesign=function(){ cov(); loadLive(); renderPreview(); showPage(1); dzTakeSnapshot(); try{ if(window.__pageAutosavePause) window.__pageAutosavePause(); }catch(e){} ov.classList.add('open'); };
     var entry=document.getElementById('set-design2'); if(entry) entry.onclick=function(){ window.__openDesign(); };
   })();
 
@@ -6042,7 +6140,7 @@
     content: [{type:'text',layout:'quote',name:'세계관 한 줄',content:['내 관점을 **한 문장**으로','사람들이 나를 따르는 이유를 적어요.']}, {type:'text',name:'나는 누구 · 무엇을 믿나',content:['','내가 무엇을 하고 무엇을 믿는지 짧게.']}, {type:'cardnews',name:'대표 컨텐츠',content:[]}, {type:'gallery',name:'컨텐츠 갤러리',content:[]}, {type:'authority',name:'영향력 · 증명',content:[]}, {type:'links',name:'뉴스레터 · 구독',content:[]}, P_LEAD],
     // 🖤 프리미엄 헤어샵 (뱅하우스 톤) — 다크 그린 + Archivo Black + 글로우/마퀴/쇼케이스영상
     premium: [
-      {type:'glowhook',name:'글로우 후킹',content:['70%','WELCOME TO BANG HOUSE','첫인상의 앞머리 디자인']},
+      {type:'glowhook',name:'글로우 후킹',content:['70%','WELCOME TO BANG HOUSE','앞머리 디자인','첫인상의','BY 유수 디자이너 · 압구정 라브']},
       {type:'marquee',name:'흐르는 태그 띠',content:[[['#얼굴보완'],['#앞머리유선생'],['#묶을때이쁜머리'],['#시스루뱅'],['#히메허쉬'],['#슬릭컷']]]},
       {type:'lookbook',name:'베스트 앞머리 (LOOKBOOK)',content:['베스트 앞머리 디자인','by 유수 디자이너','BANG HOUSE',[]]},
       {type:'text',layout:'quote',name:'스토리',content:['"앞머리 한번 망치면 3달 고생이야"','고객 한 마디로 시작된 5년차 노하우 · by YOOSU @ 압구정']},
@@ -6054,6 +6152,17 @@
       P_REVIEW,
       {type:'channels',name:'채널',content:['https://instagram.com/la.b_yoosu','','','https://open.kakao.com/o/sZsUOcui']},
       {type:'location',name:'매장 · 위치',content:['압구정 라브 (LEAVE A BLANK)','서울 강남구 신사동 563-18','수–일 · 11:00–17:00 · 월·화 휴무','https://map.naver.com/p/entry/place/1200619533','','']}
+    ],
+    // ⚡ 트랜스폼 (결과형 — 비포애프터로 증명 · PT·다이어트·뷰티·코칭) — 다크 + 라임 accent, 같은 에디토리얼 가족
+    transform: [
+      {type:'glowhook',name:'글로우 후킹',content:['12주','결과로 증명합니다','면, 몸이 바뀝니다','단','BY ○○ 코치 · 1:1 맞춤']},
+      {type:'marquee',name:'흐르는 태그 띠',content:[[['#다이어트'],['#바디프로필'],['#체형교정'],['#식단코칭'],['#근력강화'],['#자세교정']]]},
+      {type:'beforeafter',name:'비포 · 애프터',content:['','','12주 전 → 후 · 실제 회원님','']},
+      {type:'ranking',name:'프로그램',content:['PROGRAM','프로그램',[['','1:1 퍼스널 코칭','주 2회 · 12주 · 식단 코칭 포함','상담 후 안내','BEST'],['','집중 8주 속성','목표일 역산 · 주 3회 집중','상담 후 안내',''],['','온라인 코칭 (비대면)','주간 피드백 · 식단·운동 영상','월 정액','']]]},
+      {type:'text',layout:'quote',name:'후기 한 줄',content:['"처음인데 12주만에 인생 몸 됐어요"','직장인 김○○ · 12주 1:1 코칭']},
+      P_REVIEW,
+      {type:'lead',name:'무료 체험 신청',content:['무료 체험 신청','⚡ 무료 체험 신청하기','목표·현재 상태만 남겨주시면 맞춤 상담 잡아드려요']},
+      {type:'location',name:'위치 · 안내',content:['○○ (지점·상호명)','서울 강남구 ○○','평일 06:00–23:00 · 주말 09:00–18:00','','','']}
     ],
     blank:   []
   };
@@ -6135,7 +6244,7 @@
   (function(){ var _rb=refreshBuilder; refreshBuilder=function(){ var rv=_rb.apply(this, arguments); try{ histMark(); }catch(e){} return rv; }; window.__refreshBuilder=refreshBuilder; })();
   (function(){ var _ce=window.__collectEdit; if(_ce){ window.__collectEdit=function(){ var rv=_ce.apply(this, arguments); try{ histMark(); }catch(e){} return rv; }; } })();
   // ─── 진짜 자동 저장 (서버) + 상태 표시 ───  ("저장" 안 눌러도 바뀌면 1.5초 뒤 서버에 저장)
-  var asTimer=null, asInflight=false, asPendingAgain=false, asReady=false, AS_DELAY=1500;
+  var asTimer=null, asInflight=false, asPendingAgain=false, asReady=false, asPaused=false, AS_DELAY=1500;
   function setAutosaveStatus(state, msg){
     var el=document.getElementById('le-autosave'); if(!el) return;
     var wasSaving=el.classList.contains('is-saving');
@@ -6148,6 +6257,7 @@
     el.innerHTML='<i class="as-dot"></i><span class="as-txt">'+txt+'</span>';
   }
   function scheduleAutosave(){
+    if(asPaused) return;   // 분위기(실험) 중엔 자동저장 멈춤 — 저장/취소로만 확정
     if(!asReady || !window.__liveEditActive || !AUTH) return;   // 보면서 수정 중 + 로그인 상태에서만
     setAutosaveStatus('dirty');
     clearTimeout(asTimer); asTimer=setTimeout(doPageAutosave, AS_DELAY);
@@ -6175,6 +6285,9 @@
   window.__pageAutosaveSaved=function(){ clearTimeout(asTimer); asInflight=false; asPendingAgain=false; setAutosaveStatus('saved'); };  // 수동 저장 성공 시 칩 동기화
   window.__pageAutosaveReady=function(){ asReady=true; clearTimeout(asTimer); asInflight=false; asPendingAgain=false; setAutosaveStatus('saved'); };
   window.__pageAutosaveStop=function(){ asReady=false; clearTimeout(asTimer); asInflight=false; asPendingAgain=false; };
+  // 분위기(실험) 중 자동저장 일시정지 / 재개 — 저장·취소로만 서버 반영
+  window.__pageAutosavePause=function(){ asPaused=true; clearTimeout(asTimer); };
+  window.__pageAutosaveResume=function(save){ asPaused=false; if(save){ scheduleAutosave(); } else { setAutosaveStatus('saved'); } };
   // 오류 칩 탭 → 즉시 재시도
   document.addEventListener('click', function(e){ var p=e.target&&e.target.closest&&e.target.closest('#le-autosave.is-error'); if(p){ clearTimeout(asTimer); doPageAutosave(); } });
   function captureCurrentVersion(){ if(postEditId!=null){ var p=postById(postEditId); if(p) p.blocks=collectRowsArray(); } else { homeVersions[curVersion]=collectRowsArray(); } }
@@ -8024,7 +8137,8 @@
       // ★ li_get_own 응답이 느리거나 안 와도 편집 화면(iframe)은 무조건 띄운다 — 안 그러면 까만 화면으로 멈춤
       var _framed=false; function _go(){ if(_framed) return; _framed=true; loadFrame(); }
       var _t=setTimeout(_go, 2500);   // 2.5초 안에 저장본 못 받으면 그냥 띄움
-      (async function(){ try{ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } }catch(e){} clearTimeout(_t); _go(); try{ if(window.__histInit) setTimeout(window.__histInit, 300); }catch(e){} try{ if(window.__pageAutosaveReady) setTimeout(window.__pageAutosaveReady, 350); }catch(e){} })();   // 로드 완료 후 되돌리기 기준선 + 자동저장 시작
+      var _skipFetch = !!window.__pendingTemplateApply;   // ★ 방금 템플릿 적용 → 서버 옛 데이터로 덮어쓰지 않음
+      (async function(){ try{ if(!_skipFetch){ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } } }catch(e){} clearTimeout(_t); _go(); try{ if(window.__histInit) setTimeout(window.__histInit, 300); }catch(e){} try{ if(window.__pageAutosaveReady) setTimeout(window.__pageAutosaveReady, 350); }catch(e){} if(_skipFetch){ window.__pendingTemplateApply=false; setTimeout(function(){ try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(e){} }, 800); } })();   // 로드 완료 후 되돌리기 기준선 + 자동저장 시작 (템플릿 적용이면 현재 빌더를 서버에 저장)
     }
     function closeLive(){ window.__liveEditActive=false; try{ if(window.__pageAutosaveStop) window.__pageAutosaveStop(); }catch(e){} if(window.__setFabInsert) try{ window.__setFabInsert(false); }catch(e){} ov.classList.remove('open'); ifr.src='about:blank'; }
     // 편집 후 새로고침: iframe 통째 reload(스크롤 튐) 대신 데이터만 재전송 → 보던 위치 그대로 유지
@@ -8057,6 +8171,7 @@
       else if(m.type==='la-edit-lookdel'){ handleLookDel(m.idx); }
       else if(m.type==='la-edit-move'){ handleMove(m.bt, m.nth, m.dir); }
       else if(m.type==='la-edit-reorder'){ handleReorder(m.order); }
+      else if(m.type==='la-open-catalog'){ try{ if(window.__setFabInsert) window.__setFabInsert(false); }catch(e){} if(window.__openAddCatalog) window.__openAddCatalog(); }   // 페이지 내 '＋ 구성 추가' 슬롯 탭 → 카탈로그
       else if(m.type==='la-undo'){ if(window.__doUndo) window.__doUndo(); }
       else if(m.type==='la-redo'){ if(window.__doRedo) window.__doRedo(); }
       else if(m.type==='la-edit-item'){ handleItem(m); }
@@ -8174,7 +8289,7 @@
     function handleGlowField(fi, value){
       var row=document.querySelector('#rows .row[data-type="glowhook"]'); if(!row) return;
       var c=row._content; if(!Array.isArray(c)) c=row._content=['','',''];
-      while(c.length<3) c.push('');
+      while(c.length<Math.max(3,fi+1)) c.push('');   // pre(3)·author(4)도 저장 가능하게
       c[fi]=value||'';
       try{ var sw=row.querySelector('[data-sw]'); if(sw && !sw.classList.contains('on')) sw.classList.add('on'); }catch(e){}
       try{ if(window.__refreshRowSub) window.__refreshRowSub(row); }catch(e){}
@@ -8243,9 +8358,10 @@
     // 우측 상단 '구성 삭제' → 지금 선택(테두리)된 구성 삭제 (없으면 안내)
     var delb=document.getElementById('le-fab-del');
     if(delb) delb.onclick=function(){ try{ (document.getElementById('le-iframe')||ifr).contentWindow.postMessage({type:'la-del-selected'}, '*'); }catch(e){} };
-    // 하단 독: 🎨디자인 → 홈 꾸미기(라이브 위) / 🖼사진 보관함 → 보관함(라이브 위, 폴더·업로드·삭제)
+    // 하단 독: ＋구성 추가 → 카탈로그 바로 (끼워넣기 모드 없이, 고르면 맨 위에 추가) / 🎨분위기 → dz 편집기
+    var dadd=document.getElementById('le-add'); if(dadd) dadd.onclick=function(){ try{ if(window.__setFabInsert) window.__setFabInsert(false); }catch(e){} if(window.__openAddCatalog) window.__openAddCatalog(); };
     var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ if(window.__openDesign) window.__openDesign(); else if(window.__openHomeDeco) window.__openHomeDeco('all'); };   // 분위기 = 라이브 미리보기 dz 편집기 (구 홈꾸미기는 설정에 보존)
-    var lib=document.getElementById('le-library'); if(lib) lib.onclick=function(){ if(window.openVault) window.openVault(null); };
+    // 사진 보관함은 독에서 제거(2026-06-29) — 사진은 아바타·커버·갤러리 탭할 때 보관함이 그 자리서 열림
     // 상단 우측 미리보기/편집 토글 (손님 화면 그대로 보기 ↔ 편집)
     // 🏠 고객 홈 = 저장·공개 후 실제 손님 페이지(새 탭)로 — '미리보기' 대체
     var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
