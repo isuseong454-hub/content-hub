@@ -2194,7 +2194,7 @@
         <button type="button" class="cv-b on" data-cv="edit">✏️ 편집</button>
         <button type="button" class="cv-b" data-cv="preview">👁 미리보기</button>
       </div>
-      <button type="button" id="pw-preview" class="pw-mini cv-real">🖥 실제로 보기</button>
+      <button type="button" id="pw-preview" class="pw-mini cv-real">👁 실제 고객 화면</button>
     </div>
 
     <!-- 대표 게시물 픽커는 숨겨두되 유지(렌더러 안전용) -->
@@ -3193,7 +3193,8 @@
     .cv-seg{ display:inline-flex; background:var(--soft); border:1px solid var(--hair); border-radius:999px; padding:3px; }
     .cv-seg .cv-b{ border:none; background:transparent; color:var(--muted); font-family:inherit; font-size:12px; font-weight:800; padding:6px 14px; border-radius:999px; cursor:pointer; }
     .cv-seg .cv-b.on{ background:var(--grad,linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); color:#fff; }
-    .cv-real{ font-size:11px !important; opacity:.65; }
+    .cv-real{ font-size:12px !important; font-weight:700; opacity:1; color:#c9c2ec; border-color:rgba(167,139,255,.45); background:rgba(167,139,255,.08); }
+    .cv-real:hover{ color:#fff; border-color:var(--coral); background:rgba(167,139,255,.18); }
     /* 미리보기 모드 = 손님 화면처럼 (편집 어포던스·관리 UI 숨김) */
     .ws-pane[data-pane="posts"].previewing .pc-acts,
     .ws-pane[data-pane="posts"].previewing .pc-grip,
