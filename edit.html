@@ -1499,6 +1499,92 @@
   .trend-sum b{color:var(--ink);}
   .trend-empty{color:var(--muted); font-size:12px; text-align:center; padding:18px 4px; line-height:1.6;}
   .trend-empty span{font-size:10.5px; opacity:.8;}
+  /* ═══════ 방문 분석 v2 (탭 + 그래프) · an- 네임스페이스 ═══════ */
+  .an-tabs{display:flex; gap:5px; background:var(--soft); border:1px solid var(--hair); border-radius:13px; padding:4px; margin-bottom:15px;}
+  .an-tabs button{flex:1; font-size:12.5px; font-weight:700; padding:9px 4px; border-radius:9px; background:transparent; border:none; color:var(--muted); cursor:pointer; font-family:var(--sans);}
+  .an-tabs button.on{background:var(--grad); color:#fff; box-shadow:0 4px 12px rgba(124,63,228,.4);}
+  .an-pane{display:none;} .an-pane.on{display:block;}
+  .an-tcat{font-size:12.5px; font-weight:800; color:var(--ink); margin:17px 2px 9px; display:flex; align-items:center; gap:6px;}
+  .an-tcat:first-child{margin-top:2px;}
+  .an-tcat span{font-weight:400; color:var(--muted); font-size:11px;}
+  .an-empty{color:var(--muted); font-size:12px; text-align:center; padding:16px 4px; line-height:1.6;}
+  /* 한줄 진단 */
+  .an-verdict{border-radius:15px; padding:14px; margin-bottom:14px; border:1px solid;}
+  .an-verdict.up{background:linear-gradient(135deg,rgba(52,211,153,.16),rgba(52,211,153,.04)); border-color:rgba(52,211,153,.35);}
+  .an-verdict.warn{background:linear-gradient(135deg,rgba(245,200,75,.15),rgba(245,200,75,.03)); border-color:rgba(245,200,75,.35);}
+  .an-verdict.down{background:linear-gradient(135deg,rgba(248,113,113,.15),rgba(248,113,113,.03)); border-color:rgba(248,113,113,.32);}
+  .an-verdict.flat{background:var(--surface); border-color:var(--hair);}
+  .an-verdict .vh{font-size:15.5px; font-weight:800; line-height:1.4;}
+  .an-verdict .vh .em{color:#34D399;} .an-verdict .vh .em-w{color:#F5C84B;} .an-verdict .vh .em-b{color:#F87171;}
+  .an-verdict .vs{font-size:12px; color:#c7ccd4; line-height:1.6; margin-top:6px;}
+  .an-verdict .vs b{color:#fff;}
+  /* 베이스라인 카드 */
+  .an-cards{display:flex; gap:8px; margin-bottom:6px;}
+  .an-card{flex:1; background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:12px 8px; text-align:center;}
+  .an-card .lbl{font-size:10.5px; color:var(--muted); margin-bottom:5px;}
+  .an-card .val{font-size:21px; font-weight:800; line-height:1; color:var(--ink);}
+  .an-cmp{font-size:10px; font-weight:700; margin-top:6px; display:inline-flex; gap:2px; padding:3px 6px; border-radius:99px;}
+  .an-cmp.up{color:#34D399; background:rgba(52,211,153,.13);}
+  .an-cmp.flat{color:var(--muted); background:rgba(255,255,255,.05);}
+  .an-cmp.down{color:#F87171; background:rgba(248,113,113,.13);}
+  /* 퍼널 */
+  .an-funnel{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:15px 14px 9px;}
+  .an-fstage{margin-bottom:5px;}
+  .an-fbarwrap{display:flex; align-items:center; gap:10px;}
+  .an-fbar{height:34px; border-radius:8px; background:var(--grad); display:flex; align-items:center; padding-left:11px; color:#fff; font-weight:800; font-size:13px; box-shadow:0 3px 10px rgba(124,63,228,.3); min-width:34px;}
+  .an-fbar.sm{font-size:11px; padding-left:8px;}
+  .an-fmeta{font-size:11.5px;} .an-fmeta .fn{font-weight:700; color:var(--ink);} .an-fmeta .fp{color:var(--muted); font-size:10.5px;}
+  .an-fdrop{font-size:10.5px; color:#F87171; margin:3px 0 9px 4px; font-weight:600;}
+  .an-fdrop.ok{color:#34D399;}
+  /* 잘됨/약함 */
+  .an-two{display:flex; gap:9px;}
+  .an-gbox{flex:1; border-radius:14px; padding:12px; border:1px solid; list-style:none;}
+  .an-gbox.g{background:rgba(52,211,153,.10); border-color:rgba(52,211,153,.26);}
+  .an-gbox.b{background:rgba(248,113,113,.10); border-color:rgba(248,113,113,.26);}
+  .an-gbox .gh{font-size:12px; font-weight:800; margin-bottom:9px;}
+  .an-gbox.g .gh{color:#34D399;} .an-gbox.b .gh{color:#F87171;}
+  .an-gbox li{list-style:none; font-size:11.5px; color:#d6d1e0; line-height:1.5; margin-bottom:8px; padding-left:12px; position:relative;}
+  .an-gbox li::before{content:''; position:absolute; left:2px; top:6px; width:5px; height:5px; border-radius:50%;}
+  .an-gbox.g li::before{background:#34D399;} .an-gbox.b li::before{background:#F87171;}
+  .an-gbox li b{color:#fff;}
+  /* 라인 차트 */
+  .an-chartcard{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:14px 12px 10px;}
+  .an-metricrow{display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;}
+  .an-metricrow button{font-size:11px; font-weight:700; padding:6px 11px; border-radius:8px; background:var(--soft); border:1px solid var(--hair); color:var(--muted); cursor:pointer; font-family:var(--sans);}
+  .an-metricrow button.on{background:#fff; color:#16161A; border-color:#fff;}
+  .an-linesvg{width:100%; height:150px; display:block;}
+  .an-legend{display:flex; gap:14px; font-size:10.5px; color:var(--muted); margin-top:8px; padding-left:4px;}
+  .an-legend span{display:inline-flex; align-items:center; gap:5px;}
+  .an-lgdot{width:9px; height:3px; border-radius:2px; display:inline-block;}
+  /* 도넛 */
+  .an-donutwrap{display:flex; align-items:center; gap:16px; background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:16px 14px; min-height:80px;}
+  .an-donut{flex:0 0 auto; position:relative; width:116px; height:116px;}
+  .an-donut .center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .an-donut .center b{font-size:19px; font-weight:800; line-height:1; color:var(--ink);}
+  .an-donut .center span{font-size:9.5px; color:var(--muted); margin-top:2px;}
+  .an-dleg{flex:1; display:flex; flex-direction:column; gap:9px; min-width:0;}
+  .an-dleg .di{display:flex; align-items:center; gap:8px; font-size:12px;}
+  .an-dleg .di .dc{width:11px; height:11px; border-radius:3px; flex:0 0 auto;}
+  .an-dleg .di .dn{flex:1; color:#d6d1e0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} .an-dleg .di b{font-size:12.5px; color:var(--ink);} .an-dleg .di .dp{color:var(--muted); font-size:10.5px; margin-left:4px;}
+  /* 콘텐츠 진단 */
+  .an-citem{display:flex; gap:10px; align-items:center; background:var(--surface); border:1px solid var(--hair); border-radius:12px; padding:9px 11px; margin-bottom:8px;}
+  .an-cthumb{width:36px; height:48px; border-radius:7px; background:linear-gradient(135deg,#3a3550,#241f33); flex:0 0 auto;}
+  .an-cbody{flex:1; min-width:0;}
+  .an-cname{font-size:12.5px; font-weight:700; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .an-ctag{font-size:10px; font-weight:700; margin-top:4px; display:inline-block; padding:2px 7px; border-radius:99px;}
+  .an-ctag.hot{color:#34D399; background:rgba(52,211,153,.13);}
+  .an-ctag.warn{color:#F5C84B; background:rgba(245,200,75,.13);}
+  .an-ctag.cold{color:var(--muted); background:rgba(255,255,255,.05);}
+  .an-cval{flex:0 0 auto; text-align:right;} .an-cval b{font-size:13.5px; color:var(--ink);} .an-cval span{display:block; font-size:9.5px; color:var(--muted);}
+  /* 히트맵 */
+  .an-heat{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:14px 12px 12px;}
+  .an-heatgrid{display:grid; grid-template-columns:30px repeat(7,1fr); gap:4px; align-items:center;}
+  .an-heatgrid .hh{font-size:9.5px; color:var(--muted); text-align:center;}
+  .an-heatgrid .hr{font-size:9.5px; color:var(--muted); text-align:right; padding-right:3px;}
+  .an-hcell{aspect-ratio:1; border-radius:4px; background:#7C3FE4;}
+  .an-heatnote{font-size:10.5px; color:var(--muted); margin-top:10px; text-align:center;}
+  .an-heatnote b{color:#34D399;}
+  .an-period{font-size:11.5px; color:var(--muted); background:var(--soft); border:1px solid var(--hair); padding:5px 10px; border-radius:9px;}
   .grid-card{background:var(--surface); border:1px solid var(--hair); border-radius:18px; padding:18px 8px;}
   .qgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px 4px;}
   .gi{display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; background:none; border:none; font-family:var(--sans);}
@@ -4976,22 +5062,155 @@
     if(total===0) html+='<div style="color:var(--muted);font-size:11.5px;padding:6px 2px 0;">아직 상품 클릭이 없어요 · 손님이 스토어에서 상품을 누르면 쌓여요</div>';
     return html;
   }
+  // ════ 방문 분석 v2 — 탭(개요·추이·유입·콘텐츠) + 그래프 ════
+  function anNum(n){ n=n||0; return n>=10000?(Math.round(n/1000)/10)+'만':(n>=1000?(Math.round(n/100)/10)+'천':''+n); }
+  function anSrcName(src){ var m={instagram:'instagram', direct:'직접 방문', naver:'naver', google:'google', youtube:'유튜브', kakao:'kakao', tiktok:'틱톡'}; return m[src]||src||'직접'; }
+  function anCur(s){ var p=s&&s.p28; if(p && (p.visitors||p.views||p.clicks||p.conv)){ return {visitors:p.visitors||0, views:p.views||0, clicks:p.clicks||0, conv:p.conv||0}; }
+    var conv=0; (s.labels||[]).forEach(function(x){ if(/예약|상담|구매/.test(x.label||'')) conv+=(x.n||0); });
+    return {visitors:s.sessions||0, views:s.views||0, clicks:s.clicks||0, conv:conv, _fb:true}; }
+  function anPrev(s){ var p=s&&s.prev28; if(p && (p.visitors||p.views||p.clicks||p.conv||p.visitors===0)) return {visitors:p.visitors||0, views:p.views||0, clicks:p.clicks||0, conv:p.conv||0}; return null; }
+  function anCmp(cur, prev){ if(prev==null) return {cls:'flat', txt:'—'}; if(prev===0) return cur>0?{cls:'up',txt:'▲ 새로'}:{cls:'flat',txt:'—'}; var pct=Math.round((cur-prev)/prev*100); if(pct>=8) return {cls:'up',txt:'▲ +'+pct+'%'}; if(pct<=-8) return {cls:'down',txt:'▼ '+pct+'%'}; return {cls:'flat',txt:'✓ 비슷'}; }
+
+  function anVerdict(s){
+    var cur=anCur(s), prev=anPrev(s);
+    var visC=anCmp(cur.visitors, prev?prev.visitors:null), convC=anCmp(cur.conv, prev?prev.conv:null);
+    var head, tone, sub;
+    if(!prev){ tone='flat'; head='데이터가 쌓이는 중이에요 📈'; sub='방문 <b>'+anNum(cur.visitors)+'명</b> · 28일이 더 모이면 "평소 대비"까지 보여드려요.'; }
+    else if(visC.cls==='up' && convC.cls!=='down'){ tone='up'; head='이번 28일, <span class="em">평소보다 잘 나가고 있어요 👍</span>'; sub='방문 <b>'+anNum(cur.visitors)+'명</b> · 평소보다 늘었고 전환도 유지 중이에요.'; }
+    else if(visC.cls==='up' && convC.cls==='down'){ tone='warn'; head='방문은 늘었는데 <span class="em-w">예약이 약해요 ⚠️</span>'; sub='방문 <b>'+anNum(cur.visitors)+'명</b>(늘어남)인데 예약·상담은 평소보다 적어요 — <b>후킹은 됐는데 전환이 새는 신호</b>.'; }
+    else if(visC.cls==='down'){ tone='down'; head='이번 28일, <span class="em-b">방문이 줄었어요</span>'; sub='방문 <b>'+anNum(cur.visitors)+'명</b>으로 평소보다 적어요 — 노출(콘텐츠·유입)을 점검해 보세요.'; }
+    else { tone='flat'; head='평소와 비슷하게 가고 있어요'; sub='방문 <b>'+anNum(cur.visitors)+'명</b> · 큰 변동 없이 안정적이에요.'; }
+    return '<div class="an-verdict '+tone+'"><div class="vh">'+head+'</div><div class="vs">'+sub+'</div></div>';
+  }
+  function anCards(s){
+    var cur=anCur(s), prev=anPrev(s);
+    function c(lbl,v,p){ var m=anCmp(v,p); return '<div class="an-card"><div class="lbl">'+lbl+'</div><div class="val">'+anNum(v)+'</div><div class="an-cmp '+m.cls+'">'+m.txt+'</div></div>'; }
+    return '<div class="an-cards">'+c('방문',cur.visitors,prev?prev.visitors:null)+c('콘텐츠 클릭',cur.clicks,prev?prev.clicks:null)+c('예약·상담',cur.conv,prev?prev.conv:null)+'</div>';
+  }
+  function anFunnel(s){
+    var cur=anCur(s); var v=cur.visitors||0, c=cur.clicks||0, cv=cur.conv||0;
+    var p1=v?Math.round(c/v*100):0, p2=c?Math.round(cv/c*100):0, p2v=v?(Math.round(cv/v*1000)/10):0;
+    var maxW=88;
+    function bar(w,label,num,sub,sm){ return '<div class="an-fstage"><div class="an-fbarwrap"><div class="an-fbar'+(sm?' sm':'')+'" style="width:'+Math.max(w,(num>0?12:4))+'%">'+anNum(num)+'</div><div class="an-fmeta"><div class="fn">'+label+'</div>'+(sub?'<div class="fp">'+sub+'</div>':'')+'</div></div></div>'; }
+    return '<div class="an-funnel">'
+      + bar(maxW,'방문',v,'')
+      + '<div class="an-fdrop '+(p1>=20?'ok':'')+'">↓ '+p1+'%가 콘텐츠를 눌러봄</div>'
+      + bar(Math.round(maxW*(c/(v||1))),'콘텐츠 클릭',c,'방문의 '+p1+'%')
+      + '<div class="an-fdrop">↓ '+p2+'%가 예약·상담까지</div>'
+      + bar(Math.round(maxW*(cv/(v||1))),'예약·상담',cv,'방문의 '+p2v+'%',true)
+      + '</div>';
+  }
+  function anGoodBad(s){
+    var cur=anCur(s), prev=anPrev(s), good=[], bad=[];
+    var tp=(s.posts&&s.posts[0]); if(tp){ var tt=(window.__postTitleById?window.__postTitleById(tp.pid):tp.pid)||'대표 글'; good.push('<b>'+escT(String(tt).slice(0,14))+'</b> 조회 1위'); }
+    var v=cur.visitors, c=cur.clicks, p1=v?Math.round(c/v*100):0;
+    if(p1>=25) good.push('방문→클릭 양호 ('+p1+'%)');
+    var ts=(s.sources&&s.sources[0]); if(ts) good.push(escT(anSrcName(ts.src))+' 유입이 주력');
+    var convC=anCmp(cur.conv, prev?prev.conv:null);
+    if(convC.cls==='down') bad.push('예약 전환 <b>평소보다 낮음</b>');
+    if(p1>0 && p1<12) bad.push('방문 대비 클릭 적음 ('+p1+'%)');
+    if(cur.conv===0 && v>0) bad.push('예약·상담 클릭 0 — 버튼 점검');
+    if(!good.length) good.push('데이터가 더 쌓이면 채워져요');
+    if(!bad.length) bad.push('특별히 빠지는 곳 없어요 👍');
+    function li(a){ return a.slice(0,3).map(function(x){return '<li>'+x+'</li>';}).join(''); }
+    return '<div class="an-two"><ul class="an-gbox g"><div class="gh">🟢 잘되는 것</div>'+li(good)+'</ul><ul class="an-gbox b"><div class="gh">🔴 손볼 것</div>'+li(bad)+'</ul></div>';
+  }
+  function anOverview(s){
+    return anVerdict(s)+anCards(s)
+      +'<div class="an-tcat">🪣 손님 여정 (퍼널) <span>· 어디서 빠지나</span></div>'+anFunnel(s)
+      +'<div class="an-tcat">한눈에 <span>· 잘됨 vs 손볼 것</span></div>'+anGoodBad(s);
+  }
+  var AN_METRICS=[['visitors','방문'],['views','조회'],['conv','예약'],['store','스토어']];
+  function anTrend(s){
+    var btns=AN_METRICS.map(function(m,i){ return '<button class="'+(i===0?'on':'')+'" data-anm="'+m[0]+'">'+m[1]+'</button>'; }).join('');
+    return '<div class="an-tcat">📈 추이 <span>· 파란 = 내 평소 범위</span></div>'
+      +'<div class="an-chartcard"><div class="an-metricrow">'+btns+'</div>'
+      +'<svg class="an-linesvg" id="an-line" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>'
+      +'<div class="an-legend"><span><i class="an-lgdot" style="background:#A78BFF"></i>이번 기간</span><span><i class="an-lgdot" style="background:rgba(69,113,232,.6)"></i>내 평소 범위</span></div></div>'
+      +'<div class="an-tcat">⏰ 언제 손님이 오나 <span>· 올릴 시간 추천</span></div>'+anHeatmap(s);
+  }
+  function anDrawLine(metric){
+    var s=window.__statsCache||{}, svg=document.getElementById('an-line'); if(!svg) return;
+    var arr=(s.series&&s.series[metric])||[];
+    if(arr.length<2){ svg.innerHTML='<text x="160" y="78" fill="#9296A0" font-size="11" text-anchor="middle">데이터가 더 쌓이면 그려져요</text>'; return; }
+    var W=320,H=150, n=arr.length, max=1; arr.forEach(function(x){ if((x.n||0)>max) max=x.n||0; });
+    function X(i){ return Math.round(i/(n-1)*W); }
+    function Y(v){ return Math.round(H-8 - (v/max)*(H-26)); }
+    var pts=arr.map(function(x,i){ return X(i)+','+Y(x.n||0); });
+    var area='M0,'+Y(arr[0].n||0)+' '+arr.map(function(x,i){return 'L'+X(i)+','+Y(x.n||0);}).join(' ')+' L'+W+','+H+' L0,'+H+' Z';
+    var sum=0; arr.forEach(function(x){sum+=(x.n||0);}); var avg=sum/n, vv=0; arr.forEach(function(x){var d=(x.n||0)-avg; vv+=d*d;}); var sd=Math.sqrt(vv/n);
+    var bTop=Y(avg+sd), bBot=Y(Math.max(0,avg-sd)), last=arr[n-1];
+    svg.innerHTML='<defs><linearGradient id="anaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C3FE4" stop-opacity=".42"/><stop offset="1" stop-color="#7C3FE4" stop-opacity="0"/></linearGradient></defs>'
+      +'<rect x="0" y="'+bTop+'" width="'+W+'" height="'+Math.max(2,bBot-bTop)+'" fill="rgba(69,113,232,.16)"/>'
+      +'<line x1="0" y1="'+Y(avg)+'" x2="'+W+'" y2="'+Y(avg)+'" stroke="rgba(69,113,232,.5)" stroke-dasharray="4 4"/>'
+      +'<path d="'+area+'" fill="url(#anaf)"/>'
+      +'<polyline points="'+pts.join(' ')+'" fill="none" stroke="#A78BFF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
+      +'<circle cx="'+X(n-1)+'" cy="'+Y(last.n||0)+'" r="4" fill="#A78BFF" stroke="#16161A" stroke-width="2"/>';
+  }
+  function anHeatmap(s){
+    var heat=s.heat||[];
+    if(!heat.length) return '<div class="an-heat"><div class="an-empty">아직 데이터가 부족해요 · 방문이 쌓이면 언제 붐비는지 알려드려요</div></div>';
+    var cols=[{d:1,n:'월'},{d:2,n:'화'},{d:3,n:'수'},{d:4,n:'목'},{d:5,n:'금'},{d:6,n:'토'},{d:0,n:'일'}];
+    var rows=['아침','점심','저녁','밤','새벽'], grid={}, max=1, peak={n:-1};
+    heat.forEach(function(x){ grid[x.dow+'_'+x.b]=x.n; if(x.n>max) max=x.n; if(x.n>peak.n) peak=x; });
+    var html='<div class="an-heatgrid"><span class="hh"></span>'+cols.map(function(c){return '<span class="hh">'+c.n+'</span>';}).join('');
+    for(var b=0;b<5;b++){ html+='<span class="hr">'+rows[b]+'</span>'; for(var ci=0;ci<cols.length;ci++){ var v=grid[cols[ci].d+'_'+b]||0; var op=(0.07+(v/max)*0.93).toFixed(2); html+='<span class="an-hcell" style="opacity:'+op+'"></span>'; } }
+    html+='</div>';
+    var pc=(cols.filter(function(c){return c.d===peak.dow;})[0]||{n:'?'}).n;
+    if(peak.n>0) html+='<div class="an-heatnote">가장 붐비는 때 = <b>'+pc+'요일 '+rows[peak.b]+'</b> · 그 직전에 올리면 좋아요</div>';
+    return '<div class="an-heat">'+html+'</div>';
+  }
+  function anDonut(src,total){
+    if(!total) return '<div class="an-donutwrap"><div class="an-empty">아직 유입 데이터가 없어요</div></div>';
+    var colors=['#7C3FE4','#4571E8','#C13B9E','#34D399','#F5C84B','#5b6172'];
+    var C=2*Math.PI*46, cum=0, segs='';
+    src.slice(0,6).forEach(function(x,i){ var frac=(x.n||0)/total, len=frac*C, rot=-90+cum*360; segs+='<circle cx="60" cy="60" r="46" fill="none" stroke="'+colors[i%colors.length]+'" stroke-width="17" stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" transform="rotate('+rot.toFixed(1)+' 60 60)"/>'; cum+=frac; });
+    var leg=src.slice(0,6).map(function(x,i){ var pct=Math.round((x.n||0)/total*100); return '<div class="di"><span class="dc" style="background:'+colors[i%colors.length]+'"></span><span class="dn">'+escT(anSrcName(x.src))+'</span><b>'+(x.n||0)+'</b><span class="dp">'+pct+'%</span></div>'; }).join('');
+    return '<div class="an-donutwrap"><div class="an-donut"><svg width="116" height="116" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" stroke="#26262C" stroke-width="17"/>'+segs+'</svg><div class="center"><b>'+anNum(total)+'</b><span>방문</span></div></div><div class="an-dleg">'+leg+'</div></div>';
+  }
+  function anSources(s){
+    var src=(s.sources||[]).slice(); var total=0; src.forEach(function(x){total+=(x.n||0);});
+    return '<div class="an-tcat">🔗 유입 경로 <span>· 어디서 오나</span></div>'+anDonut(src,total)
+      +'<div class="an-tcat">상세</div>'+statBars(src.map(function(x){return {src:anSrcName(x.src), n:x.n};}),'src');
+  }
+  function anContentDiag(s){
+    var posts=(s.posts||[]).slice(0,6);
+    if(!posts.length) return '<div class="an-empty" style="padding:14px 2px;">아직 조회된 게시물이 없어요</div>';
+    var title=window.__postTitleById||function(id){return id;}, max=posts[0].n||1;
+    return posts.map(function(p,i){
+      var tt=String(title(p.pid)||'게시물'), tag;
+      if(i===0) tag='<span class="an-ctag hot">🔥 떡상 · 홈에 추천돼요</span>';
+      else if(p.n < max*0.1) tag='<span class="an-ctag cold">💤 노출 적음 · 키워드·썸네일 점검</span>';
+      else tag='<span class="an-ctag warn">꾸준히 조회 중 · 더 밀어볼 만</span>';
+      return '<div class="an-citem"><div class="an-cthumb"></div><div class="an-cbody"><div class="an-cname">'+escT(tt)+'</div>'+tag+'</div><div class="an-cval"><b>'+anNum(p.n)+'</b><span>조회</span></div></div>';
+    }).join('');
+  }
+  function anContent(s){
+    return '<div class="an-tcat">📄 콘텐츠별 진단 <span>· 자동 코칭</span></div>'+anContentDiag(s)
+      +'<div class="an-tcat">🛍 상품별 클릭 <span>· 분류별</span></div>'+statProductBars(s.labels);
+  }
   function renderStats(s){
     window.__statsCache=s;
-    var conv=0; (s.labels||[]).forEach(function(x){ if(x.label==='예약하기'||x.label==='상담하기') conv+=(x.n||0); });
-    var rate = s.sessions ? Math.round(conv/s.sessions*100) : 0;
-    return '<div class="tcat" style="margin-top:0;">📅 방문자</div>'
-      +'<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('오늘',s.today)+statBox('이번 달',s.month)+statBox('전체',s.sessions)+'</div>'
-      +'<div class="tcat" style="margin-top:6px;">전체 누적</div>'
-      +'<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('방문(페이지뷰)',s.views)+statBox('클릭',s.clicks)+'</div>'
-      +'<div class="tcat" style="margin-top:6px;">🎯 전환 (예약·상담 버튼)</div>'
-      +'<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('예약·상담 클릭',conv)+statBox('전환율',rate+'%')+'</div>'
-      +statTrend(s)
-      +'<div class="tcat">👁 많이 본 게시물 <span style="font-weight:400;color:var(--muted);">· 권위로 홈에 추천돼요</span></div>'+statPostBars(s.posts)
-      +'<div class="tcat">🛍 상품별 클릭 <span style="font-weight:400;color:var(--muted);">· 분류별 · 무엇이 끌리나</span></div>'+statProductBars(s.labels)
-      +'<div class="tcat">유입 경로</div>'+statBars(s.sources,'src')
-      +'<div class="tcat">많이 누른 것</div>'+statBars(s.labels,'label');
+    return '<div class="an-tabs"><button class="on" data-antab="ov">📊 개요</button><button data-antab="tr">📈 추이</button><button data-antab="src">🔗 유입</button><button data-antab="ct">📄 콘텐츠</button></div>'
+      +'<div class="an-pane on" data-anpane="ov">'+anOverview(s)+'</div>'
+      +'<div class="an-pane" data-anpane="tr">'+anTrend(s)+'</div>'
+      +'<div class="an-pane" data-anpane="src">'+anSources(s)+'</div>'
+      +'<div class="an-pane" data-anpane="ct">'+anContent(s)+'</div>';
   }
+  function wireAnalytics(){
+    window.__anMetric=window.__anMetric||'visitors';
+    document.querySelectorAll('.an-tabs button').forEach(function(b){ b.onclick=function(){
+      document.querySelectorAll('.an-tabs button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+      var t=b.getAttribute('data-antab');
+      document.querySelectorAll('.an-pane').forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-anpane')===t); });
+      if(t==='tr'){ try{ anDrawLine(window.__anMetric); }catch(_){} }
+    }; });
+    document.querySelectorAll('.an-metricrow button').forEach(function(b){ b.onclick=function(){
+      document.querySelectorAll('.an-metricrow button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+      window.__anMetric=b.getAttribute('data-anm'); try{ anDrawLine(window.__anMetric); }catch(_){}
+    }; });
+  }
+  window.__wireAnalytics=wireAnalytics; window.__anDrawLine=anDrawLine;
   function openStats(){
     stov.classList.add('open');
     var body=document.getElementById('stats-body');
@@ -5001,7 +5220,7 @@
     window.laRpc('li_stats',{ p_code:auth.code, p_pin_hash:auth.pinHash }).then(function(res){
       if(!res||!res.ok){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">집계 표를 아직 못 불러왔어요<br><span style="font-size:11.5px;">(분석 SQL 실행 여부를 확인하세요)</span></div>'; return; }
       if(!res.views && !res.clicks){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">아직 방문 기록이 없어요<br><span style="font-size:11.5px;">공개 페이지를 열어보면 여기에 쌓여요</span></div>'; return; }
-      body.innerHTML=renderStats(res); try{ wireTrend(); }catch(_){}
+      body.innerHTML=renderStats(res); try{ wireAnalytics(); }catch(_){}
     }).catch(function(){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">불러오기 실패 (네트워크)</div>'; });
   }
   window.__openStats=openStats;
