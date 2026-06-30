@@ -695,6 +695,7 @@
   html[data-edit] .pane.la-demo > *:not(.la-head):not(.la-demo-note){opacity:.4; pointer-events:none; filter:grayscale(.2);}
   /* 편집 모드에선 움직이는 플로팅 버튼(네이버 예약·채널) 숨김 — 편집 시 거슬림 */
   html[data-edit] #home-fab, html[data-edit] .resv-fab, html[data-edit] .fab{display:none !important;}
+  html.dz-pv #home-fab, html.dz-pv .cta-sticky, html.dz-pv .resv-fab, html.dz-pv .fab{display:none !important;}   /* 분위기 미리보기 = 플로팅 링크·예약 숨김(커버/테마 집중) */
   /* 프로필 신뢰·증거 */
   .prof-evidence{margin:-2px 0 18px; text-align:center;}
   .prof-evidence .pe-auth{font-size:13px; font-weight:700; color:var(--coral); margin-bottom:8px;}
@@ -3818,6 +3819,7 @@
 
   // ── 편집 브릿지(?edit=1): 부모(편집기)가 보낸 데이터를 실시간 렌더 + 섹션 탭 보고 ──
   var EDIT_MODE=false; try{ EDIT_MODE = new URLSearchParams(location.search).get('edit')==='1'; }catch(e){}
+  try{ if(new URLSearchParams(location.search).get('dzpv')==='1') document.documentElement.classList.add('dz-pv'); }catch(e){}   // 분위기 미리보기 전용 = 플로팅 링크·예약 숨김(커버/테마 집중)
   // 디자인 모달 라이브 미리보기: 커버 위치/줌만 실시간 갱신 (전체 재렌더 없이 부드럽게)
   function updateCoverFit(f){ if(!f) return; var el=document.querySelector('.top-cover .pc-img')||document.querySelector('.page-cover .pcv-img'); if(!el) return; applyCoverFit(el, f); }
   // 💬 상담 신청폼 (성함·연락처·문의 → 명단 저장 + 카톡 이어주기)

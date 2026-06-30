@@ -701,6 +701,15 @@
   #linkch-host > .acc-card > .acc-h{display:none;}
   #linkch-host > .acc-card > .acc-bd{display:block !important; margin-top:0;}
   #linkch-host > .acc-card > .acc-bd > .vhint{display:none;}   /* 팝업 자체 안내가 있으니 카드 내부 중복 안내 숨김 */
+  /* 📁 컨텐츠 워크스페이스 드로어 — 편집 중 ☰로 왼쪽에서 슬라이드 (노션 폰식) */
+  #cont-drawer-ov{position:fixed; inset:0; background:rgba(0,0,0,.5); opacity:0; visibility:hidden; transition:opacity .25s; z-index:118;}
+  #cont-drawer-ov.open{opacity:1; visibility:visible;}
+  #cont-drawer{position:fixed; top:0; left:0; bottom:0; width:90%; max-width:400px; background:var(--surface); border-right:1px solid var(--hair); z-index:119; transform:translateX(-103%); transition:transform .28s cubic-bezier(.3,.9,.3,1); display:flex; flex-direction:column; box-shadow:14px 0 44px rgba(0,0,0,.55);}
+  #cont-drawer.open{transform:translateX(0);}
+  .cont-drawer-h{display:flex; align-items:center; padding:34px 16px 12px; font-size:16px; font-weight:800; flex:0 0 auto; border-bottom:1px solid var(--hair);}
+  .cont-drawer-h .x{margin-left:auto; color:var(--muted); font-size:20px; cursor:pointer;}
+  #cont-drawer-host{flex:1; overflow-y:auto; padding:12px 14px 24px;}
+  #cont-drawer-host > .pw-pane{display:block !important;}   /* relocate된 목록은 드로어 안에서 항상 보이게 */
   @media(max-width:430px){ .gate-row{gap:10px;} .gate-card{padding:18px 9px 14px;} .gate-ico{width:50px; height:50px; font-size:24px; border-radius:15px;} .gate-d{font-size:10.5px;} .gate-mini{height:42px;} }
   /* 해시태그 예시·작성법 가이드 */
   .mini-guide-btn{font-size:10.5px; color:var(--coral); background:var(--coral-soft); border:1px solid rgba(45,212,191,.35); border-radius:7px; padding:2px 8px; cursor:pointer; font-family:var(--sans); font-weight:600; vertical-align:middle;}
@@ -2132,7 +2141,10 @@
 
     <div id="home-body">
       <div id="post-edit-banner" style="display:none;">
-        <button type="button" id="post-back" class="secbtn" style="margin-bottom:10px;">‹ 이전으로</button>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <button type="button" id="post-list-toggle" class="secbtn" style="flex:0 0 auto; margin:0;">☰ 목록</button>
+          <button type="button" id="post-back" class="secbtn" style="flex:0 0 auto; margin:0;">‹ 이전으로</button>
+        </div>
         <div class="sec-h" style="display:flex; align-items:center;"><span class="t" id="post-edit-title" style="flex:1;">📄 게시물 편집</span><button type="button" id="post-fw" class="fw-sm">⛶ 전체화면</button></div>
         <div class="field"><label>게시물 제목</label><input id="post-f-title" placeholder="예: 앞머리 시술 랜딩"></div>
         <div class="field"><label>한 줄 요약 <span style="color:var(--muted);font-size:10.5px;">· 카드에 표시</span></label><input id="post-f-summary" placeholder="예: 왜 저를 믿어도 될까요"></div>
@@ -2553,6 +2565,14 @@
       <div class="tg-chips"><span class="tg-chip">혼자가기좋은</span><span class="tg-chip">콘센트있는카페</span><span class="tg-chip">디저트맛집</span><span class="tg-chip">분위기좋은</span></div>
       <div class="tg-hint">칩을 누르면 위 "고민 해시태그" 칸에 바로 들어가요 · 3~5개가 적당</div>
     </div>
+  </div>
+
+  <!-- 📁 컨텐츠 워크스페이스 드로어 (편집 중 ☰ 목록 → 왼쪽 슬라이드. pw-pane[archive]를 relocate = 새글·주제·목록 한 곳) -->
+  <div id="cont-drawer-ov"></div>
+  <div id="cont-drawer">
+    <div class="cont-drawer-h"><span>📁 내 컨텐츠</span><span class="x" id="cont-drawer-x">×</span></div>
+    <div style="padding:10px 14px 2px; flex:0 0 auto;"><input id="cont-drawer-search" placeholder="🔎 글 제목 검색" autocomplete="off" style="width:100%; padding:10px 12px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font-family:inherit; font-size:13px;"></div>
+    <div id="cont-drawer-host"></div>
   </div>
 
   <!-- 🔗 채널·연락처 매니저 (구성 추가 '링크 버튼' → 이 팝업. 프로필 #channels-card를 통째로 띄움 = home.fab 단일 소스·자동 동기화) -->
@@ -3502,8 +3522,8 @@
     </div>
     <!-- 하단 독 (토스식 · 아이콘 + 글자) -->
     <div class="le-dock">
-      <button class="le-d le-d-primary" id="le-add"><span class="di">＋</span>구성 추가</button>
       <button class="le-d" id="le-design"><span class="di">🎨</span>분위기</button>
+      <button class="le-d le-d-primary" id="le-add"><span class="di">＋</span>구성 추가</button>
     </div>
   </div>
 
@@ -5957,7 +5977,7 @@
     function sendLive(){ if(!_liveReady||!lifr) return; var data=null; try{ data=(window.__serialize?window.__serialize():(typeof serialize==='function'?serialize():null)); }catch(e){} if(!data) return; try{ lifr.contentWindow.postMessage({type:'la-edit-data', data:data}, '*'); setTimeout(function(){ try{ lifr.contentWindow.postMessage({type:'la-edit-preview', on:true}, '*'); }catch(e){} }, 220); }catch(e){} }   // 데이터 갱신 후 편집 UI 숨겨 깨끗한 미리보기 유지
     function sendLiveSoon(){ clearTimeout(_liveT); _liveT=setTimeout(sendLive, 90); }
     function sendFit(){ if(!_liveReady||!lifr) return; var f=cov().fit; try{ lifr.contentWindow.postMessage({type:'la-cover-fit', fit:{z:f.z||1,x:(f.x==null?50:f.x),y:(f.y==null?50:f.y),u:f.u||'bgpos'}}, '*'); }catch(e){} }
-    function loadLive(){ _liveReady=false; if(lifr){ lifr.onload=function(){ setTimeout(function(){ if(!_liveReady){ _liveReady=true; } try{ sendLive(); sendFit(); }catch(e){} }, 400); }; lifr.src='u.html?edit=1&u='+encodeURIComponent(liveHandle())+'&cb='+Date.now(); } }   // 안전망: la-edit-ready 누락돼도 로드 후 데이터 전송(샘플로 남는 것 방지)
+    function loadLive(){ _liveReady=false; if(lifr){ lifr.onload=function(){ setTimeout(function(){ if(!_liveReady){ _liveReady=true; } try{ sendLive(); sendFit(); }catch(e){} }, 400); }; lifr.src='u.html?edit=1&dzpv=1&u='+encodeURIComponent(liveHandle())+'&cb='+Date.now(); } }   // dzpv=1: 분위기 미리보기 전용 — 플로팅 링크·예약 숨김(커버/테마에 집중). 안전망: la-edit-ready 누락돼도 로드 후 데이터 전송.
     window.addEventListener('message', function(ev){ var m=ev.data||{}; if(m.type==='la-edit-ready' && lifr && ev.source===lifr.contentWindow){ _liveReady=true; try{ lifr.contentWindow.postMessage({type:'la-edit-preview', on:true}, '*'); }catch(e){} sendLive(); } });
 
     function renderPreview(){ var c=cov();
@@ -7219,6 +7239,31 @@
     if(cEl) cEl.oninput=function(){ var p=postById(postEditId); if(p) p.cat=this.value; };
     var back=document.getElementById('post-back'); if(back) back.onclick=function(){ closePostEdit(); if(window.__switchWs) window.__switchWs('posts'); };
     var pfw=document.getElementById('post-fw'); if(pfw) pfw.onclick=function(){ if(window.__enterFw) window.__enterFw(); };
+  })();
+  // 📁 컨텐츠 워크스페이스 드로어 — 편집 중 ☰로 글 목록(새콘텐츠·주제·목록) 슬라이드. pw-pane[archive] relocate(채널매니저 패턴).
+  (function(){
+    var _cdReturn=null;
+    function openCD(){
+      var pane=document.querySelector('.pw-pane[data-pwpane="archive"]'), host=document.getElementById('cont-drawer-host'), ov=document.getElementById('cont-drawer'), bd=document.getElementById('cont-drawer-ov');
+      if(!pane||!host||!ov) return;
+      try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(e){}
+      var _s=document.getElementById('cont-drawer-search'); if(_s) _s.value='';
+      if(pane.parentNode!==host){ _cdReturn={parent:pane.parentNode, next:pane.nextSibling}; host.appendChild(pane); }
+      ov.classList.add('open'); if(bd) bd.classList.add('open');
+    }
+    function closeCD(){
+      var pane=document.querySelector('.pw-pane[data-pwpane="archive"]'), ov=document.getElementById('cont-drawer'), bd=document.getElementById('cont-drawer-ov');
+      if(pane && _cdReturn){ if(_cdReturn.next && _cdReturn.next.parentNode===_cdReturn.parent) _cdReturn.parent.insertBefore(pane, _cdReturn.next); else _cdReturn.parent.appendChild(pane); }
+      _cdReturn=null;
+      if(ov) ov.classList.remove('open'); if(bd) bd.classList.remove('open');
+    }
+    window.__openContDrawer=openCD; window.__closeContDrawer=closeCD;
+    var tg=document.getElementById('post-list-toggle'); if(tg) tg.onclick=openCD;
+    var x=document.getElementById('cont-drawer-x'); if(x) x.onclick=closeCD;
+    var bd0=document.getElementById('cont-drawer-ov'); if(bd0) bd0.onclick=closeCD;
+    var host0=document.getElementById('cont-drawer-host'); if(host0) host0.addEventListener('click', function(e){ if(e.target.closest('.post-card, [data-pedit], .cc-opt')){ setTimeout(closeCD, 60); } });   // 글 카드/새콘텐츠 선택 → 닫고 그 글로
+    var srch=document.getElementById('cont-drawer-search');
+    if(srch) srch.addEventListener('input', function(){ var q=(this.value||'').trim().toLowerCase(); if(!host0) return; host0.querySelectorAll('.post-card').forEach(function(c){ var t=((c.querySelector('.pc-title')||{}).textContent||'').toLowerCase(); c.style.display=(!q||t.indexOf(q)>=0)?'':'none'; }); });   // 🔎 제목 검색 필터
   })();
 
   function showPostTypeChooser(){
