@@ -3218,6 +3218,7 @@
     var closedSet={}; String(cfg.closedDays||'').split(/[,\s/·]+/).forEach(function(s){ s=s.trim().replace('요일',''); var i=DOW.indexOf(s); if(i>=0) closedSet[i]=1; });
     var blockedDates={}; (cfg.blockedDates||[]).forEach(function(x){ blockedDates[x]=1; });
     var blockedSlots=cfg.blockedSlots||{};
+    var askFields=(cfg.askFields||[]).filter(function(f){ return f && (f.q||'').trim(); });   // 디자이너가 추가한 질문
     var showHoli=cfg.showHolidays!==false, leadDays=parseInt(cfg.leadDays,10)||0;
     var topics=(cfg.topics||[]).map(function(t){ return {name:t.name||'', services:(t.services||[]).filter(function(s){ return (s.name||'').trim(); })}; }).filter(function(t){ return t.services.length; });
     var kakao=(cfg.kakao||'').trim(), tpl=cfg.msgTpl||'[예약 신청]\n날짜: {날짜}\n시간: {시간}', note=cfg.note||'', notice=cfg.notice||'', payUrl=(cfg.payUrl||'').trim();
@@ -3246,6 +3247,7 @@
         +   '<div class="rv-flabel">연락처 <i>필수</i></div><input class="rv-phone" type="tel" inputmode="numeric" placeholder="010-1234-5678" maxlength="30">'
         +   '<div class="rv-flabel">방문 구분</div><div class="rv-visit"><button type="button" data-v="첫 방문">첫 방문</button><button type="button" data-v="재방문">재방문</button></div>'
         +   '<div class="rv-flabel">요청사항 <span>선택</span></div><textarea class="rv-memo" rows="2" placeholder="원하는 스타일·고민·레퍼런스 등 자유롭게"></textarea>'
+        +   (askFields.length?askFields.map(function(f,i){ return '<div class="rv-flabel">'+esc(f.q)+(f.required?' <i>필수</i>':' <span>선택</span>')+'</div><input class="rv-ask" data-ai="'+i+'" data-q="'+esc(f.q)+'" data-req="'+(f.required?1:0)+'" maxlength="200">'; }).join(''):'')
         +   (notice?'<div class="rv-notice">'+esc(notice)+'</div>':'')
         +   '<label class="lead-consent" style="margin-top:11px;"><input type="checkbox" class="rv-agree"><span>(필수) 개인정보 수집·이용 동의</span><a class="lead-terms" href="#">자세히 보기</a></label>'
         +   '<button type="button" class="rv-gen-btn">예약 메시지 생성 →</button>'
@@ -3369,13 +3371,19 @@
       if(!nm){ formMsg.style.color='#e05a6e'; formMsg.textContent='성함을 입력해주세요'; return; }
       if(ph.replace(/[^0-9]/g,'').length<8){ formMsg.style.color='#e05a6e'; formMsg.textContent='연락처를 정확히 입력해주세요'; return; }
       if(agreeEl && !agreeEl.checked){ formMsg.style.color='#e05a6e'; formMsg.textContent='개인정보 수집·이용에 동의해주세요'; return; }
+      // 디자이너 추가 질문 수집·필수 검증
+      var askLines=[], askMiss=null;
+      [].forEach.call(d.querySelectorAll('.rv-ask'), function(e){ var q=e.getAttribute('data-q')||'', v=(e.value||'').trim(), req=e.getAttribute('data-req')==='1'; if(req && !v && !askMiss) askMiss=q; if(v) askLines.push('· '+q+': '+v); });
+      if(askMiss){ formMsg.style.color='#e05a6e'; formMsg.textContent='“'+askMiss+'” 항목을 입력해주세요'; return; }
       formMsg.textContent='';
       var svcName=state.svc?state.svc.name:'(미선택)';
       var memoV=(memoEl.value||'').trim(), bookDate=ymd(state.date), bookTime=state.time;
+      var fullMemo=memoV+(askLines.length?((memoV?'\n':'')+askLines.join('\n')):'');
       // 슬롯 마감은 '카톡 방 연결' 버튼을 누를 때 → 여기선 메시지 생성 + 명단 기록만
-      pendingBooking={ date:bookDate, time:bookTime, name:nm, phone:ph, menu:svcName, visit:state.visit||'', memo:memoV };
+      pendingBooking={ date:bookDate, time:bookTime, name:nm, phone:ph, menu:svcName, visit:state.visit||'', memo:fullMemo };
       var dateStr=state.y+'년 '+(state.m+1)+'월 '+state.date.getDate()+'일 ('+DOW[state.date.getDay()]+')';
       var msg=tpl.replace(/\{날짜\}/g,dateStr).replace(/\{시간\}/g,bookTime||'').replace(/\{시술\}/g,svcName).replace(/\{이름\}/g,nm).replace(/\{연락처\}/g,ph).replace(/\{방문\}/g,state.visit||'-').replace(/\{메모\}/g,memoV||'-');
+      if(askLines.length) msg += '\n' + askLines.join('\n');
       d.querySelector('.rv-preview').value=msg;
       showStep('done');
       try{ track('resv',{step:'submit', svc:svcName}); track('click',{kind:'cta', label:'예약하기'}); }catch(_){}

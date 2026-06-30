@@ -275,6 +275,13 @@
           <button data-days="0">평생</button>
         </div>
       </div>
+      <div class="field">
+        <label>자료 보관 <span style="font-weight:400;color:var(--muted);font-size:12px;">· 통계(방문·클릭) 기록을 얼마나 보관할지</span></label>
+        <div class="seg period" id="seg-retention">
+          <button data-months="24" class="on">2년</button>
+          <button data-months="0">평생</button>
+        </div>
+      </div>
       <button class="btn primary" id="gen-btn" style="width:100%; padding:13px; font-size:14px;">코드 생성</button>
 
       <div class="gen-result" id="gen-result">
@@ -366,7 +373,7 @@
 <script>
 (function(){
   var AUTH=null; try{ AUTH=JSON.parse(sessionStorage.getItem('cmh-master')||'null'); }catch(e){}
-  var industry='basic', days=365;   // industry 필드를 '등급'으로 재활용 (basic/pro/premium)
+  var industry='basic', days=365, retentionMonths=24;   // industry='등급'(basic/pro/premium), retentionMonths=자료 보관(24=2년, 0=평생)
   var TIER_LBL={basic:'베이직', pro:'프로', premium:'프리미엄'};
   var TIER_COLOR={basic:'#5B8CFF', pro:'#A78BFF', premium:'#E0B84A'};
   function tierOf(u){ return TIER_LBL[u.industry] ? u.industry : 'basic'; }   // 레거시(personal/beauty/brand)=베이직 폴백
@@ -381,6 +388,7 @@
   }
   bindSeg($('seg-industry'),'data-ind',function(v){ industry=v; });
   bindSeg($('seg-period'),'data-days',function(v){ days=parseInt(v,10); });
+  bindSeg($('seg-retention'),'data-months',function(v){ retentionMonths=parseInt(v,10); });
   $('seg-industry').querySelector('[data-ind="basic"]').classList.add('on');
   $('seg-period').querySelector('[data-days="365"]').classList.add('on');
 
@@ -407,6 +415,8 @@
       }
       if(res&&res.ok){
         lastCode=code;
+        // 자료 보관기간 저장 (best-effort — 보관 SQL 미실행이어도 발급은 정상)
+        try{ await window.laRpc('li_master_set_retention',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:code, p_retention_months:(retentionMonths>0?retentionMonths:null) }); }catch(_){}
         var planL = days===30?'체험판 · 1개월': days===90?'3개월': days===180?'6개월': days===365?'정품 · 1년': days===0?'평생':days+'일';
         $('cc-code').textContent=code;
         $('cc-name').textContent=name;
@@ -417,7 +427,7 @@
         $('gen-result').classList.add('show');
         try{ $('cc-invite').value=buildInvite(code, name, planL); $('cc-invite-wrap').style.display=''; }catch(_){}
         $('f-name').value='';
-        toast(planL+' 코드 생성 완료 ✓');
+        toast(planL+' · 보관 '+(retentionMonths>0?'2년':'평생')+' 코드 생성 ✓');
         loadList();
       } else if(res&&res.reason==='auth'){ toast('마스터 인증 만료 · 다시 로그인'); }
       else { toast('생성 실패 ('+((res&&res.reason)||'SQL 미실행?')+')'); }

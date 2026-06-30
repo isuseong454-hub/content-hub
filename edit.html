@@ -3123,6 +3123,10 @@
     .rq-btn{flex:1; font-size:12px; font-weight:700; padding:10px 6px; border-radius:10px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); cursor:pointer; font-family:var(--sans);}
     .rq-btn.on{background:var(--grad); color:#fff; border-color:var(--coral);}
     .rq-btn.ghost{color:var(--muted);}
+    .rs-ask{display:flex; gap:6px; align-items:center; margin-bottom:7px;}
+    .rs-ask .rs-in{flex:1;}
+    .rs-ask-req{flex:0 0 auto; font-size:11px; font-weight:700; padding:9px 11px; border-radius:9px; border:1px solid var(--hair); background:var(--paper); color:var(--muted); cursor:pointer;}
+    .rs-ask-req.on{background:var(--coral-soft); border-color:var(--coral); color:var(--coral);}
     .rs-toggle-row{display:flex; align-items:center; justify-content:space-between; padding:11px 12px; border:1px solid var(--hair); border-radius:11px; background:var(--paper); margin-bottom:9px;}
     .rs-toggle-row .nm{font-size:13px; color:var(--ink);}
     .rs-chip{display:inline-flex; align-items:center; gap:6px; background:var(--coral-soft); color:var(--coral); border-radius:8px; padding:6px 10px; font-size:12px; margin:0 6px 6px 0;}
@@ -6716,7 +6720,7 @@
     msgTpl:'[예약 신청]\n· 날짜: {날짜}\n· 시간: {시간}\n· 시술: {시술}\n· 성함: {이름}\n· 연락처: {연락처}\n· 방문: {방문}\n· 요청사항: {메모}\n\n위 내용으로 예약 부탁드립니다 :)',
     note:'카톡 DM이 많아 실시간 답변은 어려워요. 오전 11시·저녁 10시에 모아서 답변드립니다 🙏',
     notice:'· "알아서 해주세요"는 신청이 어려워요 — 원하는 스타일을 적어주세요.\n· 변경/취소는 시술 24시간 전까지 카톡으로 알려주세요.',
-    blockedDates:[], blockedSlots:{}
+    askFields:[], blockedDates:[], blockedSlots:{}
   };
   var resvCfg = JSON.parse(JSON.stringify(DEFAULT_RESV));
   // 한국 공휴일 (2026~2027, YYYY-MM-DD). 음력(설·추석·부처님)은 해당 연도 환산값.
@@ -8739,8 +8743,25 @@
       box.querySelector('[data-sadd]').onclick=function(){ tp.services.push({name:'',price:'',dur:''}); renderTopicEdit(); };
     }
     function renderMenuTab(){
-      setupBody.innerHTML='<div class="rs-lbl">시술 메뉴 <span>· 주제 탭으로 나눠 손님이 고르기 쉽게</span></div><div class="rs-ttabs" id="rs-ttabs"></div><div id="rs-topic-edit"></div>';
-      renderTopicTabs(); renderTopicEdit();
+      setupBody.innerHTML='<div class="rs-lbl">시술 메뉴 <span>· 주제 탭으로 나눠 손님이 고르기 쉽게</span></div><div class="rs-ttabs" id="rs-ttabs"></div><div id="rs-topic-edit"></div>'
+        +'<div class="rs-lbl" style="margin-top:20px;">추가 질문 <span>· 고객 예약 폼에 더 받고 싶은 정보 (선택)</span></div><div id="rs-ask-list"></div>'
+        +'<div style="font-size:11px;color:var(--muted);margin:6px 2px 0;line-height:1.5;">디자이너마다 필요한 게 달라요 — 예: “원하는 길이?”, “펌·염색 경험?”, “알레르기?”. 적은 질문이 손님 예약 폼에 그대로 떠요.</div>';
+      renderTopicTabs(); renderTopicEdit(); renderAskList();
+    }
+    function renderAskList(){
+      var box=document.getElementById('rs-ask-list'); if(!box) return;
+      if(!Array.isArray(resvCfg.askFields)) resvCfg.askFields=[];
+      var html=resvCfg.askFields.map(function(f,i){
+        return '<div class="rs-ask"><input class="rs-in" placeholder="질문 (예: 원하는 길이?)" value="'+esc(f.q||'')+'" data-aq="'+i+'">'
+          +'<button type="button" class="rs-ask-req'+(f.required?' on':'')+'" data-areq="'+i+'">필수</button>'
+          +'<span class="rs-x" data-arm="'+i+'">×</span></div>';
+      }).join('');
+      html+='<span class="rs-add" data-aadd>＋ 질문 추가</span>';
+      box.innerHTML=html;
+      box.querySelectorAll('[data-aq]').forEach(function(i){ i.oninput=function(){ resvCfg.askFields[+i.getAttribute('data-aq')].q=i.value; }; });
+      box.querySelectorAll('[data-areq]').forEach(function(b){ b.onclick=function(){ var f=resvCfg.askFields[+b.getAttribute('data-areq')]; f.required=!f.required; b.classList.toggle('on', f.required); }; });
+      box.querySelectorAll('[data-arm]').forEach(function(x){ x.onclick=function(){ resvCfg.askFields.splice(+x.getAttribute('data-arm'),1); renderAskList(); }; });
+      box.querySelector('[data-aadd]').onclick=function(){ resvCfg.askFields.push({q:'', required:false}); renderAskList(); var ins=box.querySelectorAll('[data-aq]'); var last=ins[ins.length-1]; if(last) last.focus(); };
     }
     function renderBdChips(){
       var box=document.getElementById('rs-bd-chips'); if(!box) return;
