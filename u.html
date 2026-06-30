@@ -1015,7 +1015,7 @@
   /* ═══════ 스킨: 뱅하우스 (박스 탈출 · 에디토리얼 흐름) — 색은 테마, "구조"만 바꿈 ═══════ */
   html.has-skin .block{ background:transparent; border:none; box-shadow:none; border-radius:0; padding:18px 4px; margin-bottom:2px; }
   html.has-skin .pg-card, html.has-skin .gcard, html.has-skin .arc-card, html.has-skin .lbc{ box-shadow:none; }
-  html.has-skin .pane-title{ text-align:center; font-weight:800; }
+  html.has-skin .pane-title{ text-align:center; font-weight:600; }
   /* 스킨(에디토리얼) = 위 "주소 바"(contenthub.kr/u/…) 숨겨 시안처럼 맨 위부터 깔끔하게 — 관리자 톱니만 살짝 떠 있게 (진입 유지) */
   html.has-skin .topbar{ position:absolute; top:0; left:0; right:0; justify-content:flex-end; padding:12px 16px 0; margin:0; z-index:6; pointer-events:none; }
   html.has-skin .topbar .handle{ display:none; }
@@ -1114,7 +1114,7 @@
   a.block .left{display:flex; align-items:center; gap:11px;}
   a.block .chev{color:var(--muted); font-size:15px;}
 
-  .pane-title{font-family:var(--serif); font-size:17px; font-weight:600; margin:4px 2px 12px;}
+  .pane-title{font-family:var(--sans); font-size:16px; font-weight:600; letter-spacing:-.01em; margin:4px 2px 12px;}   /* 항상 Pretendard(읽기) — impact 스킨의 Black Han Sans로 과하게 굵어지던 것 방지 (.arc-h와 동일 원칙) */
 
   /* ── 아카이브(매거진 카드) ── */
   .arc-search{
@@ -3211,6 +3211,9 @@
   };
   function buildReservation(cfg){
     var home=document.querySelector('[data-pane="home"]'); if(!home) return;
+    // 이전 렌더 잔재 제거(편집 미리보기서 재호출 시 고정바·모달 누적 방지)
+    try{ [].forEach.call(document.querySelectorAll('.resv-sticky'), function(x){ x.remove(); }); }catch(_){}
+    try{ var _om=document.getElementById('resv-modal'); if(_om) _om.remove(); }catch(_){}
     var DOW=['일','월','화','수','목','금','토'];
     var closedSet={}; String(cfg.closedDays||'').split(/[,\s/·]+/).forEach(function(s){ s=s.trim().replace('요일',''); var i=DOW.indexOf(s); if(i>=0) closedSet[i]=1; });
     var blockedDates={}; (cfg.blockedDates||[]).forEach(function(x){ blockedDates[x]=1; });
@@ -3267,21 +3270,29 @@
     closeBtn.onclick=closeModal;
     ov.addEventListener('click', function(e){ if(e.target===ov) closeModal(); });
 
-    // 예약 CTA: 'reservation' 블록(EXTRA.reservation 렌더)을 찾아 제목 갱신 + 버튼 연결 (블록이라 순서변경·드래그 가능)
+    // 예약 버튼: 'reservation' 블록(.resv-cta)을 찾아(없으면 생성) 모달에 연결 + cfg.display로 표시 방식 결정
+    var disp = cfg.display || 'card';
     var cta=home.querySelector('.resv-cta');
-    if(cta){
-      var _bh=cta.querySelector('.block-h'); if(_bh) _bh.innerHTML=emph(cfg.title||'예약하기');
-      var _btn=cta.querySelector('.resv-cta-btn'); if(_btn){ _btn.innerHTML='📅 '+esc(cfg.title||'예약하기'); _btn.onclick=openModal; }
-    } else {
-      // 레거시(예약 블록 없음): 새로 만들어 갤러리(사진 나열) 바로 아래에 꽂기
+    if(!cta){
+      // 예약 블록이 없으면 새로 만들어 갤러리(사진 나열) 바로 아래에 꽂기
       cta=document.createElement('div'); cta.className='block resv-cta la-dyn';
       cta.innerHTML='<div class="block-h">'+emph(cfg.title||'예약하기')+'</div><div class="sub" style="margin-top:4px;">날짜·시간 골라 카톡으로 간편 예약</div><button type="button" class="resv-cta-btn">📅 '+esc(cfg.title||'예약하기')+'</button>';
-      cta.querySelector('.resv-cta-btn').onclick=openModal;
       var lastGal=null; [].forEach.call(home.querySelectorAll('[data-galblock]'), function(g){ if(g.parentNode===home) lastGal=g; });
       if(lastGal){ if(lastGal.nextSibling) home.insertBefore(cta, lastGal.nextSibling); else home.appendChild(cta); }
       else home.appendChild(cta);
     }
-    // 플로팅 예약 버튼은 만들지 않음(네이버 등 채널 플로팅과 겹침 방지) — 예약은 위 인라인 버튼으로
+    // 버튼 제목·연결은 항상 (숨김이어도 data-go="reserve" 등에서 모달 열 수 있게)
+    var _bh=cta.querySelector('.block-h'); if(_bh) _bh.innerHTML=emph(cfg.title||'예약하기');
+    var _btn=cta.querySelector('.resv-cta-btn'); if(_btn){ _btn.innerHTML='📅 '+esc(cfg.title||'예약하기'); _btn.onclick=openModal; }
+    // 표시 방식: 본문 카드(기본) / 하단 고정바 / 숨김
+    if(disp==='sticky' || disp==='off'){ cta.style.display='none'; }
+    if(disp==='sticky'){
+      var rbar=document.createElement('div'); rbar.className='cta-sticky resv-sticky';
+      rbar.innerHTML='<a href="#" data-resv-sticky="1">📅 '+esc(cfg.title||'예약하기')+'</a>';
+      rbar.querySelector('a').addEventListener('click', function(e){ e.preventDefault(); openModal(); });
+      document.body.appendChild(rbar);
+      try{ document.body.classList.add('has-cta-sticky'); }catch(_){}
+    }
 
     var state={ y:0, m:0, date:null, time:null, svc:null, visit:'' };
     var now=new Date(); state.y=now.getFullYear(); state.m=now.getMonth();

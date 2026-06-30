@@ -2513,7 +2513,7 @@
             <div class="tpl" data-ic="🛡" data-nm="반박 제거"><span class="tic">🛡</span><span><span class="tn">반박 제거</span><span class="ts">"이래서 망설여요" 해소</span></span></div>
             <div class="tpl" data-ic="🛡" data-nm="보장 배지"><span class="tic">🛡</span><span><span class="tn">보장 배지</span><span class="ts">환불·만족 보장</span></span></div>
             <div class="tpl" data-ic="⏳" data-nm="카운트다운"><span class="tic">⏳</span><span><span class="tn">카운트다운</span><span class="ts">마감 긴박감</span></span></div>
-            <div class="tpl" data-ic="📌" data-nm="예약 & 구매 버튼" data-layout="sticky"><span class="tic">📌</span><span><span class="tn">예약 & 구매 버튼</span><span class="ts">스크롤해도 보이는 버튼 · 고정 on/off</span></span></div>
+            <div class="tpl" data-ic="🛒" data-nm="구매 버튼" data-layout="sticky"><span class="tic">🛒</span><span><span class="tn">구매 버튼</span><span class="ts">구매·신청 링크 · 고정 on/off</span></span></div>
             <div class="tpl" data-ic="🔢" data-nm="이용 방법"><span class="tic">🔢</span><span><span class="tn">이용 방법</span><span class="ts">1·2·3 단계</span></span></div>
             <div class="tpl" data-ic="👆" data-nm="CTA 버튼"><span class="tic">👆</span><span><span class="tn">CTA 버튼</span><span class="ts">행동유도 버튼</span></span></div>
             <div class="tpl" data-ic="🏷" data-nm="흐르는 태그 띠"><span class="tic">🏷</span><span><span class="tn">흐르는 태그 띠</span><span class="ts">키워드가 흐름</span></span></div>
@@ -2924,6 +2924,10 @@
     .rs-dow{display:flex; gap:5px; flex-wrap:wrap;}
     .rs-dow button{width:40px; padding:9px 0; border:1px solid var(--hair); border-radius:9px; background:var(--paper); color:var(--ink); font-size:13px; cursor:pointer;}
     .rs-dow button.on{background:var(--grad); color:#fff; border-color:var(--coral); font-weight:600;}
+    .rs-disp{display:flex; gap:6px;}
+    .rs-disp button{flex:1; padding:11px 4px; border:1px solid var(--hair); border-radius:10px; background:var(--paper); color:var(--ink); font-size:12.5px; font-weight:600; cursor:pointer;}
+    .rs-disp button.on{background:var(--grad); color:#fff; border-color:var(--coral);}
+    .rs-disp-hint{font-size:11.5px; color:var(--muted); margin:8px 2px 0; line-height:1.5;}
     .rs-toggle-row{display:flex; align-items:center; justify-content:space-between; padding:11px 12px; border:1px solid var(--hair); border-radius:11px; background:var(--paper); margin-bottom:9px;}
     .rs-toggle-row .nm{font-size:13px; color:var(--ink);}
     .rs-chip{display:inline-flex; align-items:center; gap:6px; background:var(--coral-soft); color:var(--coral); border-radius:8px; padding:6px 10px; font-size:12px; margin:0 6px 6px 0;}
@@ -3723,7 +3727,7 @@
     '강의 · 전자책':'link','숫자 스탯':'stat','후기':'review','문의 폼':'contact',
     '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','문의·신청':'lead','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service','가격표 · 예약':'service',
     '대표 사진 쇼케이스':'lookbook','랭킹 · 가격':'ranking','매장 · 위치':'location',
-    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','예약 & 구매 버튼':'cta','카운트다운':'countdown','이용 방법':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best'
+    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','예약 & 구매 버튼':'cta','구매 버튼':'cta','카운트다운':'countdown','이용 방법':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best'
   };
   var SCHEMA = {
     event:[['text','태그','이번 달'],['text','제목','6월 신규 등록 시 1:1 컨설팅 무료'],['date','종료일','2026-06-30'],['url','링크(선택)',''],['photo','사진 (선택 · 은은한 리본에 작은 썸네일)','']],
@@ -3753,7 +3757,7 @@
     lead:[['text','제목','상담·문의 남기기'],['text','버튼 글자','신청하기'],['text','안내 문구(선택)','이름·연락처를 남겨주시면 빠르게 연락드릴게요']],
     service:[['text','제목','이런 걸 도와드려요'],['list','서비스 (이름·가격·버튼·링크)','이름|가격(예: 60,000원)|버튼 글자(예약/신청/결제)|링크']],
     video:[['url','유튜브 / 비메오 영상 링크','https://youtu.be/... 또는 vimeo.com/...']],
-    cta:[['text','버튼 글자','지금 예약하기'],['url','링크','']],
+    cta:[['text','버튼 글자','지금 구매하기'],['url','링크','']],
     countdown:[['text','제목','마감 임박! 지금 신청하세요'],['date','마감일','2026-06-30'],['text','버튼 글자(선택)','지금 신청'],['url','링크(선택)','']],
     steps:[['text','제목','이렇게 진행돼요'],['list','단계 (제목·설명)','단계 제목|설명']],
     guarantee:[['text','제목','100% 환불 보장'],['textarea','설명','마음에 안 드시면 100% 환불해드려요. 부담 없이 시작하세요.']],
@@ -4473,6 +4477,7 @@
     '강의 신청': ['강의 신청', '신청하기', '관심 있으시면 이름·연락처를 남겨주세요'],
     'CTA 버튼': ['지금 예약하기', ''],
     '예약 & 구매 버튼': ['지금 예약하기', ''],
+    '구매 버튼': ['지금 구매하기', ''],
     '카운트다운': ['마감 임박! 지금 신청하세요', '', '지금 신청', ''],
     '이용 방법': ['이렇게 진행돼요', [['상담 신청','부담 없이 문의 남겨주세요'],['1:1 맞춤 진단','문제를 정확히 파악하고 방향을 잡아요'],['실행 & 케어','결과가 날 때까지 함께해요']]],
     '보장 배지': ['100% 환불 보장', '마음에 안 드시면 100% 환불해드려요. 부담 없이 시작하세요.'],
@@ -4948,6 +4953,29 @@
         +'<b style="flex:0 0 auto;">👁 '+x.n+'</b></div>';
     }).join('');
   }
+  // 🛍 상품별 클릭 — s.labels(라벨별 클릭)를 내 상품목록과 대조해 분류별로 보여줌 (SQL 변경 없이 기존 데이터 사용)
+  function statProductBars(labels){
+    var prods=((window.__getProductsData?window.__getProductsData():[])||[]).filter(function(p){ return (p.name||'').trim(); });
+    if(!prods.length) return '<div style="color:var(--muted);font-size:12.5px;padding:8px 2px;">스토어에 등록된 상품이 없어요 · 상품을 올리면 클릭이 여기 모여요</div>';
+    var clickMap={}; (labels||[]).forEach(function(x){ clickMap[x.label]=(clickMap[x.label]||0)+(x.n||0); });
+    function group(kind, title){
+      var arr=prods.filter(function(p){ return (p.kind||'coupang')===kind; }).map(function(p){ return {name:p.name, n:clickMap[p.name]||0}; });
+      if(!arr.length) return '';
+      arr.sort(function(a,b){ return b.n-a.n; });
+      var max=1; arr.forEach(function(x){ if(x.n>max) max=x.n; });
+      var rows=arr.map(function(x){
+        return '<div style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12.5px;">'
+          +'<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escT(x.name)+'</span>'
+          +'<span style="flex:0 0 80px;height:9px;border-radius:5px;background:var(--coral-soft);overflow:hidden;"><span style="display:block;height:100%;width:'+Math.round(x.n/max*100)+'%;background:var(--grad);"></span></span>'
+          +'<b style="flex:0 0 auto;">'+x.n+'</b></div>';
+      }).join('');
+      return '<div style="font-size:11.5px;font-weight:700;color:var(--muted);margin:10px 2px 4px;">'+title+'</div>'+rows;
+    }
+    var html=group('mine','내 상품 · 클래스 · 서비스')+group('coupang','추천 제품');
+    var total=0; prods.forEach(function(p){ total+=clickMap[p.name]||0; });
+    if(total===0) html+='<div style="color:var(--muted);font-size:11.5px;padding:6px 2px 0;">아직 상품 클릭이 없어요 · 손님이 스토어에서 상품을 누르면 쌓여요</div>';
+    return html;
+  }
   function renderStats(s){
     window.__statsCache=s;
     var conv=0; (s.labels||[]).forEach(function(x){ if(x.label==='예약하기'||x.label==='상담하기') conv+=(x.n||0); });
@@ -4960,6 +4988,7 @@
       +'<div style="display:flex;gap:9px;margin-bottom:6px;">'+statBox('예약·상담 클릭',conv)+statBox('전환율',rate+'%')+'</div>'
       +statTrend(s)
       +'<div class="tcat">👁 많이 본 게시물 <span style="font-weight:400;color:var(--muted);">· 권위로 홈에 추천돼요</span></div>'+statPostBars(s.posts)
+      +'<div class="tcat">🛍 상품별 클릭 <span style="font-weight:400;color:var(--muted);">· 분류별 · 무엇이 끌리나</span></div>'+statProductBars(s.labels)
       +'<div class="tcat">유입 경로</div>'+statBars(s.sources,'src')
       +'<div class="tcat">많이 누른 것</div>'+statBars(s.labels,'label');
   }
@@ -6335,7 +6364,7 @@
 
   // ════ 예약하기 (단독 기능) — 설정 데이터 모델 ════
   var DEFAULT_RESV = {
-    on:false, title:'예약하기',
+    on:false, title:'예약하기', display:'card',
     closedDays:'월,화', start:'11:00', end:'17:00', interval:60, leadDays:30,
     showHolidays:true,
     topics:[
@@ -6499,6 +6528,7 @@
   function postById(id){ for(var i=0;i<postsData.length;i++){ if(postsData[i].id===id) return postsData[i]; } return null; }
   window.__postTitleById=function(id){ var p=postById(id); return p?(p.title||'(제목 없음)'):'(삭제된 글)'; };
   var productsData = [];        // [{name,price,url}] → 손님 제품 탭
+  window.__getProductsData = function(){ return productsData; };   // 분석(다른 <script> 스코프)에서 상품별 클릭 집계용
   var qnaData = [];             // [{q,a}] → 손님 Q&A 탭
   var archiveView = 'list';    // 'cards' | 'photo' | 'list'(매거진·기본) → 손님 아카이브 보기 방식
   var CATS_DEFAULT = ['정보·노하우','후기·사례','소식·이벤트'];
@@ -8303,6 +8333,12 @@
       var h='<div class="rs-lbl">특정일 임시 휴무 <span>· 달력에서 날짜를 눌러 막아요</span></div><div class="rs-mini" id="rs-bd-cal"></div><div id="rs-bd-chips" style="margin-top:9px;"></div>';
       h+='<div class="rs-lbl">영업 시간 · 간격</div><div class="rs-row3"><input class="rs-in" id="rs-start" placeholder="시작" value="'+esc(resvCfg.start)+'"><input class="rs-in" id="rs-end" placeholder="종료" value="'+esc(resvCfg.end)+'"><input class="rs-in" id="rs-interval" placeholder="간격(분)" value="'+esc(resvCfg.interval)+'"></div>';
       h+='<div class="rs-lbl">정기 휴무 요일</div><div class="rs-dow" id="rs-dow">'+DOW.map(function(d,i){ return '<button data-dow="'+i+'"'+(closed[i]?' class="on"':'')+'>'+d+'</button>'; }).join('')+'</div>';
+      h+='<div class="rs-lbl">예약 버튼 표시 위치 <span>· 손님 페이지에서 어떻게 보일지</span></div>';
+      h+='<div class="rs-disp" id="rs-disp">'
+        + '<button type="button" data-disp="card"'+((resvCfg.display||'card')==='card'?' class="on"':'')+'>본문 카드</button>'
+        + '<button type="button" data-disp="sticky"'+(resvCfg.display==='sticky'?' class="on"':'')+'>하단 고정바</button>'
+        + '<button type="button" data-disp="off"'+(resvCfg.display==='off'?' class="on"':'')+'>숨김</button>'
+        + '</div><div class="rs-disp-hint" id="rs-disp-hint"></div>';
       h+='<div class="rs-lbl">표시</div><div class="rs-toggle-row"><span class="nm">공휴일 자동 표시 (빨강·휴무)</span><span class="sw'+(resvCfg.showHolidays?' on':'')+'" id="rs-holi"><i></i></span></div>';
       h+='<div class="rs-lbl">예약 가능 기간 <span>· 오늘부터 N일까지만</span></div><input class="rs-in" id="rs-lead" placeholder="예: 30" value="'+esc(resvCfg.leadDays)+'">';
       setupBody.innerHTML=h;
@@ -8312,6 +8348,10 @@
       document.getElementById('rs-lead').oninput=function(){ resvCfg.leadDays=parseInt(this.value,10)||0; };
       document.querySelectorAll('#rs-dow button').forEach(function(b){ b.onclick=function(){ b.classList.toggle('on'); resvCfg.closedDays=collectClosed(); renderResvMiniCal(); }; });
       var holi=document.getElementById('rs-holi'); holi.onclick=function(){ resvCfg.showHolidays=!resvCfg.showHolidays; holi.classList.toggle('on', resvCfg.showHolidays); renderResvMiniCal(); };
+      var dispHints={card:'본문 글 흐름 안에 예약 카드로 노출 (기본)', sticky:'화면 아래 항상 떠 있는 고정바로 — 손님이 어디서든 바로 예약', off:'버튼을 숨김 (다른 버튼에서 예약으로 연결할 때)'};
+      function setDispHint(){ var el=document.getElementById('rs-disp-hint'); if(el) el.textContent=dispHints[resvCfg.display||'card']||''; }
+      document.querySelectorAll('#rs-disp button').forEach(function(b){ b.onclick=function(){ resvCfg.display=b.dataset.disp; document.querySelectorAll('#rs-disp button').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); setDispHint(); }; });
+      setDispHint();
       renderResvMiniCal(); renderBdChips();
     }
     var rsCalY=null, rsCalM=null;
