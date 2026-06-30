@@ -1574,6 +1574,29 @@
   .an-cmp.up{color:#34D399; background:rgba(52,211,153,.13);}
   .an-cmp.flat{color:var(--muted); background:rgba(255,255,255,.05);}
   .an-cmp.down{color:#F87171; background:rgba(248,113,113,.13);}
+  /* 🎯 목표 게이지 */
+  .an-goal{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:14px; margin-top:13px;}
+  .an-goal.done{border-color:rgba(233,196,106,.5); background:radial-gradient(120% 80% at 50% 0%, rgba(233,196,106,.12), transparent 62%), var(--surface);}
+  .an-goal .ag-h{font-size:13px; font-weight:800; color:var(--ink);}
+  .an-goal .ag-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .an-goal .ag-edit{font-size:11px; color:var(--muted); background:var(--soft); border:1px solid var(--hair); padding:5px 9px; border-radius:8px; cursor:pointer; font-family:var(--sans);}
+  .an-goal .ag-bar{height:11px; border-radius:6px; background:var(--coral-soft); overflow:hidden; margin-bottom:8px;}
+  .an-goal .ag-bar > span{display:block; height:100%; background:var(--grad); border-radius:6px; transition:width .5s;}
+  .an-goal.done .ag-bar > span{background:linear-gradient(120deg,#E9C46A,#C9962F);}
+  .an-goal .ag-row{font-size:12.5px; color:#d6d1e0;} .an-goal .ag-row b{font-size:16px; color:var(--ink);} .an-goal .ag-row span{color:var(--muted); font-size:11.5px;}
+  .an-goal .ag-done{color:#E9C46A !important; font-weight:800;}
+  .an-goal .ag-set{display:flex; gap:7px; margin:9px 0 6px;}
+  .an-goal .ag-set input{flex:1; min-width:0; border:1px solid var(--hair); background:var(--paper); border-radius:9px; padding:9px 11px; font-size:14px; color:var(--ink); font-family:var(--sans);}
+  .an-goal .ag-set button{flex:0 0 auto; background:var(--grad); color:#fff; border:none; border-radius:9px; padding:9px 16px; font-size:13px; font-weight:800; cursor:pointer; font-family:var(--sans);}
+  .an-goal .ag-sub{font-size:11.5px; color:var(--muted); line-height:1.5;} .an-goal .ag-sub b{color:var(--ink);}
+  /* 📅 이번 주 vs 지난주 */
+  .aw-box{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:6px 13px;}
+  .aw-row{display:flex; align-items:center; gap:9px; padding:9px 0; border-bottom:1px solid var(--hair); font-size:12.5px;}
+  .aw-row:last-child{border-bottom:none;}
+  .aw-row .aw-l{flex:0 0 64px; color:var(--muted);}
+  .aw-row .aw-v{font-size:15px; color:var(--ink);}
+  .aw-row .aw-lw{color:var(--muted); font-size:11px;}
+  .aw-row .an-cmp{margin-left:auto;}
   /* 퍼널 */
   .an-funnel{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:15px 14px 9px;}
   .an-fstage{margin-bottom:5px;}
@@ -5241,15 +5264,37 @@
     if(!a) return '';
     return '<div class="an-alert">🔔 '+a+' — 무슨 콘텐츠 덕분인지 확인해 보세요!</div>';
   }
+  // 🎯 이번 달 예약·상담 목표 게이지 (로컬 저장 · 계정별)
+  function anGoalKey(){ try{ var a=JSON.parse(localStorage.getItem('la-auth')||'null'); return 'cm-an-goal-'+((a&&a.code)||'x'); }catch(_){ return 'cm-an-goal-x'; } }
+  function anMonthConv(s){ var now=new Date(), mm=('0'+(now.getMonth()+1)).slice(-2), c=0; ((s.series&&s.series.conv)||[]).forEach(function(x){ if(String(x.d).slice(0,2)===mm) c+=(x.n||0); }); return c; }
+  function anGoal(s){
+    var goal=parseInt(localStorage.getItem(anGoalKey())||'0',10)||0, cur=anMonthConv(s);
+    if(!goal) return '<div class="an-goal"><div class="ag-h">🎯 이번 달 예약·상담 목표</div><div class="ag-set"><input id="an-goal-in" type="number" min="1" inputmode="numeric" placeholder="예: 20"><button type="button" id="an-goal-save">설정</button></div><div class="ag-sub">이번 달 <b>'+cur+'건</b> · 목표를 정하면 진행률이 보여요</div></div>';
+    var pct=Math.min(100,Math.round(cur/goal*100)), done=cur>=goal;
+    return '<div class="an-goal'+(done?' done':'')+'"><div class="ag-top"><span class="ag-h">🎯 이번 달 예약·상담</span><button type="button" id="an-goal-edit" class="ag-edit">목표 '+goal+'건 · 수정</button></div><div class="ag-bar"><span style="width:'+pct+'%"></span></div><div class="ag-row"><b>'+cur+'</b> / '+goal+'건 <span>('+pct+'%)</span>'+(done?' <span class="ag-done">🎉 달성!</span>':'')+'</div></div>';
+  }
+  // 📅 이번 주 vs 지난주 (최근 7일 vs 직전 7일)
+  function anWeekCompare(s){
+    var metrics=[['visitors','방문'],['views','조회'],['conv','예약·상담']];
+    var rows=metrics.map(function(m){
+      var arr=(s.series&&s.series[m[0]])||[]; if(arr.length<14) return '';
+      var tw=arr.slice(-7).reduce(function(a,b){return a+(b.n||0);},0), lw=arr.slice(-14,-7).reduce(function(a,b){return a+(b.n||0);},0);
+      var c=anCmp(tw,lw);
+      return '<div class="aw-row"><span class="aw-l">'+m[1]+'</span><b class="aw-v">'+anNum(tw)+'</b><span class="aw-lw">지난주 '+anNum(lw)+'</span><span class="an-cmp '+c.cls+'">'+c.txt+'</span></div>';
+    }).filter(Boolean);
+    if(!rows.length) return '';
+    return '<div class="an-tcat">📅 이번 주 vs 지난주 <span>· 최근 7일</span></div><div class="aw-box">'+rows.join('')+'</div>';
+  }
   function anOverview(s){
-    return anVerdict(s)+anAlert(s)+anCards(s)
+    return anVerdict(s)+anAlert(s)+anCards(s)+anGoal(s)
       +'<div class="an-tcat">🪣 손님 여정 (퍼널) <span>· 어디서 빠지나</span></div>'+anFunnel(s)
       +'<div class="an-tcat">한눈에 <span>· 잘됨 vs 손볼 것</span></div>'+anGoodBad(s);
   }
   var AN_METRICS=[['visitors','방문'],['views','조회'],['conv','예약'],['store','스토어']];
   function anTrend(s){
     var btns=AN_METRICS.map(function(m,i){ return '<button class="'+(i===0?'on':'')+'" data-anm="'+m[0]+'">'+m[1]+'</button>'; }).join('');
-    return '<div class="an-tcat">📈 추이 <span>· 파란 = 내 평소 범위</span></div>'
+    return anWeekCompare(s)
+      +'<div class="an-tcat">📈 추이 <span>· 파란 = 내 평소 범위</span></div>'
       +'<div class="an-chartcard"><div class="an-metricrow">'+btns+'</div>'
       +'<svg class="an-linesvg" id="an-line" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>'
       +'<div class="an-legend"><span><i class="an-lgdot" style="background:#A78BFF"></i>이번 기간</span><span><i class="an-lgdot" style="background:rgba(69,113,232,.6)"></i>내 평소 범위</span></div></div>'
@@ -5335,7 +5380,12 @@
       document.querySelectorAll('.an-metricrow button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
       window.__anMetric=b.getAttribute('data-anm'); try{ anDrawLine(window.__anMetric); }catch(_){}
     }; });
+    // 🎯 목표 게이지 설정/수정
+    var gs=document.getElementById('an-goal-save'); if(gs) gs.onclick=function(){ var v=parseInt((document.getElementById('an-goal-in')||{}).value,10)||0; if(v>0){ try{ localStorage.setItem(anGoalKey(), v); }catch(_){} anRerenderOverview(); } };
+    var ge=document.getElementById('an-goal-edit'); if(ge) ge.onclick=function(){ try{ localStorage.removeItem(anGoalKey()); }catch(_){} anRerenderOverview(); };
+    var gi=document.getElementById('an-goal-in'); if(gi) gi.onkeydown=function(e){ if(e.key==='Enter'){ var b=document.getElementById('an-goal-save'); if(b) b.click(); } };
   }
+  function anRerenderOverview(){ var ov=document.querySelector('.an-pane[data-anpane="ov"]'); if(ov && window.__statsCache){ ov.innerHTML=anOverview(window.__statsCache); wireAnalytics(); } }
   window.__wireAnalytics=wireAnalytics; window.__anDrawLine=anDrawLine;
   function openStats(){
     stov.classList.add('open');
