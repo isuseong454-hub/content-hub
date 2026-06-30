@@ -3565,10 +3565,9 @@
     var chips='<span class="chip on" data-cat="">전체</span>'+cats.map(function(c){ return '<span class="chip" data-cat="'+esc(c)+'">'+esc(c)+'</span>'; }).join('');
     var bodyHtml;
     if(view==='list'){
-      var feat=null, rest=[]; live.forEach(function(p){ if(p.featured && !feat) feat=p; else rest.push(p); });   // 대표 1개 = 매거진
-      var fh='';
-      if(feat){ var fcov=feat.cover?' style="background-image:url('+esc(feat.cover)+');background-size:cover;background-position:center;"':'';
-        fh='<div data-pid="'+esc(feat.id)+'" data-cat="'+esc(feat.cat||'')+'" role="link" tabindex="0" class="arc-mag"><div class="arc-mag-ph"'+fcov+'></div><div class="arc-mag-grad"></div><span class="arc-mag-tag">★ 대표</span><div class="arc-mag-body">'+(feat.cat?'<div class="arc-mag-cat">'+esc(feat.cat)+'</div>':'')+'<div class="arc-h">'+esc(feat.title||'')+'</div>'+(feat.summary?'<div class="arc-mag-s">'+esc(feat.summary)+'</div>':'')+'</div></div>'; }
+      var feats=[], rest=[]; live.forEach(function(p){ if(p.featured) feats.push(p); else rest.push(p); });   // 대표 = 매거진 큰 카드 전부 (유형당 3개 제한이라 보통 소수)
+      var fh=feats.map(function(feat){ var fcov=feat.cover?' style="background-image:url('+esc(feat.cover)+');background-size:cover;background-position:center;"':'';
+        return '<div data-pid="'+esc(feat.id)+'" data-cat="'+esc(feat.cat||'')+'" role="link" tabindex="0" class="arc-mag"><div class="arc-mag-ph"'+fcov+'></div><div class="arc-mag-grad"></div><span class="arc-mag-tag">★ 대표</span><div class="arc-mag-body">'+(feat.cat?'<div class="arc-mag-cat">'+esc(feat.cat)+'</div>':'')+'<div class="arc-h">'+esc(feat.title||'')+'</div>'+(feat.summary?'<div class="arc-mag-s">'+esc(feat.summary)+'</div>':'')+'</div></div>'; }).join('');
       var rows=rest.map(function(p){ var col=catColor(p.cat); var th=p.cover?'<div class="arc-crow-th" style="background-image:url('+esc(p.cover)+');"></div>':'<div class="arc-crow-th">▦</div>';
         return '<div data-pid="'+esc(p.id)+'" data-cat="'+esc(p.cat||'')+'" role="link" tabindex="0" class="arc-crow" style="--c:'+col+';">'+th+'<div class="arc-crow-m">'+(p.cat?'<span class="arc-crow-badge">'+esc(p.cat)+'</span>':'')+'<div class="arc-h">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="arc-d">'+esc(p.summary)+'</div>':'')+'</div></div>'; }).join('');
       bodyHtml='<div id="arc-grid">'+fh+'<div class="arc-clist">'+rows+'</div></div>';
