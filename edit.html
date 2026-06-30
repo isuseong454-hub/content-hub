@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<title>내 페이지 편집 · 컨텐츠 허브</title>
+<title>컨텐츠 허브 — 컨텐츠를 자산으로 만드는 수익화 개인 홈페이지</title>
 <link rel="icon" type="image/png" sizes="192x192" href="la-192.png">
 <link rel="apple-touch-icon" href="la-180.png">
 <link rel="manifest" href="la-manifest.json">
@@ -370,6 +370,7 @@
   @keyframes lgGlow{0%,100%{filter:drop-shadow(0 3px 12px rgba(20,170,150,.35));} 50%{filter:drop-shadow(0 5px 18px rgba(20,170,150,.5));}}
   @keyframes lgFloat{0%,100%{transform:translateY(0);} 50%{transform:translateY(-7px);}}
   .login-t{font-family:var(--serif); font-size:22px; font-weight:700; color:var(--ink);}
+  .login-slogan{font-size:11.5px; font-weight:700; letter-spacing:.01em; margin:5px 0 2px; background:linear-gradient(95deg,#b79bff,#ff7fcf,#5fd9ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; opacity:.92;}
   .login-s{font-size:12.5px; color:var(--muted); margin:4px 0 16px; line-height:1.5;}
   .lg-seg{display:inline-flex; gap:2px; margin:0 0 14px; padding:3px; background:rgba(255,255,255,.06); border:1px solid rgba(45,212,191,.2); border-radius:999px;}
   .lg-seg button{border:none; background:none; color:#9b94b8; border-radius:999px; padding:6px 15px; font-size:12.5px; font-family:var(--sans); cursor:pointer; transition:background .12s, color .12s;}
@@ -463,9 +464,9 @@
   .tb-pro{display:inline-flex; align-items:center; font-size:9.5px; font-weight:900; letter-spacing:.04em; color:#fff; background:linear-gradient(120deg,#4571E8,#9B5AFF); padding:3px 8px; border-radius:7px; box-shadow:0 2px 8px rgba(123,90,255,.4); vertical-align:middle; white-space:nowrap;}
   .tb-prem{display:inline-flex; align-items:center; gap:2px; font-size:9.5px; font-weight:900; letter-spacing:.03em; color:#2a200a; background:linear-gradient(120deg,#F6DFA0,#E7C079 55%,#C99B43); padding:3px 9px; border-radius:7px; box-shadow:0 2px 10px rgba(231,192,121,.55); vertical-align:middle; white-space:nowrap;}
   /* 프로 전용 블록 (베이직일 때 자물쇠) */
-  .tpl-pro{position:relative; opacity:.62;}
-  .tpl-pro::after{content:'프로'; position:absolute; top:6px; right:7px; font-size:8.5px; font-weight:900; letter-spacing:.03em; color:#fff; background:linear-gradient(120deg,#4571E8,#9B5AFF); padding:2px 8px; border-radius:7px; box-shadow:0 2px 7px rgba(123,90,255,.45);}
-  .tpl-pro .tic{filter:grayscale(.5);}
+  /* 구성 추가 타일의 PRO 배지 = 모션·스킨과 동일한 .tier-badge 코너칩(우측 상단). 흐림·중복 라벨 폐기 */
+  .tpl.tpl-has-badge{padding-right:46px;}
+  .tpl>.tier-badge{top:7px; right:7px;}
   /* 프리미엄 전용 블록 (프로 이하일 때 골드 자물쇠) */
   .tpl-premlock{position:relative; opacity:.62;}
   .tpl-premlock::after{content:'💎 프리미엄'; position:absolute; top:6px; right:7px; font-size:8.5px; font-weight:900; color:#2a200a; background:linear-gradient(120deg,#F6DFA0,#C99B43); padding:2px 8px; border-radius:7px; box-shadow:0 2px 8px rgba(231,192,121,.5);}
@@ -694,6 +695,11 @@
   .acc-card > .acc-bd{display:none; margin-top:12px;}
   .acc-card.open > .acc-bd{display:block;}
   .acc-card .acc-sub{font-size:11px; color:var(--muted); font-weight:400; margin-left:6px;}
+  /* 🔗 채널·연락처 매니저 팝업 — #channels-card를 통째로 띄움(단일 소스). 카드 자체 헤더·테두리는 숨기고 필드만 노출 */
+  #linkch-host > .acc-card{border:none; background:transparent; box-shadow:none; padding:0; margin:0;}
+  #linkch-host > .acc-card > .acc-h{display:none;}
+  #linkch-host > .acc-card > .acc-bd{display:block !important; margin-top:0;}
+  #linkch-host > .acc-card > .acc-bd > .vhint{display:none;}   /* 팝업 자체 안내가 있으니 카드 내부 중복 안내 숨김 */
   @media(max-width:430px){ .gate-row{gap:10px;} .gate-card{padding:18px 9px 14px;} .gate-ico{width:50px; height:50px; font-size:24px; border-radius:15px;} .gate-d{font-size:10.5px;} .gate-mini{height:42px;} }
   /* 해시태그 예시·작성법 가이드 */
   .mini-guide-btn{font-size:10.5px; color:var(--coral); background:var(--coral-soft); border:1px solid rgba(45,212,191,.35); border-radius:7px; padding:2px 8px; cursor:pointer; font-family:var(--sans); font-weight:600; vertical-align:middle;}
@@ -965,7 +971,7 @@
   .sheet .desc{font-size:12px; color:var(--muted); margin-bottom:6px;}
   .tcat{font-size:12px; font-weight:600; color:var(--muted); margin:16px 2px 8px;}
   .tgrid{display:grid; grid-template-columns:1fr 1fr; gap:9px;}
-  .tpl{display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--hair); box-shadow:var(--shadow); border-radius:12px; padding:11px 12px; cursor:pointer; transition:transform .1s;}
+  .tpl{display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--hair); box-shadow:var(--shadow); border-radius:12px; padding:11px 12px; cursor:pointer; transition:transform .1s; position:relative;}
   .tpl:active{transform:scale(.97);}
   .tpl .tic{width:30px; height:30px; flex-shrink:0; border-radius:8px; background:var(--coral-soft); color:var(--coral); display:flex; align-items:center; justify-content:center; font-size:15px;}
   .tpl .tn{display:block; font-size:13px; font-weight:500;}
@@ -1126,7 +1132,7 @@
   .en-opt.sel .en-nm{color:var(--coral);}
   .en-grid{ margin-top:12px; }   /* 코너 뱃지 poke 공간 (뱃지=.tier-badge 공용) */
   /* PRO 블록 타일 인라인 뱃지 */
-  .tpl-pro{ font-size:8px; font-weight:800; color:#1a1320; background:#E8B84B; border-radius:4px; padding:1px 4px; margin-left:5px; vertical-align:middle; letter-spacing:.02em; }
+  /* (제거됨) 옛 금색 'PRO' 인라인 span — .tier-badge 코너칩으로 통일 */
   .dz-cg .gl{font-size:11px; font-weight:800; color:var(--muted); margin-bottom:7px; display:block;}
   .dz-seg{display:flex; gap:6px;}
   .dz-seg button{flex:1; padding:11px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font:700 12.5px var(--sans); cursor:pointer;}
@@ -1714,6 +1720,7 @@
     <div class="login-card">
       <img class="login-house" src="la-mark.png" alt="컨텐츠 허브">
       <div class="login-t">컨텐츠 허브</div>
+      <div class="login-slogan">컨텐츠를 자산으로 만드는 수익화 개인 홈페이지</div>
       <div class="login-s" id="lg-sub">컨텐츠 허브 운영자 페이지 · 코드와 PIN으로 들어가면 편집·설정을 할 수 있어요</div>
       <div class="lg-signup-note" id="lg-signup-note">발급받은 <b>코드</b>를 입력하면, 다음 화면에서 <b>나만의 PIN</b>을 정해요.<br>가입은 이 한 번이면 끝이에요 😊</div>
       <input id="lg-code" placeholder="발급받은 코드 (6자리)" autocapitalize="characters" autocomplete="off" maxlength="6">
@@ -2506,8 +2513,8 @@
         <div class="tpl tpl-set" data-set="photo"><span class="tpl-badge">템플릿</span><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
         <div class="tpl tpl-set" data-set="profile"><span class="tpl-badge">템플릿</span><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
         <div class="tpl tpl-set" data-set="content"><span class="tpl-badge">템플릿</span><span class="tic">✍️</span><span><span class="tn">컨텐츠·구독형 세트</span><span class="ts">세계관→컨텐츠→구독</span></span></div>
-        <div class="tpl tpl-set tpl-prem" data-set="premium"><span class="tpl-badge tpl-badge-prem">프로</span><span class="tic">🖤</span><span><span class="tn">프리미엄 헤어샵 (뱅하우스 톤)</span><span class="ts">다크 그린·글로우·쇼케이스 — 테마까지 한 번에</span></span></div>
-        <div class="tpl tpl-set tpl-prem" data-set="transform"><span class="tpl-badge tpl-badge-prem">프로</span><span class="tic">⚡</span><span><span class="tn">트랜스폼 (결과형)</span><span class="ts">비포·애프터로 증명 · PT·다이어트·코칭 — 색은 테마로</span></span></div>
+        <div class="tpl tpl-set tpl-prem tpl-has-badge" data-set="premium"><span class="tier-badge tb-pro"><svg class="tb-ic" viewBox="0 0 24 24"><path d="M12 3 19 9 12 21 5 9Z"/></svg><span class="tb-tx">프로</span></span><span class="tic">🖤</span><span><span class="tn">프리미엄 헤어샵 (뱅하우스 톤)</span><span class="ts">다크 그린·글로우·쇼케이스 — 테마까지 한 번에</span></span></div>
+        <div class="tpl tpl-set tpl-prem tpl-has-badge" data-set="transform"><span class="tier-badge tb-pro"><svg class="tb-ic" viewBox="0 0 24 24"><path d="M12 3 19 9 12 21 5 9Z"/></svg><span class="tb-tx">프로</span></span><span class="tic">⚡</span><span><span class="tn">트랜스폼 (결과형)</span><span class="ts">비포·애프터로 증명 · PT·다이어트·코칭 — 색은 테마로</span></span></div>
       </div>
 
       </div><!-- /#add-all -->
@@ -2544,6 +2551,16 @@
       <div class="tg-exlbl">☕ 카페·음식</div>
       <div class="tg-chips"><span class="tg-chip">혼자가기좋은</span><span class="tg-chip">콘센트있는카페</span><span class="tg-chip">디저트맛집</span><span class="tg-chip">분위기좋은</span></div>
       <div class="tg-hint">칩을 누르면 위 "고민 해시태그" 칸에 바로 들어가요 · 3~5개가 적당</div>
+    </div>
+  </div>
+
+  <!-- 🔗 채널·연락처 매니저 (구성 추가 '링크 버튼' → 이 팝업. 프로필 #channels-card를 통째로 띄움 = home.fab 단일 소스·자동 동기화) -->
+  <div class="ov" id="linkch-ov">
+    <div class="sheet">
+      <div class="sheet-h"><span class="t">🔗 링크 · 채널 추가</span><span class="x" id="linkch-x">×</span></div>
+      <div class="vhint" style="text-align:left; margin:0 0 12px;">인스타·유튜브·네이버·카톡 등 링크를 넣고 <b style="color:var(--coral)">켜면</b> 공개 페이지 <b>우측 하단 아이콘</b>으로 떠요. <b>내 프로필 채널과 자동으로 같이 저장돼요.</b></div>
+      <div id="linkch-host"></div>
+      <button type="button" id="linkch-done" class="btn primary" style="width:100%; margin:14px 0 0; padding:15px; font-size:15px; font-weight:800; border-radius:14px;">완료</button>
     </div>
   </div>
 
@@ -4450,14 +4467,15 @@
   // 판매: 추천 제품(쿠팡)·강의/전자책   전환: 전문가 증명·후기·랭킹·쇼케이스·반박 제거·보장 배지
   var PRO_NM = { '추천 제품':'판매','강의 · 전자책':'판매','전문가 증명':'전환','후기':'전환','랭킹 · 가격':'전환','대표 사진 쇼케이스':'전환','반박 제거':'전환','보장 배지':'전환' };
   function blockLocked(nm){ return !!PRO_NM[nm] && typeof tierOK==='function' && !tierOK('pro'); }
-  // PRO 블록 타일에 'PRO' 표시 (잠그지 않고 표시만 · 게이트는 저장 시)
-  (function tagProBlockTiles(){ try{ document.querySelectorAll('.tpl[data-nm]').forEach(function(t){ if(PRO_NM[t.dataset.nm]){ var tn=t.querySelector('.tn'); if(tn && !tn.querySelector('.tpl-pro')){ tn.insertAdjacentHTML('beforeend',' <span class="tpl-pro">PRO</span>'); } } }); }catch(_){} })();
-  // 카탈로그 타일에 🔒 뱃지 표시 (베이직일 때만)
+  // PRO 블록 타일 표시 = 패널 열 때 decorateProTiles가 .tier-badge 코너칩 부착
+  // (tierBadgeHTML가 이 줄보다 아래에 정의돼 여기서 직접 호출 불가 → openAddCatalog 시점에 부착)
+  // PRO 블록 타일 우측 상단에 깔끔한 코너칩(◇ 프로) 부착 — 모션·스킨과 동일한 .tier-badge. 흐림·잠금 없음(게이트는 '추가' 시점 blockLocked)
   function decorateProTiles(){
-    var basic = (typeof tierOK==='function' && !tierOK('pro'));
     ov.querySelectorAll('.tpl[data-nm]').forEach(function(t){
-      var nm=t.getAttribute('data-nm'); var on = basic && !!PRO_NM[nm];
-      t.classList.toggle('tpl-pro', on);
+      if(!PRO_NM[t.getAttribute('data-nm')]) return;
+      if(t.querySelector('.tier-badge')) return;   // 멱등 — 이미 배지 달림
+      t.classList.add('tpl-has-badge');
+      try{ t.insertAdjacentHTML('beforeend', (typeof tierBadgeHTML==='function'?tierBadgeHTML('pro'):'')); }catch(_){}
     });
   }
   window.__decorateProTiles=decorateProTiles;
@@ -4465,7 +4483,10 @@
   ov.querySelectorAll('.tpl').forEach(function(t){
     if(t.dataset.set) return;   // 세트 타일은 아래에서 별도 처리(통째로 추가)
     if(t.dataset.special) return;   // 프로필 등 특수 구성은 별도 핸들러
-    t.addEventListener('click', function(){ openBlockPreview(t); });   // 탭 → 미리보기 → 넣기
+    t.addEventListener('click', function(){
+      if(t.dataset.nm==='링크 버튼'){ try{ ov.classList.remove('open'); }catch(e){} if(window.__openChannelManager) window.__openChannelManager(); return; }   // '링크 버튼' = 채널·연락처 매니저로 통일(프로필 home.fab 동기화)
+      openBlockPreview(t);
+    });   // 탭 → 미리보기 → 넣기
   });
   // 실제 추가 (미리보기 "넣기" 또는 직접)
   function addBlockFromTile(t){
@@ -6077,6 +6098,29 @@
   document.querySelectorAll('[data-fabsw]').forEach(function(sw){ sw.onclick=function(){ sw.classList.toggle('on'); saveFab(); }; });
   FAB_KEYS.forEach(function(k){ var el=document.getElementById('fab-'+k); if(el) el.addEventListener('input', saveFab); });
   fillFab();   // 프로필 카드에 현재 값 표시
+  // 🔗 '링크 버튼'(구성 추가) → 채널·연락처 매니저 팝업. 프로필 #channels-card를 통째로 옮겨(relocate) 단일 소스 유지.
+  // 입력·토글 핸들러는 요소에 직접 바인딩돼 있어 옮겨도 그대로 작동(saveFab→home.fab 즉시저장+__liveRefresh). 닫으면 프로필로 복귀.
+  var _linkchReturn=null;
+  function openChannelManager(){
+    var card=document.getElementById('channels-card'), host=document.getElementById('linkch-host'), ovx=document.getElementById('linkch-ov');
+    if(!card||!host||!ovx) return;
+    if(card.parentNode!==host){ _linkchReturn={parent:card.parentNode, next:card.nextSibling}; host.appendChild(card); }
+    card.classList.add('open');
+    try{ fillFab(); }catch(e){}
+    ovx.classList.add('open');
+  }
+  function closeChannelManager(){
+    var card=document.getElementById('channels-card'), ovx=document.getElementById('linkch-ov');
+    if(card && _linkchReturn){ if(_linkchReturn.next && _linkchReturn.next.parentNode===_linkchReturn.parent) _linkchReturn.parent.insertBefore(card, _linkchReturn.next); else _linkchReturn.parent.appendChild(card); }
+    _linkchReturn=null;
+    if(ovx) ovx.classList.remove('open');
+    try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(e){}
+  }
+  window.__openChannelManager=openChannelManager;
+  (function(){ var x=document.getElementById('linkch-x'); if(x) x.onclick=closeChannelManager;
+    var d=document.getElementById('linkch-done'); if(d) d.onclick=closeChannelManager;
+    var ovx=document.getElementById('linkch-ov'); if(ovx) ovx.addEventListener('click', function(e){ if(e.target===ovx) closeChannelManager(); });
+  })();
   // 🎁 첫 방문 혜택 (home.coupon: {on,style,title,desc,code,emoji,img,limit,mono}) — 3스타일 + 프로 잠금
   function cpEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];}); }
   var CPE_EMOJIS=['🎁','🎉','✨','💝','🎀','🧧','💌','🥳','🌸','💎'];

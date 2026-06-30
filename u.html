@@ -2139,7 +2139,10 @@
       if(h.accentOverride){ r.style.setProperty('--coral', h.accentOverride); r.style.setProperty('--coral-soft','color-mix(in srgb,'+h.accentOverride+' 16%, transparent)'); r.style.setProperty('--coral-fill', h.accentOverride); }
       else if(!(h.design&&h.design.on)){ r.style.removeProperty('--coral'); r.style.removeProperty('--coral-soft'); r.style.removeProperty('--coral-fill'); }
     })();
-    try{ if(window.buildDesignMenus) buildDesignMenus(h); }catch(e){}   // (레거시) 메뉴 → 홈 버튼
+    // (레거시 제거 2026-06-30) 옛 '디자인 메뉴(home.menus)' 렌더 호출 삭제.
+    // 메뉴 편집 UI는 개편 때 제거됐는데, 이 호출이 메뉴가 빌 때(=항상) #home-links(샘플 링크블록)를
+    // display=''로 강제로 다시 켜서 → 프로필 토글마다 뉴스레터/클래스/전자책 버튼이 되살아나는 버그였음.
+    // 이제 #home-links 표시는 renderBlocks(유저 블록 데이터)만 관장 → 링크 블록 없으면 계속 숨김.
     var profEl = document.querySelector('.profile'); if(profEl){ profEl.style.display = (h.profileOn===false) ? 'none' : ''; }
     // 커버 사진 히어로 — design 사진(우선) 또는 cover.on && photo
     if(profEl){
@@ -2250,14 +2253,14 @@
         naver:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4.2l3.6 5.6V5H18v14h-4.2l-3.6-5.6V19H6z"/></svg>',
         kakao:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.8C7.6 4.8 4 7.5 4 10.9c0 2.2 1.4 4.1 3.6 5.2l-.8 3.1 3.4-1.9c.6.1 1.2.1 1.8.1 4.4 0 8-2.7 8-6.5S16.4 4.8 12 4.8z"/></svg>'
       };
-      var LABELS={ naver:'예약하기', kakao:'상담하기' };
+      var LABELS={ instagram:'인스타그램', youtube:'유튜브', blog:'블로그', naver:'네이버 예약', kakao:'카카오톡 상담' };   // aria-label(접근성)용. 화면엔 전부 아이콘만 = 인스타·유튜브 크기로 통일(네이버·카톡 알약 폐기)
       fabBox.innerHTML = '';
       var idx=0;
       ['instagram','youtube','blog','naver','kakao'].forEach(function(k){
         if(fab[k] && fabOn[k]!==false){
           var a=document.createElement('a'); a.href=fab[k]; a.target='_blank'; a.rel='noopener'; a.setAttribute('aria-label', LABELS[k]||k);
-          a.className='b-'+k+(LABELS[k]?'':' icon-only');
-          a.innerHTML = ICONS[k] + (LABELS[k] ? '<span>'+LABELS[k]+'</span>' : '');
+          a.className='b-'+k+' icon-only';   // 전부 아이콘 정사각(54x54)으로 통일
+          a.innerHTML = ICONS[k];
           a.style.animationDelay=(idx*0.08)+'s'; idx++;
           fabBox.appendChild(a);
         }
