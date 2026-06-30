@@ -865,6 +865,81 @@
   .hh-text{font-family:var(--serif); font-size:25px; font-weight:600; line-height:1.32; color:var(--on-strong); animation:hhup .8s ease both;}
   .hh-text .kw{color:var(--coral);}
   .hero-hook{text-align:center;}
+
+  /* ════ 진입 모션 — 들어오자마자 첫 화면(커버·후킹) 살아남 · html[data-entrance] (무료=rise, 나머지=프로) ════ */
+  @keyframes enRise{ from{opacity:0; transform:translateY(26px);} to{opacity:1; transform:none;} }
+  @keyframes enMaskUp{ from{transform:translateY(116%);} to{transform:translateY(0);} }
+  @keyframes enKen{ from{transform:scale(1.22);} to{transform:scale(1);} }
+  @keyframes enBlur{ from{opacity:0; filter:blur(16px); transform:scale(1.03);} to{opacity:1; filter:blur(0); transform:none;} }
+  @keyframes enPop{ 0%{opacity:0; transform:scale(.6);} 65%{opacity:1; transform:scale(1.07);} 100%{transform:scale(1);} }
+  @keyframes enFade{ from{opacity:0;} to{opacity:1;} }
+  @keyframes enSheen{ from{transform:translateX(-120%);} to{transform:translateX(120%);} }
+  @keyframes enKwGlow{ 0%{filter:brightness(1);} 45%{filter:brightness(1.45) drop-shadow(0 0 14px var(--coral));} 100%{filter:brightness(1);} }
+  @keyframes enAuroraDrift{ 0%{transform:translate(-50%,0) scale(1);} 50%{transform:translate(-42%,-6%) scale(1.12);} 100%{transform:translate(-50%,0) scale(1);} }
+  @keyframes enWipe{ from{opacity:.35; clip-path:inset(0 0 100% 0); transform:translateY(8px);} to{opacity:1; clip-path:inset(0 0 0 0); transform:none;} }
+  /* 타깃 = 후킹문구(.hh-text) + 뱅하우스 히어로 자식(.gh-*) + 커버(.top-cover). 히어로 자식은 시안처럼 차례로(stagger) */
+  /* none — 모션 끔 (기존 hhup도 무력화) */
+  html[data-entrance="none"] .hh-text, html[data-entrance="none"] .gh-hook>*{ animation:none; }
+  /* A 순차(rise) — 무료 */
+  html[data-entrance="rise"] .hh-text{ animation:enRise .8s cubic-bezier(.2,.7,.2,1) both; }
+  html[data-entrance="rise"] .gh-hook>.gh-star{ animation:enRise .6s both .05s; }
+  html[data-entrance="rise"] .gh-hook>.gh-eyebrow{ animation:enRise .7s both .16s; }
+  html[data-entrance="rise"] .gh-hook>.gh-bigwrap{ animation:enRise .75s cubic-bezier(.2,.7,.2,1) both .3s; }
+  html[data-entrance="rise"] .gh-hook>.gh-sub{ animation:enRise .75s cubic-bezier(.2,.7,.2,1) both .44s; }
+  html[data-entrance="rise"] .gh-hook>.gh-bychip{ animation:enRise .7s both .58s; }
+  html[data-entrance="rise"] .top-cover{ animation:enFade 1s ease both; }
+  /* B 마스크(mask) — 글자가 위에서부터 드러남(clip wipe) */
+  html[data-entrance="mask"] .hh-text{ animation:enWipe .9s cubic-bezier(.16,.84,.24,1) both .08s; }
+  html[data-entrance="mask"] .gh-hook>.gh-star{ animation:enRise .55s both .05s; }
+  html[data-entrance="mask"] .gh-hook>.gh-eyebrow{ animation:enWipe .8s cubic-bezier(.16,.84,.24,1) both .18s; }
+  html[data-entrance="mask"] .gh-hook>.gh-bigwrap{ animation:enWipe .9s cubic-bezier(.16,.84,.24,1) both .32s; }
+  html[data-entrance="mask"] .gh-hook>.gh-sub{ animation:enWipe .9s cubic-bezier(.16,.84,.24,1) both .48s; }
+  html[data-entrance="mask"] .gh-hook>.gh-bychip{ animation:enRise .7s both .64s; }
+  html[data-entrance="mask"] .top-cover{ animation:enFade 1s ease both; }
+  /* C 시네마틱(cinema) — 커버 줌 + 글자 블러풀림 */
+  html[data-entrance="cinema"] .top-cover .pc-img{ animation:enKen 7s ease-out both; }
+  html[data-entrance="cinema"] .hh-text{ animation:enBlur 1.1s ease both .3s; }
+  html[data-entrance="cinema"] .gh-hook>.gh-star{ animation:enBlur 1s ease both .1s; }
+  html[data-entrance="cinema"] .gh-hook>.gh-eyebrow{ animation:enBlur 1.1s ease both .25s; }
+  html[data-entrance="cinema"] .gh-hook>.gh-bigwrap{ animation:enBlur 1.2s ease both .4s; }
+  html[data-entrance="cinema"] .gh-hook>.gh-sub{ animation:enBlur 1.2s ease both .58s; }
+  html[data-entrance="cinema"] .gh-hook>.gh-bychip{ animation:enBlur 1.1s ease both .76s; }
+  /* D 키네틱(kinetic) — 통통 팝 + 70%(강조) 글로우 */
+  html[data-entrance="kinetic"] .hh-text{ animation:enPop .7s cubic-bezier(.2,.7,.2,1) both .08s; }
+  html[data-entrance="kinetic"] .hh-text .kw{ animation:enKwGlow 1.4s ease both .4s; }
+  html[data-entrance="kinetic"] .gh-hook>.gh-star{ animation:enPop .55s both .05s; }
+  html[data-entrance="kinetic"] .gh-hook>.gh-eyebrow{ animation:enPop .55s both .18s; }
+  html[data-entrance="kinetic"] .gh-hook>.gh-bigwrap{ animation:enPop .6s both .32s; }
+  html[data-entrance="kinetic"] .gh-hook .gh-big{ animation:enKwGlow 1.5s ease both .55s; }
+  html[data-entrance="kinetic"] .gh-hook>.gh-sub{ animation:enPop .6s both .5s; }
+  html[data-entrance="kinetic"] .gh-hook>.gh-bychip{ animation:enPop .55s both .68s; }
+  html[data-entrance="kinetic"] .top-cover{ animation:enFade .8s ease both; }
+  /* E 오로라(aurora) — 히어로 뒤 테마색 빛이 계속 일렁임 (.gh-hook / .hero-hook 둘 다) */
+  html[data-entrance="aurora"] .hero-hook, html[data-entrance="aurora"] .gh-hook{ position:relative; }
+  html[data-entrance="aurora"] .hero-hook::before, html[data-entrance="aurora"] .gh-hook::before{ content:''; position:absolute; z-index:0; left:50%; top:44%; width:130%; height:200%; transform:translate(-50%,0); background:radial-gradient(closest-side, color-mix(in srgb, var(--coral) 42%, transparent), transparent 72%); filter:blur(28px); opacity:.5; pointer-events:none; animation:enFade 1.2s ease both, enAuroraDrift 9s ease-in-out infinite 1s; }
+  html[data-entrance="aurora"] .hh-text{ position:relative; z-index:1; animation:enRise .85s cubic-bezier(.2,.7,.2,1) both .22s; }
+  html[data-entrance="aurora"] .gh-hook>*{ position:relative; z-index:1; }
+  html[data-entrance="aurora"] .gh-hook>.gh-star{ animation:enRise .6s both .35s; }
+  html[data-entrance="aurora"] .gh-hook>.gh-eyebrow{ animation:enRise .7s both .46s; }
+  html[data-entrance="aurora"] .gh-hook>.gh-bigwrap{ animation:enRise .8s cubic-bezier(.2,.7,.2,1) both .6s; }
+  html[data-entrance="aurora"] .gh-hook>.gh-sub{ animation:enRise .8s cubic-bezier(.2,.7,.2,1) both .74s; }
+  html[data-entrance="aurora"] .gh-hook>.gh-bychip{ animation:enRise .7s both .88s; }
+  html[data-entrance="aurora"] .top-cover{ animation:enFade 1s ease both; }
+  /* F 광택(sheen) — 글자 떠오른 뒤 빛이 사선으로 쓱 + 커버 살짝 줌 */
+  html[data-entrance="sheen"] .hero-hook, html[data-entrance="sheen"] .gh-hook{ position:relative; overflow:hidden; }
+  html[data-entrance="sheen"] .hh-text{ animation:enRise .8s cubic-bezier(.2,.7,.2,1) both; }
+  html[data-entrance="sheen"] .gh-hook>.gh-star{ animation:enRise .6s both .05s; }
+  html[data-entrance="sheen"] .gh-hook>.gh-eyebrow{ animation:enRise .7s both .16s; }
+  html[data-entrance="sheen"] .gh-hook>.gh-bigwrap{ animation:enRise .75s cubic-bezier(.2,.7,.2,1) both .3s; }
+  html[data-entrance="sheen"] .gh-hook>.gh-sub{ animation:enRise .75s cubic-bezier(.2,.7,.2,1) both .44s; }
+  html[data-entrance="sheen"] .gh-hook>.gh-bychip{ animation:enRise .7s both .58s; }
+  html[data-entrance="sheen"] .hero-hook::after, html[data-entrance="sheen"] .gh-hook::after{ content:''; position:absolute; inset:0; z-index:5; pointer-events:none; background:linear-gradient(105deg, transparent 40%, rgba(255,255,255,.5) 50%, transparent 60%); mix-blend-mode:screen; transform:translateX(-120%); animation:enSheen 1.15s ease both .85s; }
+  html[data-entrance="sheen"] .top-cover .pc-img{ animation:enKen 8s ease-out both; }
+  /* 접근성 — 어지럼 사용자 자동 약화 */
+  @media (prefers-reduced-motion:reduce){
+    html[data-entrance] .hh-text, html[data-entrance] .gh-hook>*, html[data-entrance] .top-cover, html[data-entrance] .top-cover .pc-img{ animation:none !important; }
+    html[data-entrance="aurora"] .hero-hook::before, html[data-entrance="aurora"] .gh-hook::before, html[data-entrance="sheen"] .hero-hook::after, html[data-entrance="sheen"] .gh-hook::after{ animation:none !important; opacity:0 !important; }
+  }
   .hh-tags{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:11px;}
   .hh-tag{font-size:12px; color:var(--coral); background:var(--coral-soft); border-radius:999px; padding:4px 11px;}
   .hh-cta{display:inline-block; margin-top:14px; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:14px; font-weight:600; padding:11px 26px; border-radius:12px; text-decoration:none;}
@@ -1072,7 +1147,7 @@
     color:var(--coral); font-size:11px; font-weight:500; padding:4px 10px; border-radius:999px;
   }
   .arc-body{padding:14px 16px 16px;}
-  .arc-h{font-family:var(--serif); font-size:17px; font-weight:600; line-height:1.35;}
+  .arc-h{font-family:var(--sans); font-size:17px; font-weight:800; line-height:1.35; letter-spacing:-.01em;}   /* 컨텐츠 제목은 항상 Pretendard(읽기) — impact 폰트의 Black Han Sans 뭉개짐 방지 */
   .arc-d{font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5;}
   .arc-meta{font-size:11.5px; color:var(--muted); margin-top:9px; display:flex; gap:8px; align-items:center;}
   /* 2열 작은 카드 */
@@ -1086,6 +1161,25 @@
   .arc-card .arc-h{font-size:14px; line-height:1.3;}
   .arc-more{text-align:center; margin-top:14px;}
   .arc-more a{font-size:13px; color:var(--coral); text-decoration:none; font-weight:500;}
+  /* ★ 컨텐츠 리스트뷰 = 대표 매거진 + 유형 컬러 리스트 */
+  .arc-mag{position:relative; display:block; border-radius:16px; overflow:hidden; aspect-ratio:16/10; border:1px solid var(--hair); margin-bottom:11px; text-decoration:none; color:inherit; cursor:pointer;}
+  .arc-mag-ph{position:absolute; inset:0; background:var(--coral-soft) center/cover;}
+  .arc-mag-grad{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.9) 8%, rgba(0,0,0,.2) 55%, transparent);}
+  .arc-mag-tag{position:absolute; top:12px; left:12px; z-index:2; font-size:10px; font-weight:800; color:var(--on-coral,#06140d); background:var(--coral); border-radius:999px; padding:4px 11px;}
+  .arc-mag-body{position:absolute; left:15px; right:15px; bottom:14px; z-index:2;}
+  .arc-mag-cat{font-size:10.5px; color:var(--coral); font-weight:700;}
+  .arc-mag .arc-h{color:#fff; font-size:20px; margin-top:3px;}
+  .arc-mag-s{font-size:12.5px; color:rgba(255,255,255,.82); margin-top:3px;}
+  .arc-clist{display:flex; flex-direction:column; gap:9px; margin-top:4px;}
+  .arc-crow{position:relative; display:flex; align-items:center; gap:12px; padding:11px 13px 11px 16px; border-radius:13px; background:var(--surface); border:1px solid var(--hair); overflow:hidden; cursor:pointer; text-decoration:none; color:inherit; transition:border-color .18s, transform .14s;}
+  .arc-crow::before{content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--c,var(--coral));}
+  .arc-crow-th{flex:0 0 auto; width:48px; height:48px; border-radius:11px; background:color-mix(in srgb, var(--c,var(--coral)) 14%, transparent); display:grid; place-items:center; color:var(--c,var(--coral)); font-size:18px; overflow:hidden; background-size:cover; background-position:center;}
+  .arc-crow-m{flex:1; min-width:0;}
+  .arc-crow-badge{display:inline-block; font-size:9.5px; font-weight:800; border-radius:6px; padding:2px 7px; margin-bottom:3px; color:var(--c,var(--coral)); background:color-mix(in srgb, var(--c,var(--coral)) 15%, transparent);}
+  .arc-crow .arc-h{font-size:15px;}
+  .arc-crow .arc-d{font-size:11.5px; margin-top:2px; color:var(--muted);}
+  .arc-crow:hover{border-color:color-mix(in srgb, var(--c,var(--coral)) 50%, var(--hair)); transform:translateX(2px);}
+  html.has-skin .arc-crow, html.has-skin .arc-mag{background:rgba(255,255,255,.02);}
 
   /* 추천제품 */
   .prod{display:flex; align-items:center; gap:12px; padding:10px 0; border-top:1px solid var(--hair);}
@@ -2036,6 +2130,8 @@
     var h; try{ h = JSON.parse(localStorage.getItem('cm-home-v1')) || {}; }catch(e){ h = {}; }
     document.documentElement.setAttribute('data-font', h.font || 'serif');
     document.documentElement.setAttribute('data-skin', h.skin || '');   // 스킨 = 레이아웃(박스탈출·에디토리얼). 색은 테마가 담당
+    // 진입 모션 — 들어오자마자 첫 화면(커버·후킹) 살아남. 리플로우로 재적용해 라이브 미리보기서도 재생
+    (function(){ var de=document.documentElement, en=(h.entrance||'rise'); if(de.getAttribute('data-entrance')!==en){ de.setAttribute('data-entrance', en); } else { de.removeAttribute('data-entrance'); void de.offsetWidth; de.setAttribute('data-entrance', en); } })();
     if(h.skin) document.documentElement.classList.add('has-skin'); else document.documentElement.classList.remove('has-skin');
     applyDesign(h);   // (레거시) 직접 디자인 활성 시 — 지금은 미사용
     // 버튼 색 오버라이드 — 테마는 그대로, --coral(버튼색)만 내 색으로
@@ -3449,17 +3545,29 @@
     if(!live.length) return;   // 게시물 없으면 기존 샘플 유지
     view=view||'cards';
     var cats=[]; live.forEach(function(p){ var c=(p.cat||'').trim(); if(c && cats.indexOf(c)<0) cats.push(c); });
+    var ARC_PAL=['#7DCF96','#7CB0FF','#E3B563','#FF9DBA','#B9A6FF','#5FD0C0','#FF9E7A','#A6B0BC'];   // 유형 색 팔레트
+    function catColor(c){ c=(c||'').trim(); if(!c) return ARC_PAL[7]; if(window.__catColors&&window.__catColors[c]) return window.__catColors[c]; var h=0; for(var i=0;i<c.length;i++) h=(h*31+c.charCodeAt(i))>>>0; return ARC_PAL[h%7]; }   // 저장색 우선, 없으면 이름으로 자동(회색=index7은 '분류없음' 전용이라 자동에선 제외)
     function covHtml(p, cls){ return p.cover ? '<div class="'+cls+'" style="background-image:url('+esc(p.cover)+');background-size:cover;background-position:center;">'+(p.cat?'<span class="arc-cat">'+esc(p.cat)+'</span>':'')+'</div>' : '<div class="'+cls+'">'+(p.cat?'<span class="arc-cat">'+esc(p.cat)+'</span>':'')+'▦</div>'; }
     function item(p){
       var head='<div data-pid="'+esc(p.id)+'" data-cat="'+esc(p.cat||'')+'" role="link" tabindex="0"';
       if(view==='photo') return head+' class="arc-photo-cell">'+covHtml(p,'arc-photo-cov')+'</div>';
-      if(view==='list'){ var th=p.cover?'<div class="arc-li-thumb" style="background-image:url('+esc(p.cover)+');background-size:cover;background-position:center;"></div>':'<div class="arc-li-thumb">▦</div>';
-        return head+' class="arc-list-item"><div class="arc-li-main">'+th+'<div class="arc-li-body"><div class="arc-h">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="arc-d">'+esc(p.summary)+'</div>':'')+(p.cat?'<div class="arc-li-cat">'+esc(p.cat)+'</div>':'')+'</div></div></div>'; }
       return head+' class="arc-card">'+covHtml(p,'arc-cover')+'<div class="arc-body"><div class="arc-h">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="arc-d">'+esc(p.summary)+'</div>':'')+'</div></div>';
     }
-    var wrapCls = view==='photo'?'arc-photo':(view==='list'?'arc-list':'arc-grid');
     var chips='<span class="chip on" data-cat="">전체</span>'+cats.map(function(c){ return '<span class="chip" data-cat="'+esc(c)+'">'+esc(c)+'</span>'; }).join('');
-    sec.innerHTML='<div class="cats" id="arc-cats">'+chips+'</div><div class="'+wrapCls+'" id="arc-grid">'+live.map(item).join('')+'</div>';
+    var bodyHtml;
+    if(view==='list'){
+      var feat=null, rest=[]; live.forEach(function(p){ if(p.featured && !feat) feat=p; else rest.push(p); });   // 대표 1개 = 매거진
+      var fh='';
+      if(feat){ var fcov=feat.cover?' style="background-image:url('+esc(feat.cover)+');background-size:cover;background-position:center;"':'';
+        fh='<div data-pid="'+esc(feat.id)+'" data-cat="'+esc(feat.cat||'')+'" role="link" tabindex="0" class="arc-mag"><div class="arc-mag-ph"'+fcov+'></div><div class="arc-mag-grad"></div><span class="arc-mag-tag">★ 대표</span><div class="arc-mag-body">'+(feat.cat?'<div class="arc-mag-cat">'+esc(feat.cat)+'</div>':'')+'<div class="arc-h">'+esc(feat.title||'')+'</div>'+(feat.summary?'<div class="arc-mag-s">'+esc(feat.summary)+'</div>':'')+'</div></div>'; }
+      var rows=rest.map(function(p){ var col=catColor(p.cat); var th=p.cover?'<div class="arc-crow-th" style="background-image:url('+esc(p.cover)+');"></div>':'<div class="arc-crow-th">▦</div>';
+        return '<div data-pid="'+esc(p.id)+'" data-cat="'+esc(p.cat||'')+'" role="link" tabindex="0" class="arc-crow" style="--c:'+col+';">'+th+'<div class="arc-crow-m">'+(p.cat?'<span class="arc-crow-badge">'+esc(p.cat)+'</span>':'')+'<div class="arc-h">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="arc-d">'+esc(p.summary)+'</div>':'')+'</div></div>'; }).join('');
+      bodyHtml='<div id="arc-grid">'+fh+'<div class="arc-clist">'+rows+'</div></div>';
+    } else {
+      var wrapCls = view==='photo'?'arc-photo':'arc-grid';
+      bodyHtml='<div class="'+wrapCls+'" id="arc-grid">'+live.map(item).join('')+'</div>';
+    }
+    sec.innerHTML='<div class="cats" id="arc-cats">'+chips+'</div>'+bodyHtml;
     sec.querySelectorAll('#arc-cats .chip').forEach(function(ch){ ch.onclick=function(){ sec.querySelectorAll('#arc-cats .chip').forEach(function(x){ x.classList.toggle('on', x===ch); }); var c=ch.getAttribute('data-cat'); sec.querySelectorAll('#arc-grid [data-pid]').forEach(function(cd){ cd.style.display=(!c||cd.getAttribute('data-cat')===c)?'':'none'; }); }; });
     sec.querySelectorAll('[data-pid]').forEach(function(a){ a.onclick=function(){ openPostModal(a.getAttribute('data-pid')); }; });
     if(view!=='photo'){ sec.querySelectorAll('#arc-grid [data-pid]').forEach(function(cd){ try{ cd.appendChild(buildCornerShare(cd.getAttribute('data-pid'))); }catch(_){} }); }
@@ -3497,6 +3605,7 @@
     if(theme && window.setTheme){ window.setTheme(theme); }
     if(d.home){ try{ localStorage.setItem('cm-home-v1', JSON.stringify(d.home)); }catch(e){} if(window.applyHome) window.applyHome(); }
     window.__POSTS = d.posts || [];          // 베스트 블록이 읽으므로 블록 렌더 '전'에 세팅
+    window.__catColors = (d.catColors && typeof d.catColors==='object') ? d.catColors : null;   // 유형별 지정 색 (운영서 고른 것) — buildArchive/catColor가 읽음
     window.__hasCurated = false;             // postref(가져온 글) 있으면 렌더 중 true → 자동 전체 노출 끔
     window.__PRODUCTS = d.products || [];
     window.__QNA = d.qna || [];
