@@ -439,6 +439,51 @@
   .jf-make{width:100%; padding:14px; border:0; border-radius:12px; background:var(--grad); color:#fff; font-size:15px; font-weight:800; cursor:pointer; margin-top:16px;}
   .jf-make:disabled{opacity:.4; cursor:not-allowed;}
   .jf-make:not(:disabled):active{transform:scale(.99);}
+  /* 회원가입 단계형(토스식) */
+  .jstep-bar{display:flex; gap:6px; margin:14px 0 16px;}
+  .jstep-bar i{flex:1; height:4px; border-radius:2px; background:var(--soft);}
+  .jstep-bar i.on{background:var(--grad);}
+  .jstep{display:none;} .jstep.on{display:block;}
+  .jstep-n{font-size:11px; color:var(--coral); font-weight:700; margin-bottom:8px;}
+  .jq{font-size:19px; font-weight:800; line-height:1.35; letter-spacing:-.01em; margin-bottom:6px; color:var(--ink);}
+  .jq.jq-sm{font-size:17px;}
+  .jq-s{font-size:12.5px; color:var(--muted); margin-bottom:16px; line-height:1.55;}
+  .jopt{display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--soft); border:1.5px solid var(--hair); border-radius:14px; padding:14px 13px; margin-bottom:9px; cursor:pointer; font-family:var(--sans); transition:border-color .12s, background .12s;}
+  .jopt.sel{border-color:var(--coral); background:var(--coral-soft);}
+  .jopt:active{transform:scale(.99);}
+  .jopt .oe{font-size:23px; flex:0 0 auto;}
+  .jopt .ot{font-size:14px; font-weight:700; color:var(--ink);}
+  .jopt .od{font-size:11.5px; color:var(--muted); margin-top:2px;}
+  .jopt .ock{margin-left:auto; width:21px; height:21px; border-radius:50%; border:2px solid var(--hair); flex:0 0 auto;}
+  .jopt.sel .ock{border-color:var(--coral); background:var(--coral); box-shadow:inset 0 0 0 3px var(--surface);}
+  .jreco{background:radial-gradient(120% 80% at 50% 0%, rgba(124,63,228,.2), transparent 60%), var(--surface); border:1px solid rgba(167,139,255,.5); border-radius:16px; padding:15px; margin:14px 0 4px; text-align:center;}
+  .jreco .rl{font-size:11px; color:#cdbcff; font-weight:700;}
+  .jreco .rn{font-size:20px; font-weight:800; margin:5px 0;}
+  .jreco .rn .rbadge{font-size:11px; background:var(--grad); color:#fff; padding:2px 8px; border-radius:99px; vertical-align:middle; font-weight:800;}
+  .jreco .rp{font-size:14px; color:var(--ink); font-weight:700;} .jreco .rp i{font-size:11px; color:var(--muted); font-style:normal;}
+  .jreco .rmo{font-size:11.5px; color:#c6bdf0; margin-top:9px; line-height:1.5;} .jreco .rmo b{color:#fff;}
+  .jreco-mini{font-size:12px; color:var(--muted); background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:9px 12px; margin-bottom:12px;} .jreco-mini b{color:var(--coral);}
+  /* 전체 등급 한눈에 (A 랜딩식 카드) */
+  .ats-hook{font-size:12.5px; color:#c6bdf0; text-align:center; margin-bottom:14px; line-height:1.5;} .ats-hook b{color:#fff;}
+  .atier{position:relative; display:block; width:100%; text-align:left; border-radius:16px; border:1.5px solid var(--hair); background:var(--surface); padding:15px 14px; margin-bottom:11px; cursor:pointer; font-family:var(--sans); color:var(--ink); transition:border-color .12s, box-shadow .12s;}
+  .atier.hot{border-color:rgba(167,139,255,.5); background:radial-gradient(120% 70% at 50% 0%, rgba(124,63,228,.16), transparent 60%), var(--surface);}
+  .atier.prem{border-color:rgba(233,196,106,.45); background:radial-gradient(120% 70% at 50% 0%, rgba(233,196,106,.1), transparent 62%), var(--surface);}
+  .atier.on{border-color:var(--coral); box-shadow:0 0 0 2px rgba(167,139,255,.4);}
+  .atier:active{transform:scale(.99);}
+  .atier .atb{position:absolute; top:-9px; left:14px; font-size:10px; font-weight:800; color:#fff; background:var(--grad); padding:3px 10px; border-radius:99px;}
+  .atier .atb.g{background:linear-gradient(120deg,#E9C46A,#C9962F); color:#3a2a05;}
+  .atier .atn{font-size:16px; font-weight:800;} .atier.prem .atn{color:#F1D78C;}
+  .atier .atp{font-size:21px; font-weight:800; margin-top:5px;} .atier .atp i{font-size:11px; font-weight:500; color:var(--muted); font-style:normal;}
+  .atier .atf{list-style:none; margin-top:11px; display:flex; flex-direction:column; gap:6px;}
+  .atier .atf li{font-size:11.5px; color:#d6d1e0; display:flex; gap:7px; align-items:flex-start;} .atier .atf li::before{content:'✓'; color:#34D399; font-weight:800; flex:0 0 auto;} .atier .atf li b{color:#fff;}
+  .atier .atpick{display:block; text-align:center; margin-top:12px; padding:10px; border-radius:11px; font-size:13px; font-weight:800; border:1px solid var(--hair); background:var(--soft); color:var(--ink);}
+  .atier.hot .atpick{background:var(--grad); color:#fff; border:none;}
+  .atier.prem .atpick{background:linear-gradient(120deg,#E9C46A,#C9962F); color:#3a2a05; border:none;}
+  .atier.on .atpick{outline:2px solid var(--coral); outline-offset:-2px;}
+  .atier-wide{display:block; width:100%; text-align:center; border-radius:12px; border:1.5px solid var(--hair); background:var(--soft); padding:13px; margin-bottom:12px; cursor:pointer; font-family:var(--sans); color:var(--muted); font-size:12.5px; font-weight:700;}
+  .atier-wide.on{border-color:var(--coral); background:var(--coral-soft); color:var(--ink);}
+  .ats-trust{display:flex; gap:8px; margin-bottom:12px;}
+  .ats-trust span{flex:1; text-align:center; font-size:10.5px; color:#cfcad8; font-weight:600; background:var(--surface); border:1px solid var(--hair); border-radius:10px; padding:9px 4px;}
   #join-result-ov{background:rgba(0,0,0,.78);}
   /* 등급 잠금 */
   .hm-locked{position:relative; opacity:.55;}
@@ -1518,6 +1563,8 @@
   .an-verdict .vh .em{color:#34D399;} .an-verdict .vh .em-w{color:#F5C84B;} .an-verdict .vh .em-b{color:#F87171;}
   .an-verdict .vs{font-size:12px; color:#c7ccd4; line-height:1.6; margin-top:6px;}
   .an-verdict .vs b{color:#fff;}
+  .an-alert{background:linear-gradient(135deg,rgba(245,200,75,.18),rgba(245,200,75,.04)); border:1px solid rgba(245,200,75,.4); border-radius:13px; padding:11px 13px; font-size:12.5px; font-weight:600; color:#ffe6a8; line-height:1.5; margin-bottom:13px;}
+  .an-alert b{color:#fff;}
   /* 베이스라인 카드 */
   .an-cards{display:flex; gap:8px; margin-bottom:6px;}
   .an-card{flex:1; background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:12px 8px; text-align:center;}
@@ -1856,25 +1903,71 @@
         <div><div class="join-t">회원가입 신청</div><div class="join-s2">정보를 입력하면 신청서가 만들어져요 · 카톡 문의방에 붙여넣으면 끝</div></div>
       </div>
 
-      <div class="jf-lbl">① 등급 선택 <span>· 연 1회 결제</span></div>
-      <div class="tier-list">
-        <button type="button" class="tier" data-tier="베이직" data-price="99,000원 / 1년"><b>베이직</b><span class="tprice">99,000원 <i>/ 1년</i></span><span class="tdesc">기본 기능 (컨텐츠·Q&A)</span></button>
-        <button type="button" class="tier" data-tier="프로" data-price="149,000원 / 1년"><span class="tbadge">인기</span><b>프로</b><span class="tprice">149,000원 <i>/ 1년</i></span><span class="tdesc">예약·판매·전환·모션</span></button>
-        <button type="button" class="tier" data-tier="프리미엄" data-price="199,000원 / 1년"><b>프리미엄</b><span class="tprice">199,000원 <i>/ 1년</i></span><span class="tdesc">화이트라벨·도메인·AI</span></button>
-        <button type="button" class="tier tier-wide" data-tier="상담 후 결정" data-price="상담 후 결정"><b>아직 못 정했어요</b><span class="tdesc">상담받고 정할게요</span></button>
+      <div class="jstep-bar"><i class="on"></i><i></i><i></i></div>
+
+      <!-- STEP 1: 목표 → 자동 추천 -->
+      <div class="jstep on" data-jstep="goal">
+        <div class="jstep-n">1 / 3 · 목표</div>
+        <div class="jq">무엇이 제일<br>필요하세요?</div>
+        <div class="jq-s">고른 것에 딱 맞는 등급을 추천해 드려요. 나중에 바꿀 수 있어요.</div>
+        <button type="button" class="jopt" data-tier="베이직" data-price="99,000원 / 1년"><span class="oe">📸</span><div><div class="ot">컨텐츠로 알리기</div><div class="od">글·사진·후기로 신뢰 쌓기</div></div><span class="ock"></span></button>
+        <button type="button" class="jopt" data-tier="프로" data-price="149,000원 / 1년"><span class="oe">📅</span><div><div class="ot">예약·판매까지</div><div class="od">캘린더 예약 + 제품·전환 장치</div></div><span class="ock"></span></button>
+        <button type="button" class="jopt" data-tier="프리미엄" data-price="199,000원 / 1년"><span class="oe">🚀</span><div><div class="ot">브랜드로 키우기</div><div class="od">내 도메인·화이트라벨·AI</div></div><span class="ock"></span></button>
+        <div class="jreco" id="jreco" style="display:none;"></div>
+        <button type="button" class="jf-make" id="js-goalnext" disabled>이 등급으로 계속 →</button>
+        <button type="button" class="jf-cmp" id="js-showtiers">📊 전체 등급 한눈에 보기</button>
       </div>
-      <button type="button" class="jf-cmp" id="jf-cmp">📊 등급별 기능 자세히 비교하기</button>
 
-      <div class="jf-lbl">② 신청자 정보</div>
-      <input class="jf-in" id="jf-name" placeholder="성함" maxlength="40">
-      <input class="jf-in" id="jf-phone" type="tel" inputmode="numeric" placeholder="연락처 (예: 010-1234-5678)" maxlength="30">
+      <!-- 등급 직접 고르기 -->
+      <div class="jstep" data-jstep="tiers">
+        <div class="jstep-n">전체 등급 한눈에 · 연 1회 결제</div>
+        <div class="ats-hook">컨텐츠를 <b>자산</b>으로 — 예약·구매로 이어지는 내 홈페이지</div>
+        <button type="button" class="atier" data-tier="베이직" data-price="99,000원 / 1년">
+          <div class="atn">베이직</div><div class="atp">99,000<i> 원/년</i></div>
+          <ul class="atf"><li>공개 허브 페이지</li><li>컨텐츠·아카이브·Q&A</li><li>사진 보관함 · 테마 전체</li><li>방문 분석 기본</li></ul>
+          <span class="atpick">선택</span>
+        </button>
+        <button type="button" class="atier hot" data-tier="프로" data-price="149,000원 / 1년">
+          <span class="atb">인기 · 추천</span>
+          <div class="atn">프로</div><div class="atp">149,000<i> 원/년</i></div>
+          <ul class="atf"><li><b>베이직 전부 포함</b></li><li>📅 예약 시스템</li><li>🛍 판매 블록 (쿠팡·내 제품)</li><li>🎯 전환·움직이는 모션</li><li>📊 방문 분석 상세</li></ul>
+          <span class="atpick">선택</span>
+        </button>
+        <button type="button" class="atier prem" data-tier="프리미엄" data-price="199,000원 / 1년">
+          <span class="atb g">올인원 ♛</span>
+          <div class="atn">프리미엄</div><div class="atp">199,000<i> 원/년</i></div>
+          <ul class="atf"><li><b>프로 전부 포함</b></li><li>🏷 화이트라벨 (브랜드 숨김)</li><li>🌐 내 도메인 연결</li><li>🤖 AI · 분석 상세+</li></ul>
+          <span class="atpick">선택</span>
+        </button>
+        <button type="button" class="atier-wide" data-tier="상담 후 결정" data-price="상담 후 결정">아직 못 정했어요 · 상담 후 결정</button>
+        <div class="ats-trust"><span>🛡 7일 환불</span><span>🔒 컨텐츠 소유</span><span>📤 내보내기</span></div>
+        <button type="button" class="jf-cmp" id="jf-cmp">📊 표로 자세히 비교하기</button>
+        <button type="button" class="jf-make" id="js-tiersnext" disabled>이 등급으로 계속 →</button>
+        <button type="button" class="jf-cmp" id="js-backgoal">← 추천으로 돌아가기</button>
+      </div>
 
-      <div class="jf-lbl">③ 동의 <span>· 가입에 꼭 필요해요</span></div>
-      <label class="jf-agree"><input type="checkbox" id="jf-agree1"><span><b>(필수)</b> 만 14세 이상이며, 이용약관·개인정보 수집·이용·처리위탁에 동의합니다.</span></label>
-      <label class="jf-agree"><input type="checkbox" id="jf-agree2"><span>(선택) 마케팅·뉴스레터 수신에 동의합니다.</span></label>
-      <button type="button" class="jf-terms" id="jf-terms">📄 약관·개인정보 처리방침 자세히 보기</button>
+      <!-- STEP 2: 정보 -->
+      <div class="jstep" data-jstep="info">
+        <div class="jstep-n">2 / 3 · 정보</div>
+        <div class="jq jq-sm">신청자 정보를<br>알려주세요</div>
+        <div class="jreco-mini" id="jreco-mini"></div>
+        <input class="jf-in" id="jf-name" placeholder="성함" maxlength="40">
+        <input class="jf-in" id="jf-phone" type="tel" inputmode="numeric" placeholder="연락처 (예: 010-1234-5678)" maxlength="30">
+        <button type="button" class="jf-make" id="js-infonext" disabled>다음 →</button>
+        <button type="button" class="jf-cmp" id="js-backtier">← 등급 다시 고르기</button>
+      </div>
 
-      <button type="button" class="jf-make" id="jf-make" disabled>신청서 만들기 →</button>
+      <!-- STEP 3: 동의 -->
+      <div class="jstep" data-jstep="agree">
+        <div class="jstep-n">3 / 3 · 동의</div>
+        <div class="jq jq-sm">마지막,<br>동의만 해주세요</div>
+        <label class="jf-agree"><input type="checkbox" id="jf-agree1"><span><b>(필수)</b> 만 14세 이상이며, 이용약관·개인정보 수집·이용·처리위탁에 동의합니다.</span></label>
+        <label class="jf-agree"><input type="checkbox" id="jf-agree2"><span>(선택) 마케팅·뉴스레터 수신에 동의합니다.</span></label>
+        <button type="button" class="jf-terms" id="jf-terms">📄 약관·개인정보 처리방침 자세히 보기</button>
+        <button type="button" class="jf-make" id="jf-make" disabled>신청서 만들기 →</button>
+        <button type="button" class="jf-cmp" id="js-backinfo">← 정보 다시</button>
+      </div>
+
       <button type="button" class="join-close" id="join-close">닫기</button>
     </div>
   </div>
@@ -2406,6 +2499,7 @@
         <span class="acc-chev">▾</span>
       </div>
       <div class="acc-bd">
+      <div id="resv-quick" style="display:none;"></div>
       <div class="vhint" style="margin:2px 2px 10px; line-height:1.55;">손님이 <b>캘린더로 날짜·시간</b>을 고르고 <b>카톡</b>으로 신청해요. 켜면 공개 페이지에 <b>플로팅 예약 버튼 + 홈 섹션</b>으로 나와요.</div>
       <div class="set" id="open-resv-setup">
         <span class="ic">🛠</span>
@@ -3014,6 +3108,21 @@
     .rs-disp button{flex:1; padding:11px 4px; border:1px solid var(--hair); border-radius:10px; background:var(--paper); color:var(--ink); font-size:12.5px; font-weight:600; cursor:pointer;}
     .rs-disp button.on{background:var(--grad); color:#fff; border-color:var(--coral);}
     .rs-disp-hint{font-size:11.5px; color:var(--muted); margin:8px 2px 0; line-height:1.5;}
+    /* 예약 빠른 위젯 (오늘 현황 + 임시휴무) */
+    .rq-card{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:13px 13px 12px; margin:2px 0 12px;}
+    .rq-today{display:flex; align-items:center; gap:9px;}
+    .rq-today .rq-n{font-size:25px; font-weight:800; color:var(--coral); line-height:1;}
+    .rq-today .rq-l{font-size:13px; font-weight:700; color:var(--ink);}
+    .rq-today .rq-next{margin-left:auto; font-size:11px; color:var(--muted); background:var(--soft); border:1px solid var(--hair); padding:4px 9px; border-radius:99px;}
+    .rq-list{margin-top:10px; display:flex; flex-direction:column; gap:6px;}
+    .rq-item{font-size:12.5px; color:#d6d1e0; background:var(--soft); border-radius:9px; padding:7px 10px;}
+    .rq-item b{color:var(--ink); margin-right:5px;} .rq-item span{color:var(--muted);}
+    .rq-empty{margin-top:9px; font-size:12px; color:var(--muted);}
+    .rq-loading{font-size:12px; color:var(--muted); padding:4px 2px;}
+    .rq-btns{display:flex; gap:7px; margin-top:12px;}
+    .rq-btn{flex:1; font-size:12px; font-weight:700; padding:10px 6px; border-radius:10px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); cursor:pointer; font-family:var(--sans);}
+    .rq-btn.on{background:var(--grad); color:#fff; border-color:var(--coral);}
+    .rq-btn.ghost{color:var(--muted);}
     .rs-toggle-row{display:flex; align-items:center; justify-content:space-between; padding:11px 12px; border:1px solid var(--hair); border-radius:11px; background:var(--paper); margin-bottom:9px;}
     .rs-toggle-row .nm{font-size:13px; color:var(--ink);}
     .rs-chip{display:inline-flex; align-items:center; gap:6px; background:var(--coral-soft); color:var(--coral); border-radius:8px; padding:6px 10px; font-size:12px; margin:0 6px 6px 0;}
@@ -5115,8 +5224,21 @@
     function li(a){ return a.slice(0,3).map(function(x){return '<li>'+x+'</li>';}).join(''); }
     return '<div class="an-two"><ul class="an-gbox g"><div class="gh">🟢 잘되는 것</div>'+li(good)+'</ul><ul class="an-gbox b"><div class="gh">🔴 손볼 것</div>'+li(bad)+'</ul></div>';
   }
+  function anAlert(s){
+    var ser=s.series||{};
+    function spike(arr,label,emo){
+      if(!arr||arr.length<6) return null;
+      var last=arr[arr.length-1].n||0, prior=arr.slice(0,-1), sum=0; prior.forEach(function(x){sum+=(x.n||0);}); var avg=sum/prior.length;
+      if(avg<1 || last<3) return null;
+      var r=last/avg; if(r>=2) return '최근 '+label+'이(가) 평소의 <b>'+(Math.round(r*10)/10)+'배</b> '+emo;
+      return null;
+    }
+    var a=spike(ser.conv,'예약·상담','🔥')||spike(ser.pay,'결제 클릭','💳')||spike(ser.visitors,'방문','📈');
+    if(!a) return '';
+    return '<div class="an-alert">🔔 '+a+' — 무슨 콘텐츠 덕분인지 확인해 보세요!</div>';
+  }
   function anOverview(s){
-    return anVerdict(s)+anCards(s)
+    return anVerdict(s)+anAlert(s)+anCards(s)
       +'<div class="an-tcat">🪣 손님 여정 (퍼널) <span>· 어디서 빠지나</span></div>'+anFunnel(s)
       +'<div class="an-tcat">한눈에 <span>· 잘됨 vs 손볼 것</span></div>'+anGoodBad(s);
   }
@@ -8130,23 +8252,59 @@
     // 회원가입 신청 폼 (등급선택 → 정보·동의 → 신청서 생성 → 복사 → 카톡)
     var joinBtn=document.getElementById('lg-join'), joinOv=document.getElementById('join-ov'), joinClose=document.getElementById('join-close');
     if(joinBtn && joinOv){
-      joinBtn.addEventListener('click', function(){ joinOv.style.display='flex'; joinOv.scrollTop=0; });
-      if(joinClose) joinClose.addEventListener('click', function(){ joinOv.style.display='none'; });
-      joinOv.addEventListener('click', function(e){ if(e.target===joinOv) joinOv.style.display='none'; });
       var selTier=null, selPrice='';
-      var tiers=[].slice.call(joinOv.querySelectorAll('.tier'));
       var nameEl=document.getElementById('jf-name'), phoneEl=document.getElementById('jf-phone'),
           ag1=document.getElementById('jf-agree1'), ag2=document.getElementById('jf-agree2'),
           makeBtn=document.getElementById('jf-make'), resultOv=document.getElementById('join-result-ov'),
           msgEl=document.getElementById('jf-msg'), copyBtn=document.getElementById('jf-copy'), jrBack=document.getElementById('jr-back');
-      function refreshMake(){
-        var ok = !!selTier && !!(nameEl.value||'').trim() && (phoneEl.value||'').replace(/[^0-9]/g,'').length>=8 && ag1.checked;
-        makeBtn.disabled=!ok;
+      function jById(id){ return document.getElementById(id); }
+      function showJoinStep(name){
+        joinOv.querySelectorAll('.jstep').forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-jstep')===name); });
+        var idx = (name==='info')?1 : (name==='agree')?2 : 0;
+        joinOv.querySelectorAll('.jstep-bar i').forEach(function(b,i){ b.classList.toggle('on', i<=idx); });
+        var dlg=joinOv.querySelector('.join-dlg'); if(dlg) dlg.scrollTop=0; joinOv.scrollTop=0;
+        if(name==='info') updateRecoMini();
       }
-      tiers.forEach(function(t){ t.addEventListener('click', function(){
-        tiers.forEach(function(x){ x.classList.remove('on'); }); t.classList.add('on');
-        selTier=t.getAttribute('data-tier'); selPrice=t.getAttribute('data-price'); refreshMake();
-      }); });
+      function updateRecoMini(){ var m=jById('jreco-mini'); if(m){ m.innerHTML = selTier? ('선택한 등급: <b>'+selTier+'</b> · '+selPrice) : '등급을 먼저 골라주세요'; } }
+      function refreshMake(){
+        var infoOk = !!(nameEl.value||'').trim() && (phoneEl.value||'').replace(/[^0-9]/g,'').length>=8;
+        var inext=jById('js-infonext'); if(inext) inext.disabled=!infoOk;
+        makeBtn.disabled = !(!!selTier && infoOk && ag1.checked);
+      }
+      function setTier(tier, price){
+        selTier=tier; selPrice=price;
+        joinOv.querySelectorAll('.atier, .atier-wide').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-tier')===tier); });
+        joinOv.querySelectorAll('.jopt').forEach(function(x){ x.classList.toggle('sel', x.getAttribute('data-tier')===tier); });
+        var gn=jById('js-goalnext'); if(gn) gn.disabled=!selTier;
+        var tn=jById('js-tiersnext'); if(tn) tn.disabled=!selTier;
+        refreshMake();
+      }
+      function showReco(){
+        var box=jById('jreco'); if(!box||!selTier) return;
+        var FEAT={'베이직':'컨텐츠·아카이브·Q&A · 분석 기본','프로':'예약·판매·전환·모션 + 분석 상세','프리미엄':'화이트라벨·도메인·AI + 분석 상세+'};
+        var GT={'베이직':'📸 컨텐츠 알리기엔 베이직이 딱이에요','프로':'📅 예약·판매엔 프로가 딱이에요','프리미엄':'🚀 브랜드 키우기엔 프리미엄이 딱이에요'};
+        var MO={'베이직':'8,250','프로':'12,400','프리미엄':'16,600'};
+        var hot = selTier==='프로'?' <span class="rbadge">인기</span>':'';
+        var mo = MO[selTier]?('<br>월로 치면 <b>'+MO[selTier]+'원</b>꼴'):'';
+        box.innerHTML='<div class="rl">'+(GT[selTier]||'추천 등급')+'</div><div class="rn">'+selTier+hot+'</div><div class="rp">'+String(selPrice).replace('/','<i>/</i>')+'</div><div class="rmo">'+(FEAT[selTier]||'')+mo+'</div>';
+        box.style.display='';
+      }
+      joinBtn.addEventListener('click', function(){ joinOv.style.display='flex'; showJoinStep('goal'); });
+      if(joinClose) joinClose.addEventListener('click', function(){ joinOv.style.display='none'; });
+      joinOv.addEventListener('click', function(e){ if(e.target===joinOv) joinOv.style.display='none'; });
+      // 목표 옵션 → 자동 추천
+      joinOv.querySelectorAll('.jopt').forEach(function(o){ o.addEventListener('click', function(){ setTier(o.getAttribute('data-tier'), o.getAttribute('data-price')); showReco(); }); });
+      // 전체 등급 한눈에 (A 카드) 직접 고르기
+      [].slice.call(joinOv.querySelectorAll('.atier, .atier-wide')).forEach(function(t){ t.addEventListener('click', function(){ setTier(t.getAttribute('data-tier'), t.getAttribute('data-price')); }); });
+      // 단계 이동
+      function jOn(id, fn){ var e=jById(id); if(e) e.addEventListener('click', fn); }
+      jOn('js-goalnext', function(){ if(selTier) showJoinStep('info'); });
+      jOn('js-tiersnext', function(){ if(selTier) showJoinStep('info'); });
+      jOn('js-showtiers', function(){ showJoinStep('tiers'); });
+      jOn('js-backgoal', function(){ showJoinStep('goal'); });
+      jOn('js-backtier', function(){ showJoinStep('goal'); });
+      jOn('js-infonext', function(){ showJoinStep('agree'); });
+      jOn('js-backinfo', function(){ showJoinStep('info'); });
       [nameEl,phoneEl].forEach(function(e){ e.addEventListener('input', refreshMake); });
       ag1.addEventListener('change', refreshMake);
       makeBtn.addEventListener('click', function(){
@@ -8163,7 +8321,7 @@
         msgEl.value=msg;
         if(resultOv){ joinOv.style.display='none'; resultOv.style.display='flex'; resultOv.scrollTop=0; }
       });
-      function backToForm(){ if(resultOv) resultOv.style.display='none'; joinOv.style.display='flex'; joinOv.scrollTop=0; }
+      function backToForm(){ if(resultOv) resultOv.style.display='none'; joinOv.style.display='flex'; showJoinStep('agree'); }
       if(jrBack && resultOv){ jrBack.addEventListener('click', backToForm); }
       if(resultOv){ resultOv.addEventListener('click', function(e){ if(e.target===resultOv) backToForm(); }); }
       copyBtn.addEventListener('click', function(){
@@ -8505,9 +8663,51 @@
       if(!onoff) return;
       onoff.classList.toggle('on', !!resvCfg.on);
       if(onLbl){ onLbl.textContent = resvCfg.on ? '· 켜짐 (공개 중)' : '· 꺼짐'; onLbl.style.color = resvCfg.on ? 'var(--coral)' : 'var(--muted)'; }
+      try{ renderResvQuick(); }catch(_){}
     }
     window.__refreshResvSection = refreshSection;
     if(onoff) onoff.onclick=function(){ resvCfg.on=!resvCfg.on; refreshSection(); if(resvCfg.on){ var c=document.getElementById('resv-section-wrap'); if(c) c.classList.add('open'); } };
+
+    // ── 예약 빠른 위젯 (오늘 현황 + 빠른 임시휴무) ──
+    function todayKey(){ var n=new Date(); return n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2); }
+    function fetchResvQuick(){
+      var auth=getAuth(); if(!auth){ window.__resvQuickList=[]; renderResvQuick(); return; }
+      window.laRpc('li_resv_list',{ p_code:auth.code, p_pin_hash:auth.pinHash }).then(function(r){
+        window.__resvQuickList=(r&&r.ok&&r.list&&r.list.length!==undefined)?r.list:[];
+        renderResvQuick();
+      }).catch(function(){ window.__resvQuickList=[]; renderResvQuick(); });
+    }
+    function renderResvQuick(){
+      var box=document.getElementById('resv-quick'); if(!box) return;
+      if(!resvCfg.on){ box.style.display='none'; box.innerHTML=''; return; }
+      box.style.display='';
+      var today=todayKey(), blocked=(resvCfg.blockedDates||[]).indexOf(today)>=0;
+      var list=window.__resvQuickList;
+      var inner;
+      if(list===undefined){ inner='<div class="rq-loading">오늘 예약 불러오는 중…</div>'; }
+      else {
+        var todays=(list||[]).filter(function(b){ return b.rdate===today && b.status!=='cancelled'; }).sort(function(a,b){ return String(a.rtime).localeCompare(String(b.rtime)); });
+        var up=(list||[]).filter(function(b){ return b.rdate>today && b.status!=='cancelled'; }).sort(function(a,b){ return (a.rdate+a.rtime).localeCompare(b.rdate+b.rtime); })[0];
+        inner='<div class="rq-today"><span class="rq-n">'+todays.length+'</span><span class="rq-l">오늘 예약</span>';
+        if(up){ var u=up.rdate.split('-'); inner+='<span class="rq-next">다음 · '+(+u[1])+'/'+(+u[2])+' '+escT(up.rtime||'')+'</span>'; }
+        inner+='</div>';
+        if(todays.length){ inner+='<div class="rq-list">'+todays.map(function(b){ return '<div class="rq-item"><b>'+escT(b.rtime||'')+'</b>'+escT(b.name||'손님')+(b.menu?' <span>· '+escT(b.menu)+'</span>':'')+'</div>'; }).join('')+'</div>'; }
+        else { inner+='<div class="rq-empty">오늘은 예약이 없어요'+(blocked?' · <b style="color:var(--coral)">임시휴무 중</b>':'')+'</div>'; }
+      }
+      box.innerHTML='<div class="rq-card">'+inner
+        +'<div class="rq-btns"><button type="button" id="rq-dayoff" class="rq-btn'+(blocked?' on':'')+'">'+(blocked?'✓ 오늘 휴무 중 · 해제':'🚫 오늘 임시휴무')+'</button>'
+        +'<button type="button" id="rq-status" class="rq-btn ghost">📋 전체 현황</button></div></div>';
+      var off=document.getElementById('rq-dayoff');
+      if(off) off.onclick=function(){
+        var i=resvCfg.blockedDates.indexOf(today);
+        if(i>=0){ resvCfg.blockedDates.splice(i,1); }
+        else { if(!confirm('오늘('+today+')을 임시휴무로 막을까요?\n손님이 오늘 날짜로 예약을 못 하게 돼요.')) return; resvCfg.blockedDates.push(today); resvCfg.blockedDates.sort(); }
+        renderResvQuick(); try{ topSave(); }catch(_){}
+      };
+      var st=document.getElementById('rq-status'); if(st) st.onclick=function(){ var b=document.getElementById('open-resv-status'); if(b) b.click(); };
+      if(list===undefined) fetchResvQuick();
+    }
+    window.__renderResvQuick=renderResvQuick;
     refreshSection();
 
     // ════ 예약 화면 설정 ════
