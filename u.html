@@ -3041,11 +3041,11 @@
     location: function(c){
       var name=c[0]||'', addr=c[1]||'', hours=c[2]||'', link=c[3]||'', photo=c[4]||'';
       if(!name && !addr) return null;
-      var pf=pcStyle(c[5]); var fxC=pf.cls?(' '+pf.cls):'';
-      var wrap=document.createElement('div'); wrap.className='loc';
-      var ph= photo?'<div class="loc-photo'+fxC+'" style="'+pf.vs+'background-image:url('+esc(photo)+')"></div>':'';
-      var btn= link?'<a class="loc-btn" href="'+esc(link)+'" target="_blank" rel="noopener">📍 네이버 지도로 보기 →</a>':'';
-      wrap.innerHTML=ph+'<div class="loc-body">'+(name?'<div class="loc-nm">'+esc(name)+'</div>':'')+(addr?'<div class="loc-addr">'+esc(addr)+'</div>':'')+(hours?'<div class="loc-hours">'+esc(hours)+'</div>':'')+btn+'</div>';
+      // 지도 사진은 인라인으로 안 깔고(스크롤 단축) → "지도 보기" 누르면 새 창. 링크(네이버) 우선, 없으면 올린 지도 사진.
+      var wrap=document.createElement('div'); wrap.className='loc loc-compact';
+      var dest = link || photo;
+      var btn= dest?'<a class="loc-btn" href="'+esc(dest)+'" target="_blank" rel="noopener">🗺 지도 보기 →</a>':'';
+      wrap.innerHTML='<div class="loc-body">'+(name?'<div class="loc-nm">'+esc(name)+'</div>':'')+(addr?'<div class="loc-addr">'+esc(addr)+'</div>':'')+(hours?'<div class="loc-hours">'+esc(hours)+'</div>':'')+btn+'</div>';
       return wrap;
     },
     cardnews: function(c){

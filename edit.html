@@ -2476,7 +2476,7 @@
 
       <div class="tcat addsec s5"><span class="addnum">5</span>연결하기 <span class="addwhy">· 행동으로</span></div>
       <div class="tgrid s5">
-        <div class="tpl imp" data-ic="🛒" data-nm="서비스 · 상품"><span class="tic">🛒</span><span><span class="tn">서비스 · 상품</span><span class="ts">예약·결제 버튼</span></span></div>
+        <div class="tpl imp" data-ic="🛒" data-nm="가격표 · 예약"><span class="tic">🛒</span><span><span class="tn">가격표 · 예약</span><span class="ts">가격 안내 + 예약·구매 버튼</span></span></div>
         <div class="tpl" data-ic="🔗" data-nm="링크 버튼"><span class="tic">🔗</span><span><span class="tn">링크 버튼</span><span class="ts">인스타·유튜브·카톡</span></span></div>
         <div class="tpl" data-ic="✉" data-nm="뉴스레터"><span class="tic">✉</span><span><span class="tn">뉴스레터</span><span class="ts">구독 받기</span></span></div>
         <div class="tpl" data-ic="📍" data-nm="매장 · 위치"><span class="tic">📍</span><span><span class="tn">매장 · 위치</span><span class="ts">주소·지도</span></span></div>
@@ -2500,7 +2500,7 @@
             <div class="tpl" data-ic="🛡" data-nm="반박 제거"><span class="tic">🛡</span><span><span class="tn">반박 제거</span><span class="ts">"이래서 망설여요" 해소</span></span></div>
             <div class="tpl" data-ic="🛡" data-nm="보장 배지"><span class="tic">🛡</span><span><span class="tn">보장 배지</span><span class="ts">환불·만족 보장</span></span></div>
             <div class="tpl" data-ic="⏳" data-nm="카운트다운"><span class="tic">⏳</span><span><span class="tn">카운트다운</span><span class="ts">마감 긴박감</span></span></div>
-            <div class="tpl" data-ic="📌" data-nm="하단 고정 CTA" data-layout="sticky"><span class="tic">📌</span><span><span class="tn">하단 고정 CTA</span><span class="ts">항상 보이는 예약 바</span></span></div>
+            <div class="tpl" data-ic="📌" data-nm="예약 & 구매 버튼" data-layout="sticky"><span class="tic">📌</span><span><span class="tn">예약 & 구매 버튼</span><span class="ts">스크롤해도 보이는 버튼 · 고정 on/off</span></span></div>
             <div class="tpl" data-ic="🔢" data-nm="이용 방법"><span class="tic">🔢</span><span><span class="tn">이용 방법</span><span class="ts">1·2·3 단계</span></span></div>
             <div class="tpl" data-ic="👆" data-nm="CTA 버튼"><span class="tic">👆</span><span><span class="tn">CTA 버튼</span><span class="ts">행동유도 버튼</span></span></div>
             <div class="tpl" data-ic="🏷" data-nm="흐르는 태그 띠"><span class="tic">🏷</span><span><span class="tn">흐르는 태그 띠</span><span class="ts">키워드가 흐름</span></span></div>
@@ -3309,14 +3309,15 @@
     .lc-tb button.tb-em{ color:#E0A36B; }
     .lc-tb button:active{ transform:scale(.94); }
     /* 편집 툴바 (글) = 화면 하단 고정 (네이버식) */
-    #landing-canvas .lc-toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:90; display:flex; flex-wrap:nowrap; align-items:center; gap:6px; margin:0; padding:9px 10px; background:#181620; border-top:1px solid rgba(255,255,255,.12); overflow-x:auto; scrollbar-width:none; }
+    /* 글 서식 툴바 = 글쓰기 영역 맨 위에 작게 고정 (네이버 블로그식) — 하단이면 찾기 어려움 */
+    #landing-canvas .lc-toolbar{ position:sticky; top:0; z-index:90; display:flex; flex-wrap:nowrap; align-items:center; gap:5px; margin:0 0 14px; padding:7px 8px; background:rgba(24,22,32,.96); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.1); border-radius:12px; box-shadow:0 5px 16px rgba(0,0,0,.35); overflow-x:auto; scrollbar-width:none; }
     #landing-canvas .lc-toolbar::-webkit-scrollbar{ display:none; }
     body.post-editing #ws-tabs{ display:none !important; }   /* 글 쓸 땐 하단 내비 숨겨 집중 + 툴바 자리 */
-    body.post-editing{ padding-bottom:66px; }   /* 하단 고정 툴바 자리(저장 버튼 안 가리게) */
+    body.post-editing{ padding-bottom:20px; }   /* 툴바가 상단으로 이동 — 하단 여백 축소 */
     /* ⛶ 전체화면 = 제목줄 우측 작은 버튼 */
     #post-fw.fw-sm{ flex:none; display:inline-flex; align-items:center; gap:4px; padding:6px 11px; border-radius:9px; border:1px solid rgba(155,123,255,.4); background:rgba(155,123,255,.12); color:#b79cff; font:800 11.5px var(--sans); cursor:pointer; white-space:nowrap; }
     #post-fw.fw-sm:active{ transform:scale(.95); }
-    #landing-canvas .lct-b{ padding:8px 11px; border-radius:9px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:#e8e3f0; font-family:inherit; font-size:12.5px; font-weight:800; cursor:pointer; white-space:nowrap; }
+    #landing-canvas .lct-b{ padding:6px 9px; border-radius:8px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:#e8e3f0; font-family:inherit; font-size:11.5px; font-weight:800; cursor:pointer; white-space:nowrap; }
     #landing-canvas .lct-b:active{ transform:scale(.94); }
     #landing-canvas .lct-b.lct-em{ color:#E0A36B; }
     #landing-canvas .lct-photo{ color:#E0A36B; border-color:rgba(224,163,107,.45); background:rgba(224,163,107,.12); margin-left:auto; }
@@ -3324,11 +3325,11 @@
     /* ⛶ 전체 화면 글쓰기 */
     body.fw-on .topbar, body.fw-on #ws-tabs{ display:none !important; }
     .ws-pane[data-pane="page"].fw-mode{ position:fixed; inset:0; z-index:200; background:var(--paper); overflow-y:auto; -webkit-overflow-scrolling:touch; padding:54px 0 96px; margin:0; }
-    .fw-mode #home-body{ max-width:680px; margin:0 auto; padding:0 18px; }
+    .fw-mode #home-body{ max-width:820px; margin:0 auto; padding:0 22px; }
     .fw-mode #landing-canvas .lcx{ margin:6px 0 0; }
     .fw-mode #landing-canvas .lcx-doc .lc-big{ min-height:55vh; }
     .fw-mode #landing-canvas .lc-toolbar{ position:fixed; left:0; right:0; bottom:0; top:auto; margin:0; border-radius:0; border:none; border-top:1px solid rgba(255,255,255,.1); justify-content:center; padding:9px 10px; z-index:210; background:#14131a; overflow-x:auto; }
-    .fw-mode #post-apply-wrap{ max-width:680px; margin:0 auto; padding:0 18px; }
+    .fw-mode #post-apply-wrap{ max-width:820px; margin:0 auto; padding:0 22px; }
     #fw-close{ position:fixed; top:12px; right:14px; z-index:215; display:none; padding:9px 14px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font:800 12.5px var(--sans); cursor:pointer; }
     body.fw-on #fw-close{ display:block; }
     .fw-mode #landing-canvas .lct-full{ display:none; }
@@ -3554,8 +3555,8 @@
   var ov = document.getElementById('add-ov');
   function closeAdd(){ ov.classList.remove('open'); window.__insertBeforeRow=null; if(window.__liveEditActive && window.__liveRefresh) setTimeout(window.__liveRefresh, 40); }
   // ── 토스식 점진 공개: 추천 3개 먼저, "전체 보기"로 펼침 ──
-  var REC_BY_IND={ beauty:['대표 사진 쇼케이스','스타일 갤러리','전문가 증명','서비스 · 상품'], personal:['컨텐츠 갤러리','전문가 증명','문의·신청'], brand:['대표 사진 쇼케이스','매장 · 위치','후기','서비스 · 상품'] };
-  var REC_BY_STYLE={ photo:['대표 사진 쇼케이스','스타일 갤러리','후기','서비스 · 상품'], profile:['전문가 증명','후기','문의·신청'], hook:['서비스 · 상품','후기','카운트다운'], content:['카드뉴스','컨텐츠 갤러리','뉴스레터'] };
+  var REC_BY_IND={ beauty:['대표 사진 쇼케이스','스타일 갤러리','전문가 증명','가격표 · 예약'], personal:['컨텐츠 갤러리','전문가 증명','문의·신청'], brand:['대표 사진 쇼케이스','매장 · 위치','후기','가격표 · 예약'] };
+  var REC_BY_STYLE={ photo:['대표 사진 쇼케이스','스타일 갤러리','후기','가격표 · 예약'], profile:['전문가 증명','후기','문의·신청'], hook:['가격표 · 예약','후기','카운트다운'], content:['카드뉴스','컨텐츠 갤러리','뉴스레터'] };
   function buildRecommended(){
     var grid=document.getElementById('rec-grid'); if(!grid) return;
     var A=(typeof AUTH!=='undefined'&&AUTH)?AUTH:(window.AUTH||null);
@@ -3698,9 +3699,9 @@
     'Q&A':'qna','반박 제거':'qna','채널 링크':'channels','링크 버튼':'link','뉴스레터':'newsletter',
     '인용구':'quote','전후사진':'beforeafter','자유 텍스트':'text','이미지 + 글':'imagetext','프로필 카드':'profilecard',
     '강의 · 전자책':'link','숫자 스탯':'stat','후기':'review','문의 폼':'contact',
-    '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','문의·신청':'lead','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service',
+    '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','문의·신청':'lead','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service','가격표 · 예약':'service',
     '대표 사진 쇼케이스':'lookbook','랭킹 · 가격':'ranking','매장 · 위치':'location',
-    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','카운트다운':'countdown','이용 방법':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best'
+    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','예약 & 구매 버튼':'cta','카운트다운':'countdown','이용 방법':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best'
   };
   var SCHEMA = {
     event:[['text','태그','이번 달'],['text','제목','6월 신규 등록 시 1:1 컨설팅 무료'],['date','종료일','2026-06-30'],['url','링크(선택)',''],['photo','사진 (선택 · 은은한 리본에 작은 썸네일)','']],
@@ -4198,6 +4199,7 @@
   };
   // ── 표현법(레이아웃) 정의: 블록 종류별 선택지 ──
   var LAYOUTS = {
+    cta:       [['inline','일반 (글 속에)','한 번만 노출'],['sticky','스크롤 고정','내려도 항상 보임']],
     imagetext: [['hero','풀블리드 히어로','사진 위 큰 글자'],['split','좌우 분할','사진+글 나란히'],['center','센터 미니멀','사진 위 가운데 글'],['card','카드(기본)','네모 카드']],
     text:      [['impact','임팩트','특대 가운데 글'],['quote','인용','큰 따옴표 강조'],['bar','강조바','좌측 컬러 바'],['card','카드(기본)','네모 카드']],
     authority: [['band','임팩트 숫자','큰 숫자 띠'],['grid','2×2 그리드','큰 숫자 4칸'],['card','카드','작은 숫자'],['minimal','미니멀','한 줄']],
@@ -4448,7 +4450,7 @@
   var TPL_PRESET = {
     '강의 신청': ['강의 신청', '신청하기', '관심 있으시면 이름·연락처를 남겨주세요'],
     'CTA 버튼': ['지금 예약하기', ''],
-    '하단 고정 CTA': ['지금 예약하기', ''],
+    '예약 & 구매 버튼': ['지금 예약하기', ''],
     '카운트다운': ['마감 임박! 지금 신청하세요', '', '지금 신청', ''],
     '이용 방법': ['이렇게 진행돼요', [['상담 신청','부담 없이 문의 남겨주세요'],['1:1 맞춤 진단','문제를 정확히 파악하고 방향을 잡아요'],['실행 & 케어','결과가 날 때까지 함께해요']]],
     '보장 배지': ['100% 환불 보장', '마음에 안 드시면 100% 환불해드려요. 부담 없이 시작하세요.'],
@@ -4525,7 +4527,7 @@
     '영상':'<div style="aspect-ratio:16/9; border-radius:9px; background:linear-gradient(135deg,#2c2c33,#3a3142); display:flex; align-items:center; justify-content:center; font-size:26px; color:rgba(255,255,255,.6)">▶</div><div class="m-q" style="margin-top:8px">유튜브·릴스를 홈에서 바로 재생.</div>',
     '사진':'<div style="aspect-ratio:4/5; border-radius:9px; background:linear-gradient(135deg,#2c2c33,#3a3142)"></div><div class="m-q" style="margin-top:8px">성과·포트폴리오 한 장 + 프레임 꾸미기.</div>',
     '전후사진':IMG2+'<div class="m-q" style="margin-top:8px">비포 → 애프터, 변화가 가장 강한 증거.</div>',
-    '서비스 · 상품':'<div class="m-row"><span>앞머리 컷</span><b>30,000원</b></div><div class="m-row"><span>전체 스타일링</span><b>120,000원</b></div><span class="m-cta">📅 지금 예약하기</span>',
+    '가격표 · 예약':'<div class="m-row"><span>앞머리 컷</span><b>30,000원</b></div><div class="m-row"><span>전체 스타일링</span><b>120,000원</b></div><span class="m-cta">📅 지금 예약하기</span>',
     '랭킹 · 가격':'<div class="m-row"><span>🥇 히메허쉬 <b style="color:#F5C84B">HOT</b></span><b>55,000원</b></div><div class="m-row"><span>🥈 슬릭컷</span><b>55,000원</b></div>',
     '링크 버튼':'<div class="m-row"><span>📷 인스타그램</span><b>›</b></div><div class="m-row"><span>▶ 유튜브</span><b>›</b></div><div class="m-row"><span>💬 카카오 상담</span><b>›</b></div>',
     '카드뉴스':IMG3+'<div class="m-q" style="margin-top:8px">📝 글마다 링크 — 모은 콘텐츠가 자산이 돼요.</div>',
@@ -6381,7 +6383,7 @@
     try{ if(window.__renderAboutCanvas) window.__renderAboutCanvas(); }catch(e){}
   }
   // ── 분야별 기본 구성(프리셋) — 새 사용자가 로그인하면 분야에 맞게 자동 ──
-  var TYPE_NAME = { links:'뉴스레터 · 강의 · 전자책', cardnews:'카드뉴스', gallery:'컨텐츠 갤러리', channels:'채널 링크', stylegallery:'스타일 갤러리', highlights:'하이라이트', products:'추천 제품', event:'이벤트 배너', qna:'Q&A', archive:'아카이브', authority:'전문가 증명', service:'서비스 · 상품', lead:'문의·신청', review:'후기', reservation:'예약 신청', lookbook:'대표 사진 쇼케이스', ranking:'랭킹 · 가격', location:'매장 · 위치' };
+  var TYPE_NAME = { links:'뉴스레터 · 강의 · 전자책', cardnews:'카드뉴스', gallery:'컨텐츠 갤러리', channels:'채널 링크', stylegallery:'스타일 갤러리', highlights:'하이라이트', products:'추천 제품', event:'이벤트 배너', qna:'Q&A', archive:'아카이브', authority:'전문가 증명', service:'가격표 · 예약', lead:'문의·신청', review:'후기', reservation:'예약 신청', lookbook:'대표 사진 쇼케이스', ranking:'랭킹 · 가격', location:'매장 · 위치' };
   // 문제 기반 랜딩 = 설득 서사(공감→원인→전문가→해결→변화→예약). 안내문구 미리 채움.
   var P_EMPATHY={type:'imagetext', layout:'hero', name:'① 공감 · 문제 후킹', content:['','이런 고민, **있으시죠?**','고객이 겪는 문제를 공감되게 적어요. (강조: **두 별표** = 그라데이션, *한 별표* = 포인트색)\n예: "앞머리만 자르면 얼굴이 더 커 보여 늘 고민이셨죠?"']};
   var P_CAUSE={type:'text', layout:'impact', name:'② 원인 · 근거', content:['사실, **이게 원인**이에요','왜 그 문제가 생기는지 + 근거를 적어요.\n예: "얼굴형을 고려하지 않은 일률적인 커트 때문이에요. 같은 앞머리도 얼굴형에 따라 전혀 다르게 보여요."']};
@@ -7234,7 +7236,9 @@
     openPostEdit(p.id);
     try{ if(window.__sheetAfterCreate) window.__sheetAfterCreate(); }catch(_){}
   }
-  (function(){ var ap=document.getElementById('add-post-btn'); if(ap) ap.onclick=showPostTypeChooser; })();
+  window.__createPost=createPost;
+  // 유형 picker 건너뛰고 바로 블로그 글쓰기 캔버스로 (유형 분류는 안에서 주제 칩으로 — 사용자 "노션/블로그처럼 바로 쓰기")
+  (function(){ var ap=document.getElementById('add-post-btn'); if(ap) ap.onclick=function(){ createPost('blog'); }; })();
 
   // ════ 컨텐츠 가져오기 picker (발행 글 → 홈에 카드로 꽂기 · 큐레이션) ════
   (function(){
@@ -8503,7 +8507,7 @@
       _moved=null; lsHost.innerHTML='';
     }
     window.__openPostSheet=function(id){ _mode='post'; try{ openPostEdit(id); }catch(e){} moveIn(document.getElementById('home-body'), '게시물 편집'); };
-    window.__newPostSheet=function(){ _newToSheet=true; try{ showPostTypeChooser(); }catch(e){ _newToSheet=false; } };
+    window.__newPostSheet=function(){ _newToSheet=true; try{ createPost('blog'); }catch(e){ _newToSheet=false; } };
     window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '게시물 편집'); } };
     window.__openProfileSheet=function(){ _mode='profile'; moveIn(document.getElementById('profile-card'), '프로필 편집'); };
     window.__openProductsSheet=function(){ _mode='product'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.querySelector('.pw-pane[data-pwpane="product"]'), '스토어 편집'); };
