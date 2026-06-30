@@ -372,6 +372,7 @@
   .login-t{font-family:var(--serif); font-size:22px; font-weight:700; color:var(--ink);}
   .login-slogan{font-size:11.5px; font-weight:700; letter-spacing:.01em; margin:5px 0 2px; background:linear-gradient(95deg,#b79bff,#ff7fcf,#5fd9ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; opacity:.92;}
   .login-s{font-size:12.5px; color:var(--muted); margin:4px 0 16px; line-height:1.5;}
+  .login-s:empty{display:none;}   /* 기본 설명 비움 — PIN 단계 안내 등 텍스트 있을 때만 보임 */
   .lg-seg{display:inline-flex; gap:2px; margin:0 0 14px; padding:3px; background:rgba(255,255,255,.06); border:1px solid rgba(45,212,191,.2); border-radius:999px;}
   .lg-seg button{border:none; background:none; color:#9b94b8; border-radius:999px; padding:6px 15px; font-size:12.5px; font-family:var(--sans); cursor:pointer; transition:background .12s, color .12s;}
   .lg-seg button.on{background:linear-gradient(95deg,#3D7BFF,#9B3DFF,#FF3DC0); color:#fff; box-shadow:0 2px 10px rgba(0,0,0,.45);}
@@ -1721,7 +1722,7 @@
       <img class="login-house" src="la-mark.png" alt="컨텐츠 허브">
       <div class="login-t">컨텐츠 허브</div>
       <div class="login-slogan">컨텐츠를 자산으로 만드는 수익화 개인 홈페이지</div>
-      <div class="login-s" id="lg-sub">컨텐츠 허브 운영자 페이지 · 코드와 PIN으로 들어가면 편집·설정을 할 수 있어요</div>
+      <div class="login-s" id="lg-sub"></div>
       <div class="lg-signup-note" id="lg-signup-note">발급받은 <b>코드</b>를 입력하면, 다음 화면에서 <b>나만의 PIN</b>을 정해요.<br>가입은 이 한 번이면 끝이에요 😊</div>
       <input id="lg-code" placeholder="발급받은 코드 (6자리)" autocapitalize="characters" autocomplete="off" maxlength="6">
       <div class="pin-box" id="lg-pin-box">
@@ -3537,8 +3538,9 @@
     }
     window.__switchWs=switchWs;
     document.querySelectorAll('.ws-tab').forEach(function(t){ t.onclick=function(){ switchWs(t.getAttribute('data-ws')); }; });
-    var goCH=document.getElementById('go-customer-home'); if(goCH) goCH.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
-    var goCT=document.getElementById('go-customer-top'); if(goCT) goCT.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+    // 고객 홈으로 = 새 탭(window.open) 말고 인앱 미리보기(allprev iframe)로 — 왔다갔다 없이 "유기체처럼" 한 화면에서 (✎편집하기로 복귀)
+    var goCH=document.getElementById('go-customer-home'); if(goCH) goCH.onclick=function(){ if(window.__openCustomerPreview) window.__openCustomerPreview(); else if(window.__openRealHome) window.__openRealHome(); };
+    var goCT=document.getElementById('go-customer-top'); if(goCT) goCT.onclick=function(){ if(window.__openCustomerPreview) window.__openCustomerPreview(); else if(window.__openRealHome) window.__openRealHome(); };
     var topEd=document.getElementById('top-edit'); if(topEd) topEd.onclick=function(){ if(window.__openLive) window.__openLive(); };   // 운영→편집 모드
   })();
 
@@ -6357,6 +6359,8 @@
     if(d.cats && Array.isArray(d.cats) && d.cats.length){ catsData = d.cats; } else { ensureCats(); }
     if(d.catColors && typeof d.catColors==='object'){ catColorsData = d.catColors; } else { catColorsData = {}; }
     if(d.archiveView){ archiveView = d.archiveView; }
+    // 1회 마이그(2026-06-30): 옛 기본 'cards'(그리드)→'매거진'(list). 의도적 선택이 아니라 옛 기본값이었음. 플래그로 한 번만(다시 그리드 고르면 유지).
+    try{ if(archiveView==='cards' && !localStorage.getItem('cm-arcview-mag-mig')){ archiveView='list'; localStorage.setItem('cm-arcview-mag-mig','1'); } }catch(_){}
     try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){}
     try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(_){}
     if(d.profile){ sv('pf-name',d.profile.name); sv('pf-bio',d.profile.bio); sv('pf-handle',d.profile.handle); sv('pf-tagline',d.profile.tagline||''); sv('pf-headline',d.profile.headline||''); try{ if(window.__reviewsSet) window.__reviewsSet(d.profile.reviews||[]); }catch(_){} try{ if(window.__ctaLoad) window.__ctaLoad(d.profile.cta||{}); }catch(_){}
@@ -6476,7 +6480,7 @@
   window.__postTitleById=function(id){ var p=postById(id); return p?(p.title||'(제목 없음)'):'(삭제된 글)'; };
   var productsData = [];        // [{name,price,url}] → 손님 제품 탭
   var qnaData = [];             // [{q,a}] → 손님 Q&A 탭
-  var archiveView = 'cards';    // 'cards' | 'photo' | 'list' → 손님 아카이브 보기 방식
+  var archiveView = 'list';    // 'cards' | 'photo' | 'list'(매거진·기본) → 손님 아카이브 보기 방식
   var CATS_DEFAULT = ['정보·노하우','후기·사례','소식·이벤트'];
   var catsData = [];            // 관리되는 주제(카테고리) 목록 — 손님 칩 + 편집 고르기
   function ensureCats(){ if(!Array.isArray(catsData) || !catsData.length) catsData = CATS_DEFAULT.slice(); return catsData; }
@@ -6753,7 +6757,10 @@
       ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">어디로 배포할까요?</span><span class="x" id="pub-x">×</span></div><div class="desc">손님 목록에서 이 컨텐츠가 묶일 주제예요 · 톡 골라주세요. (안 골라도 전체엔 떠요)</div><div id="pub-chips" class="lce-chips" style="margin:8px 0 16px;"></div><button type="button" id="pub-go" class="btn primary" style="width:100%; padding:15px; font-size:15px; font-weight:800; border-radius:13px;">💾 저장 · 배포하기</button></div>';
       document.body.appendChild(ov);
       ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='pub-x') ov.classList.remove('open'); });
-      ov.querySelector('#pub-go').onclick=function(){ ov.classList.remove('open'); doSave(); };
+      ov.querySelector('#pub-go').onclick=function(){ ov.classList.remove('open'); doSave();
+        // 발행하면 → 컨텐츠 목록으로 (블로그·노션처럼 끝맺음). 저장이 시작될 시간(0.5s) 후 목록 복귀.
+        try{ setTimeout(function(){ if(window.__leavePostEdit) window.__leavePostEdit(); if(window.__switchWs) window.__switchWs('posts'); }, 500); }catch(_){}
+      };
     }
     renderPubChips(); ov.classList.add('open');
   }

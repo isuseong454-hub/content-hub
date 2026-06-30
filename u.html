@@ -1329,6 +1329,10 @@
   button:active,.cta-btn:active,.hh-cta:active,.resv-cta-btn:active,.loc-btn:active,.lead-btn:active,.cd-btn:active,.ev-s-btn:active,.navitem:active{transform:scale(.96);}
   .cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:62px; width:100%; max-width:520px; padding:8px 14px calc(8px + env(safe-area-inset-bottom)); z-index:33; box-sizing:border-box; pointer-events:none;}
   .cta-sticky a{pointer-events:auto; display:block; text-align:center; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:15.5px; font-weight:700; padding:14px; border-radius:14px; text-decoration:none; box-shadow:0 6px 22px rgba(0,0,0,.32);}
+  /* 플로팅 채널·예약 고정바 = 홈 탭에서만 (소개·컨텐츠·스토어·Q&A선 숨겨 집중) */
+  body.cm-not-home #home-fab, body.cm-not-home .cta-sticky{ display:none !important; }
+  /* 예약 고정바와 채널 아이콘이 겹치지 않게 아이콘을 위로 */
+  body.has-cta-sticky #home-fab{ bottom:128px; }
   .cd-card{text-align:center;}
   .cd-title{font-size:16px; font-weight:700; color:var(--ink); margin-bottom:13px;}
   .cd-timer{display:flex; justify-content:center; gap:8px; margin-bottom:14px;}
@@ -2045,6 +2049,7 @@
       var id = t.getAttribute('data-tab');
       navs.forEach(function(x){ x.classList.toggle('active', x === t); });
       panes.forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-pane') === id); });
+      document.body.classList.toggle('cm-not-home', id !== 'home');   // 플로팅 채널·예약바는 홈 탭에서만 (다른 탭선 집중 흐트러짐 방지)
       var hero = document.getElementById('home-hero');
       if(hero && hero.dataset.global){ hero.style.display = (id === 'home' && !hero.hidden) ? '' : 'none'; }
       // 소개 탭 = 전용 프로필 허브 → 전역 프로필 헤더 숨김 (중복 방지)
@@ -2540,6 +2545,7 @@
       var text=c[0]||'지금 예약하기', link=c[1]||'#';
       if(layout==='sticky'){
         var bar=document.createElement('div'); bar.className='cta-sticky';
+        try{ document.body.classList.add('has-cta-sticky'); }catch(_){}   // 예약 고정바 있으면 채널 아이콘을 그 위로 올림(겹침 방지)
         bar.innerHTML='<a href="'+esc(link)+'" target="_blank" rel="noopener" data-cta="1">'+emph(text)+'</a>';
         return bar;
       }
@@ -3615,7 +3621,7 @@
     window.__resvOn = !!(d.reservation && d.reservation.on);   // '이 스타일로 예약' 버튼 노출 조건 (블록 렌더 전 세팅)
     if(d.blocks && d.blocks.length){ renderBlocks(d.blocks); }
     try{ setTimeout(setupReveal, 230); }catch(e){}   // ✨ 스크롤 등장 효과 (블록 렌더 후)
-    if(d.posts && d.posts.length){ try{ buildPosts(d.posts); }catch(e){} try{ buildArchive(d.posts, d.archiveView||'cards'); }catch(e){} }
+    if(d.posts && d.posts.length){ try{ buildPosts(d.posts); }catch(e){} try{ buildArchive(d.posts, d.archiveView||'list'); }catch(e){} }   /* 기본=매거진(대표 1개 크게+컬러 행). 설정서 그리드·사진으로 바꿀 수 있음 */
     try{ setTimeout(decoratePostViews, 450); }catch(e){}
     // 제품·Q&A 탭 = 편집기 게시물 워크스페이스의 제품/Q&A 매니저 데이터로 렌더
     if(d.products && d.products.length){ try{ buildProductsPane(d.products); }catch(e){} }
