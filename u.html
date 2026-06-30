@@ -2692,8 +2692,8 @@
         var html=''; for(var b=0;b<first;b++) html+='<span class="rv-empty"></span>';
         for(var dd=1;dd<=days;dd++){
           var dt=new Date(state.y, state.m, dd); var dow=dt.getDay();
+          if(dt<today){ html+='<span class="rv-empty"></span>'; continue; }   // 지난 날짜는 표시 안 함 — 당일 기준(사용자 요청)
           var cls=['rv-day']; var disabled=false;
-          if(dt<today){ cls.push('rv-past'); disabled=true; }
           if(closedSet[dow]){ cls.push('rv-closed'); disabled=true; }
           if(!disabled){ if(dow===0) cls.push('rv-sun'); else if(dow===6) cls.push('rv-sat'); }
           if(dt.getTime()===today.getTime()) cls.push('rv-today');
@@ -4189,7 +4189,7 @@
     if(!EDIT_MODE) return;
     var pane=document.querySelector('.pane[data-pane="'+tab+'"]'); if(!pane) return;
     if(tab==='archive'){
-      ensureHeader(pane, '📂 컨텐츠', '＋ 새 글 쓰기', 'la-edit-newpost');
+      // (제거 2026-06-30·사용자 요청) 컨텐츠 위 '📂 컨텐츠 ＋ 새 글 쓰기' 편집 헤더 — 손님 화면처럼 깔끔하게. 새 글은 편집기 컨텐츠 탭에서 추가. 카드 탭 편집(✎수정)은 유지.
       if(!pane.querySelector('[data-pid]') && !realPosts().length){ markDemo(pane); }
       [].forEach.call(pane.querySelectorAll('[data-pid]'), function(a){
         if(!a.querySelector('.la-ed-pen')){ a.classList.add('la-ed-sec'); var pen=document.createElement('span'); pen.className='la-ed-pen'; pen.textContent='✎ 수정'; a.appendChild(pen); }

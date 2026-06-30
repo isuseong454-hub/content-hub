@@ -2224,7 +2224,7 @@
       <div class="cat-bar">
         <span class="cat-bar-lbl">주제</span>
         <div id="post-type-seg" class="ptype-seg"></div>
-        <button type="button" id="cat-add-pinned" class="cat-add-pinned">＋ 유형</button>
+        <button type="button" id="cat-add-pinned" class="cat-add-pinned">＋ 주제</button>
       </div>
       <div id="posts-lib"></div>
       <div class="pw-foot">
@@ -2232,7 +2232,7 @@
         <span class="pw-foot-seg" id="arcview-seg" title="손님 아카이브 탭에 보이는 형태">
           <button type="button" class="av-tab on" data-av="cards">카드</button>
           <button type="button" class="av-tab" data-av="photo">사진</button>
-          <button type="button" class="av-tab" data-av="list">리스트</button>
+          <button type="button" class="av-tab" data-av="list">매거진</button>
         </span>
       </div>
       <button type="button" id="arc-guide-btn" class="pw-link" style="display:block; margin:12px auto 0;">✨ 뭘 올릴까? · 예시 보기</button>
@@ -3455,7 +3455,7 @@
         <button class="rs-tab" data-rstab="msg">③ 신청·카톡</button>
       </div>
       <div id="resv-setup-body"></div>
-      <button class="btn" id="resv-setup-preview" style="width:100%; padding:11px; margin-top:14px;">👁 고객 예약화면 미리보기 (새 탭)</button>
+      <button class="btn" id="resv-setup-preview" style="width:100%; padding:11px; margin-top:14px;">👁 고객 예약화면 미리보기</button>
       <button class="btn primary" id="resv-setup-save" style="width:100%; padding:13px; margin-top:9px;">💾 저장하기</button>
     </div>
   </div>
@@ -6651,6 +6651,8 @@
   function newPostId(){ return 'p_'+Date.now().toString(36)+Math.floor(Math.random()*1000); }
 
   var postTypeFilter=null;   // (호환용 — 더 안 씀)
+  // 대표(featured) 개수 제한 = 유형(주제)별 — 한 유형에 최대 3개 (사용자 요청)
+  function featCntInCat(cat){ cat=(cat||'').trim(); var n=0; postsData.forEach(function(x){ if(x && x.featured && (x.cat||'').trim()===cat) n++; }); return n; }
   function renderPostsLibrary(){
     var box=document.getElementById('posts-lib'); if(!box) return;
     var seg=document.getElementById('post-type-seg');
@@ -6702,7 +6704,10 @@
         +actsHtml
         +'</div>';
     }).join('');
-    box.querySelectorAll('[data-pfeat]').forEach(function(s){ s.onclick=function(e){ e.stopPropagation(); var p=postById(s.getAttribute('data-pfeat')); if(!p) return; if(!p.featured){ var cnt=0; postsData.forEach(function(x){ if(x.featured) cnt++; }); if(cnt>=3){ try{ notify('대표 컨텐츠는 최대 3개까지예요'); }catch(_){} return; } p.featured=true; } else p.featured=false; renderPostsLibrary(); }; });
+    box.querySelectorAll('[data-pfeat]').forEach(function(s){ s.onclick=function(e){ e.stopPropagation(); var p=postById(s.getAttribute('data-pfeat')); if(!p) return; if(!p.featured){ if(featCntInCat(p.cat)>=3){ try{ notify('한 유형에 대표는 3개까지예요'); }catch(_){} return; } p.featured=true;
+        // 대표 누르면 자동 매거진 보기로 (사용자: "대표 = 매거진"). cards일 때만 전환.
+        try{ if(window.__archiveView && window.__archiveView.get && window.__archiveView.get()==='cards'){ window.__archiveView.set('list'); document.querySelectorAll('#arcview-seg .av-tab').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-av')==='list'); }); try{ notify('★ 대표 → 매거진 보기로 전환됐어요'); }catch(_){} } }catch(_){}
+      } else p.featured=false; renderPostsLibrary(); }; });
     box.querySelectorAll('[data-plink]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); copyPostLink(b.getAttribute('data-plink')); }; });
     box.querySelectorAll('[data-pedit]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openPostEdit(b.getAttribute('data-pedit')); }; });
     box.querySelectorAll('[data-pon]').forEach(function(s){ s.onclick=function(e){ e.stopPropagation(); var p=postById(s.getAttribute('data-pon')); if(p){ p.on=!(p.on!==false); renderPostsLibrary(); } }; });
@@ -6983,7 +6988,7 @@
       var cp=e.target.closest('[data-catpick]');
       if(cp){ var v=cp.getAttribute('data-catpick'); if(v==='__manage'){ openCatManage(); return; } var p=postById(postEditId); if(!p) return; p.cat=(((p.cat||'').trim())===v)?'':v; var ci=document.getElementById('post-f-cat'); if(ci) ci.value=p.cat; renderLandingCardEditor(p); try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){} return; }
       if(e.target.closest('[data-lcecover]')){ try{ openVault(function(u){ var p=postById(postEditId); if(p) p.cover=u; renderLandingCardEditor(postById(postEditId)); try{ if(window.__renderLandingLib) window.__renderLandingLib(); }catch(_){} }); }catch(_){} return; }
-      if(e.target.closest('[data-lcefeat]')){ var p=postById(postEditId); if(!p) return; if(!p.featured){ var cnt=0; postsData.forEach(function(x){ if(x.featured) cnt++; }); if(cnt>=3){ try{ notify('대표 컨텐츠는 최대 3개까지예요'); }catch(_){} return; } p.featured=true; } else p.featured=false; renderLandingCardEditor(p); try{ if(window.__renderLandingLib) window.__renderLandingLib(); }catch(_){} return; }
+      if(e.target.closest('[data-lcefeat]')){ var p=postById(postEditId); if(!p) return; if(!p.featured){ if(featCntInCat(p.cat)>=3){ try{ notify('한 유형에 대표는 3개까지예요'); }catch(_){} return; } p.featured=true; } else p.featured=false; renderLandingCardEditor(p); try{ if(window.__renderLandingLib) window.__renderLandingLib(); }catch(_){} return; }
       if(e.target.closest('[data-lcedel]')){ if(!confirm('이 랜딩을 삭제할까요?')) return; var rid=postEditId; postsData=postsData.filter(function(x){return x.id!==rid;}); exitPostMode(); renderPostsLibrary(); try{ renderLandingLib(); }catch(_){} if(window.__switchWs) window.__switchWs('posts'); return; }
     });
   })();
@@ -7160,8 +7165,7 @@
     function paintFeat(){ feat.textContent=p.featured?'★ 대표 컨텐츠 (소개·홈 노출)':'☆ 대표로 지정 (최대 3개)'; }
     feat.onclick=function(){
       if(!p.featured){
-        var cnt=0; postsData.forEach(function(x){ if(x.featured) cnt++; });
-        if(cnt>=3){ try{ notify('대표 컨텐츠는 최대 3개까지예요'); }catch(_){} return; }
+        if(featCntInCat(p.cat)>=3){ try{ notify('한 유형에 대표는 3개까지예요'); }catch(_){} return; }
         p.featured=true;
       } else { p.featured=false; }
       paintFeat(); if(window.__renderPostsLib) window.__renderPostsLib();
@@ -7635,7 +7639,7 @@
       var box=document.getElementById('pw-featured'); if(!box) return;
       if(!postsData.length){ box.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 2px;">게시물이 없어요 · 아카이브 탭에서 만들어보세요</div>'; return; }
       box.innerHTML=postsData.map(function(p){ return '<div class="pw-feat-item'+(p.featured?' on':'')+'" data-fid="'+p.id+'"><span class="pw-feat-star">'+(p.featured?'★':'☆')+'</span><div style="flex:1;min-width:0;font-size:13px;">'+escT(p.title||'(제목 없음)')+'</div></div>'; }).join('');
-      box.querySelectorAll('[data-fid]').forEach(function(it){ it.onclick=function(){ var id=it.getAttribute('data-fid'); var t=postById(id); if(t){ if(!t.featured){ var cnt=0; postsData.forEach(function(x){ if(x.featured) cnt++; }); if(cnt>=3){ try{ notify('대표 컨텐츠는 최대 3개까지예요'); }catch(_){} return; } t.featured=true; } else { t.featured=false; } } renderFeatured(); if(window.__renderPostsLib) window.__renderPostsLib(); }; });
+      box.querySelectorAll('[data-fid]').forEach(function(it){ it.onclick=function(){ var id=it.getAttribute('data-fid'); var t=postById(id); if(t){ if(!t.featured){ if(featCntInCat(t.cat)>=3){ try{ notify('한 유형에 대표는 3개까지예요'); }catch(_){} return; } t.featured=true; } else { t.featured=false; } } renderFeatured(); if(window.__renderPostsLib) window.__renderPostsLib(); }; });
     }
     function renderArcView(){ var av=window.__archiveView?window.__archiveView.get():'cards'; document.querySelectorAll('#arcview-seg .av-tab').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-av')===av); }); }
     document.querySelectorAll('#arcview-seg .av-tab').forEach(function(b){ b.onclick=function(){ if(window.__archiveView) window.__archiveView.set(b.getAttribute('data-av')); renderArcView(); }; });
@@ -8318,7 +8322,7 @@
     document.getElementById('resv-setup-x').onclick=function(){ closeOv('resv-setup-ov'); };
     document.getElementById('resv-setup-ov').addEventListener('click', function(e){ if(e.target.id==='resv-setup-ov') closeOv('resv-setup-ov'); });
     document.getElementById('resv-setup-save').onclick=function(){ closeOv('resv-setup-ov'); topSave(); };
-    var rsPv=document.getElementById('resv-setup-preview'); if(rsPv) rsPv.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+    var rsPv=document.getElementById('resv-setup-preview'); if(rsPv) rsPv.onclick=function(){ if(window.__openCustomerPreview) window.__openCustomerPreview(); else if(window.__openRealHome) window.__openRealHome(); };
 
     // ════ 예약 현황 · 명단 ════
     function parseResvLead(x){
