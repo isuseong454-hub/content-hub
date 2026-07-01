@@ -85,3 +85,27 @@ p{font-size:17px;line-height:1.7;color:var(--muted)}
   .final-buttons{flex-direction:column;width:100%}
   .final-buttons .btn{width:100%}
 }
+
+/* ===== 소개 ① / ② 세그먼트 토글 + 소개②(레벨 1 시스템 스토리) ===== */
+.intro-seg-wrap{max-width:1220px;margin:0 auto 44px;padding:0 28px;display:flex;justify-content:center}
+.intro-seg{display:inline-flex;gap:6px;background:#f0ecff;border:1px solid #e3dcff;border-radius:16px;padding:6px}
+.intro-seg-b{display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:transparent;color:#6552aa;font-family:inherit;font-weight:800;font-size:15px;padding:11px 28px;border-radius:11px;cursor:pointer;line-height:1.2;transition:.15s}
+.intro-seg-b small{font-size:10.5px;font-weight:600;color:#9a8fc7;letter-spacing:.01em}
+.intro-seg-b.on{background:#fff;color:#6337ee;box-shadow:0 6px 16px rgba(99,55,238,.18)}
+.intro-seg-b.on small{color:#a07be0}
+.intro-pane[hidden]{display:none}
+.lv-sec{max-width:1220px;margin:0 auto 128px;padding:0 28px;text-align:center}
+.lv-sec.compact{max-width:1100px}.lv-sec.wide{max-width:1340px}.lv-sec.narrow{max-width:760px}
+.lv-eyebrow{display:inline-block;padding:9px 17px;border-radius:999px;background:rgba(124,63,228,.2);border:1px solid rgba(167,139,255,.4);color:#c9b6ff;font-weight:900;font-size:14px;letter-spacing:.02em;margin:0 0 16px}
+.lv-h2{font-size:42px;line-height:1.18;letter-spacing:-.05em;margin:0 0 30px;font-weight:900;color:#fff}
+.lv-h2 strong{color:#c084fc}
+.lv-shot{width:100%;max-width:1060px;display:block;margin:0 auto;border-radius:22px;box-shadow:0 22px 60px rgba(0,0,0,.5);border:1px solid rgba(167,139,255,.16)}
+.lv-sec.wide .lv-shot{max-width:1220px}.lv-sec.compact .lv-shot{max-width:980px}.lv-sec.narrow .lv-shot{max-width:560px}.lv-shot.tall{max-height:760px;object-fit:contain}
+.lv-dark{max-width:1280px;padding:54px 38px;border-radius:36px;background:radial-gradient(120% 90% at 50% 0%,rgba(124,63,228,.22),transparent 60%),linear-gradient(180deg,#0e0b1e,#141027);border:1px solid rgba(167,139,255,.22)}
+.lv-dark .lv-eyebrow{background:rgba(167,139,255,.18);color:#d6c4ff}
+.lv-reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}.lv-reveal.is-visible{opacity:1;transform:none}
+@media (max-width:900px){
+  .intro-seg-wrap{margin-bottom:30px;padding:0 14px}.intro-seg-b{padding:9px 16px;font-size:14px}
+  .lv-sec{margin-bottom:78px;padding:0 16px}.lv-h2{font-size:27px;margin-bottom:20px}.lv-eyebrow{font-size:12.5px;padding:7px 13px}
+  .lv-shot{border-radius:18px}.lv-dark{padding:36px 16px;border-radius:26px}
+}
