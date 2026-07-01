@@ -17,30 +17,46 @@
 </header>
 
 <main>
-  <section class="hero">
-    <div class="hero-text">
-      <p class="eyebrow" style="letter-spacing:.02em">컨텐츠를 자산으로 만드는 수익화 개인 홈페이지</p>
-      <h1>인스타 열심히 해도<br><span>반응 없는 이유</span></h1>
-      <p class="lead">열심히 올리는데 왜 고객은 남지 않을까요? 문제는 노력보다 콘텐츠가 신뢰와 매출로 이어지는 구조입니다.</p>
-      <div class="buttons">
-        <a class="btn primary" href="#story">스토리 보기</a>
-        <a class="btn ghost" href="#start">시작하기</a>
+  <!-- 타겟 선택 게이트 (둥둥 뜨는 버튼 2개) -->
+  <section id="gate" class="gate">
+    <div class="gate-inner">
+      <p class="gate-hello">안녕하세요 👋</p>
+      <h1 class="gate-q">컨텐츠 만들면서<br>가장 <span>어려운 점</span>은 뭔가요?</h1>
+      <p class="gate-sub">고르면 딱 맞는 이야기를 보여드릴게요.</p>
+      <div class="gate-btns">
+        <button type="button" class="gate-btn f1" data-goto="1">
+          <span class="gb-em">😮‍💨</span>
+          <span class="gb-t">열심히 했는데<br><b>반응이 없을 때</b> 보세요</span>
+          <span class="gb-tag">헤어 · 크리에이터 · 초급</span>
+        </button>
+        <button type="button" class="gate-btn f2 danger" data-goto="2">
+          <span class="gb-em">🚫</span>
+          <span class="gb-t">컨텐츠로 <b>돈 벌 생각</b> 없으면<br>절대 누르지 마세요</span>
+          <span class="gb-tag">사업 · 수익화</span>
+        </button>
       </div>
     </div>
-    <div class="hero-img"><img src="assets/hero.jpg" alt="컨텐츠 허브"></div>
   </section>
+
   <div id="story"></div>
-  <div class="intro-seg-wrap">
-    <div class="intro-seg" role="tablist">
-      <button type="button" class="intro-seg-b on" data-intro="1">소개 ①<small>고객 관점</small></button>
-      <button type="button" class="intro-seg-b" data-intro="2">소개 ②<small>레벨 1 시스템</small></button>
-    </div>
-  </div>
-  <div id="intro-1" class="intro-pane">
+  <div id="intro-1" class="intro-pane" hidden>
+    <button type="button" class="intro-back" data-back>← 다시 선택</button>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow" style="letter-spacing:.02em">컨텐츠를 자산으로 만드는 수익화 개인 홈페이지</p>
+        <h1>인스타 열심히 해도<br><span>반응 없는 이유</span></h1>
+        <p class="lead">열심히 올리는데 왜 고객은 남지 않을까요? 문제는 노력보다 콘텐츠가 신뢰와 매출로 이어지는 구조입니다.</p>
+        <div class="buttons">
+          <a class="btn primary" href="#start">시작하기</a>
+        </div>
+      </div>
+      <div class="hero-img"><img src="assets/hero.jpg" alt="컨텐츠 허브"></div>
+    </section>
   <section class="image-section story"><img loading="lazy" src="assets/story_01.jpg" alt=""></section><section class="image-section story"><img loading="lazy" src="assets/story_02.jpg" alt=""></section><section class="image-section story"><img loading="lazy" src="assets/story_03.jpg" alt=""></section><section class="image-section bridge-img"><img loading="lazy" src="assets/transition.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_04.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_02.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_03.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_05.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_06.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_07.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_08.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_09.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_10.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_11.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_12.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_13.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_14.jpg" alt=""></section><section class="image-section"><img loading="lazy" src="assets/home_15.jpg" alt=""></section>
   </div>
 
   <div id="intro-2" class="intro-pane" hidden>
+    <button type="button" class="intro-back" data-back>← 다시 선택</button>
     <section class="lv-sec lv-reveal"><img class="lv-shot" loading="lazy" src="assets/lv_01.jpg" alt="당신의 수익을 만드는 레벨 1 수익 시스템"></section>
     <section class="lv-sec lv-reveal"><div class="lv-eyebrow">Problem</div><div class="lv-h2">조회수보다 먼저 필요한 건<br><strong>수익 구조</strong>입니다.</div><img class="lv-shot" loading="lazy" src="assets/lv_02.jpg" alt="인스타 100만 조회수가 나와도 왜 수익을 안 낼까요"></section>
     <section class="lv-sec compact lv-reveal"><div class="lv-eyebrow">Common Start</div><div class="lv-h2">대부분 콘텐츠부터 시작하지만,<br>기준이 없으면 흔들립니다.</div><img class="lv-shot" loading="lazy" src="assets/lv_03.jpg" alt="대부분 이렇게 시작합니다"></section>
@@ -63,7 +79,7 @@
     <section class="lv-sec compact lv-reveal"><img class="lv-shot" loading="lazy" src="assets/lv_20.jpg" alt="이제 당신 차례입니다 지금 시작하기"></section>
   </div>
 
-  <section class="final" id="start">
+  <section class="final" id="start" hidden>
     <p class="eyebrow">START HOME</p>
     <h2>오늘 만든 콘텐츠가<br><span>내일의 자산</span>이 되게 만드세요.</h2>
     <div class="final-buttons">
@@ -74,15 +90,12 @@
 </main>
 <script>
   (function(){
+    var gate=document.getElementById('gate'), i1=document.getElementById('intro-1'), i2=document.getElementById('intro-2'), fin=document.getElementById('start');
     function reveal(sel){ try{ var o=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('is-visible'); }); },{threshold:.12}); document.querySelectorAll(sel).forEach(function(el){ o.observe(el); }); }catch(_){ document.querySelectorAll(sel).forEach(function(el){ el.classList.add('is-visible'); }); } }
-    document.querySelectorAll('.intro-seg-b').forEach(function(b){ b.addEventListener('click', function(){
-      document.querySelectorAll('.intro-seg-b').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on');
-      var v=b.getAttribute('data-intro');
-      var i1=document.getElementById('intro-1'), i2=document.getElementById('intro-2');
-      if(i1) i1.hidden=(v!=='1'); if(i2) i2.hidden=(v!=='2');
-      if(v==='2') reveal('#intro-2 .lv-reveal:not(.is-visible)');
-      try{ var st=document.getElementById('story'); if(st) window.scrollTo({top:st.offsetTop-10, behavior:'smooth'}); }catch(_){}
-    }); });
+    function pick(v){ if(gate) gate.hidden=true; if(i1) i1.hidden=(v!=='1'); if(i2) i2.hidden=(v!=='2'); if(fin) fin.hidden=false; if(v==='2') reveal('#intro-2 .lv-reveal:not(.is-visible)'); window.scrollTo(0,0); }
+    function toGate(){ if(gate) gate.hidden=false; if(i1) i1.hidden=true; if(i2) i2.hidden=true; if(fin) fin.hidden=true; window.scrollTo(0,0); }
+    document.querySelectorAll('.gate-btn').forEach(function(b){ b.addEventListener('click', function(){ pick(b.getAttribute('data-goto')); }); });
+    document.querySelectorAll('[data-back]').forEach(function(b){ b.addEventListener('click', toGate); });
   })();
 </script>
 </body>
