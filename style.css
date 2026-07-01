@@ -86,13 +86,30 @@ p{font-size:17px;line-height:1.7;color:var(--muted)}
   .final-buttons .btn{width:100%}
 }
 
-/* ===== 소개 ① / ② 세그먼트 토글 + 소개②(레벨 1 시스템 스토리) ===== */
-.intro-seg-wrap{max-width:1220px;margin:0 auto 44px;padding:0 28px;display:flex;justify-content:center}
-.intro-seg{display:inline-flex;gap:6px;background:#f0ecff;border:1px solid #e3dcff;border-radius:16px;padding:6px}
-.intro-seg-b{display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:transparent;color:#6552aa;font-family:inherit;font-weight:800;font-size:15px;padding:11px 28px;border-radius:11px;cursor:pointer;line-height:1.2;transition:.15s}
-.intro-seg-b small{font-size:10.5px;font-weight:600;color:#9a8fc7;letter-spacing:.01em}
-.intro-seg-b.on{background:#fff;color:#6337ee;box-shadow:0 6px 16px rgba(99,55,238,.18)}
-.intro-seg-b.on small{color:#a07be0}
+/* ===== 타겟 선택 게이트 + 소개②(레벨 1 시스템 스토리) ===== */
+.gate{min-height:calc(100vh - 120px);display:flex;align-items:center;justify-content:center;padding:30px 20px 70px;text-align:center}
+.gate[hidden]{display:none}
+.gate-inner{max-width:780px;width:100%}
+.gate-hello{font-size:16px;color:#c9b6ff;font-weight:800;margin:0 0 10px;letter-spacing:.02em}
+.gate-q{font-size:40px;line-height:1.24;font-weight:900;letter-spacing:-.045em;margin:0 0 14px;color:#fff}
+.gate-q span{background:linear-gradient(120deg,#8b6dff,#c084fc);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.gate-sub{font-size:15px;color:#9aa3b8;margin:0 0 46px}
+.gate-btns{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.gate-btn{position:relative;width:300px;max-width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 22px 24px;border-radius:24px;cursor:pointer;font-family:inherit;color:#fff;background:linear-gradient(180deg,rgba(124,63,228,.18),rgba(124,63,228,.05));border:1.5px solid rgba(167,139,255,.36);box-shadow:0 20px 50px rgba(80,40,180,.26);transition:transform .18s,box-shadow .18s,border-color .18s}
+.gate-btn:hover{transform:translateY(-7px) scale(1.02);border-color:rgba(167,139,255,.72);box-shadow:0 30px 66px rgba(124,63,228,.42)}
+.gate-btn .gb-em{font-size:40px;line-height:1}
+.gate-btn .gb-t{font-size:18px;font-weight:800;line-height:1.42}.gate-btn .gb-t b{color:#c9b6ff}
+.gate-btn .gb-tag{font-size:11.5px;font-weight:700;color:#a99cd6;background:rgba(255,255,255,.06);border:1px solid rgba(167,139,255,.26);padding:5px 12px;border-radius:999px}
+.gate-btn.danger{background:linear-gradient(180deg,rgba(239,68,68,.15),rgba(239,68,68,.04));border-color:rgba(248,113,113,.42);box-shadow:0 20px 50px rgba(180,40,40,.24)}
+.gate-btn.danger:hover{border-color:rgba(248,113,113,.78);box-shadow:0 30px 66px rgba(239,68,68,.4)}
+.gate-btn.danger .gb-t b{color:#ffb4b4}
+.gate-btn.danger .gb-tag{color:#f0a5a5;border-color:rgba(248,113,113,.3)}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+.gate-btn.f1{animation:floaty 3.4s ease-in-out infinite}
+.gate-btn.f2{animation:floaty 3.9s ease-in-out infinite .5s}
+.gate-btn:hover{animation-play-state:paused}
+.intro-back{display:inline-flex;align-items:center;gap:6px;margin:16px 0 0 24px;padding:9px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(167,139,255,.28);color:#c9b6ff;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.intro-back:hover{background:rgba(167,139,255,.14)}
 .intro-pane[hidden]{display:none}
 .lv-sec{max-width:1220px;margin:0 auto 128px;padding:0 28px;text-align:center}
 .lv-sec.compact{max-width:1100px}.lv-sec.wide{max-width:1340px}.lv-sec.narrow{max-width:760px}
@@ -105,7 +122,9 @@ p{font-size:17px;line-height:1.7;color:var(--muted)}
 .lv-dark .lv-eyebrow{background:rgba(167,139,255,.18);color:#d6c4ff}
 .lv-reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}.lv-reveal.is-visible{opacity:1;transform:none}
 @media (max-width:900px){
-  .intro-seg-wrap{margin-bottom:30px;padding:0 14px}.intro-seg-b{padding:9px 16px;font-size:14px}
+  .gate{min-height:auto;padding:24px 16px 44px}.gate-q{font-size:28px}.gate-sub{margin-bottom:32px}
+  .gate-btns{gap:14px}.gate-btn{width:100%;padding:24px 18px}.gate-btn .gb-em{font-size:34px}.gate-btn .gb-t{font-size:16px}
+  .intro-back{margin-left:16px}
   .lv-sec{margin-bottom:78px;padding:0 16px}.lv-h2{font-size:27px;margin-bottom:20px}.lv-eyebrow{font-size:12.5px;padding:7px 13px}
   .lv-shot{border-radius:18px}.lv-dark{padding:36px 16px;border-radius:26px}
 }
