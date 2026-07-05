@@ -2861,11 +2861,11 @@
         if(layout==='minimal'){
           statHtml='<div style="display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:'+(creds.length?'14px':'2px')+';">'+stats.map(function(s){ return '<span style="font-size:14px;color:var(--on-strong);"><b style="color:var(--coral);font-weight:800;">'+esc(s[0]||'')+'</b> <span class="sub" style="font-size:12px;">'+esc(s[1]||'')+'</span></span>'; }).join('')+'</div>';
         } else if(layout==='grid'){
-          statHtml='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:'+(creds.length?'18px':'2px')+';">'+stats.map(function(s){ return '<div style="text-align:center;background:var(--coral-soft);border-radius:14px;padding:18px 6px;"><div style="font-size:32px;font-weight:800;color:var(--coral);font-family:var(--serif);line-height:1;'+glow+'">'+esc(s[0]||'')+'</div><div class="sub" style="margin-top:7px;font-size:12px;">'+esc(s[1]||'')+'</div></div>'; }).join('')+'</div>';
+          statHtml='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:'+(creds.length?'18px':'2px')+';">'+stats.map(function(s){ return '<div style="text-align:center;background:var(--coral-soft);border-radius:14px;padding:18px 6px;"><div style="font-size:32px;font-weight:800;background:linear-gradient(95deg,#8A5CFF,#C13B9E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;font-family:var(--serif);line-height:1;">'+esc(s[0]||'')+'</div><div class="sub" style="margin-top:7px;font-size:12px;">'+esc(s[1]||'')+'</div></div>'; }).join('')+'</div>';
         } else if(layout==='card'){
-          statHtml='<div style="display:flex;gap:10px;margin-bottom:'+(creds.length?'14px':'2px')+';">'+stats.map(function(s){ return '<div style="flex:1;text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--coral);font-family:var(--serif);line-height:1;">'+esc(s[0]||'')+'</div><div class="sub" style="margin-top:5px;font-size:11.5px;">'+esc(s[1]||'')+'</div></div>'; }).join('')+'</div>';
+          statHtml='<div style="display:flex;gap:10px;margin-bottom:'+(creds.length?'14px':'2px')+';">'+stats.map(function(s){ return '<div style="flex:1;text-align:center;"><div style="font-size:20px;font-weight:800;background:linear-gradient(95deg,#8A5CFF,#C13B9E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;font-family:var(--serif);line-height:1;">'+esc(s[0]||'')+'</div><div class="sub" style="margin-top:5px;font-size:11.5px;">'+esc(s[1]||'')+'</div></div>'; }).join('')+'</div>';
         } else { // band 기본
-          statHtml='<div style="display:flex;gap:10px;margin-bottom:'+(creds.length?'18px':'2px')+';">'+stats.map(function(s){ return '<div style="flex:1;text-align:center;background:var(--coral-soft);border-radius:14px;padding:16px 6px;"><div style="font-size:30px;font-weight:800;color:var(--coral);font-family:var(--serif);line-height:1;'+glow+'">'+esc(s[0]||'')+'</div><div class="sub" style="margin-top:6px;font-size:12px;">'+esc(s[1]||'')+'</div></div>'; }).join('')+'</div>';
+          statHtml='<div style="display:flex;gap:10px;margin-bottom:'+(creds.length?'18px':'2px')+';">'+stats.map(function(s){ return '<div style="flex:1;text-align:center;background:var(--coral-soft);border-radius:14px;padding:16px 6px;"><div style="font-size:30px;font-weight:800;background:linear-gradient(95deg,#8A5CFF,#C13B9E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;font-family:var(--serif);line-height:1;">'+esc(s[0]||'')+'</div><div class="sub" style="margin-top:6px;font-size:12px;">'+esc(s[1]||'')+'</div></div>'; }).join('')+'</div>';
         }
       }
       var credHtml = creds.length ? creds.map(function(x){
@@ -2959,10 +2959,24 @@
       var h=title?'<div class="block-h" style="margin-bottom:6px;">'+esc(title)+'</div>':'';
       return card(img+h+descH);
     },
-    beforeafter: function(c){
-      var pf=pcStyle(c[3]); var fxC=pf.cls?(' '+pf.cls):''; var rad=pf.cls?'':'border-radius:12px;';
-      var b=c[0]?' url('+esc(c[0])+') center/cover':''; var a=c[1]?' url('+esc(c[1])+') center/cover':'';
-      return card('<div style="display:flex;gap:8px;margin-bottom:8px;"><div class="pc-fit'+fxC+'" style="'+pf.vs+'flex:1;height:130px;'+rad+'background:var(--ph1)'+b+';"></div><div class="pc-fit'+fxC+'" style="'+pf.vs+'flex:1;height:130px;'+rad+'background:var(--ph2)'+a+';"></div></div><div class="sub" style="text-align:center;">'+esc(c[2]||'')+'</div>');
+    beforeafter: function(c, layout){
+      var cap=c[2]||'';
+      if(layout==='side'){
+        var pf=pcStyle(c[3]); var fxC=pf.cls?(' '+pf.cls):''; var rad=pf.cls?'':'border-radius:12px;';
+        var b=c[0]?' url('+esc(c[0])+') center/cover':''; var a=c[1]?' url('+esc(c[1])+') center/cover':'';
+        return card('<div style="display:flex;gap:8px;margin-bottom:8px;"><div class="pc-fit'+fxC+'" style="'+pf.vs+'flex:1;height:130px;'+rad+'background:var(--ph1)'+b+';"></div><div class="pc-fit'+fxC+'" style="'+pf.vs+'flex:1;height:130px;'+rad+'background:var(--ph2)'+a+';"></div></div><div class="sub" style="text-align:center;">'+esc(cap)+'</div>');
+      }
+      var bbg=c[0]?'url('+esc(c[0])+') center/cover':'var(--ph1)', abg=c[1]?'url('+esc(c[1])+') center/cover':'var(--ph2)';
+      var wrap=document.createElement('div'); wrap.className='block';
+      wrap.innerHTML='<div class="ba-sl" style="position:relative;height:230px;border-radius:14px;overflow:hidden;touch-action:none;cursor:ew-resize;user-select:none;background:'+abg+';"><div class="ba-bf" style="position:absolute;inset:0;clip-path:inset(0 50% 0 0);background:'+bbg+';"></div><span style="position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.5);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">전</span><span style="position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.5);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">후</span><div class="ba-dv" style="position:absolute;left:50%;top:0;bottom:0;width:3px;background:#fff;transform:translateX(-1.5px);box-shadow:0 0 10px rgba(0,0,0,.5);"></div><div class="ba-kb" style="position:absolute;left:50%;top:50%;width:38px;height:38px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;color:#7C3FE4;font-weight:900;font-size:16px;box-shadow:0 3px 12px rgba(0,0,0,.4);">⇄</div></div>'+(cap?'<div class="sub" style="text-align:center;margin-top:8px;">'+esc(cap)+'</div>':'');
+      var sl=wrap.querySelector('.ba-sl'), bf=wrap.querySelector('.ba-bf'), dv=wrap.querySelector('.ba-dv'), kb=wrap.querySelector('.ba-kb'), drag=false;
+      function set(p){ p=Math.max(3,Math.min(97,p)); bf.style.clipPath='inset(0 '+(100-p)+'% 0 0)'; dv.style.left=p+'%'; kb.style.left=p+'%'; }
+      function px(x){ var r=sl.getBoundingClientRect(); return (x-r.left)/r.width*100; }
+      sl.addEventListener('pointerdown',function(e){ drag=true; try{sl.setPointerCapture(e.pointerId);}catch(_){} set(px(e.clientX)); });
+      sl.addEventListener('pointermove',function(e){ if(drag) set(px(e.clientX)); });
+      sl.addEventListener('pointerup',function(){ drag=false; });
+      sl.addEventListener('pointercancel',function(){ drag=false; });
+      return wrap;
     },
     contact: function(){ return card('<div class="block-h" style="margin-bottom:8px;">1:1 문의</div><div class="sub">이름·연락처·메시지를 남겨주세요</div>'); },
     highlights: function(c){

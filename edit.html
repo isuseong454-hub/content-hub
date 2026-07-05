@@ -2670,16 +2670,16 @@
         <div class="tpl imp" data-ic="🔥" data-nm="베스트·대표 작업"><span class="tic">🔥</span><span><span class="tn">베스트 · 대표 작업</span><span class="ts">인기 컨텐츠를 크게</span></span></div>
         <div class="tpl imp" data-ic="🎬" data-nm="영상"><span class="tic">🎬</span><span><span class="tn">영상 (VSL)</span><span class="ts">유튜브·릴스 임베드</span></span></div>
         <div class="tpl" data-ic="🖼" data-nm="사진"><span class="tic">🖼</span><span><span class="tn">사진</span><span class="ts">포트폴리오 + 프레임</span></span></div>
-        <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전후사진</span><span class="ts">비포·애프터</span></span></div>
         <div class="tpl" data-ic="◍" data-nm="하이라이트"><span class="tic">◍</span><span><span class="tn">하이라이트</span><span class="ts">후기·가격·메뉴 버블</span></span></div>
         <div class="tpl" data-ic="▥" data-nm="이미지 + 글"><span class="tic">▥</span><span><span class="tn">이미지 + 글</span><span class="ts">좌우 분할</span></span></div>
       </div>
 
-      <div class="tcat addsec s3"><span class="addnum">3</span>믿게 하기 <span class="addwhy">· 신뢰·증거</span></div>
+      <div class="tcat addsec s3"><span class="addnum">3</span>전문성 가시화 셋팅 <span class="addwhy">· 신뢰·증거를 눈에 보이게</span></div>
       <div class="tgrid s3">
         <div class="tpl imp" data-ic="★" data-nm="후기"><span class="tic">★</span><span><span class="tn">후기</span><span class="ts">고객 후기</span></span></div>
         <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력</span></span></div>
         <div class="tpl" data-ic="％" data-nm="숫자 스탯"><span class="tic">％</span><span><span class="tn">숫자 스탯</span><span class="ts">누적·재방문율</span></span></div>
+        <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전/후 슬라이더</span><span class="ts">밀어서 비교 · 실력 증명</span></span></div>
       </div>
 
       <div class="tcat addsec s4"><span class="addnum">4</span>더 보여주기 <span class="addwhy">· 내 콘텐츠</span></div>
@@ -4297,9 +4297,10 @@
   var EDIT_INTRO = {
     lookbook: { ic:'📸', what:'대표 작업·디자인을 큰 카드로 보여주는 <b>쇼케이스</b>예요. (스크린샷 찍어 대표 사진처럼 설정)', rec:'상품·디자인·작업물처럼 <b>시각적인 걸 강조</b>하고 싶을 때' },
     stylegallery: { ic:'🖼', what:'사진을 <b>분류·검색·전후</b>로 보여주는 갤러리예요.', rec:'스타일/메뉴가 많아 <b>골라보게</b> 하고 싶을 때' },
-    authority: { ic:'🏅', what:'수상·자격·경력·숫자로 <b>신뢰</b>를 보여줘요.', rec:'"이 사람 믿어도 될까?"를 <b>안심</b>시키고 싶을 때' },
+    authority: { ic:'🏅', what:'<b>숫자는 안 거짓말해요.</b> 경력·실적을 숫자로 보여주면 한눈에 "이 사람 진짜다"라는 신뢰가 생겨요.', rec:'아래 <b>빈칸(숫자·라벨)만 채우면</b> 위 미리보기처럼 배지로 완성돼요' },
     ranking: { ic:'🥇', what:'대표 메뉴·상품을 <b>순위·가격</b>으로 보여줘요.', rec:'<b>가격·시그니처</b>를 깔끔히 정리하고 싶을 때' },
-    lead: { ic:'🤝', what:'이름·연락처를 받는 <b>상담·문의·신청</b> 폼이에요.', rec:'손님 <b>연락처를 모으고</b> 싶을 때' }
+    lead: { ic:'🤝', what:'이름·연락처를 받는 <b>상담·문의·신청</b> 폼이에요.', rec:'손님 <b>연락처를 모으고</b> 싶을 때' },
+    beforeafter: { ic:'◧', what:'<b>전/후를 손가락으로 밀어 비교</b>하는 슬라이더예요. 정지 사진 2장보다 임팩트가 커서 실력이 3초에 증명돼요.', rec:'전·후 사진 두 장만 넣으면 위 미리보기처럼 완성돼요' }
   };
   function openEdit(row){
     var type = row.dataset.type || 'link';
@@ -4549,9 +4550,10 @@
     service:   [['grid','가격 카드','2열'],['feature','피처','강조 카드'],['list','리스트','가로'],['mini','미니','알약']],
     event:     [['soft','은은한 리본','티 안 나게 · 추천'],['banner','배너','태그+제목'],['spotlight','스포트라이트','크게 강조'],['urgent','긴급','마감 임박'],['minimal','미니','한 줄']],
     lead:      [['form','등록폼','이름+연락처'],['banner','배너','강조 배경'],['compact','컴팩트','한 줄'],['minimal','미니','연락처만']],
-    stylegallery: [['search','검색형','검색+칩'],['bigba','전후 강조','크게 비교'],['grid','그리드','2열'],['strip','가로 스크롤','옆으로']]
+    stylegallery: [['search','검색형','검색+칩'],['bigba','전후 강조','크게 비교'],['grid','그리드','2열'],['strip','가로 스크롤','옆으로']],
+    beforeafter: [['slider','슬라이더','밀어서 비교 · 추천'],['side','나란히','전·후 동시']]
   };
-  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search' };
+  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider' };
   function layoutMini(type,k){
     // 표현법 구조를 보여주는 작은 도식 (선택지 썸네일)
     var box='<div style="height:34px;border-radius:6px;overflow:hidden;display:flex;background:var(--soft);">';
@@ -4610,6 +4612,10 @@
       if(k==='strip') return box+'<div style="flex:1;display:flex;gap:3px;padding:4px;overflow:hidden;"><div style="flex:0 0 30%;background:#34343C;border-radius:2px;"></div><div style="flex:0 0 30%;background:#34343C;border-radius:2px;"></div><div style="flex:0 0 30%;background:#34343C;border-radius:2px;"></div></div></div>';
       return box+'<div style="flex:1;padding:5px;display:flex;flex-direction:column;gap:3px;"><div style="height:6px;background:#2A2A30;border-radius:3px;"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;flex:1;"><div style="background:#34343C;border-radius:2px;"></div><div style="background:#34343C;border-radius:2px;"></div></div></div></div>';
     }
+    if(type==='beforeafter'){
+      if(k==='side') return box+'<div style="flex:1;display:flex;gap:2px;padding:4px;"><div style="flex:1;background:#34343C;border-radius:2px;"></div><div style="flex:1;background:#5a3fae;border-radius:2px;"></div></div></div>';
+      return box+'<div style="flex:1;position:relative;background:linear-gradient(90deg,#34343C 50%,#5a3fae 50%);border-radius:3px;margin:4px;"><div style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:#fff;transform:translateX(-1px);"></div><div style="position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);"></div></div></div>';
+    }
     return box+'</div>';
   }
   // ── 실제 컨텐츠를 그 레이아웃으로 그리는 라이브 미리보기 ──
@@ -4646,6 +4652,7 @@
       if(box4) [].forEach.call(box4.querySelectorAll('.sg-item'),function(it){ var t2=it.querySelector('.sg-title'), c2=it.querySelector('.sg-cat'), bf=it.querySelector('.sg-before'), af=it.querySelector('.sg-after'), d2=it.querySelector('.sg-desc'); items4.push([t2?t2.value:'', c2?c2.value:'', bf?(bf.dataset.url||''):'', af?(af.dataset.url||''):'', d2?d2.value:'']); });
       return { items:items4 };
     }
+    if(type==='beforeafter') return { before:ph(0), after:ph(1), cap:v(2,'input') };
     return {};
   }
   function renderLayoutPreview(type, layout){
@@ -4669,7 +4676,7 @@
     } else if(type==='authority'){
       var title3=v.title||'왜 믿어도 될까요', stats=(v.stats&&v.stats.length)?v.stats:[['500+','시술'],['200+','후기'],['12년','경력']], big=layout!=='card';
       var glow=big?'text-shadow:0 0 16px rgba(155,90,255,.45);':'';
-      var statH=stats.slice(0,3).map(function(s){ return '<div style="flex:1;text-align:center;'+(big?'background:'+hexA(c.ac,.14)+';border-radius:12px;padding:14px 4px;':'')+'"><div style="font-family:\'Nanum Myeongjo\',serif;font-size:'+(big?'24px':'16px')+';font-weight:800;color:'+c.ac+';line-height:1;'+glow+'">'+e(s[0])+'</div><div style="font-size:10px;color:'+c.sub+';margin-top:5px;">'+e(s[1])+'</div></div>'; }).join('');
+      var statH=stats.slice(0,3).map(function(s){ return '<div style="flex:1;text-align:center;'+(big?'background:'+hexA(c.ac,.14)+';border-radius:12px;padding:14px 4px;':'')+'"><div style="font-family:\'Nanum Myeongjo\',serif;font-size:'+(big?'24px':'16px')+';font-weight:800;background:linear-gradient(95deg,#8A5CFF,#C13B9E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;line-height:1;">'+e(s[0])+'</div><div style="font-size:10px;color:'+c.sub+';margin-top:5px;">'+e(s[1])+'</div></div>'; }).join('');
       html='<div style="background:'+c.surf+';border:1px solid '+c.hair+';border-radius:13px;padding:13px;"><div style="font-size:14px;font-weight:700;color:'+c.ink+';margin-bottom:12px;">'+em(title3)+'</div><div style="display:flex;gap:8px;">'+statH+'</div></div>';
     } else if(type==='review'){
       var rv=(v.items&&v.items.length)?v.items:[['앞머리 고민이 사라졌어요. 진짜 얼굴이 작아 보여요!','김○○'],['상담부터 꼼꼼해서 믿음이 갔어요','이○○']];
@@ -4717,6 +4724,13 @@
       else if(layout==='strip') html='<div style="display:flex;gap:8px;overflow:hidden;">'+sg.slice(0,3).map(function(it){ return '<div style="flex:0 0 44%;background:'+c.surf+';border:1px solid '+c.hair+';border-radius:11px;overflow:hidden;"><div style="height:64px;'+cov(it)+'"></div><div style="padding:7px;"><div style="font-size:11.5px;font-weight:600;color:'+c.ink+';">'+e(it[0])+'</div></div></div>'; }).join('')+'</div>';
       else if(layout==='grid') html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+sg.slice(0,2).map(function(it){ return '<div style="background:'+c.surf+';border:1px solid '+c.hair+';border-radius:11px;overflow:hidden;"><div style="height:70px;'+cov(it)+'"></div><div style="padding:8px;"><div style="font-size:12px;font-weight:600;color:'+c.ink+';">'+e(it[0])+'</div><div style="font-size:10px;color:'+c.ac+';">'+e(it[1])+'</div></div></div>'; }).join('')+'</div>';
       else html='<div style="background:'+(c.dark?'rgba(255,255,255,.05)':'#f4f1ec')+';border-radius:10px;padding:9px 12px;font-size:12px;color:'+c.sub+';margin-bottom:9px;">⌕ 스타일 검색…</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+sg.slice(0,2).map(function(it){ return '<div style="background:'+c.surf+';border:1px solid '+c.hair+';border-radius:11px;overflow:hidden;"><div style="height:64px;'+cov(it)+'"></div><div style="padding:8px;"><div style="font-size:12px;font-weight:600;color:'+c.ink+';">'+e(it[0])+'</div></div></div>'; }).join('')+'</div>';
+    } else if(type==='beforeafter'){
+      var babg1=v.before?'url('+v.before+') center/cover':'linear-gradient(160deg,#3a3742,#26242c)', babg2=v.after?'url('+v.after+') center/cover':'radial-gradient(120% 100% at 30% 20%,#5a3fae,#241a3a)', bacap=v.cap||'';
+      if(layout==='side'){
+        html='<div style="display:flex;gap:8px;"><div style="flex:1;height:150px;border-radius:12px;background:'+babg1+';position:relative;"><span style="position:absolute;left:8px;top:8px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;">전</span></div><div style="flex:1;height:150px;border-radius:12px;background:'+babg2+';position:relative;"><span style="position:absolute;left:8px;top:8px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;">후</span></div></div>'+(bacap?'<div style="text-align:center;font-size:12px;color:'+c.sub+';margin-top:8px;">'+e(bacap)+'</div>':'');
+      } else {
+        html='<div style="position:relative;height:180px;border-radius:14px;overflow:hidden;background:'+babg2+';"><div style="position:absolute;inset:0;clip-path:inset(0 50% 0 0);background:'+babg1+';"></div><span style="position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;">전</span><span style="position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;">후</span><div style="position:absolute;left:50%;top:0;bottom:0;width:3px;background:#fff;transform:translateX(-1.5px);box-shadow:0 0 10px rgba(0,0,0,.45);"></div><div style="position:absolute;left:50%;top:50%;width:34px;height:34px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;color:#7C3FE4;font-weight:900;box-shadow:0 3px 10px rgba(0,0,0,.4);">⇄</div></div>'+(bacap?'<div style="text-align:center;font-size:12px;color:'+c.sub+';margin-top:8px;">'+e(bacap)+'</div>':'')+'<div style="text-align:center;font-size:10.5px;color:'+c.sub+';margin-top:4px;">손님은 손잡이를 밀어 전·후를 비교해요</div>';
+      }
     }
     pbox.innerHTML='<div style="padding:13px;">'+html+'</div>';
   }
