@@ -1405,6 +1405,8 @@
   .le-fab{display:flex; align-items:center; gap:5px; padding:8px 13px; border:none; border-radius:999px; background:var(--grad); color:#fff; font-family:var(--sans); font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 5px 16px rgba(124,63,228,.45); -webkit-text-stroke:var(--btn-stroke); text-shadow:var(--btn-tsh);}
   .le-fab .le-fab-p{font-size:14px; font-weight:800; line-height:1;}
   .le-fab:active{transform:scale(.94);}
+  .le-fab.le-fab-sig{background:linear-gradient(120deg,#ffd977,#ff9ecf); color:#3a2410; box-shadow:0 6px 20px rgba(255,158,206,.5); -webkit-text-stroke:0; text-shadow:none; padding:10px 16px; font-size:13px;}
+  .le-fab.le-fab-sig .le-fab-p{font-size:15px;}
   .le-fab.cancel{background:rgba(40,30,55,.95); box-shadow:0 5px 16px rgba(0,0,0,.5);}
   .le-fab-del{background:rgba(40,30,55,.92); color:#FF8C8C; box-shadow:0 5px 16px rgba(0,0,0,.45); -webkit-text-stroke:0; text-shadow:none;}
   .le-fab-import{background:rgba(40,30,55,.92); color:#C9B6FF; box-shadow:0 5px 16px rgba(0,0,0,.45); -webkit-text-stroke:0; text-shadow:none;}
@@ -2680,6 +2682,7 @@
         <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력</span></span></div>
         <div class="tpl" data-ic="％" data-nm="숫자 스탯"><span class="tic">％</span><span><span class="tn">숫자 스탯</span><span class="ts">누적·재방문율</span></span></div>
         <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전/후 슬라이더</span><span class="ts">밀어서 비교 · 실력 증명</span></span></div>
+        <div class="tpl" data-ic="🔢" data-nm="과정 · 진행 단계"><span class="tic">🔢</span><span><span class="tn">과정 타임라인</span><span class="ts">상담→진단→시술→애프터</span></span></div>
       </div>
 
       <div class="tcat addsec s4"><span class="addnum">4</span>더 보여주기 <span class="addwhy">· 내 콘텐츠</span></div>
@@ -3837,12 +3840,11 @@
       <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
     </div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe>
-      <!-- 구성 추가는 하단 독으로 이동 · 삭제는 구성을 톡 누르면 그 자리에 🗑로 뜸 -->
+      <div class="le-fabwrap"><button class="le-fab le-fab-sig" id="le-add-top"><span class="le-fab-p">＋</span> 구성 추가</button></div>
     </div>
     <!-- 하단 독 (토스식 · 아이콘 + 글자) -->
     <div class="le-dock">
       <button class="le-d" id="le-design"><span class="di">🎨</span>분위기</button>
-      <button class="le-d le-d-primary" id="le-add"><span class="di">＋</span>구성 추가</button>
     </div>
   </div>
 
@@ -4042,7 +4044,7 @@
     '강의 · 전자책':'link','숫자 스탯':'stat','후기':'review','문의 폼':'contact',
     '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','문의·신청':'lead','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service','가격표 · 예약':'service',
     '대표 사진 쇼케이스':'lookbook','랭킹 · 가격':'ranking','매장 · 위치':'location',
-    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','예약 & 구매 버튼':'cta','구매 버튼':'cta','카운트다운':'countdown','이용 방법':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best'
+    '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','예약 & 구매 버튼':'cta','구매 버튼':'cta','카운트다운':'countdown','이용 방법':'steps','과정 · 진행 단계':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best'
   };
   var SCHEMA = {
     event:[['text','태그','이번 달'],['text','제목','6월 신규 등록 시 1:1 컨설팅 무료'],['date','종료일','2026-06-30'],['url','링크(선택)',''],['photo','사진 (선택 · 은은한 리본에 작은 썸네일)','']],
@@ -4300,7 +4302,8 @@
     authority: { ic:'🏅', what:'<b>숫자는 안 거짓말해요.</b> 경력·실적을 숫자로 보여주면 한눈에 "이 사람 진짜다"라는 신뢰가 생겨요.', rec:'아래 <b>빈칸(숫자·라벨)만 채우면</b> 위 미리보기처럼 배지로 완성돼요' },
     ranking: { ic:'🥇', what:'대표 메뉴·상품을 <b>순위·가격</b>으로 보여줘요.', rec:'<b>가격·시그니처</b>를 깔끔히 정리하고 싶을 때' },
     lead: { ic:'🤝', what:'이름·연락처를 받는 <b>상담·문의·신청</b> 폼이에요.', rec:'손님 <b>연락처를 모으고</b> 싶을 때' },
-    beforeafter: { ic:'◧', what:'<b>전/후를 손가락으로 밀어 비교</b>하는 슬라이더예요. 정지 사진 2장보다 임팩트가 커서 실력이 3초에 증명돼요.', rec:'전·후 사진 두 장만 넣으면 위 미리보기처럼 완성돼요' }
+    beforeafter: { ic:'◧', what:'<b>전/후를 손가락으로 밀어 비교</b>하는 슬라이더예요. 정지 사진 2장보다 임팩트가 커서 실력이 3초에 증명돼요.', rec:'전·후 사진 두 장만 넣으면 위 미리보기처럼 완성돼요' },
+    steps: { ic:'🔢', what:'상담→진단→시술→애프터, <b>과정을 단계로</b> 보여줘요. "아무나 안 하는 과정"이 전문가로 각인돼요.', rec:'단계 제목·설명만 채우면 번호 타임라인으로 완성돼요' }
   };
   function openEdit(row){
     var type = row.dataset.type || 'link';
@@ -4551,9 +4554,10 @@
     event:     [['soft','은은한 리본','티 안 나게 · 추천'],['banner','배너','태그+제목'],['spotlight','스포트라이트','크게 강조'],['urgent','긴급','마감 임박'],['minimal','미니','한 줄']],
     lead:      [['form','등록폼','이름+연락처'],['banner','배너','강조 배경'],['compact','컴팩트','한 줄'],['minimal','미니','연락처만']],
     stylegallery: [['search','검색형','검색+칩'],['bigba','전후 강조','크게 비교'],['grid','그리드','2열'],['strip','가로 스크롤','옆으로']],
-    beforeafter: [['slider','슬라이더','밀어서 비교 · 추천'],['side','나란히','전·후 동시']]
+    beforeafter: [['slider','슬라이더','밀어서 비교 · 추천'],['side','나란히','전·후 동시']],
+    steps: [['timeline','타임라인','가로 흐름 · 추천'],['list','세로 목록','번호 리스트']]
   };
-  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider' };
+  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'timeline' };
   function layoutMini(type,k){
     // 표현법 구조를 보여주는 작은 도식 (선택지 썸네일)
     var box='<div style="height:34px;border-radius:6px;overflow:hidden;display:flex;background:var(--soft);">';
@@ -4612,6 +4616,10 @@
       if(k==='strip') return box+'<div style="flex:1;display:flex;gap:3px;padding:4px;overflow:hidden;"><div style="flex:0 0 30%;background:#34343C;border-radius:2px;"></div><div style="flex:0 0 30%;background:#34343C;border-radius:2px;"></div><div style="flex:0 0 30%;background:#34343C;border-radius:2px;"></div></div></div>';
       return box+'<div style="flex:1;padding:5px;display:flex;flex-direction:column;gap:3px;"><div style="height:6px;background:#2A2A30;border-radius:3px;"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;flex:1;"><div style="background:#34343C;border-radius:2px;"></div><div style="background:#34343C;border-radius:2px;"></div></div></div></div>';
     }
+    if(type==='steps'){
+      if(k==='list') return box+'<div style="flex:1;padding:5px 8px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><div style="height:5px;width:70%;background:#7FE8D8;border-radius:2px;"></div><div style="height:4px;width:85%;background:#5c5580;border-radius:2px;"></div></div></div>';
+      return box+'<div style="flex:1;display:flex;align-items:center;justify-content:space-around;padding:0 8px;position:relative;"><div style="position:absolute;left:14px;right:14px;top:50%;height:2px;background:#5c5580;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div></div></div>';
+    }
     if(type==='beforeafter'){
       if(k==='side') return box+'<div style="flex:1;display:flex;gap:2px;padding:4px;"><div style="flex:1;background:#34343C;border-radius:2px;"></div><div style="flex:1;background:#5a3fae;border-radius:2px;"></div></div></div>';
       return box+'<div style="flex:1;position:relative;background:linear-gradient(90deg,#34343C 50%,#5a3fae 50%);border-radius:3px;margin:4px;"><div style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:#fff;transform:translateX(-1px);"></div><div style="position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);"></div></div></div>';
@@ -4653,6 +4661,7 @@
       return { items:items4 };
     }
     if(type==='beforeafter') return { before:ph(0), after:ph(1), cap:v(2,'input') };
+    if(type==='steps'){ var stt=v(0,'input'), sti=[]; var sbox=ebody.querySelector('[data-fi="1"][data-list]'); if(sbox) [].forEach.call(sbox.querySelectorAll('.litem'),function(it){ var ins=it.querySelectorAll('input'); if(ins[0]&&ins[0].value) sti.push([ins[0].value, ins[1]?ins[1].value:'']); }); return { title:stt, items:sti }; }
     return {};
   }
   function renderLayoutPreview(type, layout){
@@ -4724,6 +4733,14 @@
       else if(layout==='strip') html='<div style="display:flex;gap:8px;overflow:hidden;">'+sg.slice(0,3).map(function(it){ return '<div style="flex:0 0 44%;background:'+c.surf+';border:1px solid '+c.hair+';border-radius:11px;overflow:hidden;"><div style="height:64px;'+cov(it)+'"></div><div style="padding:7px;"><div style="font-size:11.5px;font-weight:600;color:'+c.ink+';">'+e(it[0])+'</div></div></div>'; }).join('')+'</div>';
       else if(layout==='grid') html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+sg.slice(0,2).map(function(it){ return '<div style="background:'+c.surf+';border:1px solid '+c.hair+';border-radius:11px;overflow:hidden;"><div style="height:70px;'+cov(it)+'"></div><div style="padding:8px;"><div style="font-size:12px;font-weight:600;color:'+c.ink+';">'+e(it[0])+'</div><div style="font-size:10px;color:'+c.ac+';">'+e(it[1])+'</div></div></div>'; }).join('')+'</div>';
       else html='<div style="background:'+(c.dark?'rgba(255,255,255,.05)':'#f4f1ec')+';border-radius:10px;padding:9px 12px;font-size:12px;color:'+c.sub+';margin-bottom:9px;">⌕ 스타일 검색…</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+sg.slice(0,2).map(function(it){ return '<div style="background:'+c.surf+';border:1px solid '+c.hair+';border-radius:11px;overflow:hidden;"><div style="height:64px;'+cov(it)+'"></div><div style="padding:8px;"><div style="font-size:12px;font-weight:600;color:'+c.ink+';">'+e(it[0])+'</div></div></div>'; }).join('')+'</div>';
+    } else if(type==='steps'){
+      var stTitle=v.title||'이렇게 진행돼요', stArr=(v.items&&v.items.length)?v.items:[['상담','고민·톤 파악'],['진단','모발·얼굴형'],['시술','맞춤 채도'],['애프터','홈케어']];
+      var stHead='<div style="font-size:14px;font-weight:700;color:'+c.ink+';margin-bottom:13px;">'+em(stTitle)+'</div>';
+      if(layout==='list'){
+        html=stHead+'<div style="display:flex;flex-direction:column;gap:9px;">'+stArr.slice(0,5).map(function(s,i){ return '<div style="display:flex;gap:9px;align-items:flex-start;"><span style="flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:'+c.ac+';color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">'+(i+1)+'</span><div><div style="font-size:13px;font-weight:700;color:'+c.ink+';">'+e(s[0])+'</div>'+(s[1]?'<div style="font-size:11.5px;color:'+c.sub+';margin-top:1px;">'+e(s[1])+'</div>':'')+'</div></div>'; }).join('')+'</div>';
+      } else {
+        html=stHead+'<div style="position:relative;"><div style="position:absolute;left:12%;right:12%;top:15px;height:2px;background:'+c.hair+';"></div><div style="display:flex;gap:4px;align-items:flex-start;position:relative;">'+stArr.slice(0,4).map(function(s,i){ return '<div style="flex:1;min-width:0;text-align:center;"><div style="width:30px;height:30px;border-radius:50%;background:'+hexA(c.ac,.16)+';border:1.5px solid '+c.ac+';color:'+c.ac+';font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 7px;">'+(i+1)+'</div><div style="font-size:11.5px;font-weight:700;color:'+c.ink+';line-height:1.25;">'+e(s[0])+'</div>'+(s[1]?'<div style="font-size:10px;color:'+c.sub+';margin-top:2px;line-height:1.3;">'+e(s[1])+'</div>':'')+'</div>'; }).join('')+'</div></div>';
+      }
     } else if(type==='beforeafter'){
       var babg1=v.before?'url('+v.before+') center/cover':'linear-gradient(160deg,#3a3742,#26242c)', babg2=v.after?'url('+v.after+') center/cover':'radial-gradient(120% 100% at 30% 20%,#5a3fae,#241a3a)', bacap=v.cap||'';
       if(layout==='side'){
@@ -9473,8 +9490,8 @@
       try{ toast('순서를 바꿨어요'); }catch(e){}
     }
     // 공용 아이템(카드/행) 편집 엔진 — 랭킹·스타일갤러리 (lookbook은 별도)
-    var ITEM_CI={ ranking:2, stylegallery:0 };
-    var ITEM_EMPTY={ ranking:function(){return ['','','','',''];}, stylegallery:function(){return ['','','','',''];} };
+    var ITEM_CI={ ranking:2, stylegallery:0, steps:1, review:0, qna:0 };
+    var ITEM_EMPTY={ ranking:function(){return ['','','','',''];}, stylegallery:function(){return ['','','','',''];}, steps:function(){return ['',''];}, review:function(){return ['',''];}, qna:function(){return ['',''];} };
     function itemCtx(bt){ var row=document.querySelector('#rows .row[data-type="'+bt+'"]'); if(!row) return null; var ci=ITEM_CI[bt]; if(ci==null) return null; var c=row._content; if(!Array.isArray(c)) c=row._content=[]; if(!Array.isArray(c[ci])) c[ci]=[]; return {row:row, items:c[ci]}; }
     function itemSync(row, refresh){ try{ var sw=row.querySelector('[data-sw]'); if(sw&&!sw.classList.contains('on')) sw.classList.add('on'); }catch(e){} try{ if(window.__refreshRowSub) window.__refreshRowSub(row); }catch(e){} try{ refreshBuilder(); updateHomeProgress(); }catch(e){} if(refresh && window.__liveRefresh) setTimeout(window.__liveRefresh, 40); }
     function handleItem(m){
@@ -9584,6 +9601,7 @@
     if(delb) delb.onclick=function(){ try{ (document.getElementById('le-iframe')||ifr).contentWindow.postMessage({type:'la-del-selected'}, '*'); }catch(e){} };
     // 하단 독: ＋구성 추가 → 카탈로그 바로 (끼워넣기 모드 없이, 고르면 맨 위에 추가) / 🎨분위기 → dz 편집기
     var dadd=document.getElementById('le-add'); if(dadd) dadd.onclick=function(){ try{ if(window.__setFabInsert) window.__setFabInsert(false); }catch(e){} if(window.__openAddCatalog) window.__openAddCatalog(); };
+    var dtop=document.getElementById('le-add-top'); if(dtop) dtop.onclick=function(){ try{ if(window.__setFabInsert) window.__setFabInsert(false); }catch(e){} if(window.__openAddCatalog) window.__openAddCatalog(); };
     var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ if(window.__openDesign) window.__openDesign(); else if(window.__openHomeDeco) window.__openHomeDeco('all'); };   // 분위기 = 라이브 미리보기 dz 편집기 (구 홈꾸미기는 설정에 보존)
     // 사진 보관함은 독에서 제거(2026-06-29) — 사진은 아바타·커버·갤러리 탭할 때 보관함이 그 자리서 열림
     // 상단 우측 미리보기/편집 토글 (손님 화면 그대로 보기 ↔ 편집)

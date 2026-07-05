@@ -2587,11 +2587,21 @@
         +(btn?'<a class="cd-btn" href="'+esc(link||'#')+'" target="_blank" rel="noopener" data-cta="1">'+esc(btn)+'</a>':'');
       return d;
     },
-    steps: function(c){
-      var title=c[0]||'', list=c[1]||[]; if(!list.length) return null;
-      var items=list.map(function(s,i){ return '<div class="st-item"><span class="st-num">'+(i+1)+'</span><div class="st-body"><div class="st-t">'+esc(s[0]||'')+'</div>'+(s[1]?'<div class="sub st-d">'+esc(s[1])+'</div>':'')+'</div></div>'; }).join('');
-      var d=card(''); d.innerHTML=(title?'<div class="block-h" style="margin-bottom:15px;">'+emph(title)+'</div>':'')+'<div class="st-list">'+items+'</div>';
-      return d;
+    steps: function(c, layout){
+      var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
+      var title=c[0]||'', list=c[1]||[];
+      if(!list.length){ if(!EDIT) return null; list=[['','']]; }
+      var head=title?'<div class="block-h" style="margin-bottom:15px;">'+emph(title)+'</div>':'';
+      var del=EDIT?'<button class="st-edel" title="삭제" style="position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:none;background:#E0566E;color:#fff;font-size:12px;line-height:20px;text-align:center;cursor:pointer;z-index:4;padding:0;">×</button>':'';
+      var add=EDIT?'<button class="st-eadd" style="display:block;margin:14px auto 0;background:var(--coral-soft);color:var(--coral);border:1px dashed var(--coral);border-radius:10px;padding:8px 15px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;">＋ 단계 추가</button>':'';
+      if(layout==='list'){
+        var items=list.map(function(s,i){ return '<div class="st-item st-ei" style="position:relative;"><span class="st-num">'+(i+1)+'</span><div class="st-body"><div class="st-t st-et">'+esc(s[0]||'')+'</div>'+((s[1]||EDIT)?'<div class="sub st-d st-ed">'+esc(s[1]||'')+'</div>':'')+'</div>'+del+'</div>'; }).join('');
+        var d=card(''); d.innerHTML=head+'<div class="st-list">'+items+'</div>'+add;
+        return d;
+      }
+      var cells=list.slice(0, EDIT?8:6).map(function(s,i){ return '<div class="st-ei" style="flex:1;min-width:0;text-align:center;position:relative;"><div style="width:38px;height:38px;border-radius:50%;background:var(--coral-soft);border:1.5px solid var(--coral);color:var(--coral);font-size:15px;font-weight:800;font-family:var(--serif);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;position:relative;z-index:1;">'+(i+1)+'</div><div class="st-et" style="font-size:12.5px;font-weight:700;color:var(--on-strong);line-height:1.3;">'+esc(s[0]||'')+'</div>'+((s[1]||EDIT)?'<div class="sub st-ed" style="font-size:11px;margin-top:3px;line-height:1.35;">'+esc(s[1]||'')+'</div>':'')+del+'</div>'; }).join('');
+      var d2=card(''); d2.innerHTML=head+'<div style="position:relative;"><div style="position:absolute;left:12%;right:12%;top:19px;height:2px;background:var(--hair);"></div><div style="display:flex;gap:4px;align-items:flex-start;position:relative;">'+cells+'</div></div>'+add;
+      return d2;
     },
     photocard: function(c){
       var url=c[0]||''; if(!url) return null;
@@ -2885,15 +2895,18 @@
     },
     stat: function(c){ var list=c[0]||[]; var inner=list.map(function(x){ return '<div style="flex:1;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--coral);font-family:var(--serif);">'+esc(x[0]||'')+'</div><div class="sub">'+esc(x[1]||'')+'</div></div>'; }).join(''); return card('<div style="display:flex;gap:10px;">'+inner+'</div>'); },
     review: function(c, layout){
-      var list=c[0]||[]; if(!list.length) return null;
+      var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
+      var list=c[0]||[]; if(!list.length){ if(!EDIT) return null; list=[['','']]; }
       function ini(n){ n=(n||'').trim(); return n? n.charAt(0) : '★'; }
+      var rvDel=EDIT?'<button class="rv-edel" title="삭제" style="position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;border:none;background:#E0566E;color:#fff;font-size:12px;line-height:20px;text-align:center;cursor:pointer;z-index:4;padding:0;">×</button>':'';
+      var rvAdd=EDIT?'<button class="rv-eadd" style="display:block;margin:12px auto 0;background:var(--coral-soft);color:var(--coral);border:1px dashed var(--coral);border-radius:10px;padding:8px 15px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;">＋ 후기 추가</button>':'';
       if(layout==='quotes'){
         var q=list.map(function(x){ return '<div class="rv-quote"><span class="rv-qm">“</span><div class="rv-qt">'+esc(x[0]||'')+'</div><div class="rv-qn">— '+esc(x[1]||'고객님')+'</div></div>'; }).join('');
         return card('<div class="block-h" style="margin-bottom:12px;">생생 후기</div>'+q);
       }
       if(layout==='list'){
-        var l=list.map(function(x){ return '<div style="padding:11px 0;border-top:1px solid var(--hair);"><div style="font-size:11px;color:#FFB740;letter-spacing:1px;">★★★★★</div><div style="font-size:13.5px;margin-top:4px;line-height:1.5;">'+esc(x[0]||'')+'</div><div class="sub" style="margin-top:3px;">— '+esc(x[1]||'고객님')+'</div></div>'; }).join('');
-        return card('<div class="block-h" style="margin-bottom:2px;">후기</div>'+l);
+        var l=list.map(function(x){ return '<div class="rv-ei" style="padding:11px 0;border-top:1px solid var(--hair);position:relative;"><div style="font-size:11px;color:#FFB740;letter-spacing:1px;">★★★★★</div><div class="rv-et" style="font-size:13.5px;margin-top:4px;line-height:1.5;">'+esc(x[0]||'')+'</div><div class="sub rv-en" style="margin-top:3px;">'+esc(x[1]||(EDIT?'':'고객님'))+'</div>'+rvDel+'</div>'; }).join('');
+        return card('<div class="block-h" style="margin-bottom:2px;">후기</div>'+l+rvAdd);
       }
       if(layout==='spotlight'){
         var f=list[0]||[], rest=list.slice(1);
@@ -2902,26 +2915,29 @@
         return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div>'+big+more);
       }
       // cards (기본)
-      var cards=list.map(function(x){ return '<div class="rv-card"><div class="rv-card-top"><span class="rv-av">'+esc(ini(x[1]))+'</span><div><div style="color:#FFB740;font-size:10px;letter-spacing:1px;">★★★★★</div><div class="rv-name">'+esc(x[1]||'고객님')+'</div></div></div><div class="rv-card-t">'+esc(x[0]||'')+'</div></div>'; }).join('');
-      return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div><div class="rv-cards">'+cards+'</div>');
+      var cards=list.map(function(x){ return '<div class="rv-card rv-ei" style="position:relative;"><div class="rv-card-top"><span class="rv-av">'+esc(ini(x[1]))+'</span><div><div style="color:#FFB740;font-size:10px;letter-spacing:1px;">★★★★★</div><div class="rv-name rv-en">'+esc(x[1]||(EDIT?'':'고객님'))+'</div></div></div><div class="rv-card-t rv-et">'+esc(x[0]||'')+'</div>'+rvDel+'</div>'; }).join('');
+      return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div><div class="rv-cards">'+cards+'</div>'+rvAdd);
     },
     qna: function(c, layout){
-      var list=c[0]||[]; if(!list.length) return null;
+      var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
+      var list=c[0]||[]; if(!list.length){ if(!EDIT) return null; list=[['','']]; }
+      var del=EDIT?'<button class="qa-edel" title="삭제" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;border:none;background:#E0566E;color:#fff;font-size:12px;line-height:20px;text-align:center;cursor:pointer;z-index:4;padding:0;">×</button>':'';
+      var add=EDIT?'<button class="qa-eadd" style="display:block;margin:12px auto 0;background:var(--coral-soft);color:var(--coral);border:1px dashed var(--coral);border-radius:10px;padding:8px 15px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;">＋ 질문 추가</button>':'';
       if(layout==='accordion'){
-        var a=list.map(function(x){ return '<div class="qa-ac"><div class="qa-ac-q"><span>Q</span>'+esc(x[0]||'')+'</div><div class="qa-ac-a">'+esc(x[1]||'')+'</div></div>'; }).join('');
-        return card('<div class="block-h" style="margin-bottom:12px;">자주 묻는 질문</div>'+a);
+        var a=list.map(function(x){ return '<div class="qa-ac qa-ei" style="position:relative;"><div class="qa-ac-q"><span>Q</span><span class="qa-eq">'+esc(x[0]||'')+'</span></div><div class="qa-ac-a qa-ea">'+esc(x[1]||'')+'</div>'+del+'</div>'; }).join('');
+        return card('<div class="block-h" style="margin-bottom:12px;">자주 묻는 질문</div>'+a+add);
       }
       if(layout==='cards'){
-        var cc=list.map(function(x){ return '<div class="qa-cd"><div class="qa-cd-q">'+esc(x[0]||'')+'</div><div class="qa-cd-a">'+esc(x[1]||'')+'</div></div>'; }).join('');
-        return card('<div class="block-h" style="margin-bottom:12px;">걱정 마세요</div><div class="qa-cards">'+cc+'</div>');
+        var cc=list.map(function(x){ return '<div class="qa-cd qa-ei" style="position:relative;"><div class="qa-cd-q qa-eq">'+esc(x[0]||'')+'</div><div class="qa-cd-a qa-ea">'+esc(x[1]||'')+'</div>'+del+'</div>'; }).join('');
+        return card('<div class="block-h" style="margin-bottom:12px;">걱정 마세요</div><div class="qa-cards">'+cc+'</div>'+add);
       }
       if(layout==='simple'){
-        var s=list.map(function(x){ return '<div style="padding:11px 0;border-top:1px solid var(--hair);"><div style="font-size:13.5px;font-weight:600;color:var(--on-strong);">'+esc(x[0]||'')+'</div><div class="sub" style="margin-top:4px;line-height:1.5;">'+esc(x[1]||'')+'</div></div>'; }).join('');
-        return card('<div class="block-h" style="margin-bottom:2px;">Q&A</div>'+s);
+        var s=list.map(function(x){ return '<div class="qa-ei" style="padding:11px 0;border-top:1px solid var(--hair);position:relative;"><div class="qa-eq" style="font-size:13.5px;font-weight:600;color:var(--on-strong);">'+esc(x[0]||'')+'</div><div class="sub qa-ea" style="margin-top:4px;line-height:1.5;">'+esc(x[1]||'')+'</div>'+del+'</div>'; }).join('');
+        return card('<div class="block-h" style="margin-bottom:2px;">Q&A</div>'+s+add);
       }
       // bubble (기본) — 말풍선
-      var b=list.map(function(x){ return '<div class="qb"><div class="qb-q">'+esc(x[0]||'')+'</div><div class="qb-a">'+esc(x[1]||'')+'</div></div>'; }).join('');
-      return card('<div class="block-h" style="margin-bottom:14px;">이런 걱정, 하시죠?</div>'+b);
+      var b=list.map(function(x){ return '<div class="qb qa-ei" style="position:relative;"><div class="qb-q qa-eq">'+esc(x[0]||'')+'</div><div class="qb-a qa-ea">'+esc(x[1]||'')+'</div>'+del+'</div>'; }).join('');
+      return card('<div class="block-h" style="margin-bottom:14px;">이런 걱정, 하시죠?</div>'+b+add);
     },
     profilecard: function(c){
       var url=c[0]||'', name=c[1]||'', desc=c[2]||'';
@@ -4018,7 +4034,7 @@
         selectBlock(el);
       }, true);
     });
-    armGallery(); armLookbook(); armItems('ranking'); armItems('stylegallery'); armGlowhook();
+    armGallery(); armLookbook(); armItems('ranking'); armItems('stylegallery'); armItems('steps'); armItems('review'); armItems('qna'); armGlowhook();
     setupBlockDrag();   // 🖐 꾹 눌러 드래그로 순서 변경
     ensureAddSlot();    // 페이지 맨 아래 '＋ 구성 추가' 빈 슬롯 (탭 → 카탈로그)
     if(_insertMode) showInsertSlots();   // 재렌더돼도 '여기' 슬롯 유지(각 구성 사이)
@@ -4099,7 +4115,10 @@
   function _post(o){ try{ parent.postMessage(o, '*'); }catch(_){} }
   var ITEM_ARM={
     ranking: { sel:'.rk-row', photos:[{sel:'.rk-th', fi:0}], texts:[{sel:'.rk-nm', fi:1, ph:'이름'},{sel:'.rk-pr-v', fi:3, ph:'가격'}], del:'.rk-del', add:'.rk-add' },
-    stylegallery: { sel:'.sgc', photos:[{sel:'.sgc-before', fi:2},{sel:'.sgc-after', fi:3}], texts:[{sel:'.sgc-title', fi:0, ph:'제목'},{sel:'.sgc-desc', fi:4, ph:'설명'}], del:'.sgc-del', add:'.sg-add' }
+    stylegallery: { sel:'.sgc', photos:[{sel:'.sgc-before', fi:2},{sel:'.sgc-after', fi:3}], texts:[{sel:'.sgc-title', fi:0, ph:'제목'},{sel:'.sgc-desc', fi:4, ph:'설명'}], del:'.sgc-del', add:'.sg-add' },
+    steps: { sel:'.st-ei', photos:[], texts:[{sel:'.st-et', fi:0, ph:'단계 제목'},{sel:'.st-ed', fi:1, ph:'설명(선택)'}], del:'.st-edel', add:'.st-eadd' },
+    review: { sel:'.rv-ei', photos:[], texts:[{sel:'.rv-et', fi:0, ph:'후기 내용'},{sel:'.rv-en', fi:1, ph:'작성자'}], del:'.rv-edel', add:'.rv-eadd' },
+    qna: { sel:'.qa-ei', photos:[], texts:[{sel:'.qa-eq', fi:0, ph:'질문'},{sel:'.qa-ea', fi:1, ph:'답변'}], del:'.qa-edel', add:'.qa-eadd' }
   };
   function armItems(bt){
     if(!EDIT_MODE) return; var cfg=ITEM_ARM[bt]; if(!cfg) return;

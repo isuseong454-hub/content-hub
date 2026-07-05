@@ -128,3 +128,28 @@ p{font-size:17px;line-height:1.7;color:var(--muted)}
   .lv-sec{margin-bottom:78px;padding:0 16px}.lv-h2{font-size:27px;margin-bottom:20px}.lv-eyebrow{font-size:12.5px;padding:7px 13px}
   .lv-shot{border-radius:18px}.lv-dark{padding:36px 16px;border-radius:26px}
 }
+
+/* ===== 컨텐츠 허브란? — 전문성 가시화 셋팅 요약 (게이트 맨 아래) ===== */
+.wv{margin-top:54px;padding-top:36px;border-top:1px solid rgba(167,139,255,.18);text-align:center}
+.wv-eyebrow{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.12em;color:#c9b6ff;background:rgba(124,63,228,.16);border:1px solid rgba(167,139,255,.34);padding:6px 14px;border-radius:999px;margin-bottom:16px}
+.wv-h{font-size:26px;line-height:1.3;font-weight:900;letter-spacing:-.03em;color:#fff;margin:0 0 16px}
+.wv-h span{background:linear-gradient(90deg,#a78bff,#e88fce);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.wv-lead{font-size:16px;line-height:1.7;color:#e7e2f2;margin:0 auto 14px;max-width:620px}
+.wv-lead b{color:#fff}
+.wv-body{font-size:14.5px;line-height:1.7;color:#a9a3bd;margin:0 auto 22px;max-width:600px}
+.wv-body b{color:#c9b6ff}
+.wv-flow{display:flex;align-items:stretch;justify-content:center;gap:6px;flex-wrap:wrap;margin:0 auto 22px;max-width:640px}
+.wv-step{flex:1;min-width:96px;background:rgba(255,255,255,.04);border:1px solid rgba(167,139,255,.18);border-radius:14px;padding:13px 8px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wv-step .wv-ic{font-size:22px;line-height:1}
+.wv-step b{font-size:14px;color:#fff}
+.wv-step small{font-size:11px;color:#a9a3bd;line-height:1.3}
+.wv-ar{align-self:center;color:#6b6484;font-size:16px;font-weight:800}
+.wv-foot{font-size:15px;line-height:1.75;color:#e7e2f2;margin:6px auto 0;max-width:620px}
+.wv-foot b{background:linear-gradient(90deg,#ffd977,#ff9ecf);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:900}
+@media(max-width:900px){
+  .wv{margin-top:38px;padding-top:28px}
+  .wv-h{font-size:21px}
+  .wv-lead{font-size:15px}
+  .wv-ar{display:none}
+  .wv-step{min-width:0;flex:1 1 40%}
+}
