@@ -1033,6 +1033,53 @@
   #stats-ov .st-head .x{margin-left:auto;}
   #stats-ov .st-under{display:block; height:2px; width:100%; margin-top:5px; background:linear-gradient(90deg,#4571E8,#a78bff,#ff9ecf); border-radius:2px; box-shadow:0 0 8px rgba(167,139,255,.55);}
   @keyframes stPulse{0%,100%{box-shadow:0 0 12px rgba(167,139,255,.4)} 50%{box-shadow:0 0 20px rgba(167,139,255,.7)}}
+  /* 리드 관리 (신청·문의 명단) */
+  .ld-sum{font-size:12px;color:var(--muted);margin-bottom:9px;} .ld-sum b{color:var(--ink);font-weight:800;}
+  .ld-search{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid var(--hair);background:var(--surface);color:var(--ink);font-size:13px;font-family:var(--sans);margin-bottom:11px;}
+  .ld-card{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:11px 12px;margin-bottom:8px;transition:opacity .15s;}
+  .ld-card.done{opacity:.55;}
+  .ld-top{display:flex;align-items:center;gap:8px;}
+  .ld-tag{flex:0 0 auto;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;}
+  .ld-tag.ld-r{color:#1d9e75;background:rgba(52,211,153,.14);} .ld-tag.ld-q{color:#8A5CFF;background:rgba(138,92,255,.13);}
+  .ld-name{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ld-date{flex:0 0 auto;font-size:11px;color:var(--muted);}
+  .ld-phone{font-size:13.5px;font-weight:700;color:var(--coral);margin:5px 0 8px;}
+  .ld-actrow{display:flex;align-items:center;gap:7px;}
+  .ld-act{width:34px;height:32px;display:flex;align-items:center;justify-content:center;font-size:15px;border-radius:9px;background:var(--soft);border:1px solid var(--hair);color:var(--ink);text-decoration:none;cursor:pointer;}
+  .ld-done{margin-left:auto;font-size:11.5px;font-weight:800;font-family:var(--sans);padding:7px 12px;border-radius:9px;background:var(--soft);border:1px solid var(--hair);color:var(--muted);cursor:pointer;}
+  .ld-done.on{background:rgba(52,211,153,.14);border-color:rgba(52,211,153,.3);color:#1d9e75;}
+  /* 📈 성장 방법 — 홈 카드 + 플레이북 */
+  .hub-grow{display:flex;align-items:center;gap:11px;width:100%;text-align:left;margin-bottom:13px;padding:13px 14px;border-radius:15px;border:1px solid rgba(167,139,255,.32);background:radial-gradient(120% 100% at 0% 0%,rgba(167,139,255,.14),transparent 60%),var(--surface);cursor:pointer;font-family:var(--sans);}
+  .hub-grow .hg-ic{font-size:20px;flex:0 0 auto;}
+  .hub-grow .hg-m{flex:1;min-width:0;} .hub-grow .hg-m b{display:block;font-size:14px;font-weight:800;color:var(--ink);} .hub-grow .hg-m small{font-size:11px;color:var(--muted);}
+  .hub-grow .hg-go{flex:0 0 auto;font-size:16px;color:#8A5CFF;font-weight:800;}
+  .gch{border:1px solid var(--hair);border-radius:14px;margin-bottom:10px;overflow:hidden;background:var(--surface);}
+  .gch.open{border-color:rgba(167,139,255,.35);}
+  .gch-h{display:flex;align-items:center;gap:8px;padding:13px 13px;cursor:pointer;}
+  .gch-ic{font-size:17px;} .gch-t{font-size:14px;font-weight:800;color:var(--ink);} .gch-s{font-size:11px;color:var(--muted);}
+  .gch-chev{margin-left:auto;color:var(--muted);font-size:12px;transition:transform .2s;}
+  .gch.open .gch-chev{transform:rotate(180deg);}
+  .gch-body{display:none;padding:0 13px 13px;}
+  .gch.open .gch-body{display:block;}
+  .gch-why{font-size:12px;line-height:1.55;color:var(--ink);background:rgba(167,139,255,.07);border-radius:10px;padding:10px 11px;margin-bottom:10px;}
+  .gch-why b{font-weight:800;}
+  .gch-ways{display:flex;flex-direction:column;gap:7px;}
+  .gw-way{display:flex;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--hair);border-radius:11px;padding:9px 11px;cursor:pointer;transition:.12s;}
+  .gw-way:hover{border-color:rgba(167,139,255,.4);}
+  .gw-ic{font-size:16px;flex:0 0 auto;} .gw-m{flex:1;min-width:0;} .gw-m b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);} .gw-m small{font-size:10.5px;color:var(--muted);}
+  .gw-go{flex:0 0 auto;font-size:11px;font-weight:800;color:#3a2410;background:linear-gradient(120deg,#ffd977,#ff9ecf);padding:6px 11px;border-radius:99px;white-space:nowrap;}
+  /* 💰 홈 압축 수익화 공식 (다크 네온) */
+  .hub-fx{position:relative;overflow:hidden;border-radius:16px;padding:12px 12px 11px;margin-bottom:13px;background:radial-gradient(130% 90% at 50% -10%,rgba(124,63,228,.3),transparent 60%),linear-gradient(180deg,#17131f,#100e15);border:1px solid rgba(167,139,255,.28);}
+  .hfx-eye{font-size:10.5px;font-weight:900;color:#c9a6ff;text-align:center;margin-bottom:10px;}
+  .hfx-eye span{color:#8a7ba8;font-weight:700;}
+  .hfx-row{display:flex;align-items:center;justify-content:center;gap:5px;}
+  .hfx-f{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:800;border-radius:10px;padding:7px 9px;}
+  .hfx-f b{font-size:15px;font-weight:900;}
+  .hfx-f em{font-style:normal;font-size:9.5px;opacity:.8;font-weight:700;}
+  .hfx-f.red{background:rgba(255,90,90,.14);border:1px solid #ff5a5a;color:#ffd9d6;box-shadow:0 0 12px rgba(255,90,90,.3);}
+  .hfx-f.vi{background:rgba(160,107,255,.15);border:1px solid #a06bff;color:#e6d9ff;box-shadow:0 0 12px rgba(160,107,255,.35);}
+  .hfx-f.go{background:rgba(255,195,90,.15);border:1px solid #ffd35a;color:#ffe6a8;box-shadow:0 0 12px rgba(255,190,80,.35);}
+  .hfx-op{font-size:14px;font-weight:900;color:#fff;text-shadow:0 0 6px rgba(255,255,255,.5);animation:anFxPulse 1.9s ease-in-out infinite;}
   .tcat{font-size:12px; font-weight:600; color:var(--muted); margin:16px 2px 8px;}
   .tgrid{display:grid; grid-template-columns:1fr 1fr; gap:9px;}
   .tpl{display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--hair); box-shadow:var(--shadow); border-radius:12px; padding:11px 12px; cursor:pointer; transition:transform .1s; position:relative;}
@@ -1591,6 +1638,35 @@
   .an-nsline{fill:none; stroke:url(#nsg); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:600; stroke-dashoffset:600; animation:anDraw 1.4s .25s ease forwards;}
   @keyframes anDraw{to{stroke-dashoffset:0}}
   .an-nsdot{opacity:0; animation:anDot .3s 1.5s forwards;} @keyframes anDot{to{opacity:1}}
+  /* 📈 그래프 추이 라인 — 파랑→핑크 그라데이션 + 선을 타고 올라가는 점 (모션은 JS rAF로 선과 완벽 동기화) */
+  .an-linedraw{filter:drop-shadow(0 1px 5px rgba(167,139,255,.4));}
+  .an-linedot{filter:drop-shadow(0 0 6px rgba(255,158,207,.75));}
+  /* 💰 수익화 공식 히어로 (유입×전환×구매 · 트리오 네온 · 은은 맥동) */
+  .an-fx{position:relative; overflow:hidden; border-radius:18px; padding:17px 14px 15px; margin-bottom:13px; background:radial-gradient(130% 90% at 50% -10%,rgba(124,63,228,.28),transparent 60%),linear-gradient(180deg,#17131f,#100e15); border:1px solid rgba(167,139,255,.25); box-shadow:0 8px 30px rgba(124,63,228,.15);}
+  .fx-glow{position:absolute; inset:0; background:radial-gradient(90% 70% at 50% -10%,rgba(124,63,228,.14),transparent 60%); pointer-events:none;}
+  .fx-eye{position:relative; font-size:11px; font-weight:900; letter-spacing:.03em; color:#c9a6ff; text-align:center; margin-bottom:14px;}
+  .fx-row{position:relative; display:flex; align-items:center; justify-content:center; gap:6px;}
+  .fx-f{flex:1; max-width:96px; border-radius:14px; padding:11px 4px 9px; display:flex; flex-direction:column; align-items:center; gap:1px;}
+  .fx-f i{font-size:19px; font-style:normal; line-height:1;}
+  .fx-f b{font-size:22px; font-weight:900; line-height:1; letter-spacing:-.02em; margin-top:3px;}
+  .fx-f b small{font-size:13px; font-weight:800;}
+  .fx-f span{font-size:9.5px; font-weight:800; margin-top:3px; opacity:.85;}
+  .fx-f.red{background:radial-gradient(120% 100% at 50% 20%,rgba(255,90,90,.18),rgba(20,14,18,.35)); border:1.5px solid #ff5a5a; box-shadow:0 0 15px rgba(255,90,90,.35); color:#ffd9d6;}
+  .fx-f.vi{background:radial-gradient(120% 100% at 50% 20%,rgba(160,107,255,.2),rgba(18,14,22,.35)); border:1.5px solid #a06bff; box-shadow:0 0 15px rgba(160,107,255,.4); color:#e6d9ff;}
+  .fx-f.go{background:radial-gradient(120% 100% at 50% 20%,rgba(255,195,90,.2),rgba(22,18,12,.35)); border:1.5px solid #ffd35a; box-shadow:0 0 15px rgba(255,190,80,.4); color:#ffe6a8;}
+  .fx-op{font-size:18px; font-weight:900; color:#fff; text-shadow:0 0 8px rgba(255,255,255,.5); animation:anFxPulse 1.9s ease-in-out infinite;}
+  .fx-eq{position:relative; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px; flex-wrap:wrap;}
+  .fx-eqs{font-size:18px; font-weight:900; color:#9296A0;}
+  .fx-res{font-size:15px; font-weight:900; background:linear-gradient(120deg,#ffd977,#ff9ecf); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .fx-tr{font-size:11.5px; font-weight:800; border-radius:999px; padding:2px 9px;}
+  .fx-tr.up{color:#6ff0bf; background:rgba(52,211,153,.14);} .fx-tr.down{color:#ff9db0; background:rgba(255,107,125,.14);} .fx-tr.flat{color:#9296A0; background:rgba(255,255,255,.06);}
+  .fx-tag{position:relative; font-size:10.5px; color:#9296A0; text-align:center; margin-top:11px;}
+  .fx-tag b{color:#ff9ecf; font-weight:800;}
+  @keyframes anFxPulse{0%,100%{opacity:.5; transform:scale(.9);} 50%{opacity:1; transform:scale(1.13);}}
+  .an-fxsp{display:flex; align-items:center; gap:11px; background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:9px 13px; margin-bottom:13px;}
+  .an-fxsp-lb{font-size:11.5px; font-weight:800; color:var(--ink); white-space:nowrap; flex:0 0 auto;}
+  .an-fxsp-g{flex:1; min-width:0; display:block;}
+  .an-fxsp-g .an-nssvg{height:36px; margin:0;}
   .an-lv{position:relative; overflow:hidden; background:radial-gradient(120% 100% at 0% 0%,rgba(255,158,207,.15),transparent 55%),var(--surface); border:1px solid rgba(255,158,207,.28); border-radius:16px; padding:14px 15px; margin-bottom:12px;}
   .an-lv::before{content:''; position:absolute; top:0; left:-60%; width:45%; height:100%; background:linear-gradient(100deg,transparent,rgba(255,255,255,.09),transparent); animation:anShine 3.6s ease-in-out infinite; pointer-events:none;}
   @keyframes anShine{0%{left:-60%} 55%,100%{left:135%}}
@@ -1655,13 +1731,28 @@
   .an-fnsvg .anfs{opacity:0; transform:scale(.9); transform-box:fill-box; transform-origin:center; animation:anfin .5s cubic-bezier(.2,.8,.2,1) forwards;}
   .an-fnsvg .anfs1{animation-delay:.05s} .an-fnsvg .anfs2{animation-delay:.2s} .an-fnsvg .anfs3{animation-delay:.36s}
   @keyframes anfin{to{opacity:1; transform:scale(1)}}
+  /* 얇은 네온 띠 카드형 퍼널 (여정 카드) */
+  .an-jfunnel{display:flex; flex-direction:column;}
+  .an-jcard{display:flex; align-items:center; gap:11px; padding:13px 14px; border-radius:14px; background:linear-gradient(180deg,#1a1622,#131018); opacity:0; animation:anJin .45s cubic-bezier(.2,.8,.2,1) forwards;}
+  .an-jcard .jc-e{font-size:19px; line-height:1;}
+  .an-jcard .jc-l{flex:1; font-size:12.5px; font-weight:700;}
+  .an-jcard .jc-n{font-size:24px; font-weight:900; letter-spacing:-.02em; line-height:1;}
+  .an-jcard.red{border:1.5px solid #ff5a5a; box-shadow:0 0 15px rgba(255,90,90,.26); color:#ffd9d6;}
+  .an-jcard.vi{border:1.5px solid #a06bff; box-shadow:0 0 15px rgba(160,107,255,.3); color:#e6d9ff;}
+  .an-jcard.go{border:1.5px solid #ffd35a; box-shadow:0 0 18px rgba(255,190,80,.38); color:#ffe6a8;}
+  .an-jconn{display:flex; justify-content:center; padding:8px 0; opacity:0; animation:anJin .45s cubic-bezier(.2,.8,.2,1) forwards;}
+  .an-jpill{font-size:11px; font-weight:800; padding:5px 13px; border-radius:99px;}
+  .an-jpill.ok{color:#6ff0bf; background:rgba(52,211,153,.13); border:1px solid rgba(52,211,153,.3);}
+  .an-jpill.bad{color:#ff9db0; background:rgba(255,107,125,.13); border:1px solid rgba(255,107,125,.35);}
+  .an-jfunnel>:nth-child(1){animation-delay:.04s} .an-jfunnel>:nth-child(2){animation-delay:.12s} .an-jfunnel>:nth-child(3){animation-delay:.2s} .an-jfunnel>:nth-child(4){animation-delay:.28s} .an-jfunnel>:nth-child(5){animation-delay:.36s}
+  @keyframes anJin{from{opacity:0; transform:translateY(7px)} to{opacity:1; transform:none}}
   .anb{display:flex; flex-direction:column; gap:2px;}
   .anb-row{display:flex; align-items:center; gap:9px;}
   .anb-lab{flex:0 0 70px; font-size:11px; font-weight:700; color:var(--muted);}
   .anb-tr{flex:1; height:26px; background:rgba(255,255,255,.05); border-radius:8px; overflow:hidden;}
   .anb-fl{height:100%; width:0; border-radius:8px; display:flex; align-items:center; justify-content:flex-end; padding-right:9px; animation:anbfill .9s cubic-bezier(.2,.8,.2,1) both;}
   .anb-fl span{font-size:12.5px; font-weight:900; color:#fff;}
-  .anb-fl.bl{background:linear-gradient(90deg,#3d63d8,#5b83f0); animation-delay:.08s;}
+  .anb-fl.bl{background:linear-gradient(90deg,#e0453e,#ff6b5e); animation-delay:.08s;}
   .anb-fl.vi{background:linear-gradient(90deg,#7a48e6,#a06bff); animation-delay:.2s;}
   .anb-fl.go{background:linear-gradient(90deg,#ffd977,#ff9ecf); box-shadow:0 0 16px rgba(255,158,207,.5); animation-delay:.32s;}
   .anb-fl.go span{color:#3a2410;}
@@ -1675,7 +1766,7 @@
   .an-fdiag{margin-top:11px; font-size:11.5px; line-height:1.5; color:#d9cbb2; background:rgba(255,158,207,.06); border-left:2.5px solid #ffd977; padding:9px 11px; border-radius:0 9px 9px 0;}
   .an-fdiag b{color:var(--ink); font-weight:800;}
   /* 퍼널 탭: 이미지 맨 위 + 전환 토글 행 */
-  #an-funnel-box.an-fbox-top{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:16px 12px 12px;}
+  #an-funnel-box.an-fbox-top{background:radial-gradient(130% 85% at 50% -8%,rgba(124,63,228,.2),transparent 58%),linear-gradient(180deg,#17131f,#100e15); border:1px solid rgba(167,139,255,.22); border-radius:16px; padding:18px 12px 14px; box-shadow:0 8px 26px rgba(124,63,228,.13);}
   .an-ftoggle-row{display:flex; justify-content:center; margin:10px 0 4px;}
   /* 기간 토글 (일별/월별) */
   .an-period{display:inline-flex; background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:3px; gap:2px; margin-bottom:11px;}
@@ -1716,9 +1807,9 @@
   .an-metricrow button{font-size:11px; font-weight:700; padding:6px 11px; border-radius:8px; background:var(--soft); border:1px solid var(--hair); color:var(--muted); cursor:pointer; font-family:var(--sans);}
   .an-metricrow button.on{background:#fff; color:#16161A; border-color:#fff;}
   .an-plotbox{position:relative; padding-left:34px;}
-  .an-yax{position:absolute; left:0; top:0; width:30px; height:150px; pointer-events:none;}
+  .an-yax{position:absolute; left:0; top:0; width:30px; height:172px; pointer-events:none;}
   .an-yax span{position:absolute; right:3px; transform:translateY(-50%); font-size:9.5px; font-weight:700; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap;}
-  .an-linesvg{width:100%; height:150px; display:block;}
+  .an-linesvg{width:100%; height:172px; display:block;}
   .an-xax{display:flex; justify-content:space-between; margin:6px 0 0 34px; padding-right:2px;}
   .an-xax span{font-size:9.5px; font-weight:600; color:var(--muted); white-space:nowrap;}
   .an-legend{display:flex; gap:14px; font-size:10.5px; color:var(--muted); margin-top:8px; padding-left:34px;}
@@ -3144,6 +3235,15 @@
   </div>
 
   <!-- 단골 명단 -->
+  <!-- 성장 방법 (플레이북) -->
+  <div class="ov" id="gpb-ov">
+    <div class="sheet">
+      <div class="sheet-h"><span class="t">📈 성장 방법</span><span class="x" id="gpb-x">×</span></div>
+      <div class="desc">뭘 키울지 고르면 방법을 모아드려요 · 버튼을 누르면 바로 그 기능이 열려요</div>
+      <div id="gpb-body"></div>
+    </div>
+  </div>
+
   <!-- 전환 진단 -->
   <div class="ov" id="diag-ov">
     <div class="sheet">
@@ -5477,6 +5577,7 @@
     return '👉 예약 전환은 괜찮은데 <b>랜딩 클릭('+p1+'%)</b>이 약함 — 썸네일·후킹 문구로 "눌러보고 싶게" 만들어보세요';
   }
   function anFunnelSVG(s){
+    // 깔때기 모양 유지 + 얇은 네온 띠(윤곽선)만 — 안쪽 채움 없이 가볍게
     var cur=anCur(s); var v=cur.visitors||0, c=cur.clicks||0, cv=cur.conv||0;
     var p1=v?Math.round(c/v*100):0, p2=c?Math.round(cv/c*100):0;
     function fw(n){ if(v<=0) return 0.34; return 0.34+0.66*Math.min(1,Math.sqrt(Math.max(0,n)/v)); }
@@ -5487,26 +5588,29 @@
     var gx=cx-hw(r3), gw=hw(r3)*2;
     return '<svg class="an-fnsvg" viewBox="0 0 340 250" preserveAspectRatio="xMidYMid meet" role="img" aria-label="손님 여정 깔때기">'
       +'<defs>'
-      +'<filter id="anfg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
-      +'<filter id="anfgg" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      +'<filter id="anfg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      +'<filter id="anfgg" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="4.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      +'<radialGradient id="fgR" cx="50%" cy="16%" r="88%"><stop offset="0" stop-color="#ff5a5a" stop-opacity="0.24"/><stop offset="1" stop-color="#ff5a5a" stop-opacity="0.03"/></radialGradient>'
+      +'<radialGradient id="fgV" cx="50%" cy="16%" r="88%"><stop offset="0" stop-color="#a06bff" stop-opacity="0.26"/><stop offset="1" stop-color="#a06bff" stop-opacity="0.03"/></radialGradient>'
+      +'<radialGradient id="fgG" cx="50%" cy="18%" r="90%"><stop offset="0" stop-color="#ffcb5a" stop-opacity="0.3"/><stop offset="1" stop-color="#ffcb5a" stop-opacity="0.05"/></radialGradient>'
       +'</defs>'
       +'<g class="anfs anfs1">'
-      +'<polygon points="'+poly(1,r2,12,74)+'" fill="rgba(69,113,232,.13)" stroke="#5b83f0" stroke-width="2.2" filter="url(#anfg)"/>'
+      +'<polygon points="'+poly(1,r2,12,74)+'" fill="url(#fgR)" stroke="#ff5a5a" stroke-width="1.6" stroke-linejoin="round" filter="url(#anfg)"/>'
       +'<text x="170" y="40" fill="#fff" font-size="20" font-weight="800" text-anchor="middle">'+anNum(v)+'</text>'
-      +'<text x="170" y="58" fill="#a9c0ff" font-size="10.5" font-weight="700" text-anchor="middle">🧲 방문</text>'
+      +'<text x="170" y="58" fill="#ffb3ad" font-size="10.5" font-weight="700" text-anchor="middle">🧲 방문</text>'
       +'</g>'
       +'<text class="anfs anfs2" x="170" y="88" fill="'+(l1ok?okc:badc)+'" font-size="11" font-weight="800" text-anchor="middle">↓ '+p1+'% 관심 '+(l1ok?'양호 👍':'약함 🔴')+'</text>'
       +'<g class="anfs anfs2">'
-      +'<polygon points="'+poly(r2,r3,98,160)+'" fill="rgba(138,92,255,.14)" stroke="#a06bff" stroke-width="2.2" filter="url(#anfg)"/>'
+      +'<polygon points="'+poly(r2,r3,98,160)+'" fill="url(#fgV)" stroke="#a06bff" stroke-width="1.6" stroke-linejoin="round" filter="url(#anfg)"/>'
       +'<text x="170" y="126" fill="#fff" font-size="18" font-weight="800" text-anchor="middle">'+anNum(c)+'</text>'
-      +'<text x="170" y="144" fill="#d3bcff" font-size="10.5" font-weight="700" text-anchor="middle">🤝 랜딩 클릭</text>'
+      +'<text x="170" y="144" fill="#d3bcff" font-size="10.5" font-weight="700" text-anchor="middle">💎 랜딩 클릭</text>'
       +'</g>'
       +'<text class="anfs anfs3" x="170" y="173" fill="'+(l2ok?okc:badc)+'" font-size="11" font-weight="800" text-anchor="middle">↓ '+p2+'% 예약 '+(l2ok?'양호 👍':'여기가 새요 🔴')+'</text>'
       +'<g class="anfs anfs3">'
-      +'<rect class="an-fngoalglow" x="'+gx+'" y="178" width="'+gw+'" height="52" rx="13" fill="none" stroke="#ffcf6a" stroke-width="4"/>'
-      +'<rect x="'+gx+'" y="178" width="'+gw+'" height="52" rx="13" fill="rgba(255,180,120,.12)" stroke="#ffd977" stroke-width="2.4" filter="url(#anfgg)"/>'
+      +'<rect class="an-fngoalglow" x="'+gx+'" y="178" width="'+gw+'" height="52" rx="13" fill="none" stroke="#ffcf6a" stroke-width="3"/>'
+      +'<rect x="'+gx+'" y="178" width="'+gw+'" height="52" rx="13" fill="url(#fgG)" stroke="#ffd977" stroke-width="1.8" filter="url(#anfgg)"/>'
       +'<text x="170" y="203" fill="#ffe08a" font-size="19" font-weight="900" text-anchor="middle">'+anNum(cv)+'</text>'
-      +'<text x="170" y="220" fill="#ffcf9a" font-size="10" font-weight="800" text-anchor="middle">🎯 예약·상담</text>'
+      +'<text x="170" y="220" fill="#ffcf9a" font-size="10" font-weight="800" text-anchor="middle">🏆 예약·상담</text>'
       +'</g>'
       +'</svg>';
   }
@@ -5518,9 +5622,9 @@
     return '<div class="anb">'
       +'<div class="anb-row"><div class="anb-lab">🧲 방문</div><div class="anb-tr"><div class="anb-fl bl" style="--w:'+w(v)+'%"><span>'+anNum(v)+'</span></div></div></div>'
       +'<div class="anb-cn '+(l1ok?'ok':'bad')+'">↓ 방문의 <b>'+p1+'%</b>가 랜딩 클릭'+(l1ok?'':' · 새는 곳')+'</div>'
-      +'<div class="anb-row"><div class="anb-lab">🤝 랜딩 클릭</div><div class="anb-tr"><div class="anb-fl vi" style="--w:'+w(c)+'%"><span>'+anNum(c)+'</span></div></div></div>'
+      +'<div class="anb-row"><div class="anb-lab">💎 랜딩 클릭</div><div class="anb-tr"><div class="anb-fl vi" style="--w:'+w(c)+'%"><span>'+anNum(c)+'</span></div></div></div>'
       +'<div class="anb-cn '+(l2ok?'ok':'bad')+'">↓ 클릭의 <b>'+p2+'%</b>가 예약'+(l2ok?'':' · 새는 곳')+'</div>'
-      +'<div class="anb-row goal"><div class="anb-lab">🎯 예약</div><div class="anb-tr"><div class="anb-fl go" style="--w:'+w(cv)+'%"><span>'+anNum(cv)+'</span></div></div></div>'
+      +'<div class="anb-row goal"><div class="anb-lab">🏆 예약</div><div class="anb-tr"><div class="anb-fl go" style="--w:'+w(cv)+'%"><span>'+anNum(cv)+'</span></div></div></div>'
       +'</div>';
   }
   function anFunnelInner(s){ return anFunnelView==='bars' ? anFunnelBars(s) : anFunnelSVG(s); }
@@ -5649,21 +5753,50 @@
       +'<div class="an-lv-hint">'+hint+'</div>'
       +'</div>';
   }
+  // 💰 수익화 공식 히어로 — 유입 × 전환 × 구매 (트리오 네온 · 은은 맥동)
+  function anFormula(s){
+    var cur=anCur(s), prev=anPrev(s);
+    var v=cur.visitors||0, cv=cur.conv||0;
+    var rate=v?(Math.round(cv/v*1000)/10):0;
+    var pc=anCmp(cv, prev?prev.conv:null);
+    var pcls=pc.cls==='up'?'up':(pc.cls==='down'?'down':'flat');
+    var trend=(pc.txt&&pc.txt!=='—')?'<span class="fx-tr '+pcls+'">'+pc.txt+'</span>':'';
+    return '<div class="an-fx"><span class="fx-glow"></span>'
+      +'<div class="fx-eye">💰 나의 수익화 공식</div>'
+      +'<div class="fx-row">'
+      +'<div class="fx-f red"><i>🧲</i><b class="an-cup" data-to="'+v+'">0</b><span>유입 · 방문</span></div>'
+      +'<span class="fx-op">×</span>'
+      +'<div class="fx-f vi"><i>💎</i><b>'+rate+'<small>%</small></b><span>전환율</span></div>'
+      +'<span class="fx-op">×</span>'
+      +'<div class="fx-f go"><i>🏆</i><b class="an-cup" data-to="'+cv+'">0</b><span>구매 · 예약</span></div>'
+      +'</div>'
+      +'<div class="fx-eq"><span class="fx-eqs">=</span> <span class="fx-res">💰 내 수익 엔진</span> '+trend+'</div>'
+      +'<div class="fx-tag">하나라도 <b>0이면 전체가 0</b> · 셋을 키우는 게임</div>'
+      +'</div>';
+  }
+  // 📈 예약 추세 스파크라인 (그려지며 올라감) — 공식 아래 부활
+  function anTrendSpark(s){
+    var arr=(s.series&&s.series.conv)||[]; var sp=anSpark(arr);
+    if(!sp){ arr=(s.series&&s.series.visitors)||[]; sp=anSpark(arr); }
+    if(!sp) return '';
+    var lb=((s.series&&s.series.conv&&s.series.conv.length>=3))?'📈 예약·상담 추세':'📈 방문 추세';
+    return '<div class="an-fxsp"><span class="an-fxsp-lb">'+lb+'</span><span class="an-fxsp-g">'+sp+'</span></div>';
+  }
   function anDashboard(s){
-    // 📊 분석(홈 대시보드): 북극성 → 진단 1줄 → 방문·클릭 → 목표+페이스 → 추세 그래프+히트맵
-    return anNorthstar(s)+anVerdict(s)+anAlert(s)+anCards(s)+anGoal(s)+anTrend(s);
+    // 📊 분석: 수익화 공식 히어로 → 진단 1줄 → 목표+페이스 → 그래프 추이(그라데이션+모션)+히트맵
+    return anFormula(s)+anVerdict(s)+anAlert(s)+anGoal(s)+anTrend(s);
   }
   var AN_METRICS=[['visitors','방문'],['views','조회'],['conv','예약'],['store','스토어']];
   function anTrend(s){
     var per=window.__anPeriod||'day';
     var btns=AN_METRICS.map(function(m,i){ return '<button class="'+(i===0?'on':'')+'" data-anm="'+m[0]+'">'+m[1]+'</button>'; }).join('');
     return anWeekCompare(s)
-      +'<div class="an-tcat">📈 추이 <span>· 저번 달과 비교</span></div>'
+      +'<div class="an-tcat">📈 그래프 추이 <span>· 저번 달과 비교</span></div>'
       +'<div class="an-chartcard">'
       +'<div class="an-period"><button type="button" class="an-ptg'+(per==='day'?' on':'')+'" data-anp="day">일별 · 30일</button><button type="button" class="an-ptg'+(per==='month'?' on':'')+'" data-anp="month">월별 · 12개월</button></div>'
       +'<div class="an-metricrow">'+btns+'</div>'
       +'<div class="an-plotbox"><div class="an-yax" id="an-yax"><span></span><span></span><span></span></div>'
-      +'<svg class="an-linesvg" id="an-line" viewBox="0 0 320 150" preserveAspectRatio="none"></svg></div>'
+      +'<svg class="an-linesvg" id="an-line" viewBox="0 0 320 172" preserveAspectRatio="none"></svg></div>'
       +'<div class="an-xax" id="an-xax"><span></span><span></span><span></span><span></span><span></span></div>'
       +'<div class="an-legend"><span><i class="an-lgdot" style="background:#A78BFF"></i>이번 기간</span><span id="an-avg-lb"><i class="an-lgdot" style="background:rgba(69,113,232,.6)"></i>내 평소 범위</span></div></div>'
       +'<div class="an-tcat">⏰ 언제 손님이 오나 <span>· 올릴 시간 추천</span></div>'+anHeatmap(s);
@@ -5682,32 +5815,73 @@
       if(xax){ [].forEach.call(xax.children,function(c){c.textContent='';}); }
       return;
     }
-    var W=320,H=150, n=arr.length, dmax=1; arr.forEach(function(x){ if((x.n||0)>dmax) dmax=x.n||0; });
+    var W=320,H=172,PADX=16, n=arr.length, dmax=1; arr.forEach(function(x){ if((x.n||0)>dmax) dmax=x.n||0; });
     var niceMax=anNiceCeil(dmax);
-    function X(i){ return Math.round(i/(n-1)*W); }
-    function Y(v){ return Math.round(H-8 - (v/niceMax)*(H-26)); }   // v=0 → y142, v=niceMax → y18
+    function X(i){ return Math.round(PADX + i/(n-1)*(W-2*PADX)); }   // 좌우 여백 PADX (여유있게)
+    function Y(v){ return Math.round(160 - (v/niceMax)*132); }        // v=0 → y160, v=niceMax → y28 (위아래 여유)
     var pts=arr.map(function(x,i){ return X(i)+','+Y(x.n||0); });
-    var area='M0,'+Y(arr[0].n||0)+' '+arr.map(function(x,i){return 'L'+X(i)+','+Y(x.n||0);}).join(' ')+' L'+W+','+H+' L0,'+H+' Z';
+    var lineD='M'+pts.join(' L');                                     // 선 = path (getPointAtLength로 점이 타고 올라감)
+    var area='M'+pts.join(' L')+' L'+X(n-1)+','+H+' L'+X(0)+','+H+' Z';
     var sum=0; arr.forEach(function(x){sum+=(x.n||0);}); var avg=sum/n, vv=0; arr.forEach(function(x){var d=(x.n||0)-avg; vv+=d*d;}); var sd=Math.sqrt(vv/n);
     var bTop=Y(avg+sd), bBot=Y(Math.max(0,avg-sd)), last=arr[n-1];
-    var grid=[18,80,142].map(function(y){ return '<line x1="0" y1="'+y+'" x2="'+W+'" y2="'+y+'" stroke="rgba(255,255,255,.06)" stroke-width="1"/>'; }).join('');
-    svg.innerHTML='<defs><linearGradient id="anaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C3FE4" stop-opacity=".42"/><stop offset="1" stop-color="#7C3FE4" stop-opacity="0"/></linearGradient></defs>'
+    var axisC='rgba(255,255,255,.18)', gridC='rgba(255,255,255,.08)';
+    var grid=''
+      +'<line x1="0" y1="28" x2="'+W+'" y2="28" stroke="'+gridC+'" stroke-width="1"/>'          // 가로 격자 (max)
+      +'<line x1="0" y1="94" x2="'+W+'" y2="94" stroke="'+gridC+'" stroke-width="1"/>'          // 가로 격자 (mid)
+      +[80,160,240].map(function(x){ return '<line x1="'+x+'" y1="24" x2="'+x+'" y2="160" stroke="'+gridC+'" stroke-width="1"/>'; }).join('')   // 세로 격자
+      +'<line x1="0.5" y1="24" x2="0.5" y2="160" stroke="'+axisC+'" stroke-width="1"/>'          // Y축 (세로)
+      +'<line x1="0" y1="160" x2="'+W+'" y2="160" stroke="'+axisC+'" stroke-width="1.3"/>';       // X축 바닥선
+    svg.innerHTML='<defs><linearGradient id="anaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7C3FE4" stop-opacity=".42"/><stop offset="1" stop-color="#7C3FE4" stop-opacity="0"/></linearGradient>'
+      +'<linearGradient id="anlg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4571E8"/><stop offset="0.55" stop-color="#A78BFF"/><stop offset="1" stop-color="#ff9ecf"/></linearGradient></defs>'
       +grid
       +'<rect x="0" y="'+bTop+'" width="'+W+'" height="'+Math.max(2,bBot-bTop)+'" fill="rgba(69,113,232,.16)"/>'
       +'<line x1="0" y1="'+Y(avg)+'" x2="'+W+'" y2="'+Y(avg)+'" stroke="rgba(69,113,232,.5)" stroke-dasharray="4 4"/>'
       +'<path d="'+area+'" fill="url(#anaf)"/>'
-      +'<polyline points="'+pts.join(' ')+'" fill="none" stroke="#A78BFF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
-      +'<circle cx="'+X(n-1)+'" cy="'+Y(last.n||0)+'" r="4" fill="#A78BFF" stroke="#16161A" stroke-width="2"/>';
+      +'<path class="an-linedraw" d="'+lineD+'" fill="none" stroke="url(#anlg)" stroke-width="2.7" stroke-linejoin="round" stroke-linecap="round"/>'
+      +'<circle class="an-linedot" cx="'+X(n-1)+'" cy="'+Y(last.n||0)+'" r="4.5" fill="#ff9ecf" stroke="#16161A" stroke-width="2"/>';
     if(yax){ var sp=yax.children;
-      sp[0].style.top='18px';  sp[0].textContent=anNum(niceMax);
-      sp[1].style.top='80px';  sp[1].textContent=anNum(Math.round(niceMax/2));
-      sp[2].style.top='142px'; sp[2].textContent='0';
+      sp[0].style.top='28px';  sp[0].textContent=anNum(niceMax);
+      sp[1].style.top='94px';  sp[1].textContent=anNum(Math.round(niceMax/2));
+      sp[2].style.top='160px'; sp[2].textContent='0';
     }
     if(xax){ for(var i=0;i<5;i++){ if(!xax.children[i]) continue;
       if(per==='month'){ var idx=Math.round((n-1)*(i/4)); var d=arr[idx]?String(arr[idx].d):''; xax.children[i].textContent=d?(parseInt(d.slice(-2),10)+'월'):''; }
       else { xax.children[i].textContent=anRelLabel(Math.round((n-1)*(1-i/4))); }
     } }
     if(avgLb){ avgLb.innerHTML='<i class="an-lgdot" style="background:rgba(69,113,232,.6)"></i>내 평소 ≈ '+anNum(Math.round(avg)); }
+    // 🎬 선이 그려지는 것과 점이 그 끝을 타고 올라가는 걸 하나의 rAF로 완벽 동기화
+    //    기본 상태 = 완성(보이는) 그래프. 화면이 보일 때만 "숨김→완성" 연출.
+    //    안전 타이머로, rAF가 안 돌아도 절대 빈 그래프로 남지 않게 보장.
+    (function(){
+      if(window.__anRaf) { cancelAnimationFrame(window.__anRaf); window.__anRaf=null; }
+      if(window.__anSafe) { clearTimeout(window.__anSafe); window.__anSafe=null; }
+      var lp=svg.querySelector('.an-linedraw'), dot=svg.querySelector('.an-linedot');
+      if(!lp||!dot||!lp.getTotalLength) return;
+      var L=lp.getTotalLength(); if(!(L>0)) return;
+      var endX=dot.getAttribute('cx'), endY=dot.getAttribute('cy');
+      function finish(){                                          // 완성 상태로 고정 (안전판)
+        if(window.__anRaf){ cancelAnimationFrame(window.__anRaf); window.__anRaf=null; }
+        lp.style.strokeDashoffset='0'; dot.setAttribute('cx',endX); dot.setAttribute('cy',endY); dot.setAttribute('opacity','1');
+      }
+      // 화면이 안 보이면(rAF 멈춤) 애니메이션 생략하고 완성 상태 그대로 둔다
+      if(document.visibilityState!=='visible'){ finish(); return; }
+      lp.style.strokeDasharray=L; lp.style.strokeDashoffset=L;   // 처음엔 선 전체 숨김
+      dot.setAttribute('opacity','0');
+      var DUR=1400, DELAY=140, t0=null;
+      function ease(x){ return 1-Math.pow(1-x,3); }               // easeOutCubic — 끝에서 살포시 안착
+      function frame(ts){
+        if(t0===null) t0=ts;
+        var e=ts-t0-DELAY;
+        if(e<=0){ window.__anRaf=requestAnimationFrame(frame); return; }
+        var p=e/DUR; if(p>1)p=1; var q=ease(p);
+        lp.style.strokeDashoffset=(L*(1-q)).toFixed(1);           // 선을 좌→우로 그림
+        var pt=lp.getPointAtLength(L*q);                          // 점 = 그려진 선의 바로 그 끝
+        dot.setAttribute('cx',pt.x.toFixed(1)); dot.setAttribute('cy',pt.y.toFixed(1)); dot.setAttribute('opacity','1');
+        window.__anRaf = (p<1) ? requestAnimationFrame(frame) : (finish(),null);
+      }
+      window.__anRaf=requestAnimationFrame(frame);
+      window.__anSafe=setTimeout(finish, DELAY+DUR+900);          // 어떤 경우에도 완성 보장
+    })();
   }
   function anHeatmap(s){
     var heat=s.heat||[];
@@ -5907,26 +6081,51 @@
   if(document.querySelector('[data-lclose]')) document.querySelector('[data-lclose]').onclick=closeLeads;
   lov.addEventListener('click', function(e){ if(e.target===lov) closeLeads(); });
   function fmtLeadDate(ms){ if(!ms) return ''; var d=new Date(ms); var p=function(n){return (n<10?'0':'')+n;}; return (d.getMonth()+1)+'/'+d.getDate()+' '+p(d.getHours())+':'+p(d.getMinutes()); }
-  function renderLeads(list){
-    if(!list.length) return '<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">아직 등록된 연락처가 없어요<br><span style="font-size:11.5px;">공개 페이지에 "문의·신청" 블록을 넣어보세요</span></div>';
-    var head='<div style="font-size:12px;color:var(--muted);margin-bottom:8px;">총 '+list.length+'명</div>';
-    return head + list.map(function(x){
-      return '<div style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--surface);border:1px solid var(--hair);border-radius:11px;margin-bottom:8px;">'
-        +'<span style="font-size:16px;">📇</span>'
-        +'<div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:500;">'+escT(x.name||'(이름 없음)')+'</div><div style="font-size:13px;color:var(--coral);">'+escT(x.phone||'')+'</div></div>'
-        +'<span style="font-size:11px;color:var(--muted);flex:0 0 auto;">'+fmtLeadDate(x.created_at)+'</span></div>';
+  var leadsFilter='';
+  function leadKey(x){ return (x.phone||'')+'|'+(x.created_at||''); }
+  function leadDoneSet(){ try{ return JSON.parse(localStorage.getItem('cm-lead-done')||'{}'); }catch(_){ return {}; } }
+  function leadDoneToggle(k){ var s=leadDoneSet(); if(s[k]) delete s[k]; else s[k]=1; try{ localStorage.setItem('cm-lead-done', JSON.stringify(s)); }catch(_){ } return !!s[k]; }
+  function leadInfo(x){ var raw=x.name||''; var isR=/^\[예약\]/.test(raw); return { isR:isR, disp:(raw.replace(/^\[예약\]\s*/,'')||'(이름 없음)'), phone:x.phone||'', date:fmtLeadDate(x.created_at), key:leadKey(x) }; }
+  function renderLeadCards(list){
+    var done=leadDoneSet(), f=(leadsFilter||'').toLowerCase();
+    var filtered=list.filter(function(x){ if(!f) return true; return ((x.name||'')+(x.phone||'')).toLowerCase().indexOf(f)>=0; });
+    if(!filtered.length) return '<div style="padding:22px;text-align:center;color:var(--muted);font-size:12.5px;">'+(f?'검색 결과가 없어요':'아직 없어요')+'</div>';
+    return filtered.map(function(x){
+      var L=leadInfo(x), isDone=!!done[L.key], tel=L.phone?L.phone.replace(/[^0-9+]/g,''):'';
+      var tag=L.isR?'<span class="ld-tag ld-r">📅 예약</span>':'<span class="ld-tag ld-q">✉ 문의</span>';
+      var acts=tel?('<a class="ld-act" href="tel:'+tel+'" title="전화">📞</a><a class="ld-act" href="sms:'+tel+'" title="문자">💬</a><button type="button" class="ld-act" data-ldcopy="'+esc(L.phone)+'" title="번호 복사">📋</button>'):'';
+      return '<div class="ld-card'+(isDone?' done':'')+'">'
+        +'<div class="ld-top">'+tag+'<span class="ld-name">'+escT(L.disp)+'</span><span class="ld-date">'+L.date+'</span></div>'
+        +(L.phone?'<div class="ld-phone">'+escT(L.phone)+'</div>':'')
+        +'<div class="ld-actrow">'+acts+'<button type="button" class="ld-done'+(isDone?' on':'')+'" data-lddone="'+esc(L.key)+'">'+(isDone?'✓ 연락함':'연락함 표시')+'</button></div>'
+        +'</div>';
     }).join('');
   }
+  function renderLeads(list){
+    if(!list.length) return '<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">아직 등록된 연락처가 없어요<br><span style="font-size:11.5px;">공개 페이지에 "문의·신청" 블록이나 예약을 켜보세요</span></div>';
+    var R=list.filter(function(x){return /^\[예약\]/.test(x.name||'');}).length, Q=list.length-R;
+    var wk=list.filter(function(x){ return x.created_at && x.created_at > (Date.now()-7*864e5); }).length;
+    return '<div class="ld-sum">총 <b>'+list.length+'</b>명 · 📅 예약 '+R+' · ✉ 문의 '+Q+(wk?' · 🔥 이번 주 '+wk:'')+'</div>'
+      +'<input id="leads-search" class="ld-search" placeholder="🔎 이름·전화 검색" value="'+esc(leadsFilter)+'">'
+      +'<div id="leads-list">'+renderLeadCards(list)+'</div>';
+  }
+  function wireLeads(){ var s=document.getElementById('leads-search'); if(s){ s.oninput=function(){ leadsFilter=this.value; var lst=document.getElementById('leads-list'); if(lst) lst.innerHTML=renderLeadCards(leadsCache); }; } }
+  lov.addEventListener('click', function(e){
+    var cp=e.target.closest?e.target.closest('[data-ldcopy]'):null;
+    var dn=e.target.closest?e.target.closest('[data-lddone]'):null;
+    if(cp){ var ph=cp.getAttribute('data-ldcopy'); try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(ph); else { var ta=document.createElement('textarea'); ta.value=ph; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } if(window.toast) toast('번호 복사됨'); }catch(_){} }
+    if(dn){ var k=dn.getAttribute('data-lddone'); var now=leadDoneToggle(k); var card=dn.closest('.ld-card'); if(card) card.classList.toggle('done', now); dn.classList.toggle('on', now); dn.textContent=now?'✓ 연락함':'연락함 표시'; }
+  });
   var setLeads=document.getElementById('set-leads');
   if(setLeads) setLeads.onclick=function(){
-    lov.classList.add('open');
+    lov.classList.add('open'); leadsFilter='';
     var body=document.getElementById('leads-body');
     var auth=null; try{ auth=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){}
     if(!auth){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">로그인 후 이용할 수 있어요</div>'; return; }
     body.innerHTML='<div style="padding:30px 0;text-align:center;color:var(--muted);font-size:13px;">불러오는 중…</div>';
     window.laRpc('li_leads_get',{ p_code:auth.code, p_pin_hash:auth.pinHash }).then(function(res){
       if(!res||!res.ok){ leadsCache=[]; body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">명단을 못 불러왔어요<br><span style="font-size:11.5px;">(단골 명단 SQL 실행 여부를 확인하세요)</span></div>'; return; }
-      leadsCache=res.list||[]; body.innerHTML=renderLeads(leadsCache);
+      leadsCache=res.list||[]; body.innerHTML=renderLeads(leadsCache); try{ wireLeads(); }catch(_){}
     }).catch(function(){ leadsCache=[]; body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">불러오기 실패 (네트워크)</div>'; });
   };
   var leadsExport=document.getElementById('leads-export');
@@ -6103,6 +6302,62 @@
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(link).then(function(){ toast('링크 복사됨'); }).catch(function(){ shCopyFallback(link); }); } else shCopyFallback(link);
   };
   function shCopyFallback(link){ try{ var ta=document.createElement('textarea'); ta.value=link; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast('링크 복사됨'); }catch(e){ toast(link); } }
+
+  // ════ 📈 성장 방법 (플레이북) — 목적별 방법 + 코치 설명 + 기능 바로 열기 ════
+  (function(){
+    var gpbov=document.getElementById('gpb-ov'); if(!gpbov) return;
+    var GROW=[
+      { id:'in', ic:'📈', t:'유입 늘리기', s:'내 홈으로 사람 데려오기',
+        why:'아무리 좋은 홈페이지도 <b>볼 사람이 없으면 0</b>이에요. 온라인(인스타·콘텐츠 링크)과 오프라인(매장·명함) <b>둘 다</b> 링크를 뿌리는 게 핵심이에요.',
+        ways:[
+          {ic:'🔗',t:'인스타 프로필·DM에 링크',s:'제일 기본 · 바이오에 걸어두기',go:'링크 복사',act:'copylink'},
+          {ic:'📱',t:'스토리에 올릴 이미지',s:'테마+QR 카드 자동 생성',go:'공유 카드',act:'share'},
+          {ic:'🔳',t:'매장 거울·명함에 QR',s:'오프라인 손님도 홈으로',go:'QR 만들기',act:'share'},
+          {ic:'📊',t:'어디서 오는지 확인',s:'잘 되는 채널에 더 집중',go:'유입 분석',act:'stats'}
+        ]},
+      { id:'cv', ic:'🤝', t:'전환 높이기', s:'방문 → 예약',
+        why:'들어온 사람을 <b>예약으로</b>. 신뢰(전후사진·후기·증명)를 보여주고 <b>"지금 예약할 이유"</b>를 만들어요. 겉(기능) 말고 <b>속(감정·정체성)</b>을 건드리기.',
+        ways:[
+          {ic:'🏅',t:'전문성·신뢰 블록 추가',s:'전후·후기·증명·진단형·3초 커버',go:'구성 추가',act:'addcatalog'},
+          {ic:'🪣',t:'어디서 새는지 진단',s:'퍼널에서 약한 고리 콕',go:'퍼널 보기',act:'stats'}
+        ]},
+      { id:'rp', ic:'🔁', t:'단골 만들기', s:'온 손님 다시 오게',
+        why:'한 번 온 손님을 <b>다시 오게</b>. 예약·문의한 분께 <b>먼저 연락</b>하고, 예약을 켜서 스스로 시간을 잡게 해요.',
+        ways:[
+          {ic:'📇',t:'예약·문의한 분께 연락',s:'먼저 연락 = 재방문의 시작',go:'리드 관리',act:'leads'},
+          {ic:'📅',t:'예약 받기 켜기',s:'손님이 직접 시간 잡게',go:'예약 설정',act:'resv'}
+        ]},
+      { id:'an', ic:'📊', t:'성과 확인·개선', s:'숫자로 다음 수 정하기',
+        why:'느낌 말고 <b>숫자</b>로. 어디서 새는지 보고 <b>약한 곳을 보완</b>하면 페이지가 계속 강해져요.',
+        ways:[
+          {ic:'🎯',t:'방문·예약·유입 다 보기',s:'퍼널·유입·콘텐츠→예약',go:'방문 분석',act:'stats'}
+        ]}
+    ];
+    function growGo(act){ closeGrowth(); setTimeout(function(){ try{
+      if(act==='copylink'){ if(window.__copyMyLink) window.__copyMyLink(); }
+      else if(act==='share'){ if(window.__openShare) window.__openShare(); }
+      else if(act==='stats'){ if(window.__openStats) window.__openStats(); }
+      else if(act==='addcatalog'){ if(window.__openAddCatalog) window.__openAddCatalog(); else if(window.__openLive) window.__openLive(); }
+      else if(act==='leads'){ var b=document.getElementById('set-leads'); if(b) b.click(); }
+      else if(act==='resv'){ var r=document.getElementById('open-resv-setup'); if(r) r.click(); }
+    }catch(_){ } }, 130); }
+    function renderGrowth(){
+      var body=document.getElementById('gpb-body'); if(!body) return;
+      var open=window.__growOpen||'in';
+      body.innerHTML=GROW.map(function(ch){
+        var ways=ch.ways.map(function(w){ return '<div class="gw-way" data-gact="'+w.act+'"><span class="gw-ic">'+w.ic+'</span><div class="gw-m"><b>'+w.t+'</b><small>'+w.s+'</small></div><span class="gw-go">'+w.go+' →</span></div>'; }).join('');
+        return '<div class="gch'+(ch.id===open?' open':'')+'"><div class="gch-h" data-gtog="'+ch.id+'"><span class="gch-ic">'+ch.ic+'</span><span class="gch-t">'+ch.t+'</span><span class="gch-s">'+ch.s+'</span><span class="gch-chev">▾</span></div>'
+          +'<div class="gch-body"><div class="gch-why">💬 '+ch.why+'</div><div class="gch-ways">'+ways+'</div></div></div>';
+      }).join('');
+      body.querySelectorAll('[data-gtog]').forEach(function(h){ h.onclick=function(){ var id=h.getAttribute('data-gtog'); window.__growOpen=(window.__growOpen===id?'':id); renderGrowth(); }; });
+      body.querySelectorAll('[data-gact]').forEach(function(w){ w.onclick=function(){ growGo(w.getAttribute('data-gact')); }; });
+    }
+    function openGrowth(){ window.__growOpen=window.__growOpen||'in'; gpbov.classList.add('open'); renderGrowth(); }
+    function closeGrowth(){ gpbov.classList.remove('open'); }
+    window.__openGrowth=openGrowth;
+    var gx=document.getElementById('gpb-x'); if(gx) gx.onclick=closeGrowth;
+    gpbov.addEventListener('click', function(e){ if(e.target===gpbov) closeGrowth(); });
+  })();
 
   // 편집 패널의 ＋사진 버튼 → 보관함(선택 모드)
   document.addEventListener('click', function(e){
@@ -8258,6 +8513,19 @@
   })();
   try{ renderPostsLibrary(); }catch(_){}
 
+  // 💰 홈 압축 수익화 공식 (유입×전환×구매 · 최근 28일) — __hubStats(li_stats) 재사용
+  function hubFormulaHtml(s){
+    if(!s||!s.p28) return '';
+    var v=(s.p28.visitors)||0, cv=(s.p28.conv)||0;
+    if(!v && !cv) return '';
+    var rate=v?(Math.round(cv/v*1000)/10):0;
+    return '<div class="hub-fx" id="hub-fx"><div class="hfx-eye">💰 나의 수익화 공식 <span>· 최근 28일</span></div>'
+      +'<div class="hfx-row">'
+      +'<span class="hfx-f red">🧲 <b>'+v+'</b><em>유입</em></span><span class="hfx-op">×</span>'
+      +'<span class="hfx-f vi">💎 <b>'+rate+'%</b><em>전환</em></span><span class="hfx-op">×</span>'
+      +'<span class="hfx-f go">🏆 <b>'+cv+'</b><em>구매</em></span>'
+      +'</div></div>';
+  }
   // ════ 🏠 홈 허브 — 완성도 북극성(실데이터) + 진입 ════
   function renderHomeHub(){
     var box=document.getElementById('home-hub'); if(!box) return;
@@ -8284,7 +8552,9 @@
     var fold; try{ fold=JSON.parse(localStorage.getItem('cm-hub-fold')||'null'); }catch(_){ fold=null; } if(!fold) fold={ns:true,q:true};   // 기본 접힘
     var myH=(window.__custHandle?window.__custHandle():'');
     box.innerHTML=''
+      +'<div id="hub-fx-wrap">'+hubFormulaHtml(window.__hubStats)+'</div>'
       +'<div class="hub-hero" id="hub-hero"><div class="hh-eyebrow">📍 지금 할 일</div><div class="hh-t">'+next.t+'</div>'+(next.label?'<button class="hh-btn" id="hub-hero-btn">'+next.label+' →</button>':'')+'</div>'
+      +'<button class="hub-grow" id="hub-grow"><span class="hg-ic">📈</span><span class="hg-m"><b>성장 방법</b><small>유입·전환·단골·성과 — 뭘 할지 방법 모음</small></span><span class="hg-go">→</span></button>'
       /* ── 존 1: 오늘 성과 ── */
       +'<div class="hub-zone"><div class="hub-zone-h">📊 오늘 성과</div>'
       +  '<div id="hub-today" class="today-card"></div>'
@@ -8320,6 +8590,7 @@
     box.querySelectorAll('.gi').forEach(function(g){ g.onclick=function(){ tileGo(TILES[+g.getAttribute('data-tile')][3]); }; });
     var bp=document.getElementById('hub-plan'); if(bp) bp.onclick=function(){ if(ws)ws('design'); };
     var bn=document.getElementById('hub-hero-btn'); if(bn) bn.onclick=function(){ if(next.go==='live'){ if(window.__openLive) window.__openLive(); } else if(next.go && ws){ ws(next.go); } };
+    var hg=document.getElementById('hub-grow'); if(hg) hg.onclick=function(){ if(window.__openGrowth) window.__openGrowth(); };
     var hlc=document.getElementById('hub-link-copy'); if(hlc) hlc.onclick=function(){ if(window.__copyMyLink) window.__copyMyLink(); };
     var hlq=document.getElementById('hub-link-qr'); if(hlq) hlq.onclick=function(){ if(window.__openShare) window.__openShare(); };
     try{ if(myH&&myH!=='preview'&&!localStorage.getItem('clb-seen')){ localStorage.setItem('clb-seen','1'); var hlb=document.getElementById('hub-link'); if(hlb) setTimeout(function(){ hlb.classList.add('hl-flash'); if(window.toast) toast('👆 이게 손님에게 보낼 링크예요 · 복사해서 인스타·손님에게'); setTimeout(function(){ hlb.classList.remove('hl-flash'); }, 2500); }, 700); } }catch(e){}
@@ -8378,7 +8649,7 @@
     window.__hubStatsFetching=true;
     window.laRpc('li_stats',{ p_code:auth.code, p_pin_hash:auth.pinHash }).then(function(res){
       window.__hubStatsFetching=false;
-      if(res&&res.ok){ window.__hubStats=res; try{ renderTodayCard(); }catch(_){} try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){} }
+      if(res&&res.ok){ window.__hubStats=res; try{ renderTodayCard(); }catch(_){} try{ var fxw=document.getElementById('hub-fx-wrap'); if(fxw) fxw.innerHTML=hubFormulaHtml(res); }catch(_){} try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){} }
       else { var e2=document.getElementById('hub-today'); if(e2) e2.innerHTML='<div class="td-empty">📊 방문 기록이 쌓이면 여기 오늘의 현황이 떠요.</div>'; }
     }).catch(function(){ window.__hubStatsFetching=false; var e3=document.getElementById('hub-today'); if(e3) e3.innerHTML=''; });
   }
