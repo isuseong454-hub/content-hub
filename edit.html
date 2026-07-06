@@ -1011,6 +1011,7 @@
   .add-import-row{display:flex; align-items:center; gap:12px; width:100%; margin:0 0 14px; padding:13px 14px; border-radius:13px; cursor:pointer; font-family:var(--sans); text-align:left;
     background:rgba(155,61,255,.1); border:1px solid rgba(155,61,255,.4);}
   .add-import-row:active{transform:scale(.99);}
+  .tgrid .add-import-row{grid-column:1/-1; margin:0;}   /* 섹션4 그리드 안에서 전체폭 (더 보여주기·내 콘텐츠에 소속) */
   .add-import-row .air-ic{font-size:20px; flex:0 0 auto;}
   .add-import-row .air-m{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
   .add-import-row .air-m b{font-size:13.5px; font-weight:700; color:#d8bfff;}
@@ -1087,9 +1088,54 @@
   .tpl .tic{width:30px; height:30px; flex-shrink:0; border-radius:8px; background:var(--coral-soft); color:var(--coral); display:flex; align-items:center; justify-content:center; font-size:15px;}
   .tpl .tn{display:block; font-size:13px; font-weight:500;}
   .tpl .ts{display:block; font-size:10.5px; color:var(--muted);}
+  /* 🖼 쇼룸 타일 — 타일마다 미니 완성샷 (글자 아닌 실제 모습) */
+  .tpl.tpl-show{flex-direction:column; align-items:stretch; gap:6px; padding:7px 7px 8px;}
+  .tpl.tpl-show .tic{display:none;}
+  .tpl.tpl-show .ts{display:none;}
+  .tpl.tpl-show .tn{font-size:11.5px;}
+  .tpl-thumb{height:58px; border-radius:9px; overflow:hidden;}
+  .tpl-plus{position:absolute; top:6px; right:6px; width:19px; height:19px; border-radius:50%; background:linear-gradient(120deg,#ffd977,#ff9ecf); color:#3a2410; font-size:13px; font-weight:900; display:flex; align-items:center; justify-content:center; z-index:3; box-shadow:0 2px 7px rgba(0,0,0,.45);}
+  .tpl-thumb .mp{width:100%; height:100%; background:var(--soft); border:1px solid var(--hair); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; padding:7px 8px;}
+  .mp-star{color:#FFB740; font-size:8px; letter-spacing:1px;}
+  .mp-q{font-size:9px; color:#e7e2f0; line-height:1.3; margin:2px 0; font-weight:600;}
+  .mp-q .h{color:#ff9ecf;}
+  .mp-by{font-size:7.5px; color:var(--muted);}
+  .mp-ba{flex-direction:row !important; padding:0 !important;}
+  .mp-ba>span{flex:1; display:flex; align-items:flex-end; padding:5px; font-size:7.5px; font-weight:800; letter-spacing:.04em;}
+  .mp-ba .b1{background:linear-gradient(160deg,#2a2340,#181425); color:var(--muted);}
+  .mp-ba .b2{background:linear-gradient(160deg,#3a2b52,#241a38); color:#c6adff; border-left:2px solid #ff9ecf;}
+  .mp-num{flex-direction:row !important; gap:5px; text-align:center;}
+  .mp-num>div{flex:1;}
+  .mp-num b{display:block; font-size:14px; font-weight:900; background:linear-gradient(95deg,#8A5CFF,#C13B9E); -webkit-background-clip:text; background-clip:text; color:transparent; line-height:1;}
+  .mp-num span{font-size:7px; color:var(--muted);}
+  .mp-gal{flex-direction:row !important; gap:3px; padding:7px !important;}
+  .mp-gal>span{flex:1; aspect-ratio:3/4; border-radius:3px; background:linear-gradient(150deg,#33294d,#1e1830);}
+  .mp-ps{flex-direction:row !important; align-items:center; gap:4px; justify-content:center; font-size:8px; font-weight:800;}
+  .mp-ps .p{background:rgba(255,107,125,.16); color:#ff9a9a; padding:3px 6px; border-radius:5px;}
+  .mp-ps .s{background:rgba(70,214,166,.16); color:#46D6A6; padding:3px 6px; border-radius:5px;}
+  .mp-ps .ar{color:var(--muted);}
+  .mp-logo{flex-direction:row !important; gap:4px; align-items:center; justify-content:center;}
+  .mp-logo>span{width:20px; height:20px; border-radius:5px; background:#2a2733; border:1px solid var(--hair);}
+  .mp-cover{padding:0 !important; position:relative; background:radial-gradient(110% 90% at 30% 10%,rgba(167,139,255,.4),transparent 55%),linear-gradient(160deg,#2a2140,#15111f); display:flex; align-items:flex-end;}
+  .mp-cover .t{padding:6px; font-size:8.5px; font-weight:800; color:#fff;}
+  .mp-cover .t .h{color:#ff9ecf;}
+  .mp-badge{flex-direction:row !important; align-items:center; justify-content:center; gap:5px; font-size:8.5px; font-weight:800; color:#ff9a9a;}
+  .mp-badge .dot{width:6px; height:6px; border-radius:50%; background:#ff5a5a; box-shadow:0 0 6px #ff5a5a;}
+  .mp-diag{gap:3px !important;}
+  .mp-diag .q{font-size:8px; font-weight:700; color:#e7e2f0; text-align:center;}
+  .mp-diag .opts{display:flex; gap:3px; margin-top:2px;}
+  .mp-diag .opts span{flex:1; height:11px; border-radius:4px; background:rgba(167,139,255,.18); border:1px solid rgba(167,139,255,.4);}
   /* 구성추가 — 5단계 흐름 + 목적별 색 (타일은 다크, 아이콘·번호에만 의미색) */
-  .addsec{display:flex; align-items:center; flex-wrap:wrap; gap:8px; font-size:14px; font-weight:700; color:var(--ink); margin:18px 0 9px;}
-  .addsec.first{margin-top:4px;}
+  .addsec{display:flex; align-items:center; flex-wrap:nowrap; gap:8px; font-size:14px; font-weight:700; color:var(--ink); margin:8px 0; padding:11px 13px; background:var(--soft); border:1px solid var(--hair); border-radius:12px; cursor:pointer; user-select:none; transition:border-color .15s, background .15s;}
+  .addsec.first{margin-top:6px;}
+  .addsec:hover{border-color:rgba(167,139,255,.5); background:rgba(123,90,255,.05);}
+  .addsec:active{transform:scale(.995);}
+  .addsec .addwhy{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;}
+  /* 접기/펼치기 버튼 — 크고 명확하게 (상태별 색·화살표는 JS가 직접 박음: 접힘=회색▾ / 펼침=보라▴) */
+  .addsec-caret{flex:0 0 auto; margin-left:8px; width:32px; height:32px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,.07); border:1px solid var(--hair); font-size:15px; line-height:1; color:var(--muted); transition:background .15s, color .15s, border-color .15s;}
+  .addsec:hover .addsec-caret{filter:brightness(1.3);}
+  /* 펼쳐진 섹션은 아래 그리드와 붙어 보이게 (연결감) */
+  .addsec:not(.collapsed){background:rgba(123,90,255,.06); border-color:rgba(167,139,255,.32); margin-bottom:11px;}
   /* 트리오 역할 태그 — 구성 추가 섹션을 분석 언어(🧲유입/💎전환/🏆구매)와 통일 */
   .addtrio{margin-left:auto; flex:0 0 auto; display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:800; padding:3px 9px; border-radius:99px; border:1px solid; letter-spacing:.01em;}
   .addtrio.t-in{color:#ff9a9a; border-color:rgba(255,90,90,.55); background:rgba(255,90,90,.12);}
@@ -1148,10 +1194,35 @@
   .addpv-h .t{font-size:15px; font-weight:700;}
   .addpv-sub{font-size:11.5px; color:var(--muted); margin:0 0 12px 39px;}
   .addpv-label{font-size:10.5px; color:var(--muted); margin-bottom:6px;}
-  .addpv-frame{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:13px; margin-bottom:14px;}
+  .addpv-frame{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:13px; margin-bottom:13px;}
+  .addpv-frame > *{animation:addFadeUp .42s cubic-bezier(.2,.8,.3,1) both;}   /* 열 때마다 데모가 살아나게 (다 모션) */
+  /* 💡 이래서 좋아요 (장점) — 만들고 싶게 */
+  .addpv-benefit{font-size:12px; line-height:1.5; color:#bfeede; background:rgba(70,214,166,.10); border:1px solid rgba(70,214,166,.3); border-radius:11px; padding:10px 12px; margin:11px 0 2px;}
+  .addpv-benefit b{color:#46D6A6; font-weight:700;}
+  .addpv-benefit:empty{display:none;}
+  .addpv-ov.demo-only .addpv-benefit{display:none;}
+  .addpv-btns{margin-top:14px;}
+  .addpv-mini{display:flex; justify-content:center; align-items:center;}
+  .addpv-mini .mp{width:210px; min-height:70px; background:var(--soft); color:var(--ink); border:1px solid var(--hair); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; padding:10px 11px;}
+  /* 📍 위치 선택 안내 배너 — 위에서 부드럽게 내려옴 */
+  #place-banner{position:fixed; top:38%; left:50%; transform:translateX(-50%); z-index:100000; background:linear-gradient(120deg,#ffd977,#ff9ecf); color:#3a2410; font-size:14px; font-weight:800; padding:11px 20px; border-radius:99px; box-shadow:0 10px 30px rgba(0,0,0,.5); white-space:nowrap; animation:pbDrop .42s cubic-bezier(.2,.9,.3,1.25) both;}
+  @keyframes pbDrop{from{opacity:0; transform:translate(-50%,-14px);} to{opacity:1; transform:translate(-50%,0);}}
   @keyframes addRvSlide{from{transform:translateX(0)} to{transform:translateX(-50%)}}
   @keyframes addFadeUp{from{opacity:0;transform:translateY(9px)} to{opacity:1;transform:none}}
   @keyframes addPop{0%{opacity:0;transform:scale(.74)} 70%{opacity:1;transform:scale(1.08)} 100%{opacity:1;transform:scale(1)}}
+  @keyframes addShine{0%{left:-45%} 55%,100%{left:120%}}
+  @keyframes addBtnPulse{0%,100%{transform:scale(1)} 50%{transform:scale(1.035)}}
+  /* ◧ 전/후 데모 — 자동으로 밀리며 비포↔애프터 (밀어서 비교가 뭔지 보이게) */
+  .ba-demo{position:relative; height:132px; border-radius:11px; overflow:hidden;}
+  .ba-after{position:absolute; inset:0; background:linear-gradient(150deg,#7C3FE4,#C13B9E 55%,#ff9ecf);}
+  .ba-before{position:absolute; inset:0; background:linear-gradient(150deg,#3a3550,#241f33); clip-path:inset(0 50% 0 0); animation:baWipe 3.6s ease-in-out infinite;}
+  .ba-div{position:absolute; top:0; bottom:0; left:50%; width:2px; background:#fff; box-shadow:0 0 8px rgba(255,255,255,.6); animation:baDiv 3.6s ease-in-out infinite;}
+  .ba-div .ba-knob{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.5);}
+  .ba-tag{position:absolute; bottom:9px; font-size:9.5px; font-weight:800; color:#fff; letter-spacing:.05em; text-shadow:0 1px 3px rgba(0,0,0,.55);}
+  .ba-tag-b{left:10px;} .ba-tag-a{right:10px;}
+  @keyframes baWipe{0%,100%{clip-path:inset(0 50% 0 0);} 25%{clip-path:inset(0 78% 0 0);} 75%{clip-path:inset(0 22% 0 0);}}
+  @keyframes baDiv{0%,100%{left:50%;} 25%{left:22%;} 75%{left:78%;}}
+  @media (prefers-reduced-motion: reduce){ .ba-before,.ba-div{animation:none !important;} }
   /* 👁 완성 예시(데모) 버튼 — 편집 중 언제든 완성샷 다시 보기 */
   .edit-demo-btn{margin-left:auto; margin-right:10px; flex:0 0 auto; display:inline-flex; align-items:center; gap:4px; font-family:inherit; font-size:12px; font-weight:700; color:var(--coral); background:var(--coral-soft); border:1px solid var(--coral); border-radius:99px; padding:6px 12px; cursor:pointer;}
   .edit-demo-btn:active{transform:scale(.95);}
@@ -2868,7 +2939,7 @@
 
       <div id="add-all">
 
-      <div class="tcat addsec first s1"><span class="addnum">1</span>첫인상 <span class="addwhy">· 나는 누구인가</span><span class="addtrio t-in">🧲 유입</span></div>
+      <div class="tcat addsec first s1"><span class="addnum">1</span>첫인상<span class="addtrio t-in">🧲 유입</span></div>
       <div class="tgrid s1">
         <div class="tpl imp" data-special="profile"><span class="tic">👤</span><span><span class="tn">프로필</span><span class="ts">동그란 사진·이름·소개 (맨 위)</span></span></div>
         <div class="tpl" data-ic="🪪" data-nm="프로필 카드"><span class="tic">🪪</span><span><span class="tn">프로필 카드</span><span class="ts">원형 사진 + 이름 + 설명</span></span></div>
@@ -2878,7 +2949,7 @@
         <div class="tpl" data-ic="¶" data-nm="자유 텍스트"><span class="tic">¶</span><span><span class="tn">자유 텍스트</span><span class="ts">제목·설명</span></span></div>
       </div>
 
-      <div class="tcat addsec s2"><span class="addnum">2</span>시선 잡기 <span class="addwhy">· 사진·영상으로</span><span class="addtrio t-in">🧲 유입</span></div>
+      <div class="tcat addsec s2"><span class="addnum">2</span>시선 잡기<span class="addtrio t-in">🧲 유입</span></div>
       <div class="tgrid s2">
         <div class="tpl" data-ic="✂" data-nm="스타일 갤러리"><span class="tic">✂</span><span><span class="tn">스타일 갤러리</span><span class="ts">분류·검색·전후</span></span></div>
         <div class="tpl imp" data-ic="🎞" data-nm="대표 사진 쇼케이스"><span class="tic">🎞</span><span><span class="tn">대표 쇼케이스</span><span class="ts">대표 작업 카드</span></span></div>
@@ -2887,15 +2958,16 @@
         <div class="tpl" data-ic="🖼" data-nm="사진"><span class="tic">🖼</span><span><span class="tn">사진</span><span class="ts">포트폴리오 + 프레임</span></span></div>
         <div class="tpl" data-ic="◍" data-nm="하이라이트"><span class="tic">◍</span><span><span class="tn">하이라이트</span><span class="ts">후기·가격·메뉴 버블</span></span></div>
         <div class="tpl" data-ic="▥" data-nm="이미지 + 글"><span class="tic">▥</span><span><span class="tn">이미지 + 글</span><span class="ts">좌우 분할</span></span></div>
+        <div class="tpl" data-ic="🏷" data-nm="흐르는 태그 띠"><span class="tic">🏷</span><span><span class="tn">흐르는 태그 띠</span><span class="ts">키워드가 흐름</span></span></div>
       </div>
 
-      <div class="tcat addsec s3"><span class="addnum">3</span>전문성 가시화 셋팅 <span class="addwhy">· 신뢰·증거를 눈에 보이게</span><span class="addtrio t-cv">💎 전환</span></div>
+      <div class="tcat addsec s3"><span class="addnum">3</span>전문성 가시화<span class="addtrio t-cv">💎 전환</span></div>
       <div class="tgrid s3">
         <div class="tpl imp" data-ic="★" data-nm="후기"><span class="tic">★</span><span><span class="tn">후기</span><span class="ts">고객 후기</span></span></div>
         <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력</span></span></div>
         <div class="tpl" data-ic="％" data-nm="숫자 스탯"><span class="tic">％</span><span><span class="tn">숫자 스탯</span><span class="ts">누적·재방문율</span></span></div>
         <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전/후 슬라이더</span><span class="ts">밀어서 비교 · 실력 증명</span></span></div>
-        <div class="tpl" data-ic="🔢" data-nm="과정 · 진행 단계"><span class="tic">🔢</span><span><span class="tn">과정 타임라인</span><span class="ts">상담→진단→시술→애프터</span></span></div>
+        <div class="tpl" data-ic="🔢" data-nm="과정 · 진행 단계"><span class="tic">🔢</span><span><span class="tn">과정 · 이용 방법</span><span class="ts">상담→시술 흐름 · 1·2·3 단계</span></span></div>
         <div class="tpl" data-ic="🎯" data-nm="고민 → 해결"><span class="tic">🎯</span><span><span class="tn">고민 → 해결</span><span class="ts">문제 → 내 솔루션</span></span></div>
         <div class="tpl" data-ic="🏛" data-nm="로고 벽"><span class="tic">🏛</span><span><span class="tn">로고 벽</span><span class="ts">함께한 브랜드·매체</span></span></div>
         <div class="tpl" data-ic="🔮" data-nm="진단형"><span class="tic">🔮</span><span><span class="tn">진단형</span><span class="ts">눌러서 맞춤 결과</span></span></div>
@@ -2903,15 +2975,15 @@
         <div class="tpl" data-ic="⚡" data-nm="3초 커버"><span class="tic">⚡</span><span><span class="tn">3초 커버</span><span class="ts">첫인상 후킹 문구</span></span></div>
       </div>
 
-      <div class="tcat addsec s4"><span class="addnum">4</span>더 보여주기 <span class="addwhy">· 내 콘텐츠</span><span class="addtrio t-cv">💎 전환</span></div>
+      <div class="tcat addsec s4"><span class="addnum">4</span>내 컨텐츠 게시물<span class="addtrio t-cv">💎 전환</span></div>
       <div class="tgrid s4">
         <div class="tpl" data-ic="▦" data-nm="컨텐츠 갤러리"><span class="tic">▦</span><span><span class="tn">컨텐츠 갤러리</span><span class="ts">사진 가로 스크롤</span></span></div>
         <div class="tpl" data-ic="🗞" data-nm="카드뉴스"><span class="tic">🗞</span><span><span class="tn">카드뉴스</span><span class="ts">글마다 링크 복사</span></span></div>
         <div class="tpl" data-ic="▤" data-nm="아카이브"><span class="tic">▤</span><span><span class="tn">아카이브</span><span class="ts">매거진형 글</span></span></div>
+        <button type="button" class="add-import-row" id="add-import-row"><span class="air-ic">📚</span><span class="air-m"><b>내 발행 글 불러오기</b><small>컨텐츠 탭에 쓴 글을 홈 카드로</small></span><span class="air-go">›</span></button>
       </div>
-      <button type="button" class="add-import-row" id="add-import-row"><span class="air-ic">📚</span><span class="air-m"><b>발행한 글 가져오기</b><small>컨텐츠 탭의 글을 홈에 카드로 꽂기</small></span><span class="air-go">›</span></button>
 
-      <div class="tcat addsec s5"><span class="addnum">5</span>연결하기 <span class="addwhy">· 행동으로</span><span class="addtrio t-buy">🏆 구매</span></div>
+      <div class="tcat addsec s5"><span class="addnum">5</span>구매 · 연결하기</div>
       <div class="tgrid s5">
         <div class="tpl imp" data-ic="🛒" data-nm="가격표 · 예약"><span class="tic">🛒</span><span><span class="tn">가격표 · 예약</span><span class="ts">가격 안내 + 예약·구매 버튼</span></span></div>
         <div class="tpl" data-ic="🔗" data-nm="링크 버튼"><span class="tic">🔗</span><span><span class="tn">링크 버튼</span><span class="ts">인스타·유튜브·카톡</span></span></div>
@@ -2921,31 +2993,17 @@
         <div class="tpl imp" data-ic="📇" data-nm="문의·신청"><span class="tic">📇</span><span><span class="tn">문의·신청 받기</span><span class="ts">이름·연락처 받기</span></span></div>
         <div class="tpl" data-ic="✎" data-nm="문의 폼"><span class="tic">✎</span><span><span class="tn">문의 폼</span><span class="ts">1:1 문의</span></span></div>
         <div class="tpl" data-ic="？" data-nm="Q&amp;A"><span class="tic">？</span><span><span class="tn">Q&amp;A</span><span class="ts">자주 묻는 질문</span></span></div>
-        <div class="tpl" data-ic="🎓" data-nm="강의 신청"><span class="tic">🎓</span><span><span class="tn">강의 신청</span><span class="ts">이름·연락처로 신청</span></span></div>
-        <div class="tpl" data-ic="◇" data-nm="강의 · 전자책"><span class="tic">◇</span><span><span class="tn">강의 · 전자책</span><span class="ts">판매 버튼</span></span></div>
         <div class="tpl" data-ic="📣" data-nm="이벤트 배너"><span class="tic">📣</span><span><span class="tn">이벤트 배너</span><span class="ts">기간 프로모션</span></span></div>
         <div class="tpl" data-ic="🛍" data-nm="추천 제품"><span class="tic">🛍</span><span><span class="tn">추천 제품</span><span class="ts">쿠팡 파트너스</span></span></div>
+        <div class="tpl" data-ic="🛡" data-nm="보장 배지"><span class="tic">🛡</span><span><span class="tn">보장 배지</span><span class="ts">환불·만족 보장</span></span></div>
+        <div class="tpl" data-ic="⏳" data-nm="카운트다운"><span class="tic">⏳</span><span><span class="tn">카운트다운</span><span class="ts">마감 긴박감</span></span></div>
+        <div class="tpl" data-ic="🛒" data-nm="구매 버튼" data-layout="sticky"><span class="tic">🛒</span><span><span class="tn">구매 버튼</span><span class="ts">구매·신청 링크 · 고정 on/off</span></span></div>
+        <div class="tpl" data-ic="👆" data-nm="CTA 버튼"><span class="tic">👆</span><span><span class="tn">CTA 버튼</span><span class="ts">행동유도 버튼</span></span></div>
       </div>
 
       <div class="add-noresult" id="add-noresult">검색 결과가 없어요 · 다른 단어로 찾아보세요</div>
 
-      <div class="addadv" id="add-adv">
-        <div class="addadv-h" id="add-adv-h">🧩 고급 · 랜딩 장치 <span class="addadv-arr">▾</span></div>
-        <div class="addadv-sub">전환에 진심일 때만 · 또는 「컨텐츠 글」로 랜딩 따로</div>
-        <div class="addadv-body">
-          <div class="tgrid">
-            <div class="tpl" data-ic="🛡" data-nm="반박 제거"><span class="tic">🛡</span><span><span class="tn">반박 제거</span><span class="ts">"이래서 망설여요" 해소</span></span></div>
-            <div class="tpl" data-ic="🛡" data-nm="보장 배지"><span class="tic">🛡</span><span><span class="tn">보장 배지</span><span class="ts">환불·만족 보장</span></span></div>
-            <div class="tpl" data-ic="⏳" data-nm="카운트다운"><span class="tic">⏳</span><span><span class="tn">카운트다운</span><span class="ts">마감 긴박감</span></span></div>
-            <div class="tpl" data-ic="🛒" data-nm="구매 버튼" data-layout="sticky"><span class="tic">🛒</span><span><span class="tn">구매 버튼</span><span class="ts">구매·신청 링크 · 고정 on/off</span></span></div>
-            <div class="tpl" data-ic="🔢" data-nm="이용 방법"><span class="tic">🔢</span><span><span class="tn">이용 방법</span><span class="ts">1·2·3 단계</span></span></div>
-            <div class="tpl" data-ic="👆" data-nm="CTA 버튼"><span class="tic">👆</span><span><span class="tn">CTA 버튼</span><span class="ts">행동유도 버튼</span></span></div>
-            <div class="tpl" data-ic="🏷" data-nm="흐르는 태그 띠"><span class="tic">🏷</span><span><span class="tn">흐르는 태그 띠</span><span class="ts">키워드가 흐름</span></span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tcat" style="margin-top:16px;">✨ 통째로 시작 <span style="font-weight:400; color:var(--muted);">· 검증된 순서로 한 번에</span></div>
+      <div class="tcat addsec" style="margin-top:16px;">✨ 템플릿</div>
       <div class="tgrid">
         <div class="tpl tpl-set" data-set="photo"><span class="tpl-badge">템플릿</span><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
         <div class="tpl tpl-set" data-set="profile"><span class="tpl-badge">템플릿</span><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
@@ -2961,13 +3019,14 @@
   <!-- 👁 구성 미리보기 팝업 -->
   <div class="addpv-ov" id="addpv-ov">
     <div class="addpv">
+      <div class="addpv-label" id="addpv-label">👁 완성되면 이렇게 보여요</div>
+      <div class="addpv-frame" id="addpv-frame"></div>
       <div class="addpv-h"><span class="tic" id="addpv-ic">＋</span><span class="t" id="addpv-t"></span></div>
       <div class="addpv-sub" id="addpv-sub"></div>
-      <div class="addpv-label">👁 채우면 이렇게 보여요</div>
-      <div class="addpv-frame" id="addpv-frame"></div>
+      <div class="addpv-benefit" id="addpv-benefit"></div>
       <div class="addpv-btns">
         <button type="button" class="addpv-cancel" id="addpv-cancel">닫기</button>
-        <button type="button" class="addpv-add" id="addpv-add">＋ 이 자리에 넣기</button>
+        <button type="button" class="addpv-add" id="addpv-add">＋ 만들기</button>
       </div>
     </div>
   </div>
@@ -4182,9 +4241,13 @@
     if(el=document.getElementById('add-diag')) el.style.display=searching?'none':'';
     if(el=document.getElementById('add-import-row')) el.style.display=searching?'none':'';
     [].forEach.call(document.querySelectorAll('#add-all .addsec'), function(h){
-      var grid=h.nextElementSibling; if(!grid) return; var vis=0;
+      var grid=h.nextElementSibling; if(!grid) return;
+      if(!grid.querySelector('.tpl[data-nm]')) return;   // data-nm 타일 없는 섹션(통째로 시작=data-set)은 아래 특수처리에 맡김
+      var vis=0;
       [].forEach.call(grid.querySelectorAll('.tpl[data-nm]'), function(t){ var ok=!q||tileHay(t).indexOf(q)!==-1; t.style.display=ok?'':'none'; if(ok){vis++; any=true;} });
-      h.style.display=vis?'':'none'; grid.style.display=vis?'':'none';
+      h.style.display=vis?'':'none';
+      // 검색 중=매칭되면 펼침 / 평소=접힘 상태(collapsed) 존중
+      grid.style.display = !vis ? 'none' : (q ? '' : (h.classList.contains('collapsed') ? 'none' : ''));
     });
     var adv=document.getElementById('add-adv');
     if(adv){ var avis=0;
@@ -4192,20 +4255,25 @@
       if(searching){ adv.style.display=avis?'':'none'; if(avis) adv.classList.add('open'); } else { adv.style.display=''; }
     }
     var sg=document.querySelector('#add-all .tpl-set'), setGrid=sg?sg.closest('.tgrid'):null, setHdr=setGrid?setGrid.previousElementSibling:null;
-    if(setGrid) setGrid.style.display=searching?'none':'';
+    if(setGrid) setGrid.style.display = searching ? 'none' : ((setHdr && setHdr.classList.contains('collapsed')) ? 'none' : '');   // 통째로 시작: 검색중 숨김 / 평소=접힘 존중
     if(setHdr && setHdr.classList.contains('tcat')) setHdr.style.display=searching?'none':'';
     var nr=document.getElementById('add-noresult'); if(nr) nr.style.display=(searching && !any)?'block':'none';
   }
-  function openAddCatalog(){
+  function openAddCatalog(fromSlot){
     window.__insertBeforeRow=null;
     var adv=document.getElementById('add-adv'); if(adv) adv.classList.remove('open');   // 고급은 기본 접힘
     var dg=document.getElementById('add-diag'); if(dg) dg.classList.remove('collapsed');
     var s=document.getElementById('add-search'); if(s) s.value='';
+    try{ wireCatalogSections(); collapseAllSections(); }catch(e){}   // 섹션 접기/펼치기 배선 + 처음엔 전부 접힘
     try{ filterAddCatalog(''); }catch(e){}
     try{ renderHomeDiag(); }catch(e){}
     try{ if(window.__decorateProTiles) window.__decorateProTiles(); }catch(e){}
+    try{ if(window.__decorateShowroomTiles) window.__decorateShowroomTiles(); }catch(e){}
+    try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){}   // 구성 추가는 항상 편집 위에서 — 모드 게이트가 뒤에 남지 않게
     ov.classList.add('open');
     var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
+    // 라이브 편집 중 + 명시적 '여기' 슬롯이 아니면 → iframe에 "지금 보이는 블록" 물어봐서 그 자리에 삽입 예약 (맨아래 튐 방지)
+    if(!fromSlot && window.__liveEditActive){ try{ var _lif=document.getElementById('le-iframe'); if(_lif&&_lif.contentWindow) _lif.contentWindow.postMessage({type:'la-which-visible'}, '*'); }catch(e){} }
   }
   // 고급·랜딩 접기/펼치기
   var advH=document.getElementById('add-adv-h');
@@ -4213,6 +4281,30 @@
   // 진단 접기/펼치기
   var diagH=document.getElementById('add-diag-h');
   if(diagH) diagH.addEventListener('click', function(){ var d=document.getElementById('add-diag'); if(d) d.classList.toggle('collapsed'); });
+  // 구성 섹션(첫인상·시선·신뢰·콘텐츠·연결) 접기/펼치기 — 한눈에 안 부담스럽게
+  function setSecCollapsed(h, on){
+    h.classList.toggle('collapsed', on);
+    var grid=h.nextElementSibling;
+    if(grid && grid.classList.contains('tgrid')) grid.style.display = on ? 'none' : '';
+    var caret=h.querySelector('.addsec-caret');   // 상태별 색·화살표 직접 박기 = 접힘/펼침이 한눈에
+    if(caret){
+      caret.textContent = on ? '▾' : '▴';                       // 접힘=아래(펼치기) / 펼침=위(접기)
+      caret.style.background = on ? '' : '#7B5AFF';              // 펼침=진한 보라
+      caret.style.color = on ? '' : '#fff';
+      caret.style.borderColor = on ? '' : 'transparent';
+    }
+  }
+  function wireCatalogSections(){
+    [].forEach.call(document.querySelectorAll('#add-all .addsec'), function(h){
+      if(h.__acc) return; h.__acc=1;
+      var caret=document.createElement('span'); caret.className='addsec-caret'; caret.textContent='▾';
+      if(!h.querySelector('.addtrio')) caret.style.marginLeft='auto';   // 트리오 배지 없는 섹션(통째로 시작)은 캐럿을 오른쪽 끝으로
+      h.appendChild(caret);
+      h.addEventListener('click', function(){ setSecCollapsed(h, !h.classList.contains('collapsed')); });
+    });
+  }
+  function collapseAllSections(){ [].forEach.call(document.querySelectorAll('#add-all .addsec'), function(h){ setSecCollapsed(h, true); }); }   // 처음 열면 전부 접힘
+  window.__wireCatalogSections=wireCatalogSections;
   // 검색 입력
   var addSearch=document.getElementById('add-search');
   if(addSearch) addSearch.addEventListener('input', function(){ filterAddCatalog(this.value); });
@@ -4235,7 +4327,7 @@
   eov.addEventListener('click', function(e){ if(e.target === eov){ collectEdit(); eov.classList.remove('open'); } });
   document.getElementById('edit-done').addEventListener('click', function(){ collectEdit(); eov.classList.remove('open'); toast('내용 저장됨 · 상단 [저장]을 눌러 공개에 반영'); });
   // 편집 중 타이핑하면 표현법 미리보기 실시간 갱신
-  ebody.addEventListener('input', function(){ var type=eov.dataset.type, row=eov._row; if(type && row && typeof LAYOUTS!=='undefined' && LAYOUTS[type]) renderLayoutPreview(type, row._layout||LAYOUT_DEFAULT[type]); });
+  ebody.addEventListener('input', function(){ var type=eov.dataset.type, row=eov._row; if(!type||!row) return; if(typeof LAYOUTS!=='undefined' && LAYOUTS[type]) renderLayoutPreview(type, row._layout||LAYOUT_DEFAULT[type]); else if(typeof PREVIEW_NOLAYOUT!=='undefined' && PREVIEW_NOLAYOUT[type]) renderLayoutPreview(type, ''); });
 
   // ── 강조(**)/보조(*) 툴바 — 글자칸 선택 영역을 마크로 감싸기 (네이버블로그/엑셀 식) ──
   var emActiveField=null;
@@ -4570,6 +4662,10 @@
       });
       lw.appendChild(grid); ebody.appendChild(lw);
       setTimeout(function(){ renderLayoutPreview(type, cur); }, 0);
+    } else if(PREVIEW_NOLAYOUT[type]){
+      // 표현법 없는 블록도 '완성 미리보기'를 위에 (수정→채우면 완성이 바로 보이게)
+      var pv2=document.createElement('div'); pv2.id='lay-preview'; pv2.className='lay-preview'; ebody.appendChild(pv2);
+      setTimeout(function(){ renderLayoutPreview(type, ''); }, 0);
     }
     var _advBox=null, _advToggle=null;
     function ensureAdvBox(){
@@ -4796,6 +4892,8 @@
     steps: [['timeline','타임라인','가로 흐름 · 추천'],['list','세로 목록','번호 리스트']]
   };
   var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'timeline' };
+  // 표현법(LAYOUTS)은 없지만 편집 패널에 '완성 미리보기'를 띄우는 블록들 (수정→패널 통일: 채우면 바로 완성이 보이게)
+  var PREVIEW_NOLAYOUT = { quote:1, stat:1, painsolve:1, diagnostic:1, glowhook:1 };
   function layoutMini(type,k){
     // 표현법 구조를 보여주는 작은 도식 (선택지 썸네일)
     var box='<div style="height:34px;border-radius:6px;overflow:hidden;display:flex;background:var(--soft);">';
@@ -4900,6 +4998,11 @@
     }
     if(type==='beforeafter') return { before:ph(0), after:ph(1), cap:v(2,'input') };
     if(type==='steps'){ var stt=v(0,'input'), sti=[]; var sbox=ebody.querySelector('[data-fi="1"][data-list]'); if(sbox) [].forEach.call(sbox.querySelectorAll('.litem'),function(it){ var ins=it.querySelectorAll('input'); if(ins[0]&&ins[0].value) sti.push([ins[0].value, ins[1]?ins[1].value:'']); }); return { title:stt, items:sti }; }
+    if(type==='quote') return { quote:v(0,'textarea') };
+    if(type==='glowhook') return { big:v(0,'input'), lab:v(1,'input'), sub:v(2,'textarea'), pre:v(3,'input'), by:v(4,'input') };
+    if(type==='stat'){ var st5=[]; var sbx=ebody.querySelector('[data-fi="0"][data-list]'); if(sbx) [].forEach.call(sbx.querySelectorAll('.litem'),function(it){ var ins=it.querySelectorAll('input'); if((ins[0]&&ins[0].value)||(ins[1]&&ins[1].value)) st5.push([ins[0]?ins[0].value:'', ins[1]?ins[1].value:'']); }); return { stats:st5 }; }
+    if(type==='painsolve'){ var pt=v(0,'input'), pit=[]; var pbx=ebody.querySelector('[data-fi="1"][data-list]'); if(pbx) [].forEach.call(pbx.querySelectorAll('.litem'),function(it){ var ins=it.querySelectorAll('input'); if((ins[0]&&ins[0].value)||(ins[1]&&ins[1].value)) pit.push([ins[0]?ins[0].value:'', ins[1]?ins[1].value:'']); }); return { title:pt, items:pit }; }
+    if(type==='diagnostic'){ var dq=v(1,'input'), dtitle=v(0,'input'), dbtn=v(3,'input'), dit=[]; var dbx=ebody.querySelector('[data-fi="2"][data-list]'); if(dbx) [].forEach.call(dbx.querySelectorAll('.litem'),function(it){ var ins=it.querySelectorAll('input'); if((ins[0]&&ins[0].value)||(ins[1]&&ins[1].value)) dit.push([ins[0]?ins[0].value:'', ins[1]?ins[1].value:'']); }); return { title:dtitle, q:dq, items:dit, btn:dbtn }; }
     return {};
   }
   function renderLayoutPreview(type, layout){
@@ -4914,6 +5017,22 @@
       else if(layout==='split'){ var im=img?'background:url('+img+') center/cover;':'background:'+hexA(c.ac,.2)+';'; html='<div style="display:flex;gap:10px;background:'+c.surf+';border:1px solid '+c.hair+';border-radius:13px;overflow:hidden;align-items:center;"><div style="flex:0 0 40%;align-self:stretch;min-height:104px;'+im+'"></div><div style="flex:1;padding:12px 12px 12px 0;"><div style="font-size:15px;font-weight:700;color:'+c.ink+';line-height:1.3;">'+em(title)+'</div>'+(desc?'<div style="font-size:11.5px;color:'+c.sub+';margin-top:6px;">'+e(desc)+'</div>':'')+'</div></div>'; }
       else if(layout==='center') html='<div style="text-align:center;padding:12px;">'+(img?'<div style="width:80px;height:80px;border-radius:50%;margin:0 auto 12px;background:url('+img+') center/cover;box-shadow:0 6px 20px rgba(0,0,0,.25);"></div>':'')+'<div style="font-family:\'Nanum Myeongjo\',serif;font-size:19px;font-weight:800;color:'+c.ink+';line-height:1.3;">'+em(title)+'</div>'+(desc?'<div style="font-size:12px;color:'+c.sub+';margin-top:9px;">'+e(desc)+'</div>':'')+'</div>';
       else html='<div style="background:'+c.surf+';border:1px solid '+c.hair+';border-radius:13px;padding:12px;">'+(img?'<div style="height:88px;border-radius:9px;background:url('+img+') center/cover;margin-bottom:10px;"></div>':'')+'<div style="font-size:15px;font-weight:700;color:'+c.ink+';">'+em(title)+'</div>'+(desc?'<div style="font-size:11.5px;color:'+c.sub+';margin-top:6px;">'+e(desc)+'</div>':'')+'</div>';
+    } else if(type==='quote'){
+      var qt=v.quote||'여기에 인용할 한 문장을 적으면 이렇게 보여요';
+      html='<div style="padding:16px 14px;"><div style="font-family:\'Nanum Myeongjo\',serif;font-size:19px;font-weight:600;line-height:1.5;color:'+c.ink+';">&ldquo;'+em(qt)+'&rdquo;</div></div>';
+    } else if(type==='glowhook'){
+      var gb=v.big||'70%', gl=v.lab||'', gs=v.sub||'', gp=v.pre||'';
+      html='<div style="text-align:center;padding:22px 12px;">'+(gl?'<div style="font-size:10px;letter-spacing:2px;font-weight:700;color:'+c.sub+';margin-bottom:10px;">'+e(gl)+'</div>':'')+'<div style="font-family:\'Nanum Myeongjo\',serif;font-size:42px;font-weight:800;color:'+c.ac+';line-height:1;text-shadow:0 0 22px '+hexA(c.ac,.5)+';">'+(gp?'<span style="font-size:15px;font-weight:600;color:'+c.sub+';display:block;margin-bottom:2px;">'+e(gp)+'</span>':'')+em(gb)+'</div>'+(gs?'<div style="font-size:12.5px;color:'+c.sub+';margin-top:10px;">'+e(gs)+'</div>':'')+'</div>';
+    } else if(type==='stat'){
+      var sts=(v.stats&&v.stats.length)?v.stats:[['1,800','누적 고객'],['82%','재방문율']];
+      html='<div style="display:flex;gap:14px;justify-content:center;padding:16px 10px;">'+sts.slice(0,4).map(function(s){ return '<div style="flex:1;text-align:center;"><div style="font-family:\'Nanum Myeongjo\',serif;font-size:26px;font-weight:800;color:'+c.ac+';line-height:1;">'+e(s[0]||'')+'</div><div style="font-size:11px;color:'+c.sub+';margin-top:5px;">'+e(s[1]||'')+'</div></div>'; }).join('')+'</div>';
+    } else if(type==='painsolve'){
+      var ps=(v.items&&v.items.length)?v.items:[['붉은기가 돌아요','매트브라운으로 중화해요']];
+      html=(v.title?'<div style="font-size:14px;font-weight:700;color:'+c.ink+';margin-bottom:12px;">'+em(v.title)+'</div>':'')+ps.slice(0,3).map(function(x){ return '<div style="display:flex;align-items:stretch;gap:7px;margin-bottom:8px;"><div style="flex:1;background:rgba(255,107,125,.1);border:1px solid rgba(255,107,125,.28);border-radius:10px;padding:9px 10px;"><div style="font-size:9px;font-weight:800;color:#e0566e;margin-bottom:3px;">😣 이런 고민</div><div style="font-size:12px;color:'+c.ink+';">'+e(x[0]||'')+'</div></div><div style="display:flex;align-items:center;color:'+c.sub+';">→</div><div style="flex:1;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:10px;padding:9px 10px;"><div style="font-size:9px;font-weight:800;color:#1d9e75;margin-bottom:3px;">✅ 이렇게 해결</div><div style="font-size:12px;color:'+c.ink+';">'+e(x[1]||'')+'</div></div></div>'; }).join('');
+    } else if(type==='diagnostic'){
+      var dtit=v.title||'🔮 30초 진단', dq2=v.q||'지금 가장 큰 고민은?', dbtn2=v.btn||'상담받기';
+      var dopts=(v.items&&v.items.length)?v.items:[['앞머리가 갈라져요',''],['얼굴형이 안 살아요','']];
+      html='<div style="padding:4px 2px;"><div style="font-size:13px;font-weight:800;color:'+c.ink+';margin-bottom:5px;">'+e(dtit)+'</div><div style="font-size:12.5px;color:'+c.sub+';margin-bottom:9px;">'+e(dq2)+'</div>'+dopts.slice(0,3).map(function(x){ return '<div style="font-size:12px;padding:9px 11px;border-radius:9px;background:'+hexA(c.ac,.14)+';border:1px solid '+hexA(c.ac,.4)+';color:'+c.ink+';margin-bottom:6px;text-align:center;">'+e(x[0]||'')+'</div>'; }).join('')+'<div style="text-align:center;margin-top:9px;"><span style="display:inline-block;font-weight:800;color:'+c.ac+';border-bottom:1px dashed '+c.ac+';padding:0 3px;font-size:12px;">'+e(dbtn2)+' →</span></div></div>';
     } else if(type==='text'){
       var t2=v.title||'제목', d2=v.desc||'';
       if(layout==='impact') html='<div style="text-align:center;padding:18px 8px;"><div style="font-family:\'Nanum Myeongjo\',serif;font-size:22px;font-weight:800;color:'+c.ink+';line-height:1.3;">'+em(t2)+'</div>'+(d2?'<div style="font-size:12.5px;color:'+c.sub+';margin-top:11px;line-height:1.6;">'+e(d2)+'</div>':'')+'</div>';
@@ -5093,6 +5212,47 @@
     });
   }
   window.__decorateProTiles=decorateProTiles;
+  // 🖼 쇼룸 타일 — data-nm별 미니 완성샷 (파일럿: 전문성 가시화 섹션). 없는 블록은 기존 텍스트 스타일 유지.
+  var TILE_MINI={
+    '후기':'<div class="mp mp-rv"><div class="mp-star">★★★★★</div><div class="mp-q">"인생 머리예요, <span class="h">매일 거울 봐요</span>"</div><div class="mp-by">— 김○○</div></div>',
+    '전문가 증명':'<div class="mp mp-num"><div><b>8년</b><span>경력</span></div><div><b>3회</b><span>수상</span></div><div><b>1.8천</b><span>시술</span></div></div>',
+    '숫자 스탯':'<div class="mp mp-num"><div><b>10년</b><span>경력</span></div><div><b>2.3천</b><span>고객</span></div><div><b>87%</b><span>재방문</span></div></div>',
+    '전후사진':'<div class="mp mp-ba"><span class="b1">BEFORE</span><span class="b2">AFTER</span></div>',
+    '과정 · 진행 단계':'<div class="mp mp-ps"><span class="p">상담</span><span class="ar">→</span><span class="s">시술</span><span class="ar">→</span><span class="s" style="background:rgba(167,139,255,.16);color:#c6adff">애프터</span></div>',
+    '고민 → 해결':'<div class="mp mp-ps"><span class="p">붉은기</span><span class="ar">→</span><span class="s">매트브라운</span></div>',
+    '로고 벽':'<div class="mp mp-logo"><span></span><span></span><span></span><span></span></div>',
+    '진단형':'<div class="mp mp-diag"><div class="q">🔮 가장 큰 고민은?</div><div class="opts"><span></span><span></span><span></span></div></div>',
+    '실시간 예약 뱃지':'<div class="mp mp-badge"><span class="dot"></span>이번 주 12명 예약</div>',
+    '3초 커버':'<div class="mp mp-cover"><div class="t">3개월 만에 <span class="h">인생 앞머리</span></div></div>'
+  };
+  function decorateShowroomTiles(){
+    ov.querySelectorAll('.tpl[data-nm]').forEach(function(t){
+      if(t.dataset.set || t.dataset.special) return;      // 세트·프로필 제외
+      if(t.classList.contains('tpl-show')) return;         // 멱등
+      var mini=TILE_MINI[t.getAttribute('data-nm')]; if(!mini) return;
+      t.classList.add('tpl-show');
+      t.insertAdjacentHTML('afterbegin', '<span class="tpl-plus">＋</span><div class="tpl-thumb">'+mini+'</div>');
+    });
+  }
+  window.__decorateShowroomTiles=decorateShowroomTiles;
+  // 💡 "이래서 좋아요" — 블록별 장점 (미리보기 팝업. 없으면 안 뜸)
+  var BLOCK_BENEFIT={
+    '후기':'실제 후기로 <b>믿음</b>을. 사람들은 남의 경험을 보고 결정해요.',
+    '전문가 증명':'경력·수상·숫자로 <b>믿고 맡길 이유</b>를 한눈에.',
+    '숫자 스탯':'누적·재방문 <b>숫자가 곧 실력의 증거</b>예요.',
+    '전후사진':'밀어서 비교 — <b>변화</b>가 가장 강력한 증거.',
+    '과정 · 진행 단계':'어떻게 진행되는지 보이면 <b>불안이 사라져요.</b>',
+    '고민 → 해결':'손님의 <b>고민을 콕</b> 짚어 내 솔루션으로 연결.',
+    '로고 벽':'함께한 브랜드·매체로 <b>공신력</b>을.',
+    '진단형':'손님이 <b>직접 골라 참여</b> → 이탈↓, 맞춤 결과로 신뢰↑.',
+    '실시간 예약 뱃지':'"지금 붐빈다" <b>사회적 증거</b>로 지금 예약하게.',
+    '3초 커버':'첫 3초에 <b>시선을 붙잡는</b> 임팩트 대문.',
+    '가격표 · 예약':'가격을 <b>투명하게</b> + 바로 예약 버튼 = 전환.',
+    '스타일 갤러리':'작업을 <b>분류·검색</b>으로 — 손님이 원하는 걸 바로 찾아요.',
+    '랜딩 요약':'맨 위 한 줄로 <b>"이 사람 뭐 하는지"</b>를 3초에 각인.',
+    '문의·신청':'이름·연락처를 <b>바로 받아</b> 놓치지 않게.'
+  };
+  window.__BLOCK_BENEFIT=BLOCK_BENEFIT;
   // 템플릿 선택 → 전환 흐름 리스트에 새 행 추가 (맨 아래)
   ov.querySelectorAll('.tpl').forEach(function(t){
     if(t.dataset.set) return;   // 세트 타일은 아래에서 별도 처리(통째로 추가)
@@ -5125,11 +5285,12 @@
       if(preset){ row._content = preset.slice(); if(window.__refreshRowSub) window.__refreshRowSub(row); }
       closeAdd();
       try{ refreshBuilder(); }catch(e){}
-      // ⓑ 사용하기 → 노션식 인라인 편집으로 바로 진입 (라이브 아니면 열고 그 블록으로 스크롤)
-      if(window.__liveEditActive && window.__liveScrollNew){ window.__liveScrollNew(row); }
-      else if(window.__openLive){ window.__pendingTemplateApply=true; window.__openLive(); setTimeout(function(){ try{ if(window.__liveScrollNew) window.__liveScrollNew(row); }catch(e){} }, 950); }
+      // ⓑ 만들기 → 노션식 인라인 편집으로 바로 진입 (라이브 아니면 열고 그 블록으로 스크롤) + 명확한 피드백
+      if(window.__liveEditActive && window.__liveScrollNew){ window.__liveScrollNew(row); try{ toast('✨ 여기 만들어졌어요 · 빈칸을 채우세요'); }catch(e){} }
+      else if(window.__openLive){ window.__pendingTemplateApply=true; window.__openLive(); setTimeout(function(){ try{ if(window.__liveScrollNew) window.__liveScrollNew(row); }catch(e){} try{ toast('✨ 편집홈에 만들어졌어요 · 빈칸을 채우세요'); }catch(e){} }, 1000); }
       else { row.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
   }
+  window.__addBlockFromTile=addBlockFromTile;
   // 👁 구성 미리보기 — "채우면 이렇게 보여요"
   var IMG3='<div class="m-imgs"><i></i><i></i><i></i></div>', IMG2='<div class="m-imgs"><i></i><i></i></div>';
   var PREVIEW_HTML = {
@@ -5149,7 +5310,7 @@
     '베스트·대표 작업':IMG2+'<div class="m-q" style="margin-top:8px">🔥 인기 컨텐츠를 크게 (사회적 증명).</div>',
     '영상':'<div style="aspect-ratio:16/9; border-radius:9px; background:linear-gradient(135deg,#2c2c33,#3a3142); display:flex; align-items:center; justify-content:center; font-size:26px; color:rgba(255,255,255,.6)">▶</div><div class="m-q" style="margin-top:8px">유튜브·릴스를 홈에서 바로 재생.</div>',
     '사진':'<div style="aspect-ratio:4/5; border-radius:9px; background:linear-gradient(135deg,#2c2c33,#3a3142)"></div><div class="m-q" style="margin-top:8px">성과·포트폴리오 한 장 + 프레임 꾸미기.</div>',
-    '전후사진':IMG2+'<div class="m-q" style="margin-top:8px">비포 → 애프터, 변화가 가장 강한 증거.</div>',
+    '전후사진':'<div class="ba-demo"><div class="ba-after"></div><div class="ba-before"></div><div class="ba-div"><span class="ba-knob"></span></div><span class="ba-tag ba-tag-b">BEFORE</span><span class="ba-tag ba-tag-a">AFTER</span></div>',
     '가격표 · 예약':'<div class="m-row"><span>앞머리 컷</span><b>30,000원</b></div><div class="m-row"><span>전체 스타일링</span><b>120,000원</b></div><span class="m-cta">📅 지금 예약하기</span>',
     '랭킹 · 가격':'<div class="m-row"><span>🥇 히메허쉬 <b style="color:#F5C84B">HOT</b></span><b>55,000원</b></div><div class="m-row"><span>🥈 슬릭컷</span><b>55,000원</b></div>',
     '링크 버튼':'<div class="m-row"><span>📷 인스타그램</span><b>›</b></div><div class="m-row"><span>▶ 유튜브</span><b>›</b></div><div class="m-row"><span>💬 카카오 상담</span><b>›</b></div>',
@@ -5161,7 +5322,20 @@
     '뉴스레터':'<div class="m-q">✉ 이메일 구독 받기</div><span class="m-cta">구독하기</span>',
     '매장 · 위치':'<div style="aspect-ratio:5/3; border-radius:9px; background:linear-gradient(135deg,#22303a,#2c2c33); display:flex; align-items:center; justify-content:center; font-size:22px">📍</div><div class="m-q" style="margin-top:8px">주소·지도·길찾기를 한 번에.</div>',
     '문의·신청':'<div class="m-row" style="border:none"><span style="color:var(--muted)">이름 · 연락처 입력칸</span></div><span class="m-cta">신청하기</span>',
-    '문의 폼':'<div class="m-row" style="border:none"><span style="color:var(--muted)">이름 · 이메일 · 메시지</span></div><span class="m-cta">보내기</span>'
+    '문의 폼':'<div class="m-row" style="border:none"><span style="color:var(--muted)">이름 · 이메일 · 메시지</span></div><span class="m-cta">보내기</span>',
+    '프로필 카드':'<div style="text-align:center;padding:6px 0"><div style="width:58px;height:58px;border-radius:50%;margin:0 auto 9px;background:linear-gradient(135deg,#8A5CFF,#C13B9E);display:flex;align-items:center;justify-content:center;font-size:25px;animation:addPop .5s .1s both">👤</div><div style="font-size:14px;font-weight:800;color:var(--ink)">유수 디자이너</div><div style="font-size:11px;color:var(--muted);margin-top:3px">압구정 앞머리 전문 · 10년차</div></div>',
+    '자유 텍스트':'<div style="text-align:center;padding:8px 4px"><div style="font-family:Nanum Myeongjo,serif;font-size:18px;font-weight:800;color:var(--ink);line-height:1.4">작은 변화가<br><span style="color:var(--coral)">큰 차이</span>를 만듭니다</div><div style="font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.6">제목·설명을 자유롭게 — 임팩트·인용·강조바</div></div>',
+    '하이라이트':'<div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;padding:8px 2px"><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .1s both">⭐ 후기 200+</span><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .22s both">💰 가격표</span><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .34s both">📋 메뉴</span><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .46s both">📍 위치</span></div>',
+    '이미지 + 글':'<div style="display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:11px;overflow:hidden;padding:10px"><div style="flex:0 0 40%;aspect-ratio:1;border-radius:9px;background:linear-gradient(135deg,#8A5CFF,#C13B9E)"></div><div style="flex:1"><div style="font-size:13px;font-weight:800;color:var(--ink)">시술 과정</div><div style="font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5">사진 옆에 설명을 나란히 — 좌우 분할</div></div></div>',
+    '흐르는 태그 띠':'<div style="overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)"><div style="display:flex;gap:14px;width:max-content;animation:addRvSlide 8s linear infinite"><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#앞머리교정</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#볼륨매직</span><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#레이어드컷</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#여신머리</span><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#앞머리교정</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#볼륨매직</span><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#레이어드컷</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#여신머리</span></div></div>',
+    '아카이브':'<div style="display:flex;flex-direction:column;gap:7px"><div style="display:flex;gap:9px;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:10px;padding:9px;animation:addFadeUp .5s .1s both"><div style="flex:0 0 44px;height:44px;border-radius:7px;background:linear-gradient(135deg,#2c2c33,#3a3142)"></div><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--ink)">앞머리 고민 완전정복</div><div style="font-size:10px;color:var(--muted);margin-top:3px">고객심리 · 3분 읽기</div></div></div><div style="display:flex;gap:9px;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:10px;padding:9px;animation:addFadeUp .5s .24s both"><div style="flex:0 0 44px;height:44px;border-radius:7px;background:linear-gradient(135deg,#3a3142,#2c2c33)"></div><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--ink)">얼굴형별 스타일 가이드</div><div style="font-size:10px;color:var(--muted);margin-top:3px">브랜딩 · 5분 읽기</div></div></div></div>',
+    'Q&A':'<div style="display:flex;flex-direction:column;gap:8px"><div style="animation:addFadeUp .5s .1s both"><span style="display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:12px 12px 12px 3px;padding:8px 11px;font-size:12px;color:var(--ink)"><b style="color:var(--coral)">Q</b> 나랑 안 어울리면요?</span></div><div style="text-align:right;animation:addFadeUp .5s .3s both"><span style="display:inline-block;background:linear-gradient(95deg,#3D7BFF,#9B3DFF);color:#fff;border-radius:12px 12px 3px 12px;padding:8px 11px;font-size:12px">얼굴형 진단 후 맞춤 설계라 안심!</span></div></div>',
+    '이벤트 배너':'<div style="position:relative;overflow:hidden;background:linear-gradient(100deg,#7C3FE4,#C13B9E);border-radius:12px;padding:14px 15px;color:#fff"><div style="font-size:10px;font-weight:800;letter-spacing:1px;opacity:.9">🎁 이번 달 이벤트</div><div style="font-size:17px;font-weight:800;margin-top:5px">첫 방문 <span style="color:#ffd977">20% OFF</span></div><div style="font-size:11px;opacity:.9;margin-top:3px">~6/30 · 놓치면 후회</div><span style="position:absolute;top:0;left:-45%;width:45%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:addShine 2.6s ease-in-out infinite"></span></div>',
+    '추천 제품':'<div style="display:flex;gap:8px"><div style="flex:1;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:10px;padding:9px;animation:addPop .5s .1s both"><div style="aspect-ratio:1;border-radius:7px;background:linear-gradient(135deg,#2c2c33,#3a3142);margin-bottom:6px"></div><div style="font-size:11px;font-weight:700;color:var(--ink)">추천 샴푸</div><div style="font-size:11px;font-weight:800;color:var(--coral)">19,900원</div></div><div style="flex:1;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:10px;padding:9px;animation:addPop .5s .26s both"><div style="aspect-ratio:1;border-radius:7px;background:linear-gradient(135deg,#3a3142,#2c2c33);margin-bottom:6px"></div><div style="font-size:11px;font-weight:700;color:var(--ink)">헤어 에센스</div><div style="font-size:11px;font-weight:800;color:var(--coral)">24,000원</div></div></div>',
+    '보장 배지':'<div style="display:flex;gap:11px;align-items:center;background:var(--coral-soft);border:1px solid var(--coral);border-radius:12px;padding:13px 14px"><div style="font-size:28px;animation:addPop .5s .1s both;filter:drop-shadow(0 0 8px var(--coral))">🛡</div><div><div style="font-size:14px;font-weight:800;color:var(--ink)">100% 만족 보장</div><div style="font-size:11px;color:var(--muted);margin-top:2px">안 되면 환불 · 부담 없이</div></div></div>',
+    '카운트다운':'<div style="text-align:center;padding:6px 0"><div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;margin-bottom:8px">⏳ 마감까지</div><div style="display:flex;gap:6px;justify-content:center;align-items:center"><span style="background:#15101f;color:#fff;font-size:20px;font-weight:800;border-radius:8px;padding:8px 11px">02</span><span style="font-size:18px;color:var(--muted)">:</span><span style="background:#15101f;color:#fff;font-size:20px;font-weight:800;border-radius:8px;padding:8px 11px">47</span><span style="font-size:18px;color:var(--muted)">:</span><span style="background:#15101f;color:var(--coral);font-size:20px;font-weight:800;border-radius:8px;padding:8px 11px;animation:addpulse 1s steps(2) infinite">13</span></div></div>',
+    '구매 버튼':'<div style="padding:6px 0"><div style="text-align:center;background:linear-gradient(95deg,#7C3FE4,#C13B9E);color:#fff;font-size:14px;font-weight:800;border-radius:11px;padding:13px;box-shadow:0 6px 18px rgba(124,63,228,.4);animation:addBtnPulse 1.8s ease-in-out infinite">🛒 지금 구매하기</div><div style="text-align:center;font-size:10.5px;color:var(--muted);margin-top:8px">스크롤해도 아래 고정 가능</div></div>',
+    'CTA 버튼':'<div style="padding:6px 0"><div style="text-align:center;background:var(--coral);color:#15101f;font-size:14px;font-weight:800;border-radius:11px;padding:13px;animation:addBtnPulse 1.8s ease-in-out infinite">👆 상담 예약하기 →</div><div style="text-align:center;font-size:10.5px;color:var(--muted);margin-top:8px">누르면 행동으로 이어지는 버튼</div></div>'
   };
   var addpvTile=null, addpvOv=document.getElementById('addpv-ov');
   function openBlockPreview(t){
@@ -5172,10 +5346,11 @@
     var tEl=document.getElementById('addpv-t'); if(tEl) tEl.textContent=tn;
     var sEl=document.getElementById('addpv-sub'); if(sEl) sEl.textContent=ts;
     var frame=document.getElementById('addpv-frame');
-    var pv=PREVIEW_HTML[nm];
+    var pv=PREVIEW_HTML[nm] || ((typeof TILE_MINI!=='undefined' && TILE_MINI[nm]) ? ('<div class="addpv-mini">'+TILE_MINI[nm]+'</div>') : null);
     if(!pv){ var ty=(typeof NAME_TYPE!=='undefined')?NAME_TYPE[nm]:null; var intro=(typeof EDIT_INTRO!=='undefined' && ty && EDIT_INTRO[ty])?EDIT_INTRO[ty]:null;
       pv= intro ? ('<div class="m-q">'+intro.what+'</div>') : ('<div class="m-q">이 구성을 추가하면 홈에 <b>'+tn+'</b> 영역이 생겨요.<br>사진·글만 채우면 바로 완성돼요.</div>'); }
     if(frame) frame.innerHTML=pv;
+    var bEl=document.getElementById('addpv-benefit'); if(bEl){ bEl.innerHTML=(typeof BLOCK_BENEFIT!=='undefined' && BLOCK_BENEFIT[nm]) ? ('💡 '+BLOCK_BENEFIT[nm]) : ''; }
     if(addpvOv){ addpvOv.classList.remove('demo-only'); addpvOv.classList.add('open'); }
   }
   // 👁 완성 예시(데모) 다시 보기 — 편집 중 블록의 완성샷을 보기전용으로 (넣기 버튼 숨김)
@@ -5194,7 +5369,8 @@
     addpvOv.classList.add('open','demo-only');
   };
   if(addpvOv){
-    var pvAdd=document.getElementById('addpv-add'); if(pvAdd) pvAdd.addEventListener('click', function(){ if(addpvTile && blockLocked(addpvTile.dataset.nm)){ if(window.__cmShowLock) window.__cmShowLock((PRO_NM[addpvTile.dataset.nm]||'프로')+' 블록','pro'); return; } addpvOv.classList.remove('open','demo-only'); if(addpvTile) addBlockFromTile(addpvTile); });   // PRO 블록은 미리보기는 열리되 '추가'에서 게이트 (콘텐츠라 추가 시점 게이트 = 신뢰성↑·손실0)
+    var pvAdd=document.getElementById('addpv-add'); if(pvAdd) pvAdd.addEventListener('click', function(){ if(addpvTile && blockLocked(addpvTile.dataset.nm)){ if(window.__cmShowLock) window.__cmShowLock((PRO_NM[addpvTile.dataset.nm]||'프로')+' 블록','pro'); return; } addpvOv.classList.remove('open','demo-only'); try{ closeAdd(); }catch(e){}   // 카탈로그 닫아 편집홈이 보이게 · 그 위에 위치 슬롯
+      if(addpvTile){ if(window.__startPlacePicker){ window.__startPlacePicker(addpvTile); } else { addBlockFromTile(addpvTile); } } });   // PRO 블록은 미리보기는 열리되 '추가'에서 게이트 (콘텐츠라 추가 시점 게이트 = 신뢰성↑·손실0)
     var pvCancel=document.getElementById('addpv-cancel'); if(pvCancel) pvCancel.addEventListener('click', function(){ addpvOv.classList.remove('open','demo-only'); });
     addpvOv.addEventListener('click', function(e){ if(e.target===addpvOv) addpvOv.classList.remove('open','demo-only'); });
   }
@@ -9060,6 +9236,7 @@
   function showModeGate(){ if(gateOv) gateOv.classList.add('open'); }
   function hideModeGate(){ if(gateOv) gateOv.classList.remove('open'); }
   window.__showModeGate=showModeGate;
+  window.__hideModeGate=hideModeGate;
   (function(){
     var ge=document.getElementById('gate-edit'), gs=document.getElementById('gate-settings'), gb=document.getElementById('gate-back');
     if(ge) ge.onclick=function(){ hideModeGate(); if(window.__openLive) window.__openLive(); };
@@ -10019,7 +10196,7 @@
       loadFrame._heal=setTimeout(function(){ var blank=true; try{ var d=ifr.contentDocument; blank = !d || !d.body || d.body.innerHTML.length<800 || d.querySelectorAll('[data-bt]').length===0; }catch(e){ blank=false; } if(blank && (loadFrame._tries||0)<2){ loadFrame._tries=(loadFrame._tries||0)+1; loadFrame(); } else { loadFrame._tries=0; } }, 3500);
     }
     window.__liveEditActive=false;
-    function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); ov.classList.add('open');
+    function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); ov.classList.add('open'); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){}   // ★ 라이브 편집 진입 시 모드 게이트 항상 닫기 (게이트가 위에 남아 배너만 뜨던 버그 방지)
       // 진입 시 최신 저장본을 다시 불러와 편집기를 '공개'와 일치시킴 (공개엔 있는데 편집엔 없는 어긋남 방지)
       // ★ li_get_own 응답이 느리거나 안 와도 편집 화면(iframe)은 무조건 띄운다 — 안 그러면 까만 화면으로 멈춤
       var _framed=false; function _go(){ if(_framed) return; _framed=true; loadFrame(); }
@@ -10050,8 +10227,10 @@
         else { toast('이 구성은 삭제할 수 없어요'); }
       }
       else if(m.type==='la-edit-glowfield'){ handleGlowField(m.fi, m.value); }
+      else if(m.type==='la-edit-blockfield'){ handleBlockField(m.bt, m.fi, m.value); }
       else if(m.type==='la-edit-galimg'){ handleGalImg(m.idx); }
-      else if(m.type==='la-insert-slot'){ handleInsertSlot(m.beforeType, m.beforeNth); }
+      else if(m.type==='la-insert-slot'){ if(window.__pendingAddTile){ placePending(m.beforeType, m.beforeNth); } else { handleInsertSlot(m.beforeType, m.beforeNth); } }
+      else if(m.type==='la-visible-block'){ try{ setInsertBeforeFrom(m.beforeType, m.beforeNth); }catch(e){} }   // 지금 보던 자리에 삽입 예약
       else if(m.type==='la-edit-lookimg'){ handleLookImg(m.idx); }
       else if(m.type==='la-edit-lookfield'){ handleLookField(m.idx, m.value); }
       else if(m.type==='la-edit-lookadd'){ handleLookAdd(); }
@@ -10137,8 +10316,8 @@
       try{ toast('순서를 바꿨어요'); }catch(e){}
     }
     // 공용 아이템(카드/행) 편집 엔진 — 랭킹·스타일갤러리 (lookbook은 별도)
-    var ITEM_CI={ ranking:2, stylegallery:0, steps:1, review:0, qna:0, painsolve:1, authority:1 };
-    var ITEM_EMPTY={ ranking:function(){return ['','','','',''];}, stylegallery:function(){return ['','','','',''];}, steps:function(){return ['',''];}, review:function(){return ['',''];}, qna:function(){return ['',''];}, painsolve:function(){return ['',''];}, authority:function(){return ['',''];} };
+    var ITEM_CI={ ranking:2, stylegallery:0, steps:1, review:0, qna:0, authority:1 };
+    var ITEM_EMPTY={ ranking:function(){return ['','','','',''];}, stylegallery:function(){return ['','','','',''];}, steps:function(){return ['',''];}, review:function(){return ['',''];}, qna:function(){return ['',''];}, authority:function(){return ['',''];} };
     function itemCtx(bt){ var row=document.querySelector('#rows .row[data-type="'+bt+'"]'); if(!row) return null; var ci=ITEM_CI[bt]; if(ci==null) return null; var c=row._content; if(!Array.isArray(c)) c=row._content=[]; if(!Array.isArray(c[ci])) c[ci]=[]; return {row:row, items:c[ci]}; }
     function itemSync(row, refresh){ try{ var sw=row.querySelector('[data-sw]'); if(sw&&!sw.classList.contains('on')) sw.classList.add('on'); }catch(e){} try{ if(window.__refreshRowSub) window.__refreshRowSub(row); }catch(e){} try{ refreshBuilder(); updateHomeProgress(); }catch(e){} if(refresh && window.__liveRefresh) setTimeout(window.__liveRefresh, 40); }
     function handleItem(m){
@@ -10173,6 +10352,16 @@
       L.cards[idx][2]=value||'';   // kr 이름 (재렌더 안 함 = 인라인 입력 유지)
       lookSync(L.row, false);
     }
+    // 📝 범용 단일 필드 인라인 저장 (진단형 제목/질문/버튼 등 · 리스트 아닌 필드) — 재렌더 안 함
+    function handleBlockField(bt, fi, value){
+      if(!bt) return; var row=document.querySelector('#rows .row[data-type="'+bt+'"]'); if(!row) return;
+      var c=row._content; if(!Array.isArray(c)) c=row._content=[];
+      while(c.length<fi+1) c.push('');
+      c[fi]=value||'';
+      try{ var sw=row.querySelector('[data-sw]'); if(sw && !sw.classList.contains('on')) sw.classList.add('on'); }catch(e){}
+      try{ if(window.__refreshRowSub) window.__refreshRowSub(row); }catch(e){}
+      try{ refreshBuilder(); updateHomeProgress(); }catch(e){}
+    }
     // 글로우 후킹 인라인 편집 — content[0]큰글자/[1]라벨/[2]설명 (재렌더 안 함 = 입력 유지)
     function handleGlowField(fi, value){
       var row=document.querySelector('#rows .row[data-type="glowhook"]'); if(!row) return;
@@ -10193,10 +10382,7 @@
       L.cards.splice(idx,1); lookSync(L.row, true);
     }
     // ③ '여기' 슬롯 탭 → 그 위치에 구성 삽입 (피커 열고 __insertBeforeRow 지정)
-    function handleInsertSlot(beforeType, beforeNth){
-      if(window.__setFabInsert) window.__setFabInsert(false);   // 슬롯 숨김 + FAB 원복
-      if(window.__openAddCatalog) window.__openAddCatalog(); else { var ab=document.getElementById('add-block-btn'); if(ab) ab.click(); }
-      // openAddCatalog이 __insertBeforeRow=null로 리셋 → 그 다음에 목표 지정
+    function setInsertBeforeFrom(beforeType, beforeNth){
       var target=null;
       if(beforeType){
         var rows=[].slice.call(document.querySelectorAll('#rows .row[data-type="'+beforeType+'"]')).filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw || sw.classList.contains('on'); });
@@ -10204,6 +10390,26 @@
       }
       window.__insertBeforeRow = target;   // null = 맨 끝에 추가
     }
+    function handleInsertSlot(beforeType, beforeNth){
+      if(window.__setFabInsert) window.__setFabInsert(false);   // 슬롯 숨김 + FAB 원복
+      if(window.__openAddCatalog) window.__openAddCatalog(true); else { var ab=document.getElementById('add-block-btn'); if(ab) ab.click(); }
+      setInsertBeforeFrom(beforeType, beforeNth);   // openAddCatalog이 null로 리셋 후 명시적 위치 지정
+    }
+    // 📍 만들기 → 위치 선택 (블록 먼저 고르고 → 편집홈 슬롯에서 자리 콕) · 집중 안 끊기게 부드럽게
+    window.__startPlacePicker=function(tile){
+      window.__pendingAddTile=tile;
+      function go(){ if(window.__setFabInsert) window.__setFabInsert(true); showPlaceBanner(); }
+      if(!window.__liveEditActive){ if(window.__openLive) window.__openLive(); setTimeout(go, 1000); }
+      else { go(); }
+    };
+    function placePending(beforeType, beforeNth){
+      var tile=window.__pendingAddTile; if(!tile) return;
+      setFabInsert(false);   // 슬롯·배너·FAB·pending 한 번에 정리
+      setInsertBeforeFrom(beforeType, beforeNth);
+      if(window.__addBlockFromTile) window.__addBlockFromTile(tile);
+    }
+    function showPlaceBanner(){ hidePlaceBanner(); var b=document.createElement('div'); b.id='place-banner'; b.innerHTML='📍 위치를 선택해주세요'; document.body.appendChild(b); }
+    function hidePlaceBanner(){ var b=document.getElementById('place-banner'); if(b) b.remove(); }
     // 손님 내비(아카이브/제품/Q&A) 탭 → 보면서 수정 닫고 그 탭 편집으로
     function handleEditNav(tab){
       var pw={ archive:'archive', shop:'product', qna:'qna' }[tab] || 'archive';
@@ -10238,6 +10444,7 @@
       if(addb){ var p=addb.querySelector('.le-fab-p'), t=addb.querySelector('.le-fab-t');
         if(on){ if(p)p.textContent='✕'; if(t)t.textContent='취소'; addb.classList.add('cancel'); }
         else { if(p)p.textContent='＋'; if(t)t.textContent='구성 추가'; addb.classList.remove('cancel'); } }
+      if(!on){ try{ hidePlaceBanner(); }catch(e){} window.__pendingAddTile=null; }   // 위치 선택 취소·완료 시 배너·대기 정리
       try{ (document.getElementById('le-iframe')||ifr).contentWindow.postMessage({type: on?'la-enter-insert':'la-exit-insert'}, '*'); }catch(e){}   // 항상 현재 iframe을 찾아 전송(재로드돼도 먹통 안 되게)
     }
     window.__setFabInsert=setFabInsert;

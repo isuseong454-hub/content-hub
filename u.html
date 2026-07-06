@@ -648,11 +648,22 @@
   html.has-reveal .reveal-blk.has-items.in .reveal-si{opacity:1; transform:none;}
   /* ③ '여기' 끼워넣기 슬롯 */
   .la-slot{display:none;}
-  html[data-edit][data-inserting] .la-slot{display:flex; align-items:center; gap:9px; width:100%; margin:2px 0; padding:6px 0; background:none; border:none; cursor:pointer; font-family:inherit;}
-  .la-slot-line{flex:1; height:0; border-top:2px dashed rgba(167,139,255,.6);}
-  /* 브랜드 보라 — 손님 테마색과 무관하게 고정 (은은하게) */
-  .la-slot-chip{flex:0 0 auto; background:rgba(124,92,240,.92); color:#fff; font-size:12px; font-weight:800; padding:6px 15px; border-radius:999px; box-shadow:0 4px 14px rgba(124,92,240,.45);}
+  html[data-edit][data-inserting] .la-slot{display:flex; align-items:center; gap:9px; width:100%; margin:2px 0; padding:6px 0; background:none; border:none; cursor:pointer; font-family:inherit; transition:margin .2s ease, padding .2s ease; animation:laSlotIn .35s ease both;}
+  .la-slot-line{flex:1; height:0; border-top:2px dashed rgba(167,139,255,.55); transition:border-top-color .16s, box-shadow .16s;}
+  /* 브랜드 보라 — 손님 테마색과 무관하게 고정. 은은히 숨쉬며 "여기 눌러" 초대 */
+  .la-slot-chip{flex:0 0 auto; background:rgba(124,92,240,.92); color:#fff; font-size:12px; font-weight:800; padding:6px 15px; border-radius:999px; box-shadow:0 4px 14px rgba(124,92,240,.45); transition:transform .16s, box-shadow .16s; animation:laSlotBreathe 2.3s ease-in-out infinite;}
+  /* hover(또는 근접) = 그 자리가 쫙 벌어지며 빛남 = "여기에 쏙 들어가요" */
+  html[data-edit][data-inserting] .la-slot:hover{margin:15px 0; padding:13px 0;}
+  .la-slot:hover .la-slot-line{border-top:2px solid #b39cff; box-shadow:0 0 11px rgba(179,156,255,.7);}
+  .la-slot:hover .la-slot-chip{transform:scale(1.13); box-shadow:0 7px 24px rgba(124,92,240,.7); animation:none;}
   .la-slot:active .la-slot-chip{transform:scale(.94);}
+  @keyframes laSlotBreathe{0%,100%{transform:scale(1); box-shadow:0 4px 13px rgba(124,92,240,.38);} 50%{transform:scale(1.06); box-shadow:0 6px 22px rgba(124,92,240,.66);}}
+  @keyframes laSlotIn{from{opacity:0; transform:translateY(-5px) scaleX(.96);} to{opacity:1; transform:none;}}
+  @media (prefers-reduced-motion: reduce){ .la-slot,.la-slot-chip{animation:none !important;} }
+  /* 넣으면 그 자리에 스르륵 나타남 */
+  .la-just-placed{animation:laPlaced .55s cubic-bezier(.2,.9,.3,1.1) both;}
+  @keyframes laPlaced{0%{opacity:0; transform:translateY(-10px) scale(.97);} 60%{opacity:1;} 100%{opacity:1; transform:none;}}
+  @media (prefers-reduced-motion: reduce){ .la-just-placed{animation:none !important;} }
   /* 끼워넣기 모드: 블록은 흐리게 + 클릭막아 슬롯만 누르게 */
   html[data-edit][data-inserting] .la-hb{opacity:.45; pointer-events:none;}
   /* 맨 아래 '＋ 구성 추가' 빈 슬롯 (항상 보임 · 탭하면 카탈로그) */
@@ -805,6 +816,8 @@
   html[data-edit] .lbc{cursor:pointer;}
   html[data-edit] .lbc .lbc-photo.lbc-empty{display:flex; align-items:center; justify-content:center; color:var(--coral); font-size:14px; font-weight:800; border:1.5px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07);}
   html[data-edit] .lbc-kr.la-ed-inline:empty::before{content:attr(data-ph); color:var(--muted); opacity:.7;}
+  /* 범용 인라인 빈칸 힌트 — data-ph 있으면 비었을 때 흐리게 보여줌 (숫자스탯·인용구·진단형 선택지/질문 등 공통) */
+  html[data-edit] .la-ed-inline:empty::before{ content:attr(data-ph); color:var(--muted); opacity:.5; font-weight:400; -webkit-text-fill-color:currentColor; pointer-events:none; }
   html[data-edit] .lbc-del{position:absolute; top:8px; right:8px; z-index:5; width:24px; height:24px; border-radius:50%; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:15px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;}
   html[data-edit] .lb-addcard{display:block; width:100%; margin-top:12px; padding:14px; border-radius:14px; border:2px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07); color:var(--coral); font-size:13.5px; font-weight:800; font-family:inherit; cursor:pointer;}
   html[data-edit] .lb-addcard:active{transform:scale(.99);}
@@ -866,6 +879,14 @@
   .hh-text{font-family:var(--serif); font-size:25px; font-weight:600; line-height:1.32; color:var(--on-strong); animation:hhup .8s ease both;}
   .hh-text .kw{color:var(--coral);}
   .hero-hook{text-align:center;}
+  /* ✨ 랜딩 요약 — 태그라인 + 신뢰 칩 (첫인상 3초 각인) */
+  .landsum{text-align:center; padding:2px 0 14px;}
+  .ls-tag{font-family:var(--serif); font-size:21px; font-weight:700; line-height:1.42; letter-spacing:-.01em; color:var(--on-strong); animation:lsUp .6s .08s both;}
+  .ls-chips{display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:14px;}
+  .ls-chip{font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; color:var(--coral); background:color-mix(in srgb, var(--coral) 13%, transparent); border:1px solid color-mix(in srgb, var(--coral) 42%, transparent); opacity:0; animation:lsPop .5s both cubic-bezier(.3,1.3,.5,1);}
+  @keyframes lsUp{from{opacity:0; transform:translateY(11px)} to{opacity:1; transform:none}}
+  @keyframes lsPop{0%{opacity:0; transform:scale(.78)} 70%{opacity:1; transform:scale(1.05)} 100%{opacity:1; transform:scale(1)}}
+  @media (prefers-reduced-motion: reduce){ .ls-tag,.ls-chip{animation:none !important; opacity:1 !important; transform:none !important;} }
 
   /* ════ 진입 모션 — 들어오자마자 첫 화면(커버·후킹) 살아남 · html[data-entrance] (무료=rise, 나머지=프로) ════ */
   @keyframes enRise{ from{opacity:0; transform:translateY(26px);} to{opacity:1; transform:none;} }
@@ -1243,6 +1264,23 @@
   .rv-spot{background:var(--coral-soft); border-radius:16px; padding:18px;}
   .rv-spot-t{font-family:var(--serif); font-size:18px; font-weight:700; color:var(--on-strong); line-height:1.45; margin-top:8px;}
   .rv-spot-n{font-size:12.5px; color:var(--muted); margin-top:10px;}
+  /* 🎯 스포트라이트(B) 프리미엄 — 중앙 대형 인용 + 강조 컬러 + 등장 모션 */
+  .rv-spot2{text-align:center; padding:24px 18px; background:radial-gradient(circle at 50% -12%, color-mix(in srgb,var(--coral) 24%,transparent), var(--coral-soft) 70%);}
+  .rv-spot2 .rv-spot-st{color:#FFB740; font-size:15px; letter-spacing:3px;}
+  .rv-spot2 .rv-spot-t{font-size:22px; font-weight:800; letter-spacing:-.01em; margin-top:12px; animation:rvUp .6s .05s both;}
+  .rv-spot2 .rv-spot-n{margin-top:13px;}
+  .rv-spot2 .em-main{background-size:220% 100%; animation:rvShim 3.2s ease-in-out infinite;}
+  @keyframes rvUp{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none}}
+  @keyframes rvShim{0%,100%{background-position:0 0} 50%{background-position:100% 0}}
+  /* 🎞 슬라이더(C) — 후기 카드가 끊임없이 흐름 */
+  .rv-sl-mask{position:relative; overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
+  .rv-sl-track{display:flex; gap:11px; width:max-content; animation:rvScroll linear infinite;}
+  .rv-sl-item{flex:0 0 220px; background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:14px;}
+  .rv-sl-st{color:#FFB740; font-size:12px; letter-spacing:2px;}
+  .rv-sl-q{font-size:13px; line-height:1.55; color:var(--on-strong); margin:8px 0 10px; min-height:60px;}
+  .rv-sl-n{font-size:11.5px; color:var(--muted);}
+  @keyframes rvScroll{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion: reduce){ .rv-sl-track{animation:none !important} .rv-spot2 .rv-spot-t,.rv-spot2 .em-main{animation:none !important; opacity:1 !important} }
   .rv-mini-row{display:flex; gap:9px; margin-top:11px;}
   .rv-mini{flex:1; background:var(--surface); border:1px solid var(--hair); border-radius:11px; padding:10px;}
   .rv-mini-t{font-size:11.5px; color:var(--on-strong); line-height:1.4; margin-top:4px;}
@@ -1306,6 +1344,17 @@
   .dg-res{ margin-top:12px; background:var(--coral-soft); border-radius:12px; padding:12px 13px; }
   .dg-rt{ font-size:14px; font-weight:800; color:var(--ink); line-height:1.4; margin-bottom:10px; }
   .dg-cta{ display:inline-block; font-size:12.5px; font-weight:800; color:var(--on-coral,#fff); background:var(--coral); border-radius:10px; padding:9px 15px; text-decoration:none; }
+  /* 🌟 진단형 편집 = 완성형 빈칸 채우기 */
+  .dg-edit .dg-q{ margin-bottom:11px; }
+  .dg-erows{ display:flex; flex-direction:column; gap:8px; }
+  .dg-ei{ display:flex; align-items:center; gap:8px; background:var(--paper); border:1px solid var(--hair); border-radius:12px; padding:9px 11px; position:relative; }
+  .dg-eo{ flex:1; min-width:44px; font-size:12.5px; font-weight:700; color:var(--ink); }
+  .dg-arw{ flex:0 0 auto; color:var(--muted); font-size:13px; }
+  .dg-er{ flex:1.25; min-width:44px; font-size:12px; color:var(--on-strong); }
+  .dg-edel{ flex:0 0 auto; width:20px; height:20px; border-radius:50%; border:none; background:#E0566E; color:#fff; font-size:12px; line-height:20px; text-align:center; cursor:pointer; padding:0; }
+  .dg-eadd{ display:block; margin:10px auto 0; background:var(--coral-soft); color:var(--coral); border:1px dashed var(--coral); border-radius:10px; padding:8px 15px; font-size:12px; font-weight:700; font-family:var(--sans); cursor:pointer; }
+  .dg-ebtnrow{ margin-top:13px; font-size:11.5px; color:var(--muted); }
+  .dg-ebtn{ display:inline-block; font-weight:800; color:var(--coral); border-bottom:1px dashed var(--coral); padding:0 2px; }
   .lb-badge{ display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:800; color:var(--ink); background:var(--coral-soft); border:1px solid var(--coral); border-radius:999px; padding:9px 15px; }
   .lb-dot{ width:8px; height:8px; border-radius:50%; background:var(--coral); animation:lbPing 1.7s ease-out infinite; }
   .lb-recent{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--muted); margin-top:9px; }
@@ -2573,6 +2622,7 @@
       return card('<div class="block-h" style="margin-bottom:11px;">'+esc(title||'함께한 브랜드 · 매체')+'</div><div class="lw-wall">'+chips+'</div>');
     },
     diagnostic: function(c){
+      var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
       var title=c[0]||'🔮 진단', q=c[1]||'', list=c[2]||[], btnT=c[3]||'상담받기', btnU=c[4]||'';
       var opts=list.filter(function(x){ return (x[0]||'').trim(); });
       if(!opts.length) return null;
@@ -2606,6 +2656,14 @@
       if(photo){ var safe=String(photo).replace(/["'()\\]/g,''); d.style.backgroundImage='linear-gradient(180deg,rgba(8,6,16,.18),rgba(8,6,16,.72)),url('+safe+')'; }
       var ctaH = btnT ? (btnU?'<a class="cv3-cta" href="'+esc(btnU)+'" target="_blank" rel="noopener">'+esc(btnT)+' →</a>':'<span class="cv3-cta">'+esc(btnT)+' →</span>') : '';
       d.innerHTML=(tag?'<span class="cv3-tag">'+esc(tag)+'</span>':'')+'<div class="cv3-h">'+emph(hook)+'</div>'+ctaH;
+      return d;
+    },
+    landsum: function(c){
+      var tag=c[0]||'', chips=(c[1]||[]).filter(function(x){ return (x[0]||'').trim(); });
+      if(!tag && !chips.length) return null;
+      var d=document.createElement('div'); d.className='block landsum';
+      var chipH=chips.map(function(x,i){ return '<span class="ls-chip" style="animation-delay:'+(0.42+i*0.12).toFixed(2)+'s">'+esc(x[0])+'</span>'; }).join('');
+      d.innerHTML='<div class="ls-tag">'+emph(tag)+'</div>'+(chipH?'<div class="ls-chips">'+chipH+'</div>':'');
       return d;
     },
     postref: function(c){
@@ -2701,13 +2759,13 @@
       return d;
     },
     glowhook: function(c){
-      var big=c[0]||'', lab=c[1]||'', sub=c[2]||'', pre=c[3]||'', by=c[4]||''; if(!big && !EDIT) return null;
+      var big=c[0]||'', lab=c[1]||'', sub=c[2]||'', pre=c[3]||'', by=c[4]||''; if(!big) return null;
       var d=document.createElement('div'); d.className='block gh-hook';
       d.innerHTML='<div class="gh-star">✱</div>'
-        +((lab||EDIT)?'<div class="gh-eyebrow">'+(lab?esc(lab):'')+'</div>':'')
-        +'<div class="gh-bigwrap">'+((pre||EDIT)?'<span class="gh-pre">'+(pre?esc(pre):'')+'</span>':'')+'<span class="gh-big">'+(big?emph(big):'')+'</span></div>'
-        +((sub||EDIT)?'<div class="gh-sub">'+(sub?emph(sub):'')+'</div>':'')
-        +((by||EDIT)?'<div class="gh-bychip">'+(by?esc(by):'')+'</div>':'');
+        +(lab?'<div class="gh-eyebrow">'+esc(lab)+'</div>':'')
+        +'<div class="gh-bigwrap">'+(pre?'<span class="gh-pre">'+esc(pre)+'</span>':'')+'<span class="gh-big">'+emph(big)+'</span></div>'
+        +(sub?'<div class="gh-sub">'+emph(sub)+'</div>':'')
+        +(by?'<div class="gh-bychip">'+esc(by)+'</div>':'');
       return d;
     },
     marquee: function(c){
@@ -2963,7 +3021,7 @@
       var h=title?'<div class="block-h" style="margin-bottom:6px;">'+esc(title)+'</div>':'';
       return card(h+bodyH);
     },
-    stat: function(c){ var list=c[0]||[]; var inner=list.map(function(x){ return '<div style="flex:1;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--coral);font-family:var(--serif);">'+esc(x[0]||'')+'</div><div class="sub">'+esc(x[1]||'')+'</div></div>'; }).join(''); return card('<div style="display:flex;gap:10px;">'+inner+'</div>'); },
+    stat: function(c){ var list=c[0]||[]; if(!list.length) return null; var inner=list.map(function(x){ return '<div style="flex:1;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--coral);font-family:var(--serif);">'+esc(x[0]||'')+'</div><div class="sub">'+esc(x[1]||'')+'</div></div>'; }).join(''); return card('<div style="display:flex;gap:10px;">'+inner+'</div>'); },
     review: function(c, layout){
       var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
       var list=c[0]||[]; if(!list.length){ if(!EDIT) return null; list=[['','']]; }
@@ -2980,11 +3038,17 @@
       }
       if(layout==='spotlight'){
         var f=list[0]||[], rest=list.slice(1);
-        var big='<div class="rv-spot"><div style="color:#FFB740;font-size:14px;letter-spacing:2px;">★★★★★</div><div class="rv-spot-t">"'+esc(f[0]||'')+'"</div><div class="rv-spot-n">— '+esc(f[1]||'고객님')+'</div></div>';
+        var big='<div class="rv-spot rv-spot2"><div class="rv-spot-st">★★★★★</div><div class="rv-spot-t">'+emph(f[0]||'')+'</div><div class="rv-spot-n">— '+esc(f[1]||'고객님')+'</div></div>';
         var more=rest.length?'<div class="rv-mini-row">'+rest.map(function(x){ return '<div class="rv-mini"><div style="color:#FFB740;font-size:9px;">★★★★★</div><div class="rv-mini-t">'+esc((x[0]||'').slice(0,28))+'</div></div>'; }).join('')+'</div>':'';
         return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div>'+big+more);
       }
-      // cards (기본)
+      if(layout==='slider' && !EDIT){
+        var dbl=list.concat(list);   // 이어붙여 끊김 없이 순환
+        var sitems=dbl.map(function(x){ return '<div class="rv-sl-item"><div class="rv-sl-st">★★★★★</div><div class="rv-sl-q">'+emph(x[0]||'')+'</div><div class="rv-sl-n">— '+esc(x[1]||'고객님')+'</div></div>'; }).join('');
+        var sdur=Math.max(16, list.length*7);
+        return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div><div class="rv-sl-mask"><div class="rv-sl-track" style="animation-duration:'+sdur+'s">'+sitems+'</div></div>');
+      }
+      // cards (기본) — slider 편집모드도 여기로(인라인 편집 유지)
       var cards=list.map(function(x){ return '<div class="rv-card rv-ei" style="position:relative;"><div class="rv-card-top"><span class="rv-av">'+esc(ini(x[1]))+'</span><div><div style="color:#FFB740;font-size:10px;letter-spacing:1px;">★★★★★</div><div class="rv-name rv-en">'+esc(x[1]||(EDIT?'':'고객님'))+'</div></div></div><div class="rv-card-t rv-et">'+esc(x[0]||'')+'</div>'+rvDel+'</div>'; }).join('');
       return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div><div class="rv-cards">'+cards+'</div>'+rvAdd);
     },
@@ -3010,13 +3074,10 @@
       return card('<div class="block-h" style="margin-bottom:14px;">이런 걱정, 하시죠?</div>'+b+add);
     },
     painsolve: function(c, layout){
-      var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
-      var title=c[0]||'', list=c[1]||[]; if(!list.length){ if(!EDIT) return null; list=[['','']]; }
-      var head=title?'<div class="block-h" style="margin-bottom:13px;">'+emph(title)+'</div>':'';
-      var del=EDIT?'<button class="ps-edel" title="삭제" style="position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:none;background:#E0566E;color:#fff;font-size:12px;line-height:20px;text-align:center;cursor:pointer;z-index:4;padding:0;">×</button>':'';
-      var add=EDIT?'<button class="ps-eadd" style="display:block;margin:12px auto 0;background:var(--coral-soft);color:var(--coral);border:1px dashed var(--coral);border-radius:10px;padding:8px 15px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;">＋ 항목 추가</button>':'';
-      var rows=list.map(function(x){ return '<div class="ps-ei" style="display:flex;align-items:stretch;gap:8px;margin-bottom:9px;position:relative;"><div style="flex:1;background:rgba(255,107,125,.1);border:1px solid rgba(255,107,125,.28);border-radius:11px;padding:10px 11px;"><div style="font-size:10px;font-weight:800;color:#e0566e;margin-bottom:4px;">😣 이런 고민</div><div class="ps-eq" style="font-size:13px;color:var(--on-strong);line-height:1.45;">'+esc(x[0]||'')+'</div></div><div style="display:flex;align-items:center;color:var(--muted);font-size:17px;flex:0 0 auto;">→</div><div style="flex:1;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:11px;padding:10px 11px;"><div style="font-size:10px;font-weight:800;color:#1d9e75;margin-bottom:4px;">✅ 이렇게 해결</div><div class="ps-ea" style="font-size:13px;color:var(--on-strong);line-height:1.45;">'+esc(x[1]||'')+'</div></div>'+del+'</div>'; }).join('');
-      var d=card(''); d.innerHTML=head+rows+add;
+      var title=c[0]||'', list=c[1]||[]; if(!list.length) return null;
+      var head = title?'<div class="block-h" style="margin-bottom:13px;">'+emph(title)+'</div>':'';
+      var rows=list.map(function(x){ return '<div class="ps-ei" style="display:flex;align-items:stretch;gap:8px;margin-bottom:9px;position:relative;"><div style="flex:1;background:rgba(255,107,125,.1);border:1px solid rgba(255,107,125,.28);border-radius:11px;padding:10px 11px;"><div style="font-size:10px;font-weight:800;color:#e0566e;margin-bottom:4px;">😣 이런 고민</div><div class="ps-eq" style="font-size:13px;color:var(--on-strong);line-height:1.45;">'+esc(x[0]||'')+'</div></div><div style="display:flex;align-items:center;color:var(--muted);font-size:17px;flex:0 0 auto;">→</div><div style="flex:1;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:11px;padding:10px 11px;"><div style="font-size:10px;font-weight:800;color:#1d9e75;margin-bottom:4px;">✅ 이렇게 해결</div><div class="ps-ea" style="font-size:13px;color:var(--on-strong);line-height:1.45;">'+esc(x[1]||'')+'</div></div></div>'; }).join('');
+      var d=card(''); d.innerHTML=head+rows;
       return d;
     },
     profilecard: function(c){
@@ -4008,6 +4069,7 @@
       else if(m && m.type==='la-cover-fit'){ try{ updateCoverFit(m.fit); }catch(e){} }
       else if(m && m.type==='la-set-avatar'){ try{ applyAvatar(m.url); }catch(e){} }
       else if(m && m.type==='la-scroll-new'){ try{ scrollToNewBlock(m.idx); }catch(e){} }
+      else if(m && m.type==='la-which-visible'){ try{ reportVisibleForInsert(); }catch(e){} }
       else if(m && m.type==='la-enter-insert'){ try{ showInsertSlots(); }catch(e){} }
       else if(m && m.type==='la-exit-insert'){ try{ removeInsertSlots(); }catch(e){} }
       else if(m && m.type==='la-del-selected'){ try{ delSelectedBlock(); }catch(e){} }
@@ -4097,8 +4159,8 @@
       el.appendChild(head);
       // 컨트롤바: 수정만 (선택 시 · 오른쪽 세로 중앙) — ▲▼·삭제는 제거(삭제는 상단 '구성 삭제')
       var bar=document.createElement('span'); bar.className='la-ed-bar';
-      // 글로우 후킹은 글자를 직접 탭해서 인라인 편집 → 어려운 ✎수정 모달 버튼 숨김
-      if(bt!=='glowhook'){
+      // 완전 인라인 블록(글자·항목을 그 자리서 직접 편집)은 중복인 ✎수정 모달 버튼 숨김 (표현법 있는 블록만 수정 버튼 유지)
+      if(true){
         var edit=document.createElement('button'); edit.type='button'; edit.className='la-ed-btn'; edit.textContent='✎ 수정';
         edit.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-edit-tap', bt:bt}, '*'); }catch(_){} });
         bar.appendChild(edit);
@@ -4114,7 +4176,7 @@
         selectBlock(el);
       }, true);
     });
-    armGallery(); armLookbook(); armItems('ranking'); armItems('stylegallery'); armItems('steps'); armItems('review'); armItems('qna'); armItems('painsolve'); armItems('authority'); armGlowhook();
+    armGallery(); armLookbook(); armItems('ranking'); armItems('stylegallery'); armItems('steps'); armItems('review'); armItems('qna'); armItems('authority');
     setupBlockDrag();   // 🖐 꾹 눌러 드래그로 순서 변경
     ensureAddSlot();    // 페이지 맨 아래 '＋ 구성 추가' 빈 슬롯 (탭 → 카탈로그)
     if(_insertMode) showInsertSlots();   // 재렌더돼도 '여기' 슬롯 유지(각 구성 사이)
@@ -4199,7 +4261,6 @@
     steps: { sel:'.st-ei', photos:[], texts:[{sel:'.st-et', fi:0, ph:'단계 제목'},{sel:'.st-ed', fi:1, ph:'설명(선택)'}], del:'.st-edel', add:'.st-eadd' },
     review: { sel:'.rv-ei', photos:[], texts:[{sel:'.rv-et', fi:0, ph:'후기 내용'},{sel:'.rv-en', fi:1, ph:'작성자'}], del:'.rv-edel', add:'.rv-eadd' },
     qna: { sel:'.qa-ei', photos:[], texts:[{sel:'.qa-eq', fi:0, ph:'질문'},{sel:'.qa-ea', fi:1, ph:'답변'}], del:'.qa-edel', add:'.qa-eadd' },
-    painsolve: { sel:'.ps-ei', photos:[], texts:[{sel:'.ps-eq', fi:0, ph:'고민'},{sel:'.ps-ea', fi:1, ph:'해결'}], del:'.ps-edel', add:'.ps-eadd' },
     authority: { sel:'.au-ei', photos:[], texts:[{sel:'.au-en', fi:0, ph:'숫자'},{sel:'.au-el', fi:1, ph:'라벨'}], del:'.au-edel', add:'.au-eadd' }
   };
   function armItems(bt){
@@ -4218,6 +4279,18 @@
     });
   }
   window.__armItems=armItems;
+  // 📝 단일 필드 인라인 (리스트 아닌 블록 필드: 진단형 제목/질문/버튼 등) — data-bft(타입)·data-bfi(필드번호)
+  function armBlockFields(){
+    if(!EDIT_MODE) return;
+    [].forEach.call(document.querySelectorAll('[data-bfi]'), function(el){
+      if(el.__bf) return; el.__bf=1;
+      el.setAttribute('contenteditable','true'); el.setAttribute('spellcheck','false'); el.classList.add('la-ed-inline');
+      el.addEventListener('click', function(e){ e.stopPropagation(); });
+      el.addEventListener('input', function(){ clearTimeout(el.__t); el.__t=setTimeout(function(){ _post({type:'la-edit-blockfield', bt:el.getAttribute('data-bft'), fi:parseInt(el.getAttribute('data-bfi'),10)||0, value:el.innerText.replace(/\n+/g,' ').trim()}); }, 250); });
+      el.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+    });
+  }
+  window.__armBlockFields=armBlockFields;
   // 구성 선택(탭한 것만 강조) · 다른 곳 탭하면 해제
   function selectBlock(el){
     [].forEach.call(document.querySelectorAll('.la-hb.la-ed-sel'), function(x){ if(x!==el) x.classList.remove('la-ed-sel'); });
@@ -4255,9 +4328,29 @@
     var home=document.querySelector('[data-pane="home"]'); if(!home) return;
     var blocks=[].slice.call(home.querySelectorAll('[data-bt]')).filter(function(b){ return b.getAttribute('data-bt')!=='hero'; });
     var t=(typeof idx==='number' && idx>=0 && idx<blocks.length) ? blocks[idx] : blocks[blocks.length-1];
-    if(t){ t.scrollIntoView({behavior:'smooth', block:'center'}); clearBlockSel(); t.classList.add('la-ed-sel'); }
+    if(t){ t.scrollIntoView({behavior:'smooth', block:'center'}); clearBlockSel(); t.classList.add('la-ed-sel'); t.classList.add('la-just-placed'); setTimeout(function(){ t.classList.remove('la-just-placed'); }, 700); }
   }
   window.__scrollToNewBlock=scrollToNewBlock;
+  // 지금 화면(뷰포트)에 보이는 블록을 찾아 → 그 '다음' 자리를 부모에 알림 (구성 추가 시 지금 보던 자리에 삽입 = 맨아래 튐 방지)
+  function reportVisibleForInsert(){
+    var out={type:'la-visible-block', beforeType:null, beforeNth:0};
+    try{
+      var home=document.querySelector('[data-pane="home"]');
+      if(home){
+        var blocks=[].slice.call(home.querySelectorAll('[data-bt]')).filter(function(b){ return b.getAttribute('data-bt')!=='hero' && getComputedStyle(b).display!=='none' && b.offsetHeight>0; });
+        if(blocks.length){
+          var anchorY=window.innerHeight*0.34, viewedIdx=-1;
+          for(var i=0;i<blocks.length;i++){ if(blocks[i].getBoundingClientRect().bottom>anchorY){ viewedIdx=i; break; } }
+          if(viewedIdx<0) viewedIdx=blocks.length-1;
+          var nextIdx=viewedIdx+1;
+          if(nextIdx<blocks.length){ var nb=blocks[nextIdx], bt=nb.getAttribute('data-bt');
+            out.beforeType=bt; out.beforeNth=blocks.filter(function(b){return b.getAttribute('data-bt')===bt;}).indexOf(nb);
+          }
+        }
+      }
+    }catch(e){}
+    try{ parent.postMessage(out, '*'); }catch(e){}
+  }
   // ③ '여기' 끼워넣기 슬롯 — 블록 사이/끝에 표시, 탭하면 그 위치로 삽입
   function makeSlot(beforeType, beforeNth){
     var s=document.createElement('button'); s.type='button'; s.className='la-slot';
