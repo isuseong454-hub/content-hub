@@ -1073,6 +1073,39 @@
   .gw-way:hover{border-color:rgba(167,139,255,.4);}
   .gw-ic{font-size:16px;flex:0 0 auto;} .gw-m{flex:1;min-width:0;} .gw-m b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);} .gw-m small{font-size:10.5px;color:var(--muted);}
   .gw-go{flex:0 0 auto;font-size:11px;font-weight:800;color:#3a2410;background:linear-gradient(120deg,#ffd977,#ff9ecf);padding:6px 11px;border-radius:99px;white-space:nowrap;}
+  /* ── 작업실 홈 v2 (2026-07-07): 프리미엄 배지 맨위 · 성장 히어로 · 추이 모션 ── */
+  .hub-plan2{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:13px;padding:12px 14px;border-radius:15px;position:relative;overflow:hidden;background:linear-gradient(120deg,rgba(255,215,122,.14),rgba(255,158,207,.05));border:1px solid rgba(255,215,122,.3);cursor:pointer;font-family:var(--sans);text-align:left;}
+  .hub-plan2::after{content:"";position:absolute;right:-24px;top:-24px;width:88px;height:88px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,122,.26),transparent 70%);}
+  .hub-plan2 .hp2-ic{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#ffe08a,#f0b04a);display:flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto;position:relative;}
+  .hub-plan2 .hp2-m{flex:1;min-width:0;position:relative;}
+  .hub-plan2 .hp2-m b{display:block;font-size:13px;font-weight:800;color:var(--ink);line-height:1.2;}
+  .hub-plan2 .hp2-m b em{font-style:normal;color:#e0a83a;}
+  .hub-plan2 .hp2-m small{font-size:10.5px;color:var(--muted);font-weight:600;}
+  .hub-plan2 .hp2-go{position:relative;flex:0 0 auto;font-size:11px;font-weight:800;color:#1c1710;background:linear-gradient(135deg,#ffe08a,#f0b04a);border-radius:9px;padding:7px 11px;white-space:nowrap;}
+  .hub-grow2{display:block;width:100%;text-align:left;margin:15px 0 4px;padding:16px 15px;border-radius:17px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(143,109,255,.22),rgba(255,158,207,.1));border:1px solid rgba(167,139,255,.34);cursor:pointer;font-family:var(--sans);}
+  .hub-grow2::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,255,.32),transparent 70%);}
+  .hub-grow2 .hg2-h{display:flex;align-items:center;gap:9px;position:relative;}
+  .hub-grow2 .hg2-ic{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto;}
+  .hub-grow2 .hg2-t b{display:block;font-size:15px;font-weight:800;color:var(--ink);}
+  .hub-grow2 .hg2-t small{font-size:11.5px;color:var(--muted);}
+  .hub-grow2 .hg2-body{display:block;font-size:12.5px;color:var(--ink);opacity:.92;margin:11px 0 13px;position:relative;line-height:1.6;}
+  .hub-grow2 .hg2-body b{opacity:1;font-weight:800;}
+  .hub-grow2 .hg2-btn{position:relative;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#2a1a4a;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:800;}
+  .hub-zone-h{display:flex;align-items:center;justify-content:space-between;}
+  .hz-more{background:none;border:none;font-family:var(--sans);color:#a78bff;font-size:11px;font-weight:700;cursor:pointer;}
+  .hub-trend{margin-top:12px;background:var(--soft);border:1px solid var(--hair);border-radius:13px;padding:11px 12px 9px;}
+  .ht-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+  .ht-head b{font-size:11.5px;font-weight:800;color:var(--ink);}
+  .ht-head small{font-size:10px;color:var(--muted);font-weight:600;}
+  .ht-svg{width:100%;height:112px;display:block;overflow:visible;}
+  .ht-line{fill:none;stroke:url(#htGrad);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;animation:htDraw 1.5s cubic-bezier(.5,0,.2,1) .2s forwards;filter:drop-shadow(0 2px 6px rgba(167,139,255,.4));}
+  .ht-area{fill:url(#htArea);opacity:0;animation:htFade .8s ease .9s forwards;}
+  .ht-dot{opacity:0;animation:htFade .4s ease 1.55s forwards;filter:drop-shadow(0 0 6px rgba(255,158,207,.85));}
+  .ht-dot-ring{transform-origin:center;animation:htPulse 2s ease-in-out 1.75s infinite;}
+  @keyframes htDraw{to{stroke-dashoffset:0;}}
+  @keyframes htFade{to{opacity:1;}}
+  @keyframes htPulse{0%,100%{opacity:.5;r:5;}50%{opacity:0;r:11;}}
+  @media (prefers-reduced-motion:reduce){.ht-line{animation:none;stroke-dashoffset:0!important;}.ht-area,.ht-dot{opacity:1;animation:none;}.ht-dot-ring{animation:none;}}
   /* 💰 홈 압축 수익화 공식 (다크 네온) */
   .hub-fx{position:relative;overflow:hidden;border-radius:16px;padding:12px 12px 11px;margin-bottom:13px;background:radial-gradient(130% 90% at 50% -10%,rgba(124,63,228,.3),transparent 60%),linear-gradient(180deg,#17131f,#100e15);border:1px solid rgba(167,139,255,.28);}
   .hfx-eye{font-size:10.5px;font-weight:900;color:#c9a6ff;text-align:center;margin-bottom:10px;}
@@ -2707,10 +2740,10 @@
       <img src="la-192.png" width="27" height="27" alt="컨텐츠 허브" style="border-radius:7px; display:block;">
     </span>
     <span class="title" id="ws-title">작업실</span>
-    <button class="btn" id="top-edit" title="홈 구성 (보면서 수정) — 안에서 👁 미리보기로 손님 화면 확인">🪄 홈 구성</button>
+    <button class="btn" id="top-edit" title="편집 모드 (보면서 수정) — 안에서 👁 미리보기로 손님 화면 확인">✏️ 편집 모드</button>
     <!-- (정리 2026-07-07) '고객 홈으로'는 홈 구성→👁 미리보기와 중복이라 숨김. 되돌리려면 style 제거. 핸들러·기능은 보존. -->
     <button class="btn" id="go-customer-top" style="display:none;" title="손님 화면은 '홈 구성 → 👁 미리보기'에서 봐요">🏠 고객 홈으로</button>
-    <button class="btn primary" id="top-save" title="내 홈에 적용 (저장 + 손님 페이지 반영)">✓ 내 홈에 적용</button>
+    <button class="btn primary" id="top-save" title="내 홈에 적용 (저장 + 손님 페이지 반영)">✓ 적용</button>
     <button class="tb-logout" id="open-settings" title="설정" aria-label="설정">⚙</button>
   </div>
 
@@ -9090,30 +9123,21 @@
     var fold; try{ fold=JSON.parse(localStorage.getItem('cm-hub-fold')||'null'); }catch(_){ fold=null; } if(!fold) fold={ns:true,q:true};   // 기본 접힘
     var myH=(window.__custHandle?window.__custHandle():'');
     box.innerHTML=''
+      /* ① 프리미엄 배지 (맨 위 · 상업적) */
+      +'<div class="hub-plan2" id="hub-plan"><span class="hp2-ic">'+(({basic:'🌱',pro:'🚀',premium:'👑'})[tier]||'🌱')+'</span><span class="hp2-m"><b>'+(nm?escT(nm)+'님 · ':'')+'<em>'+tierLbl+'</em></b><small>'+dday+'</small></span><span class="hp2-go">관리 →</span></div>'
+      /* ② 수익화 공식 */
       +'<div id="hub-fx-wrap">'+hubFormulaHtml(window.__hubStats)+'</div>'
-      +'<div class="hub-hero" id="hub-hero"><div class="hh-eyebrow">📍 지금 할 일</div><div class="hh-t">'+next.t+'</div>'+(next.label?'<button class="hh-btn" id="hub-hero-btn">'+next.label+' →</button>':'')+'</div>'
-      +'<button class="hub-grow" id="hub-grow"><span class="hg-ic">📈</span><span class="hg-m"><b>성장 방법</b><small>유입·전환·단골·성과 — 뭘 할지 방법 모음</small></span><span class="hg-go">→</span></button>'
-      /* ── 존 1: 오늘 성과 ── */
-      +'<div class="hub-zone"><div class="hub-zone-h">📊 오늘 성과</div>'
+      /* ③ 오늘 성과 (+ 추이 그래프 = renderTodayCard가 채움) */
+      +'<div class="hub-zone"><div class="hub-zone-h">📊 오늘 성과 <button type="button" class="hz-more" id="hub-an-more">분석 자세히 →</button></div>'
       +  '<div id="hub-today" class="today-card"></div>'
       +'</div>'
-      /* ── 존 2: 내 페이지 (링크 + 완성도) ── */
+      /* ④ 성장 방법 (히어로 카드) */
+      +'<button class="hub-grow2" id="hub-grow"><span class="hg2-h"><span class="hg2-ic">📈</span><span class="hg2-t"><b>성장 방법</b><small>유입 · 전환 · 단골 · 성과</small></span></span><span class="hg2-body">숫자가 안 오를 때, <b>유입 → 전환</b> 어디가 약한지 짚고 <b>뭘 하면 되는지</b> 방법을 알려드려요.</span><span class="hg2-btn">방법 보러 가기 →</span></button>'
+      /* ⑤ 내 페이지 */
       +'<div class="hub-zone"><div class="hub-zone-h">🔗 내 페이지</div>'
       +  ((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">contenthub.kr/u/'+myH+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
-      +  '<div class="ns'+(fold.ns?' fold-collapsed':'')+'" id="hub-ns">'
-      +    '<div class="ns-h" id="hub-ns-h">🎯 전환을 높이는 내 페이지 완성도 <span class="ns-pct">· '+overall+'%</span><span class="hub-chev">▾</span></div>'
-      +    '<div class="ns-body">'
-      +      '<div class="ns-sub">방문 → <b>신뢰</b> → <b>전환</b>. 이 세 칸을 채울수록 손님이 행동해요.</div>'
-      +      step(1,'첫인상 · 신뢰',trust,'프로필·소개·전문성 = "이 사람 믿어도 돼"')
-      +      step(2,'관심 · 공감',content,'글·작업·후기 = "맞아, 내 얘기네"')
-      +      step(3,'행동 · 전환',action,'예약·문의·스토어 = "지금 신청할래"')
-      +    '</div>'
-      +  '</div>'
-      +'</div>'
-      /* ── 계정 (슬림) ── */
-      +'<div class="mbr-chip" id="hub-plan"><span class="mc-ic">👑</span><span class="mc-t">'+tierLbl+'</span><span class="mc-s">· '+dday+'</span><span class="mc-go">관리 →</span></div>';
-    function saveFold(){ try{ localStorage.setItem('cm-hub-fold', JSON.stringify(fold)); }catch(_){} }
-    (function(){ var nh=document.getElementById('hub-ns-h'); if(nh) nh.onclick=function(){ var c=document.getElementById('hub-ns').classList.toggle('fold-collapsed'); fold.ns=c; saveFold(); }; })();
+      +'</div>';
+    // (지금할일 hub-hero · 완성도 hub-ns 카드 제거 2026-07-07 — fold 로직 삭제)
     var ws=window.__switchWs, pw=window.__showPwTab;
     function tileGo(k){
       if(k==='live'){ if(window.__openLive) window.__openLive(); }
@@ -9127,7 +9151,7 @@
     }
     box.querySelectorAll('.gi').forEach(function(g){ g.onclick=function(){ tileGo(TILES[+g.getAttribute('data-tile')][3]); }; });
     var bp=document.getElementById('hub-plan'); if(bp) bp.onclick=function(){ if(ws)ws('design'); };
-    var bn=document.getElementById('hub-hero-btn'); if(bn) bn.onclick=function(){ if(next.go==='live'){ if(window.__openLive) window.__openLive(); } else if(next.go && ws){ ws(next.go); } };
+    var bn=document.getElementById('hub-an-more'); if(bn) bn.onclick=function(){ if(window.__openStats) window.__openStats(); };   // 분석 자세히 → 고객·분석 탭
     var hg=document.getElementById('hub-grow'); if(hg) hg.onclick=function(){ if(window.__openGrowth) window.__openGrowth(); };
     var hlc=document.getElementById('hub-link-copy'); if(hlc) hlc.onclick=function(){ if(window.__copyMyLink) window.__copyMyLink(); };
     var hlq=document.getElementById('hub-link-qr'); if(hlq) hlq.onclick=function(){ if(window.__openShare) window.__openShare(); };
@@ -9138,6 +9162,28 @@
   function postStreak(){
     var wk=Math.floor(Date.now()/604800000), arr=[]; try{ arr=JSON.parse(localStorage.getItem('cm-hub-postweeks')||'[]'); }catch(_){}
     var set={}; arr.forEach(function(w){ set[w]=1; }); var st=0, c=wk; while(set[c]){ st++; c--; } return {streak:st, thisWeek:!!set[wk]};
+  }
+  // 📈 홈 방문 추이 (펼침 + 그려지는 모션) — s.daily로 자체완결 SVG (분석탭 an-line과 별개 id)
+  function hubTrendSvg(daily){
+    var pts=(daily||[]).map(function(x){ return (x&&x.n)||0; }).slice(-14);
+    if(pts.length<2) return '';
+    var n=pts.length, top=14, bot=104;
+    var max=Math.max.apply(null,pts), min=Math.min.apply(null,pts); if(max===min) max=min+1;
+    function X(i){ return (10 + i*(300/(n-1))); }
+    function Y(v){ return (bot - (v-min)/(max-min)*(bot-top)); }
+    var d='M'+X(0).toFixed(1)+','+Y(pts[0]).toFixed(1);
+    for(var i=1;i<n;i++){ d+=' L'+X(i).toFixed(1)+','+Y(pts[i]).toFixed(1); }
+    var lx=X(n-1).toFixed(1), ly=Y(pts[n-1]).toFixed(1);
+    var area=d+' L'+lx+',110 L10,110 Z';
+    return '<div class="hub-trend"><div class="ht-head"><b>📈 방문 추이</b><small>최근 '+n+'일</small></div>'
+      +'<svg class="ht-svg" viewBox="0 0 320 118" preserveAspectRatio="none"><defs>'
+      +'<linearGradient id="htGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f6dff"/><stop offset="1" stop-color="#ff9ecf"/></linearGradient>'
+      +'<linearGradient id="htArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(143,109,255,.3)"/><stop offset="1" stop-color="rgba(143,109,255,0)"/></linearGradient></defs>'
+      +'<path class="ht-area" d="'+area+'"/>'
+      +'<path class="ht-line" d="'+d+'" style="stroke-dasharray:640;stroke-dashoffset:640;"/>'
+      +'<circle class="ht-dot-ring" cx="'+lx+'" cy="'+ly+'" r="5" fill="none" stroke="#ff9ecf" stroke-width="1.6"/>'
+      +'<circle class="ht-dot" cx="'+lx+'" cy="'+ly+'" r="4.5" fill="#ff9ecf" stroke="#0c0b0f" stroke-width="2"/>'
+      +'</svg></div>';
   }
   function renderTodayCard(){
     var el=document.getElementById('hub-today'); if(!el) return;
@@ -9168,13 +9214,13 @@
       +'<div class="td-cell"><div class="td-n">'+(s.month||0)+'</div><div class="td-l">이번 달</div></div>'
       +'<div class="td-cell"><div class="td-n '+gCls+'">'+gArrow+'</div><div class="td-l">지난주 대비</div></div>'
       +'</div>';
+    /* ★ 추이 그래프 펼침 + 모션 (홈 임팩트 · 자세한 건 분석 탭) */
+    h+=hubTrendSvg(daily);
     var chips='';
     chips+='<span class="td-chip '+(ps.streak>=1?'on':'')+'">🔥 '+(ps.streak>=1?(ps.streak+'주 연속 발행'):'이번 주 글 올려 불 붙이기')+'</span>';
     if(pop) chips+='<span class="td-chip">👁 인기: '+escT(pop.title)+' '+pop.n+'</span>';
-    chips+='<button type="button" class="td-chip td-graph" id="td-graph-btn">📈 추이 그래프 보기</button>';
     if(chips) h+='<div class="td-chips">'+chips+'</div>';
-    if(!hasData) h='<div class="td-empty">📊 손님이 공개 페이지를 방문하면 <b>오늘의 현황</b>이 여기 떠요.<br><span>인스타·컨텐츠 끝에 홈 링크를 노출해보세요.</span></div>'
-      +'<button type="button" class="td-chip td-graph" id="td-graph-btn" style="margin-top:10px;">📈 추이 그래프 보기</button>';
+    if(!hasData) h='<div class="td-empty">📊 손님이 공개 페이지를 방문하면 <b>오늘의 현황</b>이 여기 떠요.<br><span>인스타·컨텐츠 끝에 홈 링크를 노출해보세요.</span></div>';
     el.className='today-card'+(cele?' cele':'');
     el.innerHTML=h;
     var gb=el.querySelector('#td-graph-btn'); if(gb) gb.onclick=function(){ if(window.__openStats) window.__openStats(); };
