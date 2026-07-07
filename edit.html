@@ -4388,7 +4388,7 @@
   <!-- 시안 B: 보면서 수정 라이브 캔버스 -->
   <div id="live-edit-ov">
     <div class="le-bar">
-      <button class="le-toptoggle" id="le-home" title="고객이 보는 실제 페이지(새 탭)">🏠 고객 홈</button>
+      <button class="le-toptoggle" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)">👁 미리보기</button>
       <button class="le-toptoggle" id="le-opmode" title="운영 모드 — 예약·분석·설정">⚙ 운영</button>
       <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" style="margin-left:auto;" disabled>↶</button>
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
@@ -10763,13 +10763,22 @@
     var dsb=document.getElementById('le-design'); if(dsb) dsb.onclick=function(){ if(window.__openDesign) window.__openDesign(); else if(window.__openHomeDeco) window.__openHomeDeco('all'); };   // 분위기 = 라이브 미리보기 dz 편집기 (구 홈꾸미기는 설정에 보존)
     // 사진 보관함은 독에서 제거(2026-06-29) — 사진은 아바타·커버·갤러리 탭할 때 보관함이 그 자리서 열림
     // 상단 우측 미리보기/편집 토글 (손님 화면 그대로 보기 ↔ 편집)
-    // 🏠 고객 홈 = 저장·공개 후 실제 손님 페이지(새 탭)로 — '미리보기' 대체
-    var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+    // 🔄 미리보기 ↔ 편집 제자리 토글 (Figma식 · 새로고침 없이 la-edit-preview로 편집표시만 on/off)
+    var lePreview=false;
+    function setLePreview(on){
+      lePreview=!!on;
+      try{ ifr.contentWindow.postMessage({type:'la-edit-preview', on:lePreview}, '*'); }catch(e){}
+      var dock=document.querySelector('#live-edit-ov .le-dock'); if(dock) dock.style.display=lePreview?'none':'';
+      var fabw=document.querySelector('#live-edit-ov .le-fabwrap'); if(fabw) fabw.style.display=lePreview?'none':'';
+      var b=document.getElementById('le-home'); if(b){ b.innerHTML=lePreview?'✏️ 편집으로':'👁 미리보기'; b.style.background=lePreview?'rgba(111,240,191,.16)':''; b.style.color=lePreview?'#6ff0bf':''; b.title=lePreview?'편집으로 돌아가기':'손님이 보는 화면 (편집 ↔ 미리보기)'; }
+    }
+    window.__leSetPreview=setLePreview;
+    var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ setLePreview(!lePreview); };
     var hc=document.getElementById('le-homeconfig'); if(hc) hc.onclick=function(){ if(window.__openDesign) window.__openDesign(); };   // 🪄 홈 구성 → 디자인 3단계
     var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영 → 편집모드 닫고 운영 화면
     var ml=document.getElementById('le-mode-label');
     var EDIT_LBL='✎ 편집 중 <span style="font-weight:400; color:var(--muted); font-size:11px;">· 톡 눌러 고치기</span>';
-    window.__leResetToggle=function(){ if(ml) ml.innerHTML=EDIT_LBL; };
+    window.__leResetToggle=function(){ if(ml) ml.innerHTML=EDIT_LBL; try{ if(window.__leSetPreview) window.__leSetPreview(false); }catch(e){} };
   })();
 })();
 </script>
