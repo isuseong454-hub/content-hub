@@ -3037,6 +3037,12 @@
     <div class="ws-pane" data-pane="sales">
     <div class="pane-intro">💰 <b>판매·예약 = 행동·전환</b> <span style="opacity:.75;">· 홈 여정 ③</span><br>마음 생긴 손님이 <b>지금 행동</b>하는 곳. 행동할 곳이 있어야 손님이 새어나가지 않아요.</div>
 
+    <div class="set" id="set-leads" style="margin-bottom:14px;">
+      <span class="ic">📇</span>
+      <span class="meta"><span class="nm">신청·문의 명단</span><span class="sb">예약·문의로 모인 연락처 · 내보내기</span></span>
+      <span class="chev">›</span>
+    </div>
+
     <div class="sl-seg" id="sl-seg">
       <button type="button" class="sl-seg-b on" data-slseg="sell">🛍 판매</button>
       <button type="button" class="sl-seg-b" data-slseg="book">📅 예약</button>
@@ -3176,23 +3182,7 @@
       <span class="chev">›</span>
     </div>
 
-    <div class="set" id="set-diag">
-      <span class="ic">🎯</span>
-      <span class="meta"><span class="nm">전환 진단</span><span class="sb">어디서 새는지 + 무엇을 고칠지 코칭</span></span>
-      <span class="chev">›</span>
-    </div>
-
-    <div class="set" id="set-leads">
-      <span class="ic">📇</span>
-      <span class="meta"><span class="nm">신청·문의 명단</span><span class="sb">모인 연락처 · 내보내기</span></span>
-      <span class="chev">›</span>
-    </div>
-
-    <div class="set" id="set-share">
-      <span class="ic">📤</span>
-      <span class="meta"><span class="nm">공유 카드</span><span class="sb">QR·링크로 손님 모으기 · 이미지 저장</span></span>
-      <span class="chev">›</span>
-    </div>
+    <!-- 전환 진단 = 방문 분석 → 퍼널 탭 아래 버튼으로 이동 / 공유 카드 = 홈·프로필에 이미 있음(중복 제거) -->
 
     <div class="note">편집기 · 추가·삭제·켜고끄기·드래그·저장 작동</div>
     </div><!-- /📊 분석·고객 pane -->
@@ -6168,7 +6158,8 @@
       +'<button type="button" class="an-ftg'+(anFunnelView==='bars'?' on':'')+'" data-fview="bars">📊 막대</button>'
       +'</div></div>'
       +'<div class="an-fdiag">'+anFunnelDiag(v,c,cv,p1,p2)+'</div>'                          // ② 피드백
-      +'<div class="an-tcat">한눈에 <span>· 잘됨 vs 손볼 것</span></div>'+anGoodBad(s);        // ③ 기능
+      +'<div class="an-tcat">한눈에 <span>· 잘됨 vs 손볼 것</span></div>'+anGoodBad(s)          // ③ 기능
+      +'<button type="button" id="an-open-diag" style="display:block;width:100%;margin-top:14px;padding:14px;border:1px solid rgba(255,158,207,.42);border-radius:13px;background:rgba(255,158,207,.09);color:#ff9ecf;font-family:var(--sans);font-size:13.5px;font-weight:800;cursor:pointer;">🎯 전환 진단 <span style="color:var(--muted);font-weight:500;">· 어디서 새는지 + 무엇을 고칠지 코칭</span> →</button>';   // ④ 전환 진단(퍼널 아래)
   }
   function anGoodBad(s){
     var cur=anCur(s), prev=anPrev(s), good=[], bad=[];
@@ -6527,6 +6518,8 @@
       document.querySelectorAll('.an-ftg').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
       anFunnelView=b.getAttribute('data-fview'); try{ anRenderFunnelBox(); }catch(_){}
     }; });
+    // 🎯 전환 진단 버튼 (퍼널 탭 아래)
+    var _diagB=document.getElementById('an-open-diag'); if(_diagB) _diagB.onclick=function(){ if(window.__openDiag) window.__openDiag(); };
     // 🎯 목표 게이지 설정/수정
     var gs=document.getElementById('an-goal-save'); if(gs) gs.onclick=function(){ var v=parseInt((document.getElementById('an-goal-in')||{}).value,10)||0; if(v>0){ try{ localStorage.setItem(anGoalKey(), v); }catch(_){} anRerenderOverview(); } };
     var ge=document.getElementById('an-goal-edit'); if(ge) ge.onclick=function(){ try{ localStorage.removeItem(anGoalKey()); }catch(_){} anRerenderOverview(); };
@@ -6590,8 +6583,7 @@
     body.innerHTML=h;
     body.querySelectorAll('[data-go]').forEach(function(g){ g.onclick=function(){ document.getElementById('diag-ov').classList.remove('open'); if(window.__switchWs) window.__switchWs(g.getAttribute('data-go')); }; });
   }
-  var setDiag=document.getElementById('set-diag');
-  if(setDiag) setDiag.onclick=function(){
+  function openDiag(){
     var ov=document.getElementById('diag-ov'); ov.classList.add('open');
     var body=document.getElementById('diag-body');
     var auth=null; try{ auth=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){}
@@ -6600,7 +6592,10 @@
     window.laRpc('li_stats',{ p_code:auth.code, p_pin_hash:auth.pinHash }).then(function(res){
       renderDiag((res&&res.ok)?res:{});
     }).catch(function(){ renderDiag({}); });
-  };
+  }
+  window.__openDiag=openDiag;
+  var setDiag=document.getElementById('set-diag');
+  if(setDiag) setDiag.onclick=openDiag;
   (function(){ var ov=document.getElementById('diag-ov'); if(!ov) return; var x=document.getElementById('diag-x'); if(x) x.onclick=function(){ ov.classList.remove('open'); }; ov.addEventListener('click',function(e){ if(e.target===ov) ov.classList.remove('open'); }); })();
 
   // ════ 단골 명단 (연락처 모으기 + CSV 내보내기) ════
@@ -9540,7 +9535,7 @@
 
   // ── 로그인 후: 편집 / 설정 모드 게이트 ──
   var gateOv=document.getElementById('mode-gate-ov');
-  function showModeGate(){ if(gateOv) gateOv.classList.add('open'); }
+  function showModeGate(){ /* 게이트 제거(2026-07-07): 로그인·편집/미리보기 닫기 후 바로 작업화면(하단 5탭+톱바)으로. 게이트 오버레이 안 띄움. 되돌리려면 이 줄을 { if(gateOv) gateOv.classList.add('open'); } 로 */ }
   function hideModeGate(){ if(gateOv) gateOv.classList.remove('open'); }
   window.__showModeGate=showModeGate;
   window.__hideModeGate=hideModeGate;
