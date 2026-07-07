@@ -1537,9 +1537,16 @@
   .le-d.main{color:var(--coral);}
   .le-d.is-on{color:var(--ink);}
   .le-d:active{transform:scale(.92);}
+  .le-d .le-d-lbl{line-height:1;}
   /* 구성 추가 = 워크스페이스 탭(은은한 강조) — 큰 그라데이션 알약 아님 */
   .le-d.le-d-primary{flex:1; background:var(--coral-soft); color:var(--coral); border-radius:12px; padding:7px 2px; font-weight:800;}
   .le-dock .le-d{flex:1;}
+  /* 토스 탭바 (2026-07-07): 구성추가 은은한 보라 강조 + 미리보기 활성(민트) */
+  .le-d.le-d-add{background:linear-gradient(180deg,rgba(143,109,255,.2),rgba(143,109,255,.08)); color:var(--violet); border:1px solid rgba(143,109,255,.3); border-radius:13px; font-weight:800; padding:6px 2px;}
+  .le-d.le-d-add .di{font-size:20px;}
+  .le-d.le-d-prev.is-on{color:var(--teal);}
+  .le-dock.previewing #le-design, .le-dock.previewing #le-add-top{opacity:.42;}
+  .le-dock.previewing #le-add-top{background:none; border-color:transparent;}
   .le-frame{flex:1; position:relative; background:#16161A; overflow:hidden;}
   .le-frame iframe{width:100%; height:100%; border:0; display:block; background:#16161A;}
   .le-load{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; z-index:2;}
@@ -1898,6 +1905,9 @@
   .an-yax{position:absolute; left:0; top:0; width:30px; height:172px; pointer-events:none;}
   .an-yax span{position:absolute; right:3px; transform:translateY(-50%); font-size:9.5px; font-weight:700; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap;}
   .an-linesvg{width:100%; height:172px; display:block;}
+  /* 고객·분석 탭 = 인라인 분석 호스트 (탭 열면 바로 뜸) */
+  .data-analytics{padding:2px 0 24px;}
+  .data-analytics .an-empty{padding:44px 20px; text-align:center; color:var(--muted); font-size:13px; line-height:1.7;}
   .an-xax{display:flex; justify-content:space-between; margin:6px 0 0 34px; padding-right:2px;}
   .an-xax span{font-size:9.5px; font-weight:600; color:var(--muted); white-space:nowrap;}
   .an-legend{display:flex; gap:14px; font-size:10.5px; color:var(--muted); margin-top:8px; padding-left:34px;}
@@ -2696,9 +2706,10 @@
     <span class="brand" aria-label="컨텐츠 허브" title="컨텐츠 허브">
       <img src="la-192.png" width="27" height="27" alt="컨텐츠 허브" style="border-radius:7px; display:block;">
     </span>
-    <span class="title" id="ws-title">운영 모드</span>
-    <button class="btn" id="top-edit" title="홈 구성 (보면서 수정)">🪄 홈 구성</button>
-    <button class="btn" id="go-customer-top">🏠 고객 홈으로</button>
+    <span class="title" id="ws-title">작업실</span>
+    <button class="btn" id="top-edit" title="홈 구성 (보면서 수정) — 안에서 👁 미리보기로 손님 화면 확인">🪄 홈 구성</button>
+    <!-- (정리 2026-07-07) '고객 홈으로'는 홈 구성→👁 미리보기와 중복이라 숨김. 되돌리려면 style 제거. 핸들러·기능은 보존. -->
+    <button class="btn" id="go-customer-top" style="display:none;" title="손님 화면은 '홈 구성 → 👁 미리보기'에서 봐요">🏠 고객 홈으로</button>
     <button class="btn primary" id="top-save" title="내 홈에 적용 (저장 + 손님 페이지 반영)">✓ 내 홈에 적용</button>
     <button class="tb-logout" id="open-settings" title="설정" aria-label="설정">⚙</button>
   </div>
@@ -3172,19 +3183,9 @@
     <!-- (설정 항목은 '설정' 탭으로 이동함 — 빈 셸 유지: 참조 안전용) -->
     <div class="ov" id="settings-ov" style="display:none;"><div class="sheet"></div></div>
 
-    <!-- 📊 분석·고객 -->
+    <!-- 📊 분석·고객 (탭 열면 바로 분석이 뜸 — 한번 더 안 눌러도 됨. 인라인 호스트) -->
     <div class="ws-pane" data-pane="data">
-    <div class="sec-h"><span class="t">분석 · 고객</span><span class="hint">방문·전환·단골</span></div>
-
-    <div class="set" id="set-stats">
-      <span class="ic">📊</span>
-      <span class="meta"><span class="nm">방문 분석</span><span class="sb">유입 · 클릭 · 체류 · 전환</span></span>
-      <span class="chev">›</span>
-    </div>
-
-    <!-- 전환 진단 = 방문 분석 → 퍼널 탭 아래 버튼으로 이동 / 공유 카드 = 홈·프로필에 이미 있음(중복 제거) -->
-
-    <div class="note">편집기 · 추가·삭제·켜고끄기·드래그·저장 작동</div>
+    <div id="data-analytics" class="data-analytics"><div class="an-empty">분석을 불러오는 중…</div></div>
     </div><!-- /📊 분석·고객 pane -->
 
   </div>
@@ -4387,20 +4388,20 @@
 
   <!-- 시안 B: 보면서 수정 라이브 캔버스 -->
   <div id="live-edit-ov">
-    <div class="le-bar">
-      <button class="le-toptoggle" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)">👁 미리보기</button>
-      <button class="le-toptoggle" id="le-opmode" title="운영 모드 — 예약·분석·설정">⚙ 운영</button>
+    <!-- 상단 = 문서 유틸리티만 (저장·실행취소). 미리보기·운영은 하단 탭바로 통합 (2026-07-07) -->
+    <div class="le-bar le-bar-slim">
+      <span class="le-autosave is-saved" id="le-autosave" title="자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">저장됨 ✓</span></span>
       <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" style="margin-left:auto;" disabled>↶</button>
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
-      <span class="le-autosave is-saved" id="le-autosave" title="자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">저장됨 ✓</span></span>
       <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
     </div>
-    <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe>
-      <div class="le-fabwrap"><button class="le-fab le-fab-sig" id="le-add-top"><span class="le-fab-p">＋</span> 구성 추가</button></div>
-    </div>
-    <!-- 하단 독 (토스식 · 아이콘 + 글자) -->
+    <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe></div>
+    <!-- 하단 탭바 (토스식) · 미리보기 · 분위기 · 구성추가 · 운영 -->
     <div class="le-dock">
-      <button class="le-d" id="le-design"><span class="di">🎨</span>분위기</button>
+      <button class="le-d le-d-prev" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
+      <button class="le-d" id="le-design" title="분위기·테마 꾸미기"><span class="di">🎨</span><span class="le-d-lbl">분위기</span></button>
+      <button class="le-d le-d-add" id="le-add-top" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성추가</span></button>
+      <button class="le-d" id="le-opmode" title="작업실로 (예약·분석·설정)"><span class="di">⚙️</span><span class="le-d-lbl">작업실</span></button>
     </div>
   </div>
 
@@ -4429,6 +4430,8 @@
       try{ window.scrollTo(0,0); }catch(e){}
       if(name==='home' && window.__renderHomeHub){ try{ window.__renderHomeHub(); }catch(_){} }
       if(name==='page' && window.__renderProfileDash){ try{ window.__renderProfileDash(); }catch(_){} }
+      if(name==='data' && window.__mountDataAnalytics){ try{ window.__mountDataAnalytics(false); }catch(_){} }   // 탭 열면 바로 분석 인라인
+
       // 고객 화면(게시물) → 편집실(내 페이지) 돌아올 때 허브 전환 모션
       if(name==='page' && prevWs==='posts' && window.__playHubTransition){ window.__playHubTransition(); }
       // (자동 진입 제거 — 탭 누를 때 안 넘어감. 진입은 편집/설정 게이트로)
@@ -6533,25 +6536,37 @@
   }
   function anRerenderOverview(){ var ov=document.querySelector('.an-pane[data-anpane="ov"]'); if(ov && window.__statsCache){ ov.innerHTML=anDashboard(window.__statsCache); wireAnalytics(); } }
   window.__wireAnalytics=wireAnalytics; window.__anDrawLine=anDrawLine;
-  function openStats(){
-    stov.classList.add('open');
-    var body=document.getElementById('stats-body');
+  // 분석을 지정한 컨테이너에 그려 넣음 (모달 대신 고객·분석 탭 인라인)
+  function loadStatsInto(body){
+    if(!body) return;
     var auth=null; try{ auth=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){}
-    if(!auth){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">로그인 후 이용할 수 있어요</div>'; return; }
-    body.innerHTML='<div style="padding:30px 0;text-align:center;color:var(--muted);font-size:13px;">불러오는 중…</div>';
+    if(!auth){ body.innerHTML='<div class="an-empty">로그인 후 이용할 수 있어요</div>'; return; }
+    body.innerHTML='<div class="an-empty">분석을 불러오는 중…</div>';
     Promise.all([
       window.laRpc('li_stats',{ p_code:auth.code, p_pin_hash:auth.pinHash }),
       window.laRpc('li_conv_posts',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; })
     ]).then(function(arr){
       var res=arr[0], cp=arr[1];
-      if(!res||!res.ok){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">집계 표를 아직 못 불러왔어요<br><span style="font-size:11.5px;">(분석 SQL 실행 여부를 확인하세요)</span></div>'; return; }
-      if(!res.views && !res.clicks){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">아직 방문 기록이 없어요<br><span style="font-size:11.5px;">공개 페이지를 열어보면 여기에 쌓여요</span></div>'; return; }
+      if(!res||!res.ok){ body.innerHTML='<div class="an-empty">집계 표를 아직 못 불러왔어요<br><span style="font-size:11.5px;">(분석 SQL 실행 여부를 확인하세요)</span></div>'; return; }
+      if(!res.views && !res.clicks){ body.innerHTML='<div class="an-empty">아직 방문 기록이 없어요<br><span style="font-size:11.5px;">공개 페이지를 열어보면 여기에 쌓여요</span></div>'; return; }
       if(cp && cp.ok && cp.conv_posts) res.conv_posts=cp.conv_posts;   // li_conv_posts SQL 있으면 병합, 없으면 무시
       body.innerHTML=renderStats(res); try{ wireAnalytics(); }catch(_){}
-    }).catch(function(){ body.innerHTML='<div style="padding:26px;text-align:center;color:var(--muted);font-size:13px;">불러오기 실패 (네트워크)</div>'; });
+    }).catch(function(){ body.innerHTML='<div class="an-empty">불러오기 실패 (네트워크)</div>'; });
+  }
+  // 고객·분석 탭 진입 시 인라인으로 분석 마운트 (force면 새로 불러옴)
+  function mountDataAnalytics(force){
+    var host=document.getElementById('data-analytics'); if(!host) return;
+    if(host.__loaded && !force) return;
+    host.__loaded=true;
+    loadStatsInto(host);
+  }
+  window.__mountDataAnalytics=mountDataAnalytics;
+  // '분석 보기' = 고객·분석 탭으로 이동 + 새로 로드 (모달 없이 한 화면)
+  function openStats(){
+    if(window.__switchWs) window.__switchWs('data');
+    mountDataAnalytics(true);
   }
   window.__openStats=openStats;
-  (function(){ var setStats=document.getElementById('set-stats'); if(setStats) setStats.onclick=openStats; })();
 
   // ════ 전환 진단 (퍼널 + 단계별 코칭) ════
   var DIAG=[
@@ -9569,7 +9584,7 @@
     // 로그인 직후 화면은 enter()에서 '고객 홈'으로 처리 (운영 깜빡임 제거) — 게이트는 고객 홈 닫을 때 뜸
     try{ if(window.__updateDraftsBtn) window.__updateDraftsBtn(); }catch(_){}
   }
-  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
+  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'작업실'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
     // 로그인 직후 → 바로 모드 선택 게이트(무엇부터 해볼까요?). 손님 미리보기는 게이트의 '고객용 화면' 타일에서. dev 자동편집(localhost)은 제외 (사용자 요청 2026-06-29: 미리보기 강제 노출 빼고 바로 게이트)
     if(!window.__devEnter){ try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){} }
     // 📸 첫 로그인 = 컨텐츠 허브 소개 6장 → 전문성 가시화 체험(데모라인) 1회 자동 · 수익화 이야기는 로그인 💰버튼 (이후 설정에서 다시 보기)
@@ -10768,9 +10783,13 @@
     function setLePreview(on){
       lePreview=!!on;
       try{ ifr.contentWindow.postMessage({type:'la-edit-preview', on:lePreview}, '*'); }catch(e){}
-      var dock=document.querySelector('#live-edit-ov .le-dock'); if(dock) dock.style.display=lePreview?'none':'';
-      var fabw=document.querySelector('#live-edit-ov .le-fabwrap'); if(fabw) fabw.style.display=lePreview?'none':'';
-      var b=document.getElementById('le-home'); if(b){ b.innerHTML=lePreview?'✏️ 편집으로':'👁 미리보기'; b.style.background=lePreview?'rgba(111,240,191,.16)':''; b.style.color=lePreview?'#6ff0bf':''; b.title=lePreview?'편집으로 돌아가기':'손님이 보는 화면 (편집 ↔ 미리보기)'; }
+      // 미리보기 토글이 이제 하단 탭바 안에 있으므로 dock을 숨기지 않음 — 편집 전용 탭(분위기·구성추가)만 흐리게
+      var dock=document.querySelector('#live-edit-ov .le-dock'); if(dock) dock.classList.toggle('previewing', lePreview);
+      var b=document.getElementById('le-home');
+      if(b){ b.classList.toggle('is-on', lePreview);
+             var ic=b.querySelector('.di'); if(ic) ic.textContent=lePreview?'✏️':'👁';
+             var lbl=b.querySelector('.le-d-lbl'); if(lbl) lbl.textContent=lePreview?'편집으로':'미리보기';
+             b.title=lePreview?'편집으로 돌아가기':'손님이 보는 화면 (편집 ↔ 미리보기)'; }
     }
     window.__leSetPreview=setLePreview;
     var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ setLePreview(!lePreview); };
