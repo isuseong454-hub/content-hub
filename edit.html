@@ -2416,6 +2416,203 @@
     </div>
   </div>
 
+  <!-- 🎬 데모 투어 (첫 로그인 온보딩 · 스크롤형) -->
+  <style>
+    #dmt-ov{position:fixed; inset:0; z-index:100050; background:#0e0c12; display:none; flex-direction:column;}
+    #dmt-ov.open{display:flex; animation:dmtFade .3s ease;}
+    @keyframes dmtFade{from{opacity:0} to{opacity:1}}
+    .dmt-topbar{flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; padding:calc(12px + env(safe-area-inset-top)) 16px 8px;}
+    .dmt-lead{font-size:13px; font-weight:800; color:#f5f2f9;}
+    .dmt-lead span{color:#9296a0; font-weight:500;}
+    .dmt-skip{font-size:12px; font-weight:700; color:#9296a0; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:99px; padding:7px 14px; cursor:pointer; font-family:var(--sans);}
+    .dmt-stage{flex:1; position:relative; overflow:hidden; max-width:460px; width:100%; margin:0 auto;}
+    #dmt-scroll{position:absolute; inset:0; overflow-y:auto; padding:6px 16px 0; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;}
+    #dmt-scroll::-webkit-scrollbar{width:0;}
+    .dmt-sec{margin-bottom:14px; transition:box-shadow .4s ease, transform .4s ease;}
+    .dmt-sec.on{transform:scale(1.012);}
+    .dmt-sec.on > *{box-shadow:0 0 0 2px #A78BFF, 0 0 26px rgba(167,139,255,.5); border-radius:16px;}
+    .dmt-pad{height:250px;}
+    .dmt-hero{background:radial-gradient(120% 80% at 70% 15%,rgba(124,63,228,.55),transparent 60%),linear-gradient(160deg,#241a3a,#140f22); border-radius:16px; padding:24px 18px 26px;}
+    .dmt-htag{font-size:10.5px; font-weight:800; letter-spacing:1px; color:#ffd77a; margin-bottom:11px;}
+    .dmt-hh{font-family:'Nanum Myeongjo',serif; font-size:22px; font-weight:800; line-height:1.3; color:#f5f2f9;}
+    .dmt-hh span{color:#ff9ecf;}
+    .dmt-hchips{display:flex; gap:6px; margin-top:14px;}
+    .dmt-hchips span{font-size:10.5px; font-weight:700; color:#c6adff; border:1px solid rgba(179,156,255,.5); border-radius:99px; padding:5px 10px;}
+    .dmt-card{background:#16131d; border:1px solid rgba(255,255,255,.08); border-radius:15px; padding:15px 14px;}
+    .dmt-ch{font-size:13.5px; font-weight:800; margin-bottom:12px; color:#f5f2f9;}
+    .dmt-stats{display:flex; gap:8px; text-align:center;} .dmt-stats>div{flex:1;}
+    .dmt-stats b{display:block; font-family:'Nanum Myeongjo',serif; font-size:21px; background:linear-gradient(95deg,#8A5CFF,#C13B9E); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+    .dmt-stats small{font-size:10px; color:#9296a0;}
+    .dmt-ba{display:flex; gap:6px; height:84px;}
+    .dmt-ba div{flex:1; border-radius:9px; display:flex; align-items:flex-end; padding:8px; font-size:9.5px; font-weight:800; color:#fff;}
+    .dmt-ba .b{background:linear-gradient(150deg,#3a3550,#241f33);}
+    .dmt-ba .a{background:linear-gradient(150deg,#7C3FE4,#C13B9E); justify-content:flex-end;}
+    .dmt-rev .st{color:#ffb740; font-size:12px; letter-spacing:2px;}
+    .dmt-rev .rt{font-family:'Nanum Myeongjo',serif; font-size:14px; font-weight:600; line-height:1.5; margin:9px 0; color:#f5f2f9;}
+    .dmt-rev .rn{font-size:11.5px; color:#9296a0;}
+    .dmt-prow{display:flex; justify-content:space-between; font-size:13px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.07); color:#f5f2f9;}
+    .dmt-prow b{color:#ff9ecf;}
+    .dmt-pbtn{margin-top:12px; text-align:center; background:linear-gradient(100deg,#b39cff,#ff9ecf); color:#0e0c12; font-size:13px; font-weight:800; border-radius:11px; padding:12px;}
+    .dmt-coach{position:absolute; left:14px; right:14px; bottom:calc(14px + env(safe-area-inset-bottom)); z-index:5; background:#1b1726; border:1px solid rgba(167,139,255,.35); border-radius:17px; padding:14px 16px; box-shadow:0 14px 36px rgba(0,0,0,.62);}
+    .dmt-co-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+    .dmt-badge{font-size:10.5px; font-weight:800; padding:3px 10px; border-radius:99px; border:1px solid; transition:.25s;}
+    .dmt-badge.in{color:#ff9a9a; border-color:rgba(255,90,90,.55); background:rgba(255,90,90,.12);}
+    .dmt-badge.cv{color:#c6adff; border-color:rgba(160,107,255,.55); background:rgba(160,107,255,.12);}
+    .dmt-badge.buy{color:#ffdd95; border-color:rgba(255,195,90,.55); background:rgba(255,195,90,.14);}
+    .dmt-step{font-size:11.5px; color:#6f6a7d; font-weight:700;}
+    .dmt-title{font-size:15.5px; font-weight:800; color:#f5f2f9;}
+    .dmt-desc{font-size:12.5px; color:#c9c3d6; line-height:1.55; margin-top:5px; min-height:34px;}
+    .dmt-hint{font-size:11px; color:#8f8a9d; margin-top:7px;}
+    .dmt-make{display:block; width:100%; margin-top:11px; text-align:center; font-size:13.5px; font-weight:800; color:#0e0c12; background:linear-gradient(100deg,#b39cff,#ff9ecf); border:none; border-radius:11px; padding:12px; cursor:pointer; font-family:var(--sans); box-shadow:0 6px 16px rgba(179,156,255,.32);}
+    .dmt-make:active{transform:scale(.98);}
+    /* 데모라인 선택 화면 */
+    .dmt-back{font-size:12px; font-weight:700; color:#9296a0; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:99px; padding:7px 13px; cursor:pointer; font-family:var(--sans);}
+    #dmt-picker{flex:1; overflow-y:auto; max-width:420px; width:100%; margin:0 auto; padding:14px 18px 24px;}
+    .dmt-pk-h{font-size:20px; font-weight:800; text-align:center; color:#f5f2f9;}
+    .dmt-pk-s{font-size:12.5px; color:#9296a0; text-align:center; margin:8px 0 20px; line-height:1.5;}
+    .dmt-pk-card{display:flex; align-items:center; gap:14px; background:#16131d; border:1px solid rgba(255,255,255,.09); border-radius:16px; padding:16px 15px; margin-bottom:12px; cursor:pointer; transition:border-color .15s, transform .1s; width:100%; text-align:left; font-family:var(--sans);}
+    .dmt-pk-card:hover{border-color:rgba(167,139,255,.5);}
+    .dmt-pk-card:active{transform:scale(.99);}
+    .dmt-pk-ico{font-size:27px; flex:0 0 auto;}
+    .dmt-pk-nm{font-size:15.5px; font-weight:800; color:#f5f2f9;}
+    .dmt-pk-sub{font-size:12px; color:#9296a0; margin-top:3px;}
+    .dmt-pk-go{margin-left:auto; color:#6f6a7d; font-size:18px;}
+    /* 유입/구매 섹션 */
+    .dmt-gal{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+    .dmt-gal i{aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#2c2c33,#3a3142); display:block;}
+    .dmt-cn{display:flex; flex-direction:column; gap:9px;}
+    .dmt-cn .r{display:flex; gap:10px; align-items:center;}
+    .dmt-cn .th{width:42px; height:42px; border-radius:8px; background:linear-gradient(135deg,#3a3142,#2c2c33); flex:0 0 auto;}
+    .dmt-cn .tx{font-size:12.5px; font-weight:600; color:#f5f2f9;}
+    .dmt-cn .tx small{display:block; font-size:10.5px; color:#9296a0; font-weight:400; margin-top:2px;}
+    .dmt-links .r{display:flex; justify-content:space-between; font-size:13px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.07); color:#f5f2f9;}
+    .dmt-links .r:last-child{border-bottom:none;}
+    .dmt-links b{color:#9296a0;}
+    .dmt-news .nw{border:1px solid rgba(255,255,255,.12); border-radius:9px; padding:11px; font-size:12px; color:#6f6a7d; margin-bottom:10px;}
+    .dmt-ev{position:relative; overflow:hidden; background:linear-gradient(100deg,#7C3FE4,#C13B9E); border-radius:15px; padding:16px; color:#fff;}
+    .dmt-ev .tg{font-size:10.5px; font-weight:800; letter-spacing:1px; opacity:.9;}
+    .dmt-ev .eh{font-size:19px; font-weight:800; margin-top:5px;}
+    .dmt-ev .eh span{color:#ffd977;}
+    .dmt-ev .es{font-size:11.5px; opacity:.9; margin-top:3px;}
+    .dmt-ev .shine{position:absolute; top:0; left:-45%; width:45%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent); animation:dmtShine 2.6s ease-in-out infinite;}
+    @keyframes dmtShine{0%{left:-45%} 55%,100%{left:120%}}
+    .dmt-cd{display:flex; gap:6px; justify-content:center; align-items:center; margin-top:4px;}
+    .dmt-cd span{background:#0e0c12; color:#fff; font-size:22px; font-weight:800; border-radius:9px; padding:9px 12px; font-variant-numeric:tabular-nums;}
+    .dmt-cd span.s{color:#ff9ecf; animation:dmtBlink 1s steps(2) infinite;}
+    .dmt-cd i{font-style:normal; color:#6f6a7d; font-size:18px;}
+    @keyframes dmtBlink{50%{opacity:.35}}
+    .dmt-gtee{display:flex; gap:12px; align-items:center; background:var(--coral-soft); border:1px solid var(--coral); border-radius:15px; padding:15px;}
+    .dmt-gtee .gi{font-size:30px; filter:drop-shadow(0 0 8px var(--coral)); flex:0 0 auto;}
+    .dmt-gtee .gt{font-size:15px; font-weight:800; color:#f5f2f9;}
+    .dmt-gtee .gd{font-size:11.5px; color:#9296a0; margin-top:2px;}
+  </style>
+  <div id="dmt-ov">
+    <div class="dmt-topbar"><div id="dmt-lead-wrap"><div class="dmt-lead">🎬 데모라인 <span>· 목표별 완성 예시</span></div></div><button class="dmt-skip" id="dmt-skip">건너뛰기</button></div>
+    <div id="dmt-picker">
+      <div class="dmt-pk-h">어떤 홈을 볼까요?</div>
+      <div class="dmt-pk-s">목표에 맞는 완성 예시를 스크롤로 안내해드려요.<br>유입 → 전환 → 구매, 원하는 걸 골라보세요.</div>
+      <button class="dmt-pk-card" data-sc="in"><span class="dmt-pk-ico">🧲</span><span><span class="dmt-pk-nm">유입 버전</span><span class="dmt-pk-sub">사람을 모으는 홈 · 콘텐츠·구독</span></span><span class="dmt-pk-go">›</span></button>
+      <button class="dmt-pk-card" data-sc="cv"><span class="dmt-pk-ico">💎</span><span><span class="dmt-pk-nm">전문성 가시화 버전</span><span class="dmt-pk-sub">믿음을 만드는 홈 · 증거·후기</span></span><span class="dmt-pk-go">›</span></button>
+      <button class="dmt-pk-card" data-sc="buy"><span class="dmt-pk-ico">🏆</span><span><span class="dmt-pk-nm">구매 버전</span><span class="dmt-pk-sub">바로 파는 홈 · 오퍼·긴박감</span></span><span class="dmt-pk-go">›</span></button>
+    </div>
+    <div class="dmt-stage" id="dmt-stage" style="display:none;">
+      <div id="dmt-scroll"><div class="dmt-pad"></div></div>
+      <div class="dmt-coach">
+        <div class="dmt-co-top"><span class="dmt-badge in" id="dmt-badge">🧲 유입</span><span class="dmt-step" id="dmt-step">1 / 5</span></div>
+        <div class="dmt-title" id="dmt-title">커버 · 후킹 문구</div>
+        <div class="dmt-desc" id="dmt-desc">3초 안에 시선을 붙잡는 대문.</div>
+        <div class="dmt-hint">↕ 손가락으로 내려서 둘러보세요</div>
+        <button class="dmt-make" id="dmt-make">✨ 이제 내 걸로 만들기</button>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var ov=document.getElementById('dmt-ov'); if(!ov) return;
+    var picker=document.getElementById('dmt-picker'), stage=document.getElementById('dmt-stage'), scroll=document.getElementById('dmt-scroll'), leadWrap=document.getElementById('dmt-lead-wrap');
+    var bBadge=document.getElementById('dmt-badge'), bStep=document.getElementById('dmt-step'), bTitle=document.getElementById('dmt-title'), bDesc=document.getElementById('dmt-desc');
+    function HERO(tag,tc,h1,h2,c1,c2){ return '<div class="dmt-hero"><div class="dmt-htag"'+(tc?' style="color:'+tc+'"':'')+'>'+tag+'</div><div class="dmt-hh">'+h1+'<br><span>'+h2+'</span></div><div class="dmt-hchips"><span>'+c1+'</span><span>'+c2+'</span></div></div>'; }
+    var SC={
+      in:{ secs:[
+        {h:HERO('✱ 헤어 콘텐츠',null,'매일 올리는 헤어 팁,','여기서 다 봐요','팔로워 8,200','영상 120개'), bt:'in',b:'🧲 유입',t:'콘텐츠 후킹',d:'유익한 콘텐츠로 "이 사람 팔로우해야겠다" 하게 만들어요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">📸 콘텐츠 갤러리</div><div class="dmt-gal"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>', bt:'in',b:'🧲 유입',t:'콘텐츠 갤러리',d:'쌓인 콘텐츠 = 더 보고 싶게 + 전문성 증명.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">🗞 카드뉴스</div><div class="dmt-cn"><div class="r"><div class="th"></div><div class="tx">앞머리 고민 완전정복<small>고객심리 · 3분</small></div></div><div class="r"><div class="th"></div><div class="tx">얼굴형별 스타일 가이드<small>브랜딩 · 5분</small></div></div></div></div>', bt:'in',b:'🧲 유입',t:'카드뉴스',d:'글마다 링크 = 모은 콘텐츠가 자산이 돼요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">🔗 채널</div><div class="dmt-links"><div class="r"><span>📷 인스타그램</span><b>›</b></div><div class="r"><span>▶ 유튜브</span><b>›</b></div><div class="r"><span>💬 카카오 상담</span><b>›</b></div></div></div>', bt:'in',b:'🧲 유입',t:'채널 링크',d:'인스타·유튜브를 한 곳에 모아 팔로우로 연결.'},
+        {h:'<div class="dmt-card dmt-news"><div class="dmt-ch">✉ 뉴스레터</div><div class="nw">이메일 주소를 입력하면…</div><div class="dmt-pbtn">구독하고 팁 받기</div></div>', bt:'cv',b:'💎 전환',t:'뉴스레터 구독',d:'구독으로 관계를 이어가며 재방문을 유도해요.'}
+      ]},
+      cv:{ secs:[
+        {h:HERO('✱ 얼굴형 전문',null,'얼굴형에 딱 맞는 머리,','제가 찾아드려요','경력 10년','누적 2,300명'), bt:'in',b:'🧲 유입',t:'커버 · 후킹 문구',d:'3초 안에 시선을 붙잡는 대문. "이 사람 뭐 하는지"가 각인돼요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">왜 믿어도 될까요</div><div class="dmt-stats"><div><b>10년</b><small>경력</small></div><div><b>2,300</b><small>누적 고객</small></div><div><b>87%</b><small>재방문</small></div></div></div>', bt:'cv',b:'💎 전환',t:'전문가 증명 · 숫자',d:'경력·누적·재방문율 = 믿고 맡길 이유를 눈에 보이게.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">전 · 후</div><div class="dmt-ba"><div class="b">BEFORE</div><div class="a">AFTER</div></div></div>', bt:'cv',b:'💎 전환',t:'전 · 후 사진',d:'말보다 강한 증거. 변화를 보여주면 신뢰가 확 올라요.'},
+        {h:'<div class="dmt-card dmt-rev"><div class="st">★★★★★</div><div class="rt">"앞머리 고민이 사라졌어요. 진짜 얼굴이 작아 보여요!"</div><div class="rn">— 김○○</div></div>', bt:'cv',b:'💎 전환',t:'고객 후기',d:'남의 경험이 결정을 만들어요 (사회적 증명).'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">가격 · 예약</div><div class="dmt-prow"><span>앞머리 컷</span><b>30,000원</b></div><div class="dmt-prow"><span>얼굴형 스타일링</span><b>120,000원</b></div><div class="dmt-pbtn">📅 지금 예약하기</div></div>', bt:'buy',b:'🏆 구매',t:'가격 · 예약',d:'투명한 가격 + 바로 예약 = 행동으로 연결.'}
+      ]},
+      buy:{ secs:[
+        {h:HERO('🔥 이번 달만','#ff9ecf','앞머리 교정','20% OFF','선착순 20명','~6/30'), bt:'buy',b:'🏆 구매',t:'오퍼 후킹',d:'첫 화면부터 "지금 사면 이득" 오퍼를 던져요.'},
+        {h:'<div class="dmt-ev"><div class="tg">🎁 첫 방문 이벤트</div><div class="eh">전 시술 <span>20% 할인</span></div><div class="es">지금 예약하면 바로 적용</div><span class="shine"></span></div>', bt:'buy',b:'🏆 구매',t:'이벤트 배너',d:'기간 한정 혜택 = 지금 행동할 이유를 만들어요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch" style="text-align:center">⏳ 마감까지</div><div class="dmt-cd"><span>02</span><i>:</i><span>47</span><i>:</i><span class="s">13</span></div></div>', bt:'buy',b:'🏆 구매',t:'카운트다운',d:'마감까지 카운트 = 미루지 못하게 (긴박감).'},
+        {h:'<div class="dmt-gtee"><div class="gi">🛡</div><div><div class="gt">100% 만족 보장</div><div class="gd">안 되면 환불 · 부담 없이</div></div></div>', bt:'buy',b:'🏆 구매',t:'보장 배지',d:'환불·만족 보장 = 구매 불안을 낮춰요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">가격 · 예약</div><div class="dmt-prow"><span>앞머리 교정</span><b>40,000원</b></div><div class="dmt-pbtn">📅 지금 예약하고 20% 받기</div></div>', bt:'buy',b:'🏆 구매',t:'가격 · 예약 CTA',d:'투명한 가격 + 바로 예약 = 결제로 연결.'}
+      ]}
+    };
+    var cur=[], raf=null, curIdx=-1;
+    function update(){
+      var els=[].slice.call(scroll.querySelectorAll('.dmt-sec')), n=els.length; if(!n) return;
+      var vc=scroll.scrollTop+scroll.clientHeight*0.34, best=0, bd=1e9;
+      els.forEach(function(el,i){ var c=el.offsetTop+el.offsetHeight/2, dd=Math.abs(c-vc); if(dd<bd){bd=dd;best=i;} });
+      if(scroll.scrollTop<26) best=0;
+      if(scroll.scrollTop+scroll.clientHeight>=scroll.scrollHeight-30) best=n-1;
+      els.forEach(function(el,i){ el.classList.toggle('on', i===best); });
+      if(best!==curIdx){ curIdx=best; var s=cur[best]; if(!s) return; bBadge.textContent=s.b; bBadge.className='dmt-badge '+s.bt; bStep.textContent=(best+1)+' / '+n; bTitle.textContent=s.t; bDesc.textContent=s.d; }
+    }
+    function showPicker(){ leadWrap.innerHTML='<div class="dmt-lead">🎬 데모라인 <span>· 목표별 완성 예시</span></div>'; picker.style.display='block'; stage.style.display='none'; }
+    function play(key){
+      var sc=SC[key]; if(!sc) return; cur=sc.secs; curIdx=-1;
+      scroll.innerHTML=sc.secs.map(function(s,i){ return '<div class="dmt-sec" data-sec="'+i+'">'+s.h+'</div>'; }).join('')+'<div class="dmt-pad"></div>';
+      leadWrap.innerHTML='<button class="dmt-back" id="dmt-back">← 다시 고르기</button>';
+      document.getElementById('dmt-back').onclick=showPicker;
+      picker.style.display='none'; stage.style.display='block'; scroll.scrollTop=0; setTimeout(update,90);
+    }
+    scroll.addEventListener('scroll', function(){ if(raf) cancelAnimationFrame(raf); raf=requestAnimationFrame(update); });
+    [].forEach.call(ov.querySelectorAll('.dmt-pk-card'), function(b){ b.onclick=function(){ play(b.getAttribute('data-sc')); }; });
+    function close(){ ov.classList.remove('open'); }
+    window.__openDemoTour=function(){ try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){} showPicker(); ov.classList.add('open'); };
+    document.getElementById('dmt-skip').onclick=close;
+    document.getElementById('dmt-make').onclick=function(){ close(); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){} var ge=document.getElementById('gate-edit'); if(ge) ge.click(); };
+  })();
+  </script>
+
+  <!-- 💰 수익화 이야기 온보딩 (첫 로그인) → CTA로 데모라인 연결 -->
+  <div id="rv-ov">
+    <button id="rv-skip">건너뛰기</button>
+    <iframe id="rv-frame" title="수익화 이야기" src="about:blank"></iframe>
+  </div>
+  <style>
+    #rv-ov{position:fixed; inset:0; z-index:100060; background:#0e0c12; display:none;}
+    #rv-ov.open{display:block; animation:rvOvFade .3s ease;}
+    @keyframes rvOvFade{from{opacity:0}to{opacity:1}}
+    #rv-ov #rv-frame{width:100%; height:100%; border:0; display:block;}
+    #rv-skip{position:absolute; top:12px; right:14px; z-index:2; font-size:12.5px; font-weight:700; color:#9296a0; background:rgba(30,26,38,.82); border:1px solid rgba(255,255,255,.12); border-radius:99px; padding:8px 15px; cursor:pointer; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+    #rv-skip:hover{color:#f5f2f9;}
+  </style>
+  <script>
+  (function(){
+    var ov=document.getElementById('rv-ov'); if(!ov) return;
+    var frame=document.getElementById('rv-frame');
+    function closeRv(){ ov.classList.remove('open'); try{ frame.src='about:blank'; }catch(e){} }
+    window.__openRevenueStory=function(){
+      try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){}
+      try{ frame.src='story.html?cb='+Date.now(); }catch(e){}
+      ov.classList.add('open');
+    };
+    document.getElementById('rv-skip').onclick=closeRv;
+    window.addEventListener('message', function(ev){
+      var d=ev&&ev.data; if(!d||typeof d!=='object') return;
+      if(d.t==='rv-start'){ closeRv(); try{ if(window.__openDemoTour) window.__openDemoTour(); }catch(e){} }
+    });
+  })();
+  </script>
+
   <div class="topbar">
     <span class="brand" aria-label="컨텐츠 허브" title="컨텐츠 허브">
       <img src="la-192.png" width="27" height="27" alt="컨텐츠 허브" style="border-radius:7px; display:block;">
@@ -2844,6 +3041,10 @@
         <span class="acct-ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.4"/><circle cx="8.5" cy="10" r="1.7"/><path d="M4.5 17.5l4.5-4 3 2.5L16 11l3.5 4"/></svg></span>
         <span class="acct-tl">사진 보관함</span>
       </div>
+      <div class="acct-tile ac-demo" id="set-demo">
+        <span class="acct-ico" style="font-size:18px;">🎬</span>
+        <span class="acct-tl">온보딩 다시 보기</span>
+      </div>
       <div class="acct-tile ac-pin" id="set-pin">
         <span class="acct-ico"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
         <span class="acct-tl">비밀번호</span>
@@ -2983,7 +3184,7 @@
         <button type="button" class="add-import-row" id="add-import-row"><span class="air-ic">📚</span><span class="air-m"><b>내 발행 글 불러오기</b><small>컨텐츠 탭에 쓴 글을 홈 카드로</small></span><span class="air-go">›</span></button>
       </div>
 
-      <div class="tcat addsec s5"><span class="addnum">5</span>구매 · 연결하기</div>
+      <div class="tcat addsec s5"><span class="addnum">5</span>연결하기<span class="addtrio t-buy">🏆 구매</span></div>
       <div class="tgrid s5">
         <div class="tpl imp" data-ic="🛒" data-nm="가격표 · 예약"><span class="tic">🛒</span><span><span class="tn">가격표 · 예약</span><span class="ts">가격 안내 + 예약·구매 버튼</span></span></div>
         <div class="tpl" data-ic="🔗" data-nm="링크 버튼"><span class="tic">🔗</span><span><span class="tn">링크 버튼</span><span class="ts">인스타·유튜브·카톡</span></span></div>
@@ -5250,7 +5451,33 @@
     '가격표 · 예약':'가격을 <b>투명하게</b> + 바로 예약 버튼 = 전환.',
     '스타일 갤러리':'작업을 <b>분류·검색</b>으로 — 손님이 원하는 걸 바로 찾아요.',
     '랜딩 요약':'맨 위 한 줄로 <b>"이 사람 뭐 하는지"</b>를 3초에 각인.',
-    '문의·신청':'이름·연락처를 <b>바로 받아</b> 놓치지 않게.'
+    '문의·신청':'이름·연락처를 <b>바로 받아</b> 놓치지 않게.',
+    '프로필 카드':'<b>누구인지</b> 한눈에 — 사진·이름·소개로 첫 신뢰.',
+    '글로우 후킹':'큰 숫자·한 단어가 <b>빛나며</b> 시선을 훅 잡아요.',
+    '인용구':'핵심 한 문장으로 <b>가치관·철학</b>을 각인.',
+    '자유 텍스트':'하고 싶은 말을 <b>내 방식대로</b> — 임팩트·인용·강조.',
+    '대표 사진 쇼케이스':'대표 작업을 <b>크게</b> — 말없이 실력을 증명.',
+    '베스트·대표 작업':'인기 컨텐츠를 크게 = <b>사회적 증명</b>.',
+    '영상':'영상은 <b>체류시간·신뢰</b>를 확 올려요.',
+    '사진':'한 장의 <b>포트폴리오</b>로 분위기·실력 전달.',
+    '하이라이트':'후기·가격·메뉴를 <b>버블로 톡톡</b> — 가볍게 훑기 좋게.',
+    '이미지 + 글':'사진 옆 설명으로 <b>맥락</b>까지 — 이해가 쉬워요.',
+    '흐르는 태그 띠':'키워드가 흐르며 <b>전문 분야</b>를 각인.',
+    '컨텐츠 갤러리':'사진을 가로로 쓱 — <b>더 보고 싶게</b>.',
+    '카드뉴스':'글마다 링크 — <b>모은 콘텐츠가 자산</b>이 돼요.',
+    '아카이브':'쌓은 글을 매거진처럼 = <b>꾸준함·전문성</b>.',
+    '링크 버튼':'인스타·유튜브·카톡을 <b>한 곳에</b> 모아 연결.',
+    '뉴스레터':'구독으로 <b>관계를 이어가며</b> 재방문 유도.',
+    '매장 · 위치':'주소·지도·길찾기로 <b>방문 문턱</b>을 낮게.',
+    '랭킹 · 가격':'TOP 메뉴+가격으로 <b>고르기 쉽게</b> — 결정 촉진.',
+    '문의 폼':'궁금증을 <b>1:1로</b> 받아 놓치지 않게.',
+    'Q&A':'걱정을 미리 풀어주면 <b>망설임이 사라져요.</b>',
+    '이벤트 배너':'기간·혜택으로 <b>지금 행동할 이유</b>를.',
+    '추천 제품':'쓰는 제품 추천 = <b>부가 수익</b> + 신뢰.',
+    '보장 배지':'환불·만족 보장으로 <b>구매 불안</b>을 낮게.',
+    '카운트다운':'마감까지 카운트 = <b>지금 사야 할 긴박감</b>.',
+    '구매 버튼':'스크롤해도 <b>항상 보이는</b> 구매 버튼 = 전환↑.',
+    'CTA 버튼':'"지금 예약" 한 번의 <b>행동으로</b> 연결.'
   };
   window.__BLOCK_BENEFIT=BLOCK_BENEFIT;
   // 템플릿 선택 → 전환 흐름 리스트에 새 행 추가 (맨 아래)
@@ -5324,9 +5551,9 @@
     '문의·신청':'<div class="m-row" style="border:none"><span style="color:var(--muted)">이름 · 연락처 입력칸</span></div><span class="m-cta">신청하기</span>',
     '문의 폼':'<div class="m-row" style="border:none"><span style="color:var(--muted)">이름 · 이메일 · 메시지</span></div><span class="m-cta">보내기</span>',
     '프로필 카드':'<div style="text-align:center;padding:6px 0"><div style="width:58px;height:58px;border-radius:50%;margin:0 auto 9px;background:linear-gradient(135deg,#8A5CFF,#C13B9E);display:flex;align-items:center;justify-content:center;font-size:25px;animation:addPop .5s .1s both">👤</div><div style="font-size:14px;font-weight:800;color:var(--ink)">유수 디자이너</div><div style="font-size:11px;color:var(--muted);margin-top:3px">압구정 앞머리 전문 · 10년차</div></div>',
-    '자유 텍스트':'<div style="text-align:center;padding:8px 4px"><div style="font-family:Nanum Myeongjo,serif;font-size:18px;font-weight:800;color:var(--ink);line-height:1.4">작은 변화가<br><span style="color:var(--coral)">큰 차이</span>를 만듭니다</div><div style="font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.6">제목·설명을 자유롭게 — 임팩트·인용·강조바</div></div>',
+    '자유 텍스트':'<div style="text-align:center;padding:8px 4px"><div style="font-family:Nanum Myeongjo,serif;font-size:18px;font-weight:800;color:var(--ink);line-height:1.4">작은 변화가<br><span style="color:var(--coral);display:inline-block;animation:addPop .55s .35s both">큰 차이</span>를 만듭니다</div><div style="font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.6;animation:addFadeUp .5s .5s both">제목·설명을 자유롭게 — 임팩트·인용·강조바</div></div>',
     '하이라이트':'<div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;padding:8px 2px"><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .1s both">⭐ 후기 200+</span><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .22s both">💰 가격표</span><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .34s both">📋 메뉴</span><span style="font-size:11.5px;font-weight:700;color:var(--coral);background:var(--coral-soft);border-radius:99px;padding:7px 13px;animation:addPop .5s .46s both">📍 위치</span></div>',
-    '이미지 + 글':'<div style="display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:11px;overflow:hidden;padding:10px"><div style="flex:0 0 40%;aspect-ratio:1;border-radius:9px;background:linear-gradient(135deg,#8A5CFF,#C13B9E)"></div><div style="flex:1"><div style="font-size:13px;font-weight:800;color:var(--ink)">시술 과정</div><div style="font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5">사진 옆에 설명을 나란히 — 좌우 분할</div></div></div>',
+    '이미지 + 글':'<div style="display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:11px;overflow:hidden;padding:10px"><div style="flex:0 0 40%;aspect-ratio:1;border-radius:9px;background:linear-gradient(135deg,#8A5CFF,#C13B9E);animation:addPop .5s .1s both"></div><div style="flex:1;animation:addFadeUp .5s .3s both"><div style="font-size:13px;font-weight:800;color:var(--ink)">시술 과정</div><div style="font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5">사진 옆에 설명을 나란히 — 좌우 분할</div></div></div>',
     '흐르는 태그 띠':'<div style="overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)"><div style="display:flex;gap:14px;width:max-content;animation:addRvSlide 8s linear infinite"><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#앞머리교정</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#볼륨매직</span><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#레이어드컷</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#여신머리</span><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#앞머리교정</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#볼륨매직</span><span style="font-size:13px;font-weight:800;color:var(--coral);white-space:nowrap">#레이어드컷</span><span style="font-size:13px;font-weight:800;color:var(--ink);white-space:nowrap">#여신머리</span></div></div>',
     '아카이브':'<div style="display:flex;flex-direction:column;gap:7px"><div style="display:flex;gap:9px;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:10px;padding:9px;animation:addFadeUp .5s .1s both"><div style="flex:0 0 44px;height:44px;border-radius:7px;background:linear-gradient(135deg,#2c2c33,#3a3142)"></div><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--ink)">앞머리 고민 완전정복</div><div style="font-size:10px;color:var(--muted);margin-top:3px">고객심리 · 3분 읽기</div></div></div><div style="display:flex;gap:9px;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:10px;padding:9px;animation:addFadeUp .5s .24s both"><div style="flex:0 0 44px;height:44px;border-radius:7px;background:linear-gradient(135deg,#3a3142,#2c2c33)"></div><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--ink)">얼굴형별 스타일 가이드</div><div style="font-size:10px;color:var(--muted);margin-top:3px">브랜딩 · 5분 읽기</div></div></div></div>',
     'Q&A':'<div style="display:flex;flex-direction:column;gap:8px"><div style="animation:addFadeUp .5s .1s both"><span style="display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:12px 12px 12px 3px;padding:8px 11px;font-size:12px;color:var(--ink)"><b style="color:var(--coral)">Q</b> 나랑 안 어울리면요?</span></div><div style="text-align:right;animation:addFadeUp .5s .3s both"><span style="display:inline-block;background:linear-gradient(95deg,#3D7BFF,#9B3DFF);color:#fff;border-radius:12px 12px 3px 12px;padding:8px 11px;font-size:12px">얼굴형 진단 후 맞춤 설계라 안심!</span></div></div>',
@@ -5673,6 +5900,8 @@
   // 설정의 사진 보관함 진입
   var setVault=document.getElementById('set-vault');
   if(setVault) setVault.onclick=function(){ openVault(null); };
+  var setDemo=document.getElementById('set-demo');
+  if(setDemo) setDemo.onclick=function(){ if(window.__openRevenueStory) window.__openRevenueStory(); else if(window.__openDemoTour) window.__openDemoTour(); };
 
   // ════ 방문 분석 대시보드 ════
   var stov=document.getElementById('stats-ov');
@@ -9270,6 +9499,8 @@
   function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
     // 로그인 직후 → 바로 모드 선택 게이트(무엇부터 해볼까요?). 손님 미리보기는 게이트의 '고객용 화면' 타일에서. dev 자동편집(localhost)은 제외 (사용자 요청 2026-06-29: 미리보기 강제 노출 빼고 바로 게이트)
     if(!window.__devEnter){ try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){} }
+    // 💰 첫 로그인 = 수익화 이야기 → (CTA) 데모라인 1회 자동 (이후 설정에서 다시 보기)
+    try{ if(!localStorage.getItem('ch-onboard-v2') && window.__openRevenueStory){ setTimeout(function(){ try{ window.__openRevenueStory(); }catch(_){} }, 500); } }catch(_){}
   }
 
   // 분야 선택 제거 — 로그인은 코드+PIN만. selInd=null이면 아래 분야 일치 검사들이 자동 통과
