@@ -395,6 +395,10 @@
   .lg-join:active{transform:scale(.99);}
   .lg-about{display:inline-block; text-align:center; margin:8px auto 0; padding:5px 12px; font-size:11.5px; font-weight:600; color:var(--muted); text-decoration:none;}
   .lg-about:active{transform:scale(.98);}
+  .lg-about-row{display:flex; gap:6px; justify-content:center; align-items:center; margin-top:8px; flex-wrap:wrap;}
+  .lg-about-row .lg-about{margin:0;}
+  .lg-money{font-family:var(--sans); cursor:pointer; border:1px solid rgba(255,215,122,.42); border-radius:99px; background:rgba(255,215,122,.1); color:#ffd977; font-weight:700;}
+  .lg-money:active{transform:scale(.98);}
   /* 회원가입 신청 폼 */
   #join-ov{align-items:flex-start; overflow-y:auto;}
   .join-dlg{max-width:400px; max-height:none; margin:0 auto; text-align:left;}
@@ -2188,7 +2192,10 @@
       <button class="login-btn" id="lg-next">다음 →</button>
       <button type="button" class="lg-switch" id="lg-backlogin">← 이미 PIN이 있어요 (로그인)</button>
       <button type="button" class="lg-join" id="lg-join">처음이신가요? <b>회원가입 문의 →</b></button>
-      <a class="lg-about" href="index.html?intro=1" target="_blank" rel="noopener">컨텐츠 허브란?</a>
+      <div class="lg-about-row">
+        <a class="lg-about" href="index.html?intro=1" target="_blank" rel="noopener">컨텐츠 허브란?</a>
+        <button type="button" class="lg-about lg-money" id="lg-money">💰 수익화 이야기</button>
+      </div>
 
       <!-- 첫 로그인: 본인이 PIN 직접 설정 -->
       <div id="lg-setpin">
@@ -2465,18 +2472,26 @@
     .dmt-hint{font-size:11px; color:#8f8a9d; margin-top:7px;}
     .dmt-make{display:block; width:100%; margin-top:11px; text-align:center; font-size:13.5px; font-weight:800; color:#0e0c12; background:linear-gradient(100deg,#b39cff,#ff9ecf); border:none; border-radius:11px; padding:12px; cursor:pointer; font-family:var(--sans); box-shadow:0 6px 16px rgba(179,156,255,.32);}
     .dmt-make:active{transform:scale(.98);}
+    .dmt-more{display:block; width:100%; margin-top:8px; text-align:center; font-size:12.5px; font-weight:700; color:#9296a0; background:none; border:none; cursor:pointer; font-family:var(--sans); padding:5px;}
+    .dmt-more:active{transform:scale(.99);}
     /* 데모라인 선택 화면 */
     .dmt-back{font-size:12px; font-weight:700; color:#9296a0; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:99px; padding:7px 13px; cursor:pointer; font-family:var(--sans);}
-    #dmt-picker{flex:1; overflow-y:auto; max-width:420px; width:100%; margin:0 auto; padding:14px 18px 24px;}
-    .dmt-pk-h{font-size:20px; font-weight:800; text-align:center; color:#f5f2f9;}
-    .dmt-pk-s{font-size:12.5px; color:#9296a0; text-align:center; margin:8px 0 20px; line-height:1.5;}
-    .dmt-pk-card{display:flex; align-items:center; gap:14px; background:#16131d; border:1px solid rgba(255,255,255,.09); border-radius:16px; padding:16px 15px; margin-bottom:12px; cursor:pointer; transition:border-color .15s, transform .1s; width:100%; text-align:left; font-family:var(--sans);}
+    #dmt-picker{flex:1; overflow-y:auto; max-width:540px; width:100%; margin:0 auto; padding:26px 18px 24px; display:flex; flex-direction:column; justify-content:center;}
+    .dmt-pk-h{font-size:21px; font-weight:800; text-align:center; color:#f5f2f9;}
+    .dmt-pk-s{font-size:12.5px; color:#9296a0; text-align:center; margin:8px 0 22px; line-height:1.55;}
+    .dmt-pk-s b{color:#c6adff; font-weight:700;}
+    .dmt-pk-row{display:flex; gap:10px; align-items:stretch;}
+    .dmt-pk-card{flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:4px; background:#16131d; border:1px solid rgba(255,255,255,.09); border-radius:16px; padding:18px 8px 15px; cursor:pointer; transition:border-color .15s, transform .1s; text-align:center; font-family:var(--sans); position:relative;}
     .dmt-pk-card:hover{border-color:rgba(167,139,255,.5);}
-    .dmt-pk-card:active{transform:scale(.99);}
-    .dmt-pk-ico{font-size:27px; flex:0 0 auto;}
-    .dmt-pk-nm{font-size:15.5px; font-weight:800; color:#f5f2f9;}
-    .dmt-pk-sub{font-size:12px; color:#9296a0; margin-top:3px;}
-    .dmt-pk-go{margin-left:auto; color:#6f6a7d; font-size:18px;}
+    .dmt-pk-card:active{transform:scale(.98);}
+    .dmt-pk-card.seen{border-color:rgba(111,240,191,.4); background:#141b18;}
+    .dmt-pk-ico{font-size:30px;}
+    .dmt-pk-nm{font-size:13.5px; font-weight:800; color:#f5f2f9; line-height:1.2;}
+    .dmt-pk-sub{font-size:11px; color:#9296a0;}
+    .dmt-pk-done{display:none; font-size:10px; font-weight:800; color:#6ff0bf; margin-top:3px;}
+    .dmt-pk-card.seen .dmt-pk-done{display:block;}
+    .dmt-pk-finish{margin-top:22px; width:100%; text-align:center; font-size:14px; font-weight:800; color:#0e0c12; background:linear-gradient(100deg,#b39cff,#ff9ecf); border:none; border-radius:13px; padding:14px; cursor:pointer; font-family:var(--sans); box-shadow:0 8px 20px rgba(179,156,255,.3);}
+    .dmt-pk-finish:active{transform:scale(.99);}
     /* 유입/구매 섹션 */
     .dmt-gal{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
     .dmt-gal i{aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#2c2c33,#3a3142); display:block;}
@@ -2509,11 +2524,14 @@
   <div id="dmt-ov">
     <div class="dmt-topbar"><div id="dmt-lead-wrap"><div class="dmt-lead">🎬 데모라인 <span>· 목표별 완성 예시</span></div></div><button class="dmt-skip" id="dmt-skip">건너뛰기</button></div>
     <div id="dmt-picker">
-      <div class="dmt-pk-h">어떤 홈을 볼까요?</div>
-      <div class="dmt-pk-s">목표에 맞는 완성 예시를 스크롤로 안내해드려요.<br>유입 → 전환 → 구매, 원하는 걸 골라보세요.</div>
-      <button class="dmt-pk-card" data-sc="in"><span class="dmt-pk-ico">🧲</span><span><span class="dmt-pk-nm">유입 버전</span><span class="dmt-pk-sub">사람을 모으는 홈 · 콘텐츠·구독</span></span><span class="dmt-pk-go">›</span></button>
-      <button class="dmt-pk-card" data-sc="cv"><span class="dmt-pk-ico">💎</span><span><span class="dmt-pk-nm">전문성 가시화 버전</span><span class="dmt-pk-sub">믿음을 만드는 홈 · 증거·후기</span></span><span class="dmt-pk-go">›</span></button>
-      <button class="dmt-pk-card" data-sc="buy"><span class="dmt-pk-ico">🏆</span><span><span class="dmt-pk-nm">구매 버전</span><span class="dmt-pk-sub">바로 파는 홈 · 오퍼·긴박감</span></span><span class="dmt-pk-go">›</span></button>
+      <div class="dmt-pk-h">✨ 전문성 가시화, 체험해보세요</div>
+      <div class="dmt-pk-s">우리의 <b>메인 기술</b>이에요. 목표별로 <b>하나씩 눌러</b> 완성된 홈을 둘러보세요.</div>
+      <div class="dmt-pk-row">
+        <button class="dmt-pk-card" data-sc="in"><span class="dmt-pk-ico">🧲</span><span class="dmt-pk-nm">유입</span><span class="dmt-pk-sub">사람 모으기</span><span class="dmt-pk-done">✓ 체험함</span></button>
+        <button class="dmt-pk-card" data-sc="cv"><span class="dmt-pk-ico">💎</span><span class="dmt-pk-nm">전문성<br>가시화</span><span class="dmt-pk-sub">믿음 만들기</span><span class="dmt-pk-done">✓ 체험함</span></button>
+        <button class="dmt-pk-card" data-sc="buy"><span class="dmt-pk-ico">🏆</span><span class="dmt-pk-nm">구매</span><span class="dmt-pk-sub">바로 팔기</span><span class="dmt-pk-done">✓ 체험함</span></button>
+      </div>
+      <button class="dmt-pk-finish" id="dmt-pk-finish">체험 다 봤어요 · 내 걸로 시작하기 →</button>
     </div>
     <div class="dmt-stage" id="dmt-stage" style="display:none;">
       <div id="dmt-scroll"><div class="dmt-pad"></div></div>
@@ -2523,6 +2541,7 @@
         <div class="dmt-desc" id="dmt-desc">3초 안에 시선을 붙잡는 대문.</div>
         <div class="dmt-hint">↕ 손가락으로 내려서 둘러보세요</div>
         <button class="dmt-make" id="dmt-make">✨ 이제 내 걸로 만들기</button>
+        <button class="dmt-more" id="dmt-more">← 다른 것도 체험하기</button>
       </div>
     </div>
   </div>
@@ -2568,8 +2587,9 @@
     function showPicker(){ leadWrap.innerHTML='<div class="dmt-lead">🎬 데모라인 <span>· 목표별 완성 예시</span></div>'; picker.style.display='block'; stage.style.display='none'; }
     function play(key){
       var sc=SC[key]; if(!sc) return; cur=sc.secs; curIdx=-1;
+      var _c=ov.querySelector('.dmt-pk-card[data-sc="'+key+'"]'); if(_c) _c.classList.add('seen');
       scroll.innerHTML=sc.secs.map(function(s,i){ return '<div class="dmt-sec" data-sec="'+i+'">'+s.h+'</div>'; }).join('')+'<div class="dmt-pad"></div>';
-      leadWrap.innerHTML='<button class="dmt-back" id="dmt-back">← 다시 고르기</button>';
+      leadWrap.innerHTML='<button class="dmt-back" id="dmt-back">← 다른 것도 체험하기</button>';
       document.getElementById('dmt-back').onclick=showPicker;
       picker.style.display='none'; stage.style.display='block'; scroll.scrollTop=0; setTimeout(update,90);
     }
@@ -2579,6 +2599,8 @@
     window.__openDemoTour=function(){ try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){} showPicker(); ov.classList.add('open'); };
     document.getElementById('dmt-skip').onclick=close;
     document.getElementById('dmt-make').onclick=function(){ close(); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){} var ge=document.getElementById('gate-edit'); if(ge) ge.click(); };
+    var _more=document.getElementById('dmt-more'); if(_more) _more.onclick=showPicker;
+    var _fin=document.getElementById('dmt-pk-finish'); if(_fin) _fin.onclick=function(){ close(); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){} var ge=document.getElementById('gate-edit'); if(ge) ge.click(); };
   })();
   </script>
 
@@ -2601,15 +2623,72 @@
     var frame=document.getElementById('rv-frame');
     function closeRv(){ ov.classList.remove('open'); try{ frame.src='about:blank'; }catch(e){} }
     window.__openRevenueStory=function(){
-      try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){}
       try{ frame.src='story.html?cb='+Date.now(); }catch(e){}
       ov.classList.add('open');
     };
     document.getElementById('rv-skip').onclick=closeRv;
+    var mb=document.getElementById('lg-money'); if(mb) mb.onclick=function(){ window.__openRevenueStory(); };
     window.addEventListener('message', function(ev){
       var d=ev&&ev.data; if(!d||typeof d!=='object') return;
-      if(d.t==='rv-start'){ closeRv(); try{ if(window.__openDemoTour) window.__openDemoTour(); }catch(e){} }
+      if(d.t==='rv-start'){ closeRv(); }
     });
+  })();
+  </script>
+
+  <!-- 📸 컨텐츠 허브 소개 온보딩 (첫 로그인, 6장) → 전문성 가시화 체험 -->
+  <div id="ob-ov">
+    <button id="ob-skip">건너뛰기</button>
+    <div class="ob-stage"><div class="ob-track" id="ob-track"></div></div>
+    <div class="ob-bar">
+      <button class="ob-nav" id="ob-prev">← 이전</button>
+      <div class="ob-dots" id="ob-dots"></div>
+      <button class="ob-nav pri" id="ob-next">다음 →</button>
+    </div>
+  </div>
+  <style>
+    #ob-ov{position:fixed; inset:0; z-index:100055; background:#0e0c12; display:none; flex-direction:column;}
+    #ob-ov.open{display:flex; animation:obFade .3s ease;}
+    @keyframes obFade{from{opacity:0}to{opacity:1}}
+    #ob-skip{position:absolute; top:calc(12px + env(safe-area-inset-top)); right:14px; z-index:3; font-size:12.5px; font-weight:700; color:#9296a0; background:rgba(30,26,38,.82); border:1px solid rgba(255,255,255,.12); border-radius:99px; padding:8px 15px; cursor:pointer; font-family:var(--sans); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+    #ob-skip:hover{color:#f5f2f9;}
+    .ob-stage{flex:1; overflow:hidden; display:flex;}
+    .ob-track{display:flex; width:100%; height:100%; transition:transform .35s cubic-bezier(.2,.9,.25,1);}
+    .ob-slide{flex:0 0 100%; height:100%; display:flex; align-items:center; justify-content:center; padding:calc(52px + env(safe-area-inset-top)) 16px 8px;}
+    .ob-slide img{max-width:100%; max-height:100%; object-fit:contain; border-radius:14px; box-shadow:0 18px 44px -18px rgba(0,0,0,.7);}
+    .ob-bar{flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 18px calc(16px + env(safe-area-inset-bottom)); max-width:560px; width:100%; margin:0 auto;}
+    .ob-nav{font-size:13.5px; font-weight:700; color:#c9c3d6; background:#1d1926; border:1px solid rgba(255,255,255,.12); border-radius:11px; padding:11px 16px; cursor:pointer; font-family:var(--sans);}
+    .ob-nav.pri{background:linear-gradient(100deg,#b39cff,#ff9ecf); color:#0e0c12; border:none; font-weight:800; min-width:132px;}
+    .ob-nav:active{transform:scale(.98);}
+    .ob-dots{display:flex; gap:7px;}
+    .ob-dot{width:8px; height:8px; border-radius:50%; background:#3a3550; border:none; padding:0; cursor:pointer; transition:.2s;}
+    .ob-dot.on{background:linear-gradient(100deg,#b39cff,#ff9ecf); transform:scale(1.3);}
+  </style>
+  <script>
+  (function(){
+    var ov=document.getElementById('ob-ov'); if(!ov) return;
+    var IMGS=['onboard1.jpg','onboard2.jpg','onboard3.jpg','onboard4.jpg','onboard5.jpg','onboard6.jpg'];
+    var track=document.getElementById('ob-track'), dots=document.getElementById('ob-dots');
+    var prev=document.getElementById('ob-prev'), next=document.getElementById('ob-next');
+    var idx=0, N=IMGS.length, built=false;
+    function build(){
+      if(built) return; built=true;
+      track.innerHTML=IMGS.map(function(s){ return '<div class="ob-slide"><img src="'+s+'?cb='+Date.now()+'" alt="온보딩"></div>'; }).join('');
+      dots.innerHTML=IMGS.map(function(_,i){ return '<button class="ob-dot" data-i="'+i+'" aria-label="'+(i+1)+'번째"></button>'; }).join('');
+      [].forEach.call(dots.children, function(d){ d.onclick=function(){ go(+d.getAttribute('data-i')); }; });
+    }
+    function closeOb(){ ov.classList.remove('open'); }
+    function toDemo(){ closeOb(); try{ if(window.__openDemoTour) window.__openDemoTour(); }catch(e){} }
+    function go(i){
+      idx=Math.max(0, Math.min(N-1, i));
+      track.style.transform='translateX(-'+(idx*100)+'%)';
+      [].forEach.call(dots.children, function(d,j){ d.classList.toggle('on', j===idx); });
+      prev.style.visibility = idx===0 ? 'hidden' : 'visible';
+      next.textContent = idx===N-1 ? '✨ 전문성 가시화 체험 →' : '다음 →';
+    }
+    window.__openOnboardIntro=function(){ try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){} build(); ov.classList.add('open'); go(0); };
+    prev.onclick=function(){ go(idx-1); };
+    next.onclick=function(){ if(idx===N-1) toDemo(); else go(idx+1); };
+    document.getElementById('ob-skip').onclick=toDemo;
   })();
   </script>
 
@@ -5901,7 +5980,7 @@
   var setVault=document.getElementById('set-vault');
   if(setVault) setVault.onclick=function(){ openVault(null); };
   var setDemo=document.getElementById('set-demo');
-  if(setDemo) setDemo.onclick=function(){ if(window.__openRevenueStory) window.__openRevenueStory(); else if(window.__openDemoTour) window.__openDemoTour(); };
+  if(setDemo) setDemo.onclick=function(){ if(window.__openOnboardIntro) window.__openOnboardIntro(); else if(window.__openDemoTour) window.__openDemoTour(); };
 
   // ════ 방문 분석 대시보드 ════
   var stov=document.getElementById('stats-ov');
@@ -9499,8 +9578,8 @@
   function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'운영'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
     // 로그인 직후 → 바로 모드 선택 게이트(무엇부터 해볼까요?). 손님 미리보기는 게이트의 '고객용 화면' 타일에서. dev 자동편집(localhost)은 제외 (사용자 요청 2026-06-29: 미리보기 강제 노출 빼고 바로 게이트)
     if(!window.__devEnter){ try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){} }
-    // 💰 첫 로그인 = 수익화 이야기 → (CTA) 데모라인 1회 자동 (이후 설정에서 다시 보기)
-    try{ if(!localStorage.getItem('ch-onboard-v2') && window.__openRevenueStory){ setTimeout(function(){ try{ window.__openRevenueStory(); }catch(_){} }, 500); } }catch(_){}
+    // 📸 첫 로그인 = 컨텐츠 허브 소개 6장 → 전문성 가시화 체험(데모라인) 1회 자동 · 수익화 이야기는 로그인 💰버튼 (이후 설정에서 다시 보기)
+    try{ if(!localStorage.getItem('ch-onboard-v2') && window.__openOnboardIntro){ setTimeout(function(){ try{ window.__openOnboardIntro(); }catch(_){} }, 500); } }catch(_){}
   }
 
   // 분야 선택 제거 — 로그인은 코드+PIN만. selInd=null이면 아래 분야 일치 검사들이 자동 통과
