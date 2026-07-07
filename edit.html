@@ -8043,7 +8043,7 @@
     if(d.catColors && typeof d.catColors==='object'){ catColorsData = d.catColors; } else { catColorsData = {}; }
     if(d.archiveView){ archiveView = d.archiveView; }
     // 1회 마이그(2026-06-30): 옛 기본 'cards'(그리드)→'매거진'(list). 의도적 선택이 아니라 옛 기본값이었음. 플래그로 한 번만(다시 그리드 고르면 유지).
-    try{ if(archiveView==='cards' && !localStorage.getItem('cm-arcview-mag-mig')){ archiveView='list'; localStorage.setItem('cm-arcview-mag-mig','1'); } }catch(_){}
+    /* cards→매거진 자동 마이그 제거 (2026-07-07): 카드 그리드가 대표를 지원하므로 카드 선택 유지 */
     try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){}
     try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(_){}
     if(d.profile){ sv('pf-name',d.profile.name); sv('pf-bio',d.profile.bio); sv('pf-handle',d.profile.handle); sv('pf-tagline',d.profile.tagline||''); sv('pf-headline',d.profile.headline||''); try{ if(window.__reviewsSet) window.__reviewsSet(d.profile.reviews||[]); }catch(_){} try{ if(window.__ctaLoad) window.__ctaLoad(d.profile.cta||{}); }catch(_){}
@@ -8389,8 +8389,7 @@
         +'</div>';
     }).join('');
     box.querySelectorAll('[data-pfeat]').forEach(function(s){ s.onclick=function(e){ e.stopPropagation(); var p=postById(s.getAttribute('data-pfeat')); if(!p) return; if(!p.featured){ if(featCntInCat(p.cat)>=3){ try{ notify('한 유형에 대표는 3개까지예요'); }catch(_){} return; } p.featured=true;
-        // 대표 누르면 자동 매거진 보기로 (사용자: "대표 = 매거진"). cards일 때만 전환.
-        try{ if(window.__archiveView && window.__archiveView.get && window.__archiveView.get()==='cards'){ window.__archiveView.set('list'); document.querySelectorAll('#arcview-seg .av-tab').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-av')==='list'); }); try{ notify('★ 대표 → 매거진 보기로 전환됐어요'); }catch(_){} } }catch(_){}
+        // 대표는 카드(그리드)에서도 큰 카드로 지원 → 자동 매거진 전환 제거 (2026-07-07)
       } else p.featured=false; renderPostsLibrary(); }; });
     box.querySelectorAll('[data-plink]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); copyPostLink(b.getAttribute('data-plink')); }; });
     box.querySelectorAll('[data-pedit]').forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); openPostEdit(b.getAttribute('data-pedit')); }; });

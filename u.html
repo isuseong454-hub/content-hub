@@ -1203,6 +1203,7 @@
   .arc-card .arc-cover{height:104px; font-size:20px;}
   .arc-card .arc-body{padding:11px 12px 13px;}
   .arc-card .arc-h{font-size:14px; line-height:1.3;}
+  .arc-nocov{background:linear-gradient(140deg, color-mix(in srgb, var(--cc,var(--coral)) 42%, var(--surface)), color-mix(in srgb, var(--cc,var(--coral)) 13%, var(--surface))) !important; display:flex; align-items:flex-start;}
   .arc-more{text-align:center; margin-top:14px;}
   .arc-more a{font-size:13px; color:var(--coral); text-decoration:none; font-weight:500;}
   /* ★ 컨텐츠 리스트뷰 = 대표 매거진 + 유형 컬러 리스트 */
@@ -1251,7 +1252,9 @@
   .svcf-btn{flex:0 0 auto; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:13px; font-weight:700; padding:11px 16px; border-radius:12px;}
   .svcm-wrap{display:flex; flex-wrap:wrap; gap:8px;} .svcm{display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:999px; background:var(--coral-soft); border:1px solid var(--hair); text-decoration:none; color:var(--on-strong); font-size:13px;} .svcm b{color:var(--coral);}
   /* 후기 — 카드/인용/스포트라이트 */
-  .rv-cards{display:flex; flex-direction:column; gap:10px;}
+  .rv-cards{display:flex; gap:11px; overflow-x:auto; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; padding-bottom:6px; scrollbar-width:none;}
+  .rv-cards::-webkit-scrollbar{height:0;}
+  .rv-cards > .rv-card{flex:0 0 82%; scroll-snap-align:start;}
   .rv-card{background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:14px;}
   .rv-card-top{display:flex; align-items:center; gap:9px; margin-bottom:9px;}
   .rv-av{width:30px; height:30px; border-radius:50%; flex:0 0 auto; background:var(--coral-fill,var(--coral)); color:var(--on-coral); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;}
@@ -3770,7 +3773,7 @@
     var cats=[]; live.forEach(function(p){ var c=(p.cat||'').trim(); if(c && cats.indexOf(c)<0) cats.push(c); });
     var ARC_PAL=['#7DCF96','#7CB0FF','#E3B563','#FF9DBA','#B9A6FF','#5FD0C0','#FF9E7A','#A6B0BC'];   // 유형 색 팔레트
     function catColor(c){ c=(c||'').trim(); if(!c) return ARC_PAL[7]; if(window.__catColors&&window.__catColors[c]) return window.__catColors[c]; var h=0; for(var i=0;i<c.length;i++) h=(h*31+c.charCodeAt(i))>>>0; return ARC_PAL[h%7]; }   // 저장색 우선, 없으면 이름으로 자동(회색=index7은 '분류없음' 전용이라 자동에선 제외)
-    function covHtml(p, cls){ return p.cover ? '<div class="'+cls+'" style="background-image:url('+esc(p.cover)+');background-size:cover;background-position:center;">'+(p.cat?'<span class="arc-cat">'+esc(p.cat)+'</span>':'')+'</div>' : '<div class="'+cls+'">'+(p.cat?'<span class="arc-cat">'+esc(p.cat)+'</span>':'')+'▦</div>'; }
+    function covHtml(p, cls){ var cat=p.cat?'<span class="arc-cat">'+esc(p.cat)+'</span>':''; return p.cover ? '<div class="'+cls+'" style="background-image:url('+esc(p.cover)+');background-size:cover;background-position:center;">'+cat+'</div>' : '<div class="'+cls+' arc-nocov" style="--cc:'+catColor(p.cat)+';">'+cat+'</div>'; }
     function item(p){
       var head='<div data-pid="'+esc(p.id)+'" data-cat="'+esc(p.cat||'')+'" role="link" tabindex="0"';
       if(view==='photo') return head+' class="arc-photo-cell">'+covHtml(p,'arc-photo-cov')+'</div>';
@@ -3778,16 +3781,17 @@
     }
     var chips='<span class="chip on" data-cat="">전체</span>'+cats.map(function(c){ return '<span class="chip" data-cat="'+esc(c)+'">'+esc(c)+'</span>'; }).join('');
     var bodyHtml;
+    var feats=[], rest=[]; live.forEach(function(p){ if(p.featured) feats.push(p); else rest.push(p); });   // 대표 = 큰 매거진 카드 (list·grid 공용)
+    var fh=feats.map(function(feat){ var fcov=feat.cover?' style="background-image:url('+esc(feat.cover)+');background-size:cover;background-position:center;"':'';
+      return '<div data-pid="'+esc(feat.id)+'" data-cat="'+esc(feat.cat||'')+'" role="link" tabindex="0" class="arc-mag"><div class="arc-mag-ph"'+fcov+'></div><div class="arc-mag-grad"></div><span class="arc-mag-tag">★ 대표</span><div class="arc-mag-body">'+(feat.cat?'<div class="arc-mag-cat">'+esc(feat.cat)+'</div>':'')+'<div class="arc-h">'+esc(feat.title||'')+'</div>'+(feat.summary?'<div class="arc-mag-s">'+esc(feat.summary)+'</div>':'')+'</div></div>'; }).join('');
     if(view==='list'){
-      var feats=[], rest=[]; live.forEach(function(p){ if(p.featured) feats.push(p); else rest.push(p); });   // 대표 = 매거진 큰 카드 전부 (유형당 3개 제한이라 보통 소수)
-      var fh=feats.map(function(feat){ var fcov=feat.cover?' style="background-image:url('+esc(feat.cover)+');background-size:cover;background-position:center;"':'';
-        return '<div data-pid="'+esc(feat.id)+'" data-cat="'+esc(feat.cat||'')+'" role="link" tabindex="0" class="arc-mag"><div class="arc-mag-ph"'+fcov+'></div><div class="arc-mag-grad"></div><span class="arc-mag-tag">★ 대표</span><div class="arc-mag-body">'+(feat.cat?'<div class="arc-mag-cat">'+esc(feat.cat)+'</div>':'')+'<div class="arc-h">'+esc(feat.title||'')+'</div>'+(feat.summary?'<div class="arc-mag-s">'+esc(feat.summary)+'</div>':'')+'</div></div>'; }).join('');
       var rows=rest.map(function(p){ var col=catColor(p.cat); var th=p.cover?'<div class="arc-crow-th" style="background-image:url('+esc(p.cover)+');"></div>':'<div class="arc-crow-th">▦</div>';
         return '<div data-pid="'+esc(p.id)+'" data-cat="'+esc(p.cat||'')+'" role="link" tabindex="0" class="arc-crow" style="--c:'+col+';">'+th+'<div class="arc-crow-m">'+(p.cat?'<span class="arc-crow-badge">'+esc(p.cat)+'</span>':'')+'<div class="arc-h">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="arc-d">'+esc(p.summary)+'</div>':'')+'</div></div>'; }).join('');
       bodyHtml='<div id="arc-grid">'+fh+'<div class="arc-clist">'+rows+'</div></div>';
+    } else if(view==='photo'){
+      bodyHtml='<div class="arc-photo" id="arc-grid">'+live.map(item).join('')+'</div>';
     } else {
-      var wrapCls = view==='photo'?'arc-photo':'arc-grid';
-      bodyHtml='<div class="'+wrapCls+'" id="arc-grid">'+live.map(item).join('')+'</div>';
+      bodyHtml='<div id="arc-grid">'+fh+'<div class="arc-grid">'+rest.map(item).join('')+'</div></div>';   // 카드(그리드) = 대표 크게 + 나머지 2열 하이브리드
     }
     sec.innerHTML='<div class="cats" id="arc-cats">'+chips+'</div>'+bodyHtml;
     sec.querySelectorAll('#arc-cats .chip').forEach(function(ch){ ch.onclick=function(){ sec.querySelectorAll('#arc-cats .chip').forEach(function(x){ x.classList.toggle('on', x===ch); }); var c=ch.getAttribute('data-cat'); sec.querySelectorAll('#arc-grid [data-pid]').forEach(function(cd){ cd.style.display=(!c||cd.getAttribute('data-cat')===c)?'':'none'; }); }; });
@@ -3834,7 +3838,7 @@
     window.__resvOn = !!(d.reservation && d.reservation.on);   // '이 스타일로 예약' 버튼 노출 조건 (블록 렌더 전 세팅)
     if(d.blocks && d.blocks.length){ renderBlocks(d.blocks); }
     try{ setTimeout(setupReveal, 230); }catch(e){}   // ✨ 스크롤 등장 효과 (블록 렌더 후)
-    if(d.posts && d.posts.length){ try{ buildPosts(d.posts); }catch(e){} try{ buildArchive(d.posts, d.archiveView||'list'); }catch(e){} }   /* 기본=매거진(대표 1개 크게+컬러 행). 설정서 그리드·사진으로 바꿀 수 있음 */
+    if(d.posts && d.posts.length){ try{ buildPosts(d.posts); }catch(e){} try{ var _av=null; try{ _av=new URLSearchParams(location.search).get('arcview'); }catch(_){} buildArchive(d.posts, _av||d.archiveView||'grid'); }catch(e){} }   /* 기본=사진 그리드(2열). ?arcview=grid|list|photo 로 미리보기 가능. archiveView 설정으로 선택 */
     try{ setTimeout(decoratePostViews, 450); }catch(e){}
     // 제품·Q&A 탭 = 편집기 게시물 워크스페이스의 제품/Q&A 매니저 데이터로 렌더
     if(d.products && d.products.length){ try{ buildProductsPane(d.products); }catch(e){} }
