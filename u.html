@@ -537,6 +537,14 @@
   .cta-quote .cq-n{color:var(--on-soft); font-size:11.5px;}
   .pm-cta{display:flex; align-items:center; justify-content:center; width:100%; margin:18px 0 6px; padding:14px; border:none; border-radius:13px; background:var(--grad, linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); color:#fff; font-family:inherit; font-size:14px; font-weight:800; cursor:pointer; text-decoration:none;}
   .pm-cta:active{transform:scale(.98);}
+  /* ✂️ 홈 다이어트 (2026-07-08): 구성 많으면 접기 */
+  .home-more{display:block; width:100%; margin:4px 0 16px; padding:12px; border-radius:13px; background:var(--coral-soft); border:1px dashed var(--hair); color:var(--coral); font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer;}
+  .home-more:active{transform:scale(.98);}
+  /* 🧭 홈 끝 바로가기 */
+  .home-tabgos{display:flex; gap:8px; margin:20px 0 10px;}
+  .htg{flex:1; background:rgba(127,127,127,.07); border:1px solid var(--hair); border-radius:13px; padding:13px 6px; text-align:center; font-family:inherit; font-size:11.5px; font-weight:700; color:var(--on-soft, inherit); cursor:pointer;}
+  .htg b{display:block; font-size:17px; margin-bottom:4px;}
+  .htg:active{transform:scale(.97);}
 
   /* ── 커버 사진 히어로 (홈 꾸미기 → 커버 사진) ── */
   .prof-cover{position:relative; margin:-26px -22px -64px; aspect-ratio:1/1; overflow:hidden; border-radius:0;}   /* 미리보기 '반'과 동일 비율 → 잘림 일치 */
@@ -3902,6 +3910,8 @@
     try{ var _pcta=(d.profile&&d.profile.cta)||{}; window.__CTA_URL=_pcta.url||((d.home&&d.home.fab&&d.home.fab.kakao)||''); }catch(_){ window.__CTA_URL=''; }   // 글 끝 CTA 폴백 (예약 꺼져 있을 때)
     if(d.blocks && d.blocks.length){ renderBlocks(d.blocks); }
     try{ setTimeout(function(){ pinCtaQuote(p); }, 320); }catch(e){}   // 💬 대표 후기 → 예약 CTA 위 (블록 렌더 뒤)
+    try{ setTimeout(foldHomeBlocks, 400); }catch(e){}                  // ✂️ 홈 다이어트 (구성 7개+ 접기)
+    try{ setTimeout(buildHomeTabgos, 450); }catch(e){}                 // 🧭 홈 끝 바로가기 (소개·컨텐츠·스토어)
     try{ setTimeout(setupReveal, 230); }catch(e){}   // ✨ 스크롤 등장 효과 (블록 렌더 후)
     if(d.posts && d.posts.length){ try{ buildPosts(d.posts); }catch(e){} try{ var _av=null; try{ _av=new URLSearchParams(location.search).get('arcview'); }catch(_){} buildArchive(d.posts, _av||d.archiveView||'grid'); }catch(e){} }   /* 기본=사진 그리드(2열). ?arcview=grid|list|photo 로 미리보기 가능. archiveView 설정으로 선택 */
     try{ setTimeout(decoratePostViews, 450); }catch(e){}
@@ -4081,6 +4091,49 @@
     }catch(_e){}
   }
   window.__pinCtaQuote=pinCtaQuote;
+  // ✂️ 홈 다이어트 (2026-07-08): 홈 구성 7개+ → 앞 4개만 + '더 보기' 접기. 예약·편집모드는 제외 (기능 삭제 아님 — 접기만)
+  function foldHomeBlocks(){
+    try{
+      if(typeof EDIT_MODE!=='undefined' && EDIT_MODE) return;
+      var old=document.getElementById('home-more-btn'); if(old) old.remove();
+      var home=document.querySelector('[data-pane="home"]'); if(!home) return;
+      var kids=[].filter.call(home.children, function(el){
+        if(!(el.classList.contains('la-dyn')||el.hasAttribute('data-block'))) return false;
+        if(getComputedStyle(el).display==='none') return false;
+        if(el.querySelector && el.querySelector('.resv-cta')) return false;   // 예약은 절대 안 접음
+        if(el.classList.contains('cta-sticky')) return false;
+        return true;
+      });
+      if(kids.length<7) return;
+      var fold=kids.slice(4); if(!fold.length) return;
+      fold.forEach(function(el){ el.classList.add('la-folded'); el.style.display='none'; });
+      var btn=document.createElement('button'); btn.type='button'; btn.id='home-more-btn'; btn.className='home-more';
+      btn.textContent='▾ 더 보기 ('+fold.length+'개)';
+      fold[0].parentNode.insertBefore(btn, fold[0]);
+      btn.onclick=function(){
+        fold.forEach(function(el){ el.style.display=''; el.classList.remove('la-folded'); if(el.classList.contains('reveal-blk')) el.classList.add('in'); });
+        btn.remove();
+        try{ track('home_more',{}); }catch(_){}
+      };
+    }catch(_e){}
+  }
+  window.__foldHome=foldHomeBlocks;
+  // 🧭 홈 끝 바로가기 (2026-07-08, 사용자 승인): 홈 다 보면 "다음에 뭘 보지?" — 소개·컨텐츠·스토어 즉시 연결
+  function buildHomeTabgos(){
+    try{
+      if(typeof EDIT_MODE!=='undefined' && EDIT_MODE) return;
+      var old=document.getElementById('home-tabgos'); if(old) old.remove();
+      var home=document.querySelector('[data-pane="home"]'); if(!home) return;
+      var defs=[['about','🏅','소개 · 전문성'],['archive','📄','컨텐츠'],['shop','🛍','스토어']];
+      var live=defs.filter(function(d){ var nv=document.querySelector('.navitem[data-tab="'+d[0]+'"]'); return nv && getComputedStyle(nv).display!=='none'; });
+      if(!live.length) return;
+      var w=document.createElement('div'); w.id='home-tabgos'; w.className='home-tabgos';
+      w.innerHTML=live.map(function(d){ return '<button type="button" class="htg" data-goto="'+d[0]+'"><b>'+d[1]+'</b>'+d[2]+'</button>'; }).join('');
+      home.appendChild(w);
+      w.addEventListener('click', function(e){ var b=e.target.closest('[data-goto]'); if(!b) return; var nv=document.querySelector('.navitem[data-tab="'+b.getAttribute('data-goto')+'"]'); if(nv) nv.click(); try{ track('home_tabgo',{label:b.getAttribute('data-goto')}); }catch(_){} });
+    }catch(_e){}
+  }
+  window.__buildHomeTabgos=buildHomeTabgos;
   // 🎨 작가·포트폴리오 형식 소개란 (작업물 갤러리 중심)
   function buildAboutPortfolio(pane, d, p){
     var ev=p.evidence||{};

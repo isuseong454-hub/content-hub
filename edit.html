@@ -11398,6 +11398,28 @@
     renderXpRev();
   }
   window.__collectXp=function(){ return JSON.parse(JSON.stringify(xp)); };
+  /* ✂️ 홈 다이어트 넛지 (2026-07-08): 라이브 편집 열 때 구성 8개+면 하루 1회 안내 */
+  (function(){
+    var prev=window.__openLive;
+    function wrap(){
+      var p2=window.__openLive;
+      if(typeof p2!=='function' || p2.__dietWrapped){ return; }
+      var orig=p2;
+      window.__openLive=function(){
+        var r=orig.apply(this, arguments);
+        setTimeout(function(){
+          try{
+            var n=document.querySelectorAll('#rows .row').length;
+            var key='cm-diet-tip-'+(new Date().toISOString().slice(0,10));
+            if(n>=8 && !localStorage.getItem(key)){ localStorage.setItem(key,'1'); if(window.toast) toast('✂️ 홈 구성이 '+n+'개 — 손님은 3~4개에서 이탈해요. 안 쓰는 건 소개·컨텐츠 탭이 어울려요'); }
+          }catch(_e){}
+        }, 1400);
+        return r;
+      };
+      window.__openLive.__dietWrapped=true;
+    }
+    if(typeof prev==='function') wrap(); else setTimeout(wrap, 1500);
+  })();
   window.__loadXp=function(o){
     if(o&&typeof o==='object'){ xp={ adopted:Array.isArray(o.adopted)?o.adopted.slice():[], story:Object.assign({style:'scene',hl:'',why:'',turn:'',now:''}, o.story||{}), ba:Object.assign({b:'',a:'',cap:''}, o.ba||{}), probmap:Array.isArray(o.probmap)?o.probmap.slice():[] }; }
     fillInputs(); paint();
