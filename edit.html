@@ -1109,6 +1109,19 @@
   #add-ov.ed-on.slot-open .add-search{display:flex;}
   #add-ov.ed-on.slot-open #add-diag, #add-ov.ed-on.slot-open #add-all, #add-ov.ed-on.slot-open .tpl-section, #add-ov.ed-on.slot-open #rec-grid{display:block;}
   #add-ov.ed-on #add-myslot{display:block;}
+  /* ✏️ 템플릿 문구 입력 (대문·안심·마감일) — 템플릿 켰을 때만, 종류별로 필요한 칸만 */
+  .htp-seg.htp-seg4{flex-wrap:wrap;}
+  .htp-seg.htp-seg4 button{flex:1 1 42%;}
+  #add-tpl-fields{display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--hair);}
+  #add-ov.ed-on #add-tpl-fields{display:block;}
+  #add-tpl-fields .atf-dl{display:none;}
+  #add-ov[data-tpl="sales"] #add-tpl-fields .atf-dl{display:block;}
+  #add-ov[data-tpl="trust"] #add-tpl-fields .atf-hook{display:none;}
+  #add-tpl-fields .atf-l{display:block; font-size:11px; font-weight:800; color:var(--muted); margin:8px 0 5px;}
+  #add-tpl-fields .atf-l small{font-weight:600; opacity:.7; margin-left:4px;}
+  #add-tpl-fields textarea, #add-tpl-fields input{width:100%; box-sizing:border-box; font-size:13px; font-weight:600; padding:9px 11px; border-radius:10px; border:1px solid var(--hair); background:var(--surface); color:var(--ink); font-family:var(--sans); resize:none;}
+  #add-tpl-fields textarea{font-family:Georgia,'Times New Roman',serif; font-size:15px; font-weight:700; line-height:1.35;}
+  #add-tpl-fields textarea:focus, #add-tpl-fields input:focus{outline:none; border-color:var(--coral);}
   .ht-head small{font-size:10px;color:var(--muted);font-weight:600;}
   .ht-svg{width:100%;height:112px;display:block;overflow:visible;}
   .ht-line{fill:none;stroke:url(#htGrad);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;animation:htDraw 1.5s cubic-bezier(.5,0,.2,1) .2s forwards;filter:drop-shadow(0 2px 6px rgba(167,139,255,.4));}
@@ -3470,8 +3483,16 @@
       <!-- 🏠 홈 템플릿 (2026-07-08 사용자: 구성추가 상단으로) — 에디토리얼형이면 뼈대 우선, 블록 카탈로그는 '내 슬롯' 뒤로 접힘 -->
       <div class="hub-tpl" id="add-tpl" style="margin:0 0 12px;">
         <span class="htp-l">🏠 홈 템플릿</span>
-        <div class="htp-seg" id="add-tpl-seg"><button type="button" data-tpl="free">🧱 자유형</button><button type="button" data-tpl="editorial">📖 에디토리얼형</button></div>
+        <div class="htp-seg htp-seg4" id="add-tpl-seg"><button type="button" data-tpl="free">🧱 자유형</button><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button></div>
         <div class="htp-hint" id="add-tpl-hint"></div>
+        <div id="add-tpl-fields">
+          <label class="atf-l atf-hook">✏️ 대문 문구 <small>홈 맨 위 큰 글씨 · 줄바꿈 가능</small></label>
+          <textarea id="ed-hook-in" class="atf-hook" rows="2" placeholder="Design&#10;Your Style"></textarea>
+          <label class="atf-l">🤍 안심 한 줄 <small>CTA 버튼 바로 위</small></label>
+          <input type="text" id="ed-assure-in" placeholder="첫 상담은 진단부터 — 강요 없이 어울리는 방향을 찾아드려요">
+          <label class="atf-l atf-dl">⏰ 신청 마감일 <small>D-day로 떠요 · 지나면 자동 숨김</small></label>
+          <input type="date" id="sa-deadline-in" class="atf-dl">
+        </div>
       </div>
       <button type="button" id="add-myslot" class="xp-wide-btn" style="margin:0 0 14px;">＋ 내 슬롯에 블록 추가 ▾</button>
 
@@ -9473,7 +9494,7 @@
       /* ⑤ 내 페이지 */
       +'<div class="hub-zone"><div class="hub-zone-h">🔗 내 페이지</div>'
       +  ((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">contenthub.kr/u/'+myH+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
-      +  '<div class="hub-tpl" id="hub-tpl"><span class="htp-l">🏠 손님 홈 템플릿</span><div class="htp-seg"><button type="button" data-tpl="free">🧱 자유형</button><button type="button" data-tpl="editorial">📖 에디토리얼형</button></div><div class="htp-hint" id="htp-hint"></div></div>'
+      +  '<div class="hub-tpl" id="hub-tpl"><span class="htp-l">🏠 손님 홈 템플릿</span><div class="htp-seg htp-seg4"><button type="button" data-tpl="free">🧱 자유형</button><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button></div><div class="htp-hint" id="htp-hint"></div></div>'
       +'</div>';
     // (지금할일 hub-hero · 완성도 hub-ns 카드 제거 2026-07-07 — fold 로직 삭제)
     var ws=window.__switchWs, pw=window.__showPwTab;
@@ -9500,14 +9521,18 @@
         var c=curTpl();
         box2.querySelectorAll('[data-tpl]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tpl')===c); });
         var h2=document.getElementById('htp-hint');
-        if(h2) h2.textContent=(c==='editorial')?'📖 사진·명함·전후·후기가 잡지처럼 자동 배치돼요 (블록은 그대로 보존)':'🧱 내가 쌓은 구성 그대로 보여요';
+        if(h2) h2.textContent={
+          editorial:'📖 사진·명함·전후·후기가 잡지처럼 자동 배치돼요 (블록은 그대로 보존)',
+          trust:'🪪 명함·숫자·자격·걸어온 길이 주인공 — 상담 CTA로 마감 (블록 보존)',
+          sales:'✨ 훅→공감→증거→오퍼→마감 D-day 순서로 배치 (블록 보존)'
+        }[c]||'🧱 내가 쌓은 구성 그대로 보여요';
       }
       box2.querySelectorAll('[data-tpl]').forEach(function(b){ b.onclick=function(){
         var v=b.getAttribute('data-tpl');
         try{ var h3=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); h3.template=v; localStorage.setItem('cm-home-v1', JSON.stringify(h3)); }catch(_){}
         try{ home.template=v; }catch(_){}
         paintTpl();
-        try{ toast(v==='editorial'?'📖 에디토리얼형 선택 — [✓ 적용]을 누르면 손님에게 반영돼요 (언제든 자유형 복귀)':'🧱 자유형으로 되돌렸어요 — [✓ 적용]으로 반영'); }catch(_){}
+        try{ toast({editorial:'📖 에디토리얼형',trust:'🪪 신뢰형',sales:'✨ 세일즈형'}[v]?({editorial:'📖 에디토리얼형',trust:'🪪 신뢰형',sales:'✨ 세일즈형'}[v]+' 선택 — [✓ 적용]을 누르면 손님에게 반영돼요 (언제든 자유형 복귀)'):'🧱 자유형으로 되돌렸어요 — [✓ 적용]으로 반영'); }catch(_){}
       }; });
       paintTpl();
     })();
@@ -11445,22 +11470,50 @@
     var ov2=document.getElementById('add-ov'), seg2=document.getElementById('add-tpl-seg');
     if(!ov2||!seg2) return;
     function cur(){ try{ return (JSON.parse(localStorage.getItem('cm-home-v1')||'{}').template)||'free'; }catch(_){ return 'free'; } }
+    var TPL_HINTS={
+      free:'🧱 내가 쌓은 구성 그대로 — 아래에서 블록을 골라 담아요',
+      editorial:'📖 뼈대(사진·명함·전후·후기·예약)는 자동 — 재료는 전문성 가시화에서. 자유 블록은 아래 내 슬롯으로',
+      trust:'🪪 명함·숫자·자격·걸어온 길이 주인공 — 재료는 전문성 가시화에서. 상담 CTA로 마감',
+      sales:'✨ 훅→공감→전후 증거→오퍼→마감 D-day — 오퍼는 판매·예약 탭의 첫 내 상품이 올라와요'
+    };
     function paint(){
       var c=cur();
       seg2.querySelectorAll('[data-tpl]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tpl')===c); });
       var h2=document.getElementById('add-tpl-hint');
-      if(h2) h2.textContent=(c==='editorial')?'📖 뼈대(사진·명함·전후·후기·예약)는 자동 — 재료는 전문성 가시화에서. 자유 블록은 아래 내 슬롯으로':'🧱 내가 쌓은 구성 그대로 — 아래에서 블록을 골라 담아요';
-      ov2.classList.toggle('ed-on', c==='editorial');
-      if(c!=='editorial') ov2.classList.remove('slot-open');
+      if(h2) h2.textContent=TPL_HINTS[c]||TPL_HINTS.free;
+      ov2.classList.toggle('ed-on', c!=='free');
+      ov2.setAttribute('data-tpl', c);
+      if(c==='free') ov2.classList.remove('slot-open');
       var ms=document.getElementById('add-myslot'); if(ms) ms.textContent=ov2.classList.contains('slot-open')?'－ 내 슬롯 닫기 ▴':'＋ 내 슬롯에 블록 추가 ▾';
+      // ✏️ 템플릿 문구 필드 채우기 (입력 중이면 건드리지 않음)
+      try{
+        var h4=JSON.parse(localStorage.getItem('cm-home-v1')||'{}');
+        [['ed-hook-in','edHook'],['ed-assure-in','edAssure'],['sa-deadline-in','saDeadline']].forEach(function(pr){
+          var el=document.getElementById(pr[0]);
+          if(el && document.activeElement!==el) el.value=h4[pr[1]]||'';
+        });
+      }catch(_){}
     }
+    // ✏️ 대문 문구·안심 한 줄·마감일 저장 (디바운스 → cm-home-v1 → 자동저장+라이브 반영)
+    [['ed-hook-in','edHook'],['ed-assure-in','edAssure'],['sa-deadline-in','saDeadline']].forEach(function(pr){
+      var el=document.getElementById(pr[0]); if(!el) return;
+      var _edT=null;
+      el.addEventListener('input', function(){
+        clearTimeout(_edT);
+        _edT=setTimeout(function(){
+          try{ var h5=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); h5[pr[1]]=el.value.trim(); localStorage.setItem('cm-home-v1', JSON.stringify(h5)); }catch(_){}
+          try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+          try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(_){}
+        }, 400);
+      });
+    });
     seg2.querySelectorAll('[data-tpl]').forEach(function(b){ b.onclick=function(){
       var v=b.getAttribute('data-tpl');
       try{ var h3=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); h3.template=v; localStorage.setItem('cm-home-v1', JSON.stringify(h3)); }catch(_){}
       paint();
       try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
       try{ if(window.__liveEditActive && window.__liveRefresh) setTimeout(window.__liveRefresh, 60); }catch(_){}
-      try{ toast(v==='editorial'?'📖 에디토리얼형! 👁 미리보기로 확인해보세요':'🧱 자유형으로 전환'); }catch(_){}
+      try{ toast({editorial:'📖 에디토리얼형! 👁 미리보기로 확인해보세요',trust:'🪪 신뢰형! 👁 미리보기로 확인해보세요',sales:'✨ 세일즈형! 👁 미리보기로 확인해보세요'}[v]||'🧱 자유형으로 전환'); }catch(_){}
     }; });
     var ms=document.getElementById('add-myslot');
     if(ms) ms.onclick=function(){ ov2.classList.toggle('slot-open'); paint(); };

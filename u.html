@@ -571,6 +571,40 @@
   .ed-cta{display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin:12px 0 10px; padding:15px; border:none; border-radius:14px; background:var(--grad, linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); color:#fff; font-family:inherit; font-size:14.5px; font-weight:800; cursor:pointer;}
   .ed-cta:active{transform:scale(.98);}
   html.tpl-editorial .resv-cta{display:none;}   /* 인라인 예약카드는 ed-cta로 대체 (모달 배선은 유지) */
+  /* 🪪 신뢰형 홈 템플릿 (home.template='trust') — 명함·숫자·자격이 주인공, 상담 CTA로 마감 */
+  html.tpl-trust .profile{background:var(--surface, rgba(255,255,255,.04)); border:1px solid var(--hair); border-radius:20px; box-shadow:0 10px 26px rgba(0,0,0,.10);}
+  html.tpl-trust .pf-chips{display:grid; grid-template-columns:repeat(auto-fit,minmax(0,1fr)); gap:7px;}
+  html.tpl-trust .pf-chip{display:flex; align-items:center; justify-content:center; text-align:center; padding:13px 8px; border-radius:13px; font-size:11.5px; line-height:1.4;}
+  html.tpl-trust .pf-chip b{font-size:17px; margin:0 2px;}
+  html.tpl-trust .resv-cta{display:none;}
+  .tr-card{margin:14px 0; padding:15px 16px; border:1px solid var(--hair); border-radius:16px; background:rgba(127,127,127,.05);}
+  .tr-h{font-size:10px; letter-spacing:.14em; font-weight:800; color:var(--on-soft); margin-bottom:10px;}
+  .tr-row{display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.55; padding:3px 0;}
+  .tr-row .ck{color:var(--coral); font-weight:800; flex:none;}
+  .tr-tl{position:relative; padding-left:16px; border-left:2px solid var(--coral-soft); margin-left:4px; display:flex; flex-direction:column; gap:12px;}
+  .tr-tl-i{position:relative;}
+  .tr-tl-i::before{content:''; position:absolute; left:-21px; top:4px; width:8px; height:8px; border-radius:99px; background:var(--coral);}
+  .tr-tl-i b{display:block; font-size:10px; color:var(--coral); letter-spacing:.08em; margin-bottom:2px;}
+  .tr-tl-i span{font-size:12.5px; line-height:1.55;}
+  .tr-posts{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .tr-posts.c1{grid-template-columns:1fr;}
+  .tr-post{border-radius:13px; overflow:hidden; border:1px solid var(--hair); cursor:pointer; background:rgba(127,127,127,.05);}
+  .tr-post .tp-ph{aspect-ratio:16/10; background-size:cover; background-position:center; background-color:var(--coral-soft);}
+  .tr-post .tp-t{font-size:11.5px; font-weight:700; padding:8px 10px; line-height:1.4;}
+  /* ✨ 세일즈형 홈 템플릿 (home.template='sales') — 훅→공감→전후 증거→오퍼→마감 D-day */
+  html.tpl-sales .resv-cta{display:none;}
+  .sa-hook{margin:6px 0 14px; padding:4px 2px;}
+  .sa-hook .sh-big{font-size:24px; font-weight:900; line-height:1.32; letter-spacing:-.01em;}
+  .sa-hook .sh-sub{font-size:12px; color:var(--on-soft); margin-top:8px; line-height:1.6;}
+  .sa-offer{margin:16px 0;}
+  .sa-offer .so-card{display:block; border-radius:18px; border:1.5px solid var(--coral); overflow:hidden; background:var(--surface, rgba(255,255,255,.04)); text-decoration:none; color:inherit; cursor:pointer;}
+  .sa-offer .so-ph{aspect-ratio:16/9; background-size:cover; background-position:center; background-color:var(--coral-soft);}
+  .sa-offer .so-b{padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .sa-offer .so-n{font-size:14.5px; font-weight:800; line-height:1.4;}
+  .sa-offer .so-p{font-size:13px; color:var(--coral); font-weight:800; margin-top:3px;}
+  .sa-offer .so-go{flex:none; font-size:18px;}
+  .sa-dday{display:flex; align-items:center; justify-content:center; gap:7px; margin:16px 0 0; font-size:12.5px; font-weight:800; color:var(--coral);}
+  .sa-dday b{background:var(--coral); color:#fff; border-radius:8px; padding:3px 10px; font-size:12px;}
   /* 🧭 홈 끝 바로가기 */
   .home-tabgos{display:flex; gap:8px; margin:20px 0 10px;}
   .htg{flex:1; background:rgba(127,127,127,.07); border:1px solid var(--hair); border-radius:13px; padding:13px 6px; text-align:center; font-family:inherit; font-size:11.5px; font-weight:700; color:var(--on-soft, inherit); cursor:pointer;}
@@ -4167,70 +4201,164 @@
     }catch(_e){}
   }
   window.__buildHomeTabgos=buildHomeTabgos;
-  // 📖 에디토리얼형 홈 (2026-07-08 최종 시안 그대로): 기존 렌더 위에 재배치+주입 — 무회귀(옵트인), 편집모드 제외
-  // 존: ①커버+세리프훅 ②곡선명함 ③고민태그 ④전후+스타일그리드 ⑤(내 슬롯=기존 블록) ⑥실제말+안심+예약CTA+바로가기
+  // 📖 홈 템플릿 3종 (2026-07-08): editorial=에디토리얼 / trust=신뢰형 / sales=세일즈형 — 기존 렌더 위에 재배치+주입, 무회귀(free 기본)
+  // editorial: ①커버+세리프훅 ②곡선명함 ③고민태그 ④전후+스타일그리드 ⑤내슬롯 ⑥실제말+안심+예약CTA
+  // trust:     ①명함 히어로(CSS) ②자격·경력 ③걸어온 길 ④대표 컨텐츠 ⑤내슬롯 ⑥실제말+안심+상담CTA
+  // sales:     ①훅(맨 위) ②공감 체크 ③전후+실제말 ④오퍼(첫 내 상품) ⑤내슬롯 ⑥D-day+안심+신청CTA
   function applyEditorial(d){
     try{
       var root=document.documentElement;
-      // 멱등 청소
-      ['ed-hook','ed-pm','ed-ba-w','ed-styles-w','ed-assure','ed-cta'].forEach(function(id){ var e=document.getElementById(id); if(e) e.remove(); });
+      // 멱등 청소 (세 템플릿 공용)
+      ['ed-hook','ed-pm','ed-ba-w','ed-styles-w','ed-assure','ed-cta','tr-creds','tr-story','tr-posts','sa-hook','sa-pain','sa-ba-w','sa-offer','sa-dday'].forEach(function(id){ var e=document.getElementById(id); if(e) e.remove(); });
       var home=(d&&d.home)||{}, p=(d&&d.profile)||{}, xp=p.xp||{};
-      var isEd = home.template==='editorial';
+      var tpl=home.template||'free';
       var _EDIT=(typeof EDIT_MODE!=='undefined'&&EDIT_MODE);
-      var show = isEd && (!_EDIT || window.__edPreviewOn);   // 편집모드는 👁미리보기 켰을 때만 (WYSIWYG)
-      root.classList.toggle('tpl-editorial', !!show);
+      var show = (tpl!=='free') && (!_EDIT || window.__edPreviewOn);   // 편집모드는 👁미리보기 켰을 때만 (WYSIWYG)
+      root.classList.toggle('tpl-editorial', show&&tpl==='editorial');
+      root.classList.toggle('tpl-trust', show&&tpl==='trust');
+      root.classList.toggle('tpl-sales', show&&tpl==='sales');
       if(!show) return;
       var homeEl=document.querySelector('[data-pane="home"]'); if(!homeEl) return;
       var prof=homeEl.querySelector('.profile');
-      // ① 커버 위 세리프 훅 (커버 있을 때만)
-      var cov=document.querySelector('.top-cover');
-      if(cov){
-        var hk=document.createElement('div'); hk.id='ed-hook'; hk.className='ed-hook';
-        var big=esc(home.edHook||'Design\nYour Style').replace(/\n/g,'<br>');
-        hk.innerHTML='<div class="eh-big">'+big+'</div>'+(p.bio?('<div class="eh-sub">'+esc(p.bio)+'</div>'):'');
-        cov.appendChild(hk);
-      }
       var anchor=prof||homeEl.firstElementChild;
       function place(el){ if(anchor&&anchor.parentNode){ anchor.insertAdjacentElement('afterend', el); anchor=el; } else homeEl.appendChild(el); }
-      // ③ 고민 태그 바
-      if(xp.probmap&&xp.probmap.length){
-        var pm=document.createElement('div'); pm.id='ed-pm'; pm.className='ed-pm';
-        pm.innerHTML='<div class="edpm-l">이런 고민을 풀어요</div><div class="edpm-tags">'+xp.probmap.slice(0,6).map(function(t){ return '<span class="edpm-t">'+esc(t)+'</span>'; }).join('')+'</div>';
-        place(pm);
+      // 공용 마감 존: (실제 말 →) 안심 한 줄 → CTA → 바로가기
+      function endZone(moveQuote, assureDefault, ctaLabel, ctaUrl){
+        if(moveQuote){ var q=document.getElementById('cta-quote'); if(q) homeEl.appendChild(q); }
+        var as=document.createElement('div'); as.id='ed-assure'; as.className='ed-assure';
+        as.textContent='🤍 '+(home.edAssure||assureDefault);
+        homeEl.appendChild(as);
+        if(!ctaUrl && window.__resvOn){
+          var cta=document.createElement('button'); cta.type='button'; cta.id='ed-cta'; cta.className='ed-cta';
+          cta.innerHTML=ctaLabel+' <span style="opacity:.8;">→</span>';
+          cta.onclick=function(){ var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); try{ track('ed_cta',{label:tpl}); }catch(_){} };
+          homeEl.appendChild(cta);
+        } else if(ctaUrl || window.__CTA_URL){
+          var ca=document.createElement('a'); ca.id='ed-cta'; ca.className='ed-cta'; ca.href=ctaUrl||window.__CTA_URL; ca.target='_blank'; ca.rel='noopener'; ca.setAttribute('data-ev','conv'); ca.setAttribute('data-track', ctaLabel);
+          ca.innerHTML=ctaLabel+' <span style="opacity:.8;">→</span>';
+          homeEl.appendChild(ca);
+        }
+        var tg=document.getElementById('home-tabgos'); if(tg) homeEl.appendChild(tg);
       }
-      // ④-1 변화 쇼케이스 (전후)
       var ba=xp.ba||{};
-      if(ba.b&&ba.a){
-        var bw=document.createElement('div'); bw.id='ed-ba-w';
-        bw.innerHTML='<div class="ed-sec-h"><b>Real Change</b><span>BEFORE → AFTER</span></div>'
+      function baHtml(){
+        return '<div class="ed-sec-h"><b>Real Change</b><span>BEFORE → AFTER</span></div>'
           +'<div class="ed-ba"><figure><span style="background-image:url('+esc(ba.b)+')"></span><figcaption>BEFORE</figcaption></figure><figure><span style="background-image:url('+esc(ba.a)+')"></span><figcaption class="af">AFTER</figcaption></figure></div>'
           +(ba.cap?('<div class="ed-ba-cap">'+esc(ba.cap)+'</div>'):'');
-        place(bw);
       }
-      // ④-2 스타일 그리드 (룩북 우선, 없으면 명함 작업사진 · 1~3장 적응형)
-      var items=[];
-      try{ ((d&&d.blocks)||[]).forEach(function(b){ if(b&&b.type==='lookbook'&&b.on!==false&&items.length===0){ (b.content||[]).forEach(function(c){ if(c&&c[0]&&items.length<3) items.push({img:c[0], nm:(c[2]||''), eng:(c[3]||'')}); }); } }); }catch(_){}
-      if(!items.length) items=((p.works)||[]).filter(Boolean).slice(0,3).map(function(u){ return {img:u, nm:'', eng:''}; });
-      if(items.length){
-        var sw=document.createElement('div'); sw.id='ed-styles-w';
-        sw.innerHTML='<div class="ed-sec-h"><b>Signature Styles</b><span>PORTFOLIO</span></div>'
-          +'<div class="ed-styles c'+items.length+'">'+items.map(function(it,i){
-            return '<div class="ed-st"><span class="esph" style="background-image:url('+esc(it.img)+')"></span><span class="esno">0'+(i+1)+'</span>'+(it.nm?('<span class="esnm">'+esc(it.nm)+(it.eng?(' <small style="opacity:.7;font-weight:600;">'+esc(it.eng)+'</small>'):'')+'</span>'):'')+'</div>';
-          }).join('')+'</div>';
-        place(sw);
+
+      if(tpl==='editorial'){
+        // ① 커버 위 세리프 훅 (커버 있을 때만)
+        var cov=document.querySelector('.top-cover');
+        if(cov){
+          var hk=document.createElement('div'); hk.id='ed-hook'; hk.className='ed-hook';
+          var big=esc(home.edHook||'Design\nYour Style').replace(/\n/g,'<br>');
+          hk.innerHTML='<div class="eh-big">'+big+'</div>'+(p.bio?('<div class="eh-sub">'+esc(p.bio)+'</div>'):'');
+          cov.appendChild(hk);
+        }
+        // ③ 고민 태그 바
+        if(xp.probmap&&xp.probmap.length){
+          var pm=document.createElement('div'); pm.id='ed-pm'; pm.className='ed-pm';
+          pm.innerHTML='<div class="edpm-l">이런 고민을 풀어요</div><div class="edpm-tags">'+xp.probmap.slice(0,6).map(function(t){ return '<span class="edpm-t">'+esc(t)+'</span>'; }).join('')+'</div>';
+          place(pm);
+        }
+        // ④-1 변화 쇼케이스 (전후)
+        if(ba.b&&ba.a){
+          var bw=document.createElement('div'); bw.id='ed-ba-w';
+          bw.innerHTML=baHtml();
+          place(bw);
+        }
+        // ④-2 스타일 그리드 (룩북 우선, 없으면 명함 작업사진 · 1~3장 적응형)
+        var items=[];
+        try{ ((d&&d.blocks)||[]).forEach(function(b){ if(b&&b.type==='lookbook'&&b.on!==false&&items.length===0){ (b.content||[]).forEach(function(c){ if(c&&c[0]&&items.length<3) items.push({img:c[0], nm:(c[2]||''), eng:(c[3]||'')}); }); } }); }catch(_){}
+        if(!items.length) items=((p.works)||[]).filter(Boolean).slice(0,3).map(function(u){ return {img:u, nm:'', eng:''}; });
+        if(items.length){
+          var sw=document.createElement('div'); sw.id='ed-styles-w';
+          sw.innerHTML='<div class="ed-sec-h"><b>Signature Styles</b><span>PORTFOLIO</span></div>'
+            +'<div class="ed-styles c'+items.length+'">'+items.map(function(it,i){
+              return '<div class="ed-st"><span class="esph" style="background-image:url('+esc(it.img)+')"></span><span class="esno">0'+(i+1)+'</span>'+(it.nm?('<span class="esnm">'+esc(it.nm)+(it.eng?(' <small style="opacity:.7;font-weight:600;">'+esc(it.eng)+'</small>'):'')+'</span>'):'')+'</div>';
+            }).join('')+'</div>';
+          place(sw);
+        }
+        endZone(true, '첫 상담은 진단부터 — 강요 없이 어울리는 방향을 찾아드려요', '📅 예약하기');
       }
-      // ⑥ 행동 존을 맨 끝으로: 실제 말(#cta-quote) → 안심 → 예약 CTA → 바로가기
-      var q=document.getElementById('cta-quote'); if(q) homeEl.appendChild(q);
-      var as=document.createElement('div'); as.id='ed-assure'; as.className='ed-assure';
-      as.textContent='🤍 '+(home.edAssure||'첫 상담은 진단부터 — 강요 없이 어울리는 방향을 찾아드려요');
-      homeEl.appendChild(as);
-      if(window.__resvOn){
-        var cta=document.createElement('button'); cta.type='button'; cta.id='ed-cta'; cta.className='ed-cta';
-        cta.innerHTML='📅 예약하기 <span style="opacity:.8;">→</span>';
-        cta.onclick=function(){ var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); try{ track('ed_cta',{}); }catch(_){} };
-        homeEl.appendChild(cta);
+      else if(tpl==='trust'){
+        // ① 명함 히어로 확대는 CSS(tpl-trust)가 처리
+        var ev=p.evidence||{};
+        // ② 자격 · 경력
+        var creds=ev.creds?String(ev.creds).split(/\n/).map(function(s){ return s.trim(); }).filter(Boolean):[];
+        if(creds.length){
+          var tc=document.createElement('div'); tc.id='tr-creds'; tc.className='tr-card';
+          tc.innerHTML='<div class="tr-h">CREDENTIALS · 자격과 경력</div>'+creds.slice(0,6).map(function(s){ return '<div class="tr-row"><span class="ck">✓</span><span>'+esc(s)+'</span></div>'; }).join('');
+          place(tc);
+        }
+        // ③ 걸어온 길 (스토리 타임라인: 시작→전환점→지금)
+        var st=xp.story||{};
+        var pts=[['시작',st.why],['전환점',st.turn],['지금',st.now]].filter(function(x){ return x[1]; });
+        if(pts.length>=2){
+          var ts=document.createElement('div'); ts.id='tr-story'; ts.className='tr-card';
+          ts.innerHTML='<div class="tr-h">JOURNEY · 걸어온 길</div><div class="tr-tl">'+pts.map(function(x){ return '<div class="tr-tl-i"><b>'+x[0]+'</b><span>'+esc(x[1])+'</span></div>'; }).join('')+'</div>';
+          place(ts);
+        }
+        // ④ 대표 컨텐츠 (★대표 글 최대 2개 → 탭하면 글 모달)
+        var feats=((d&&d.posts)||[]).filter(function(x){ return x&&x.featured&&x.on!==false; }).slice(0,2);
+        if(feats.length){
+          var tp=document.createElement('div'); tp.id='tr-posts';
+          tp.innerHTML='<div class="ed-sec-h"><b>대표 컨텐츠</b><span>INSIGHT</span></div>'
+            +'<div class="tr-posts c'+feats.length+'">'+feats.map(function(x){ return '<div class="tr-post" data-pid="'+esc(x.id)+'">'+(x.cover?'<div class="tp-ph" style="background-image:url('+esc(x.cover)+')"></div>':'<div class="tp-ph"></div>')+'<div class="tp-t">'+esc(x.title||'')+'</div></div>'; }).join('')+'</div>';
+          place(tp);
+          tp.querySelectorAll('[data-pid]').forEach(function(a){ a.onclick=function(){ try{ openPostModal(a.getAttribute('data-pid')); }catch(_){} }; });
+        }
+        endZone(true, '첫 상담은 부담 없이 — 지금 상황을 진단하는 것부터 시작해요', '📅 상담 예약하기');
       }
-      var tg=document.getElementById('home-tabgos'); if(tg) homeEl.appendChild(tg);
+      else if(tpl==='sales'){
+        // ① 훅 — 홈 맨 위 (프로필 앞)
+        var sh=document.createElement('div'); sh.id='sa-hook'; sh.className='sa-hook';
+        sh.innerHTML='<div class="sh-big">'+esc(home.edHook||'고민만 하다가\n이번에도 놓치지 마세요').replace(/\n/g,'<br>')+'</div>'+(p.bio?('<div class="sh-sub">'+esc(p.bio)+'</div>'):'');
+        if(prof) prof.insertAdjacentElement('beforebegin', sh); else homeEl.prepend(sh);
+        // ② 공감 체크리스트
+        if(xp.probmap&&xp.probmap.length){
+          var sp=document.createElement('div'); sp.id='sa-pain'; sp.className='tr-card';
+          sp.innerHTML='<div class="tr-h">혹시, 이런 고민이세요?</div>'+xp.probmap.slice(0,5).map(function(t){ return '<div class="tr-row"><span class="ck">✔</span><span>'+esc(t)+'</span></div>'; }).join('');
+          place(sp);
+        }
+        // ③ 증거 — 전후 + 실제 말
+        if(ba.b&&ba.a){
+          var sb=document.createElement('div'); sb.id='sa-ba-w';
+          sb.innerHTML=baHtml();
+          place(sb);
+        }
+        var q2=document.getElementById('cta-quote'); if(q2){ place(q2); }
+        // ④ 오퍼 (판매·예약 탭의 첫 내 상품)
+        var offer=(((d&&d.products)||[]).filter(function(x){ return x&&x.kind==='mine'; }))[0];
+        var offerUrl='';
+        if(offer){
+          var so=document.createElement('div'); so.id='sa-offer'; so.className='sa-offer';
+          var body='<div class="so-ph"'+(offer.img?' style="background-image:url('+esc(offer.img)+')"':'')+'></div><div class="so-b"><div><div class="so-n">'+esc(offer.name||'')+'</div>'+(offer.price?('<div class="so-p">'+esc(offer.price)+'</div>'):'')+'</div><span class="so-go">'+(offer.resv?'📅':'↗')+'</span></div>';
+          if(!offer.resv) offerUrl=offer.url||'';
+          if(offer.resv){
+            so.innerHTML='<div class="ed-sec-h"><b>이번 제안</b><span>OFFER</span></div><div class="so-card" role="button" tabindex="0">'+body+'</div>';
+            var soc=so.querySelector('.so-card'); soc.onclick=function(){ var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); try{ track('sa_offer',{label:offer.name||''}); }catch(_){} };
+          } else {
+            var u=offerUrl||window.__CTA_URL||'';
+            so.innerHTML='<div class="ed-sec-h"><b>이번 제안</b><span>OFFER</span></div>'+(u?('<a class="so-card" href="'+esc(u)+'" target="_blank" rel="noopener" data-ev="pay" data-track="'+esc(offer.name||'오퍼')+'">'+body+'</a>'):('<div class="so-card" style="cursor:default;">'+body+'</div>'));
+          }
+          place(so);
+        }
+        // ⑤ 마감 D-day (마감일 설정 시 · 지났으면 자동 숨김)
+        if(home.saDeadline){
+          try{
+            var dl=new Date(home.saDeadline+'T23:59:59');
+            var diff=Math.ceil((dl-new Date())/86400000);
+            if(!isNaN(diff)&&diff>=0){
+              var dd=document.createElement('div'); dd.id='sa-dday'; dd.className='sa-dday';
+              dd.innerHTML='<span>⏰ 신청 마감까지</span><b>'+(diff===0?'D-DAY':('D-'+diff))+'</b>';
+              homeEl.appendChild(dd);
+            }
+          }catch(_){}
+        }
+        endZone(false, '지금 결정 안 해도 괜찮아요 — 궁금한 건 부담 없이 물어보세요', offer&&offer.resv?'📅 지금 신청하기':'지금 신청하기', offerUrl);
+      }
     }catch(_e){}
   }
   window.__applyEditorial=applyEditorial;
