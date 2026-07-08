@@ -535,6 +535,8 @@
   .cta-quote{margin:0 0 10px; padding:11px 14px; border-radius:12px; background:var(--coral-soft); border:1px solid var(--hair); font-size:12.5px; line-height:1.55; color:var(--on-strong); text-align:center;}
   .cta-quote .cq-st{color:#F0B04A; font-size:11px; letter-spacing:1px; margin-right:4px;}
   .cta-quote .cq-n{color:var(--on-soft); font-size:11.5px;}
+  .pm-cta{display:flex; align-items:center; justify-content:center; width:100%; margin:18px 0 6px; padding:14px; border:none; border-radius:13px; background:var(--grad, linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); color:#fff; font-family:inherit; font-size:14px; font-weight:800; cursor:pointer; text-decoration:none;}
+  .pm-cta:active{transform:scale(.98);}
 
   /* ── 커버 사진 히어로 (홈 꾸미기 → 커버 사진) ── */
   .prof-cover{position:relative; margin:-26px -22px -64px; aspect-ratio:1/1; overflow:hidden; border-radius:0;}   /* 미리보기 '반'과 동일 비율 → 잘림 일치 */
@@ -3648,6 +3650,13 @@
     document.getElementById('pm-title').textContent=p.title||'';
     var bodyEl=document.getElementById('pm-body');
     renderPostBlocks(bodyEl, p.blocks);
+    // 💬 글 끝 예약·문의 버튼 (2026-07-08, p.ctaOn 기본 켬) — 읽고 마음 생긴 손님이 바로 행동
+    try{ if(p.ctaOn!==false){
+      var cta=null;
+      if(window.__resvOn){ cta=document.createElement('button'); cta.type='button'; cta.className='pm-cta'; cta.textContent='📅 예약하러 가기'; cta.onclick=function(){ ov.classList.remove('open'); var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); }; }
+      else if(window.__CTA_URL){ cta=document.createElement('a'); cta.className='pm-cta'; cta.href=window.__CTA_URL; cta.target='_blank'; cta.rel='noopener'; cta.textContent='💬 바로 신청 · 문의하기'; }
+      if(cta) bodyEl.appendChild(cta);
+    } }catch(_e){}
     try{ bodyEl.appendChild(buildPostFoot(id)); }catch(_){}
     try{ decoratePostLikes(); }catch(_){}
     ov.classList.add('open');
@@ -3780,7 +3789,13 @@
     var blk=pane.querySelector('.block'); if(!blk) return;
     function row(p){
       var th=p.img?(' style="background-image:url('+esc(p.img)+');background-size:cover;background-position:center;"'):'';
-      return '<a class="prod" href="'+esc(p.url||'#')+'" target="_blank" rel="noopener" data-track="'+esc(p.name||'제품')+'"'+(p.kind==='mine'?' data-ev="pay"':'')+' style="text-decoration:none;color:inherit;"><div class="prod-thumb"'+th+'></div><div><div class="prod-name">'+esc(p.name||'')+'</div><div class="prod-meta">'+esc(p.price||'')+'</div></div><span class="prod-go">↗</span></a>';
+      var body='<div class="prod-thumb"'+th+'></div><div><div class="prod-name">'+esc(p.name||'')+'</div><div class="prod-meta">'+esc(p.price||'')+'</div></div>';
+      // 📅 예약으로 받는 상품 → 예약 모달 직결 (2026-07-08)
+      if(p.resv){ return '<a class="prod prod-resv" href="javascript:void 0" data-track="'+esc(p.name||'제품')+'" data-ev="conv" style="text-decoration:none;color:inherit;">'+body+'<span class="prod-go">📅</span></a>'; }
+      var url=p.url||'';
+      if(!url && p.kind==='mine' && window.__CTA_URL) url=window.__CTA_URL;   // 링크 비면 카톡 문의 폴백 — 죽은 '#' 방지
+      if(!url) return '<div class="prod" style="opacity:.8;">'+body+'<span class="prod-go" style="opacity:.35;">…</span></div>';
+      return '<a class="prod" href="'+esc(url)+'" target="_blank" rel="noopener" data-track="'+esc(p.name||'제품')+'"'+(p.kind==='mine'?' data-ev="pay"':'')+' style="text-decoration:none;color:inherit;">'+body+'<span class="prod-go">↗</span></a>';
     }
     var mine=list.filter(function(p){ return p.kind==='mine'; });
     var coupang=list.filter(function(p){ return (p.kind||'coupang')==='coupang'; });
@@ -3788,6 +3803,8 @@
     if(mine.length) html+='<div class="pane-title">내 상품 · 클래스 · 서비스</div>'+mine.map(row).join('');
     if(coupang.length) html+='<div class="pane-title"'+(mine.length?' style="margin-top:18px;"':'')+'>추천 제품</div>'+coupang.map(row).join('')+'<div class="coupang-note">쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.</div>';
     if(html) blk.innerHTML=html;
+    // 📅 예약 상품 클릭 → 예약 모달 (편집모드에선 편집 탭 우선이라 미바인딩)
+    try{ if(typeof EDIT_MODE==='undefined'||!EDIT_MODE){ blk.querySelectorAll('.prod-resv').forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); }); }); } }catch(_){}
   }
 
   // 아카이브 탭 = 게시물을 주제(카테고리) 칩으로 분류
@@ -3882,6 +3899,7 @@
     window.__PRODUCTS = d.products || [];
     window.__QNA = d.qna || [];
     window.__resvOn = !!(d.reservation && d.reservation.on);   // '이 스타일로 예약' 버튼 노출 조건 (블록 렌더 전 세팅)
+    try{ var _pcta=(d.profile&&d.profile.cta)||{}; window.__CTA_URL=_pcta.url||((d.home&&d.home.fab&&d.home.fab.kakao)||''); }catch(_){ window.__CTA_URL=''; }   // 글 끝 CTA 폴백 (예약 꺼져 있을 때)
     if(d.blocks && d.blocks.length){ renderBlocks(d.blocks); }
     try{ setTimeout(function(){ pinCtaQuote(p); }, 320); }catch(e){}   // 💬 대표 후기 → 예약 CTA 위 (블록 렌더 뒤)
     try{ setTimeout(setupReveal, 230); }catch(e){}   // ✨ 스크롤 등장 효과 (블록 렌더 후)

@@ -2017,6 +2017,51 @@
   .bh-cand{display:block; width:100%; text-align:left; margin-top:7px; padding:11px 13px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font-size:12.5px; font-weight:700; font-family:var(--sans); cursor:pointer; line-height:1.5;}
   .bh-cand:hover{border-color:var(--coral);}
   #story-card{display:none;}   /* 레거시 스토리 편집기 숨김 (2026-07-08) — 팔레트 📖스토리가 대체. 데이터·공개렌더 보존, 되살리려면 이 줄 삭제 */
+  /* 🎯 목적 선택 (컨텐츠) */
+  .cc-fmtrow{grid-column:1/-1; display:flex; align-items:center; gap:7px; font-size:11px; color:var(--muted); font-weight:600; padding:2px 2px 0;}
+  .cc-fmtrow button{background:var(--soft); border:1px solid var(--hair); color:var(--ink); border-radius:99px; font-size:11px; font-weight:700; padding:6px 12px; cursor:pointer; font-family:var(--sans);}
+  /* 컨텐츠 작업실화 (2026-07-08): 헤더 한 줄 + 컴팩트 새 컨텐츠, 도구는 목록 아래 조용히 */
+  .pw-add-mini{background:var(--grad); color:#fff; border:none; border-radius:11px; padding:9px 16px; font-size:12.5px; font-weight:800; font-family:var(--sans); cursor:pointer; box-shadow:0 4px 14px rgba(124,63,228,.35); white-space:nowrap;}
+  .pw-add-mini:active{transform:scale(.96);}
+  .ws-pane[data-pane="posts"] .content-tools{display:flex; gap:8px; margin:14px 0 4px;}
+  /* 컨텐츠 목록 = 손님 화면과 같은 사진 그리드 (대표 풀폭 + 2열 타일) */
+  #posts-lib{display:grid; grid-template-columns:1fr 1fr; gap:9px;}
+  #posts-lib .post-mag, #posts-lib .post-empty{grid-column:1/-1;}
+  #posts-lib .post-card{margin:0;}
+  .post-card.pc-tile{position:relative; display:block; padding:0; overflow:hidden; border-radius:14px; aspect-ratio:4/5; border:1px solid var(--hair); background:var(--surface); cursor:pointer;}
+  .pc-tile .pct-ph{position:absolute; inset:0; background-size:cover; background-position:center;}
+  .pc-tile .pct-ph.pct-noc{display:flex; align-items:center; justify-content:center; font-size:32px; background:linear-gradient(150deg, color-mix(in srgb, var(--c, #a78bff) 42%, #17141f), color-mix(in srgb, var(--c, #a78bff) 13%, #100d16));}
+  .pc-tile .pct-grad{position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(5,3,10,.88));}
+  .pc-tile .pc-grip{position:absolute; left:7px; top:7px; z-index:3; color:rgba(255,255,255,.75); background:rgba(10,8,16,.5); border-radius:8px; padding:3px 5px;}
+  .pc-tile .pc-acts{position:absolute; top:7px; right:7px; z-index:3; display:flex; align-items:center; gap:7px; background:rgba(10,8,16,.6); border-radius:99px; padding:5px 9px; margin:0;}
+  .pc-tile .pct-body{position:absolute; left:10px; right:10px; bottom:9px; z-index:2;}
+  .pc-tile .pct-cat{font-size:9.5px; font-weight:800; color:#d5c4ff; margin-bottom:2px;}
+  .pc-tile .pct-title{font-size:12.5px; font-weight:800; color:#fff; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  /* 판매 작업실 (2026-07-08): 손님 카드 미러 + 접이 폼 + 유령 상품 + 구매 경로 */
+  .scard.scv{display:block !important; padding:10px !important;}
+  .scv-view{display:flex; align-items:center; gap:10px; cursor:pointer;}
+  .scv-th{width:44px; height:44px; border-radius:10px; background:var(--soft); border:1px solid var(--hair); display:flex; align-items:center; justify-content:center; font-size:18px; flex:0 0 auto; background-size:cover; background-position:center;}
+  .scv-m{flex:1; min-width:0;}
+  .scv-n{display:block; font-size:13px; font-weight:800; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .scv-p{display:block; font-size:11px; color:var(--muted); margin-top:1px;}
+  .scv-go{flex:0 0 auto; color:var(--coral); font-weight:800; font-size:14px;}
+  .scv-edit{flex:0 0 auto; width:28px; height:28px; border-radius:8px; background:var(--soft); border:1px solid var(--hair); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--muted);}
+  .scard.scv .sc-del{position:static; flex:0 0 auto;}
+  .scv-form{display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--hair);}
+  .scard.scv.open .scv-form{display:block; animation:xpFade .3s ease;}
+  .scv-frow{display:flex; gap:9px;}
+  .scv-frow .sc-mid{flex:1; min-width:0;}
+  .sc-route{display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-top:9px;}
+  .sc-route .sc-route-l{font-size:11px; color:var(--muted); font-weight:600;}
+  .sc-route button{background:var(--coral-soft); border:1px dashed rgba(45,212,191,.45); color:var(--coral); border-radius:99px; font-size:11px; font-weight:800; padding:5px 11px; cursor:pointer; font-family:var(--sans);}
+  .sc-resv{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; color:var(--ink); cursor:pointer; margin-left:auto;}
+  .sc-resv input{width:15px; height:15px; accent-color:#2DD4BF;}
+  .sc-ghosts{display:flex; flex-direction:column; gap:7px; margin-bottom:8px;}
+  .sc-ghost{display:flex; align-items:center; gap:9px; text-align:left; background:rgba(255,255,255,.015); border:1px dashed var(--hair); border-radius:12px; padding:11px 12px; cursor:pointer; font-family:var(--sans);}
+  .sc-ghost .sc-g-m{flex:1; min-width:0;}
+  .sc-ghost b{display:block; font-size:12.5px; font-weight:800; color:var(--muted);}
+  .sc-ghost small{display:block; font-size:10.5px; color:var(--muted); opacity:.7; margin-top:1px;}
+  .sc-ghost .sc-g-a{flex:0 0 auto; font-size:10.5px; font-weight:800; color:var(--coral); background:var(--coral-soft); border-radius:99px; padding:5px 10px;}
   /* ★한 흐름 통합 (2026-07-08 사용자 확정): 기본/소개꾸미기 세그 폐지 — 팔레트가 대체. 데이터·수집 전부 보존(숨김만) */
   #prof-seg, #prof-seg-hint{display:none !important;}
   #about-style-card{display:none !important;}   /* 소개 꾸미기(고급·4유형·캔버스) — 되살리려면 이 줄 삭제 */
@@ -3181,8 +3226,7 @@
 
     <!-- 📄 게시물 (고객 화면과 똑같은 4탭) -->
     <div class="ws-pane" data-pane="posts">
-    <!-- 동기 배너 ② 관심·공감 -->
-    <div class="pane-intro">📄 <b>컨텐츠 = 관심·공감</b> <span style="opacity:.75;">· 홈 여정 ②</span><br>손님이 "맞아, 내 얘기네" 하고 빠져드는 곳. 글·작업·후기를 쌓을수록 <b>신뢰가 깊어져요.</b></div>
+    <!-- (2026-07-08 작업실화) 설명 배너·이중 미리보기 제거 — 목록이 주인공, 도구는 아래 조용히 -->
 
     <!-- 유형 탭 폐기 — 손님처럼 한 목록. (DOM 유지: showPwTab 참조 안전용) -->
     <div class="pw-tabs" id="pw-tabs" style="display:none;">
@@ -3190,28 +3234,26 @@
       <button type="button" class="pw-tab" data-pwtab="cardnews">🎴 카드뉴스</button>
       <button type="button" class="pw-tab" data-pwtab="landing">📣 랜딩</button>
     </div>
-    <div class="pw-previewrow">
+    <div class="pw-previewrow" style="display:none;"><!-- 편집/미리보기 세그 폐기 — 실제 고객 화면 하나로 통일. JS 참조 안전용 DOM 유지 -->
       <div class="cv-seg" id="content-viewtoggle">
         <button type="button" class="cv-b on" data-cv="edit">✏️ 편집</button>
         <button type="button" class="cv-b" data-cv="preview">👁 미리보기</button>
       </div>
-      <button type="button" id="pw-preview" class="pw-mini cv-real">👁 실제 고객 화면</button>
     </div>
 
     <!-- 대표 게시물 픽커는 숨겨두되 유지(렌더러 안전용) -->
     <div id="pw-featured" style="display:none;"></div>
 
-    <!-- 통합 컨텐츠 목록 = 손님 화면 그대로 + ＋추가·편집 -->
+    <!-- 통합 컨텐츠 목록 = 작업실 (목록이 히어로) -->
     <div class="pw-pane on" data-pwpane="archive">
-      <div class="pw-lead"><span class="pw-lead-t">📑 내 컨텐츠</span><span class="pw-lead-d">손님이 보는 그대로</span></div>
-      <!-- ＋ 새 컨텐츠 (글/카드뉴스 만들기/랜딩) -->
-      <button id="new-content-btn" class="add pw-add" style="margin-top:2px;">＋ 새 컨텐츠</button>
-      <div class="content-tools"><button type="button" id="drafts-folder-btn" class="drafts-btn">🗂 임시저장함</button></div>
+      <div class="pw-lead"><span class="pw-lead-t">✍️ 내 컨텐츠</span><button id="new-content-btn" class="pw-add-mini">＋ 새 컨텐츠</button></div>
       <div id="content-chooser" class="cc-wrap" style="display:none;">
-        <button type="button" class="cc-opt" data-cc="article"><span class="cc-ico">✍️</span><b>글</b><small>술술 쓰기</small></button>
-        <button type="button" class="cc-opt" data-cc="cardnews"><span class="cc-ico">🎴</span><b>카드뉴스 만들기</b><small>이미지 카드</small></button>
-        <button type="button" class="cc-opt" data-cc="carousel"><span class="cc-ico">📸</span><b>캐러셀</b><small>사진 넘겨보기</small></button>
-        <button type="button" class="cc-opt" data-cc="landing"><span class="cc-ico">📣</span><b>랜딩</b><small>판매 페이지</small></button>
+        <!-- 🎯 목적으로 시작 (2026-07-08): 형식 대신 "뭘 하고 싶어요?" — 형식·주제·구조 뼈대는 앱이 준비 -->
+        <button type="button" class="cc-opt" data-goal="know"><span class="cc-ico">🧲</span><b>알려지기</b><small>정보·노하우 글</small></button>
+        <button type="button" class="cc-opt" data-goal="trust"><span class="cc-ico">💛</span><b>신뢰 쌓기</b><small>후기·사례 글</small></button>
+        <button type="button" class="cc-opt" data-goal="sell"><span class="cc-ico">💰</span><b>팔기</b><small>랜딩 · 판매 페이지</small></button>
+        <button type="button" class="cc-opt" data-goal="news"><span class="cc-ico">📢</span><b>소식 전하기</b><small>이벤트 · 공지</small></button>
+        <div class="cc-fmtrow">형식으로 바로 시작: <button type="button" data-cc="article">✍️ 그냥 글</button><button type="button" data-cc="cardnews">🎴 카드뉴스</button></div>
       </div>
       <!-- 주제 칩 (전체 + 관리목록) + 고정 ＋유형 버튼 -->
       <div class="cat-bar">
@@ -3220,6 +3262,7 @@
         <button type="button" id="cat-add-pinned" class="cat-add-pinned">＋ 주제</button>
       </div>
       <div id="posts-lib"></div>
+      <div class="content-tools"><button type="button" id="drafts-folder-btn" class="drafts-btn">🗂 임시저장함</button><button type="button" id="pw-preview" class="pw-mini cv-real">👁 실제 고객 화면</button></div>
       <div class="pw-foot">
         <span class="pw-foot-lbl" style="font-size:11px;color:var(--muted);">손님 화면 표시</span>
         <span class="pw-foot-seg" id="arcview-seg" title="손님 아카이브 탭에 보이는 형태">
@@ -3253,8 +3296,7 @@
 
     <!-- 💰 판매·예약 (전환 — 스토어 + 예약 + 쿠폰) -->
     <div class="ws-pane" data-pane="sales">
-    <div class="pane-intro">💰 <b>판매·예약 = 행동·전환</b> <span style="opacity:.75;">· 홈 여정 ③</span><br>마음 생긴 손님이 <b>지금 행동</b>하는 곳. 행동할 곳이 있어야 손님이 새어나가지 않아요.</div>
-
+    <!-- (2026-07-08 작업실화) 설명 배너 삭제 · 명단은 JS로 맨 아래 이동 — 만들기가 주인공 -->
     <div class="set" id="set-leads" style="margin-bottom:14px;">
       <span class="ic">📇</span>
       <span class="meta"><span class="nm">신청·문의 명단</span><span class="sb">예약·문의로 모인 연락처 · 내보내기</span></span>
@@ -3268,7 +3310,15 @@
 
     <!-- 판매 -->
     <div class="sl-pane on" data-slpane="sell">
-      <div class="pw-lead"><span class="pw-lead-t">🛍 스토어 · 제품</span><span class="pw-lead-d">내 상품 · 쿠팡 추천</span></div>
+      <div class="pw-lead"><span class="pw-lead-t">🛍 스토어</span><button type="button" id="sell-add" class="pw-add-mini">＋ 팔 것 추가</button></div>
+      <!-- 🎯 뭘 팔까요? (2026-07-08) — 유형 고르면 예시 프리필 -->
+      <div id="sell-chooser" class="cc-wrap" style="display:none;">
+        <button type="button" class="cc-opt" data-sgoal="service"><span class="cc-ico">💇</span><b>시술 · 서비스</b><small>예약으로 받기</small></button>
+        <button type="button" class="cc-opt" data-sgoal="class"><span class="cc-ico">🎓</span><b>클래스 · 강의</b><small>원데이 · 정규</small></button>
+        <button type="button" class="cc-opt" data-sgoal="ebook"><span class="cc-ico">📔</span><b>전자책 · 자료</b><small>노하우 · 템플릿</small></button>
+        <button type="button" class="cc-opt" data-sgoal="coupang"><span class="cc-ico">🛒</span><b>추천템</b><small>쿠팡 파트너스</small></button>
+        <div class="cc-fmtrow">뭘 팔 수 있는지 막막하면: <button type="button" id="sell-guide-link">✨ 예시 7가지 보기</button></div>
+      </div>
       <div id="prod-lib"></div>
       <div class="pw-foot" style="margin-bottom:16px;"><button type="button" id="prod-guide-btn" class="pw-link">✨ 어떤 걸 팔 수 있나요?</button></div>
 
@@ -8596,16 +8646,14 @@
           +'<div class="pm-body">'+(metaLine?'<div class="pm-cat">'+metaLine+'</div>':'')+'<div class="pm-title">'+escT(p.title||'(제목 없음)')+'</div><div class="pm-sub">'+escT(p.summary||('블록 '+((p.blocks&&p.blocks.length)||0)+'개'))+'</div></div>'
           +'</div>';
       }
-      // ── 나머지 = 유형 컬러 행 ──
-      var thumb=p.cover?(' style="background-image:url('+p.cover+')"'):'';
-      var thumbInner=p.cover?'':(POST_TYPE_ICON[p.type]||'📄');
-      var sub=p.summary||(p.on===false?'숨김 (off)':'블록 '+((p.blocks&&p.blocks.length)||0)+'개');
-      var catTag=hasC?(' <span class="pc-cat c-badge">'+escT(p.cat)+'</span>'):'';
-      return '<div class="post-card'+(hasC?' has-c':'')+(p.on===false?' pc-off':'')+'" data-pid="'+p.id+'" style="--c:'+col+onStyle+'">'
+      // ── 나머지 = 손님 화면과 같은 2열 사진 타일 (2026-07-08, 보면서 수정) ──
+      var phT=p.cover?('<span class="pct-ph" style="background-image:url('+p.cover+')"></span>'):('<span class="pct-ph pct-noc">'+(POST_TYPE_ICON[p.type]||'📄')+'</span>');
+      var metaT=(hasC?escT(p.cat):'')+(vc?((hasC?' · ':'')+'👁 '+vc):'')+(p.on===false?((hasC||vc)?' · ':'')+'숨김':'');
+      return '<div class="post-card pc-tile'+(hasC?' has-c':'')+(p.on===false?' pc-off':'')+'" data-pid="'+p.id+'" style="--c:'+col+onStyle+'">'
+        +phT+'<span class="pct-grad"></span>'
         +'<span class="pc-grip">⋮⋮</span>'
-        +'<span class="pc-thumb"'+thumb+'>'+thumbInner+'</span>'
-        +'<div class="pc-meta"><div class="pc-title">'+escT(p.title||'(제목 없음)')+'<span class="pc-type">'+(POST_TYPE_LABEL[p.type]||'')+'</span>'+(vc?' <span class="pc-views">👁 '+vc+'</span>':'')+'</div><div class="pc-sub">'+escT(sub)+catTag+'</div></div>'
         +actsHtml
+        +'<div class="pct-body">'+(metaT?'<div class="pct-cat">'+metaT+'</div>':'')+'<div class="pct-title">'+escT(p.title||'(제목 없음)')+'</div></div>'
         +'</div>';
     }).join('');
     box.querySelectorAll('[data-pfeat]').forEach(function(s){ s.onclick=function(e){ e.stopPropagation(); var p=postById(s.getAttribute('data-pfeat')); if(!p) return; if(!p.featured){ if(featCntInCat(p.cat)>=3){ try{ notify('한 유형에 대표는 3개까지예요'); }catch(_){} return; } p.featured=true;
@@ -8662,15 +8710,32 @@
     if(!p){ doSave(); return; }   // 게시물 편집이 아니면 바로 저장
     var ov=document.getElementById('publish-ov');
     if(!ov){ ov=document.createElement('div'); ov.className='ov'; ov.id='publish-ov';
-      ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">어디로 배포할까요?</span><span class="x" id="pub-x">×</span></div><div class="desc">손님 목록에서 이 컨텐츠가 묶일 주제예요 · 톡 골라주세요. (안 골라도 전체엔 떠요)</div><div id="pub-chips" class="lce-chips" style="margin:8px 0 16px;"></div><button type="button" id="pub-go" class="btn primary" style="width:100%; padding:15px; font-size:15px; font-weight:800; border-radius:13px;">💾 저장 · 배포하기</button></div>';
+      ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">어디로 배포할까요?</span><span class="x" id="pub-x">×</span></div>'
+        +'<div class="field" style="margin:0 0 12px;"><label style="display:flex; align-items:center;">제목 마지막 점검 <button type="button" id="pub-title-help" style="margin-left:auto; background:var(--coral-soft); border:1px dashed rgba(45,212,191,.5); color:var(--coral); border-radius:99px; font-size:11px; font-weight:800; padding:4px 11px; cursor:pointer; font-family:var(--sans);">✨ 제목 도우미</button></label><input id="pub-title" placeholder="제목이 클릭을 가릅니다"></div>'
+        +'<div class="desc">손님 목록에서 이 컨텐츠가 묶일 주제예요 · 톡 골라주세요. (안 골라도 전체엔 떠요)</div><div id="pub-chips" class="lce-chips" style="margin:8px 0 12px;"></div>'
+        +'<label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink); font-weight:600; margin:0 0 14px; cursor:pointer;"><input type="checkbox" id="pub-cta" checked style="width:16px; height:16px; accent-color:#2DD4BF;"> 글 끝에 <b>예약·문의 버튼</b> 붙이기 <span style="color:var(--muted); font-weight:600; font-size:11px;">— 마음 생긴 손님이 바로 행동</span></label>'
+        +'<button type="button" id="pub-go" class="btn primary" style="width:100%; padding:15px; font-size:15px; font-weight:800; border-radius:13px;">💾 저장 · 배포하기</button></div>';
       document.body.appendChild(ov);
       ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='pub-x') ov.classList.remove('open'); });
-      ov.querySelector('#pub-go').onclick=function(){ ov.classList.remove('open'); doSave();
-        // 발행하면 → 컨텐츠 목록으로 (블로그·노션처럼 끝맺음). 저장이 시작될 시간(0.5s) 후 목록 복귀.
-        try{ setTimeout(function(){ if(window.__leavePostEdit) window.__leavePostEdit(); if(window.__switchWs) window.__switchWs('posts'); }, 500); }catch(_){}
+      ov.querySelector('#pub-title-help').onclick=function(){ openTitleHelper(function(t){ var ti=document.getElementById('pub-title'); if(ti) ti.value=t; }); };
+      ov.querySelector('#pub-go').onclick=function(){
+        var savedId=postEditId;
+        try{ var pp=postById(savedId); if(pp){
+          var ti=document.getElementById('pub-title'); if(ti&&ti.value.trim()) setPostTitleEverywhere(savedId, ti.value.trim());
+          var ck=document.getElementById('pub-cta'); if(ck) pp.ctaOn=ck.checked;   // 글 끝 예약·문의 버튼 (u.html 게시물 모달이 읽음)
+        } }catch(_){}
+        ov.classList.remove('open'); doSave();
+        // 발행하면 → 목록 복귀 + 🎉 다음 행동 카드 (대표 올리기·링크 복사 — 쓴 글이 일하게)
+        try{ setTimeout(function(){ if(window.__leavePostEdit) window.__leavePostEdit(); if(window.__switchWs) window.__switchWs('posts'); try{ showPostNext(savedId); }catch(_){} }, 500); }catch(_){}
       };
     }
-    renderPubChips(); ov.classList.add('open');
+    renderPubChips();
+    // 열 때마다 현재 제목·CTA 상태 채우기
+    try{ var _pp=postById(postEditId); var _ti=document.getElementById('pub-title');
+      if(_ti&&_pp){ var _h=document.querySelector('#landing-canvas [data-empty="제목을 적어요"]'); var _cur=(_h&&_h.textContent.trim())||_pp.title||''; _ti.value=_cur; }
+      var _ck=document.getElementById('pub-cta'); if(_ck&&_pp) _ck.checked=(_pp.ctaOn!==false);
+    }catch(_){}
+    ov.classList.add('open');
   }
   window.__openPublishModal=openPublishModal;
   // 📣 랜딩 목록 (landing 타입만 — 별도 탭)
@@ -9217,6 +9282,79 @@
   window.__createPost=createPost;
   // 유형 picker 건너뛰고 바로 블로그 글쓰기 캔버스로 (유형 분류는 안에서 주제 칩으로 — 사용자 "노션/블로그처럼 바로 쓰기")
   (function(){ var ap=document.getElementById('add-post-btn'); if(ap) ap.onclick=function(){ createPost('blog'); }; })();
+  // 🎯 목적으로 시작 (2026-07-08): 목적 → 형식+주제+구조 뼈대 자동 (랜딩 6단 프리셋과 같은 철학 — 글에도 뼈대를)
+  var GOAL_DEFS={
+    know:{ cat:'정보·노하우', title:'새 정보·노하우 글', body:'이런 고민 있으시죠? — **손님이 검색할 법한 고민**으로 공감하며 시작해요.\n\n① 왜 이런 일이 생기나\n원인을 쉬운 말로 설명해요. 어려운 용어 대신 손님의 언어로.\n\n② 바로 쓰는 해결 방법\n오늘 바로 따라할 수 있는 팁을 적어요. 아까워하지 말고 진짜를 줘요 — 그게 신뢰가 돼요.\n\n③ 전문가의 한마디\n"그래도 어려우면 제가 봐드릴게요." — 예약·문의로 자연스럽게 이어요.' },
+    trust:{ cat:'후기·사례', title:'새 후기·사례', body:'**Before — 어떤 고민으로 오셨나**\n손님의 상황을 그대로 적어요. (예: 앞머리 실패로 3달 고생)\n\n**무엇을 해드렸나**\n진단부터 과정까지 — 전문가의 눈이 보이게.\n\n**After — 어떻게 달라졌나**\n변화를 구체적으로. 사진이 있으면 최고예요.\n\n**손님의 한마디**\n"진작 올 걸 그랬어요" — 실제 한 말 그대로가 제일 힘 세요.' },
+    news:{ cat:'소식·이벤트', title:'새 소식·이벤트', body:'**무슨 소식인가요?**\n한 줄로 핵심부터. (예: 7월 신규 고객 이벤트)\n\n**언제 · 누구에게**\n기간과 대상을 분명하게.\n\n**어떻게 참여하나요**\n예약·문의 방법 + 마감이 있으면 꼭! (마감 = 지금 움직일 이유)' }
+  };
+  function createGoalPost(goal){
+    if(goal==='sell'){ createPost('landing'); return; }
+    var g=GOAL_DEFS[goal]; if(!g){ createPost('blog'); return; }
+    var p={ id:newPostId(), type:'blog', cat:g.cat, title:g.title, cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:[{type:'text',name:'본문',on:true,content:['', g.body],layout:''}], createdAt:Date.now() };
+    postsData.push(p);
+    try{ var wk=Math.floor(Date.now()/604800000); var arr=JSON.parse(localStorage.getItem('cm-hub-postweeks')||'[]'); if(arr.indexOf(wk)<0){ arr.push(wk); localStorage.setItem('cm-hub-postweeks', JSON.stringify(arr.slice(-60))); } }catch(_){}
+    renderPostsLibrary(); try{ renderLandingLib(); }catch(_){}
+    openPostEdit(p.id);
+    try{ if(window.__sheetAfterCreate) window.__sheetAfterCreate(); }catch(_){}
+    try{ toast(g.cat+' 뼈대를 깔아뒀어요 — 안내 글을 내 얘기로 바꿔 쓰면 끝!'); }catch(_){}
+  }
+  window.__createGoalPost=createGoalPost;
+  (function(){ var cw=document.getElementById('content-chooser'); if(cw) cw.addEventListener('click', function(e){ var b=e.target.closest('[data-goal]'); if(!b) return; createGoalPost(b.getAttribute('data-goal')); }); })();
+  // ✨ 제목 도우미 (발행 점검용 — 순수 템플릿, 후킹 원칙 이식)
+  function openTitleHelper(onPick){
+    var ov=document.getElementById('title-helper-ov');
+    if(!ov){ ov=document.createElement('div'); ov.className='ov'; ov.id='title-helper-ov';
+      ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">✨ 제목 도우미</span><span class="x" id="th-x">×</span></div><div class="desc">2칸만 채우면 후킹 제목 후보를 만들어요 · 눌러서 바로 넣기</div>'
+        +'<div class="field"><label>고민·문제 (손님 말로)</label><input id="th-a" placeholder="예: 앞머리 실패"></div>'
+        +'<div class="field"><label>약속·결과</label><input id="th-b" placeholder="예: 안 망치는 법"></div>'
+        +'<div class="field"><label>숫자 (선택)</label><input id="th-c" placeholder="예: 3"></div>'
+        +'<button type="button" class="nchip-apply" id="th-gen">후보 만들기</button><div id="th-out"></div></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='th-x') ov.classList.remove('open'); });
+    }
+    ov.classList.add('open');
+    document.getElementById('th-gen').onclick=function(){
+      var A=(document.getElementById('th-a').value||'').trim(), B=(document.getElementById('th-b').value||'').trim(), C=(document.getElementById('th-c').value||'').trim();
+      var out=document.getElementById('th-out');
+      if(!A){ out.innerHTML='<div class="xp-hint">고민·문제 한 칸은 채워주세요</div>'; return; }
+      var cands=[];
+      if(B) cands.push(A+', '+B+(C?' '+C+'가지':''));
+      cands.push('아직도 '+A+' 때문에 고민이세요?');
+      if(B) cands.push((C?C+'분 만에 ':'')+A+' 끝내는 법 — '+B);
+      cands.push(A+' 전에 이것만은 꼭 보세요');
+      if(B&&C) cands.push(B+' '+C+'가지 ('+A+' 필독)');
+      out.innerHTML=cands.map(function(c){ return '<button type="button" class="bh-cand">'+c.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</button>'; }).join('')+'<div class="xp-hint">눌러서 넣고, 자유롭게 다듬으세요</div>';
+      out.querySelectorAll('.bh-cand').forEach(function(b){ b.onclick=function(){ if(onPick) onPick(b.textContent); ov.classList.remove('open'); }; });
+    };
+  }
+  window.__openTitleHelper=openTitleHelper;
+  // 발행 시 제목·캔버스 동기 반영
+  function setPostTitleEverywhere(id, t){
+    var p=postById(id); if(!p) return;
+    var h=document.querySelector('#landing-canvas [data-empty="제목을 적어요"]');
+    if(h){ h.textContent=t; try{ h.dispatchEvent(new Event('input',{bubbles:true})); }catch(_){} }
+    p.title=t;
+  }
+  // 🎉 발행 후 다음 행동 — 쓴 글이 일하게 (대표 올리기 · 링크 복사)
+  function showPostNext(id){
+    var p=postById(id); if(!p) return;
+    var ov=document.getElementById('post-next-ov');
+    if(!ov){ ov=document.createElement('div'); ov.className='ov'; ov.id='post-next-ov'; document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='pn-x') ov.classList.remove('open'); }); }
+    ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">🎉 발행 완료!</span><span class="x" id="pn-x">×</span></div><div class="desc">이제 이 글이 <b>일하게</b> 하세요 — 한 번씩만 눌러주면 돼요</div>'
+      +'<button type="button" class="xp-wide-btn" id="pn-feat" style="margin-bottom:8px;">★ 홈 대표로 올리기 <small style="font-weight:600; color:var(--muted);">— 홈·소개에 크게</small></button>'
+      +'<button type="button" class="xp-wide-btn" id="pn-link" style="margin-bottom:8px;">🔗 링크 복사 — 인스타 스토리·프로필에</button>'
+      +'<button type="button" class="xp-wide-btn" id="pn-close" style="background:var(--soft); border-style:solid; color:var(--muted);">닫기</button></div>';
+    ov.classList.add('open');
+    document.getElementById('pn-feat').onclick=function(){
+      if(p.featured){ toast('이미 대표예요 ★'); return; }
+      if(featCntInCat(p.cat)>=3){ toast('이 주제 대표는 3개까지 — 목록에서 ★로 바꿔주세요'); return; }
+      p.featured=true; try{ renderPostsLibrary(); }catch(_){} this.textContent='★ 대표로 올렸어요 ✓'; toast('홈·소개에 크게 보여요 ★');
+    };
+    document.getElementById('pn-link').onclick=function(){ try{ copyPostLink(id); }catch(_){} };
+    document.getElementById('pn-close').onclick=function(){ ov.classList.remove('open'); };
+  }
 
   // ════ 컨텐츠 가져오기 picker (발행 글 → 홈에 카드로 꽂기 · 큐레이션) ════
   (function(){
@@ -9586,24 +9724,43 @@
     })();
     var prodOpen={mine:true, coupang:false};
     function prodCount(kind){ var n=0; productsData.forEach(function(p){ if((p.kind||'coupang')===kind) n++; }); return n; }
+    var prodRowOpen={};   // 펼친 편집폼 (화면 상태만, 저장 안 됨)
     function scardHtml(p, gi){
       var imgStyle = p.img ? (' style="background-image:url('+p.img+')"') : '';
       var coup = (p.kind==='coupang');
-      return '<div class="scard" data-pi="'+gi+'">'
+      var open = prodRowOpen[gi] || !(p.name||'').trim();   // 새 상품=폼 펼침
+      // 손님이 보는 그대로(카드) + ✎ 펼치면 편집폼 (2026-07-08)
+      return '<div class="scard scv'+(open?' open':'')+'" data-pi="'+gi+'">'
+        + '<div class="scv-view" data-pexp="'+gi+'">'
+        +   '<span class="scv-th'+(p.img?' has':'')+'"'+imgStyle+'>'+(p.img?'':'🛍')+'</span>'
+        +   '<span class="scv-m"><span class="scv-n">'+(esc(p.name)||'<i style="color:var(--muted);">이름 없는 상품</i>')+'</span><span class="scv-p">'+esc(p.price||'')+(p.resv?' · 📅 예약으로 받기':(p.url?'':(coup?'':' · 💬 카톡 문의로')))+'</span></span>'
+        +   '<span class="scv-go">'+(p.resv?'📅':'↗')+'</span>'
+        +   '<span class="scv-edit">✎</span>'
+        +   '<button type="button" class="sc-del" data-prm="'+gi+'">×</button>'
+        + '</div>'
+        + '<div class="scv-form">'
+        + '<div class="scv-frow">'
         + '<button type="button" class="sc-img'+(p.img?' has':'')+'" data-pimg="'+gi+'"'+imgStyle+'>'+(p.img?'':'＋<br>사진')+'</button>'
         + '<div class="sc-mid">'
         +   '<input class="sc-name" placeholder="'+(coup?'추천 제품 이름':'상품·서비스 이름')+'" value="'+esc(p.name)+'" data-pf="name">'
         +   '<input class="sc-price" placeholder="가격 (예: 50,000원)" value="'+esc(p.price)+'" data-pf="price">'
-        +   '<input class="sc-url" placeholder="'+(coup?'🔗 쿠팡 링크':'💳 구매·결제 링크 (카카오페이·스마트스토어 등)')+'" value="'+esc(p.url)+'" data-pf="url">'
+        +   '<input class="sc-url" placeholder="'+(coup?'🔗 쿠팡 링크':'💳 구매·결제 링크 (비워두면 카톡 문의로 연결)')+'" value="'+esc(p.url)+'" data-pf="url">'
         + '</div>'
-        + '<span class="sc-go">↗</span>'
-        + '<button type="button" class="sc-del" data-prm="'+gi+'">×</button>'
+        + '</div>'
+        + (coup?'':('<div class="sc-route"><span class="sc-route-l">손님이 어디서 사요?</span><button type="button" data-proute="kakao" data-pri="'+gi+'">💬 카톡으로</button><button type="button" data-proute="naver" data-pri="'+gi+'">N 네이버로</button><label class="sc-resv"><input type="checkbox" data-presv="'+gi+'"'+(p.resv?' checked':'')+'> 📅 예약으로 받기</label></div>'))
+        + '</div>'
         + '</div>';
     }
     function prodSectionBody(kind){
       var h=''; var any=false;
       productsData.forEach(function(p,gi){ if((p.kind||'coupang')!==kind) return; any=true; h+=scardHtml(p,gi); });
-      if(!any) h+='<div class="sc-empty">아직 없어요 · 아래로 추가하세요</div>';
+      if(!any && kind==='mine'){   // 유령 상품 예시 (2026-07-08): 탭하면 내 것으로
+        h+='<div class="sc-ghosts">'
+          +'<button type="button" class="sc-ghost" data-sgoal="service"><span class="sc-g-m"><b>💇 예) 퍼스널 컨설팅 30분</b><small>30,000원 · 📅 예약으로 받기</small></span><span class="sc-g-a">＋ 채택</span></button>'
+          +'<button type="button" class="sc-ghost" data-sgoal="ebook"><span class="sc-g-m"><b>📔 예) 전자책 · 노하우 정리</b><small>19,000원 · 💳 링크 또는 카톡</small></span><span class="sc-g-a">＋ 채택</span></button>'
+          +'</div>';
+      }
+      else if(!any) h+='<div class="sc-empty">아직 없어요 · 아래로 추가하세요</div>';
       h+='<button type="button" class="sc-add" data-padd="'+kind+'">＋ '+(kind==='coupang'?'추천 제품 추가':'내 상품 추가')+'</button>';
       if(kind==='coupang') h+='<div class="sc-note">쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다. (공개 페이지에 자동 표시)</div>';
       return h;
@@ -9622,7 +9779,43 @@
       box.querySelectorAll('[data-prm]').forEach(function(x){ x.onclick=function(){ productsData.splice(+x.getAttribute('data-prm'),1); renderProdLib(); }; });
       box.querySelectorAll('[data-pimg]').forEach(function(b){ b.onclick=function(){ var i=+b.getAttribute('data-pimg'); if(window.openVault) window.openVault(function(u){ productsData[i].img=u; renderProdLib(); }); }; });
       box.querySelectorAll('[data-padd]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-padd'); prodOpen[k]=true; productsData.push({name:'',price:'',url:'',img:'',kind:k}); renderProdLib(); var rows=box.querySelectorAll('[data-psec="'+k+'"] .scard'); var last=rows[rows.length-1]; if(last){ var inp=last.querySelector('.sc-name'); if(inp) inp.focus(); } }; });
+      // (2026-07-08) 카드↔폼 토글 · 구매 경로 칩 · 예약으로 받기 · 유령 채택
+      box.querySelectorAll('[data-pexp]').forEach(function(v){ v.onclick=function(e){ if(e.target.closest('.sc-del')) return; var i=+v.getAttribute('data-pexp'); prodRowOpen[i]=!prodRowOpen[i]; renderProdLib(); }; });
+      box.querySelectorAll('[data-proute]').forEach(function(b){ b.onclick=function(){
+        var i=+b.getAttribute('data-pri'), k=b.getAttribute('data-proute');
+        var fab={}; try{ fab=(JSON.parse(localStorage.getItem('cm-home-v1')||'{}').fab)||{}; }catch(_){}
+        var u=fab[k]||'';
+        if(!u){ try{ notify(k==='kakao'?'🏅 전문성 가시화 → 내 주소·채널에 카톡 링크를 먼저 넣어주세요':'채널에 네이버 링크를 먼저 넣어주세요'); }catch(_){} return; }
+        productsData[i].url=u; prodRowOpen[i]=true; renderProdLib(); try{ notify('구매 경로 연결 ✓'); }catch(_){}
+      }; });
+      box.querySelectorAll('[data-presv]').forEach(function(c){ c.onchange=function(){ var i=+c.getAttribute('data-presv'); productsData[i].resv=c.checked; prodRowOpen[i]=true; renderProdLib(); }; });
+      box.querySelectorAll('[data-sgoal]').forEach(function(g){ g.onclick=function(){ addSellItem(g.getAttribute('data-sgoal')); }; });
     }
+    // 🎯 뭘 팔까요? — 유형 고르면 예시 프리필 (2026-07-08, 컨텐츠 목적 선택과 같은 패턴)
+    var SELL_TYPES={
+      service:{ name:'예) 퍼스널 컨설팅 30분', price:'30,000원', resv:true },
+      'class':{ name:'예) 원데이 클래스', price:'99,000원' },
+      ebook:{ name:'예) 전자책 · 나만의 노하우 정리', price:'19,000원' }
+    };
+    function addSellItem(t){
+      var ch=document.getElementById('sell-chooser'); if(ch) ch.style.display='none';
+      if(t==='coupang'){ prodOpen.coupang=true; productsData.push({name:'',price:'',url:'',img:'',kind:'coupang'}); renderProdLib(); return; }
+      var d=SELL_TYPES[t]||{};
+      prodOpen.mine=true;
+      productsData.push({name:d.name||'', price:d.price||'', url:'', img:'', kind:'mine', resv:!!d.resv});
+      prodRowOpen[productsData.length-1]=true;
+      renderProdLib();
+      try{ notify('예시를 내 것으로 바꿔 쓰면 끝!'); }catch(_){}
+    }
+    (function(){
+      var add=document.getElementById('sell-add'), ch=document.getElementById('sell-chooser');
+      if(add&&ch) add.onclick=function(){ ch.style.display=(getComputedStyle(ch).display==='none')?'grid':'none'; };
+      if(ch) ch.querySelectorAll('[data-sgoal]').forEach(function(b){ b.onclick=function(){ addSellItem(b.getAttribute('data-sgoal')); }; });
+      var gl=document.getElementById('sell-guide-link'); if(gl) gl.onclick=function(){ var g=document.getElementById('prod-guide-btn'); if(g) g.click(); };
+      // 신청·문의 명단 → 판매·예약 맨 아래 (만들기가 주인공, 확인은 아래 조용히)
+      var sl=document.getElementById('set-leads'), pane=document.querySelector('.ws-pane[data-pane="sales"]');
+      if(sl&&pane){ sl.style.margin='16px 0 4px'; pane.appendChild(sl); }
+    })();
     function renderQnaLib(){
       var box=document.getElementById('qna-lib'); if(!box) return;
       if(!qnaData.length){ box.innerHTML='<div class="post-empty">아직 질문이 없어요 · ＋질문 추가</div>'; return; }
