@@ -1941,6 +1941,88 @@
   /* 고객·분석 탭 = 인라인 분석 호스트 (탭 열면 바로 뜸) */
   .data-analytics{padding:2px 0 24px;}
   .data-analytics .an-empty{padding:44px 20px; text-align:center; color:var(--muted); font-size:13px; line-height:1.7;}
+  /* 숫자 증거 칩 (2026-07-08) */
+  .nchip-row{display:flex; flex-wrap:wrap; gap:7px; align-items:center;}
+  .nchip{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; padding:7px 11px; border-radius:99px; background:var(--soft); border:1px solid var(--hair); color:var(--ink); cursor:pointer;}
+  .nchip b{color:var(--coral);}
+  .nchip.pop{animation:nchipPop .4s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes nchipPop{0%{transform:scale(.4);opacity:0;} 60%{transform:scale(1.08);} 100%{transform:scale(1);opacity:1;}}
+  .nchip .nx{color:var(--muted); font-weight:700; font-size:13px; line-height:1; margin-left:1px;}
+  .nchip-add{display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:800; padding:7px 12px; border-radius:99px; color:var(--coral); border:1px dashed rgba(45,212,191,.5); background:var(--coral-soft); cursor:pointer; font-family:var(--sans);}
+  .nchip-cnt{font-size:11.5px; font-weight:800; color:var(--coral); background:var(--coral-soft); border-radius:99px; padding:3px 10px; display:inline-block; margin:2px 0 10px;}
+  .nchip-item{display:flex; align-items:center; gap:9px; padding:10px 11px; border-radius:12px; border:1px solid var(--hair); margin-bottom:7px; background:var(--soft);}
+  .nchip-item.on{border-color:var(--coral); background:var(--coral-soft);}
+  .nchip-item.dis{opacity:.4; pointer-events:none;}
+  .nchip-item .nbox{width:20px; height:20px; border-radius:6px; border:1.5px solid var(--hair); flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; cursor:pointer;}
+  .nchip-item.on .nbox{background:var(--coral); border-color:var(--coral);}
+  .nchip-item .nlb{flex:0 0 76px; font-size:11px; font-weight:800; color:var(--muted);}
+  .nchip-item.on .nlb{color:var(--ink);}
+  .nchip-item input{flex:1; min-width:0; background:var(--surface); border:1px solid var(--hair); border-radius:8px; padding:7px 9px; color:var(--ink); font-family:var(--sans); font-size:12px; font-weight:700;}
+  .nchip-item input:disabled{opacity:.5;}
+  .nchip-apply{width:100%; margin-top:8px; background:var(--grad); color:#fff; border:none; border-radius:12px; padding:13px; font-size:13.5px; font-weight:800; font-family:var(--sans); cursor:pointer;}
+  .nchip-apply:disabled{opacity:.4; cursor:default;}
+  /* 작업 사진 3장 (2026-07-08) */
+  .works-grid{display:flex; gap:8px;}
+  .works-slot{flex:1; aspect-ratio:1; border-radius:10px; position:relative; overflow:hidden;}
+  .works-slot.filled{background-size:cover; background-position:center; background-repeat:no-repeat;}
+  .works-slot.empty{border:1px dashed rgba(45,212,191,.5); background:var(--coral-soft); display:flex; align-items:center; justify-content:center; color:var(--coral); font-size:22px; font-weight:800; cursor:pointer;}
+  .works-slot.ph{background:var(--soft); border:1px solid var(--hair);}
+  .works-slot .wx{position:absolute; top:5px; right:5px; width:20px; height:20px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer; line-height:1;}
+  /* ┈ 점선 경계 + 전문성 팔레트 (2026-07-08) ┈ */
+  .xp-divider{display:flex; align-items:center; gap:10px; margin:16px 2px 14px;}
+  .xp-divider .xd-l{flex:1; border-top:2px dashed rgba(167,139,255,.35);}
+  .xp-divider .xd-t{font-size:10.5px; font-weight:800; color:#a78bff; white-space:nowrap; text-align:center;}
+  .xp-divider .xd-t small{display:block; color:var(--muted); font-weight:600; font-size:9px; margin-top:1px;}
+  .xp-cnt{font-size:11.5px; color:var(--muted); font-weight:600; margin:0 0 12px;}
+  .xp-cnt b{color:var(--coral); font-size:15px;}
+  .xpb{position:relative; border-radius:13px; padding:11px 12px; margin-bottom:9px; border:1px solid; transition:.2s;}
+  .xpb .xpb-top{display:flex; align-items:center; gap:10px; cursor:pointer;}
+  .xpb .xpb-ic{width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex:0 0 auto; background:var(--soft); transition:.2s;}
+  .xpb .xpb-m{flex:1; min-width:0;}
+  .xpb .xpb-m b{display:block; font-size:13px; font-weight:800; line-height:1.25; color:var(--ink);}
+  .xpb .xpb-m small{display:block; font-size:10px; margin-top:2px; color:var(--muted); line-height:1.35;}
+  .xpb .xpb-act{flex:0 0 auto; font-size:10.5px; font-weight:800; padding:6px 11px; border-radius:99px; white-space:nowrap; cursor:pointer; font-family:var(--sans); border:1px solid var(--hair); background:var(--soft); color:var(--muted); transition:.2s;}
+  .xpb .xp-rec{position:absolute; top:-8px; left:12px; font-size:9px; font-weight:800; color:#2a1c05; background:linear-gradient(120deg,#ffe08a,#f0b04a); padding:2px 8px; border-radius:99px;}
+  .xpb.ghost{border-color:var(--hair); border-style:dashed; background:rgba(255,255,255,.015);}
+  .xpb.ghost .xpb-ic{filter:grayscale(1); opacity:.55;}
+  .xpb.ghost .xpb-m b{color:var(--muted);}
+  .xpb.ghost.rec{border-style:solid; border-color:rgba(255,215,122,.3); background:rgba(255,215,122,.04);}
+  .xpb.on{border-style:solid; border-color:rgba(45,212,191,.45); background:linear-gradient(160deg, var(--coral-soft), transparent); animation:xpbPop .35s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes xpbPop{0%{transform:scale(.97);} 50%{transform:scale(1.015);} 100%{transform:scale(1);}}
+  .xpb.on .xpb-ic{filter:none; opacity:1; background:var(--coral-soft);}
+  .xpb.on .xpb-act{background:var(--grad); border-color:transparent; color:#fff;}
+  .xpb .xpb-ed{display:none; margin-top:11px; padding-top:11px; border-top:1px dashed var(--hair);}
+  .xpb.on .xpb-ed{display:block; animation:xpFade .35s ease;}
+  @keyframes xpFade{from{opacity:0;} to{opacity:1;}}
+  .xpb-ed input, .xpb-ed textarea{width:100%; background:var(--surface); border:1px solid var(--hair); border-radius:9px; padding:9px 10px; color:var(--ink); font-family:var(--sans); font-size:12.5px; margin-bottom:7px; resize:vertical;}
+  .xp-seg{display:flex; gap:6px; margin-bottom:9px;}
+  .xp-seg button{flex:1; font-size:11px; font-weight:800; padding:8px 4px; border-radius:9px; border:1px solid var(--hair); background:var(--soft); color:var(--muted); cursor:pointer; font-family:var(--sans);}
+  .xp-seg button.on{background:var(--coral-soft); border-color:var(--coral); color:var(--coral);}
+  .xp-rev-form{display:flex; gap:6px;}
+  .xp-rev-form input{margin-bottom:0;}
+  .xp-rev-form button{flex:0 0 auto; font-size:11.5px; font-weight:800; padding:0 13px; border-radius:9px; border:none; background:var(--grad); color:#fff; cursor:pointer; font-family:var(--sans);}
+  .xp-rev-row{display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:9px; background:var(--soft); border:1px solid var(--hair); margin-bottom:6px; font-size:11.5px;}
+  .xp-rev-row .xrr-st{color:#F5C84B; font-size:10px; flex:0 0 auto;}
+  .xp-rev-row .xrr-img{width:26px; height:26px; border-radius:6px; background-size:cover; background-position:center; flex:0 0 auto;}
+  .xp-rev-row .xrr-t{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--ink);}
+  .xp-rev-row .xrr-x{flex:0 0 auto; color:var(--muted); cursor:pointer; font-weight:700; padding:0 3px;}
+  .xp-wide-btn{width:100%; margin-top:7px; background:var(--coral-soft); border:1px dashed rgba(45,212,191,.5); border-radius:10px; padding:11px; color:var(--coral); font-size:12px; font-weight:800; font-family:var(--sans); cursor:pointer;}
+  .xp-hint{font-size:10.5px; color:var(--muted); margin-top:7px; line-height:1.5;}
+  .xp-empty{font-size:11px; color:var(--muted); padding:8px 2px;}
+  .xp-ba-grid{display:flex; gap:8px; margin-bottom:7px;}
+  .xp-ba-slot{flex:1; aspect-ratio:4/3; border-radius:10px; border:1px dashed var(--hair); background:var(--soft); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:12px; font-weight:800; cursor:pointer; background-size:cover; background-position:center; position:relative;}
+  .xp-ba-slot.filled span{background:rgba(0,0,0,.55); color:#fff; padding:3px 9px; border-radius:99px; font-size:10.5px;}
+  .xp-pm-prev{display:flex; gap:6px; flex-wrap:wrap;}
+  .xp-pm-tag{font-size:11px; font-weight:700; color:var(--coral); background:var(--coral-soft); border:1px solid var(--hair); border-radius:99px; padding:4px 11px;}
+  .bh-cand{display:block; width:100%; text-align:left; margin-top:7px; padding:11px 13px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font-size:12.5px; font-weight:700; font-family:var(--sans); cursor:pointer; line-height:1.5;}
+  .bh-cand:hover{border-color:var(--coral);}
+  #story-card{display:none;}   /* 레거시 스토리 편집기 숨김 (2026-07-08) — 팔레트 📖스토리가 대체. 데이터·공개렌더 보존, 되살리려면 이 줄 삭제 */
+  /* ★한 흐름 통합 (2026-07-08 사용자 확정): 기본/소개꾸미기 세그 폐지 — 팔레트가 대체. 데이터·수집 전부 보존(숨김만) */
+  #prof-seg, #prof-seg-hint{display:none !important;}
+  #about-style-card{display:none !important;}   /* 소개 꾸미기(고급·4유형·캔버스) — 되살리려면 이 줄 삭제 */
+  #evidence-card{display:none !important;}      /* 전문 이력·증거(권위·자격·갤러리) — 배지=팔레트로 이전, 데이터 보존 */
+  #profile-card{display:block !important;}      /* showPP 인라인 스타일 무력화 — 기본 명함 항상 표시 */
+  .req-badge{display:inline-block; font-size:9.5px; font-weight:800; color:var(--coral); background:var(--coral-soft); border:1px solid var(--hair); border-radius:6px; padding:1px 7px; margin-left:6px; vertical-align:1px;}
   .an-xax{display:flex; justify-content:space-between; margin:6px 0 0 34px; padding-right:2px;}
   .an-xax span{font-size:9.5px; font-weight:600; color:var(--muted); white-space:nowrap;}
   .an-legend{display:flex; gap:14px; font-size:10.5px; color:var(--muted); margin-top:8px; padding-left:34px;}
@@ -2749,7 +2831,7 @@
 
   <div class="ws-tabs" id="ws-tabs">
     <button class="ws-tab on" data-ws="home"><span class="ico">🏠</span>홈</button>
-    <button class="ws-tab" data-ws="page"><span class="ico">👤</span>프로필</button>
+    <button class="ws-tab" data-ws="page"><span class="ico">🏅</span>전문성 가시화</button>
     <button class="ws-tab" data-ws="posts"><span class="ico">📄</span>컨텐츠</button>
     <button class="ws-tab" data-ws="sales"><span class="ico">💰</span>판매·예약</button>
     <button class="ws-tab" data-ws="data"><span class="ico">📊</span>고객·분석</button>
@@ -2778,14 +2860,14 @@
 
     <!-- 프로필 2분할 탭: 간단 프로필 / 소개·증명 -->
     <div class="prof-seg" id="prof-seg">
-      <button type="button" class="prof-seg-b" data-pp="simple">🏠 간단 프로필<small>고객 홈에 보이는 기본 정보</small></button>
-      <button type="button" class="prof-seg-b prof-seg-star on" data-pp="convert">⭐ 전환용 프로필<small>신뢰·전문성 · 전환율 ↑</small></button>
+      <button type="button" class="prof-seg-b" data-pp="simple">🪪 기본 프로필<small>사진·이름·한 줄·숫자·작업</small></button>
+      <button type="button" class="prof-seg-b prof-seg-star on" data-pp="convert">🎨 소개 꾸미기<small>고급 · 템플릿·순서</small></button>
     </div>
     <div class="prof-seg-hint" id="prof-seg-hint"></div>
 
     <!-- ① 간단 프로필 (이름·소개·주소 + 채널) -->
     <div class="card" id="profile-card">
-      <div class="sec-h" style="margin:0 0 10px;"><span class="t" style="font-size:14px;">🏠 간단 프로필</span><span class="acc-sub">이름·소개·주소·채널</span></div>
+      <div class="sec-h" style="margin:0 0 10px;"><span class="t" style="font-size:14px;">🪪 기본 명함</span><span class="acc-sub">손님이 처음 보는 3초 신뢰</span></div>
       <div class="acc-bd">
       <div class="prof-live" id="prof-live">
         <div class="pl-lbl"><span class="pl-dot"></span>손님 눈에 이렇게 보여요<span class="pl-lbl-x">· 입력하면 바로 바뀌어요</span></div>
@@ -2810,15 +2892,107 @@
         </div>
       </div>
       <div class="field">
-        <label>한 줄 소개</label>
+        <label style="display:flex; align-items:center;">한 줄 소개 <button type="button" id="bio-helper-btn" style="margin-left:auto; background:var(--coral-soft); border:1px dashed rgba(45,212,191,.5); color:var(--coral); border-radius:99px; font-size:11px; font-weight:800; padding:4px 11px; cursor:pointer; font-family:var(--sans);">✨ 한 줄 도우미</button></label>
         <input id="pf-bio" value="컨텐츠 크리에이터 · 공부한 걸 모아 나눕니다" />
       </div>
+      <div class="field" id="nchip-field">
+        <label>🔢 숫자 증거 <span style="color:var(--muted); font-weight:600; font-size:11px;">신뢰 칩 · 최대 3개 (몰라도 건너뛰기 OK)</span></label>
+        <div class="nchip-row" id="nchip-row"></div>
+      </div>
+      <div class="field" id="works-field">
+        <label>🖼 작업 사진 <span style="color:var(--muted); font-weight:600; font-size:11px;">대표 작업 · 최대 3장 (선택)</span></label>
+        <div class="works-grid" id="works-grid"></div>
+      </div>
+      </div><!-- /.acc-bd 간단 프로필 -->
+    </div>
+
+    <!-- ┈ 점선 경계: 여기까지 기본 프로필 (2026-07-08) ┈ -->
+    <div class="xp-divider"><span class="xd-l"></span><span class="xd-t">여기까지가 기본 프로필<small>홈에도 이대로 나가요</small></span><span class="xd-l"></span></div>
+
+    <!-- 🏅 전문성 증거 팔레트 (2026-07-08): 회색 유령 → 탭 채택 → 색 켜지며 작성 -->
+    <div class="card" id="xp-card">
+      <div class="sec-h" style="margin:0 0 6px;"><span class="t" style="font-size:14px;">🏅 전문성 증거</span><span class="acc-sub">담을수록 명함이 강해져요 · 소개 탭에 나가요</span></div>
+      <div class="xp-cnt"><b id="xp-cnt-n">0</b>개 담김 · 3개만 채워도 신뢰가 완성돼요</div>
+
+      <div class="xpb ghost rec" data-xk="story">
+        <span class="xp-rec">⭐ 강추</span>
+        <div class="xpb-top"><span class="xpb-ic">📖</span><span class="xpb-m"><b>스토리</b><small>왜 시작 → 전환점 → 지금 · 질문 3개로 완성</small></span><button type="button" class="xpb-act">＋ 채택</button></div>
+        <div class="xpb-ed">
+          <div class="xp-seg" id="xp-story-style"><button type="button" data-xs="scene" class="on">🎬 한 장면</button><button type="button" data-xs="timeline">📈 타임라인</button></div>
+          <input id="xp-story-hl" placeholder="한 줄 핵심 (예: 앞머리 한 번 망치면 3달 고생 — 그래서 10년을 걸었습니다)">
+          <textarea id="xp-story-why" rows="2" placeholder="① 왜 시작했나요? (예: 저도 앞머리 때문에 3달을 고생했어요)"></textarea>
+          <textarea id="xp-story-turn" rows="2" placeholder="② 전환점은? (예: 얼굴형마다 어울리는 라인이 따로 있다는 걸 알았죠)"></textarea>
+          <textarea id="xp-story-now" rows="2" placeholder="③ 지금은 어떻게 돕나요? (예: 당신에게 어울리는 선을 찾아드려요)"></textarea>
+        </div>
+      </div>
+
+      <div class="xpb ghost rec" data-xk="reviews">
+        <span class="xp-rec">⭐ 강추</span>
+        <div class="xpb-top"><span class="xpb-ic">💬</span><span class="xpb-m"><b>후기 벽</b><small>손님이 한 말 그대로 · 카톡 캡처가 제일 빨라요</small></span><button type="button" class="xpb-act">＋ 채택</button></div>
+        <div class="xpb-ed">
+          <div id="xp-rev-list"></div>
+          <div class="xp-rev-form"><input id="xp-rvf-t" placeholder="후기 내용 (손님이 한 말 그대로)"><input id="xp-rvf-n" placeholder="이름" style="max-width:92px;"><button type="button" id="xp-rvf-add">추가</button></div>
+          <button type="button" class="xp-wide-btn" id="xp-rev-cap">📷 카톡 캡처로 추가 (타이핑 0)</button>
+        </div>
+      </div>
+
+      <div class="xpb ghost rec" data-xk="ba">
+        <span class="xp-rec">⭐ 강추</span>
+        <div class="xpb-top"><span class="xpb-ic">🔄</span><span class="xpb-m"><b>변화 증거 (전 → 후)</b><small>가장 강한 증거 · 사진 2장</small></span><button type="button" class="xpb-act">＋ 채택</button></div>
+        <div class="xpb-ed">
+          <div class="xp-ba-grid"><div class="xp-ba-slot" data-bak="b"><span>＋ 전(前)</span></div><div class="xp-ba-slot" data-bak="a"><span>＋ 후(後)</span></div></div>
+          <input id="xp-ba-cap" placeholder="설명 (예: 시스루뱅 · 얼굴형 보정)">
+        </div>
+      </div>
+
+      <div class="xpb ghost" data-xk="badges">
+        <div class="xpb-top"><span class="xpb-ic">🏅</span><span class="xpb-m"><b>신뢰 배지 (자격·수상·경력)</b><small>한 줄에 하나씩 · 소개 탭에 리스트로</small></span><button type="button" class="xpb-act">＋ 채택</button></div>
+        <div class="xpb-ed"><textarea id="xp-badges" rows="3" placeholder="예)&#10;미용사 국가자격 · 2015&#10;헤어 어워드 동안라인 부문 수상 · 2020"></textarea></div>
+      </div>
+
+      <div class="xpb ghost" data-xk="probmap">
+        <div class="xpb-top"><span class="xpb-ic">🎯</span><span class="xpb-m"><b>문제 지도</b><small>내가 푸는 고객 고민 — 손님이 자기 문제를 봐요</small></span><button type="button" class="xpb-act">＋ 채택</button></div>
+        <div class="xpb-ed"><input id="xp-pm" placeholder="쉼표로 구분 (예: 앞머리 고민, 곱슬, 얼굴형 커버)"><div id="xp-pm-prev" class="xp-pm-prev"></div></div>
+      </div>
+
+      <div class="xpb ghost" data-xk="mediakit">
+        <div class="xpb-top"><span class="xpb-ic">📤</span><span class="xpb-m"><b>명함 이미지 내보내기</b><small>인스타 스토리·카톡용 PNG — 명함이 유입을 만들어요</small></span><button type="button" class="xpb-act">＋ 채택</button></div>
+        <div class="xpb-ed"><button type="button" class="xp-wide-btn" id="xp-mediakit-go">🪪 명함 이미지 저장</button><div class="xp-hint">이름·한 줄·숫자 증거가 카드 한 장으로 — 링크 스티커와 함께 올려보세요</div></div>
+      </div>
+    </div>
+
+    <!-- 🔗 내 주소·채널 (2026-07-08 맨 아래로 — 명함 몰입 안 끊게, 설정은 설정끼리) -->
+    <div class="card" id="addr-card">
+      <div class="sec-h" style="margin:0 0 10px;"><span class="t" style="font-size:14px;">🔗 내 주소 · 채널</span><span class="acc-sub">손님이 찾아오는 길</span></div>
       <div class="field">
-        <label>내 주소 (핸들)</label>
+        <label>내 주소 (핸들)<span class="req-badge">필수</span></label>
         <div class="handle-row"><span>contenthub.kr/u/</span><input id="pf-handle" placeholder="원하는 주소 (영문·숫자, 예: jigi)" /></div>
       </div>
       <div id="profile-channels-slot"></div><!-- 채널·연락처 카드가 JS로 여기로 이동 -->
-      </div><!-- /.acc-bd 간단 프로필 -->
+    </div>
+
+    <!-- ✨ 한 줄 도우미 (2026-07-08) -->
+    <div class="ov" id="bio-helper-ov">
+      <div class="sheet">
+        <div class="sheet-h"><span class="t">✨ 한 줄 도우미</span><span class="x" id="bh-x">×</span></div>
+        <div class="desc">3칸만 채우면 후보 문장을 만들어드려요 · 마음에 드는 걸 누르면 바로 들어가요</div>
+        <div class="field"><label>무엇을 (기술·분야)</label><input id="bh-what" placeholder="예: 앞머리 디자인"></div>
+        <div class="field"><label>누구의 어떤 고민</label><input id="bh-who" placeholder="예: 얼굴형 고민"></div>
+        <div class="field"><label>숫자·연차 (선택 · 몰라도 OK)</label><input id="bh-num" placeholder="예: 10년 · 3,800명"></div>
+        <button type="button" class="nchip-apply" id="bh-gen" style="margin-top:2px;">후보 만들기</button>
+        <div id="bh-out"></div>
+      </div>
+    </div>
+
+    <!-- 숫자 증거 picker (2026-07-08) -->
+    <div class="ov" id="nchip-ov">
+      <div class="sheet">
+        <div class="sheet-h"><span class="t">🔢 숫자 증거 · 최대 3개</span><span class="x" id="nchip-x">×</span></div>
+        <div class="desc">체크하고 내 숫자를 채우면 명함에 붙어요 · 모르면 안 골라도 돼요</div>
+        <div class="nchip-cnt" id="nchip-cnt">0 / 3</div>
+        <div id="nchip-list"></div>
+        <button type="button" class="nchip-apply" id="nchip-apply" disabled>명함에 반영하기</button>
+      </div>
     </div>
 
     <!-- ② 소개·증명 (손님 '소개' 탭 = 신뢰 명함) -->
@@ -8072,7 +8246,7 @@
     var blocks = (homeVersions && homeVersions[activeVersion]) ? homeVersions[activeVersion] : collectRowsArray();  // 공개되는 건 '적용된' 버전
     var home=null; try{ home=JSON.parse(localStorage.getItem('cm-home-v1')||'null'); }catch(e){}
     var theme = (home && home.theme) || null;
-    return { v:1, profile:{ name:gv('pf-name'), bio:gv('pf-bio'), handle:gv('pf-handle'), avatar:(window.__profileAvatar||''), avatarFx:gv('pf-avatarfx'), tagline:gv('pf-tagline'), headline:gv('pf-headline'), reviews:(window.__reviewsGet?window.__reviewsGet().filter(function(r){return r&&r.text;}):[]), cta:(window.__ctaGet?window.__ctaGet():{}), template:(window.__pfTemplate||'warm'), color:(window.__pfColor||''), format:(window.__pfFormat||'pro'), creator:(window.__collectCreator?window.__collectCreator():{}), story:(window.__collectStory?window.__collectStory():{}), aboutOrder:(window.__collectAboutOrder?window.__collectAboutOrder():null), aboutOn:(window.__pfAboutOn!==false), sections:(window.__collectAbSections?window.__collectAbSections():[]), evidence:{ authority:(window.__isEvGhost&&window.__isEvGhost('pf-authority'))?'':gv('pf-authority'), creds:(window.__isEvGhost&&window.__isEvGhost('pf-creds'))?'':gv('pf-creds'), stats:(window.__isEvGhost&&window.__isEvGhost('pf-stats'))?'':gv('pf-stats'), gallery:(window.__evGalleryGet?window.__evGalleryGet().filter(function(x){return x&&(x.img||x.cap);}):[]) } }, blocks:blocks, versions:homeVersions, active:activeVersion, home:home, theme:theme, reservation:resvCfg, posts:postsData, products:productsData, qna:qnaData, cats:ensureCats(), catColors:catColorsData, archiveView:archiveView, savedAt:Date.now() };
+    return { v:1, profile:{ name:gv('pf-name'), bio:gv('pf-bio'), handle:gv('pf-handle'), avatar:(window.__profileAvatar||''), avatarFx:gv('pf-avatarfx'), tagline:gv('pf-tagline'), headline:gv('pf-headline'), reviews:(window.__reviewsGet?window.__reviewsGet().filter(function(r){return r&&r.text;}):[]), cta:(window.__ctaGet?window.__ctaGet():{}), template:(window.__pfTemplate||'warm'), color:(window.__pfColor||''), format:(window.__pfFormat||'pro'), creator:(window.__collectCreator?window.__collectCreator():{}), story:(window.__collectStory?window.__collectStory():{}), aboutOrder:(window.__collectAboutOrder?window.__collectAboutOrder():null), aboutOn:(window.__pfAboutOn!==false), sections:(window.__collectAbSections?window.__collectAbSections():[]), chips:(window.__collectChips?window.__collectChips():[]), works:(window.__collectWorks?window.__collectWorks():[]), xp:(window.__collectXp?window.__collectXp():null), evidence:{ authority:(window.__isEvGhost&&window.__isEvGhost('pf-authority'))?'':gv('pf-authority'), creds:(window.__isEvGhost&&window.__isEvGhost('pf-creds'))?'':gv('pf-creds'), stats:(window.__isEvGhost&&window.__isEvGhost('pf-stats'))?'':gv('pf-stats'), gallery:(window.__evGalleryGet?window.__evGalleryGet().filter(function(x){return x&&(x.img||x.cap);}):[]) } }, blocks:blocks, versions:homeVersions, active:activeVersion, home:home, theme:theme, reservation:resvCfg, posts:postsData, products:productsData, qna:qnaData, cats:ensureCats(), catColors:catColorsData, archiveView:archiveView, savedAt:Date.now() };
   }
   window.__serialize=serialize;
   function applyData(d){
@@ -8095,6 +8269,9 @@
       var ev=d.profile.evidence||{}; sv('pf-authority',ev.authority||''); var cr=document.getElementById('pf-creds'); if(cr){ cr.value=ev.creds||''; cr.classList.remove('gv-ghost'); } sv('pf-stats',ev.stats||'');
       try{ if(window.__evGallerySet) window.__evGallerySet(ev.gallery||[]); }catch(_){}
       ['pf-authority','pf-stats'].forEach(function(id){ var e=document.getElementById(id); if(e) e.classList.remove('gv-ghost'); });
+      try{ if(window.__loadChips) window.__loadChips(d.profile.chips||[]); }catch(_){}
+      try{ if(window.__loadWorks) window.__loadWorks(d.profile.works||[]); }catch(_){}
+      try{ if(window.__loadXp) window.__loadXp(d.profile.xp||null); }catch(_){}
       if(window.__applyEvGhosts) setTimeout(window.__applyEvGhosts, 0); }
     // ── 홈 버전 불러오기 (신규=versions / 레거시=blocks 하나를 funnel 버전으로) ──
     if(d.versions && typeof d.versions==='object'){
@@ -9305,7 +9482,7 @@
     }
     window.__showPP=showPP;
     document.querySelectorAll('#prof-seg .prof-seg-b').forEach(function(b){ b.addEventListener('click', function(){ var w=b.getAttribute('data-pp'); showPP(curPP===w?'':w); }); });   // 같은 탭 다시 누르면 접힘
-    showPP('convert');   // 기본=전환용 프로필(주 작업면)
+    showPP('simple');   // 기본=기본 프로필 (2026-07-08 통합: 기본 프로필 → 점선 → 전문성 팔레트가 주 흐름, 전환용=고급)
   })();
 
   // ════ 📸 증거 갤러리 (전문 이력·증거 — 사진+캡션, 소개에 그리드) ════
@@ -9337,7 +9514,7 @@
   (function(){
     var data=[];   // [{stars, text, name}]
     window.__reviewsGet=function(){ return data; };
-    window.__reviewsSet=function(arr){ data=Array.isArray(arr)?arr.map(function(r){ return {stars:(r&&+r.stars)||5, text:(r&&r.text)||'', name:(r&&r.name)||'', source:(r&&r.source)||''}; }):[]; };
+    window.__reviewsSet=function(arr){ data=Array.isArray(arr)?arr.map(function(r){ return {stars:(r&&+r.stars)||5, text:(r&&r.text)||'', name:(r&&r.name)||'', source:(r&&r.source)||'', img:(r&&r.img)||''}; }):[]; try{ if(window.__renderXpRev) window.__renderXpRev(); }catch(_){} };   /* img=카톡 캡처 후기 (2026-07-08) */
   })();
 
   // ════ 📣 손님 버튼(CTA) 설정 — 예약/구매/상담 ════
@@ -10845,6 +11022,194 @@
     var EDIT_LBL='✎ 편집 중 <span style="font-weight:400; color:var(--muted); font-size:11px;">· 톡 눌러 고치기</span>';
     window.__leResetToggle=function(){ if(ml) ml.innerHTML=EDIT_LBL; try{ if(window.__leSetPreview) window.__leSetPreview(false); }catch(e){} };
   })();
+})();
+</script>
+<script>
+/* 숫자 증거 칩 picker (2026-07-08) — profile.chips 편집. serialize/applyData가 window.__collectChips/__loadChips로 연동 */
+(function(){
+  var EX=[['연차·경력','12년 경력'],['누적 고객','3,800명 도움'],['누적 작업','작업 340건'],['평균 결과','평균 -8kg'],['재방문','재방문 92%'],['후기','후기 128개'],['수상','수상 2회'],['구독·팔로워','구독 3만'],['협업·언론','브랜드 협업 20건'],['속도·보장','7일 내 완성']];
+  var chips=[];
+  var row=document.getElementById('nchip-row'), ov=document.getElementById('nchip-ov');
+  var listEl=document.getElementById('nchip-list'), cntEl=document.getElementById('nchip-cnt'), applyBtn=document.getElementById('nchip-apply');
+  if(!row||!ov||!listEl) return;
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+  function boldNum(v){ var e=esc(v); var m=String(v).match(/[\d][\d,\.]*/); if(!m) return e; return e.replace(esc(m[0]),'<b>'+esc(m[0])+'</b>'); }
+  function renderRow(pop){
+    row.innerHTML='';
+    chips.forEach(function(c,i){ var sp=document.createElement('span'); sp.className='nchip'+(pop?' pop':''); sp.innerHTML=boldNum(c.value)+'<span class="nx" data-nx="'+i+'">×</span>'; row.appendChild(sp); });
+    if(chips.length<3){ var add=document.createElement('button'); add.type='button'; add.className='nchip-add'; add.textContent='＋ 숫자 증거'; row.appendChild(add); }
+  }
+  var sel={}, vals={};
+  function count(){ var n=0; for(var k in sel){ if(sel[k]) n++; } return n; }
+  function renderList(){
+    listEl.innerHTML='';
+    EX.forEach(function(e,i){
+      var on=!!sel[i], full=count()>=3;
+      var it=document.createElement('div'); it.className='nchip-item'+(on?' on':'')+((!on&&full)?' dis':'');
+      it.innerHTML='<span class="nbox" data-box="'+i+'">'+(on?'✓':'')+'</span><span class="nlb">'+esc(e[0])+'</span><input type="text" data-inp="'+i+'" placeholder="'+esc(e[1])+'" '+(on?'':'disabled')+' value="'+(vals[i]!=null?esc(vals[i]):'')+'">';
+      listEl.appendChild(it);
+    });
+    var c=count(); if(cntEl) cntEl.textContent=c+' / 3'; if(applyBtn) applyBtn.disabled=c===0;
+  }
+  listEl.addEventListener('click',function(e){ var b=e.target.closest('.nbox'); if(!b) return; var i=+b.getAttribute('data-box'), on=!!sel[i]; if(!on && count()>=3) return; sel[i]=!on; renderList(); });
+  listEl.addEventListener('input',function(e){ var inp=e.target.closest('input'); if(!inp) return; vals[+inp.getAttribute('data-inp')]=inp.value; });
+  function openPicker(){ sel={}; vals={}; chips.forEach(function(c){ for(var i=0;i<EX.length;i++){ if(EX[i][0]===c.label){ sel[i]=true; vals[i]=c.value; break; } } }); renderList(); ov.classList.add('open'); }
+  row.addEventListener('click',function(e){ var nx=e.target.closest('[data-nx]'); if(nx){ chips.splice(+nx.getAttribute('data-nx'),1); renderRow(false); persist(); return; } openPicker(); });
+  if(applyBtn) applyBtn.addEventListener('click',function(){ var out=[]; EX.forEach(function(e,i){ if(sel[i]){ var v=(vals[i]&&String(vals[i]).trim())?String(vals[i]).trim():e[1]; out.push({label:e[0], value:v}); } }); chips=out.slice(0,3); renderRow(true); ov.classList.remove('open'); persist(); });
+  var xb=document.getElementById('nchip-x'); if(xb) xb.onclick=function(){ ov.classList.remove('open'); };
+  ov.addEventListener('click',function(e){ if(e.target===ov) ov.classList.remove('open'); });
+  function persist(){ try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){} }
+  window.__collectChips=function(){ return chips.slice(); };
+  window.__loadChips=function(a){ chips=(a||[]).filter(function(c){ return c&&c.value; }).map(function(c){ return {label:(c.label||''), value:String(c.value)}; }).slice(0,3); renderRow(false); };
+  renderRow(false);
+})();
+/* 작업 사진 3장 (2026-07-08) — profile.works. openVault로 추가 (최대 3) */
+(function(){
+  var works=[];
+  var grid=document.getElementById('works-grid');
+  if(!grid) return;
+  function render(){
+    grid.innerHTML=''; var firstEmpty=true;
+    for(var i=0;i<3;i++){
+      var s=document.createElement('div');
+      if(i<works.length){ s.className='works-slot filled'; s.style.backgroundImage='url('+works[i]+')'; s.innerHTML='<span class="wx" data-wx="'+i+'">×</span>'; }
+      else if(firstEmpty){ firstEmpty=false; s.className='works-slot empty'; s.setAttribute('data-wadd','1'); s.textContent='＋'; }
+      else { s.className='works-slot ph'; }
+      grid.appendChild(s);
+    }
+  }
+  grid.addEventListener('click',function(e){
+    var x=e.target.closest('[data-wx]'); if(x){ works.splice(+x.getAttribute('data-wx'),1); render(); persist(); return; }
+    var a=e.target.closest('[data-wadd]'); if(a){ if(works.length>=3) return; if(window.openVault){ window.openVault(function(u){ if(u){ works.push(u); works=works.slice(0,3); render(); persist(); } }); } }
+  });
+  function persist(){ try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){} }
+  window.__collectWorks=function(){ return works.slice(); };
+  window.__loadWorks=function(a){ works=(a||[]).filter(function(u){ return u; }).slice(0,3); render(); };
+  render();
+})();
+/* ✨ 한 줄 도우미 (2026-07-08) — 질문 3개 → 후보 문장 → 탭하면 pf-bio에. 순수 템플릿+조사, AI 아님 */
+(function(){
+  var btn=document.getElementById('bio-helper-btn'), ov=document.getElementById('bio-helper-ov');
+  if(!btn||!ov) return;
+  function josa(w,a,b){ if(!w) return b; var c=w.charCodeAt(w.length-1); if(c<0xAC00||c>0xD7A3) return b; return ((c-0xAC00)%28>0)?a:b; }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  btn.onclick=function(){ ov.classList.add('open'); var w=document.getElementById('bh-what'); if(w) setTimeout(function(){ w.focus(); },80); };
+  var xb=document.getElementById('bh-x'); if(xb) xb.onclick=function(){ ov.classList.remove('open'); };
+  ov.addEventListener('click',function(e){ if(e.target===ov) ov.classList.remove('open'); });
+  var gen=document.getElementById('bh-gen');
+  if(gen) gen.onclick=function(){
+    var w=(document.getElementById('bh-what')||{}).value.trim(), h=(document.getElementById('bh-who')||{}).value.trim(), n=(document.getElementById('bh-num')||{}).value.trim();
+    var out=document.getElementById('bh-out'); if(!out) return;
+    if(!w&&!h){ out.innerHTML='<div class="xp-hint">"무엇을" 또는 "누구의 고민" 하나는 채워주세요</div>'; return; }
+    var cands=[];
+    if(w&&h) cands.push(n?(w+' '+n+' · '+h+' 전문'):(w+' · '+h+' 전문'));
+    if(w&&h) cands.push(h+josa(h,'은','는')+' '+w+josa(w,'으로','로')+' 풀어드려요');
+    if(w&&n) cands.push(n+' 동안 '+w+'만 — 이유 있는 선택입니다');
+    if(w&&h&&n) cands.push(h+' '+n+'과 함께한 '+w);
+    if(w&&!h) cands.push(w+' 전문'+(n?(' · '+n):''));
+    if(h&&!w) cands.push(h+', 여기서 끝내세요'+(n?(' · '+n):''));
+    out.innerHTML=cands.map(function(c){ return '<button type="button" class="bh-cand">'+esc(c)+'</button>'; }).join('')+'<div class="xp-hint">눌러서 넣고, 자유롭게 고쳐 쓰세요</div>';
+    out.querySelectorAll('.bh-cand').forEach(function(b){ b.onclick=function(){ var bio=document.getElementById('pf-bio'); if(bio){ bio.value=b.textContent; } try{ if(window.__updateProfLive) window.__updateProfLive(); }catch(_){} try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){} ov.classList.remove('open'); if(window.toast) toast('한 줄 소개에 넣었어요 ✓'); }; });
+  };
+})();
+/* 🏅 전문성 증거 팔레트 (2026-07-08) — profile.xp {adopted[], story{style,hl,why,turn,now}, ba{b,a,cap}, probmap[]}
+   회색 유령→탭 채택→편집기 펼침. 후기=기존 profile.reviews 재사용(+카톡캡처 img), 배지=pf-creds 연동 */
+(function(){
+  var card=document.getElementById('xp-card'); if(!card) return;
+  var xp={ adopted:[], story:{style:'scene',hl:'',why:'',turn:'',now:''}, ba:{b:'',a:'',cap:''}, probmap:[] };
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  function persist(){ try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){} }
+  function paint(){
+    card.querySelectorAll('.xpb').forEach(function(b){ var k=b.getAttribute('data-xk'), on=xp.adopted.indexOf(k)>=0;
+      b.classList.toggle('on',on); b.classList.toggle('ghost',!on);
+      var a=b.querySelector('.xpb-act'); if(a) a.textContent=on?'✓ 담김':'＋ 채택'; });
+    var n=document.getElementById('xp-cnt-n'); if(n) n.textContent=xp.adopted.length;
+  }
+  card.addEventListener('click',function(e){
+    if(e.target.closest('.xpb-ed')) return;   // 편집기 내부 클릭은 무시
+    var b=e.target.closest('.xpb'); if(!b) return;
+    var isAct=!!e.target.closest('.xpb-act');
+    var k=b.getAttribute('data-xk'), i=xp.adopted.indexOf(k);
+    if(i>=0){ if(isAct){ xp.adopted.splice(i,1); paint(); persist(); } return; }   // 담김 해제=버튼으로만
+    xp.adopted.push(k); paint(); persist();
+    if(k==='reviews') renderXpRev();
+  });
+  // 스토리
+  var seg=document.getElementById('xp-story-style');
+  if(seg) seg.addEventListener('click',function(e){ var b=e.target.closest('[data-xs]'); if(!b) return; xp.story.style=b.getAttribute('data-xs'); seg.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',x===b); }); persist(); });
+  ['hl','why','turn','now'].forEach(function(f){ var el=document.getElementById('xp-story-'+f); if(el) el.addEventListener('input',function(){ xp.story[f]=el.value; persist(); }); });
+  // 전후
+  card.querySelectorAll('.xp-ba-slot').forEach(function(s){ s.addEventListener('click',function(){ if(!window.openVault) return; var k=s.getAttribute('data-bak'); window.openVault(function(u){ if(!u) return; xp.ba[k]=u; s.style.backgroundImage='url('+u+')'; s.classList.add('filled'); persist(); }); }); });
+  var bacap=document.getElementById('xp-ba-cap'); if(bacap) bacap.addEventListener('input',function(){ xp.ba.cap=bacap.value; persist(); });
+  // 배지 = pf-creds 연동 (기존 소개탭 자격·증명 렌더 재사용)
+  var bg=document.getElementById('xp-badges'), creds=document.getElementById('pf-creds');
+  if(bg) bg.addEventListener('input',function(){ if(creds){ creds.value=bg.value; creds.classList.remove('gv-ghost'); } persist(); });
+  // 문제 지도
+  var pm=document.getElementById('xp-pm'), pmv=document.getElementById('xp-pm-prev');
+  function paintPm(){ if(pmv) pmv.innerHTML=xp.probmap.map(function(t){ return '<span class="xp-pm-tag">'+esc(t)+'</span>'; }).join(''); }
+  if(pm) pm.addEventListener('input',function(){ xp.probmap=pm.value.split(',').map(function(t){ return t.trim(); }).filter(Boolean).slice(0,8); paintPm(); persist(); });
+  // 후기 (profile.reviews 재사용)
+  function renderXpRev(){
+    var el=document.getElementById('xp-rev-list'); if(!el) return;
+    var arr=(window.__reviewsGet?window.__reviewsGet():[]);
+    el.innerHTML=arr.length?arr.map(function(r,i){
+      return '<div class="xp-rev-row">'+(r.img?('<span class="xrr-img" style="background-image:url('+esc(r.img)+')"></span>'):('<span class="xrr-st">'+'★★★★★'.slice(0,Math.max(1,Math.min(5,+r.stars||5)))+'</span>'))+'<span class="xrr-t">'+(r.text?esc(r.text):'(카톡 캡처 후기)')+(r.name?(' — '+esc(r.name)):'')+'</span><span class="xrr-x" data-xri="'+i+'">×</span></div>';
+    }).join(''):'<div class="xp-empty">아직 후기가 없어요 — 카톡 캡처가 제일 빨라요 📷</div>';
+  }
+  window.__renderXpRev=renderXpRev;
+  var revList=document.getElementById('xp-rev-list');
+  if(revList) revList.addEventListener('click',function(e){ var x=e.target.closest('[data-xri]'); if(!x) return; var arr=(window.__reviewsGet?window.__reviewsGet():[]); arr.splice(+x.getAttribute('data-xri'),1); renderXpRev(); persist(); });
+  var rva=document.getElementById('xp-rvf-add');
+  if(rva) rva.onclick=function(){ var t=document.getElementById('xp-rvf-t'), n=document.getElementById('xp-rvf-n'); if(!t||!t.value.trim()) return; var arr=(window.__reviewsGet?window.__reviewsGet():null); if(!arr) return; arr.push({stars:5, text:t.value.trim(), name:(n?n.value.trim():''), source:'', img:''}); t.value=''; if(n) n.value=''; renderXpRev(); persist(); };
+  var rvc=document.getElementById('xp-rev-cap');
+  if(rvc) rvc.onclick=function(){ if(!window.openVault) return; window.openVault(function(u){ if(!u) return; var arr=(window.__reviewsGet?window.__reviewsGet():null); if(!arr) return; arr.push({stars:5, text:'', name:'', source:'', img:u}); renderXpRev(); persist(); if(window.toast) toast('캡처 후기를 담았어요 📷'); }); };
+  // 명함 이미지 내보내기 (canvas PNG — 카드뉴스/코드카드와 같은 기술)
+  var mk=document.getElementById('xp-mediakit-go');
+  if(mk) mk.onclick=function(){
+    function gv2(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+    var name=gv2('pf-name')||'내 명함', bio=gv2('pf-bio'), handle=gv2('pf-handle');
+    var chips=(window.__collectChips?window.__collectChips():[]).slice(0,3);
+    var cv=document.createElement('canvas'); cv.width=720; cv.height=900; var x=cv.getContext('2d');
+    var g=x.createLinearGradient(0,0,720,900); g.addColorStop(0,'#191622'); g.addColorStop(1,'#0e0c14'); x.fillStyle=g; x.fillRect(0,0,720,900);
+    var g2=x.createRadialGradient(360,40,40,360,40,480); g2.addColorStop(0,'rgba(143,109,255,.4)'); g2.addColorStop(1,'rgba(0,0,0,0)'); x.fillStyle=g2; x.fillRect(0,0,720,520);
+    function rr(px,py,w,h,r){ x.beginPath(); if(x.roundRect){ x.roundRect(px,py,w,h,r); } else { x.rect(px,py,w,h); } }
+    function done(){
+      x.textAlign='center';
+      x.fillStyle='#ffffff'; x.font='800 50px Pretendard, sans-serif'; x.fillText(name.slice(0,14), 360, 480);
+      if(bio){ x.fillStyle='#cfc8e0'; x.font='600 27px Pretendard, sans-serif'; x.fillText(bio.slice(0,24), 360, 534); }
+      if(chips.length){ x.font='700 23px Pretendard, sans-serif';
+        var texts=chips.map(function(c){ return String(c.value).slice(0,14); });
+        var ws=texts.map(function(t){ return x.measureText(t).width+42; });
+        var total=ws.reduce(function(a,b){ return a+b; },0)+(texts.length-1)*13, sx=360-total/2, cy=612;
+        texts.forEach(function(t,i){ var w=ws[i]; x.fillStyle='rgba(255,255,255,.07)'; rr(sx,cy-30,w,54,27); x.fill(); x.strokeStyle='rgba(255,255,255,.22)'; x.lineWidth=1.4; rr(sx,cy-30,w,54,27); x.stroke(); x.fillStyle='#ffd77a'; x.fillText(t, sx+w/2, cy+7); sx+=w+13; });
+      }
+      if(handle){ x.fillStyle='#a78bff'; x.font='700 25px Pretendard, sans-serif'; x.fillText('contenthub.kr/u/'+handle, 360, 828); }
+      try{ var a=document.createElement('a'); a.download='명함_'+name+'.png'; a.href=cv.toDataURL('image/png'); a.click(); if(window.toast) toast('🪪 명함 이미지 저장! 인스타 스토리·카톡에 올려보세요'); }
+      catch(err){ if(window.toast) toast('외부 사진 때문에 저장이 막혔어요 — 프로필 사진을 보관함(앱 업로드) 사진으로 바꾸면 돼요'); }
+    }
+    var av=window.__profileAvatar||'';
+    if(av){ var im=new Image(); im.crossOrigin='anonymous';
+      im.onload=function(){ x.save(); x.beginPath(); x.arc(360,290,112,0,7); x.clip(); try{ x.drawImage(im,248,178,224,224); }catch(_){} x.restore(); x.strokeStyle='rgba(167,139,255,.6)'; x.lineWidth=4; x.beginPath(); x.arc(360,290,114,0,7); x.stroke(); done(); };
+      im.onerror=function(){ x.fillStyle='rgba(143,109,255,.3)'; x.beginPath(); x.arc(360,290,112,0,7); x.fill(); done(); };
+      im.src=av;
+    } else { x.fillStyle='rgba(143,109,255,.3)'; x.beginPath(); x.arc(360,290,112,0,7); x.fill(); done(); }
+  };
+  function fillInputs(){
+    ['hl','why','turn','now'].forEach(function(f){ var el=document.getElementById('xp-story-'+f); if(el) el.value=xp.story[f]||''; });
+    if(seg) seg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-xs')===(xp.story.style||'scene')); });
+    card.querySelectorAll('.xp-ba-slot').forEach(function(s){ var k=s.getAttribute('data-bak'), u=xp.ba[k]||''; if(u){ s.style.backgroundImage='url('+u+')'; s.classList.add('filled'); } else { s.style.backgroundImage=''; s.classList.remove('filled'); } });
+    if(bacap) bacap.value=xp.ba.cap||'';
+    if(pm) pm.value=(xp.probmap||[]).join(', ');
+    paintPm();
+    if(bg&&creds&&!creds.classList.contains('gv-ghost')) bg.value=creds.value||'';
+    renderXpRev();
+  }
+  window.__collectXp=function(){ return JSON.parse(JSON.stringify(xp)); };
+  window.__loadXp=function(o){
+    if(o&&typeof o==='object'){ xp={ adopted:Array.isArray(o.adopted)?o.adopted.slice():[], story:Object.assign({style:'scene',hl:'',why:'',turn:'',now:''}, o.story||{}), ba:Object.assign({b:'',a:'',cap:''}, o.ba||{}), probmap:Array.isArray(o.probmap)?o.probmap.slice():[] }; }
+    fillInputs(); paint();
+  };
+  paint(); renderXpRev();
 })();
 </script>
 </body>
