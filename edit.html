@@ -1103,12 +1103,15 @@
   .hub-tpl .htp-seg button{flex:1; font-size:12px; font-weight:800; padding:9px 4px; border-radius:10px; border:1px solid var(--hair); background:var(--surface); color:var(--muted); cursor:pointer; font-family:var(--sans);}
   .hub-tpl .htp-seg button.on{background:var(--grad); border-color:transparent; color:#fff;}
   .hub-tpl .htp-hint{font-size:10.5px; color:var(--muted); margin-top:8px; line-height:1.5;}
-  /* 에디토리얼형이면 구성추가 = 뼈대 우선, 자유 카탈로그는 '내 슬롯' 토글 뒤로 (기능 보존 · 접기만) */
-  #add-myslot{display:none;}
-  #add-ov.ed-on .add-search, #add-ov.ed-on #add-diag, #add-ov.ed-on #add-all, #add-ov.ed-on .tpl-section, #add-ov.ed-on #rec-grid, #add-ov.ed-on .add-rec-h{display:none;}
-  #add-ov.ed-on.slot-open .add-search{display:flex;}
-  #add-ov.ed-on.slot-open #add-diag, #add-ov.ed-on.slot-open #add-all, #add-ov.ed-on.slot-open .tpl-section, #add-ov.ed-on.slot-open #rec-grid{display:block;}
-  #add-ov.ed-on #add-myslot{display:block;}
+  /* 구성추가 = 홈 템플릿이 메인 간판 (2026-07-08 사용자): 검색·카탈로그(#add-all에 블록세트·첫인상~연결 전부)는 '더 구성 추가' 토글 뒤로, 진단은 숨김(코드 보존 — 되살리려면 이 줄 삭제) */
+  #add-ov .add-search, #add-ov #add-all{display:none;}
+  #add-ov #add-diag{display:none;}
+  #add-ov.slot-open .add-search{display:flex;}
+  #add-ov.slot-open #add-all{display:block;}
+  #add-tpl{background:linear-gradient(135deg, rgba(124,63,228,.16), rgba(193,59,158,.10)); border-color:rgba(167,139,255,.35);}
+  #add-tpl .htp-l{font-size:13px; color:var(--ink);}
+  #add-tpl .htp-seg button{padding:12px 4px; font-size:12.5px;}
+  /* (템플릿 미니 목업 tpd-*는 상세 데모(데모라인 엔진 __showTplDemo)로 대체 — 2026-07-09 사용자 "데모라인처럼 자세하게") */
   /* ✏️ 템플릿 문구 입력 (대문·안심·마감일) — 템플릿 켰을 때만, 종류별로 필요한 칸만 */
   .htp-seg.htp-seg4{flex-wrap:wrap;}
   .htp-seg.htp-seg4 button{flex:1 1 42%;}
@@ -2673,6 +2676,17 @@
     .dmt-more:active{transform:scale(.99);}
     /* 데모라인 선택 화면 */
     .dmt-back{font-size:12px; font-weight:700; color:#9296a0; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:99px; padding:7px 13px; cursor:pointer; font-family:var(--sans);}
+    /* 🏠 템플릿 미리보기 모드: 상단 ○-○-○ 전환 탭 + 코치 버튼 2열 (2026-07-09 사용자) */
+    .dmt-tpl-tabs{display:flex; gap:5px; align-items:center; flex-wrap:nowrap; overflow-x:auto;}
+    .dmt-tpl-tab{font-size:10.5px; font-weight:800; color:#9296a0; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:99px; padding:6px 10px; cursor:pointer; font-family:var(--sans); white-space:nowrap; flex:0 0 auto;}
+    .dmt-tpl-tab.on{color:#0e0c12; background:linear-gradient(100deg,#b39cff,#ff9ecf); border-color:transparent; box-shadow:0 3px 10px rgba(179,156,255,.35);}
+    .dmt-coach.tplmode{display:grid; grid-template-columns:1fr 1.55fr; column-gap:8px;}
+    .dmt-coach.tplmode .dmt-co-top{grid-row:1; grid-column:1/-1;}
+    .dmt-coach.tplmode .dmt-title{grid-row:2; grid-column:1/-1;}
+    .dmt-coach.tplmode .dmt-desc{grid-row:3; grid-column:1/-1;}
+    .dmt-coach.tplmode .dmt-hint{grid-row:4; grid-column:1/-1; color:#c6adff;}
+    .dmt-coach.tplmode .dmt-more{grid-row:5; grid-column:1; margin-top:11px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.16); border-radius:11px; padding:12px 4px; color:#c9c3d6; font-weight:800; font-size:12px;}
+    .dmt-coach.tplmode .dmt-make{grid-row:5; grid-column:2;}
     #dmt-picker{flex:1; overflow-y:auto; max-width:540px; width:100%; margin:0 auto; padding:26px 18px 24px; display:flex; flex-direction:column; justify-content:center;}
     .dmt-pk-h{font-size:21px; font-weight:800; text-align:center; color:#f5f2f9;}
     .dmt-pk-s{font-size:12.5px; color:#9296a0; text-align:center; margin:8px 0 22px; line-height:1.55;}
@@ -2689,6 +2703,29 @@
     .dmt-pk-card.seen .dmt-pk-done{display:block;}
     .dmt-pk-finish{margin-top:22px; width:100%; text-align:center; font-size:14px; font-weight:800; color:#0e0c12; background:linear-gradient(100deg,#b39cff,#ff9ecf); border:none; border-radius:13px; padding:14px; cursor:pointer; font-family:var(--sans); box-shadow:0 8px 20px rgba(179,156,255,.3);}
     .dmt-pk-finish:active{transform:scale(.99);}
+    /* 💰 수익 공식 스트립 — 3타일이 "왜" 필요한지 (유입×믿음×구매=수익, 순차 등장) */
+    .dmt-formula{display:flex; gap:7px; align-items:center; justify-content:center; flex-wrap:wrap; margin:0 0 9px;}
+    .dmt-formula .ft{font-size:12px; font-weight:800; padding:7px 12px; border-radius:99px; border:1px solid; opacity:0; transform:translateY(8px); animation:dmtFT .5s ease forwards;}
+    .dmt-formula .ft.fin{color:#ff9a9a; border-color:rgba(255,90,90,.5); background:rgba(255,90,90,.1); animation-delay:.1s;}
+    .dmt-formula .ft.fcv{color:#c6adff; border-color:rgba(160,107,255,.5); background:rgba(160,107,255,.1); animation-delay:.4s;}
+    .dmt-formula .ft.fbuy{color:#ffdd95; border-color:rgba(255,195,90,.5); background:rgba(255,195,90,.12); animation-delay:.7s;}
+    .dmt-formula .ft.fmoney{color:#0e0c12; background:linear-gradient(100deg,#ffd977,#ff9ecf); border-color:transparent; font-size:13.5px; animation-delay:1.15s; box-shadow:0 4px 16px rgba(255,180,120,.3);}
+    .dmt-formula i{font-style:normal; color:#6f6a7d; font-weight:800; opacity:0; animation:dmtFT .4s ease forwards;}
+    .dmt-formula i:nth-of-type(1){animation-delay:.28s;} .dmt-formula i:nth-of-type(2){animation-delay:.58s;} .dmt-formula i:nth-of-type(3){animation-delay:.95s;}
+    @keyframes dmtFT{to{opacity:1; transform:none;}}
+    .dmt-fm-s{font-size:11.5px; color:#9296a0; text-align:center; margin:0 0 20px; line-height:1.5;}
+    .dmt-fm-s b{color:#ff9a9a;}
+    .dmt-pk-why{display:block; font-size:9.5px; color:#6f6a7d; line-height:1.4; margin-top:5px;}
+    .dmt-story-btn{margin-top:10px; width:100%; text-align:center; font-size:12px; font-weight:700; color:#c6adff; background:rgba(160,107,255,.08); border:1px dashed rgba(160,107,255,.4); border-radius:11px; padding:11px; cursor:pointer; font-family:var(--sans);}
+    .dmt-story-btn:active{transform:scale(.99);}
+    /* 📷 빈 사진칸 = 인물 실루엣 (허함 방지 · 사진 느낌, 순수 SVG) */
+    .dmt-gal i{position:relative; overflow:hidden;}
+    .dmt-gal i svg{position:absolute; inset:0; width:100%; height:100%; display:block;}
+    .dmt-ba div{position:relative; overflow:hidden;}
+    .dmt-ba div svg{position:absolute; inset:0; width:100%; height:100%;}
+    .dmt-ba div u{position:relative; z-index:2; text-decoration:none;}
+    .dmt-cn .th{display:flex; align-items:center; justify-content:center;}
+    .dmt-cn .th b{font-size:19px; opacity:.9;}
     /* 유입/구매 섹션 */
     .dmt-gal{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
     .dmt-gal i{aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#2c2c33,#3a3142); display:block;}
@@ -2723,12 +2760,15 @@
     <div id="dmt-picker">
       <div class="dmt-pk-h">✨ 전문성 가시화, 체험해보세요</div>
       <div class="dmt-pk-s">우리의 <b>메인 기술</b>이에요. 목표별로 <b>하나씩 눌러</b> 완성된 홈을 둘러보세요.</div>
+      <div class="dmt-formula"><span class="ft fin">🧲 유입</span><i>×</i><span class="ft fcv">💎 믿음</span><i>×</i><span class="ft fbuy">🏆 구매</span><i>=</i><span class="ft fmoney">💰 수익</span></div>
+      <div class="dmt-fm-s">하나라도 <b>0</b>이면 수익도 <b>0</b> — 그래서 세 가지를 전부 갖추는 거예요</div>
       <div class="dmt-pk-row">
-        <button class="dmt-pk-card" data-sc="in"><span class="dmt-pk-ico">🧲</span><span class="dmt-pk-nm">유입</span><span class="dmt-pk-sub">사람 모으기</span><span class="dmt-pk-done">✓ 체험함</span></button>
-        <button class="dmt-pk-card" data-sc="cv"><span class="dmt-pk-ico">💎</span><span class="dmt-pk-nm">전문성<br>가시화</span><span class="dmt-pk-sub">믿음 만들기</span><span class="dmt-pk-done">✓ 체험함</span></button>
-        <button class="dmt-pk-card" data-sc="buy"><span class="dmt-pk-ico">🏆</span><span class="dmt-pk-nm">구매</span><span class="dmt-pk-sub">바로 팔기</span><span class="dmt-pk-done">✓ 체험함</span></button>
+        <button class="dmt-pk-card" data-sc="in"><span class="dmt-pk-ico">🧲</span><span class="dmt-pk-nm">유입</span><span class="dmt-pk-sub">사람 모으기</span><span class="dmt-pk-why">안 모이면<br>시작이 안 돼요</span><span class="dmt-pk-done">✓ 체험함</span></button>
+        <button class="dmt-pk-card" data-sc="cv"><span class="dmt-pk-ico">💎</span><span class="dmt-pk-nm">전문성<br>가시화</span><span class="dmt-pk-sub">믿음 만들기</span><span class="dmt-pk-why">믿음 없인<br>그냥 지나가요</span><span class="dmt-pk-done">✓ 체험함</span></button>
+        <button class="dmt-pk-card" data-sc="buy"><span class="dmt-pk-ico">🏆</span><span class="dmt-pk-nm">구매</span><span class="dmt-pk-sub">바로 팔기</span><span class="dmt-pk-why">팔 곳 없으면<br>수익이 0이에요</span><span class="dmt-pk-done">✓ 체험함</span></button>
       </div>
       <button class="dmt-pk-finish" id="dmt-pk-finish">체험 다 봤어요 · 내 걸로 시작하기 →</button>
+      <button class="dmt-story-btn" id="dmt-story-btn">▶ 이 공식이 나온 이야기 — 수익화 드라마 다시 보기</button>
     </div>
     <div class="dmt-stage" id="dmt-stage" style="display:none;">
       <div id="dmt-scroll"><div class="dmt-pad"></div></div>
@@ -2748,18 +2788,32 @@
     var picker=document.getElementById('dmt-picker'), stage=document.getElementById('dmt-stage'), scroll=document.getElementById('dmt-scroll'), leadWrap=document.getElementById('dmt-lead-wrap');
     var bBadge=document.getElementById('dmt-badge'), bStep=document.getElementById('dmt-step'), bTitle=document.getElementById('dmt-title'), bDesc=document.getElementById('dmt-desc');
     function HERO(tag,tc,h1,h2,c1,c2){ return '<div class="dmt-hero"><div class="dmt-htag"'+(tc?' style="color:'+tc+'"':'')+'>'+tag+'</div><div class="dmt-hh">'+h1+'<br><span>'+h2+'</span></div><div class="dmt-hchips"><span>'+c1+'</span><span>'+c2+'</span></div></div>'; }
+    // 📷 인물 실루엣 placeholder — 빈 사진칸을 사진 느낌으로 (h=색상 hue, hair=long/bob/short, glam=true 반짝/false 흑백톤)
+    var _silN=0;
+    function SIL(h, hair, glam){
+      var id='dsil'+(_silN++);
+      var HAIR={ long:'M24,28 Q24,10 40,10 Q56,10 56,28 L59,64 Q40,72 21,64 Z', bob:'M24,28 Q24,10 40,10 Q56,10 56,28 L57,46 Q40,54 23,46 Z', short:'M25,27 Q25,10 40,10 Q55,10 55,27 Q55,36 40,36 Q25,36 25,27 Z' };
+      var sat=(glam===false)?10:42;
+      return '<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">'
+        +'<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl('+h+','+sat+'%,32%)"/><stop offset="1" stop-color="hsl('+(h+30)+','+(sat+8)+'%,15%)"/></linearGradient></defs>'
+        +'<rect width="80" height="80" fill="url(#'+id+')"/>'
+        +'<circle cx="61" cy="12" r="24" fill="rgba(255,255,255,.06)"/>'
+        +'<g fill="rgba(11,8,17,.6)"><path d="'+(HAIR[hair]||HAIR.bob)+'"/><ellipse cx="40" cy="31" rx="13" ry="15"/><path d="M12,80 Q16,54 40,54 Q64,54 68,80 Z"/></g>'
+        +(glam===true?'<text x="57" y="36" font-size="13">✨</text>':'')
+        +'</svg>';
+    }
     var SC={
       in:{ secs:[
         {h:HERO('✱ 헤어 콘텐츠',null,'매일 올리는 헤어 팁,','여기서 다 봐요','팔로워 8,200','영상 120개'), bt:'in',b:'🧲 유입',t:'콘텐츠 후킹',d:'유익한 콘텐츠로 "이 사람 팔로우해야겠다" 하게 만들어요.'},
-        {h:'<div class="dmt-card"><div class="dmt-ch">📸 콘텐츠 갤러리</div><div class="dmt-gal"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>', bt:'in',b:'🧲 유입',t:'콘텐츠 갤러리',d:'쌓인 콘텐츠 = 더 보고 싶게 + 전문성 증명.'},
-        {h:'<div class="dmt-card"><div class="dmt-ch">🗞 카드뉴스</div><div class="dmt-cn"><div class="r"><div class="th"></div><div class="tx">앞머리 고민 완전정복<small>고객심리 · 3분</small></div></div><div class="r"><div class="th"></div><div class="tx">얼굴형별 스타일 가이드<small>브랜딩 · 5분</small></div></div></div></div>', bt:'in',b:'🧲 유입',t:'카드뉴스',d:'글마다 링크 = 모은 콘텐츠가 자산이 돼요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">📸 콘텐츠 갤러리</div><div class="dmt-gal"><i>'+SIL(265,'long')+'</i><i>'+SIL(320,'bob')+'</i><i>'+SIL(205,'short')+'</i><i>'+SIL(25,'bob')+'</i><i>'+SIL(160,'long')+'</i><i>'+SIL(290,'short')+'</i></div></div>', bt:'in',b:'🧲 유입',t:'콘텐츠 갤러리',d:'쌓인 콘텐츠 = 더 보고 싶게 + 전문성 증명.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">🗞 카드뉴스</div><div class="dmt-cn"><div class="r"><div class="th"><b>💡</b></div><div class="tx">앞머리 고민 완전정복<small>고객심리 · 3분</small></div></div><div class="r"><div class="th"><b>📐</b></div><div class="tx">얼굴형별 스타일 가이드<small>브랜딩 · 5분</small></div></div></div></div>', bt:'in',b:'🧲 유입',t:'카드뉴스',d:'글마다 링크 = 모은 콘텐츠가 자산이 돼요.'},
         {h:'<div class="dmt-card"><div class="dmt-ch">🔗 채널</div><div class="dmt-links"><div class="r"><span>📷 인스타그램</span><b>›</b></div><div class="r"><span>▶ 유튜브</span><b>›</b></div><div class="r"><span>💬 카카오 상담</span><b>›</b></div></div></div>', bt:'in',b:'🧲 유입',t:'채널 링크',d:'인스타·유튜브를 한 곳에 모아 팔로우로 연결.'},
         {h:'<div class="dmt-card dmt-news"><div class="dmt-ch">✉ 뉴스레터</div><div class="nw">이메일 주소를 입력하면…</div><div class="dmt-pbtn">구독하고 팁 받기</div></div>', bt:'cv',b:'💎 전환',t:'뉴스레터 구독',d:'구독으로 관계를 이어가며 재방문을 유도해요.'}
       ]},
       cv:{ secs:[
         {h:HERO('✱ 얼굴형 전문',null,'얼굴형에 딱 맞는 머리,','제가 찾아드려요','경력 10년','누적 2,300명'), bt:'in',b:'🧲 유입',t:'커버 · 후킹 문구',d:'3초 안에 시선을 붙잡는 대문. "이 사람 뭐 하는지"가 각인돼요.'},
         {h:'<div class="dmt-card"><div class="dmt-ch">왜 믿어도 될까요</div><div class="dmt-stats"><div><b>10년</b><small>경력</small></div><div><b>2,300</b><small>누적 고객</small></div><div><b>87%</b><small>재방문</small></div></div></div>', bt:'cv',b:'💎 전환',t:'전문가 증명 · 숫자',d:'경력·누적·재방문율 = 믿고 맡길 이유를 눈에 보이게.'},
-        {h:'<div class="dmt-card"><div class="dmt-ch">전 · 후</div><div class="dmt-ba"><div class="b">BEFORE</div><div class="a">AFTER</div></div></div>', bt:'cv',b:'💎 전환',t:'전 · 후 사진',d:'말보다 강한 증거. 변화를 보여주면 신뢰가 확 올라요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">전 · 후</div><div class="dmt-ba"><div class="b">'+SIL(255,'short',false)+'<u>BEFORE</u></div><div class="a">'+SIL(300,'long',true)+'<u>AFTER</u></div></div></div>', bt:'cv',b:'💎 전환',t:'전 · 후 사진',d:'말보다 강한 증거. 변화를 보여주면 신뢰가 확 올라요.'},
         {h:'<div class="dmt-card dmt-rev"><div class="st">★★★★★</div><div class="rt">"앞머리 고민이 사라졌어요. 진짜 얼굴이 작아 보여요!"</div><div class="rn">— 김○○</div></div>', bt:'cv',b:'💎 전환',t:'고객 후기',d:'남의 경험이 결정을 만들어요 (사회적 증명).'},
         {h:'<div class="dmt-card"><div class="dmt-ch">가격 · 예약</div><div class="dmt-prow"><span>앞머리 컷</span><b>30,000원</b></div><div class="dmt-prow"><span>얼굴형 스타일링</span><b>120,000원</b></div><div class="dmt-pbtn">📅 지금 예약하기</div></div>', bt:'buy',b:'🏆 구매',t:'가격 · 예약',d:'투명한 가격 + 바로 예약 = 행동으로 연결.'}
       ]},
@@ -2769,6 +2823,30 @@
         {h:'<div class="dmt-card"><div class="dmt-ch" style="text-align:center">⏳ 마감까지</div><div class="dmt-cd"><span>02</span><i>:</i><span>47</span><i>:</i><span class="s">13</span></div></div>', bt:'buy',b:'🏆 구매',t:'카운트다운',d:'마감까지 카운트 = 미루지 못하게 (긴박감).'},
         {h:'<div class="dmt-gtee"><div class="gi">🛡</div><div><div class="gt">100% 만족 보장</div><div class="gd">안 되면 환불 · 부담 없이</div></div></div>', bt:'buy',b:'🏆 구매',t:'보장 배지',d:'환불·만족 보장 = 구매 불안을 낮춰요.'},
         {h:'<div class="dmt-card"><div class="dmt-ch">가격 · 예약</div><div class="dmt-prow"><span>앞머리 교정</span><b>40,000원</b></div><div class="dmt-pbtn">📅 지금 예약하고 20% 받기</div></div>', bt:'buy',b:'🏆 구매',t:'가격 · 예약 CTA',d:'투명한 가격 + 바로 예약 = 결제로 연결.'}
+      ]},
+      /* 🏠 홈 템플릿 상세 데모 (2026-07-09) — 구성추가에서 템플릿 누르면 "어떤 홈이 되는지" 그대로 */
+      tpl_editorial:{ secs:[
+        {h:HERO('✱ 얼굴형 전문',null,'Design','Your Style','컷 · 컬러 · 펌','예약제 운영'), bt:'cv',b:'📖 에디토리얼형',t:'📸 백 마디 말보다, 사진 한 장',d:'에디토리얼형의 철학 — 긴 설명 대신 사진이 말하게 해요. 맨 위 풀폭 사진에 잡지처럼 큰 글씨, 대문 문구는 내 말로.'},
+        {h:'<div class="dmt-card" style="border-radius:24px 24px 15px 15px;"><div class="dmt-ch">이수성 <span style="font-size:10.5px; color:#9296a0; font-weight:600;">· 얼굴형 전문 디자이너</span></div><div class="dmt-stats"><div><b>10년</b><small>경력</small></div><div><b>2,300</b><small>누적 고객</small></div></div></div>', bt:'cv',b:'📖 에디토리얼형',t:'곡선 명함',d:'사진 아래로 곡선 카드가 겹쳐 올라와요 — 이름·한 줄·숫자 증거.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">🎯 이런 고민을 풀어요</div><div style="display:flex; gap:6px; flex-wrap:wrap;"><span style="font-size:11px; font-weight:700; color:#c6adff; background:rgba(160,107,255,.12); border:1px solid rgba(160,107,255,.4); border-radius:99px; padding:6px 12px;">앞머리 실패</span><span style="font-size:11px; font-weight:700; color:#c6adff; background:rgba(160,107,255,.12); border:1px solid rgba(160,107,255,.4); border-radius:99px; padding:6px 12px;">손상모 고민</span><span style="font-size:11px; font-weight:700; color:#c6adff; background:rgba(160,107,255,.12); border:1px solid rgba(160,107,255,.4); border-radius:99px; padding:6px 12px;">얼굴형 커버</span></div></div>', bt:'cv',b:'📖 에디토리얼형',t:'고민 태그',d:'손님이 자기 고민 단어를 발견하는 순간 — "맞아, 내 얘기네".'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">Real Change</div><div class="dmt-ba"><div class="b">'+SIL(255,'short',false)+'<u>BEFORE</u></div><div class="a">'+SIL(300,'long',true)+'<u>AFTER</u></div></div></div>', bt:'cv',b:'📖 에디토리얼형',t:'변화 쇼케이스',d:'완성컷보다 강한 건 변화의 서사 — 전후가 주인공이에요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">Signature Styles</div><div class="dmt-gal"><i>'+SIL(265,'long')+'</i><i>'+SIL(320,'bob')+'</i><i>'+SIL(205,'short')+'</i></div></div>', bt:'cv',b:'📖 에디토리얼형',t:'스타일 그리드 01·02·03',d:'룩북·작업 사진이 번호 달린 포트폴리오로 — 1~3장 자동 맞춤.'},
+        {h:'<div class="dmt-card dmt-rev"><div class="st">★★★★★</div><div class="rt">"상담이 부담 없어서 좋았어요. 결과는 더 좋고요."</div><div class="rn">— 손님의 실제 말</div></div><div class="dmt-card" style="margin-top:10px;"><div style="text-align:center; font-size:11.5px; color:#9296a0; margin-bottom:10px;">🤍 첫 상담은 진단부터 — 강요 없이</div><div class="dmt-pbtn">📅 예약하기</div></div>', bt:'cv',b:'📖 에디토리얼형',t:'실제 말 + 안심 + 예약',d:'맨 끝은 행동 존 — 후기·안심 한 줄·예약 버튼 딱 하나.'}
+      ]},
+      tpl_trust:{ secs:[
+        {h:HERO('✱ 신뢰형 · 전문가',null,'세무사 김정수','사업자 세금 파트너','국세청 출신','저서 1권'), bt:'cv',b:'🪪 신뢰형',t:'명함 히어로',d:'사람이 상품인 직업 — 명함이 맨 위에 크게 와요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">왜 믿어도 될까요</div><div class="dmt-stats"><div><b>12년</b><small>경력</small></div><div><b>340</b><small>고객사</small></div><div><b>23%</b><small>평균 절세</small></div></div></div>', bt:'cv',b:'🪪 신뢰형',t:'숫자 증거',d:'명함 숫자칩이 스탯 타일로 커져요 — 믿을 이유를 눈에 보이게.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">자격 · 경력</div><div style="font-size:12.5px; line-height:2; color:#c9c3d6;">✓ 세무사 자격 (2013)<br>✓ 前 국세청 조사과 5년<br>✓ 저서 「사장님 세금」 출간</div></div>', bt:'cv',b:'🪪 신뢰형',t:'자격 · 경력',d:'전문성 가시화에 적은 자격·경력이 ✓ 리스트로 자동 정리.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">걸어온 길</div><div style="font-size:12px; line-height:1.6; color:#c9c3d6; border-left:2px solid rgba(160,107,255,.4); padding-left:12px; display:flex; flex-direction:column; gap:10px;"><div><b style="color:#c6adff; font-size:10px;">시작</b><br>첫 사업 폐업 때 세금 폭탄을 맞았어요</div><div><b style="color:#c6adff; font-size:10px;">전환점</b><br>그때 만난 세무사 한 분이 인생을 바꿨죠</div><div><b style="color:#c6adff; font-size:10px;">지금</b><br>이제 제가 사장님들의 그 사람이 됩니다</div></div></div>', bt:'cv',b:'🪪 신뢰형',t:'걸어온 길 (스토리)',d:'왜 이 일을 하는지 — 타임라인이 신뢰를 만들어요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">대표 컨텐츠</div><div class="dmt-cn"><div class="r"><div class="th"><b>📄</b></div><div class="tx">부가세 신고 실수 TOP3<small>세무 상식 · 3분</small></div></div><div class="r"><div class="th"><b>💰</b></div><div class="tx">프리랜서 절세 로드맵<small>가이드 · 5분</small></div></div></div></div>', bt:'cv',b:'🪪 신뢰형',t:'대표 컨텐츠',d:'★ 대표로 뽑은 글 2개가 홈에서 전문성을 증명해요.'},
+        {h:'<div class="dmt-gtee"><div class="gi">🤍</div><div><div class="gt">첫 상담은 부담 없이</div><div class="gd">지금 상황 진단부터 시작해요</div></div></div><div style="margin-top:10px;"><div class="dmt-pbtn">📅 상담 예약하기</div></div>', bt:'cv',b:'🪪 신뢰형',t:'안심 + 상담 CTA',d:'마감은 상담 예약 하나 — 두려움을 낮추고 행동으로.'}
+      ]},
+      tpl_sales:{ secs:[
+        {h:HERO('🔥 세일즈형 · 단일 상품','#ff9ecf','이번 기수,','마지막 모집','선착순 20명','~7/15'), bt:'buy',b:'✨ 세일즈형',t:'훅 (대문)',d:'홈 맨 위에서 오퍼를 던져요 — 대문 문구는 직접 수정.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">혹시, 이런 고민이세요?</div><div style="font-size:12.5px; line-height:2; color:#c9c3d6;">✔ 팔로워는 느는데 매출 0<br>✔ 뭘 올려야 할지 모르겠다<br>✔ 혼자 하다 3년째 제자리</div></div>', bt:'buy',b:'✨ 세일즈형',t:'공감 체크리스트',d:'"맞아 내 얘기야"를 먼저 — 문제 지도에서 자동으로 와요.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch">Real Change</div><div class="dmt-ba"><div class="b">'+SIL(255,'short',false)+'<u>BEFORE</u></div><div class="a">'+SIL(300,'long',true)+'<u>AFTER</u></div></div></div><div class="dmt-card dmt-rev" style="margin-top:10px;"><div class="st">★★★★★</div><div class="rt">"3개월 만에 첫 매출이 났어요."</div><div class="rn">— 수강생의 말</div></div>', bt:'buy',b:'✨ 세일즈형',t:'증거 (전후 + 실제 말)',d:'사기 전 마지막 의심을 전후 변화와 실제 후기로 풀어요.'},
+        {h:'<div class="dmt-ev"><div class="tg">🛍 이번 제안</div><div class="eh">브랜딩 원데이 클래스 <span>190,000원</span></div><div class="es">판매·예약 탭의 첫 상품이 자동으로 올라와요</div><span class="shine"></span></div>', bt:'buy',b:'✨ 세일즈형',t:'오퍼 카드',d:'하나만 판다 — 스토어 첫 상품이 오퍼로 자동 배치.'},
+        {h:'<div class="dmt-card"><div class="dmt-ch" style="text-align:center">⏳ 신청 마감까지</div><div class="dmt-cd"><span class="s">D-3</span></div><div class="dmt-pbtn" style="margin-top:12px;">지금 신청하기</div></div>', bt:'buy',b:'✨ 세일즈형',t:'마감 D-day + 신청',d:'마감일을 정하면 D-day가 뜨고, 지나면 자동으로 숨어요.'}
       ]}
     };
     var cur=[], raf=null, curIdx=-1;
@@ -2781,22 +2859,54 @@
       els.forEach(function(el,i){ el.classList.toggle('on', i===best); });
       if(best!==curIdx){ curIdx=best; var s=cur[best]; if(!s) return; bBadge.textContent=s.b; bBadge.className='dmt-badge '+s.bt; bStep.textContent=(best+1)+' / '+n; bTitle.textContent=s.t; bDesc.textContent=s.d; }
     }
-    function showPicker(){ leadWrap.innerHTML='<div class="dmt-lead">🎬 데모라인 <span>· 목표별 완성 예시</span></div>'; picker.style.display='block'; stage.style.display='none'; }
+    var _tplMode=false, _tplKey='';   // 🏠 구성추가 템플릿 미리보기 모드 (상단 ○-○-○ 탭으로 전환, ✓쓸게요로 확정)
+    var TPL_ORDER=['editorial','trust','sales'];
+    var TPL_META={editorial:['📖','에디토리얼'], trust:['🪪','신뢰형'], sales:['✨','세일즈']};
+    function showPicker(){ _tplMode=false; leadWrap.innerHTML='<div class="dmt-lead">🎬 데모라인 <span>· 목표별 완성 예시</span></div>'; picker.style.display='block'; stage.style.display='none'; }
     function play(key){
       var sc=SC[key]; if(!sc) return; cur=sc.secs; curIdx=-1;
       var _c=ov.querySelector('.dmt-pk-card[data-sc="'+key+'"]'); if(_c) _c.classList.add('seen');
       scroll.innerHTML=sc.secs.map(function(s,i){ return '<div class="dmt-sec" data-sec="'+i+'">'+s.h+'</div>'; }).join('')+'<div class="dmt-pad"></div>';
-      leadWrap.innerHTML='<button class="dmt-back" id="dmt-back">← 다른 것도 체험하기</button>';
-      document.getElementById('dmt-back').onclick=showPicker;
+      if(_tplMode){
+        // 상단 = ← + 템플릿 전환 탭 (다른 것도 바로 구경 — 흐름이 보이게)
+        leadWrap.innerHTML='<div style="display:flex; gap:7px; align-items:center; min-width:0;"><button class="dmt-back" id="dmt-back">←</button><div class="dmt-tpl-tabs">'
+          +TPL_ORDER.map(function(k){ var m=TPL_META[k]; return '<button class="dmt-tpl-tab'+(k===_tplKey?' on':'')+'" data-tplk="'+k+'">'+m[0]+' '+m[1]+'</button>'; }).join('')
+          +'</div></div>';
+        document.getElementById('dmt-back').onclick=close;
+        leadWrap.querySelectorAll('[data-tplk]').forEach(function(b){ b.onclick=function(){ window.__showTplDemo(b.getAttribute('data-tplk')); }; });
+      } else {
+        leadWrap.innerHTML='<button class="dmt-back" id="dmt-back">← 다른 것도 체험하기</button>';
+        document.getElementById('dmt-back').onclick=showPicker;
+      }
+      var mk=document.getElementById('dmt-make'); if(mk) mk.textContent=_tplMode?'✓ 이 템플릿 쓸게요':'✨ 이제 내 걸로 만들기';
+      var mr=document.getElementById('dmt-more'); if(mr) mr.textContent=_tplMode?'다른 템플릿 →':'← 다른 것도 체험하기';
+      var ht=ov.querySelector('.dmt-hint'); if(ht) ht.textContent=_tplMode?'👀 예시 화면이에요 — 실제론 내 사진·글로 채워져요':'↕ 손가락으로 내려서 둘러보세요';
+      var co=ov.querySelector('.dmt-coach'); if(co) co.classList.toggle('tplmode', _tplMode);
       picker.style.display='none'; stage.style.display='block'; scroll.scrollTop=0; setTimeout(update,90);
     }
     scroll.addEventListener('scroll', function(){ if(raf) cancelAnimationFrame(raf); raf=requestAnimationFrame(update); });
-    [].forEach.call(ov.querySelectorAll('.dmt-pk-card'), function(b){ b.onclick=function(){ play(b.getAttribute('data-sc')); }; });
+    [].forEach.call(ov.querySelectorAll('.dmt-pk-card'), function(b){ b.onclick=function(){ _tplMode=false; play(b.getAttribute('data-sc')); }; });
     function close(){ ov.classList.remove('open'); }
-    window.__openDemoTour=function(){ try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){} showPicker(); ov.classList.add('open'); };
+    // 🏠 구성추가에서 템플릿 탭 → 상세 데모 (✓쓸게요를 눌러야 그 템플릿으로 확정 저장)
+    window.__showTplDemo=function(k){
+      if(!SC['tpl_'+k]) return false;
+      _tplMode=true; _tplKey=k; play('tpl_'+k); ov.classList.add('open');
+      return true;
+    };
+    window.__openDemoTour=function(){
+      try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){}
+      showPicker(); ov.classList.add('open');
+      // 💰 처음 한 번은 수익화 이야기(왜 중요한지)가 먼저 — 위에 뜨고, 닫으면 바로 아래가 이 픽커 (rv-ov z=100060 > dmt 100050)
+      try{ if(!localStorage.getItem('ch-rvstory-v1') && window.__openRevenueStory){ localStorage.setItem('ch-rvstory-v1','1'); window.__openRevenueStory(); } }catch(e){}
+    };
+    var _stb=document.getElementById('dmt-story-btn'); if(_stb) _stb.onclick=function(){ if(window.__openRevenueStory) window.__openRevenueStory(); };
     document.getElementById('dmt-skip').onclick=close;
-    document.getElementById('dmt-make').onclick=function(){ close(); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){} var ge=document.getElementById('gate-edit'); if(ge) ge.click(); };
-    var _more=document.getElementById('dmt-more'); if(_more) _more.onclick=showPicker;
+    document.getElementById('dmt-make').onclick=function(){
+      if(_tplMode){ try{ if(window.__applyTplChoice) window.__applyTplChoice(_tplKey); }catch(e){} close(); return; }   // 보고 있던 템플릿으로 확정 저장
+      close(); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){} var ge=document.getElementById('gate-edit'); if(ge) ge.click(); };
+    var _more=document.getElementById('dmt-more'); if(_more) _more.onclick=function(){
+      if(_tplMode){ var i=TPL_ORDER.indexOf(_tplKey); window.__showTplDemo(TPL_ORDER[(i+1)%TPL_ORDER.length]); return; }   // 다음 템플릿으로 순환
+      showPicker(); };
     var _fin=document.getElementById('dmt-pk-finish'); if(_fin) _fin.onclick=function(){ close(); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){} var ge=document.getElementById('gate-edit'); if(ge) ge.click(); };
   })();
   </script>
@@ -3478,12 +3588,12 @@
   <div class="ov" id="add-ov">
     <div class="sheet">
       <div class="sheet-h"><span class="t">구성 추가</span><span class="x" data-close>×</span></div>
-      <div class="desc">무엇을 보여줄지 — 위에서 아래로 담으면 홈이 완성돼요</div>
+      <div class="desc">홈 템플릿을 고르면 바로 완성 — 세부 블록은 아래 ＋에서</div>
 
-      <!-- 🏠 홈 템플릿 (2026-07-08 사용자: 구성추가 상단으로) — 에디토리얼형이면 뼈대 우선, 블록 카탈로그는 '내 슬롯' 뒤로 접힘 -->
+      <!-- 🏠 홈 템플릿 = 메인 간판 (2026-07-08 사용자: 템플릿 유도, 자유형 맨 뒤) — 카탈로그·검색·블록세트는 '더 구성 추가' 뒤로 -->
       <div class="hub-tpl" id="add-tpl" style="margin:0 0 12px;">
         <span class="htp-l">🏠 홈 템플릿</span>
-        <div class="htp-seg htp-seg4" id="add-tpl-seg"><button type="button" data-tpl="free">🧱 자유형</button><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button></div>
+        <div class="htp-seg htp-seg4" id="add-tpl-seg"><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button><button type="button" data-tpl="free">🧱 자유형</button></div>
         <div class="htp-hint" id="add-tpl-hint"></div>
         <div id="add-tpl-fields">
           <label class="atf-l atf-hook">✏️ 대문 문구 <small>홈 맨 위 큰 글씨 · 줄바꿈 가능</small></label>
@@ -3494,7 +3604,7 @@
           <input type="date" id="sa-deadline-in" class="atf-dl">
         </div>
       </div>
-      <button type="button" id="add-myslot" class="xp-wide-btn" style="margin:0 0 14px;">＋ 내 슬롯에 블록 추가 ▾</button>
+      <button type="button" id="add-myslot" class="xp-wide-btn" style="margin:0 0 14px;">＋ 더 구성 추가 ▾</button>
 
       <div class="add-search"><span class="ass-ic">🔎</span><input type="text" id="add-search" placeholder="필요한 걸 검색 — 후기·예약·사진·갤러리" autocomplete="off"></div>
 
@@ -9494,7 +9604,7 @@
       /* ⑤ 내 페이지 */
       +'<div class="hub-zone"><div class="hub-zone-h">🔗 내 페이지</div>'
       +  ((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">contenthub.kr/u/'+myH+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
-      +  '<div class="hub-tpl" id="hub-tpl"><span class="htp-l">🏠 손님 홈 템플릿</span><div class="htp-seg htp-seg4"><button type="button" data-tpl="free">🧱 자유형</button><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button></div><div class="htp-hint" id="htp-hint"></div></div>'
+      +  '<div class="hub-tpl" id="hub-tpl"><span class="htp-l">🏠 손님 홈 템플릿</span><div class="htp-seg htp-seg4"><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button><button type="button" data-tpl="free">🧱 자유형</button></div><div class="htp-hint" id="htp-hint"></div></div>'
       +'</div>';
     // (지금할일 hub-hero · 완성도 hub-ns 카드 제거 2026-07-07 — fold 로직 삭제)
     var ws=window.__switchWs, pw=window.__showPwTab;
@@ -11471,20 +11581,20 @@
     if(!ov2||!seg2) return;
     function cur(){ try{ return (JSON.parse(localStorage.getItem('cm-home-v1')||'{}').template)||'free'; }catch(_){ return 'free'; } }
     var TPL_HINTS={
-      free:'🧱 내가 쌓은 구성 그대로 — 아래에서 블록을 골라 담아요',
-      editorial:'📖 뼈대(사진·명함·전후·후기·예약)는 자동 — 재료는 전문성 가시화에서. 자유 블록은 아래 내 슬롯으로',
+      free:'🧱 내가 쌓은 구성 그대로 — 블록은 아래 ＋ 더 구성 추가에서 골라 담아요',
+      editorial:'📖 뼈대(사진·명함·전후·후기·예약)는 자동 — 재료는 전문성 가시화에서. 자유 블록은 아래 ＋에서',
       trust:'🪪 명함·숫자·자격·걸어온 길이 주인공 — 재료는 전문성 가시화에서. 상담 CTA로 마감',
       sales:'✨ 훅→공감→전후 증거→오퍼→마감 D-day — 오퍼는 판매·예약 탭의 첫 내 상품이 올라와요'
     };
+    // (미니 목업 TPL_DEMOS 제거 — 템플릿 탭하면 window.__showTplDemo가 데모라인 상세 데모를 띄움)
     function paint(){
       var c=cur();
       seg2.querySelectorAll('[data-tpl]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tpl')===c); });
       var h2=document.getElementById('add-tpl-hint');
       if(h2) h2.textContent=TPL_HINTS[c]||TPL_HINTS.free;
-      ov2.classList.toggle('ed-on', c!=='free');
+      ov2.classList.toggle('ed-on', c!=='free');   // 문구 필드 표시용
       ov2.setAttribute('data-tpl', c);
-      if(c==='free') ov2.classList.remove('slot-open');
-      var ms=document.getElementById('add-myslot'); if(ms) ms.textContent=ov2.classList.contains('slot-open')?'－ 내 슬롯 닫기 ▴':'＋ 내 슬롯에 블록 추가 ▾';
+      var ms=document.getElementById('add-myslot'); if(ms) ms.textContent=ov2.classList.contains('slot-open')?'－ 더 구성 닫기 ▴':'＋ 더 구성 추가 ▾';
       // ✏️ 템플릿 문구 필드 채우기 (입력 중이면 건드리지 않음)
       try{
         var h4=JSON.parse(localStorage.getItem('cm-home-v1')||'{}');
@@ -11507,13 +11617,18 @@
         }, 400);
       });
     });
-    seg2.querySelectorAll('[data-tpl]').forEach(function(b){ b.onclick=function(){
-      var v=b.getAttribute('data-tpl');
+    function applyChoice(v){   // 템플릿 확정 저장 (세그 탭 + 데모 '✓ 쓸게요' 공용)
       try{ var h3=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); h3.template=v; localStorage.setItem('cm-home-v1', JSON.stringify(h3)); }catch(_){}
       paint();
       try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
       try{ if(window.__liveEditActive && window.__liveRefresh) setTimeout(window.__liveRefresh, 60); }catch(_){}
       try{ toast({editorial:'📖 에디토리얼형! 👁 미리보기로 확인해보세요',trust:'🪪 신뢰형! 👁 미리보기로 확인해보세요',sales:'✨ 세일즈형! 👁 미리보기로 확인해보세요'}[v]||'🧱 자유형으로 전환'); }catch(_){}
+    }
+    window.__applyTplChoice=applyChoice;
+    seg2.querySelectorAll('[data-tpl]').forEach(function(b){ b.onclick=function(){
+      var v=b.getAttribute('data-tpl');
+      applyChoice(v);
+      try{ if(v!=='free' && window.__showTplDemo) window.__showTplDemo(v); }catch(_){}   // 📖 상세 데모 (데모라인 엔진) — 어떤 홈이 되는지 그대로
     }; });
     var ms=document.getElementById('add-myslot');
     if(ms) ms.onclick=function(){ ov2.classList.toggle('slot-open'); paint(); };
@@ -11521,7 +11636,7 @@
     function wrapOpen(){
       var o=window.__openAddCatalog;
       if(typeof o!=='function'||o.__tplWrapped){ return; }
-      window.__openAddCatalog=function(){ var r=o.apply(this, arguments); try{ paint(); }catch(_){} return r; };
+      window.__openAddCatalog=function(){ var r=o.apply(this, arguments); try{ ov2.classList.remove('slot-open'); paint(); }catch(_){} return r; };   // 열 때마다 접힌 기본 상태로
       window.__openAddCatalog.__tplWrapped=true;
     }
     wrapOpen(); setTimeout(wrapOpen, 1500);
