@@ -1783,6 +1783,118 @@
   .pcard-nm{font-size:17.5px; font-weight:800; color:var(--ink); letter-spacing:-.01em;}
   .pcard-desc{font-size:13px; color:var(--muted); margin-top:7px; line-height:1.6;}
   .pm-title{font-size:17px; font-weight:700; color:var(--ink); margin:0 34px 14px 2px;}
+  /* ══ 🧰 랜딩 무기고 T1 (2026-07-10) ══ */
+  /* ── ㉑ 스킨 3종: 모달 범위에서 테마 변수만 갈아끼움 (기존 블록 렌더러 무수정) ── */
+  #post-modal.lps-dark .resv-sheet{background:#0D0B10; color:#D8D2E0; --surface:#17141C; --hair:rgba(255,255,255,.09); --ink:#F3EEE6; --on-strong:#F3EEE6; --on-soft:#9C94A8; --muted:#9C94A8; --coral:#E8C285; --coral-soft:rgba(232,194,133,.13); --grad:linear-gradient(100deg,#E8C285,#FF8FB8);}
+  #post-modal.lps-dark .pm-title{color:#F3EEE6; font-family:Georgia,'Nanum Myeongjo',serif; font-weight:600;}
+  #post-modal.lps-dark .block-h, #post-modal.lps-dark .ly-impact-t{font-family:Georgia,'Nanum Myeongjo',serif; font-weight:600;}
+  #post-modal.lps-editorial .resv-sheet{background:#F4EDE3; color:#4A4238; --surface:#FFFDF9; --hair:rgba(36,29,22,.13); --ink:#241D16; --on-strong:#241D16; --on-soft:#8A7F70; --muted:#8A7F70; --coral:#B0713C; --coral-soft:rgba(176,113,60,.1); --grad:linear-gradient(100deg,#B0713C,#8A5A33);}
+  #post-modal.lps-editorial .pm-title, #post-modal.lps-editorial .block-h, #post-modal.lps-editorial .ly-impact-t, #post-modal.lps-editorial .ly-hero-t{font-family:Georgia,'Nanum Myeongjo',serif; font-weight:600;}
+  #post-modal.lps-editorial .resv-mclose{color:#8A7F70;}
+  #post-modal.lps-clean .resv-sheet{background:#FFFFFF; color:#3C4046; --surface:#F6F7F9; --hair:rgba(25,27,31,.1); --ink:#191B1F; --on-strong:#191B1F; --on-soft:#79808A; --muted:#79808A; --coral:#3D6FE8; --coral-soft:rgba(61,111,232,.08); --grad:linear-gradient(100deg,#3D6FE8,#2C55B8);}
+  #post-modal.lps-clean .resv-mclose{color:#79808A;}
+  /* ── ㉓ 켄번즈: 히어로 사진이 천천히 살아 움직임 (스킨 적용 시) ── */
+  .ly-hero{position:relative; overflow:hidden;}
+  .ly-hero .ly-hero-bg{position:absolute; inset:0; background-size:cover; background-position:center;}
+  .ly-hero .ly-hero-in, .ly-hero .ly-hero-glass{position:relative; z-index:2;}
+  #post-modal[class*="lps-"] .ly-hero-bg{animation:lpKen 16s ease-in-out infinite alternate;}
+  @keyframes lpKen{from{transform:scale(1);} to{transform:scale(1.12) translate(-2%,2%);}}
+  @media (prefers-reduced-motion: reduce){ #post-modal[class*="lps-"] .ly-hero-bg{animation:none;} }
+  /* ── 01 가격 플랜 블록 ── */
+  .lp-plans{display:flex; flex-direction:column; gap:10px; margin:6px 0 14px;}
+  .lp-plan{position:relative; text-align:left; width:100%; background:var(--surface, rgba(255,255,255,.04)); border:1.5px solid var(--hair); border-radius:15px; padding:14px 16px; cursor:pointer; font-family:inherit; color:inherit; transition:border-color .15s, background .15s;}
+  .lp-plan.on{border-color:var(--coral); background:var(--coral-soft);}
+  .lp-plan .lpp-rb{position:absolute; top:-9px; right:13px; font-size:9.5px; font-weight:800; background:var(--grad, linear-gradient(100deg,#E8C285,#FF8FB8)); color:#fff; border-radius:99px; padding:3px 10px;}
+  #post-modal.lps-dark .lp-plan .lpp-rb{color:#1C140A;}
+  .lp-plan .lpp-t{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .lp-plan .lpp-n{font-size:13.5px; font-weight:800; color:var(--on-strong, inherit);}
+  .lp-plan .lpp-pr{white-space:nowrap;}
+  .lp-plan .lpp-pr del{font-size:11px; color:var(--muted); margin-right:5px;}
+  .lp-plan .lpp-pr b{font-size:15px; font-weight:800; color:var(--coral); font-variant-numeric:tabular-nums;}
+  .lp-plan .lpp-pr .lpp-off{font-size:10px; font-weight:800; color:#FF6B8B; margin-left:4px;}
+  .lp-plan .lpp-d{font-size:11.5px; color:var(--muted); margin-top:5px; line-height:1.6;}
+  /* ── 04 자리 게이지 ── */
+  .lp-seat{text-align:center; margin:6px 0 14px;}
+  .lp-seat .lsg-l{font-size:12px; font-weight:800; color:var(--on-strong, inherit); margin-bottom:9px;}
+  .lp-seat .lsg-row{display:flex; gap:4px; justify-content:center; flex-wrap:wrap;}
+  .lp-seat .lsg-row i{width:22px; height:7px; border-radius:9px; background:var(--coral);}
+  .lp-seat .lsg-row i.used{background:var(--hair);}
+  .lp-seat .lsg-t{font-size:11.5px; color:var(--muted); margin-top:8px;}
+  .lp-seat .lsg-t b{color:var(--coral); animation:lsgPulse 1.9s ease-in-out infinite;}
+  @keyframes lsgPulse{0%,100%{opacity:1;} 50%{opacity:.55;}}
+  /* ── 08 별점 요약 헤더 ── */
+  .rv-sum{display:flex; align-items:baseline; gap:8px; margin-bottom:12px;}
+  .rv-sum .rvs-st{color:#FFB740; font-size:13px; letter-spacing:1.5px;}
+  .rv-sum b{font-size:16px; color:var(--on-strong, inherit);}
+  .rv-sum span{font-size:11.5px; color:var(--muted);}
+  /* ── 🧰 T2: 05 보너스 스택 · 47 비교표 · 48 맞아요/안맞아요 · 10 채팅 후기 ── */
+  .lp-bns .bns-i{display:flex; justify-content:space-between; gap:10px; align-items:baseline; padding:9px 0; border-top:1px dashed var(--hair); font-size:13.5px; color:var(--on-strong, inherit);}
+  .lp-bns .bns-i b{color:var(--coral); font-size:13px; white-space:nowrap; font-variant-numeric:tabular-nums;}
+  .lp-bns .bns-tot{margin-top:11px; text-align:center; background:color-mix(in srgb, var(--coral) 10%, transparent); border:1px dashed var(--coral); border-radius:11px; padding:9px; font-size:12.5px; color:var(--on-strong, inherit);}
+  .lp-bns .bns-tot b{color:var(--coral); font-size:14.5px; font-variant-numeric:tabular-nums;}
+  .lp-bns .bns-note{margin-top:8px; font-size:11px; color:var(--muted); text-align:center; line-height:1.5;}
+  .lp-cmp .cmp-hd,.lp-cmp .cmp-r{display:grid; grid-template-columns:.9fr 1fr 1.25fr; gap:7px; align-items:center;}
+  .lp-cmp .cmp-hd{font-size:11px; font-weight:800; color:var(--muted); padding:2px 0 8px;}
+  .lp-cmp .cmp-hd .me{color:var(--coral);}
+  .lp-cmp .cmp-r{border-top:1px solid var(--hair); padding:9px 0; font-size:12px;}
+  .lp-cmp .cmp-r i{font-style:normal; font-size:11px; font-weight:800; color:var(--muted); line-height:1.4;}
+  .lp-cmp .cmp-r span{color:var(--muted); line-height:1.45;}
+  .lp-cmp .cmp-r .me{color:var(--on-strong, inherit); font-weight:700; background:color-mix(in srgb, var(--coral) 10%, transparent); border-radius:9px; padding:7px 9px;}
+  .lp-fit{display:grid; gap:10px;}
+  .lp-fit .fit-b{border-radius:13px; padding:12px 13px;}
+  .lp-fit .fit-b.ok{background:rgba(52,211,153,.08); border:1px solid rgba(52,211,153,.3);}
+  .lp-fit .fit-b.no{background:rgba(255,107,125,.06); border:1px solid rgba(255,107,125,.22);}
+  .lp-fit .fit-h{font-size:12px; font-weight:800; margin-bottom:6px;}
+  .lp-fit .fit-b.ok .fit-h{color:#1d9e75;} .lp-fit .fit-b.no .fit-h{color:#e0566e;}
+  .lp-fit .fit-i{font-size:13px; color:var(--on-strong, inherit); line-height:1.55; padding:3px 0;}
+  .lp-fit .fit-b.no .fit-i{color:var(--muted);}
+  .rv-chatwall{display:flex; flex-direction:column; gap:12px;}
+  .rv-chat{display:grid; grid-template-columns:30px 1fr; gap:8px;}
+  .rv-chat-av{width:30px; height:30px; border-radius:11px; background:color-mix(in srgb, var(--coral) 14%, transparent); color:var(--coral); font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+  .rv-chat-b{background:rgba(127,127,127,.1); border:1px solid var(--hair); border-radius:4px 14px 14px 14px; padding:9px 12px; justify-self:start; max-width:92%;}
+  .rv-chat-t{font-size:13px; color:var(--on-strong, inherit); line-height:1.55;}
+  .rv-chat-n{grid-column:2; font-size:10px; color:var(--muted); margin-top:1px;}
+  /* ── 🧰 T2-2: 진단 퀴즈 · 쿠폰 · 얼리버드 ── */
+  .lp-quiz .qz-dots{display:flex; gap:5px; margin:6px 0 12px;}
+  .lp-quiz .qz-dots i{width:20px; height:4px; border-radius:3px; background:var(--hair);}
+  .lp-quiz .qz-dots i.on{background:var(--coral);}
+  .lp-quiz .qz-dots i.done{background:color-mix(in srgb, var(--coral) 45%, transparent);}
+  .lp-quiz .qz-q{font-size:14.5px; font-weight:800; color:var(--on-strong, inherit); line-height:1.5; margin-bottom:11px;}
+  .lp-quiz .qz-op{display:block; width:100%; text-align:left; font-family:inherit; font-size:13.5px; font-weight:700; color:var(--on-strong, inherit); background:rgba(127,127,127,.08); border:1.5px solid var(--hair); border-radius:12px; padding:12px 14px; margin-bottom:8px; cursor:pointer;}
+  .lp-quiz .qz-op:hover{border-color:var(--coral);}
+  .lp-quiz .qz-res{text-align:center; padding:4px 0;}
+  .lp-quiz .qz-rt{font-size:17px; font-weight:800; color:var(--on-strong, inherit); line-height:1.4;}
+  .lp-quiz .qz-rd{font-size:13px; color:var(--muted); line-height:1.6; margin-top:7px;}
+  .lp-quiz .qz-cta{display:block; width:100%; margin-top:13px; font-family:inherit; font-size:13.5px; font-weight:800; color:#fff; background:var(--grad, linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); border:none; border-radius:12px; padding:12px; cursor:pointer;}
+  #post-modal.lps-dark .lp-quiz .qz-cta{color:#1C140A;}
+  .lp-quiz .qz-retry{display:block; margin:9px auto 0; background:none; border:none; color:var(--muted); font-family:inherit; font-size:11px; font-weight:700; cursor:pointer;}
+  .lp-cpn .cpn-tk{border:1.5px dashed var(--coral); border-radius:14px; padding:14px 15px 15px; text-align:center;}
+  .lp-cpn .cpn-badge{display:inline-block; font-size:10px; font-weight:800; color:var(--coral); background:color-mix(in srgb, var(--coral) 12%, transparent); border-radius:99px; padding:3px 10px; margin-bottom:7px;}
+  .lp-cpn .cpn-nm{font-size:15px; font-weight:800; color:var(--on-strong, inherit);}
+  .lp-cpn .cpn-bf{font-size:13px; color:var(--on-strong, inherit); margin-top:4px;}
+  .lp-cpn .cpn-cond{font-size:10.5px; color:var(--muted); margin-top:5px; line-height:1.5;}
+  .lp-cpn .cpn-cut{border-top:1.5px dashed var(--hair); margin:11px -15px;}
+  .lp-cpn .cpn-get{font-family:inherit; font-size:13px; font-weight:800; color:#fff; background:var(--grad, linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); border:none; border-radius:11px; padding:11px 26px; cursor:pointer;}
+  #post-modal.lps-dark .lp-cpn .cpn-get{color:#1C140A;}
+  .lp-cpn .cpn-code b{font-size:16px; letter-spacing:.14em; color:var(--coral); font-variant-numeric:tabular-nums;}
+  .lp-cpn .cpn-copy{margin-left:9px; font-family:inherit; font-size:11px; font-weight:700; color:var(--muted); background:rgba(127,127,127,.1); border:1px solid var(--hair); border-radius:8px; padding:5px 10px; cursor:pointer;}
+  .lp-cpn .cpn-ok{font-size:12.5px; color:var(--coral); font-weight:700;}
+  .lp-eb .eb-l{font-size:12px; font-weight:800; color:var(--on-strong, inherit); margin-bottom:6px;}
+  .lp-eb .eb-pr{font-size:14px; color:var(--on-strong, inherit);}
+  .lp-eb .eb-pr b{color:var(--coral); font-size:16px;}
+  .lp-eb .eb-nx{font-size:11.5px; color:var(--muted);}
+  .lp-eb .eb-bar{height:8px; border-radius:6px; background:var(--hair); margin-top:9px; overflow:hidden;}
+  .lp-eb .eb-bar i{display:block; height:100%; background:var(--grad, linear-gradient(90deg,#7C3FE4,#C13B9E)); border-radius:6px;}
+  .lp-eb .eb-t{font-size:11px; color:var(--muted); margin-top:6px;}
+  .lp-eb .eb-t b{color:var(--coral); animation:lsgPulse 1.9s ease-in-out infinite;}
+  /* ── 02 하단 고정 구매바 (랜딩 모달 안) ── */
+  .pm-buybar{position:sticky; bottom:-26px; z-index:6; display:flex; gap:10px; align-items:center; margin:18px -16px -26px; padding:12px 16px calc(14px + env(safe-area-inset-bottom)); background:color-mix(in srgb, var(--surface, #17141C) 88%, transparent); border-top:1px solid var(--hair); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);}
+  .pm-buybar .pbb-i{flex:1; min-width:0;}
+  .pm-buybar .pbb-i small{display:block; font-size:10px; color:var(--muted); font-weight:700;}
+  .pm-buybar .pbb-i b{font-size:16px; font-weight:800; color:var(--on-strong, inherit); font-variant-numeric:tabular-nums;}
+  .pm-buybar .pbb-go{flex:none; font-family:inherit; font-size:14px; font-weight:800; color:#fff; background:var(--grad, linear-gradient(120deg,#4571E8,#7C3FE4,#C13B9E)); border:none; border-radius:13px; padding:13px 24px; cursor:pointer; text-decoration:none; display:inline-block;}
+  #post-modal.lps-dark .pm-buybar .pbb-go{color:#1C140A;}
+  .pm-buybar .pbb-go:active{transform:scale(.97);}
   /* 아카이브 보기 방식: 사진 그리드 / 리스트 */
   .arc-photo{display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:4px;}
   .arc-photo-cell{display:block; text-decoration:none;}
@@ -3126,6 +3238,147 @@
       return card(h+bodyH);
     },
     stat: function(c){ var list=c[0]||[]; if(!list.length) return null; var inner=list.map(function(x){ return '<div style="flex:1;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--coral);font-family:var(--serif);">'+esc(x[0]||'')+'</div><div class="sub">'+esc(x[1]||'')+'</div></div>'; }).join(''); return card('<div style="display:flex;gap:10px;">'+inner+'</div>'); },
+    /* 🧰 01 가격 플랜 (2티어 고정 · flat content [n,p,d,정가,추천, n,p,d,정가,추천]) — 탭=선택 → 구매바 연동 */
+    plans: function(c){
+      var ts=[[c[0],c[1],c[2],c[3],c[4]],[c[5],c[6],c[7],c[8],c[9]]].filter(function(t){ return t[0]&&t[1]; });
+      if(!ts.length) return null;
+      function num(s){ var m=String(s||'').replace(/[^0-9]/g,''); return m?parseInt(m,10):0; }
+      var selIdx=ts.length-1; for(var i0=0;i0<ts.length;i0++){ if(ts[i0][4]) selIdx=i0; }
+      var d=document.createElement('div'); d.className='block lp-plans';
+      ts.forEach(function(t,i){
+        var o=num(t[3]), pn=num(t[1]);
+        var off=(o>pn&&pn>0)?Math.round((1-pn/o)*100):0;
+        var b=document.createElement('button'); b.type='button'; b.className='lp-plan';
+        b.innerHTML=(t[4]?'<span class="lpp-rb">⭐ 추천</span>':'')
+          +'<div class="lpp-t"><span class="lpp-n">'+esc(t[0])+'</span><span class="lpp-pr">'+(off?('<del>'+esc(t[3])+'</del>'):'')+'<b>'+esc(t[1])+'</b>'+(off?('<span class="lpp-off">'+off+'%↓</span>'):'')+'</span></div>'
+          +(t[2]?('<div class="lpp-d">'+esc(t[2])+'</div>'):'');
+        b.onclick=function(){ pick(i); try{ track('lp_plan',{label:t[0]}); }catch(_){} };
+        d.appendChild(b);
+      });
+      function pick(i){
+        [].forEach.call(d.children, function(el,k){ el.classList.toggle('on', k===i); });
+        var t=ts[i]; window.__lpSelPlan={name:t[0]||'', price:t[1]||''};
+        var n=document.getElementById('pbb-n'), pr=document.getElementById('pbb-p');
+        if(n) n.textContent=t[0]||''; if(pr) pr.textContent=t[1]||'';
+      }
+      pick(selIdx);
+      return d;
+    },
+    /* 🧰 04 자리 게이지 (content [라벨, 총자리, 찬자리]) — 희소성의 시각화 */
+    seatgauge: function(c){
+      if(!c[1]) return null;
+      var label=c[0]||'', total=Math.max(1, Math.min(20, parseInt(c[1],10)||0)), taken=Math.max(0, Math.min(total, parseInt(c[2],10)||0));
+      var left=total-taken;
+      var row=''; for(var i=0;i<total;i++) row+='<i class="'+(i<taken?'used':'')+'"></i>';
+      var d=document.createElement('div'); d.className='block lp-seat';
+      d.innerHTML=(label?('<div class="lsg-l">'+esc(label)+'</div>'):'')
+        +'<div class="lsg-row">'+row+'</div>'
+        +'<div class="lsg-t">'+(left>0?(total+'자리 중 <b>'+left+'자리 남음</b>'):'이번 회차는 <b>마감</b>되었어요')+'</div>';
+      return d;
+    },
+    /* 🧰 05 보너스 스택 (content [제목, 이름1,가치1, 이름2,가치2, 이름3,가치3, 메모]) — 가치가 쌓이면 같은 가격도 이득이 됨 */
+    bonusstack: function(c){
+      var items=[[c[1],c[2]],[c[3],c[4]],[c[5],c[6]]].filter(function(x){ return x[0]; });
+      if(!items.length) return null;
+      function num(s){ var m=String(s||'').replace(/[^0-9]/g,''); return m?parseInt(m,10):0; }
+      var sum=0; items.forEach(function(x){ sum+=num(x[1]); });
+      var rows=items.map(function(x){ return '<div class="bns-i"><span>'+esc(x[0])+'</span>'+(x[1]?('<b>'+esc(x[1])+'</b>'):'')+'</div>'; }).join('');
+      var d=card(''); d.classList.add('lp-bns');
+      d.innerHTML=(c[0]?('<div class="block-h" style="margin-bottom:8px;">'+emph(c[0])+'</div>'):'')
+        +rows
+        +(sum>0?('<div class="bns-tot">보너스 가치만 <b>₩'+sum.toLocaleString('ko-KR')+'</b></div>'):'')
+        +(c[7]?('<div class="bns-note">'+esc(c[7])+'</div>'):'');
+      return d;
+    },
+    /* 🧰 47 비교표 (content [제목, 왼헤더, 오른헤더, 항목1,왼1,오1, 항목2,왼2,오2, 항목3,왼3,오3]) — 기준을 내가 정하는 프레이밍 (사실만!) */
+    compare: function(c){
+      var rows=[[c[3],c[4],c[5]],[c[6],c[7],c[8]],[c[9],c[10],c[11]]].filter(function(r){ return r[0]&&(r[1]||r[2]); });
+      if(!rows.length) return null;
+      var hd='<div class="cmp-hd"><i></i><span>'+esc(c[1]||'다른 곳')+'</span><span class="me">'+esc(c[2]||'여기')+'</span></div>';
+      var body=rows.map(function(r){ return '<div class="cmp-r"><i>'+esc(r[0])+'</i><span>'+esc(r[1]||'—')+'</span><span class="me">✓ '+esc(r[2]||'')+'</span></div>'; }).join('');
+      var d=card(''); d.classList.add('lp-cmp');
+      d.innerHTML=(c[0]?('<div class="block-h" style="margin-bottom:10px;">'+emph(c[0])+'</div>'):'')+hd+body;
+      return d;
+    },
+    /* 🧰 48 맞아요/안맞아요 (content [맞1,맞2,맞3, 안1,안2,안3]) — 정직한 필터가 나머지 말을 전부 믿게 함 */
+    fitcheck: function(c){
+      var fit=[c[0],c[1],c[2]].filter(Boolean), unfit=[c[3],c[4],c[5]].filter(Boolean);
+      if(!fit.length&&!unfit.length) return null;
+      var d=card(''); d.classList.add('lp-fit');
+      d.innerHTML=(fit.length?('<div class="fit-b ok"><div class="fit-h">✅ 이런 분께 맞아요</div>'+fit.map(function(x){ return '<div class="fit-i">'+esc(x)+'</div>'; }).join('')+'</div>'):'')
+        +(unfit.length?('<div class="fit-b no"><div class="fit-h">⛔ 이런 분껜 안 맞아요</div>'+unfit.map(function(x){ return '<div class="fit-i">'+esc(x)+'</div>'; }).join('')+'</div>'):'');
+      return d;
+    },
+    /* 🧰 14 진단 퀴즈 (flat 15칸: 제목, [Q,답A,답B]×3, 결과A 제목·설명, 결과B 제목·설명, CTA라벨) — 참여한 사람은 남는다 (순수 코드·AI 0) */
+    quiz: function(c){
+      var qs=[[c[1],c[2],c[3]],[c[4],c[5],c[6]],[c[7],c[8],c[9]]].filter(function(q){ return q[0]&&q[1]&&q[2]; });
+      if(!qs.length || !(c[10]||c[12])) return null;
+      var d=card(''); d.classList.add('lp-quiz');
+      var step=0, countA=0;
+      function dots(){ var h=''; for(var i=0;i<qs.length;i++) h+='<i class="'+(i<step?'done':(i===step?'on':''))+'"></i>'; return h; }
+      function render(){
+        if(step<qs.length){
+          var q=qs[step];
+          d.innerHTML='<div class="block-h" style="margin-bottom:4px;">'+emph(c[0]||'간단 진단')+'</div>'
+            +'<div class="qz-dots">'+dots()+'</div>'
+            +'<div class="qz-q">Q'+(step+1)+'. '+esc(q[0])+'</div>'
+            +'<button type="button" class="qz-op" data-v="a">'+esc(q[1])+'</button>'
+            +'<button type="button" class="qz-op" data-v="b">'+esc(q[2])+'</button>';
+          [].forEach.call(d.querySelectorAll('.qz-op'), function(b){ b.onclick=function(){ if(b.getAttribute('data-v')==='a') countA++; step++; render(); }; });
+        } else {
+          var isA = countA*2 >= qs.length;
+          var rt=isA?(c[10]||''):(c[12]||''), rd=isA?(c[11]||''):(c[13]||'');
+          if(!rt){ rt=isA?(c[12]||''):(c[10]||''); rd=isA?(c[13]||''):(c[11]||''); }   // 한쪽 결과만 채웠으면 그걸로
+          var cta=c[14]||'';
+          d.innerHTML='<div class="block-h" style="margin-bottom:10px;">'+emph(c[0]||'간단 진단')+'</div>'
+            +'<div class="qz-res"><div class="qz-rt">'+emph(rt)+'</div>'+(rd?('<div class="qz-rd">'+esc(rd)+'</div>'):'')
+            +(cta?('<button type="button" class="qz-cta">'+esc(cta)+' →</button>'):'')
+            +'<button type="button" class="qz-retry">다시 해보기</button></div>';
+          try{ track('quiz_done',{label:rt}); }catch(_){}
+          var cb=d.querySelector('.qz-cta'); if(cb) cb.onclick=function(){ try{ track('quiz_cta',{label:rt}); }catch(_){} var go=document.querySelector('#post-modal .pbb-go')||document.querySelector('#post-modal .resv-cta-btn'); if(go) go.click(); };
+          var rb=d.querySelector('.qz-retry'); if(rb) rb.onclick=function(){ step=0; countA=0; render(); };
+        }
+      }
+      render();
+      return d;
+    },
+    /* 🧰 06 쿠폰 (flat [배지, 이름, 혜택, 코드(선택), 조건(선택), 버튼라벨]) — 받는 순간 심리적 소유 (서버 0 · 기기에 기억) */
+    coupon: function(c){
+      if(!c[1]&&!c[2]) return null;
+      var d=card(''); d.classList.add('lp-cpn');
+      var key='li-cpn-'+(window.HANDLE||'')+'-'+(c[3]||c[1]||'');
+      var got=false; try{ got=localStorage.getItem(key)==='1'; }catch(_){}
+      function render(){
+        d.innerHTML='<div class="cpn-tk">'
+          +(c[0]?('<div class="cpn-badge">'+esc(c[0])+'</div>'):'')
+          +'<div class="cpn-nm">'+esc(c[1]||'')+'</div>'
+          +(c[2]?('<div class="cpn-bf">'+emph(c[2])+'</div>'):'')
+          +(c[4]?('<div class="cpn-cond">'+esc(c[4])+'</div>'):'')
+          +'<div class="cpn-cut"></div>'
+          +(got
+            ? ('<div class="cpn-code">'+(c[3]?('<b>'+esc(c[3])+'</b><button type="button" class="cpn-copy">복사</button>'):'<span class="cpn-ok">✓ 받았어요 — 예약·방문 때 말씀해주세요</span>')+'</div>')
+            : ('<button type="button" class="cpn-get">'+esc(c[5]||'🎟 쿠폰 받기')+'</button>'))
+          +'</div>';
+        var g=d.querySelector('.cpn-get'); if(g) g.onclick=function(){ got=true; try{ localStorage.setItem(key,'1'); }catch(_){} try{ track('coupon_get',{label:c[1]||c[3]||'쿠폰'}); }catch(_){} render(); };
+        var cp=d.querySelector('.cpn-copy'); if(cp) cp.onclick=function(){ try{ navigator.clipboard.writeText(c[3]||''); cp.textContent='복사됨 ✓'; }catch(_){} };
+      }
+      render();
+      return d;
+    },
+    /* 🧰 49 얼리버드 (flat [라벨, 얼리 가격, 정원, 판매수, 이후 가격]) — 단계 가격 (숫자는 진짜만 · 수동 갱신) */
+    earlybird: function(c){
+      if(!c[1]||!c[2]) return null;
+      var total=Math.max(1,parseInt(c[2],10)||0), sold=Math.max(0,Math.min(total,parseInt(c[3],10)||0));
+      var left=total-sold, pct=Math.round(sold/total*100);
+      var d=card(''); d.classList.add('lp-eb');
+      d.innerHTML='<div class="eb-l">'+esc(c[0]||'🐤 얼리버드')+'</div>'
+        +(left>0
+          ? ('<div class="eb-pr">지금 <b>'+esc(c[1])+'</b>'+(c[4]?(' <span class="eb-nx">· '+left+'명 이후 '+esc(c[4])+'</span>'):'')+'</div>')
+          : ('<div class="eb-pr">얼리버드 마감'+(c[4]?(' — 현재 <b>'+esc(c[4])+'</b>'):'')+'</div>'))
+        +'<div class="eb-bar"><i style="width:'+pct+'%"></i></div>'
+        +'<div class="eb-t">'+total+'자리 중 '+sold+'자리 판매'+(left>0?(' · <b>'+left+'자리 남음</b>'):'')+'</div>';
+      return d;
+    },
     review: function(c, layout){
       var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
       var list=c[0]||[]; if(!list.length){ if(!EDIT) return null; list=[['','']]; }
@@ -3146,6 +3399,11 @@
         var more=rest.length?'<div class="rv-mini-row">'+rest.map(function(x){ return '<div class="rv-mini"><div style="color:#FFB740;font-size:9px;">★★★★★</div><div class="rv-mini-t">'+esc((x[0]||'').slice(0,28))+'</div></div>'; }).join('')+'</div>':'';
         return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div>'+big+more);
       }
+      if(layout==='chat'){
+        // 🧰 10 채팅 후기 월 — 같은 후기 데이터를 메신저 말풍선으로 (텍스트 후기보다 생생)
+        var ch=list.map(function(x){ return '<div class="rv-chat"><span class="rv-chat-av">'+esc(ini(x[1]))+'</span><div class="rv-chat-b"><div class="rv-chat-t rv-et">'+esc(x[0]||'')+'</div></div><span class="rv-chat-n rv-en">'+esc(x[1]||'고객님')+'</span></div>'; }).join('');
+        return card('<div class="block-h" style="margin-bottom:12px;">💬 손님이 보낸 말</div><div class="rv-chatwall">'+ch+'</div>'+rvAdd);
+      }
       if(layout==='slider' && !EDIT){
         var dbl=list.concat(list);   // 이어붙여 끊김 없이 순환
         var sitems=dbl.map(function(x){ return '<div class="rv-sl-item"><div class="rv-sl-st">★★★★★</div><div class="rv-sl-q">'+emph(x[0]||'')+'</div><div class="rv-sl-n">— '+esc(x[1]||'고객님')+'</div></div>'; }).join('');
@@ -3154,7 +3412,10 @@
       }
       // cards (기본) — slider 편집모드도 여기로(인라인 편집 유지)
       var cards=list.map(function(x){ return '<div class="rv-card rv-ei" style="position:relative;"><div class="rv-card-top"><span class="rv-av">'+esc(ini(x[1]))+'</span><div><div style="color:#FFB740;font-size:10px;letter-spacing:1px;">★★★★★</div><div class="rv-name rv-en">'+esc(x[1]||(EDIT?'':'고객님'))+'</div></div></div><div class="rv-card-t rv-et">'+esc(x[0]||'')+'</div>'+rvDel+'</div>'; }).join('');
-      return card('<div class="block-h" style="margin-bottom:12px;">고객 후기</div><div class="rv-cards">'+cards+'</div>'+rvAdd);
+      // 🧰 08 별점 요약 헤더 — 진짜 데이터만 (개수=실제, 평균=별점 저장된 후기 있을 때만)
+      var stC=0, stS=0; list.forEach(function(x){ var s=parseFloat(x&&x[2]); if(s>0){ stC++; stS+=Math.min(5,s); } });
+      var sum='<div class="rv-sum"><span class="rvs-st">★★★★★</span>'+(stC?('<b>'+(stS/stC).toFixed(1)+'</b>'):'')+'<span>후기 '+list.length+'개</span></div>';
+      return card(sum+'<div class="rv-cards">'+cards+'</div>'+rvAdd);
     },
     qna: function(c, layout){
       var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
@@ -3199,8 +3460,9 @@
       if(layout==='hero'){
         var bg = url ? 'linear-gradient(180deg, rgba(10,7,20,.12) 0%, rgba(10,7,20,.55) 55%, rgba(10,7,20,.86) 100%), var(--ph2) url('+esc(url)+') center/cover'
                      : 'radial-gradient(circle at 72% 22%, color-mix(in srgb, var(--coral) 48%, #15122c) 0%, #15122c 54%, #0a0818 100%)';
-        var d=document.createElement('div'); d.className='ly-hero'; d.style.background=bg;
-        d.innerHTML=(url?'':'<span class="ly-hero-glass"></span>')+'<div class="ly-hero-in">'+(title?'<div class="ly-hero-t">'+emph(title)+'</div>':'')+(desc?'<div class="ly-hero-d">'+esc(desc)+'</div>':'')+'</div>';
+        var d=document.createElement('div'); d.className='ly-hero';
+        var bgEl=document.createElement('span'); bgEl.className='ly-hero-bg'; bgEl.style.background=bg; d.appendChild(bgEl);   // 🧰 23 켄번즈: 배경 분리 레이어 (스킨에서 천천히 줌)
+        d.insertAdjacentHTML('beforeend', (url?'':'<span class="ly-hero-glass"></span>')+'<div class="ly-hero-in">'+(title?'<div class="ly-hero-t">'+emph(title)+'</div>':'')+(desc?'<div class="ly-hero-d">'+esc(desc)+'</div>':'')+'</div>');
         return d;
       }
       if(layout==='split'){
@@ -3221,6 +3483,7 @@
       return card(img+h+descH);
     },
     beforeafter: function(c, layout){
+      if(!c[0]&&!c[1]&&!(typeof EDIT_MODE!=='undefined'&&EDIT_MODE)) return null;   // 사진 없으면 공개 화면선 숨김 (상세페이지형 랜딩 프리셋 기본칸)
       var cap=c[2]||'';
       if(layout==='side'){
         var pf=pcStyle(c[3]); var fxC=pf.cls?(' '+pf.cls):''; var rad=pf.cls?'':'border-radius:12px;';
@@ -3722,6 +3985,10 @@
     }
     document.getElementById('pm-title').textContent=p.title||'';
     var bodyEl=document.getElementById('pm-body');
+    // 🧰 21 스킨 3종 — 랜딩만, 모달 범위 테마 변수 교체 (skin 없으면 기존 그대로 = 무회귀)
+    ov.classList.remove('lps-dark','lps-editorial','lps-clean');
+    if(p.type==='landing' && p.skin) ov.classList.add('lps-'+p.skin);
+    window.__lpSelPlan=null;   // 플랜 선택 상태 리셋 (이전 랜딩 잔상 방지)
     renderPostBlocks(bodyEl, p.blocks);
     // 💬 글 끝 예약·문의 버튼 (2026-07-08, p.ctaOn 기본 켬) — 읽고 마음 생긴 손님이 바로 행동
     try{ if(p.ctaOn!==false){
@@ -3731,10 +3998,34 @@
       if(cta) bodyEl.appendChild(cta);
     } }catch(_e){}
     try{ bodyEl.appendChild(buildPostFoot(id)); }catch(_){}
+    // 🧰 02 하단 고정 구매바 (랜딩만): 선택 플랜(또는 첫 내 상품) 가격 + 예약/신청 — 스크롤 내내 손 밑에
+    try{
+      var oldBar=document.getElementById('pm-buybar'); if(oldBar) oldBar.remove();
+      if(p.type==='landing'){
+        var sel=window.__lpSelPlan||null;
+        if(!sel){ var _m=((window.__PRODUCTS||[]).filter(function(x){ return x&&x.kind==='mine'&&x.price; }))[0]; if(_m) sel={name:_m.name||'', price:_m.price}; }
+        var canResv=!!window.__resvOn, curl=window.__CTA_URL||'';
+        if(sel && (canResv||curl)){
+          var bar=document.createElement('div'); bar.className='pm-buybar'; bar.id='pm-buybar';
+          bar.innerHTML='<div class="pbb-i"><small id="pbb-n"></small><b id="pbb-p"></b></div>';
+          var go;
+          if(canResv){ go=document.createElement('button'); go.type='button'; go.className='pbb-go'; go.textContent='📅 예약하기';
+            go.onclick=function(){ ov.classList.remove('open'); var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); try{ track('lp_buybar',{label:p.id}); }catch(_){} }; }
+          else { go=document.createElement('a'); go.className='pbb-go'; go.href=curl; go.target='_blank'; go.rel='noopener'; go.setAttribute('data-ev','conv'); go.setAttribute('data-track','랜딩 구매바'); go.textContent='💬 신청하기'; }
+          bar.appendChild(go);
+          bodyEl.appendChild(bar);
+          var _n=document.getElementById('pbb-n'), _p2=document.getElementById('pbb-p');
+          if(_n) _n.textContent=sel.name||'선택한 구성'; if(_p2) _p2.textContent=sel.price||'';
+        }
+      }
+    }catch(_e){}
+    // 🧰 15 스크롤 리빌 — 랜딩 블록들이 떠오르며 등장
+    try{ if(p.type==='landing' && window.__revealScan) window.__revealScan([].slice.call(bodyEl.children)); }catch(_e){}
     try{ decoratePostLikes(); }catch(_){}
     ov.classList.add('open');
     try{ track('postview',{ kind:'post', label:id }); }catch(_){}
   }
+  window.__openPostModal=openPostModal;
   // ── ♥ 좋아요 + ✈ 보내기 (인스타식, 게시물 하단 + 카드) ──
   function hubBuzz(pat){ try{ if(navigator.vibrate) navigator.vibrate(pat||14); }catch(_){} }
   function hubToast(msg){
