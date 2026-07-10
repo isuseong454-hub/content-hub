@@ -54,6 +54,9 @@
   }
   /* 디스플레이 숫자용 '진한 테마색' — 테마 강조색을 글자색 쪽으로 섞어 대비↑ (모든 테마 자동) */
   html{ --cm-disp:color-mix(in srgb, var(--coral) 80%, var(--ink)); --cm-glow:color-mix(in srgb, var(--coral) 38%, transparent); }
+  /* 테마 포인트색에서 자동 파생되는 그라데 (모든 테마 자동) — 랜딩 숫자·버튼·리본이 🎭테마 따름에서 테마색을 따라감 (2026-07-10, 이전엔 --grad 미정의 → 보라 폴백) */
+  html{ --grad:linear-gradient(100deg, var(--coral), color-mix(in srgb, var(--coral) 62%, var(--ink))); }
+  html[data-theme="brand"], html[data-theme="midnight"], html[data-theme="butterfly"]{ --grad:var(--coral-fill); }   /* 전용 그라데 보유 테마는 그걸로 */
   /* 뱅하우스식 카드 글로우 — 호버/탭 시 테마색으로 빛남 (중요 카드 강조 + 반응) */
   .pg-card, .lbc, .best-hcard, .gcard, .arc-card{ transition:box-shadow .25s ease, border-color .25s ease, transform .18s ease; }
   .pg-card:hover, .arc-card:hover, .pg-card:active, .arc-card:active{ border-color:color-mix(in srgb, var(--coral) 55%, var(--hair)); box-shadow:0 0 22px var(--cm-glow); }
@@ -1490,8 +1493,11 @@
   .ly-hero{position:relative; border-radius:20px; overflow:hidden; margin:6px 0 15px; min-height:280px; display:flex; align-items:flex-end; background-size:cover; background-position:center; box-shadow:0 14px 40px rgba(0,0,0,.28);}
   .ly-hero::after{content:''; position:absolute; top:-30%; right:-10%; width:55%; height:60%; border-radius:50%; background:radial-gradient(circle,var(--coral),transparent 70%); opacity:.5; filter:blur(30px); pointer-events:none;}
   .ly-hero-in{position:relative; z-index:1; padding:26px 22px; width:100%;}
-  .ly-hero-t{font-family:var(--serif); font-size:30px; font-weight:800; line-height:1.18; color:#fff; letter-spacing:-.01em; text-shadow:0 2px 16px rgba(0,0,0,.55);}
-  .ly-hero-t .em-main{ filter:drop-shadow(0 2px 12px var(--coral)); }
+  .ly-hero-t{font-family:var(--serif); font-size:30px; font-weight:800; line-height:1.18; color:#fff; letter-spacing:-.01em; text-shadow:0 1px 2px rgba(0,0,0,.45), 0 6px 18px rgba(0,0,0,.4);}   /* 선명한 윤곽 + 은은한 깊이 (블러 큰 단일 그림자=뭉개짐) */
+  /* 대문 강조 글자 = 항상 흰색 + 액센트 밑줄 (2026-07-10: 테마 그라데 글자가 보라 배경 위에서 보라-온-보라로 안 보이던 문제 — 히어로 배경은 항상 어두우므로 흰색 고정이 정답) */
+  .ly-hero-t .em-main{ background:none !important; -webkit-background-clip:initial !important; background-clip:initial !important; -webkit-text-fill-color:#fff !important; color:#fff !important; text-shadow:none; filter:drop-shadow(0 2px 6px rgba(0,0,0,.5)); text-decoration:underline; text-decoration-color:var(--coral,#E8C285); text-decoration-thickness:3px; text-underline-offset:7px; }
+  /* 사진 없는 히어로 = 빈 무대 줄이기 (280px 보라 덩어리 밑에 글자 묻힘 방지) */
+  .ly-hero.ly-noimg{ min-height:170px; }
   .ly-hero-d{font-size:14px; color:rgba(255,255,255,.92); margin-top:12px; line-height:1.55; text-shadow:0 1px 10px rgba(0,0,0,.6); white-space:pre-wrap;}
   .ly-hero-glass{position:absolute; top:20px; right:20px; width:66px; height:80px; border-radius:14px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.25); box-shadow:0 0 24px var(--coral); backdrop-filter:blur(3px); z-index:1;}
   .ly-split{display:flex; gap:12px; align-items:center; margin:4px 0 13px; background:var(--surface); border:1px solid var(--hair); border-radius:16px; overflow:hidden; padding:0;}
@@ -1793,6 +1799,40 @@
   #post-modal.lps-editorial .resv-mclose{color:#8A7F70;}
   #post-modal.lps-clean .resv-sheet{background:#FFFFFF; color:#3C4046; --surface:#F6F7F9; --hair:rgba(25,27,31,.1); --ink:#191B1F; --on-strong:#191B1F; --on-soft:#79808A; --muted:#79808A; --coral:#3D6FE8; --coral-soft:rgba(61,111,232,.08); --grad:linear-gradient(100deg,#3D6FE8,#2C55B8);}
   #post-modal.lps-clean .resv-mclose{color:#79808A;}
+  /* ── 🫧 신규 스킨 4종 (2026-07-10 사용자 채택: 글래스 계열 A·C·D·E) ── */
+  /* A. 오로라 글래스 — 깊은 밤 + 오로라 광원 + 유리 카드 */
+  #post-modal.lps-aurora .resv-sheet{
+    background:radial-gradient(50% 24% at 85% -2%, rgba(124,63,228,.4), transparent 70%), radial-gradient(46% 22% at 4% 34%, rgba(61,111,232,.24), transparent 70%), radial-gradient(50% 24% at 90% 96%, rgba(193,59,158,.26), transparent 70%), #0F0C18;
+    color:#CFC8E0; --surface:rgba(255,255,255,.07); --hair:rgba(255,255,255,.15); --ink:#F4F1FB; --on-strong:#F4F1FB; --on-soft:#9A92B0; --muted:#9A92B0; --coral:#A78BFF; --coral-soft:rgba(255,255,255,.08); --grad:linear-gradient(100deg,#7C3FE4,#C13B9E);}
+  #post-modal.lps-aurora .block{background:linear-gradient(170deg, rgba(255,255,255,.09), rgba(255,255,255,.035) 60%); border:1px solid rgba(255,255,255,.15); box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 12px 30px rgba(0,0,0,.3); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);}
+  #post-modal.lps-aurora .pm-title{color:#F4F1FB;}
+  #post-modal.lps-aurora .au-en{filter:drop-shadow(0 0 12px rgba(167,139,255,.4));}
+  /* C. 크리스탈 라벤더 — 순백 + 미세 라벤더 그라 + 유리질 퍼플 포인트 */
+  #post-modal.lps-crystal .resv-sheet{
+    background:radial-gradient(50% 22% at 85% -3%, rgba(139,92,246,.06), transparent 70%), radial-gradient(44% 20% at 6% 102%, rgba(193,59,158,.045), transparent 70%), linear-gradient(180deg,#FFFFFF 0%,#FBFAFF 55%,#F5F3FD 100%);
+    color:#3E4048; --surface:#FDFDFE; --hair:#EDEDF5; --ink:#17181C; --on-strong:#17181C; --on-soft:#7E8290; --muted:#7E8290; --coral:#8B5CF6; --coral-soft:rgba(139,92,246,.08); --grad:linear-gradient(135deg,#A78BFF,#7C3FE4 55%,#C13B9E);}
+  #post-modal.lps-crystal .block{box-shadow:0 10px 30px rgba(23,24,40,.06);}
+  #post-modal.lps-crystal .resv-mclose{color:#7E8290;}
+  #post-modal.lps-crystal .au-en{filter:drop-shadow(0 4px 10px rgba(139,92,246,.3));}
+  /* D. 에어리 레이어 (파랑) — 부유·겹침 구조 + 블루 미스트 */
+  #post-modal.lps-airy .resv-sheet{
+    background:radial-gradient(48% 22% at 82% -3%, rgba(61,111,240,.055), transparent 70%), radial-gradient(44% 20% at 8% 100%, rgba(110,155,255,.05), transparent 70%), linear-gradient(175deg,#F7F8FB 0%,#F1F4F8 45%,#E9EEF3 100%);
+    color:#48505E; --surface:#FFFFFF; --hair:rgba(20,26,50,.07); --ink:#141A24; --on-strong:#141A24; --on-soft:#7E8798; --muted:#7E8798; --coral:#3D6FF0; --coral-soft:rgba(61,111,240,.07); --grad:linear-gradient(100deg,#3D6FF0,#6E9BFF);}
+  #post-modal.lps-airy .block{border-color:transparent; box-shadow:0 3px 8px rgba(20,26,50,.05), 0 22px 50px rgba(20,26,50,.12); transform:rotate(.35deg);}
+  #post-modal.lps-airy .block:nth-of-type(odd){transform:rotate(-.35deg);}
+  #post-modal.lps-airy .resv-mclose{color:#7E8798;}
+  @media (prefers-reduced-motion: reduce){ #post-modal.lps-airy .block{transform:none;} }
+  /* E. 차콜 × 라임 — 쿨 차콜 9 : 라임 1 (라임 위 글자=검정) */
+  #post-modal.lps-lime .resv-sheet{
+    background:radial-gradient(50% 24% at 85% -4%, rgba(214,255,60,.09), transparent 70%), radial-gradient(44% 22% at 4% 62%, rgba(214,255,60,.045), transparent 72%), linear-gradient(170deg,#111314,#0C0E0F 55%,#0E1011);
+    color:#C9CEC9; --surface:rgba(255,255,255,.055); --hair:rgba(255,255,255,.12); --ink:#F4F6F0; --on-strong:#F4F6F0; --on-soft:#8C948C; --muted:#8C948C; --coral:#D6FF3C; --coral-soft:rgba(214,255,60,.09); --grad:linear-gradient(100deg,#D6FF3C,#C3F02E);}
+  #post-modal.lps-lime .block{background:linear-gradient(170deg, rgba(255,255,255,.065), rgba(255,255,255,.025) 60%); border:1px solid rgba(255,255,255,.12); box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 12px 30px rgba(0,0,0,.35); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);}
+  #post-modal.lps-lime .pm-title{color:#F4F6F0;}
+  #post-modal.lps-lime .lp-plan .lpp-rb, #post-modal.lps-lime .pm-buybar .pbb-go, #post-modal.lps-lime .lp-quiz .qz-cta, #post-modal.lps-lime .lp-cpn .cpn-get, #post-modal.lps-lime .cta-btn{color:#0E1011;}
+  #post-modal.lps-lime .lp-plan .lpp-off{color:#D6FF3C;}
+  #post-modal.lps-lime .au-en{filter:drop-shadow(0 0 10px rgba(214,255,60,.25));}
+  /* 🎨 보라 하드코딩 정리: 모달 안 신뢰 숫자는 스킨의 --grad를 따름 (홈 화면은 그대로 — 인라인 보라 유지) */
+  #post-modal .au-en{background:var(--grad, linear-gradient(95deg,#8A5CFF,#C13B9E)) !important; -webkit-background-clip:text !important; background-clip:text !important; -webkit-text-fill-color:transparent !important; color:transparent !important;}
   /* ── ㉓ 켄번즈: 히어로 사진이 천천히 살아 움직임 (스킨 적용 시) ── */
   .ly-hero{position:relative; overflow:hidden;}
   .ly-hero .ly-hero-bg{position:absolute; inset:0; background-size:cover; background-position:center;}
@@ -1817,8 +1857,13 @@
   .lp-seat{text-align:center; margin:6px 0 14px;}
   .lp-seat .lsg-l{font-size:12px; font-weight:800; color:var(--on-strong, inherit); margin-bottom:9px;}
   .lp-seat .lsg-row{display:flex; gap:4px; justify-content:center; flex-wrap:wrap;}
-  .lp-seat .lsg-row i{width:22px; height:7px; border-radius:9px; background:var(--coral);}
+  .lp-seat .lsg-row i{width:22px; height:7px; border-radius:9px; background:var(--coral); transition:opacity .3s ease, transform .35s cubic-bezier(.2,.7,.2,1);}
   .lp-seat .lsg-row i.used{background:var(--hair);}
+  /* ✨ 등장 1회 모션 (revealFx) */
+  .lsg-row i.fx-hide{opacity:0; transform:scale(.4);}
+  @keyframes fxBadge{0%{transform:scale(.5); opacity:0;} 60%{transform:scale(1.15);} 100%{transform:scale(1); opacity:1;}}
+  .fx-pop-badge{animation:fxBadge .55s cubic-bezier(.2,.7,.2,1) both; display:inline-block;}
+  @media (prefers-reduced-motion: reduce){ .fx-pop-badge{animation:none;} .lsg-row i.fx-hide{opacity:1; transform:none;} }
   .lp-seat .lsg-t{font-size:11.5px; color:var(--muted); margin-top:8px;}
   .lp-seat .lsg-t b{color:var(--coral); animation:lsgPulse 1.9s ease-in-out infinite;}
   @keyframes lsgPulse{0%,100%{opacity:1;} 50%{opacity:.55;}}
@@ -2373,12 +2418,39 @@
   });
 
   // ── 스크롤 환영 모션: 화면에 들어오는 구간을 스르륵 등장시킴 ──
+  // ✨ 등장 1회 모션 (2026-07-10): 블록이 처음 보일 때 딱 한 번 — 숫자 카운트업·게이지 웨이브·할인 뱃지 팝 (애플식 절제, 반복 없음)
+  function fxCountUp(el){
+    var txt=el.textContent||''; var m=txt.match(/^([^\d]*)([\d,]+(?:\.\d+)?)(.*)$/); if(!m) return;
+    var pre=m[1], numStr=m[2], suf=m[3];
+    var hasComma=numStr.indexOf(',')>=0, target=parseFloat(numStr.replace(/,/g,''));
+    if(!(target>0)) return;
+    var dec=(numStr.split('.')[1]||'').length, t0=null, dur=900;
+    function fmt(v){ var s=dec?v.toFixed(dec):String(Math.round(v)); if(hasComma) s=s.replace(/\B(?=(\d{3})+(?!\d))/g,','); return s; }
+    function frame(ts){ if(!t0) t0=ts; var p=Math.min(1,(ts-t0)/dur); p=1-Math.pow(1-p,3); el.textContent=pre+fmt(target*p)+suf; if(p<1) requestAnimationFrame(frame); }
+    requestAnimationFrame(frame);
+  }
+  function revealFx(root){
+    try{
+      if(typeof EDIT_MODE!=='undefined' && EDIT_MODE) return;
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if(root._fxDone) return; root._fxDone=true;
+      [].forEach.call(root.querySelectorAll('.au-en'), fxCountUp);                       // 신뢰 숫자 0→값
+      [].forEach.call(root.querySelectorAll('.lsg-row'), function(rowEl){                // 자리 게이지 웨이브
+        [].forEach.call(rowEl.querySelectorAll('i'), function(cell,k){ cell.classList.add('fx-hide'); setTimeout(function(){ cell.classList.remove('fx-hide'); }, 140+k*70); });
+      });
+      [].forEach.call(root.querySelectorAll('.eb-bar i'), function(bar){                 // 얼리버드 바 차오름 (rAF 대신 타이머 — 백그라운드 탭에서도 끝값 보장)
+        var w=bar.style.width; bar.style.transition='none'; bar.style.width='0%';
+        setTimeout(function(){ bar.style.transition='width .9s cubic-bezier(.2,.7,.2,1)'; bar.style.width=w; }, 60);
+      });
+      [].forEach.call(root.querySelectorAll('.lpp-off, .bns-tot'), function(b){ b.classList.add('fx-pop-badge'); });   // 할인%·보너스 합계 팝
+    }catch(_){}
+  }
   var _rvIO=null;
   function revealScan(els){
     if(!('IntersectionObserver' in window) || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
     if(!_rvIO){
       _rvIO=new IntersectionObserver(function(ents){
-        ents.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); _rvIO.unobserve(e.target); } });
+        ents.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); revealFx(e.target); _rvIO.unobserve(e.target); } });
       }, {threshold:0.12, rootMargin:'0px 0px -7% 0px'});
     }
     var vh=window.innerHeight||800, n=0;
@@ -2388,7 +2460,7 @@
       el.classList.add('reveal');
       var r=el.getBoundingClientRect();
       if(r.top < vh*0.92 && r.bottom > 0){
-        (function(x,d){ setTimeout(function(){ x.classList.add('in'); }, 70+d*85); })(el, n++);
+        (function(x,d){ setTimeout(function(){ x.classList.add('in'); revealFx(x); }, 70+d*85); })(el, n++);
       } else { _rvIO.observe(el); }
     });
   }
@@ -3460,7 +3532,7 @@
       if(layout==='hero'){
         var bg = url ? 'linear-gradient(180deg, rgba(10,7,20,.12) 0%, rgba(10,7,20,.55) 55%, rgba(10,7,20,.86) 100%), var(--ph2) url('+esc(url)+') center/cover'
                      : 'radial-gradient(circle at 72% 22%, color-mix(in srgb, var(--coral) 48%, #15122c) 0%, #15122c 54%, #0a0818 100%)';
-        var d=document.createElement('div'); d.className='ly-hero';
+        var d=document.createElement('div'); d.className='ly-hero'+(url?'':' ly-noimg');   // 사진 없으면 무대 축소 (글자 묻힘 방지)
         var bgEl=document.createElement('span'); bgEl.className='ly-hero-bg'; bgEl.style.background=bg; d.appendChild(bgEl);   // 🧰 23 켄번즈: 배경 분리 레이어 (스킨에서 천천히 줌)
         d.insertAdjacentHTML('beforeend', (url?'':'<span class="ly-hero-glass"></span>')+'<div class="ly-hero-in">'+(title?'<div class="ly-hero-t">'+emph(title)+'</div>':'')+(desc?'<div class="ly-hero-d">'+esc(desc)+'</div>':'')+'</div>');
         return d;
@@ -3986,7 +4058,7 @@
     document.getElementById('pm-title').textContent=p.title||'';
     var bodyEl=document.getElementById('pm-body');
     // 🧰 21 스킨 3종 — 랜딩만, 모달 범위 테마 변수 교체 (skin 없으면 기존 그대로 = 무회귀)
-    ov.classList.remove('lps-dark','lps-editorial','lps-clean');
+    ov.classList.remove('lps-dark','lps-editorial','lps-clean','lps-aurora','lps-crystal','lps-airy','lps-lime');
     if(p.type==='landing' && p.skin) ov.classList.add('lps-'+p.skin);
     window.__lpSelPlan=null;   // 플랜 선택 상태 리셋 (이전 랜딩 잔상 방지)
     renderPostBlocks(bodyEl, p.blocks);
@@ -4019,10 +4091,10 @@
         }
       }
     }catch(_e){}
-    // 🧰 15 스크롤 리빌 — 랜딩 블록들이 떠오르며 등장
-    try{ if(p.type==='landing' && window.__revealScan) window.__revealScan([].slice.call(bodyEl.children)); }catch(_e){}
     try{ decoratePostLikes(); }catch(_){}
     ov.classList.add('open');
+    // 🧰 15 스크롤 리빌 — 랜딩 블록들이 떠오르며 등장 (open 후에 스캔해야 위치가 잡혀 첫 화면 블록이 즉시 스태거 + ✨등장 1회 모션)
+    try{ if(p.type==='landing' && window.__revealScan) window.__revealScan([].slice.call(bodyEl.children)); }catch(_e){}
     try{ track('postview',{ kind:'post', label:id }); }catch(_){}
   }
   window.__openPostModal=openPostModal;

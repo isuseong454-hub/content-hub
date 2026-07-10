@@ -5129,6 +5129,10 @@
     #landing-canvas .lcx.sk-editorial{ --ac:#B0713C; }
     #landing-canvas .lcx.sk-clean{ --ac:#3D6FE8; }
     #landing-canvas .lcx.sk-dark{ --ac:#E8C285; }
+    #landing-canvas .lcx.sk-aurora{ --ac:#A78BFF; }
+    #landing-canvas .lcx.sk-crystal{ --ac:#8B5CF6; }
+    #landing-canvas .lcx.sk-airy{ --ac:#3D6FF0; }
+    #landing-canvas .lcx.sk-lime{ --ac:#D6FF3C; }
     /* 🧰 T1-2: 존별 코치(💡 ✗→✓) · 제목 후보 · 과대광고 경고 */
     #landing-canvas .lco-b{ font:800 9.5px var(--sans); color:#cfc8d8; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); border-radius:99px; padding:3px 9px; cursor:pointer; letter-spacing:0; text-transform:none; }
     #landing-canvas .lco-b.on{ color:#241606; background:var(--ac,#E0A36B); border-color:var(--ac,#E0A36B); }
@@ -5149,39 +5153,54 @@
     #landing-canvas .lpr-i b{ color:#ff8f9e; }
     #landing-canvas .lpr-law{ margin-top:8px; font-size:10.5px; color:#9a93a6; line-height:1.65; border-top:1px dashed rgba(255,255,255,.12); padding-top:8px; }
     #landing-canvas .lpr-law b{ color:#cfc8d8; }
-    /* 🧰 무기고 사이드 패널 — 미드나잇 네온 (v5 2026-07-10 사용자: 알록달록 X, 그라데이션+네온 글로우 고급. 액센트=브랜드 보라→핑크 한 혈통만, 색은 패널 전용 고정) */
+    /* 🧰 무기고 사이드 패널 — 글래스 (v6 2026-07-10 사용자: "유리 느낌 고급" 레퍼런스, 컬러는 우리 보라→핑크 톤 유지)
+       핵심: 반투명+blur로 뒤 편집기가 비쳐 보이는 진짜 유리 + 오로라 광원 + 카드 상단 하이라이트 한 줄 */
     #ars-panel{ position:fixed; top:0; right:0; width:min(420px,96vw); height:100%; z-index:9991;
-      background:radial-gradient(130% 90% at 90% -5%, #251C44 0%, #161221 48%, #0E0B16 100%);
-      border-left:1px solid rgba(167,139,255,.22); transform:translateX(105%); transition:transform .24s ease; display:flex; flex-direction:column; box-shadow:-24px 0 70px rgba(0,0,0,.6); }
+      background:linear-gradient(165deg, rgba(36,27,60,.68), rgba(17,13,27,.78) 60%);
+      -webkit-backdrop-filter:blur(26px) saturate(1.5); backdrop-filter:blur(26px) saturate(1.5);
+      border-left:1px solid rgba(255,255,255,.14); transform:translateX(105%); transition:transform .24s ease; display:flex; flex-direction:column; box-shadow:-24px 0 70px rgba(0,0,0,.55); }
+    #ars-panel::before{ content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+      background:radial-gradient(55% 26% at 88% -4%, rgba(124,63,228,.32), transparent 70%), radial-gradient(48% 22% at 6% 104%, rgba(193,59,158,.2), transparent 70%); }
+    #ars-panel > *{ position:relative; z-index:1; }
     #ars-panel.open{ transform:translateX(0); }
-    .ars-h{ display:flex; justify-content:space-between; align-items:center; padding:15px 18px; border-bottom:1px solid rgba(167,139,255,.16); font:800 14.5px var(--sans); color:#F4F1FB; }
+    .ars-h{ display:flex; justify-content:space-between; align-items:center; padding:15px 18px; border-bottom:1px solid rgba(255,255,255,.1); font:800 14.5px var(--sans); color:#F4F1FB; }
     .ars-h > span::before{ content:''; display:inline-block; width:9px; height:9px; border-radius:3px; background:linear-gradient(135deg,#7C3FE4,#C13B9E); margin-right:9px; box-shadow:0 0 12px rgba(167,139,255,.8); }
-    .ars-h small{ color:#8F87A6; font-weight:600; font-size:10.5px; }
-    #ars-x{ width:27px; height:27px; border-radius:99px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); color:#8F87A6; font-size:13px; cursor:pointer; }
+    .ars-h small{ color:#9A92B0; font-weight:600; font-size:10.5px; }
+    #ars-x{ width:27px; height:27px; border-radius:99px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); box-shadow:inset 0 1px 0 rgba(255,255,255,.2); color:#B0A8C6; font-size:13px; cursor:pointer; }
     #ars-body{ flex:1; overflow-y:auto; padding:14px 18px 22px; }
     .ars-map{ display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
-    .ars-chip{ font:800 10.5px var(--sans); border-radius:99px; padding:6px 11px; cursor:pointer; color:#CFC8E4; background:rgba(255,255,255,.05); border:1px solid rgba(167,139,255,.2); white-space:nowrap; }
-    .ars-chip.ok{ box-shadow:inset 0 0 12px rgba(124,63,228,.12); }
-    .ars-chip.miss{ color:#FFC24B; border-color:rgba(255,194,75,.45); background:rgba(255,194,75,.07); animation:arsMiss 2.4s infinite; }
+    .ars-chip{ font:800 10.5px var(--sans); border-radius:99px; padding:6px 11px; cursor:pointer; color:#DCD6EC; white-space:nowrap;
+      background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); box-shadow:inset 0 1px 0 rgba(255,255,255,.16); }
+    .ars-chip.ok{ box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 0 14px rgba(124,63,228,.16); }
+    .ars-chip.miss{ color:#FFC24B; border-color:rgba(255,194,75,.5); background:rgba(255,194,75,.09); animation:arsMiss 2.4s infinite; }
     @keyframes arsMiss{ 0%,100%{ box-shadow:0 0 0 0 rgba(255,194,75,.3); } 55%{ box-shadow:0 0 0 6px transparent; } }
-    .ars-mapnote{ font-size:10.5px; color:#8F87A6; line-height:1.6; margin:8px 0 4px; }
+    .ars-mapnote{ font-size:10.5px; color:#9A92B0; line-height:1.6; margin:8px 0 4px; }
     .ars-mapnote b{ color:#FFC24B; }
     .ars-g{ margin-top:16px; }
     .ars-gh{ font:800 13px var(--sans); color:#F4F1FB; display:flex; gap:8px; align-items:baseline; margin-bottom:8px; }
     .ars-dot{ width:8px; height:8px; border-radius:3px; background:linear-gradient(135deg,#7C3FE4,#C13B9E); box-shadow:0 0 10px rgba(167,139,255,.7); align-self:center; flex:none; }
-    .ars-gh small{ color:#8F87A6; font-weight:600; font-size:10px; }
+    .ars-gh small{ color:#9A92B0; font-weight:600; font-size:10px; }
     .ars-missb{ margin-left:auto; color:#FFC24B; font-size:10px; font-weight:800; }
-    .ars-w{ display:flex; flex-direction:column; gap:9px; background:rgba(255,255,255,.04); border:1px solid rgba(167,139,255,.16); border-radius:16px; padding:14px; margin-bottom:10px; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); transition:border-color .18s, box-shadow .18s; }
-    .ars-w:hover{ border-color:rgba(167,139,255,.42); box-shadow:0 0 26px rgba(124,63,228,.16); }
+    .ars-w{ display:flex; flex-direction:column; gap:9px; border-radius:18px; padding:14px; margin-bottom:11px;
+      background:linear-gradient(170deg, rgba(255,255,255,.09), rgba(255,255,255,.035) 55%);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 12px 32px rgba(0,0,0,.28);
+      -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); transition:border-color .18s, box-shadow .18s, transform .18s; }
+    .ars-w:hover{ border-color:rgba(167,139,255,.5); transform:translateY(-1px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 14px 36px rgba(0,0,0,.32), 0 0 30px rgba(124,63,228,.2); }
     .ars-wl{ display:flex; flex-direction:column; align-items:flex-start; gap:4px; }
     .ars-wt{ font:800 13.5px var(--sans); color:#fff; }
     .ars-on{ font-style:normal; color:#5EE6A8; font-size:10px; margin-left:7px; font-weight:700; }
-    .ars-wd{ font-size:11px; color:#9C93B5; line-height:1.6; }
+    .ars-wd{ font-size:11px; color:#A79FBC; line-height:1.6; }
     .ars-wd b{ background:linear-gradient(100deg,#A78BFF,#FF8FB8); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:800; }
-    .ars-add{ width:100%; font:800 12px var(--sans); color:#fff; background:linear-gradient(100deg,#7C3FE4,#C13B9E); border:none; border-radius:12px; padding:11px 16px; cursor:pointer; box-shadow:0 8px 24px rgba(124,63,228,.35); }
+    .ars-add{ width:100%; font:800 12px var(--sans); color:#fff; border-radius:13px; padding:11px 16px; cursor:pointer;
+      background:linear-gradient(100deg, rgba(124,63,228,.9), rgba(193,59,158,.9));
+      border:1px solid rgba(255,255,255,.28);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 8px 26px rgba(124,63,228,.35); }
     .ars-add:hover{ filter:brightness(1.12); }
-    .ars-f{ padding:10px 18px 14px; border-top:1px solid rgba(167,139,255,.16); }
-    #ars-demo{ width:100%; font:700 11px var(--sans); color:#8F87A6; background:transparent; border:1px dashed rgba(167,139,255,.3); border-radius:11px; padding:10px; cursor:pointer; }
+    .ars-f{ padding:10px 18px 14px; border-top:1px solid rgba(255,255,255,.1); }
+    #ars-demo{ width:100%; font:700 11px var(--sans); color:#B0A8C6; cursor:pointer; border-radius:12px; padding:10px;
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
     /* 데모 캔버스 (다크 상세페이지 톤 · 골드 액센트) */
     .arsd{ width:100%; min-height:126px; background:#0D0B10; border:1px solid rgba(167,139,255,.16); border-radius:12px; padding:12px; display:flex; flex-direction:column; justify-content:center; gap:6px; overflow:hidden; position:relative; }
     .arsd .ad-cap{ font-size:9.5px; color:#9296a0; font-weight:700; }
@@ -9902,7 +9921,7 @@
     } else {
       var _lpSk=((postById(postEditId)||{}).skin)||'';
       h+='<div class="lcx-top"><div class="lcx-help">✏️ 글자를 누르면 그 자리서 바로 고쳐져요 · 손님에게 이 모양 그대로</div><div class="lcx-quick">'
-        +'<span class="lq-skins" title="스킨 — 글 그대로, 무드만 통째 전환">'+[['dark','🌑'],['editorial','📖'],['clean','☀️']].map(function(s){ return '<button type="button" data-lpskin="'+s[0]+'"'+(_lpSk===s[0]?' class="on"':'')+' title="'+s[0]+'">'+s[1]+'</button>'; }).join('')+'</span>'
+        +'<span class="lq-skins" title="스킨 — 글 그대로, 무드만 통째 전환 (🎭=홈 테마 따름)">'+[['','🎭','테마 따름'],['aurora','🫧','오로라 글래스'],['crystal','💠','크리스탈 라벤더'],['airy','🪁','에어리 레이어(블루)'],['lime','🍋','차콜×라임']].map(function(s){ return '<button type="button" data-lpskin="'+s[0]+'"'+(_lpSk===s[0]?' class="on"':'')+' title="'+s[2]+'">'+s[1]+'</button>'; }).join('')+'</span>'   /* 🌑📖☀️는 숨김(2026-07-10 사용자) — u.html 렌더 CSS는 보존, 기존 글 정상 표시 */
         +'<button type="button" class="lq-btn" data-lcars title="공식 지도 + 무기 카탈로그">🧰 무기고</button><button type="button" class="lq-btn" data-lcpf title="발행 전 점검 — 금칙어·빈 단계·사진·연결">🚀 점검</button><button type="button" class="lq-btn" data-lpdemo title="완성된 상세페이지 예시 보기">👁 예시</button><button type="button" class="lq-btn" data-lcphotoadd>📷 사진</button><button type="button" class="lq-btn lq-add" data-lcadd>＋ 구성</button></div></div>';
       h+='<div class="lp-risk" id="lp-risk-bar"></div>';   /* 🛡 과대광고 경고 (금칙어 감지될 때만 보임) */
     }
@@ -10116,7 +10135,7 @@
         renderLandingCanvas(); try{ var lpP=postById(postEditId); if(lpP) lpP.blocks=collectRowsArray(); }catch(_){} return; }
       // 🧰 스킨 전환 (다크/에디토리얼/클린 — 발행하면 손님 모달에 그대로)
       var lpsk=e.target.closest&&e.target.closest('[data-lpskin]');
-      if(lpsk){ var skP=postById(postEditId); if(skP){ skP.skin=lpsk.getAttribute('data-lpskin'); renderLandingCanvas(); try{ toast({dark:'🌑 다크 오퍼 스킨',editorial:'📖 에디토리얼 스킨',clean:'☀️ 클린 스킨'}[skP.skin]||'스킨 변경'); }catch(_){} } return; }
+      if(lpsk){ var skP=postById(postEditId); if(skP){ skP.skin=lpsk.getAttribute('data-lpskin')||''; renderLandingCanvas(); try{ toast({dark:'🌑 다크 오퍼 스킨',editorial:'📖 에디토리얼 스킨',clean:'☀️ 클린 스킨',aurora:'🫧 오로라 글래스 스킨',crystal:'💠 크리스탈 라벤더 스킨',airy:'🪁 에어리 레이어 스킨 (블루)',lime:'🍋 차콜×라임 스킨'}[skP.skin]||'🎭 테마 따름 — 홈 테마와 한 몸'); }catch(_){} } return; }
       if(phd){ var pdi=+phd.getAttribute('data-lcphotodel'); var rp=lcRows()[pdi]; if(rp){ if(!rp._content) rp._content=[]; rp._content[0]=''; } renderLandingCanvas(); try{ var pp=postById(postEditId); if(pp) pp.blocks=collectRowsArray(); }catch(_){} return; }
       var ph=e.target.closest('[data-lcphoto]');
       if(ph){ var pi=+ph.getAttribute('data-lcphoto'); try{ openVault(function(u){ var rr=lcRows()[pi]; if(rr){ if(!rr._content) rr._content=[]; rr._content[0]=u; } renderLandingCanvas(); try{ var p2=postById(postEditId); if(p2) p2.blocks=collectRowsArray(); }catch(_){} }); }catch(_){ } return; }
@@ -10401,7 +10420,7 @@
     var preset=blocksOverride||(POST_PRESETS[type]?POST_PRESETS[type]():[]);
     var titles={blog:'새 글',landing:'새 랜딩',reviews:'후기 모음',style:'스타일 갤러리',notice:'공지',article:'새 글',insight:'새 정리글',checklist:'체크리스트',tip:'노하우 · 꿀팁'};
     var p={ id:newPostId(), type:type, title:titles[type]||'새 게시물', cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:preset, createdAt:Date.now() };
-    if(type==='landing') p.skin='dark';   // 🧰 21 스킨 기본 = 다크 오퍼 (기존 랜딩은 skin 없음 = 예전 모습 그대로)
+    if(type==='landing') p.skin='aurora';   // 🧰 스킨 기본 = 🫧 오로라 글래스 (2026-07-10 다크 오퍼 숨김에 따라 승계. 기존 랜딩은 그대로)
     postsData.push(p);
     try{ var wk=Math.floor(Date.now()/604800000); var arr=JSON.parse(localStorage.getItem('cm-hub-postweeks')||'[]'); if(arr.indexOf(wk)<0){ arr.push(wk); localStorage.setItem('cm-hub-postweeks', JSON.stringify(arr.slice(-60))); } }catch(_){}
     renderPostsLibrary(); try{ renderLandingLib(); }catch(_){}
