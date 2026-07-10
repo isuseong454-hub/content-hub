@@ -1833,6 +1833,35 @@
   #post-modal.lps-lime .au-en{filter:drop-shadow(0 0 10px rgba(214,255,60,.25));}
   /* 🎨 보라 하드코딩 정리: 모달 안 신뢰 숫자는 스킨의 --grad를 따름 (홈 화면은 그대로 — 인라인 보라 유지) */
   #post-modal .au-en{background:var(--grad, linear-gradient(95deg,#8A5CFF,#C13B9E)) !important; -webkit-background-clip:text !important; background-clip:text !important; -webkit-text-fill-color:transparent !important; color:transparent !important;}
+  /* ⚡ 인앱 브라우저 다운그레이드 — blur·켄번즈 끔 (인스타 웹뷰에서 3초 렌더 사수, 끝모습은 동일) */
+  html.inapp .pm-buybar, html.inapp #pm-chnav{ -webkit-backdrop-filter:none; backdrop-filter:none; }
+  html.inapp #post-modal.lps-aurora .block, html.inapp #post-modal.lps-lime .block{ -webkit-backdrop-filter:none; backdrop-filter:none; }
+  html.inapp #post-modal[class*="lps-"] .ly-hero-bg{ animation:none; }
+  html.inapp .ly-hero-glass{ -webkit-backdrop-filter:none; backdrop-filter:none; }
+  /* 💬 후기 받기 화면 (?rv=1) */
+  #rvc-ov{position:fixed; inset:0; z-index:100065; background:rgba(10,8,14,.55); display:none; align-items:flex-end; justify-content:center; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+  #rvc-ov.open{display:flex;}
+  .rvc-box{width:100%; max-width:430px; background:var(--surface); border-radius:22px 22px 0 0; padding:24px 20px calc(22px + env(safe-area-inset-bottom)); box-shadow:0 -18px 50px rgba(0,0,0,.35);}
+  @media (min-width:520px){ #rvc-ov{align-items:center; padding:20px;} .rvc-box{border-radius:22px;} }
+  .rvc-box h3{font-size:18px; color:var(--ink); font-weight:800;}
+  .rvc-sub{font-size:12.5px; color:var(--muted); margin-top:5px;}
+  .rvc-stars{display:flex; gap:4px; margin:14px 0 10px;}
+  .rvc-st{font-size:30px; background:none; border:none; cursor:pointer; color:color-mix(in srgb, var(--muted) 40%, transparent); padding:0 2px; transition:transform .12s;}
+  .rvc-st.on{color:#FFB740; text-shadow:0 0 14px rgba(255,183,64,.45);}
+  .rvc-st:active{transform:scale(1.25);}
+  #rvc-body{width:100%; box-sizing:border-box; font-family:inherit; font-size:14px; color:var(--ink); background:rgba(127,127,127,.08); border:1.5px solid var(--hair); border-radius:13px; padding:12px; resize:none; line-height:1.6;}
+  #rvc-body:focus{outline:none; border-color:var(--coral);}
+  .rvc-cnt{text-align:right; font-size:10.5px; color:var(--muted); margin:4px 2px 8px;}
+  #rvc-name{width:100%; box-sizing:border-box; font-family:inherit; font-size:13px; color:var(--ink); background:rgba(127,127,127,.08); border:1.5px solid var(--hair); border-radius:13px; padding:11px 12px;}
+  #rvc-name:focus{outline:none; border-color:var(--coral);}
+  .rvc-agree{display:flex; gap:8px; align-items:flex-start; font-size:11.5px; color:var(--muted); margin:11px 2px 4px; line-height:1.5; cursor:pointer;}
+  .rvc-agree input{margin-top:2px;}
+  .rvc-msg{min-height:16px; font-size:11.5px; color:#e05a6e; margin:4px 2px;}
+  .rvc-go{width:100%; font-family:inherit; font-size:15px; font-weight:800; color:var(--on-coral,#fff); background:var(--coral-fill, var(--grad)); border:none; border-radius:14px; padding:14px; cursor:pointer; margin-top:4px;}
+  .rvc-go:disabled{opacity:.6;}
+  .rvc-skip{display:block; margin:10px auto 0; background:none; border:none; color:var(--muted); font-family:inherit; font-size:12px; font-weight:700; cursor:pointer;}
+  .rvc-done{font-size:44px; text-align:center; margin:6px 0 10px;}
+  .rvc-box > p{font-size:13px; color:var(--muted); margin-top:6px; line-height:1.6;}
   /* ── ㉓ 켄번즈: 히어로 사진이 천천히 살아 움직임 (스킨 적용 시) ── */
   .ly-hero{position:relative; overflow:hidden;}
   .ly-hero .ly-hero-bg{position:absolute; inset:0; background-size:cover; background-position:center;}
@@ -1932,6 +1961,30 @@
   .lp-eb .eb-bar i{display:block; height:100%; background:var(--grad, linear-gradient(90deg,#7C3FE4,#C13B9E)); border-radius:6px;}
   .lp-eb .eb-t{font-size:11px; color:var(--muted); margin-top:6px;}
   .lp-eb .eb-t b{color:var(--coral); animation:lsgPulse 1.9s ease-in-out infinite;}
+  /* ── 📖 스토리 무기: 창업자 타임라인 · 케이스 스토리 · 상담 대화 재연 · 챕터 내비 ── */
+  .lp-mystory .mst-sc{position:relative; display:flex; gap:12px; align-items:flex-start; padding:11px 0 11px 24px;}
+  .lp-mystory .mst-dot{position:absolute; left:0; top:16px; width:10px; height:10px; border-radius:99px; background:var(--coral); box-shadow:0 0 10px color-mix(in srgb, var(--coral) 50%, transparent);}
+  .lp-mystory .mst-sc::before{content:''; position:absolute; left:4px; top:28px; bottom:-9px; width:1.5px; background:var(--hair);}
+  .lp-mystory .mst-sc:last-child::before{display:none;}
+  .lp-mystory .mst-ph{flex:none; width:56px; height:56px; border-radius:12px; background:var(--ph2, rgba(127,127,127,.15)) center/cover;}
+  .lp-mystory .mst-tx{font-size:13.5px; color:var(--on-strong, inherit); line-height:1.6; align-self:center;}
+  .lp-case .cs-row{display:flex; gap:12px; align-items:stretch;}
+  .lp-case .cs-ph{position:relative; flex:none; width:96px; height:110px; border-radius:13px; background:var(--ph2, rgba(127,127,127,.15)) center/cover;}
+  .lp-case .cs-ph.noimg{display:flex; align-items:center; justify-content:center;}
+  .lp-case .cs-ph i{position:absolute; left:7px; top:7px; font-style:normal; font-size:9.5px; font-weight:800; background:rgba(10,8,14,.6); color:#fff; border-radius:99px; padding:2px 8px;}
+  .lp-case .cs-q{flex:1; font-size:13.5px; color:var(--muted); line-height:1.6; background:rgba(127,127,127,.08); border-radius:4px 13px 13px 13px; padding:11px 13px; align-self:center;}
+  .lp-case .cs-q.af{color:var(--on-strong, inherit); background:var(--coral-soft); border:1px solid color-mix(in srgb, var(--coral) 35%, transparent);}
+  .lp-case .cs-nm{font-size:11px; color:var(--coral); font-weight:700; margin-top:6px;}
+  .lp-case .cs-mid{text-align:center; font-size:11.5px; color:var(--muted); font-weight:700; padding:9px 0;}
+  .lp-dlg .dlg-b{max-width:86%; font-size:13.5px; line-height:1.6; border-radius:14px; padding:10px 13px; margin-bottom:9px; transition:opacity .35s ease, transform .4s cubic-bezier(.2,.7,.2,1);}
+  .lp-dlg .dlg-b.g{margin-right:auto; background:rgba(127,127,127,.1); color:var(--on-strong, inherit); border-radius:4px 14px 14px 14px;}
+  .lp-dlg .dlg-b.m{margin-left:auto; background:var(--coral-soft); color:var(--on-strong, inherit); border:1px solid color-mix(in srgb, var(--coral) 30%, transparent); border-radius:14px 4px 14px 14px;}
+  .lp-dlg .dlg-b.fx-hide2{opacity:0; transform:translateY(10px);}
+  .lp-dlg .dlg-note{font-size:10.5px; color:var(--muted); text-align:center; margin-top:4px;}
+  #pm-chnav{position:sticky; top:-22px; z-index:7; display:flex; gap:4px; margin:0 -4px 12px; padding:8px 4px; background:color-mix(in srgb, var(--surface, #17141C) 82%, transparent); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); border-bottom:1px solid var(--hair);}
+  #pm-chnav button{flex:1; font-family:inherit; font-size:11px; font-weight:800; color:var(--muted); background:none; border:none; border-bottom:2.5px solid transparent; padding:6px 2px 7px; cursor:pointer;}
+  #pm-chnav button i{font-style:normal; display:block; font-size:8.5px; font-weight:800; opacity:.7; margin-bottom:2px;}
+  #pm-chnav button.on{color:var(--coral); border-bottom-color:var(--coral);}
   /* ── 02 하단 고정 구매바 (랜딩 모달 안) ── */
   .pm-buybar{position:sticky; bottom:-26px; z-index:6; display:flex; gap:10px; align-items:center; margin:18px -16px -26px; padding:12px 16px calc(14px + env(safe-area-inset-bottom)); background:color-mix(in srgb, var(--surface, #17141C) 88%, transparent); border-top:1px solid var(--hair); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);}
   .pm-buybar .pbb-i{flex:1; min-width:0;}
@@ -2443,6 +2496,9 @@
         setTimeout(function(){ bar.style.transition='width .9s cubic-bezier(.2,.7,.2,1)'; bar.style.width=w; }, 60);
       });
       [].forEach.call(root.querySelectorAll('.lpp-off, .bns-tot'), function(b){ b.classList.add('fx-pop-badge'); });   // 할인%·보너스 합계 팝
+      [].forEach.call(root.querySelectorAll('.lp-dlg .dlg-b'), function(b,k){                                          // 📖 상담 대화 말풍선 순차 등장
+        b.classList.add('fx-hide2'); setTimeout(function(){ b.classList.remove('fx-hide2'); }, 220+k*280);
+      });
     }catch(_){}
   }
   var _rvIO=null;
@@ -2730,8 +2786,57 @@
   }
   function txt(el, sel){ var n = el.querySelector(sel); return n ? n.textContent.trim() : ''; }
 
+  // ⚡ 인앱 브라우저(인스타·카톡·네이버 등) = 저성능 → 무거운 효과(blur·켄번즈) 다운그레이드 (2026-07-10)
+  try{ if(/Instagram|KAKAOTALK|NAVER\(inapp|Line\/|FBAN|FBAV|DaumApps|; wv\)/i.test(navigator.userAgent||'')) document.documentElement.classList.add('inapp'); }catch(e){}
   // 방문 기록 (유입경로 포함)
   track('view', { pane:'home' });
+
+  // ════ 💬 후기 받기 화면 (?rv=1) — 후기 수집 엔진의 손님 쪽 (별점+한 줄+공개 동의 → li_review_add → 사장님 후기함) ════
+  (function(){
+    var q; try{ q=new URLSearchParams(location.search); }catch(e){ return; }
+    if(!q || q.get('rv')!=='1') return;
+    var stars=5, done=false;
+    var ov=document.createElement('div'); ov.id='rvc-ov';
+    function starRow(){ var h=''; for(var i=1;i<=5;i++) h+='<button type="button" class="rvc-st'+(i<=stars?' on':'')+'" data-st="'+i+'">★</button>'; return h; }
+    function paint(keepText){
+      var prevBody=keepText?((ov.querySelector('#rvc-body')||{value:''}).value):'';
+      var prevName=keepText?((ov.querySelector('#rvc-name')||{value:''}).value):'';
+      var prevCk=keepText?!!(ov.querySelector('#rvc-ck')||{}).checked:false;
+      ov.innerHTML='<div class="rvc-box">'
+        +(done
+          ? '<div class="rvc-done">💛</div><h3 style="text-align:center;">전달됐어요, 감사합니다!</h3><p style="text-align:center;">사장님이 확인한 뒤 페이지에 올라가요.</p><button type="button" class="rvc-go" id="rvc-close2">페이지 구경하기</button>'
+          : '<h3>한 줄 후기 남기기</h3><p class="rvc-sub">오늘 어떠셨어요? 별점과 한 줄이면 충분해요 😊</p>'
+            +'<div class="rvc-stars">'+starRow()+'</div>'
+            +'<textarea id="rvc-body" maxlength="300" rows="4" placeholder="예: 앞머리 고민이 사라졌어요. 상담부터 달랐어요!"></textarea>'
+            +'<div class="rvc-cnt"><span id="rvc-n">0</span>/300</div>'
+            +'<input id="rvc-name" maxlength="40" placeholder="이름 (선택 · 예: 김○○)">'
+            +'<label class="rvc-agree"><input type="checkbox" id="rvc-ck"><span>(필수) 이 후기가 페이지에 공개될 수 있음에 동의합니다</span></label>'
+            +'<div class="rvc-msg" id="rvc-msg"></div>'
+            +'<button type="button" class="rvc-go" id="rvc-send">보내기</button>'
+            +'<button type="button" class="rvc-skip" id="rvc-close">다음에 할게요</button>')
+        +'</div>';
+      if(keepText && !done){ ov.querySelector('#rvc-body').value=prevBody; ov.querySelector('#rvc-name').value=prevName; ov.querySelector('#rvc-ck').checked=prevCk; var n0=ov.querySelector('#rvc-n'); if(n0) n0.textContent=prevBody.length; }
+      bind();
+    }
+    function bind(){
+      [].forEach.call(ov.querySelectorAll('[data-st]'), function(b){ b.onclick=function(){ stars=+b.getAttribute('data-st'); paint(true); }; });
+      var ta=ov.querySelector('#rvc-body'); if(ta){ ta.oninput=function(){ var n=ov.querySelector('#rvc-n'); if(n) n.textContent=ta.value.length; }; }
+      var cl=ov.querySelector('#rvc-close'); if(cl) cl.onclick=function(){ ov.classList.remove('open'); };
+      var cl2=ov.querySelector('#rvc-close2'); if(cl2) cl2.onclick=function(){ ov.classList.remove('open'); };
+      var sd=ov.querySelector('#rvc-send'); if(sd) sd.onclick=function(){
+        var body=(ov.querySelector('#rvc-body').value||'').trim();
+        var nm=(ov.querySelector('#rvc-name').value||'').trim();
+        var msg=ov.querySelector('#rvc-msg');
+        if(body.length<2){ msg.textContent='한 줄만 적어주세요 😊'; return; }
+        if(!ov.querySelector('#rvc-ck').checked){ msg.textContent='공개 동의에 체크해주세요'; return; }
+        sd.disabled=true; sd.textContent='보내는 중…';
+        function fin(ok){ sd.disabled=false; sd.textContent='보내기'; if(ok){ done=true; try{ localStorage.setItem('li-rvdone-'+(window.HANDLE||''),'1'); }catch(_){} try{ track('review_add',{label:String(stars)}); }catch(_){} paint(); } else { msg.textContent='잠시 후 다시 시도해주세요 🙏'; } }
+        if(window.laRpc){ window.laRpc('li_review_add',{ p_handle:(window.HANDLE||''), p_stars:stars, p_body:body, p_name:nm }).then(function(r){ fin(r&&r.ok); }).catch(function(){ fin(false); }); } else fin(false);
+      };
+    }
+    function mount(){ document.body.appendChild(ov); paint(); setTimeout(function(){ ov.classList.add('open'); }, 450); }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', mount); else mount();
+  })();
 
   // 클릭 기록 — 무엇을 눌렀나 (링크/글/제품/채널)
   document.addEventListener('click', function(e){
@@ -3451,6 +3556,38 @@
         +'<div class="eb-t">'+total+'자리 중 '+sold+'자리 판매'+(left>0?(' · <b>'+left+'자리 남음</b>'):'')+'</div>';
       return d;
     },
+    /* 📖 S01 창업자 스토리 타임라인 (flat 9칸: 제목, [사진,글]×4) — "저도 그랬어요"가 최고의 신뢰 (실화만) */
+    mystory: function(c){
+      var scenes=[[c[1],c[2]],[c[3],c[4]],[c[5],c[6]],[c[7],c[8]]].filter(function(s){ return s[1]; });
+      if(!scenes.length) return null;
+      var d=card(''); d.classList.add('lp-mystory');
+      d.innerHTML=(c[0]?('<div class="block-h" style="margin-bottom:6px;">'+emph(c[0])+'</div>'):'')
+        +scenes.map(function(s){ return '<div class="mst-sc"><span class="mst-dot"></span>'
+          +(s[0]?('<span class="mst-ph" style="background-image:url('+esc(s[0])+')"></span>'):'')
+          +'<div class="mst-tx">'+esc(s[1])+'</div></div>'; }).join('');
+      return d;
+    },
+    /* 📖 S02 한 사람의 변화 (flat 7칸: 제목, 첫날사진, 첫날 실제 고민, 과정 한 줄, 지금사진, 지금 실제 말, 이름·시점) — 전후+후기+과정을 한 사람의 실화로 (동의 필수) */
+    casestory: function(c){
+      if(!c[2]&&!c[5]) return null;
+      var d=card(''); d.classList.add('lp-case');
+      function ph(u,lb){ return '<div class="cs-ph'+(u?'':' noimg')+'"'+(u?(' style="background-image:url('+esc(u)+')"'):'')+'><i>'+lb+'</i></div>'; }
+      d.innerHTML=(c[0]?('<div class="block-h" style="margin-bottom:13px;">'+emph(c[0])+'</div>'):'')
+        +'<div class="cs-row">'+ph(c[1],'첫날')+'<div class="cs-q">'+(c[2]?('“'+esc(c[2])+'”'):'')+'</div></div>'
+        +(c[3]?('<div class="cs-mid">↓ '+esc(c[3])+'</div>'):'')
+        +'<div class="cs-row">'+ph(c[4],'지금')+'<div class="cs-q af">'+(c[5]?('“'+esc(c[5])+'”'):'')+(c[6]?('<div class="cs-nm">— '+esc(c[6])+'</div>'):'')+'</div></div>';
+      return d;
+    },
+    /* 📖 S05 상담 대화 재연 (flat 7칸: 제목, 손님·나 번갈아 6말) — 상담 장면 미리 체험 (실제 대화만) */
+    dialog: function(c){
+      var msgs=[]; [[1,'g'],[2,'m'],[3,'g'],[4,'m'],[5,'g'],[6,'m']].forEach(function(x){ if(c[x[0]]) msgs.push([x[1], c[x[0]]]); });
+      if(!msgs.length) return null;
+      var d=card(''); d.classList.add('lp-dlg');
+      d.innerHTML=(c[0]?('<div class="block-h" style="margin-bottom:13px;">'+emph(c[0])+'</div>'):'')
+        +msgs.map(function(m){ return '<div class="dlg-b '+(m[0]==='g'?'g':'m')+'">'+esc(m[1])+'</div>'; }).join('')
+        +'<div class="dlg-note">실제 상담에서 오간 대화예요</div>';
+      return d;
+    },
     review: function(c, layout){
       var EDIT=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
       var list=c[0]||[]; if(!list.length){ if(!EDIT) return null; list=[['','']]; }
@@ -4041,7 +4178,7 @@
       if(!b || b.on===false) return;
       var fn=EXTRA[b.type]; if(!fn) return;
       var node; try{ node=fn(b.content||[], b.layout||''); }catch(_){ node=null; }
-      if(node) container.appendChild(node);
+      if(node){ try{ node.dataset.lpt=b.type; node.dataset.lply=b.layout||''; }catch(_){} container.appendChild(node); }   // 📖 챕터 내비가 블록 타입을 읽을 수 있게
     });
   }
   function openPostModal(id){
@@ -4083,7 +4220,7 @@
           var go;
           if(canResv){ go=document.createElement('button'); go.type='button'; go.className='pbb-go'; go.textContent='📅 예약하기';
             go.onclick=function(){ ov.classList.remove('open'); var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); try{ track('lp_buybar',{label:p.id}); }catch(_){} }; }
-          else { go=document.createElement('a'); go.className='pbb-go'; go.href=curl; go.target='_blank'; go.rel='noopener'; go.setAttribute('data-ev','conv'); go.setAttribute('data-track','랜딩 구매바'); go.textContent='💬 신청하기'; }
+          else { go=document.createElement('a'); go.className='pbb-go'; go.href=curl; go.target='_blank'; go.rel='noopener'; go.setAttribute('data-ev','conv'); go.setAttribute('data-track','랜딩 구매바'); go.textContent='💬 신청하기'; go.addEventListener('click', function(){ try{ track('lp_cta',{label:p.id}); }catch(_){} }); }
           bar.appendChild(go);
           bodyEl.appendChild(bar);
           var _n=document.getElementById('pbb-n'), _p2=document.getElementById('pbb-p');
@@ -4093,6 +4230,57 @@
     }catch(_e){}
     try{ decoratePostLikes(); }catch(_){}
     ov.classList.add('open');
+    // 📖 S04 챕터 내비 — 랜딩이 3챕터 이상 걸치면 자동 (1장 고민→2장 믿음→3장 제안→4장 시작, 스크롤 따라 점등·탭하면 점프)
+    try{
+      var oldNav=document.getElementById('pm-chnav'); if(oldNav) oldNav.remove();
+      if(p.type==='landing'){
+        var CH_NAMES=['고민','믿음','제안','시작'];
+        var chOf=function(t,ly,idx){
+          if(t==='imagetext'&&(ly==='hero'||idx===0)) return 0;
+          if(t==='painsolve'||t==='fitcheck'||t==='quiz'||t==='dialog'||t==='diagnostic'||t==='casestory') return 0;
+          if(t==='authority'||t==='mystory'||t==='beforeafter'||t==='review'||t==='video'||t==='stat'||t==='highlights'||t==='imagetext') return 1;
+          if(t==='seatgauge'||t==='countdown'||t==='coupon'||t==='earlybird'||t==='service'||t==='reservation'||t==='lead'||t==='cta') return 3;
+          return 2;
+        };
+        var firstEl=[null,null,null,null];
+        [].slice.call(bodyEl.children).forEach(function(el,i){
+          var t=el.dataset?el.dataset.lpt:''; if(!t) return;
+          var ch=chOf(t, (el.dataset&&el.dataset.lply)||'', i);
+          if(!firstEl[ch]) firstEl[ch]=el;
+        });
+        if(firstEl.filter(Boolean).length>=3){
+          var nav=document.createElement('div'); nav.id='pm-chnav';
+          nav.innerHTML=CH_NAMES.map(function(n,i){ return firstEl[i]?('<button type="button" data-ch="'+i+'"><i>'+(i+1)+'장</i>'+n+'</button>'):''; }).join('');
+          document.getElementById('pm-title').insertAdjacentElement('afterend', nav);
+          var chSheet=ov.querySelector('.resv-sheet');
+          nav.addEventListener('click', function(e){ var b=e.target.closest('[data-ch]'); if(!b) return; var el=firstEl[+b.getAttribute('data-ch')]; if(el){ var top=el.getBoundingClientRect().top - chSheet.getBoundingClientRect().top + chSheet.scrollTop - 64; chSheet.scrollTo({top:Math.max(0,top), behavior:'smooth'}); setTimeout(function(){ updCh(); }, 550); } });
+          var updCh=function(){
+            var sr=chSheet.getBoundingClientRect(); var cur=0;
+            firstEl.forEach(function(el,i){ if(el && (el.getBoundingClientRect().top - sr.top) <= 130) cur=i; });
+            [].forEach.call(nav.querySelectorAll('button'),function(b){ b.classList.toggle('on', +b.getAttribute('data-ch')===cur); });
+          };
+          chSheet.addEventListener('scroll', updCh, {passive:true}); updCh();
+        }
+      }
+    }catch(_e){}
+    // 📊 상세페이지 계측 — 도달(25/50/75/100%)·체류(15/45/90초) 마일스톤 각 1회 (분석탭 '상세페이지' 란의 재료)
+    try{
+      if(p.type==='landing'){
+        var lpSent={}; var lpSend=function(k){ if(lpSent[k]) return; lpSent[k]=1; try{ track(k,{label:p.id}); }catch(_){} };
+        var lpSheet=ov.querySelector('.resv-sheet');
+        var lpMeasure=function(){
+          var mx=lpSheet.scrollHeight - lpSheet.clientHeight;
+          if(mx<=60){ lpSend('lp_s25'); lpSend('lp_s50'); lpSend('lp_s75'); lpSend('lp_s100'); return; }
+          var pc=lpSheet.scrollTop/mx;
+          if(pc>=0.25) lpSend('lp_s25'); if(pc>=0.5) lpSend('lp_s50'); if(pc>=0.75) lpSend('lp_s75'); if(pc>=0.97) lpSend('lp_s100');
+        };
+        lpSheet.addEventListener('scroll', lpMeasure, {passive:true}); lpMeasure();
+        if(window.__lpTk) window.__lpTk.forEach(clearTimeout);
+        window.__lpTk=[[15000,'lp_t15'],[45000,'lp_t45'],[90000,'lp_t90']].map(function(x){
+          return setTimeout(function(){ if(ov.classList.contains('open')) lpSend(x[1]); }, x[0]);
+        });
+      }
+    }catch(_e){}
     // 🧰 15 스크롤 리빌 — 랜딩 블록들이 떠오르며 등장 (open 후에 스캔해야 위치가 잡혀 첫 화면 블록이 즉시 스태거 + ✨등장 1회 모션)
     try{ if(p.type==='landing' && window.__revealScan) window.__revealScan([].slice.call(bodyEl.children)); }catch(_e){}
     try{ track('postview',{ kind:'post', label:id }); }catch(_){}
