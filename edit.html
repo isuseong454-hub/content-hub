@@ -1025,6 +1025,61 @@
   .ov{position:fixed; inset:0; background:rgba(40,32,20,.45); z-index:120; display:none; align-items:center; justify-content:center; padding:16px;}
   .ov.open{display:flex;}
   .sheet{background:var(--paper); width:100%; max-width:480px; border-radius:20px; padding:18px 16px 22px; max-height:88vh; overflow-y:auto;}
+  /* 🎨 구성 추가 = 무기고 형제 오른쪽 비모달 패널 (2026-07-11) — 로직 안 건드리고 #add-ov 겉모습만: 모달→우측 패널, 배경 막 없이 페이지 보이게 */
+  #add-ov{ justify-content:flex-end; align-items:stretch; padding:0; background:transparent; pointer-events:none; }
+  #add-ov .sheet{
+    pointer-events:auto;
+    width:min(412px,96vw); max-width:none; height:100vh; max-height:100vh; border-radius:0;
+    border-left:1px solid rgba(255,255,255,.14);
+    background:linear-gradient(165deg, rgba(36,27,60,.96), rgba(17,13,27,.985) 60%);
+    -webkit-backdrop-filter:blur(20px) saturate(1.4); backdrop-filter:blur(20px) saturate(1.4);
+    box-shadow:-24px 0 70px rgba(0,0,0,.5);
+  }
+  #add-ov.open .sheet{ animation:addSlide .28s cubic-bezier(.2,.8,.3,1); }
+  @keyframes addSlide{ from{ transform:translateX(44px); opacity:.4; } to{ transform:none; opacity:1; } }
+  @media(prefers-reduced-motion:reduce){ #add-ov.open .sheet{ animation:none; } }
+  /* 🎬 타일 라이브 미리보기 (2026-07-11) — .tpl 아래에 스트립, 클릭 로직 무관 */
+  #add-ov .tpl{ flex-wrap:wrap; }
+  #add-ov .ti-prev{ flex:0 0 100%; width:100%; margin-top:9px; height:44px; border-radius:9px; background:#0d0b12; border:1px solid rgba(167,139,255,.14); overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  #add-ov .pv-ico{ font-size:22px; animation:pvFloat 3.4s ease-in-out infinite; }
+  @keyframes pvFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  #add-ov .pv-av{ width:24px;height:24px;border-radius:50%;background:linear-gradient(150deg,#a855f7,#ec4899);box-shadow:0 4px 12px -3px rgba(168,85,247,.6);animation:pvFloat 3.4s ease-in-out infinite; }
+  #add-ov .pv-num{ font:800 17px var(--sans);background:linear-gradient(103deg,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:pvPulse 2.4s ease-in-out infinite; }
+  @keyframes pvPulse{0%,100%{opacity:.7}50%{opacity:1;filter:drop-shadow(0 0 7px rgba(236,72,153,.5))}}
+  #add-ov .pv-ba{ position:absolute;inset:0;background:linear-gradient(90deg,#241d38 50%,#3a2b12 50%); }
+  #add-ov .pv-ba i{ position:absolute;top:0;bottom:0;width:2px;background:#fff;left:50%;animation:pvSlide 3.2s ease-in-out infinite; }
+  @keyframes pvSlide{0%,100%{left:32%}50%{left:68%}}
+  #add-ov .pv-ba b{ position:absolute;bottom:4px;font-size:8px;font-weight:800;color:#fff; }
+  #add-ov .pv-ba b.l{left:6px} #add-ov .pv-ba b.r{right:6px;color:#f5c84b}
+  #add-ov .pv-stars{ color:#f5c84b;font-size:14px;letter-spacing:2px;background:linear-gradient(90deg,rgba(245,200,75,.4),#fff5d0,rgba(245,200,75,.4));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:pvShine 2.6s linear infinite; }
+  @keyframes pvShine{to{background-position:-200% 0}}
+  #add-ov .pv-cd{ font:800 13px var(--sans);color:#fff;font-variant-numeric:tabular-nums; }
+  #add-ov .pv-cd .cl{ animation:pvBlink 1s steps(1) infinite; }
+  @keyframes pvBlink{50%{opacity:.25}}
+  #add-ov .pv-cta{ padding:6px 13px;border-radius:8px;background:linear-gradient(103deg,#a855f7,#ec4899);color:#fff;font:800 11px var(--sans);position:relative;overflow:hidden; }
+  #add-ov .pv-cta::after{ content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);animation:pvSweep 2.8s ease-in-out infinite; }
+  @keyframes pvSweep{0%{left:-60%}60%,100%{left:130%}}
+  #add-ov .pv-ps{ display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800; }
+  #add-ov .pv-ps .no{color:#e08585} #add-ov .pv-ps .yes{color:#34d399} #add-ov .pv-ps .ar{color:#8b7fb0}
+  #add-ov .pv-cal{ display:flex;gap:4px; }
+  #add-ov .pv-cal i{ width:8px;height:8px;border-radius:3px;background:rgba(168,120,255,.3); }
+  #add-ov .pv-cal i.on{ background:#ec4899;animation:pvPop 2.2s ease-in-out infinite; }
+  @keyframes pvPop{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
+  #add-ov .pv-price{ display:flex;gap:5px; }
+  #add-ov .pv-price span{ border-radius:5px;padding:4px 7px;font-size:8px;font-weight:800;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#cfc8dc; }
+  #add-ov .pv-price span.hot{ border-color:rgba(245,200,75,.5);color:#f5c84b;animation:pvPulse 2.4s ease-in-out infinite; }
+  #add-ov .pv-obj{ width:28px;height:28px;border-radius:9px;background:linear-gradient(150deg,#a855f7,#ec4899);display:grid;place-items:center;font-size:15px;animation:pvFloat 3.4s ease-in-out infinite;box-shadow:0 6px 16px -4px rgba(168,85,247,.6); }
+  #add-ov .pv-steps{ display:flex;align-items:center;gap:5px; }
+  #add-ov .pv-steps i{ width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:800;font-style:normal;background:rgba(168,120,255,.2);color:#d8c8f5; }
+  #add-ov .pv-steps i:nth-child(2){ animation:pvPulse 2s ease-in-out infinite; }
+  #add-ov .pv-qa{ font:800 15px var(--sans);color:#d8c8f5; } #add-ov .pv-qa b{ color:#ec4899;animation:pvPulse 1.8s ease-in-out infinite; }
+  #add-ov .pv-grid{ display:flex;gap:3px; } #add-ov .pv-grid i{ width:14px;height:14px;border-radius:3px;background:linear-gradient(150deg,#3a2b5e,#241a3c); } #add-ov .pv-grid i:nth-child(1){ animation:pvFade 2.4s ease-in-out infinite; }
+  @keyframes pvFade{0%,100%{opacity:.5}50%{opacity:1}}
+  #add-ov .pv-play{ width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);display:grid;place-items:center;color:#fff;font-size:10px;animation:pvPulse 2.2s ease-in-out infinite; }
+  #add-ov .pv-badge{ font-size:20px;animation:pvFloat 3.4s ease-in-out infinite; }
+  #add-ov .pv-quiz{ font:800 12px var(--sans);color:#d8c8f5; }
+  #add-ov .pv-seat{ display:flex;gap:4px; } #add-ov .pv-seat i{ width:16px;height:6px;border-radius:5px;background:#a855f7; } #add-ov .pv-seat i.e{ background:rgba(255,255,255,.12); }
+  @media(prefers-reduced-motion:reduce){ #add-ov .ti-prev *{ animation:none !important; } }
   .sheet-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
   .sheet-h .t{font-family:var(--serif); font-size:18px; font-weight:600;}
   .sheet-h .x{font-size:22px; color:var(--muted); cursor:pointer; line-height:1;}
@@ -5790,6 +5845,46 @@
     if(setHdr && setHdr.classList.contains('tcat')) setHdr.style.display=searching?'none':'';
     var nr=document.getElementById('add-noresult'); if(nr) nr.style.display=(searching && !any)?'block':'none';
   }
+  // 🎬 구성 추가 타일 라이브 미리보기 (2026-07-11) — 클릭 로직 안 건드림, .ti-prev 자식만 주입(멱등)
+  function addPrevHTML(nm, ico){
+    nm=String(nm||'');
+    var M=[
+      [/프로필|이름|소개/, '<div class="pv-av"></div>'],
+      [/숫자|배지|증명|스탯|성과|경력|권위/, '<span class="pv-num">2,300+</span>'],
+      [/전.?후|before|슬라이더/i, '<div class="pv-ba"><i></i><b class="l">B</b><b class="r">A</b></div>'],
+      [/후기|리뷰|평점|별점/, '<span class="pv-stars">★★★★★</span>'],
+      [/고민|해결|문제|페인/, '<span class="pv-ps"><span class="no">✗</span><span class="ar">→</span><span class="yes">✓</span></span>'],
+      [/카운트|마감|타이머|디데이|카운트다운/, '<span class="pv-cd">12<span class="cl">:</span>04<span class="cl">:</span>59</span>'],
+      [/예약|달력|캘린더|스케줄/, '<span class="pv-cal"><i></i><i class="on"></i><i></i><i></i></span>'],
+      [/가격|플랜|요금|메뉴|상품|랭킹/, '<span class="pv-price"><span>A</span><span class="hot">B ⭐</span></span>'],
+      [/과정|단계|타임라인|스텝/, '<span class="pv-steps"><i>1</i><i>2</i><i>3</i></span>'],
+      [/질문|문답|자주|Q ?& ?A|FAQ/i, '<span class="pv-qa">Q<b>?</b></span>'],
+      [/사진|갤러리|이미지|룩북|쇼케이스|캐러셀/, '<span class="pv-grid"><i></i><i></i><i></i></span>'],
+      [/영상|비디오|유튜브/, '<span class="pv-play">▶</span>'],
+      [/보장|환불|약속/, '<span class="pv-badge">🛡</span>'],
+      [/자리|남은|희소|얼리버드/, '<span class="pv-seat"><i></i><i></i><i class="e"></i></span>'],
+      [/진단|퀴즈|테스트/, '<span class="pv-quiz">A · B</span>'],
+      [/요약|랜딩|태그라인|후킹|대문|커버|글로우/, '<div class="pv-obj">✨</div>'],
+      [/버튼|구매|신청|주문|CTA|리드/i, '<span class="pv-cta">지금</span>']
+    ];
+    for(var i=0;i<M.length;i++){ if(M[i][0].test(nm)) return M[i][1]; }
+    return '<span class="pv-ico">'+(ico||'✨')+'</span>';   // 기본: 그 블록 아이콘이 둥둥
+  }
+  function paintAddPreviews(){
+    var ov0=document.getElementById('add-ov'); if(!ov0) return;
+    [].forEach.call(ov0.querySelectorAll('.tpl'), function(t){
+      if(t.__pv) return;                                        // 이미 그림(멱등)
+      if(t.classList.contains('tpl-set')) return;               // 홈 템플릿 세트는 제외
+      if(!t.getAttribute('data-nm') && !t.getAttribute('data-special')) return;
+      t.__pv=1;
+      var nm=t.getAttribute('data-nm')||t.getAttribute('data-special')||((t.querySelector('.tn')||{}).textContent||'');
+      var icoEl=t.querySelector('.tic'); var ico=icoEl?(icoEl.textContent||'').trim():'✨';
+      var pv=document.createElement('div'); pv.className='ti-prev';
+      pv.innerHTML=addPrevHTML(nm, ico);
+      t.appendChild(pv);
+    });
+  }
+  window.__paintAddPreviews=paintAddPreviews;
   function openAddCatalog(fromSlot){
     window.__insertBeforeRow=null;
     var adv=document.getElementById('add-adv'); if(adv) adv.classList.remove('open');   // 고급은 기본 접힘
@@ -5802,6 +5897,7 @@
     try{ if(window.__decorateShowroomTiles) window.__decorateShowroomTiles(); }catch(e){}
     try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){}   // 구성 추가는 항상 편집 위에서 — 모드 게이트가 뒤에 남지 않게
     ov.classList.add('open');
+    try{ paintAddPreviews(); }catch(e){}   // 🎬 타일 라이브 미리보기 주입(멱등)
     var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
     // 라이브 편집 중 + 명시적 '여기' 슬롯이 아니면 → iframe에 "지금 보이는 블록" 물어봐서 그 자리에 삽입 예약 (맨아래 튐 방지)
     if(!fromSlot && window.__liveEditActive){ try{ var _lif=document.getElementById('le-iframe'); if(_lif&&_lif.contentWindow) _lif.contentWindow.postMessage({type:'la-which-visible'}, '*'); }catch(e){} }
