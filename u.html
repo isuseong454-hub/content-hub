@@ -506,8 +506,16 @@
     width:84px; height:84px; border-radius:50%; margin:0 auto 14px;
     background:var(--coral-soft);
     display:flex; align-items:center; justify-content:center;
-    border:1px solid var(--hair); overflow:hidden;
+    border:1px solid var(--hair); overflow:hidden; position:relative;
+    animation:avFloat 4.2s ease-in-out infinite, avGlow 4.2s ease-in-out infinite;   /* 🎨 결과 히어로식 은은한 떠오름+광원 (2026-07-11) — 색은 테마 var(--coral) 상속 */
   }
+  @keyframes avFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+  @keyframes avGlow{
+    0%,100%{ box-shadow:0 8px 24px -8px rgba(0,0,0,.4), 0 0 16px 2px color-mix(in srgb, var(--coral) 30%, transparent); }
+    50%{ box-shadow:0 13px 30px -8px rgba(0,0,0,.46), 0 0 30px 4px color-mix(in srgb, var(--coral) 52%, transparent); }
+  }
+  html[data-edit] .avatar, html.inapp .avatar{ animation:none; }   /* 편집 중·인앱 브라우저에선 정지(차분·클릭 안정) */
+  @media (prefers-reduced-motion: reduce){ .avatar{ animation:none; } }
   /* 심볼 자리 — 나중에 주황 심볼 이미지로 교체 */
   .sym{width:38px; height:38px; color:var(--coral);}
   .name{font-family:var(--serif); font-size:27px; font-weight:600; letter-spacing:-.01em; color:var(--on-strong);}
