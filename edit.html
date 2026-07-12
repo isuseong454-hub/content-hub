@@ -3992,6 +3992,10 @@
       <div class="tgrid s3">
         <div class="tpl imp" data-ic="★" data-nm="후기"><span class="tic">★</span><span><span class="tn">후기</span><span class="ts">고객 후기</span></span></div>
         <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력</span></span></div>
+        <div class="tpl" data-ic="🎓" data-nm="강사 소개"><span class="tic">🎓</span><span><span class="tn">강사 소개</span><span class="ts">프로필+숫자+자격 명함</span></span></div>
+        <div class="tpl" data-ic="🏆" data-nm="성공사례 벽"><span class="tic">🏆</span><span><span class="tn">성공사례 벽</span><span class="ts">숫자 결과를 쭉</span></span></div>
+        <div class="tpl" data-ic="📚" data-nm="커리큘럼"><span class="tic">📚</span><span><span class="tn">커리큘럼</span><span class="ts">챕터·레슨+미리보기</span></span></div>
+        <div class="tpl" data-ic="🧭" data-nm="섹션 탭"><span class="tic">🧭</span><span><span class="tn">섹션 탭</span><span class="ts">긴 페이지 점프 내비</span></span></div>
         <div class="tpl" data-ic="％" data-nm="숫자 스탯"><span class="tic">％</span><span><span class="tn">숫자 스탯</span><span class="ts">누적·재방문율</span></span></div>
         <div class="tpl" data-ic="◧" data-nm="전후사진"><span class="tic">◧</span><span><span class="tn">전/후 슬라이더</span><span class="ts">밀어서 비교 · 실력 증명</span></span></div>
         <div class="tpl" data-ic="🔢" data-nm="과정 · 진행 단계"><span class="tic">🔢</span><span><span class="tn">과정 · 이용 방법</span><span class="ts">상담→시술 흐름 · 1·2·3 단계</span></span></div>
@@ -5991,7 +5995,8 @@
     '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','문의·신청':'lead','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service','가격표 · 예약':'service',
     '대표 사진 쇼케이스':'lookbook','랭킹 · 가격':'ranking','매장 · 위치':'location',
     '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','예약 & 구매 버튼':'cta','구매 버튼':'cta','카운트다운':'countdown','이용 방법':'steps','과정 · 진행 단계':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best','고민 → 해결':'painsolve',
-    '로고 벽':'logowall','진단형':'diagnostic','실시간 예약 뱃지':'livebadge','3초 커버':'cover3'
+    '로고 벽':'logowall','진단형':'diagnostic','실시간 예약 뱃지':'livebadge','3초 커버':'cover3',
+    '커리큘럼':'curriculum','목차':'curriculum','성공사례 벽':'winwall','수강생 변화':'winwall','강사 소개':'coachcard','전문가 카드':'coachcard','섹션 탭':'secnav'
   };
   var SCHEMA = {
     landsum:[['text','한 줄 태그라인 · 강조는 *별표*','당신 얼굴형에 딱 맞는 *머리*, 제가 찾아드려요'],['list','신뢰 칩 (짧게 · 숫자면 더 좋아요)','칩 (예: 경력 10년차)']],
@@ -6051,7 +6056,11 @@
     handmark:[['text','강조할 한 마디','앞머리 하나로 –5살']],
     result:[['text','제목','이런 모습을 상상해보세요'],['text','① 항목 · 또는 「지금(전)」',''],['text','② 항목 · 또는 「이후(후)」',''],['text','③ 항목 (선택)','']],
     seal:[['text','도장·뱃지 문구','동의 보장'],['text','작은 설명 (선택)','']],
-    vibe:[['text','가운데 문구 (선택 · 비우면 선만)','']]
+    vibe:[['text','가운데 문구 (선택 · 비우면 선만)','']],
+    curriculum:[['text','제목','📚 커리큘럼'],['list','챕터·레슨 (종류 칸: 챕터 / 미리보기 / 잠금)','내용|종류 (챕터·미리보기·잠금)']],
+    winwall:[['text','제목','🏆 수강생 변화'],['list','사례 (이름·한 줄·결과) · 실제만!','이름 (예: 김○○ 원장)|한 줄 (예: 인스타 문의)|결과 (예: 3배)']],
+    coachcard:[['photo','프로필 사진',''],['text','이름','이수성'],['text','한 줄 태그','압구정 · 얼굴형 앞머리 전문'],['list','핵심 숫자 (숫자·라벨)','숫자 (예: 10년)|라벨 (예: 경력)'],['list','자격·미디어·수상 (한 줄에 하나)','내용 (예: 미용사 국가자격)']],
+    secnav:[['list','탭 (누르면 그 제목의 블록으로 이동)','탭 이름 (블록 제목 일부와 일치, 예: 커리큘럼)']]
   };
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
   function escT(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -6499,7 +6508,7 @@
   window.__refreshBuilder=refreshBuilder;
 
   // 저장된 블록이 기본 행에 없으면 새 행 생성 (불러오기 복원용)
-  var TYPE_ICON = { event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍', postref:'📄', painsolve:'🎯', bonusstack:'🎁', compare:'⚖', fitcheck:'✅', quiz:'🧠', coupon:'🎟', earlybird:'🐤', mystory:'📖', casestory:'🎞', dialog:'🗨', logowall:'🏛', diagnostic:'🔮', livebadge:'🔥', cover3:'⚡', landsum:'✨', visobj:'🫧', handmark:'✍️', result:'🌈', seal:'🏅', vibe:'〰' };
+  var TYPE_ICON = { event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍', postref:'📄', painsolve:'🎯', bonusstack:'🎁', compare:'⚖', fitcheck:'✅', quiz:'🧠', coupon:'🎟', earlybird:'🐤', mystory:'📖', casestory:'🎞', dialog:'🗨', logowall:'🏛', diagnostic:'🔮', livebadge:'🔥', cover3:'⚡', landsum:'✨', visobj:'🫧', handmark:'✍️', result:'🌈', seal:'🏅', vibe:'〰', curriculum:'📚', winwall:'🏆', coachcard:'🎓', secnav:'🧭' };
   window.__createRow = function(b){
     var row=document.createElement('div'); row.className='row'; row.dataset.type=b.type;
     if(b.layout) row._layout=b.layout;
@@ -10126,6 +10135,17 @@
       return '<div class="lcard" style="text-align:center;"><div class="lbp-h" style="justify-content:center;">'+escT(c[0]||'⏰ 마감 임박')+'</div><div class="lbp-cd">'+(dt?escT(dt)+' 까지 ⏳ 실시간 카운트다운':'✎ 자세히 편집에서 날짜를 넣으면 ⏳ 카운트다운이 켜져요 (비우면 숨김)')+'</div>'+(c[2]?'<div class="lbp-cd-btn">'+escT(c[2])+'</div>':'')+'</div>'; }
     if(type==='stat'){ var stl=c[0]||[]; if(!stl.length) return ph('📊 숫자 증거','큰 숫자 스탯 · 편집에서 추가');
       return '<div class="lcard"><div class="lbp-stats">'+stl.slice(0,3).map(function(x){ return '<div class="lbp-stat"><b>'+escT(x[0]||'')+'</b><span>'+escT(x[1]||'')+'</span></div>'; }).join('')+'</div></div>'; }
+    if(type==='curriculum'){ var crows=c[1]||[]; if(!crows.length) return ph('📚 커리큘럼','챕터·레슨 목록 (종류: 챕터/미리보기/잠금) · 편집에서 추가');
+      var chaps=[],cc=null; crows.forEach(function(r){ var t=(r[0]||'').trim(),k=(r[1]||'').trim(); if(!t)return; if(/챕터|장|섹션|chapter/i.test(k)){cc={t:t,ls:[]};chaps.push(cc);} else {if(!cc){cc={t:'',ls:[]};chaps.push(cc);} cc.ls.push({t:t,free:/미리|무료|preview|샘플/i.test(k)});} });
+      return '<div class="lcard"><div class="lbp-h">'+escT(c[0]||'📚 커리큘럼')+'</div>'+chaps.slice(0,4).map(function(ch,i){ return '<div style="margin-top:8px;"><b style="font-size:12px;color:var(--coral);">'+(i+1)+'. '+escT(ch.t||'Chapter')+'</b>'+ch.ls.slice(0,4).map(function(l){ return '<div style="font-size:11px;color:var(--muted);margin-top:4px;display:flex;gap:6px;"><span style="flex:1;">'+escT(l.t)+'</span>'+(l.free?'<span style="color:#34d399;font-weight:700;">▶미리보기</span>':'<span>🔒</span>')+'</div>'; }).join('')+'</div>'; }).join('')+'</div>'; }
+    if(type==='winwall'){ var wr=(c[1]||[]).filter(function(r){return (r[0]||'').trim()||(r[2]||'').trim();}); if(!wr.length) return ph('🏆 성공사례 벽','이름·한 줄·숫자 결과 · 편집에서 추가');
+      return '<div class="lcard"><div class="lbp-h">'+escT(c[0]||'🏆 수강생 변화')+'</div>'+wr.slice(0,5).map(function(r){ return '<div style="display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12px;"><span style="flex:1;"><b>'+escT(r[0]||'')+'</b>'+(r[1]?' · '+escT(r[1]):'')+'</span>'+(r[2]?'<b style="color:var(--coral);">'+escT(r[2])+'</b>':'')+'</div>'; }).join('')+'</div>'; }
+    if(type==='coachcard'){ var cn=c[1]||'',ct=c[2]||'',cnums=c[3]||[],ccreds=c[4]||[],cav=c[0]||''; if(!cn&&!cnums.length&&!ccreds.length) return ph('🎓 강사 소개','프로필 + 숫자 + 자격 카드 · 편집에서 작성');
+      return '<div class="lcard"><div style="display:flex;align-items:center;gap:10px;"><span style="width:40px;height:40px;border-radius:50%;flex:none;'+(cav?('background:center/cover url('+String(cav).replace(/"/g,'&quot;')+');'):'background:var(--coral-soft);display:grid;place-items:center;')+'">'+(cav?'':'🎓')+'</span><div><b style="font-size:14px;">'+escT(cn||'강사')+'</b>'+(ct?'<div style="font-size:11px;color:var(--coral);">'+escT(ct)+'</div>':'')+'</div></div>'
+        +(cnums.length?'<div class="lbp-stats" style="margin-top:10px;">'+cnums.slice(0,3).map(function(n){ return '<div class="lbp-stat"><b>'+escT(n[0]||'')+'</b><span>'+escT(n[1]||'')+'</span></div>'; }).join('')+'</div>':'')
+        +(ccreds.length?ccreds.slice(0,3).map(function(x){ var t=(typeof x==='string')?x:(x&&x[0]); return t?'<div style="font-size:11px;color:var(--muted);margin-top:5px;">✓ '+escT(t)+'</div>':''; }).filter(Boolean).join(''):'')+'</div>'; }
+    if(type==='secnav'){ var sl=(c[0]||[]).map(function(r){return (typeof r==='string')?r:(r&&r[0]);}).filter(Boolean); if(!sl.length) return ph('🧭 섹션 탭','탭 이름들 (블록 제목과 매칭) · 편집에서 추가');
+      return '<div class="lcard"><div style="display:flex;gap:6px;flex-wrap:wrap;">'+sl.slice(0,7).map(function(l){ return '<span style="font-size:11px;font-weight:700;padding:6px 11px;border-radius:99px;background:var(--coral-soft);border:1px solid var(--hair);color:var(--coral);">'+escT(l)+'</span>'; }).join('')+'</div></div>'; }
     return ph(escT(nmForType(type)), '손님 화면에 이 모양으로 보여요 · 편집에서 작성');
   }
   function nmForType(t){ return (TYPE_NAME&&TYPE_NAME[t])||t; }

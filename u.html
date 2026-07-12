@@ -1960,6 +1960,43 @@
   .lv-vibe-gradient .lv-vline{ height:3px; border-radius:3px; opacity:.85; }
   @media (prefers-reduced-motion: reduce){ .lv-float{ animation:none; } }
   html.inapp .lv-float{ animation:none; }
+  /* ════ 📚🏆🎓🧭 벤치마킹 블록 (2026-07-11) ════ */
+  .lp-cur .cur-wrap{ border:1px solid var(--hair); border-radius:14px; overflow:hidden; }
+  .lp-cur .cur-ch{ border-bottom:1px solid var(--hair); }
+  .lp-cur .cur-ch:last-child{ border-bottom:0; }
+  .lp-cur .cur-h{ display:flex; align-items:center; gap:9px; padding:13px; cursor:pointer; }
+  .lp-cur .cur-cn{ width:22px; height:22px; border-radius:7px; background:var(--grad, var(--coral)); color:#fff; font-size:10px; font-weight:800; display:grid; place-items:center; flex:none; }
+  .lp-cur .cur-ct{ flex:1; font-size:13.5px; font-weight:700; color:var(--on-strong, inherit); }
+  .lp-cur .cur-cv{ color:var(--muted); font-size:12px; transition:transform .2s; }
+  .lp-cur .cur-ch.open .cur-cv{ transform:rotate(180deg); }
+  .lp-cur .cur-ls{ max-height:0; overflow:hidden; transition:max-height .3s ease; }
+  .lp-cur .cur-ch.open .cur-ls{ max-height:600px; }
+  .lp-cur .cur-l{ display:flex; align-items:center; gap:9px; padding:11px 14px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--hair); }
+  .lp-cur .cur-lt{ flex:1; line-height:1.4; color:var(--on-strong, inherit); }
+  .lp-cur .cur-tag{ flex:none; font-size:9.5px; font-weight:800; padding:3px 8px; border-radius:6px; }
+  .lp-cur .cur-tag.free{ background:color-mix(in srgb, var(--coral) 16%, transparent); color:var(--coral); }
+  .lp-cur .cur-tag.lock{ background:var(--hair); color:var(--muted); }
+  .lp-win .win-i{ display:flex; align-items:center; gap:11px; padding:11px 12px; border-radius:12px; margin-bottom:8px; background:color-mix(in srgb, var(--coral) 7%, transparent); border:1px solid color-mix(in srgb, var(--coral) 20%, transparent); }
+  .lp-win .win-i:last-child{ margin-bottom:0; }
+  .lp-win .win-tx{ flex:1; font-size:12.5px; color:var(--muted); line-height:1.4; }
+  .lp-win .win-tx b{ color:var(--on-strong, inherit); }
+  .lp-win .win-n{ flex:none; font-size:15px; font-weight:800; color:var(--coral); font-variant-numeric:tabular-nums; }
+  .lp-coach .coach-top{ display:flex; align-items:center; gap:12px; margin-bottom:13px; }
+  .lp-coach .coach-av{ width:52px; height:52px; border-radius:50%; background-size:cover; background-position:center; border:2px solid var(--hair); flex:none; display:grid; place-items:center; }
+  .lp-coach .coach-av.ph{ background:color-mix(in srgb, var(--coral) 14%, transparent); font-size:24px; }
+  .lp-coach .coach-nm{ font-size:16px; font-weight:800; color:var(--on-strong, inherit); }
+  .lp-coach .coach-tg{ font-size:11.5px; color:var(--coral); font-weight:700; margin-top:2px; }
+  .lp-coach .coach-nums{ display:flex; gap:6px; margin-bottom:12px; }
+  .lp-coach .coach-num{ flex:1; text-align:center; border-radius:10px; padding:9px 4px; background:color-mix(in srgb, var(--on-strong, #fff) 4%, transparent); border:1px solid var(--hair); }
+  .lp-coach .coach-num b{ display:block; font-size:15px; font-weight:800; color:var(--coral); font-variant-numeric:tabular-nums; }
+  .lp-coach .coach-num span{ font-size:9.5px; color:var(--muted); }
+  .lp-coach .coach-creds{ display:flex; flex-direction:column; gap:7px; }
+  .lp-coach .coach-cr{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--on-strong, inherit); }
+  .lp-coach .coach-ck{ width:16px; height:16px; border-radius:50%; background:color-mix(in srgb, var(--coral) 18%, transparent); color:var(--coral); display:grid; place-items:center; font-size:9px; flex:none; }
+  .lp-secnav{ display:flex; gap:6px; overflow-x:auto; padding:4px 0 8px; -webkit-overflow-scrolling:touch; }
+  .lp-secnav::-webkit-scrollbar{ display:none; }
+  .lp-secnav .secnav-b{ flex:none; cursor:pointer; font-family:inherit; font-size:11.5px; font-weight:700; padding:8px 13px; border-radius:999px; border:1px solid color-mix(in srgb, var(--coral) 24%, transparent); background:color-mix(in srgb, var(--coral) 6%, transparent); color:var(--on-strong, inherit); white-space:nowrap; }
+  .lp-secnav .secnav-b.on{ background:var(--grad, var(--coral)); color:#fff; border-color:transparent; }
   .lp-seat .lsg-t b{color:var(--coral); animation:lsgPulse 1.9s ease-in-out infinite;}
   @keyframes lsgPulse{0%,100%{opacity:1;} 50%{opacity:.55;}}
   /* ── 08 별점 요약 헤더 ── */
@@ -3648,6 +3685,51 @@
       if(m==='dots'){ d.innerHTML='<span class="lv-dots">•&nbsp;•&nbsp;•</span>'; }
       else if(t){ d.innerHTML='<span class="lv-vline"></span><span class="lv-vlab">'+esc(t)+'</span><span class="lv-vline"></span>'; }
       else { d.innerHTML='<span class="lv-vline full"></span>'; }
+      return d;
+    },
+    /* 📚 커리큘럼 (content [제목, [[내용,종류],...]]) — 종류=챕터/미리보기/잠금. "이만큼 준다"+무료 맛보기 (2026-07-11) */
+    curriculum: function(c){
+      var rows=c[1]||[]; if(!rows.length) return null;
+      var chapters=[], cur=null;
+      rows.forEach(function(r){ var txt=(r[0]||'').trim(), kind=(r[1]||'').trim(); if(!txt) return;
+        if(/챕터|chapter|장|섹션/i.test(kind)){ cur={t:txt, ls:[]}; chapters.push(cur); }
+        else { if(!cur){ cur={t:'', ls:[]}; chapters.push(cur); } cur.ls.push({t:txt, free:/미리|preview|무료|free|샘플/i.test(kind)}); } });
+      if(!chapters.length) return null;
+      var d=card(''); d.classList.add('lp-cur');
+      var inner=chapters.map(function(ch,i){
+        var ls=ch.ls.map(function(l){ return '<div class="cur-l"><span class="cur-lt">'+esc(l.t)+'</span>'+(l.free?'<span class="cur-tag free">▶ 미리보기</span>':'<span class="cur-tag lock">🔒</span>')+'</div>'; }).join('');
+        return '<div class="cur-ch'+(i===0?' open':'')+'"><div class="cur-h"><span class="cur-cn">'+(i+1)+'</span><span class="cur-ct">'+esc(ch.t||('Chapter '+(i+1)))+'</span><span class="cur-cv">▾</span></div><div class="cur-ls">'+ls+'</div></div>'; }).join('');
+      d.innerHTML=(c[0]?'<div class="block-h" style="margin-bottom:11px;">'+emph(c[0])+'</div>':'')+'<div class="cur-wrap">'+inner+'</div>';
+      [].forEach.call(d.querySelectorAll('.cur-h'), function(hh){ hh.onclick=function(){ hh.parentNode.classList.toggle('open'); }; });
+      return d;
+    },
+    /* 🏆 성공사례 벽 (content [제목, [[이름,한줄,결과],...]]) — 숫자 결과 리스트. 실제 사례만! (2026-07-11) */
+    winwall: function(c){
+      var items=(c[1]||[]).filter(function(r){ return (r[0]||'').trim()||(r[2]||'').trim(); });
+      if(!items.length) return null;
+      var d=card(''); d.classList.add('lp-win');
+      d.innerHTML=(c[0]?'<div class="block-h" style="margin-bottom:11px;">'+emph(c[0])+'</div>':'')
+        +items.map(function(r){ return '<div class="win-i"><span class="win-tx"><b>'+esc(r[0]||'')+'</b>'+(r[1]?' · '+esc(r[1]):'')+'</span>'+(r[2]?'<span class="win-n">'+esc(r[2])+'</span>':'')+'</div>'; }).join('');
+      return d;
+    },
+    /* 🎓 강사·전문가 카드 (content [사진, 이름, 태그, [[숫자,라벨],...], [자격...]]) — 프로필+숫자+자격 한 명함 (2026-07-11) */
+    coachcard: function(c){
+      var photo=c[0]||'', nm=c[1]||'', tag=c[2]||'', nums=c[3]||[], creds=c[4]||[];
+      if(!nm && !nums.length && !creds.length) return null;
+      var d=card(''); d.classList.add('lp-coach');
+      var av=photo?('<span class="coach-av" style="background-image:url('+String(photo).replace(/"/g,'&quot;')+')"></span>'):'<span class="coach-av ph">🎓</span>';
+      var nb=nums.length?('<div class="coach-nums">'+nums.slice(0,4).map(function(n){ return '<div class="coach-num"><b>'+esc(n[0]||'')+'</b><span>'+esc(n[1]||'')+'</span></div>'; }).join('')+'</div>'):'';
+      var cb=creds.length?('<div class="coach-creds">'+creds.map(function(x){ var t=(typeof x==='string')?x:(x&&x[0]); return t?('<div class="coach-cr"><span class="coach-ck">✓</span>'+esc(t)+'</div>'):''; }).filter(Boolean).join('')+'</div>'):'';
+      d.innerHTML='<div class="coach-top">'+av+'<div><div class="coach-nm">'+esc(nm)+'</div>'+(tag?'<div class="coach-tg">'+esc(tag)+'</div>':'')+'</div></div>'+nb+cb;
+      return d;
+    },
+    /* 🧭 섹션 탭 내비 (content [[라벨],...]) — 누르면 그 제목 든 블록으로 스크롤 (best-effort) (2026-07-11) */
+    secnav: function(c){
+      var labels=(c[0]||[]).map(function(r){ return (typeof r==='string')?r:(r&&r[0]); }).filter(Boolean);
+      if(!labels.length) return null;
+      var d=document.createElement('div'); d.className='block lp-secnav';
+      d.innerHTML=labels.map(function(l){ return '<button type="button" class="secnav-b">'+esc(l)+'</button>'; }).join('');
+      [].forEach.call(d.querySelectorAll('.secnav-b'), function(b){ b.onclick=function(){ var lab=b.textContent.trim(); var host=d.closest('#pm-body')||document; var els=host.querySelectorAll('.block-h, h3, h4'); var target=null; [].forEach.call(els, function(e){ if(!target && e!==b && e.textContent && e.textContent.indexOf(lab)>=0) target=e; }); if(target){ try{ target.scrollIntoView({behavior:'smooth', block:'start'}); }catch(_){ } } [].forEach.call(d.querySelectorAll('.secnav-b'),function(x){x.classList.toggle('on',x===b);}); }; });
       return d;
     },
     /* 🧰 47 비교표 (content [제목, 왼헤더, 오른헤더, 항목1,왼1,오1, 항목2,왼2,오2, 항목3,왼3,오3]) — 기준을 내가 정하는 프레이밍 (사실만!) */
