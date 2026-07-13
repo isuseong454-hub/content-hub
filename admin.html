@@ -363,6 +363,14 @@
           <button data-mode="life">평생</button>
         </div>
       </div>
+      <div class="field"><label>채널 수 <span style="font-weight:400;color:var(--muted);font-size:11px;">· 등급과 별개 · 추가 결제분만큼</span></label>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button type="button" id="chan-minus" aria-label="채널 줄이기" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;font-size:22px;cursor:pointer;line-height:1;">−</button>
+          <div style="min-width:66px;text-align:center;"><b id="chan-n" style="font-size:24px;font-weight:800;">1</b><span style="font-size:13px;color:var(--muted);margin-left:3px;">개</span></div>
+          <button type="button" id="chan-plus" aria-label="채널 늘리기" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;font-size:22px;cursor:pointer;line-height:1;">＋</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;">기본 1개. <b style="color:#cdb4ff;">채널을 추가 결제한 만큼만</b> 올려주세요 — 채널 수만큼 저장 용량도 늘어나요.</div>
+      </div>
       <div class="plan-btns">
         <button class="btn" id="plan-cancel" style="flex:1; padding:11px;">취소</button>
         <button class="btn primary" id="plan-save" style="flex:1.4; padding:11px;">저장</button>
@@ -506,13 +514,18 @@
     return div;
   }
   // 등급·기간 변경 (승급·연장)
-  var planTarget=null, planTier='basic', planMode='keep';
+  var planTarget=null, planTier='basic', planMode='keep', planChan=1;   // planChan = 채널 수(등급과 무관·추가결제 단위)
+  function renderChanStep(){ var el=$('chan-n'); if(el) el.textContent=planChan; }
   bindSeg($('plan-seg-tier'),'data-ind',function(v){ planTier=v; });
   bindSeg($('plan-seg-period'),'data-mode',function(v){ planMode=v; });
+  if($('chan-minus')) $('chan-minus').onclick=function(){ planChan=Math.max(1, planChan-1); renderChanStep(); };
+  if($('chan-plus'))  $('chan-plus').onclick =function(){ planChan=Math.min(99, planChan+1); renderChanStep(); };
   function planSegOn(box,attr,val){ box.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute(attr)===val); }); }
   function openPlan(u){
     planTarget=u; planTier=tierOf(u); planMode='keep';
+    planChan=Math.max(1, parseInt(u.max_channels,10)||1);
     $('plan-code').textContent=u.code; $('plan-name').textContent=u.name||'';
+    renderChanStep();
     planSegOn($('plan-seg-tier'),'data-ind',planTier);
     planSegOn($('plan-seg-period'),'data-mode','keep');
     $('plan-ov').classList.add('show');
@@ -529,8 +542,8 @@
     else if(planMode==='ext365'){ var base=(planTarget.expires_at&&planTarget.expires_at>now)?planTarget.expires_at:now; exp=base+365*DAY; }
     var btn=this; btn.disabled=true; var o=btn.textContent; btn.textContent='저장 중...';
     try{
-      var r=await window.laRpc('li_master_set_plan',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:planTarget.code, p_industry:planTier, p_expires_at:exp });
-      if(r&&r.ok){ toast(TIER_LBL[planTier]+'(으)로 변경됨 ✓'); closePlan(); loadList(); }
+      var r=await window.laRpc('li_master_set_plan',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:planTarget.code, p_industry:planTier, p_expires_at:exp, p_max_channels:planChan });
+      if(r&&r.ok){ var mc=(r.max_channels!=null)?r.max_channels:planChan; toast(TIER_LBL[planTier]+' · 채널 '+mc+'개로 변경됨 ✓'); closePlan(); loadList(); }
       else { toast('변경 실패 ('+((r&&r.reason)||'SQL 미실행?')+')'); }
     }catch(e){ toast('오류: '+e.message); }
     btn.disabled=false; btn.textContent=o;
