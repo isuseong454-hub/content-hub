@@ -12547,7 +12547,14 @@
       var g=document.getElementById('mc-grace');
       if(g) g.onclick=async function(){ g.disabled=true; g.textContent='신청 중…';
         var a=mAuth(); var r=await _rpc('li_ch_grace',{p_code:a.code,p_pin_hash:a.pinHash,p_channel:m.cur.id});
-        if(r&&r.ok){ g.textContent='✓ 3일 연장! 새로고침해요'; setTimeout(function(){ location.reload(); },700); }
+        if(r&&r.ok){ g.textContent='✓ 3일 연장됐어요';
+          try{ m.cur.expired=false; m.cur.grace_used=true; if(r.expires_at!=null) m.cur.expires_at=r.expires_at; }catch(_){}
+          setTimeout(function(){                                  // 새로고침(=재로그인) 없이 잠금 해제
+            try{ document.body.classList.remove('mc-expired'); var eb=document.getElementById('mc-expban'); if(eb) eb.remove(); }catch(_){}
+            renderChip();
+            try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+          }, 650);
+        }
         else { g.textContent=(r&&r.reason==='used')?'이미 사용했어요':'실패 — 관리자에 문의'; g.classList.add('used'); }
       };
     }
@@ -12580,10 +12587,30 @@
       body.onclick=function(e){
         var it=e.target.closest('[data-ch]');
         if(it){ var c=window.__MC.list[+it.getAttribute('data-ch')]; if(!c) return;
-          try{ localStorage.setItem(chKey(), String(c.id)); }catch(_){}
-          location.reload(); return; }
+          var cur=window.__MC.cur;
+          if(cur && String(c.id)===String(cur.id)){ var ov0=document.getElementById('mc-ov'); if(ov0) ov0.classList.remove('on'); return; }   // 이미 이 채널 → 닫기만
+          mcSwitchTo(c); return; }
         if(e.target.closest('[data-mcadd]')){ if(window.__MC.list.length>=window.__MC.max) renderUpsell(); else renderForm(); }
       };
+    }
+    // 새로고침 없이 그 자리에서 채널 전환 (재로그인 방지) — 라이브편집은 칩을 가리므로 이 경로는 항상 작업실에서만 실행됨
+    async function mcSwitchTo(c){
+      var m=window.__MC, ov=document.getElementById('mc-ov');
+      try{ if(window.__pageAutosaveStop) window.__pageAutosaveStop(); }catch(_){}   // 전환 중 자동저장 정지(옛 채널 편집분 누수 방지)
+      try{ localStorage.setItem(chKey(), String(c.id)); }catch(_){}
+      m.cur=c; syncAuthHandle();
+      try{ if(window.AUTH) localStorage.setItem('la-auth', JSON.stringify(window.AUTH)); }catch(_){}
+      try{ window.__statsCache=null; }catch(_){}   // 딴 채널 숫자 잔상 방지
+      try{ var host=document.getElementById('data-analytics'); if(host) host.__loaded=false; }catch(_){}
+      // 만료 상태 초기화 후 새 채널 기준으로 다시 판정
+      try{ document.body.classList.remove('mc-expired'); var eb=document.getElementById('mc-expban'); if(eb) eb.remove(); }catch(_){}
+      renderChip();
+      if(c.expired) showExpired();
+      if(ov) ov.classList.remove('on');
+      try{ await loadPage(); }catch(_){}                                            // li_ch_get을 새 채널 id로 재요청 → 편집기 내용 교체
+      try{ var h2=document.getElementById('data-analytics'); if(h2 && h2.offsetParent!==null && window.__mountDataAnalytics) window.__mountDataAnalytics(true); }catch(_){}
+      try{ if(window.__renderHomeHub) window.__renderHomeHub(); }catch(_){}
+      try{ if(window.toast) toast('‘'+(c.name||c.handle)+'’ 채널로 전환됐어요'); }catch(_){}
     }
     function renderUpsell(){
       var m=window.__MC, body=document.getElementById('mc-body');
