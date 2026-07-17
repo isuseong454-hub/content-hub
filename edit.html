@@ -3990,6 +3990,8 @@
 
       <div class="tcat addsec s3"><span class="addnum">3</span>전문성 가시화<span class="addtrio t-cv">💎 전환</span></div>
       <div class="tgrid s3">
+        <div class="tpl imp" data-ic="🖼" data-nm="이미지 밴드"><span class="tic">🖼</span><span><span class="tn">이미지 밴드</span><span class="ts">디자인 이미지 통째로 · 상세페이지</span></span></div>
+        <div class="tpl imp" data-ic="📈" data-nm="성장 그래프"><span class="tic">📈</span><span><span class="tn">성장 그래프</span><span class="ts">3천→10만 · 그려지며 등장</span></span></div>
         <div class="tpl imp" data-ic="★" data-nm="후기"><span class="tic">★</span><span><span class="tn">후기</span><span class="ts">고객 후기</span></span></div>
         <div class="tpl imp" data-ic="🏅" data-nm="전문가 증명"><span class="tic">🏅</span><span><span class="tn">전문가 증명</span><span class="ts">수상·자격·경력</span></span></div>
         <div class="tpl" data-ic="🎓" data-nm="강사 소개"><span class="tic">🎓</span><span><span class="tn">강사 소개</span><span class="ts">프로필+숫자+자격 명함</span></span></div>
@@ -4016,6 +4018,7 @@
 
       <div class="tcat addsec s5"><span class="addnum">5</span>연결하기<span class="addtrio t-buy">🏆 구매</span></div>
       <div class="tgrid s5">
+        <div class="tpl imp" data-ic="🎫" data-nm="얼리버드 신청"><span class="tic">🎫</span><span><span class="tn">얼리버드 신청</span><span class="ts">옵션 선택+현황 게이지 → DM·예약</span></span></div>
         <div class="tpl imp" data-ic="🛒" data-nm="가격표 · 예약"><span class="tic">🛒</span><span><span class="tn">가격표 · 예약</span><span class="ts">가격 안내 + 예약·구매 버튼</span></span></div>
         <div class="tpl" data-ic="🔗" data-nm="링크 버튼"><span class="tic">🔗</span><span><span class="tn">링크 버튼</span><span class="ts">인스타·유튜브·카톡</span></span></div>
         <div class="tpl" data-ic="✉" data-nm="뉴스레터"><span class="tic">✉</span><span><span class="tn">뉴스레터</span><span class="ts">구독 받기</span></span></div>
@@ -4256,6 +4259,12 @@
 
         <div class="tcat">사진 모션</div>
         <div class="hm-grid" id="motion-grid"></div>
+
+        <div class="tcat">스크롤 연출</div>
+        <div class="set" style="cursor:default; box-shadow:none;">
+          <span class="meta"><span class="nm">스크롤에 반응하는 페이지</span><span class="sb">숫자 차오름 · 그래프 그려짐 · 상단 진행선</span></span>
+          <span class="sw on" id="sfx-sw"><i></i></span>
+        </div>
       </div>
 
 
@@ -5996,7 +6005,10 @@
     '대표 사진 쇼케이스':'lookbook','랭킹 · 가격':'ranking','매장 · 위치':'location',
     '영상':'video','CTA 버튼':'cta','하단 고정 CTA':'cta','예약 & 구매 버튼':'cta','구매 버튼':'cta','카운트다운':'countdown','이용 방법':'steps','과정 · 진행 단계':'steps','보장 배지':'guarantee','예약 신청':'reservation','흐르는 태그 띠':'marquee','글로우 후킹':'glowhook','사진':'photocard','베스트·대표 작업':'best','고민 → 해결':'painsolve',
     '로고 벽':'logowall','진단형':'diagnostic','실시간 예약 뱃지':'livebadge','3초 커버':'cover3',
-    '커리큘럼':'curriculum','목차':'curriculum','성공사례 벽':'winwall','수강생 변화':'winwall','강사 소개':'coachcard','전문가 카드':'coachcard','섹션 탭':'secnav'
+    '커리큘럼':'curriculum','목차':'curriculum','성공사례 벽':'winwall','수강생 변화':'winwall','강사 소개':'coachcard','전문가 카드':'coachcard','섹션 탭':'secnav',
+    '이미지 밴드':'band','상세페이지 이미지':'band',
+    '성장 그래프':'chart','그래프':'chart',
+    '얼리버드 신청':'offer','펀딩식 신청':'offer','신청 옵션':'offer'
   };
   var SCHEMA = {
     landsum:[['text','한 줄 태그라인 · 강조는 *별표*','당신 얼굴형에 딱 맞는 *머리*, 제가 찾아드려요'],['list','신뢰 칩 (짧게 · 숫자면 더 좋아요)','칩 (예: 경력 10년차)']],
@@ -6006,6 +6018,9 @@
     cover3:[['photo','배경 사진 (선택)',''],['text','태그 (선택)','압구정 앞머리 전문'],['text','후킹 문구 · *별표*로 강조','3개월 만에 *인생 앞머리* 찾은 이유'],['text','버튼 글자','지금 상담받기'],['url','버튼 링크','']],
     event:[['text','태그','이번 달'],['text','제목','6월 신규 등록 시 1:1 컨설팅 무료'],['date','종료일','2026-06-30'],['url','링크(선택)',''],['photo','사진 (선택 · 은은한 리본에 작은 썸네일)','']],
     gallery:[['photos','사진 (보관함에서 선택)','']],
+    band:[['photos','상세페이지 이미지 (위→아래 순서로 그대로 이어붙어요)',''],['url','눌렀을 때 이동할 링크 (선택)','']],
+    chart:[['text','제목','📈 조회수 성장'],['list','데이터 (위→아래 = 왼→오른쪽)','라벨 (예: 시작)|숫자 (예: 3000)'],['text','단위 (선택 · 예: 회/명/만원)','']],
+    offer:[['text','작은 태그 (선택 · 예: 3기 모집 · 마감 임박)','3기 모집 · 마감 임박'],['text','제목','얼리버드 신청'],['text','신청 현황 (선택 · "신청/정원" 예: 17/20)',''],['list','옵션 (이름·가격·정가·뱃지)','이름 (예: 원데이 클래스)|가격 (예: 12만원)|정가(선택 · 예: 15만원)|뱃지(선택 · 예: ⭐추천 / 한정 20석)'],['text','버튼 글자','DM으로 신청하기'],['url','버튼 링크 (DM·카톡·예약)','']],
     links:[['list','링크 버튼들','제목|링크(URL)']],
     link:[['text','제목',''],['url','링크(URL)','']],
     newsletter:[['text','제목','주간 뉴스레터 구독'],['url','구독 링크','']],
@@ -6265,6 +6280,9 @@
   }
   // 구성별 편집창 설명(이게 뭐다 + 추천 대상) — 직감적으로
   var EDIT_INTRO = {
+    band: { ic:'🖼', what:'디자인된 이미지를 <b>통째로 이어붙이는 상세페이지 밴드</b>예요. 와디즈·스마트스토어 상세가 바로 이 방식 — 글자·표·연출이 이미지 안에 있어 디자인이 100% 자유로워요.', rec:'여러 장을 순서대로 올리면 <b>이음새 없이</b> 한 페이지처럼 이어져요. 디자인 힘줄 구간은 밴드, 움직여야 할 구간(전후·후기·예약)은 블록으로!' },
+    chart: { ic:'📈', what:'성장을 <b>선 하나로 증명</b>하는 그래프예요. "3천 → 10만" 같은 변화는 글보다 그래프가 3초 만에 믿게 만들어요.', rec:'라벨·숫자만 채우면 완성 — <b>스크롤 연출이 켜져 있으면 그래프가 쓱 그려지며</b> 등장해요' },
+    offer: { ic:'🎫', what:'와디즈식 <b>옵션 선택 + 신청 현황 게이지</b>예요. 결제 대신 DM·예약으로 연결 — 얼리버드 할인율(%)은 정가만 넣으면 자동 계산돼요.', rec:'<b>정직하게!</b> 신청 현황·한정 수량은 실제 숫자만. 가짜 긴박감은 신뢰를 깎아요' },
     lookbook: { ic:'📸', what:'대표 작업·디자인을 큰 카드로 보여주는 <b>쇼케이스</b>예요. (스크린샷 찍어 대표 사진처럼 설정)', rec:'상품·디자인·작업물처럼 <b>시각적인 걸 강조</b>하고 싶을 때' },
     stylegallery: { ic:'🖼', what:'사진을 <b>분류·검색·전후</b>로 보여주는 갤러리예요.', rec:'스타일/메뉴가 많아 <b>골라보게</b> 하고 싶을 때' },
     authority: { ic:'🏅', what:'<b>숫자는 안 거짓말해요.</b> 경력·실적을 숫자로 보여주면 한눈에 "이 사람 진짜다"라는 신뢰가 생겨요.', rec:'아래 <b>빈칸(숫자·라벨)만 채우면</b> 위 미리보기처럼 배지로 완성돼요' },
@@ -6508,7 +6526,7 @@
   window.__refreshBuilder=refreshBuilder;
 
   // 저장된 블록이 기본 행에 없으면 새 행 생성 (불러오기 복원용)
-  var TYPE_ICON = { event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍', postref:'📄', painsolve:'🎯', bonusstack:'🎁', compare:'⚖', fitcheck:'✅', quiz:'🧠', coupon:'🎟', earlybird:'🐤', mystory:'📖', casestory:'🎞', dialog:'🗨', logowall:'🏛', diagnostic:'🔮', livebadge:'🔥', cover3:'⚡', landsum:'✨', visobj:'🫧', handmark:'✍️', result:'🌈', seal:'🏅', vibe:'〰', curriculum:'📚', winwall:'🏆', coachcard:'🎓', secnav:'🧭' };
+  var TYPE_ICON = { event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍', postref:'📄', painsolve:'🎯', bonusstack:'🎁', compare:'⚖', fitcheck:'✅', quiz:'🧠', coupon:'🎟', earlybird:'🐤', mystory:'📖', casestory:'🎞', dialog:'🗨', logowall:'🏛', diagnostic:'🔮', livebadge:'🔥', cover3:'⚡', landsum:'✨', visobj:'🫧', handmark:'✍️', result:'🌈', seal:'🏅', vibe:'〰', curriculum:'📚', winwall:'🏆', coachcard:'🎓', secnav:'🧭', band:'🖼', chart:'📈', offer:'🎫' };
   window.__createRow = function(b){
     var row=document.createElement('div'); row.className='row'; row.dataset.type=b.type;
     if(b.layout) row._layout=b.layout;
@@ -6531,9 +6549,11 @@
     lead:      [['form','등록폼','이름+연락처'],['banner','배너','강조 배경'],['compact','컴팩트','한 줄'],['minimal','미니','연락처만']],
     stylegallery: [['search','검색형','검색+칩'],['bigba','전후 강조','크게 비교'],['grid','그리드','2열'],['strip','가로 스크롤','옆으로']],
     beforeafter: [['slider','슬라이더','밀어서 비교 · 추천'],['side','나란히','전·후 동시']],
-    steps: [['timeline','타임라인','가로 흐름 · 추천'],['list','세로 목록','번호 리스트']]
+    steps: [['timeline','타임라인','가로 흐름 · 추천'],['list','세로 목록','번호 리스트']],
+    band: [['full','꽉 채움','이음새 없이 상세페이지처럼 · 추천'],['card','카드','여백 + 둥근 모서리']],
+    chart: [['line','성장 곡선','부드러운 라인 · 추천'],['bars','막대','항목 비교']]
   };
-  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'timeline' };
+  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'timeline', band:'full', chart:'line' };
   // 표현법(LAYOUTS)은 없지만 편집 패널에 '완성 미리보기'를 띄우는 블록들 (수정→패널 통일: 채우면 바로 완성이 보이게)
   var PREVIEW_NOLAYOUT = { quote:1, stat:1, painsolve:1, diagnostic:1, glowhook:1 };
   function layoutMini(type,k){
@@ -6597,6 +6617,14 @@
     if(type==='steps'){
       if(k==='list') return box+'<div style="flex:1;padding:5px 8px;display:flex;flex-direction:column;gap:4px;justify-content:center;"><div style="height:5px;width:70%;background:#7FE8D8;border-radius:2px;"></div><div style="height:4px;width:85%;background:#5c5580;border-radius:2px;"></div></div></div>';
       return box+'<div style="flex:1;display:flex;align-items:center;justify-content:space-around;padding:0 8px;position:relative;"><div style="position:absolute;left:14px;right:14px;top:50%;height:2px;background:#5c5580;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div><div style="width:9px;height:9px;border-radius:50%;background:#7FE8D8;position:relative;z-index:1;"></div></div></div>';
+    }
+    if(type==='band'){
+      if(k==='card') return box+'<div style="flex:1;margin:4px 8px;background:linear-gradient(180deg,#34343C,#5a3fae);border-radius:5px;"></div></div>';
+      return box+'<div style="flex:1;background:linear-gradient(180deg,#34343C 33%,#5a3fae 33%,#5a3fae 66%,#2A2A30 66%);"></div></div>';
+    }
+    if(type==='chart'){
+      if(k==='bars') return box+'<div style="flex:1;display:flex;align-items:flex-end;gap:4px;padding:5px 8px;"><div style="flex:1;height:30%;background:#7FE8D8;border-radius:3px 3px 0 0;"></div><div style="flex:1;height:55%;background:#7FE8D8;border-radius:3px 3px 0 0;"></div><div style="flex:1;height:80%;background:#2DD4BF;border-radius:3px 3px 0 0;"></div></div></div>';
+      return box+'<div style="flex:1;position:relative;margin:5px 8px;"><svg viewBox="0 0 60 24" style="width:100%;height:100%;"><path d="M2 20 C14 19 22 15 32 11 C42 7 50 4 58 3" fill="none" stroke="#2DD4BF" stroke-width="2" stroke-linecap="round"/><circle cx="58" cy="3" r="2.6" fill="#7FE8D8"/></svg></div></div>';
     }
     if(type==='beforeafter'){
       if(k==='side') return box+'<div style="flex:1;display:flex;gap:2px;padding:4px;"><div style="flex:1;background:#34343C;border-radius:2px;"></div><div style="flex:1;background:#5a3fae;border-radius:2px;"></div></div></div>';
@@ -9393,6 +9421,18 @@
   document.querySelector('[data-hclose]').onclick = function(){ hov.classList.remove('open'); };
   hov.addEventListener('click', function(e){ if(e.target===hov) hov.classList.remove('open'); });
   document.getElementById('hero-sw').onclick = function(){ home.heroOn = !home.heroOn; renderHero(); };
+  // 🎬 스크롤 연출 온/오프 (기본 켬 · scrollFx=false만 끔)
+  (function(){
+    var sw=document.getElementById('sfx-sw'); if(!sw) return;
+    function paint(){ sw.classList.toggle('on', home.scrollFx!==false); }
+    sw.onclick=function(){
+      home.scrollFx = (home.scrollFx===false);   // false→true, true/미설정→false
+      paint();
+      try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.scrollFx=home.scrollFx; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(_){}
+      if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh();
+    };
+    paint();
+  })();
   window.__setHeroOn=function(on){ home.heroOn=!!on; try{ var cur=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); cur.heroOn=!!on; localStorage.setItem('cm-home-v1', JSON.stringify(cur)); }catch(e){} try{ if(typeof renderHero==='function') renderHero(); }catch(e){} };   // 후킹문구 삭제(숨김)/켜기 — la-del-core에서 호출 (HKEY 직접 저장 → serialize 반영)
   document.getElementById('hero-text').oninput = function(){ home.heroText = this.value; document.getElementById('hero-prev').innerHTML = heroMarkup(this.value); renderTopFirst(); };
   // 타겟 메시지 도우미: 누구에게/고민/약속 → 후킹문구·소개 자동 초안
