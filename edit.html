@@ -6054,7 +6054,7 @@
     marquee:[['list','흐르는 태그 (좌→우 무한 흐름)','태그 (예: #앞머리펌)']],
     glowhook:[['text','큰 글자 (숫자·한 단어, 빛나게)','70%'],['text','위 작은 영문 라벨 (선택)','WELCOME TO BANG HOUSE'],['textarea','큰 글자 뒤 설명 (선택)','앞머리 디자인'],['text','큰 숫자 앞 작은 말 (선택)','첫인상의'],['text','BY 작가·위치 한 줄 (선택)','유수 디자이너 · 압구정 라브']],
     photocard:[['photo','사진',''],['text','캡션 (선택)',''],['photofx','꾸미기 (프레임·효과·색)','pc-shadow|']],
-    best:[['text','제목','🏆 베스트 · 명예의 전당'],['lookcards','TOP 항목 (위→아래 = 1·2·3위, 최대 5 · 사진·영상·이름)','']],
+    best:[['text','제목','🏆 베스트 · 명예의 전당'],['lookcards','TOP 항목 (위→아래=순위 · 포디움=TOP5 · 레일=인원 제한 없음)','']],
     reservation:[
       ['text','제목','예약하기'],
       ['text','휴무 요일 (쉼표로, 예: 월,화)','월,화'],
@@ -6551,9 +6551,10 @@
     beforeafter: [['slider','슬라이더','밀어서 비교 · 추천'],['side','나란히','전·후 동시']],
     steps: [['timeline','타임라인','가로 흐름 · 추천'],['list','세로 목록','번호 리스트']],
     band: [['full','꽉 채움','이음새 없이 상세페이지처럼 · 추천'],['card','카드','여백 + 둥근 모서리']],
-    chart: [['line','성장 곡선','부드러운 라인 · 추천'],['bars','막대','항목 비교']]
+    chart: [['line','성장 곡선','부드러운 라인 · 추천'],['bars','막대','항목 비교']],
+    best: [['podium','메달 포디움','TOP5 크게 · 기본'],['rail','자동 흐름 레일','인원 제한 없이 순위·조회수 칩 흐름']]
   };
-  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'timeline', band:'full', chart:'line' };
+  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'timeline', band:'full', chart:'line', best:'podium' };
   // 표현법(LAYOUTS)은 없지만 편집 패널에 '완성 미리보기'를 띄우는 블록들 (수정→패널 통일: 채우면 바로 완성이 보이게)
   var PREVIEW_NOLAYOUT = { quote:1, stat:1, painsolve:1, diagnostic:1, glowhook:1 };
   function layoutMini(type,k){
@@ -6621,6 +6622,10 @@
     if(type==='band'){
       if(k==='card') return box+'<div style="flex:1;margin:4px 8px;background:linear-gradient(180deg,#34343C,#5a3fae);border-radius:5px;"></div></div>';
       return box+'<div style="flex:1;background:linear-gradient(180deg,#34343C 33%,#5a3fae 33%,#5a3fae 66%,#2A2A30 66%);"></div></div>';
+    }
+    if(type==='best'){
+      if(k==='rail') return box+'<div style="flex:1;display:flex;gap:3px;padding:4px;overflow:hidden;"><div style="flex:0 0 26%;background:#34343C;border-radius:3px;position:relative;"><i style="position:absolute;top:2px;left:2px;width:9px;height:5px;background:#F5C84B;border-radius:2px;"></i></div><div style="flex:0 0 26%;background:#34343C;border-radius:3px;"></div><div style="flex:0 0 26%;background:#34343C;border-radius:3px;"></div><div style="flex:0 0 26%;background:#34343C;border-radius:3px;"></div></div></div>';
+      return box+'<div style="flex:1;display:flex;align-items:flex-end;gap:3px;padding:4px 8px;"><div style="flex:1;height:62%;background:#34343C;border-radius:3px 3px 0 0;"></div><div style="flex:1.3;height:92%;background:#F5C84B;border-radius:3px 3px 0 0;"></div><div style="flex:1;height:48%;background:#34343C;border-radius:3px 3px 0 0;"></div></div></div>';
     }
     if(type==='chart'){
       if(k==='bars') return box+'<div style="flex:1;display:flex;align-items:flex-end;gap:4px;padding:5px 8px;"><div style="flex:1;height:30%;background:#7FE8D8;border-radius:3px 3px 0 0;"></div><div style="flex:1;height:55%;background:#7FE8D8;border-radius:3px 3px 0 0;"></div><div style="flex:1;height:80%;background:#2DD4BF;border-radius:3px 3px 0 0;"></div></div></div>';
