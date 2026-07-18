@@ -5130,6 +5130,8 @@
       var home=document.querySelector('[data-pane="home"]'); if(home) [].push.apply(els, [].slice.call(home.children));
       if(window.__revealScan) window.__revealScan(els);
     }, 70);
+    // 🧭 홈페이지 메뉴(고정 상단바) + 단독 모드 — 모든 렌더·타이틀 세팅 '후' 마지막에
+    try{ if(window.__renderHubNav) window.__renderHubNav(d); }catch(_){}
   }
   window.__applyPublicData = applyPublicData;
   // '이 스타일로 예약' → 예약 모달 열고 요청사항에 스타일명 자동 입력 (없으면 예약 블록으로 스크롤)
@@ -5964,6 +5966,178 @@
   }
   window.__armTabEdit = armTabEdit;
   window.__setupEditTaps = setupEditTaps;
+})();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════
+   🧭 홈페이지 모드 — 고정 상단바 메뉴 + 주소·뒤로가기 + 단독(화이트라벨)
+   · 완전 추가형: 기존 렌더 코드 무수정 (applyPublicData 끝 훅 1줄로만 진입)
+   · home.menu = {on:true, items:[{label, kind:'home'|'section'|'page'|'url', target}]}
+   · home.solo = true  → 허브 흔적 감춤 (관리자 링크·허브 주소·타이틀)
+   · post.menuMode = 'site'|'own'|'off' , post.menu={items:[...]}  (판매 페이지=off 권장)
+   ══════════════════════════════════════════════════════════════════════ */
+(function(){
+  var D=null, curPost=null, suppress=false;
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];}); }
+  function qp(k){ try{ return new URLSearchParams(location.search).get(k); }catch(_){ return null; } }
+
+  function css(){
+    if(document.getElementById('hubnav-css')) return;
+    var s=document.createElement('style'); s.id='hubnav-css'; s.textContent=
+      '#hubnav{position:fixed;top:0;left:0;right:0;z-index:70;'
+      +'background:color-mix(in srgb, var(--paper,#0d0b14) 90%, transparent);'
+      +'-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);'
+      +'border-bottom:1px solid var(--hair,rgba(255,255,255,.09));}'
+      +'.hn-in{max-width:520px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:9px 16px;}'
+      +'.hn-brand{font-size:12.5px;font-weight:800;color:var(--ink,#fff);white-space:nowrap;overflow:hidden;'
+      +'text-overflow:ellipsis;max-width:40%;cursor:pointer;background:none;border:0;font-family:inherit;padding:0;}'
+      +'.hn-items{margin-left:auto;display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;}'
+      +'.hn-items::-webkit-scrollbar{display:none;}'
+      +'.hn-b{flex:none;position:relative;background:none;border:0;padding:3px 0;font-family:inherit;'
+      +'font-size:12px;font-weight:700;color:var(--muted,#9b94b8);cursor:pointer;white-space:nowrap;}'
+      +'.hn-b.on{color:var(--ink,#fff);}'
+      +'.hn-b.on::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;border-radius:2px;'
+      +'background:var(--grad,var(--coral,#a78bff));}'
+      +'html.hn-on body{padding-top:47px;}'
+      +'html.hn-on .resv-modal{padding-top:58px;align-items:flex-start;}'
+      +'html.hn-solo .topbar .settings-link,html.hn-solo .topbar .handle{display:none!important;}'
+      +'@media print{#hubnav{display:none;}}';
+    document.head.appendChild(s);
+  }
+  function setMeta(prop,val,isProp){
+    try{
+      var sel=(isProp?'meta[property="':'meta[name="')+prop+'"]';
+      var m=document.head.querySelector(sel);
+      if(!m){ m=document.createElement('meta'); m.setAttribute(isProp?'property':'name',prop); document.head.appendChild(m); }
+      m.setAttribute('content',val);
+    }catch(_){}
+  }
+  /* ── 단독 모드: 허브 흔적 지우기 ── */
+  function applySolo(d){
+    var h=(d&&d.home)||{};
+    if(!h.solo){ document.documentElement.classList.remove('hn-solo'); return; }
+    document.documentElement.classList.add('hn-solo');
+    var nm=((((d||{}).profile)||{}).name||'').trim();
+    if(nm){ document.title=nm; setMeta('og:title',nm,true); setMeta('og:site_name',nm,true); setMeta('twitter:title',nm,false); }
+  }
+  /* ── 이 화면에 쓸 메뉴 (페이지별 3모드) ── */
+  function menuFor(post){
+    var h=(D&&D.home)||{}, site=h.menu||{};
+    if(post){
+      var mode=post.menuMode || (post.type==='landing' ? 'off' : 'site');   // 랜딩=판매 페이지는 기본 숨김(이탈 경로 차단)
+      if(mode==='off') return null;                                        // 판매 집중 = 메뉴 숨김
+      if(mode==='own') return ((post.menu&&post.menu.items)||[]).filter(function(x){ return x&&x.label; });
+    }
+    if(site.on===false) return null;
+    return (site.items||[]).filter(function(x){ return x&&x.label; });
+  }
+  function postById(id){ var r=null; (window.__POSTS||[]).forEach(function(x){ if(x&&String(x.id)===String(id)) r=x; }); return r; }
+  function postByTitle(t){ t=String(t||'').trim(); var r=null; (window.__POSTS||[]).forEach(function(x){ if(!r&&x&&String(x.title||'').trim()===t) r=x; }); return r; }
+  function isActive(it){
+    var k=it.kind||'section';
+    if(k==='home') return !curPost;
+    if(k==='page') return !!(curPost && String(curPost.id)===String(it.target));
+    return false;
+  }
+  /* ── 그리기 ── */
+  function paint(){
+    css();
+    var items=menuFor(curPost), nav=document.getElementById('hubnav');
+    if(!items || !items.length){
+      if(nav) nav.remove();
+      document.documentElement.classList.remove('hn-on');
+      return;
+    }
+    if(!nav){
+      nav=document.createElement('nav'); nav.id='hubnav';
+      document.body.insertBefore(nav, document.body.firstChild);
+      nav.addEventListener('click', onClick);
+    }
+    document.documentElement.classList.add('hn-on');
+    var brand=((((D||{}).profile)||{}).name||'').trim();
+    nav.innerHTML='<div class="hn-in">'
+      +'<button type="button" class="hn-brand" data-hn="home">'+esc(brand)+'</button>'
+      +'<div class="hn-items">'+items.map(function(it,i){
+        return '<button type="button" class="hn-b'+(isActive(it)?' on':'')+'" data-hn="'+i+'">'+esc(it.label)+'</button>';
+      }).join('')+'</div></div>';
+  }
+  function onClick(e){
+    var b=e.target.closest('[data-hn]'); if(!b) return;
+    var key=b.getAttribute('data-hn');
+    if(key==='home'){ goHome(); return; }
+    var it=(menuFor(curPost)||[])[+key]; if(!it) return;
+    var kind=it.kind||'section';
+    if(kind==='home') goHome();
+    else if(kind==='url'){ if(it.target) window.open(it.target,'_blank','noopener'); }
+    else if(kind==='page'){ if(it.target && window.__openPostModal) window.__openPostModal(it.target); }
+    else jumpSection(it.target||it.label);
+  }
+  /* ── 섹션 점프 (secnav와 동일 방식: 제목 텍스트 매칭) ── */
+  function jumpSection(label){
+    var host=(curPost?document.getElementById('pm-body'):null)||document;
+    var target=null;
+    [].forEach.call(host.querySelectorAll('.block-h, h3, h4'), function(el){
+      if(!target && el.textContent && el.textContent.indexOf(label)>=0) target=el;
+    });
+    if(target){ try{ target.scrollIntoView({behavior:'smooth', block:'start'}); }catch(_){} }
+  }
+  function goHome(){
+    var ov=document.getElementById('post-modal');
+    if(ov && ov.classList.contains('open')) ov.classList.remove('open');   // 닫힘 감지가 주소도 정리
+    else { try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(_){ window.scrollTo(0,0); } }
+  }
+  /* ── 주소 + 뒤로가기 (모달 상태를 관찰 → 어떤 경로로 열려도 동작) ── */
+  function urlFor(pid){
+    var u; try{ u=new URLSearchParams(location.search); }catch(_){ return location.href; }
+    if(pid) u.set('p',pid); else u.delete('p');
+    var q=u.toString();
+    return location.pathname+(q?('?'+q):'');
+  }
+  function watchModal(){
+    var ov=document.getElementById('post-modal'); if(!ov || ov.__hnWatch) return;
+    ov.__hnWatch=true;
+    var was=ov.classList.contains('open');
+    new MutationObserver(function(){
+      var is=ov.classList.contains('open');
+      if(is===was) return; was=is;
+      if(is){
+        var t=(document.getElementById('pm-title')||{}).textContent||'';
+        curPost=postByTitle(t); paint();
+        if(!suppress && curPost && qp('p')!==String(curPost.id)){
+          try{ history.pushState({hnp:curPost.id},'',urlFor(curPost.id)); }catch(_){}
+        }
+      } else {
+        curPost=null; paint();
+        if(!suppress && qp('p')){ try{ history.back(); }catch(_){} }
+      }
+    }).observe(ov,{attributes:true, attributeFilter:['class']});
+  }
+  function ensureWatch(){
+    if(document.getElementById('post-modal')){ watchModal(); return; }
+    if(window.__hnBodyWatch) return; window.__hnBodyWatch=true;
+    new MutationObserver(function(){ if(document.getElementById('post-modal')) watchModal(); })
+      .observe(document.body,{childList:true});
+  }
+  window.addEventListener('popstate', function(){
+    var pid=qp('p'); suppress=true;
+    try{
+      if(pid){ if(window.__openPostModal) window.__openPostModal(pid); }
+      else{
+        var ov=document.getElementById('post-modal'); if(ov) ov.classList.remove('open');
+        curPost=null; paint();
+      }
+    }catch(_){}
+    setTimeout(function(){ suppress=false; },0);   // 관찰 콜백(마이크로태스크) 이후에 해제
+  });
+  /* ── 진입점 (applyPublicData 끝에서 호출) ── */
+  window.__renderHubNav=function(d){
+    D=d||{};
+    applySolo(D);
+    ensureWatch();
+    var pid=qp('p'); curPost=pid?postById(pid):null;
+    paint();
+  };
 })();
 </script>
 </body>

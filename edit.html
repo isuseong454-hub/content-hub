@@ -4265,6 +4265,23 @@
           <span class="meta"><span class="nm">스크롤에 반응하는 페이지</span><span class="sb">숫자 차오름 · 그래프 그려짐 · 상단 진행선</span></span>
           <span class="sw on" id="sfx-sw"><i></i></span>
         </div>
+
+        <div class="tcat">홈페이지 메뉴 <span style="font-weight:400; color:var(--muted);">· 화면 맨 위 고정</span></div>
+        <div class="set" style="cursor:default; box-shadow:none;">
+          <span class="meta"><span class="nm">상단 메뉴 보이기</span><span class="sb">손님이 원하는 걸 바로 찾아가요 · 홈 · 소개 · 후기…</span></span>
+          <span class="sw" id="menu-sw"><i></i></span>
+        </div>
+        <div id="menu-box" style="display:none;">
+          <div id="menu-rows"></div>
+          <button type="button" class="btn" id="menu-add" style="width:100%; margin-top:8px;">＋ 메뉴 추가</button>
+          <div class="vhint" style="text-align:left; margin:7px 2px 0;">칸마다 <b>어디로 갈지</b> 골라요 — <b>홈</b>(맨 위) · <b>섹션</b>(이 페이지 안 점프) · <b>글</b>(내 다른 상세페이지) · <b>링크</b>(외부)</div>
+        </div>
+
+        <div class="tcat">단독 홈페이지</div>
+        <div class="set" style="cursor:default; box-shadow:none;">
+          <span class="meta"><span class="nm">내 홈페이지처럼 보이기</span><span class="sb">손님 화면에서 ‘컨텐츠 허브’ 표시·관리자 버튼 숨김</span></span>
+          <span class="sw" id="solo-sw"><i></i></span>
+        </div>
       </div>
 
 
@@ -9441,6 +9458,93 @@
     };
     paint();
   })();
+  // 🧭 홈페이지 메뉴(상단 고정 메뉴바) + 단독 홈페이지 모드 — 기본 꺼짐(무회귀)
+  (function(){
+    var box=document.getElementById('menu-box'), rowsEl=document.getElementById('menu-rows');
+    var sw=document.getElementById('menu-sw'), addB=document.getElementById('menu-add'), soloSw=document.getElementById('solo-sw');
+    if(!box||!rowsEl||!sw||!addB) return;
+    if(!document.getElementById('mn-css')){
+      var st=document.createElement('style'); st.id='mn-css'; st.textContent=
+        '.mn-row{display:flex;gap:5px;align-items:center;margin-bottom:6px;}'
+        +'.mn-row input,.mn-row select{border:1px solid var(--hair);background:var(--soft);color:var(--ink);'
+        +'border-radius:9px;padding:8px 9px;font-size:12.5px;font-family:var(--sans);min-width:0;}'
+        +'.mn-nm{width:74px;flex:none;}.mn-kind{width:64px;flex:none;}'
+        +'.mn-tg{flex:1;min-width:0;}'
+        +'.mn-none{color:var(--muted);font-size:11.5px;padding:8px 4px;}'
+        +'.mn-del{flex:none;width:28px;height:30px;border:0;background:none;color:var(--muted);font-size:14px;cursor:pointer;}'
+        +'.mn-del:hover{color:#FF8A8A;}';
+      document.head.appendChild(st);
+    }
+    function esc2(s){ return String(s==null?'':s).replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+    function M(){ if(!home.menu) home.menu={on:false,items:[]}; if(!home.menu.items) home.menu.items=[]; return home.menu; }
+    var pT=null;
+    function persist(){
+      clearTimeout(pT);
+      pT=setTimeout(function(){
+        try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.menu=home.menu; cur.solo=!!home.solo; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(_){}
+        if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh();
+      }, 350);
+    }
+    function myPosts(){ try{ return (postsData||[]).filter(function(p){ return p && p.on!==false && p.title; }); }catch(_){ return []; } }
+    function rowHtml(it,i){
+      var kind=it.kind||'section', tgt='';
+      if(kind==='page'){
+        var ps=myPosts();
+        tgt=ps.length
+          ? '<select class="mn-tg" data-mi="'+i+'" data-mf="target">'+ps.map(function(p){
+              return '<option value="'+esc2(p.id)+'"'+(String(it.target)===String(p.id)?' selected':'')+'>'+esc2(p.title)+'</option>'; }).join('')+'</select>'
+          : '<span class="mn-tg mn-none">글이 아직 없어요</span>';
+      }
+      else if(kind==='url')     tgt='<input class="mn-tg" data-mi="'+i+'" data-mf="target" placeholder="https://…" value="'+esc2(it.target)+'">';
+      else if(kind==='section') tgt='<input class="mn-tg" data-mi="'+i+'" data-mf="target" placeholder="블록 제목 (예: 후기)" value="'+esc2(it.target)+'">';
+      else                      tgt='<span class="mn-tg mn-none">맨 위로</span>';
+      return '<div class="mn-row">'
+        +'<input class="mn-nm" data-mi="'+i+'" data-mf="label" placeholder="이름" value="'+esc2(it.label)+'">'
+        +'<select class="mn-kind" data-mi="'+i+'" data-mf="kind">'
+          +'<option value="home"'+(kind==='home'?' selected':'')+'>홈</option>'
+          +'<option value="section"'+(kind==='section'?' selected':'')+'>섹션</option>'
+          +'<option value="page"'+(kind==='page'?' selected':'')+'>글</option>'
+          +'<option value="url"'+(kind==='url'?' selected':'')+'>링크</option>'
+        +'</select>'+tgt
+        +'<button type="button" class="mn-del" data-mdel="'+i+'" aria-label="삭제">✕</button></div>';
+    }
+    function render(){
+      var mm=M();
+      sw.classList.toggle('on', !!mm.on);
+      box.style.display = mm.on ? 'block' : 'none';
+      rowsEl.innerHTML = mm.items.length ? mm.items.map(rowHtml).join('')
+        : '<div class="vhint" style="text-align:left;margin:2px;">아직 메뉴가 없어요 — 아래 ＋로 추가하세요</div>';
+      if(soloSw) soloSw.classList.toggle('on', !!home.solo);
+    }
+    function onEdit(e){
+      var el=e.target.closest('[data-mi]'); if(!el) return;
+      var it=M().items[+el.getAttribute('data-mi')]; if(!it) return;
+      var f=el.getAttribute('data-mf');
+      it[f]=el.value;
+      if(f==='kind'){ it.target=''; render(); }   // 종류 바꾸면 대상칸 교체
+      persist();
+    }
+    rowsEl.addEventListener('input', onEdit);
+    rowsEl.addEventListener('change', onEdit);
+    rowsEl.addEventListener('click', function(e){
+      var d=e.target.closest('[data-mdel]'); if(!d) return;
+      M().items.splice(+d.getAttribute('data-mdel'),1); render(); persist();
+    });
+    addB.onclick=function(){
+      var mm=M();
+      if(mm.items.length>=8){ try{ toast('메뉴는 8개까지가 보기 좋아요'); }catch(_){} return; }
+      mm.items.push(mm.items.length ? {label:'',kind:'section',target:''} : {label:'홈',kind:'home',target:''});
+      render(); persist();
+    };
+    sw.onclick=function(){
+      var mm=M(); mm.on=!mm.on;
+      if(mm.on && !mm.items.length) mm.items=[{label:'홈',kind:'home',target:''}];
+      render(); persist();
+    };
+    if(soloSw) soloSw.onclick=function(){ home.solo=!home.solo; render(); persist(); };
+    try{ new MutationObserver(function(){ if(hov.classList.contains('open')) render(); }).observe(hov,{attributes:true,attributeFilter:['class']}); }catch(_){}
+    render();
+  })();
   window.__setHeroOn=function(on){ home.heroOn=!!on; try{ var cur=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); cur.heroOn=!!on; localStorage.setItem('cm-home-v1', JSON.stringify(cur)); }catch(e){} try{ if(typeof renderHero==='function') renderHero(); }catch(e){} };   // 후킹문구 삭제(숨김)/켜기 — la-del-core에서 호출 (HKEY 직접 저장 → serialize 반영)
   document.getElementById('hero-text').oninput = function(){ home.heroText = this.value; document.getElementById('hero-prev').innerHTML = heroMarkup(this.value); renderTopFirst(); };
   // 타겟 메시지 도우미: 누구에게/고민/약속 → 후킹문구·소개 자동 초안
@@ -9968,6 +10072,19 @@
     box.innerHTML=catChipsHTML(p.cat);
     box.querySelectorAll('[data-catpick]').forEach(function(b){ b.onclick=function(){ var v=b.getAttribute('data-catpick'); if(v==='__manage'){ openCatManage(); return; } var pp=postById(postEditId); if(!pp) return; pp.cat=(((pp.cat||'').trim())===v)?'':v; var ci=document.getElementById('post-f-cat'); if(ci) ci.value=pp.cat; renderPubChips(); try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){} }; });
   }
+  // 🧭 이 페이지의 상단 메뉴 모드 (사이트 메뉴 / 이 페이지 목차 / 숨김)
+  function pubMenuPaint(mode, ownStr){
+    var seg=document.getElementById('pub-mnmode'); if(!seg) return;
+    seg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-mm')===mode); });
+    var inp=document.getElementById('pub-mnown'), hint=document.getElementById('pub-mnhint');
+    if(inp){ inp.style.display=(mode==='own')?'block':'none'; if(ownStr!=null) inp.value=ownStr; }
+    if(hint) hint.innerHTML = (mode==='off')
+      ? '판매 페이지에 <b>추천</b> — 메뉴는 나가는 문이라, 없애면 신청까지 집중돼요'
+      : (mode==='own' ? '이 페이지 안의 <b>소제목·블록 제목</b>으로 점프해요' : '홈 꾸미기에서 만든 <b>사이트 메뉴</b>를 그대로 써요');
+  }
+  function pubMenuMode(){ var seg=document.getElementById('pub-mnmode'); var m='site';
+    if(seg) seg.querySelectorAll('button').forEach(function(b){ if(b.classList.contains('on')) m=b.getAttribute('data-mm'); });
+    return m; }
   function openPublishModal(){
     var p=postById(postEditId); var doSave=function(){ var b=document.querySelector('.topbar .btn.primary'); if(b) b.click(); };
     if(!p){ doSave(); return; }   // 게시물 편집이 아니면 바로 저장
@@ -9977,15 +10094,38 @@
         +'<div class="field" style="margin:0 0 12px;"><label style="display:flex; align-items:center;">제목 마지막 점검 <button type="button" id="pub-title-help" style="margin-left:auto; background:var(--coral-soft); border:1px dashed rgba(45,212,191,.5); color:var(--coral); border-radius:99px; font-size:11px; font-weight:800; padding:4px 11px; cursor:pointer; font-family:var(--sans);">✨ 제목 도우미</button></label><input id="pub-title" placeholder="제목이 클릭을 가릅니다"></div>'
         +'<div class="desc">손님 목록에서 이 컨텐츠가 묶일 주제예요 · 톡 골라주세요. (안 골라도 전체엔 떠요)</div><div id="pub-chips" class="lce-chips" style="margin:8px 0 12px;"></div>'
         +'<label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink); font-weight:600; margin:0 0 14px; cursor:pointer;"><input type="checkbox" id="pub-cta" checked style="width:16px; height:16px; accent-color:#2DD4BF;"> 글 끝에 <b>예약·문의 버튼</b> 붙이기 <span style="color:var(--muted); font-weight:600; font-size:11px;">— 마음 생긴 손님이 바로 행동</span></label>'
+        +'<div style="margin:0 0 14px;"><div style="font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:7px;">이 페이지의 상단 메뉴</div>'
+        +'<div class="pmn-seg" id="pub-mnmode"><button type="button" data-mm="site" class="on">사이트 메뉴</button><button type="button" data-mm="own">이 페이지 목차</button><button type="button" data-mm="off">숨김</button></div>'
+        +'<input id="pub-mnown" placeholder="목차 (쉼표로: 제품, 사용법, 배송)" style="display:none;">'
+        +'<div class="vhint" id="pub-mnhint" style="text-align:left; margin:6px 2px 0;"></div></div>'
         +'<button type="button" id="pub-go" class="btn primary" style="width:100%; padding:15px; font-size:15px; font-weight:800; border-radius:13px;">💾 저장 · 배포하기</button></div>';
       document.body.appendChild(ov);
       ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='pub-x') ov.classList.remove('open'); });
       ov.querySelector('#pub-title-help').onclick=function(){ openTitleHelper(function(t){ var ti=document.getElementById('pub-title'); if(ti) ti.value=t; }); };
+      if(!document.getElementById('pmn-css')){
+        var pst=document.createElement('style'); pst.id='pmn-css'; pst.textContent=
+          '.pmn-seg{display:flex; gap:6px;}'
+          +'.pmn-seg button{flex:1; border:1px solid var(--hair); background:var(--soft); color:var(--muted);'
+          +'border-radius:10px; padding:9px 6px; font-size:12px; font-weight:700; font-family:var(--sans); cursor:pointer;}'
+          +'.pmn-seg button.on{border-color:var(--coral); color:var(--coral); background:var(--coral-soft,rgba(167,139,255,.12));}'
+          +'#pub-mnown{width:100%; border:1px solid var(--hair); background:var(--soft); color:var(--ink);'
+          +'border-radius:9px; padding:9px 11px; font-size:12.5px; font-family:var(--sans); box-sizing:border-box; margin-top:7px;}';
+        document.head.appendChild(pst);
+      }
+      ov.querySelectorAll('#pub-mnmode button').forEach(function(b){
+        b.onclick=function(){ pubMenuPaint(b.getAttribute('data-mm')); };
+      });
       ov.querySelector('#pub-go').onclick=function(){
         var savedId=postEditId;
         try{ var pp=postById(savedId); if(pp){
           var ti=document.getElementById('pub-title'); if(ti&&ti.value.trim()) setPostTitleEverywhere(savedId, ti.value.trim());
           var ck=document.getElementById('pub-cta'); if(ck) pp.ctaOn=ck.checked;   // 글 끝 예약·문의 버튼 (u.html 게시물 모달이 읽음)
+          var mm=pubMenuMode(); pp.menuMode=mm;                                    // 🧭 이 페이지 상단 메뉴 (u.html hubnav가 읽음)
+          if(mm==='own'){
+            var raw=((document.getElementById('pub-mnown')||{}).value)||'';
+            pp.menu={ items: raw.split(',').map(function(s){ return s.trim(); }).filter(Boolean)
+                        .map(function(s){ return {label:s, kind:'section', target:s}; }) };
+          }
         } }catch(_){}
         ov.classList.remove('open'); doSave();
         // 발행하면 → 목록 복귀 + 🎉 다음 행동 카드 (대표 올리기·링크 복사 — 쓴 글이 일하게)
@@ -10000,6 +10140,11 @@
       if(_ck&&_pp){
         // 랜딩은 ⑪예약 블록이 이미 CTA — 글 끝 버튼 기본 꺼서 중복 방지 (사용자가 켠 적 있으면 존중)
         _ck.checked = (_pp.ctaOn===undefined) ? (_pp.type!=='landing') : (_pp.ctaOn!==false);
+      }
+      if(_pp){   // 🧭 상단 메뉴 모드 채우기 (랜딩=판매 페이지는 '숨김'을 기본 제안)
+        var _mm=_pp.menuMode || (_pp.type==='landing' ? 'off' : 'site');
+        var _own=((_pp.menu&&_pp.menu.items)||[]).map(function(x){ return x&&x.label; }).filter(Boolean).join(', ');
+        pubMenuPaint(_mm, _own);
       }
     }catch(_){}
     ov.classList.add('open');
