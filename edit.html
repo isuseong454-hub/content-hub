@@ -8910,7 +8910,10 @@
   // 안 그러면 편집기에서 선택 표시가 안 되고(아무 칸도 sel 안 됨) 저장 때 그 옛 테마가 그대로 다시 발행됨 → "크림 저장했는데 노랑" 버그.
   (function(){ var ok=false; for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme){ ok=true; break; } } if(!ok){ home.theme='cream'; try{ var c=JSON.parse(localStorage.getItem(HKEY)||'{}'); c.theme='cream'; localStorage.setItem(HKEY, JSON.stringify(c)); }catch(e){} } })();
   // ─── 등급(요금제) 기능 잠금 ─── (AUTH는 다른 스크립트 블록이라 window.__authTier로 받음)
-  function cmTier(){ var t=window.__authTier||'basic'; return (t==='pro'||t==='premium')?t:'basic'; }
+  function cmTier(){
+    try{ var m=window.__MC; if(m && m.on && m.cur && m.cur.tier){ var ct=m.cur.tier; return (ct==='pro'||ct==='premium')?ct:'basic'; } }catch(_){}
+    var t=window.__authTier||'basic'; return (t==='pro'||t==='premium')?t:'basic';
+  }
   var CM_TIER_RANK={basic:0, pro:1, premium:2};
   function tierOK(need){ return CM_TIER_RANK[cmTier()] >= (CM_TIER_RANK[need]||0); }
   window.__cmTier=cmTier;
