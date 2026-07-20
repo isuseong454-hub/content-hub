@@ -90,7 +90,7 @@
   .cc-logo{width:27px; height:27px; border-radius:7px; opacity:.95;}
   .cc-brand{font-size:11.5px; font-weight:800; letter-spacing:2px; color:#b9b1d6;}
   .cc-tier{margin-left:auto; font-size:10.5px; font-weight:800; letter-spacing:1px; color:#C77DFF;}
-  .cc-invite{width:100%; margin-top:8px; background:var(--surface,#fff); border:1px solid #ddd; border-radius:12px; padding:12px; font-size:12.5px; line-height:1.6; color:#222; font-family:inherit; resize:vertical; box-sizing:border-box;}
+  .cc-invite{width:100%; margin-top:8px; background:var(--soft); border:1px solid var(--hair); border-radius:12px; padding:12px; font-size:12.5px; line-height:1.6; color:var(--ink); font-family:inherit; resize:vertical; box-sizing:border-box;}
   .cc-label{font-size:9.5px; font-weight:700; letter-spacing:4px; color:#6f6790; margin-top:34px; text-align:center;}
   .cc-code{font-size:42px; font-weight:800; letter-spacing:10px; margin-top:8px; color:#fff; text-align:center; line-height:1;
     font-family:'JetBrains Mono','Courier New',monospace; text-shadow:0 0 28px rgba(155,61,255,.45);}
@@ -127,7 +127,7 @@
   .uc-top{display:flex; align-items:center; gap:8px;}
   .plan-ov{position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.6); padding:22px;}
   .plan-ov.show{display:flex;}
-  .plan-dlg{width:100%; max-width:360px; background:var(--surface); border:1px solid var(--hair); border-radius:18px; padding:22px 20px;}
+  .plan-dlg{width:100%; max-width:400px; max-height:88vh; overflow-y:auto; background:var(--surface); border:1px solid var(--hair); border-radius:18px; padding:22px 20px;}
   .plan-t{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:5px;}
   .plan-sub{font-size:12.5px; color:var(--muted); margin-bottom:16px;}
   .plan-sub b{color:var(--coral); letter-spacing:.04em;}
@@ -135,6 +135,44 @@
   .uc-dday{color:var(--coral); font-weight:500;}
   .uc-dday.expired{color:#C0432B;}
   .empty{color:var(--muted); font-size:12.5px; text-align:center; padding:18px 0;}
+
+  /* 채널별 등급·기간 편집 (등급·기간 모달 안) */
+  .pc-sec{margin-top:16px; border-top:1px solid var(--hair); padding-top:14px;}
+  .pc-sh{font-size:12px; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:6px; margin-bottom:3px;}
+  .pc-sh .cnt{margin-left:auto; font-size:11px; font-weight:600; color:var(--coral);}
+  .pc-note{font-size:11px; color:var(--muted); line-height:1.5; margin-bottom:11px;}
+  .pc-card{border:1px solid var(--hair); background:var(--soft); border-radius:13px; margin-bottom:9px; overflow:hidden;}
+  .pc-card.open{border-color:var(--coral);}
+  .pc-head{display:flex; align-items:center; gap:9px; padding:11px 12px; cursor:pointer;}
+  .pc-dot{width:26px; height:26px; border-radius:50%; flex:none; box-shadow:0 0 0 3px rgba(255,255,255,.04);}
+  .pc-mid{flex:1; min-width:0;}
+  .pc-nm{font-size:13.5px; font-weight:700; color:var(--ink); display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .pc-url{font-size:11px; color:var(--muted); font-family:ui-monospace,monospace;}
+  .pc-badge{font-size:10px; font-weight:800; padding:2px 8px; border:1px solid; border-radius:999px; white-space:nowrap;}
+  .pc-dday{font-size:11px; color:var(--muted); white-space:nowrap;}
+  .pc-dday.soon{color:#FF8FA6;} .pc-dday.expired{color:#C0432B;}
+  .pc-cvt{color:var(--muted); font-size:11px; transition:transform .2s;}
+  .pc-card.open .pc-cvt{transform:rotate(180deg);}
+  .pc-body{display:none; padding:2px 12px 13px; border-top:1px solid var(--hair);}
+  .pc-card.open .pc-body{display:block;}
+  .pc-body .field{margin:11px 0 0;}
+  .pc-body .field label{font-size:11px;}
+  .pc-body .seg button{min-width:0; padding:9px 6px; font-size:12px;}
+  .pc-body .seg button .ico{font-size:15px;}
+  .pc-memo{width:100%; border:1px solid var(--hair); background:var(--surface); border-radius:9px; padding:9px 11px; font-size:12.5px; color:var(--ink); font-family:var(--sans); box-sizing:border-box; margin-top:11px;}
+  .pc-memo::placeholder{color:var(--muted);}
+  .pc-tools{display:flex; gap:8px; margin-top:12px;}
+  .pc-tbtn{flex:1; border:1px solid var(--hair); background:transparent; color:var(--muted); border-radius:9px; padding:8px; font-size:11.5px; font-weight:600; cursor:pointer; font-family:var(--sans);}
+  .pc-tbtn.on{border-color:#FF8FA6; color:#FF8FA6; background:rgba(255,143,166,.08);}
+  .pc-tbtn.danger:hover{border-color:#FF8A8A; color:#FF8A8A;}
+  .pc-add{width:100%; border:1.5px dashed rgba(167,139,255,.5); background:var(--coral-soft); color:var(--coral); border-radius:13px; padding:13px; font-size:13px; font-weight:700; cursor:pointer; margin-top:2px; font-family:var(--sans);}
+  .pc-add:hover{border-color:var(--coral);}
+  .pc-cap{font-size:11px; color:var(--muted); line-height:1.5; margin-top:8px;}
+  .pc-cap b{color:#cdb4ff;}
+  .pc-form{border:1px solid var(--coral); background:var(--soft); border-radius:13px; padding:14px 13px; margin-top:8px;}
+  .pc-hrow{display:flex; align-items:center; gap:6px; background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:0 11px;}
+  .pc-hrow .pre{font-size:11px; color:var(--muted); font-family:ui-monospace,monospace;}
+  .pc-hrow input{flex:1; border:0; background:none; padding:11px 0; color:var(--ink); font-family:ui-monospace,monospace; font-size:13px; outline:none;}
 
   /* 워크스페이스 탭 */
   .ws-tabs{position:sticky; top:56px; z-index:9; max-width:880px; margin:0 auto; display:flex; gap:8px; padding:4px 16px 14px; overflow-x:auto; scrollbar-width:none;}
@@ -299,8 +337,8 @@
         </div>
         <div class="cc-actions">
           <button class="btn primary" id="cc-share">📤 카드 공유</button>
-          <button class="btn" id="cc-save" style="background:var(--surface,#fff);border:1px solid #ddd;">🖼 이미지 저장</button>
-          <button class="btn" id="cc-copy" style="background:var(--surface,#fff);border:1px solid #ddd;">코드 복사</button>
+          <button class="btn" id="cc-save" style="background:var(--soft);border:1px solid var(--hair);">🖼 이미지 저장</button>
+          <button class="btn" id="cc-copy" style="background:var(--soft);border:1px solid var(--hair);">코드 복사</button>
         </div>
         <div class="gr-note" id="r-note" style="margin-top:10px;">이 카드를 이미지로 저장해 <b>카카오톡으로 전달</b>하세요. (코드만 줘도 됩니다)</div>
         <div class="cc-invite-wrap" id="cc-invite-wrap" style="display:none;">
@@ -308,7 +346,7 @@
           <textarea id="cc-invite" class="cc-invite" rows="11" readonly></textarea>
           <div class="cc-actions">
             <button class="btn primary" id="cc-invite-copy">📋 초대 메시지 복사</button>
-            <button class="btn" id="cc-intro-copy" style="background:var(--surface,#fff);border:1px solid #ddd;">📖 소개 링크만</button>
+            <button class="btn" id="cc-intro-copy" style="background:var(--soft);border:1px solid var(--hair);">📖 소개 링크만</button>
           </div>
         </div>
       </div>
@@ -371,6 +409,39 @@
         </div>
         <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;">기본 1개. <b style="color:#cdb4ff;">채널을 추가 결제한 만큼만</b> 올려주세요 — 채널 수만큼 저장 용량도 늘어나요.</div>
       </div>
+
+      <!-- 채널별 등급·기간 (추가 채널마다 따로) -->
+      <div class="pc-sec" id="plan-chwrap" style="display:none;">
+        <div class="pc-sh">추가 채널별 설정 <span class="cnt" id="plan-chcnt"></span></div>
+        <div class="pc-note">위 <b style="color:#cdb4ff;">등급·기간</b>은 <b>주 채널(로그인 계정)</b>에 적용돼요. 추가 채널은 아래에서 <b>각자 등급·기간</b>을 따로 정합니다.</div>
+        <div id="plan-chans"></div>
+        <button type="button" class="pc-add" id="plan-addch">＋ 계정(채널) 추가</button>
+        <div class="pc-cap"><b>채널을 추가 결제한 만큼만</b> 발급하세요 — 각 채널은 자기 링크·등급·기간을 따로 가져요.</div>
+        <div class="pc-form" id="plan-chform" style="display:none;">
+          <div class="field"><label>채널 이름</label><input id="pcf-name" placeholder="예: 클리닉 계정"></div>
+          <div class="field"><label>링크 주소 <span style="color:var(--muted);font-weight:400;font-size:11px;">· 영문·숫자 (한 번 정하면 안 바꾸는 게 좋아요)</span></label>
+            <div class="pc-hrow"><span class="pre">u.html?u=</span><input id="pcf-handle" placeholder="clinic" spellcheck="false" autocapitalize="off"></div>
+          </div>
+          <div class="field"><label>등급</label>
+            <div class="seg" id="pcf-seg-tier">
+              <button data-ind="basic"><span class="ico">🌱</span>베이직</button>
+              <button data-ind="pro"><span class="ico">🚀</span>프로</button>
+              <button data-ind="premium"><span class="ico">👑</span>프리미엄</button>
+            </div>
+          </div>
+          <div class="field"><label>기간</label>
+            <div class="seg period" id="pcf-seg-per">
+              <button data-mode="365">1년</button>
+              <button data-mode="life">평생</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button class="btn" id="pcf-cancel" style="flex:1;padding:10px;">취소</button>
+            <button class="btn primary" id="pcf-make" style="flex:1.4;padding:10px;">채널 만들기</button>
+          </div>
+        </div>
+      </div>
+
       <div class="plan-btns">
         <button class="btn" id="plan-cancel" style="flex:1; padding:11px;">취소</button>
         <button class="btn primary" id="plan-save" style="flex:1.4; padding:11px;">저장</button>
@@ -503,7 +574,7 @@
   function ucard(u){
     var dd=dday(u.expires_at); var tk=tierOf(u);
     var div=document.createElement('div'); div.className='ucard';
-    div.innerHTML='<div class="uc-top"><span class="uc-code">'+u.code+'</span><span class="uc-name">'+(u.name||'')+'</span><span class="uc-edit" title="등급·기간 변경">✎</span><span class="uc-del" title="삭제">×</span></div>'
+    div.innerHTML='<div class="uc-top"><span class="uc-code">'+hesc(u.code)+'</span><span class="uc-name">'+hesc(u.name||'')+'</span><span class="uc-edit" title="등급·기간 변경">✎</span><span class="uc-del" title="삭제">×</span></div>'
       +'<div class="uc-meta"><span class="uc-tier" style="color:'+TIER_COLOR[tk]+'; border-color:'+TIER_COLOR[tk]+'66;">'+TIER_LBL[tk]+'</span><span class="uc-dday '+dd.cls+'">'+dd.t+'</span>'+(u.handle?'<span>/u/'+u.handle+'</span>':'<span>주소 미설정</span>')+'</div>';
     div.querySelector('.uc-edit').onclick=function(){ openPlan(u); };
     div.querySelector('.uc-del').onclick=async function(){
@@ -521,6 +592,103 @@
   if($('chan-minus')) $('chan-minus').onclick=function(){ planChan=Math.max(1, planChan-1); renderChanStep(); };
   if($('chan-plus'))  $('chan-plus').onclick =function(){ planChan=Math.min(99, planChan+1); renderChanStep(); };
   function planSegOn(box,attr,val){ box.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.getAttribute(attr)===val); }); }
+
+  // ── 채널별 등급·기간 ──
+  function hesc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];}); }
+  function computeExp(mode, curExp){
+    var now=Date.now(), DAY=86400000;
+    if(mode==='365')    return now+365*DAY;
+    if(mode==='life')   return null;
+    if(mode==='ext365'){ var base=(curExp&&curExp>now)?curExp:now; return base+365*DAY; }
+    return (curExp!=null?curExp:null);   // keep=그대로
+  }
+  var planChannels=[], pcfTier='basic', pcfMode='365';
+  function tsegBtn(t,cur){ var L={basic:['🌱','베이직'],pro:['🚀','프로'],premium:['👑','프리미엄']}[t];
+    return '<button type="button" data-ind="'+t+'"'+(cur===t?' class="on"':'')+'><span class="ico">'+L[0]+'</span>'+L[1]+'</button>'; }
+  function psegBtn(m,lab,cur){ return '<button type="button" data-mode="'+m+'"'+(cur===m?' class="on"':'')+'>'+lab+'</button>'; }
+  function planCardHtml(c){
+    var dd=dday(c.expires_at), tc=TIER_COLOR[c.uiTier]||'#5B8CFF';
+    var right=c.uiPaused?'<span class="pc-dday" style="color:#FF8FA6">정지</span>':'<span class="pc-dday '+dd.cls+'">'+dd.t+'</span>';
+    return '<div class="pc-card'+(c.open?' open':'')+'" data-chid="'+c.id+'">'
+      +'<div class="pc-head" data-act="toggle">'
+        +'<span class="pc-dot" style="background:'+(c.color||'#a78bff')+'"></span>'
+        +'<span class="pc-mid"><span class="pc-nm">'+hesc(c.name||c.handle)+'</span><span class="pc-url">/u/'+hesc(c.handle)+'</span></span>'
+        +'<span class="pc-badge" style="color:'+tc+';border-color:'+tc+'66;">'+TIER_LBL[c.uiTier]+'</span>'
+        +right+'<span class="pc-cvt">▾</span>'
+      +'</div>'
+      +'<div class="pc-body">'
+        +'<div class="field"><label>등급</label><div class="seg pc-tier">'+tsegBtn('basic',c.uiTier)+tsegBtn('pro',c.uiTier)+tsegBtn('premium',c.uiTier)+'</div></div>'
+        +'<div class="field"><label>기간 <span style="color:var(--muted);font-weight:400;font-size:11px;">· 현재 '+dd.t+'</span></label><div class="seg period pc-per">'+psegBtn('keep','그대로',c.uiMode)+psegBtn('365','1년',c.uiMode)+psegBtn('ext365','1년 연장',c.uiMode)+psegBtn('life','평생',c.uiMode)+'</div></div>'
+        +'<input class="pc-memo" data-act="memo" placeholder="메모 (예: 6월 프로 결제)" value="'+hesc(c.uiMemo)+'">'
+        +'<div class="pc-tools"><button type="button" class="pc-tbtn'+(c.uiPaused?' on':'')+'" data-act="pause">'+(c.uiPaused?'▶ 재개':'⏸ 일시정지')+'</button><button type="button" class="pc-tbtn danger" data-act="del">🗑 삭제</button></div>'
+      +'</div>'
+    +'</div>';
+  }
+  function renderPlanChannels(){
+    var box=$('plan-chans'); if(!box) return;
+    box.innerHTML=planChannels.length?planChannels.map(planCardHtml).join(''):'<div class="empty" style="padding:10px 0">추가 채널이 아직 없어요</div>';
+    var cn=$('plan-chcnt'); if(cn) cn.textContent=planChannels.length?('추가 '+planChannels.length+'개'):'';
+  }
+  function pcFind(id){ return planChannels.filter(function(x){ return String(x.id)===String(id); })[0]; }
+  async function loadPlanChannels(code){
+    planChannels=[]; var wrap=$('plan-chwrap'); if(wrap) wrap.style.display='none';
+    try{
+      var r=await window.laRpc('li_master_channels_list',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:code });
+      if(r&&r.ok){
+        planChannels=(r.channels||[]).filter(function(c){ return !c.is_primary; }).map(function(c){
+          c.uiTier=(TIER_LBL[c.tier]?c.tier:'basic'); c.uiMode='keep'; c.uiMemo=c.memo||''; c.uiPaused=!!c.paused; c.open=false; return c; });
+        if(wrap) wrap.style.display='';
+        renderPlanChannels();
+      }
+    }catch(e){ /* SQL 미설치 → 채널 섹션 숨김(계정 편집은 정상) */ }
+  }
+  async function delPlanChannel(c){
+    if(!confirm('‘'+(c.name||c.handle)+'’ 채널을 삭제할까요? (되돌릴 수 없어요)')) return;
+    var r=await window.laRpc('li_master_channel_del',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_channel:c.id });
+    if(r&&r.ok){ planChannels=planChannels.filter(function(x){ return x.id!==c.id; }); renderPlanChannels(); toast('채널 삭제됨'); }
+    else toast('삭제 실패 ('+((r&&r.reason)||'?')+')');
+  }
+  // 채널 카드 상호작용 (이벤트 위임 · 1회 등록)
+  if($('plan-chans')){
+    $('plan-chans').addEventListener('click', function(e){
+      var card=e.target.closest('.pc-card'); if(!card) return;
+      var c=pcFind(card.getAttribute('data-chid')); if(!c) return;
+      var tb=e.target.closest('.pc-tier button'); if(tb){ c.uiTier=tb.getAttribute('data-ind'); renderPlanChannels(); return; }
+      var pb=e.target.closest('.pc-per button'); if(pb){ c.uiMode=pb.getAttribute('data-mode'); renderPlanChannels(); return; }
+      var an=e.target.closest('[data-act]'); var act=an?an.getAttribute('data-act'):null;
+      if(act==='toggle'){ c.open=!c.open; renderPlanChannels(); }
+      else if(act==='pause'){ c.uiPaused=!c.uiPaused; renderPlanChannels(); }
+      else if(act==='del'){ delPlanChannel(c); }
+    });
+    $('plan-chans').addEventListener('input', function(e){
+      var m=e.target.closest('.pc-memo'); if(!m) return;
+      var card=e.target.closest('.pc-card'); var c=card?pcFind(card.getAttribute('data-chid')):null; if(c) c.uiMemo=m.value;
+    });
+  }
+  // +계정 추가 폼
+  if($('plan-addch')){
+    bindSeg($('pcf-seg-tier'),'data-ind',function(v){ pcfTier=v; });
+    bindSeg($('pcf-seg-per'),'data-mode',function(v){ pcfMode=v; });
+    var pcfReset=function(){ pcfTier='basic'; pcfMode='365'; $('pcf-name').value=''; $('pcf-handle').value='';
+      planSegOn($('pcf-seg-tier'),'data-ind','basic'); planSegOn($('pcf-seg-per'),'data-mode','365'); };
+    $('plan-addch').onclick=function(){ var f=$('plan-chform'); var show=(f.style.display==='none'); if(show) pcfReset(); f.style.display=show?'block':'none'; if(show) $('pcf-name').focus(); };
+    $('pcf-cancel').onclick=function(){ $('plan-chform').style.display='none'; };
+    $('pcf-make').onclick=async function(){
+      if(!planTarget) return;
+      var nm=($('pcf-name').value||'').trim(), h=($('pcf-handle').value||'').trim().toLowerCase();
+      if(!nm){ toast('채널 이름을 입력하세요'); $('pcf-name').focus(); return; }
+      if(!/^[a-z0-9][a-z0-9-]{1,29}$/.test(h)){ toast('링크 주소: 영문소문자·숫자·하이픈 (2~30자)'); $('pcf-handle').focus(); return; }
+      var exp=computeExp(pcfMode, null);
+      var btn=this; btn.disabled=true; var o=btn.textContent; btn.textContent='만드는 중...';
+      try{
+        var r=await window.laRpc('li_master_channel_add',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:planTarget.code, p_handle:h, p_name:nm, p_color:'#a78bff', p_tier:pcfTier, p_expires_at:exp });
+        if(r&&r.ok){ $('plan-chform').style.display='none'; toast('‘'+nm+'’ 채널 발급됨 ✓'); await loadPlanChannels(planTarget.code); planChan=Math.max(planChan, planChannels.length+1); renderChanStep(); }
+        else{ var msg={taken:'이미 쓰는 주소예요', format:'주소 형식이 안 맞아요', nouser:'사용자 없음', auth:'인증 실패'}[(r&&r.reason)]||('실패('+((r&&r.reason)||'SQL 미실행?')+')'); toast(msg); }
+      }catch(e){ toast('오류: '+e.message); }
+      btn.disabled=false; btn.textContent=o;
+    };
+  }
+
   function openPlan(u){
     planTarget=u; planTier=tierOf(u); planMode='keep';
     planChan=Math.max(1, parseInt(u.max_channels,10)||1);
@@ -528,22 +696,30 @@
     renderChanStep();
     planSegOn($('plan-seg-tier'),'data-ind',planTier);
     planSegOn($('plan-seg-period'),'data-mode','keep');
+    try{ $('plan-chform').style.display='none'; $('plan-chwrap').style.display='none'; $('plan-chans').innerHTML=''; }catch(_){}
+    var dlg=document.querySelector('.plan-dlg'); if(dlg) dlg.scrollTop=0;
     $('plan-ov').classList.add('show');
+    loadPlanChannels(u.code);
   }
   function closePlan(){ $('plan-ov').classList.remove('show'); planTarget=null; }
   $('plan-cancel').onclick=closePlan;
   $('plan-ov').addEventListener('click', function(e){ if(e.target===$('plan-ov')) closePlan(); });
   $('plan-save').onclick=async function(){
     if(!planTarget||!AUTH) return;
-    var now=Date.now(), DAY=86400000, exp;
-    if(planMode==='keep') exp=planTarget.expires_at||null;
-    else if(planMode==='365') exp=now+365*DAY;
-    else if(planMode==='life') exp=null;
-    else if(planMode==='ext365'){ var base=(planTarget.expires_at&&planTarget.expires_at>now)?planTarget.expires_at:now; exp=base+365*DAY; }
+    var exp=computeExp(planMode, planTarget.expires_at);
     var btn=this; btn.disabled=true; var o=btn.textContent; btn.textContent='저장 중...';
     try{
       var r=await window.laRpc('li_master_set_plan',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_code:planTarget.code, p_industry:planTier, p_expires_at:exp, p_max_channels:planChan });
-      if(r&&r.ok){ var mc=(r.max_channels!=null)?r.max_channels:planChan; toast(TIER_LBL[planTier]+' · 채널 '+mc+'개로 변경됨 ✓'); closePlan(); loadList(); }
+      if(r&&r.ok){
+        var chFail=0;
+        for(var i=0;i<planChannels.length;i++){ var c=planChannels[i];
+          try{ var cr=await window.laRpc('li_master_set_channel',{ p_master_code:AUTH.code, p_master_pin_hash:AUTH.pinHash, p_channel:c.id, p_tier:c.uiTier, p_expires_at:computeExp(c.uiMode,c.expires_at), p_memo:c.uiMemo, p_paused:c.uiPaused }); if(!(cr&&cr.ok)) chFail++; }catch(_){ chFail++; }
+        }
+        var mc=(r.max_channels!=null)?r.max_channels:planChan;
+        if(chFail){ toast('계정은 저장됐지만 채널 '+chFail+'개 저장 실패 — 다시 시도해 주세요'); }
+        else { toast(TIER_LBL[planTier]+' · 채널 '+mc+'개'+(planChannels.length?(' · 개별 '+planChannels.length+'개 저장'):'')+' ✓'); closePlan(); }
+        loadList();
+      }
       else { toast('변경 실패 ('+((r&&r.reason)||'SQL 미실행?')+')'); }
     }catch(e){ toast('오류: '+e.message); }
     btn.disabled=false; btn.textContent=o;

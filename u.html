@@ -14,10 +14,11 @@
 <meta property="og:title" content="컨텐츠 허브 · 나만의 컨텐츠 공간" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <meta property="og:description" content="컨텐츠로 안심을 쌓고, 예약·문의로 이어지는 나만의 공간" />
-<meta property="og:image" content="la-512.png" />
+<meta property="og:image" content="https://isuseong454-hub.github.io/content-hub/la-512.png" />
+<meta property="og:url" content="https://isuseong454-hub.github.io/content-hub/" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="컨텐츠 허브 · 나만의 컨텐츠 공간" />
-<meta name="twitter:image" content="la-512.png" />
+<meta name="twitter:image" content="https://isuseong454-hub.github.io/content-hub/la-512.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://www.youtube.com">
@@ -703,6 +704,9 @@
   .lp-band.bd-full{margin-top:0; margin-bottom:13px;}
   .lp-band.bd-full + .lp-band.bd-full{margin-top:-13px;}                   /* 연속 밴드 = 이음새 없이 한 장처럼 */
   .lp-band.bd-card{border-radius:16px; overflow:hidden; border:1px solid var(--hair);}
+  /* 상세페이지 모달은 좌우 패딩이 16px → 밴드도 16px만 탈출 (좌우 삐짐 방지) */
+  #pm-body .lp-band.bd-full{margin-left:-16px; margin-right:-16px;}
+  #post-modal .resv-sheet{overflow-x:hidden;}
   /* 📈 성장 그래프 (2026-07-13) */
   .lp-chart .ch-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:12px;}
   .lp-chart .ch-last{font-family:var(--serif); font-weight:800; font-size:22px; color:var(--coral); white-space:nowrap;}
@@ -2864,7 +2868,7 @@
     if(hero){
       if(h.heroOn){
         hero.hidden = false;
-        if(h.heroText){ hero.querySelector('.hh-text').innerHTML = String(h.heroText).replace(/\*([^*]+)\*/g, '<span class="kw">$1</span>'); }
+        if(h.heroText){ hero.querySelector('.hh-text').innerHTML = esc(h.heroText).replace(/\*([^*]+)\*/g, '<span class="kw">$1</span>'); }   // esc 먼저 → *강조*만 태그화 (XSS 차단)
         // 고민 해시태그
         var tagWrap=hero.querySelector('.hh-tags'); if(!tagWrap){ tagWrap=document.createElement('div'); tagWrap.className='hh-tags'; hero.appendChild(tagWrap); }
         var tags=String(h.heroTags||'').split(/[,#\n]/).map(function(s){return s.trim();}).filter(Boolean);
@@ -4541,7 +4545,7 @@
         +   '<div class="rv-done-guide"><b>마지막 단계예요!</b><span>① 복사 → ② 카톡방 이동 → ③ 붙여넣고 전송</span></div>'
         +   '<textarea class="rv-preview" readonly rows="9"></textarea>'
         +   '<button type="button" class="rv-copy">📋 전체 복사하기</button>'
-        +   (kakao?'<a class="rv-kakao" href="'+esc(kakao)+'" target="_blank" rel="noopener">💬 카카오톡으로 보내기 →</a>':(isEdit()?'<div class="rv-msg" style="color:var(--coral)">※ 편집기 → 예약 설정 → ③ 신청·카톡에서 카카오 오픈채팅 링크를 넣어주세요</div>':'<button type="button" class="rv-kakao-off" disabled>💬 카카오톡 연결 준비 중</button>'))
+        +   (kakao?'<a class="rv-kakao" href="'+esc(kakao)+'" target="_blank" rel="noopener">💬 카카오톡으로 보내기 →</a>':(isEdit()?'<div class="rv-msg" style="color:var(--coral)">※ 편집기 → 예약 설정 → ③ 신청·카톡에서 카카오 오픈채팅 링크를 넣어주세요</div>':'<div class="rv-note">📋 위 메시지를 복사해 사장님 연락처(인스타 DM·문자 등)로 보내면 예약이 접수돼요</div>'))
         +   (payUrl?'<a class="rv-pay" href="'+esc(payUrl)+'" target="_blank" rel="noopener" data-ev="pay" data-track="예약금 결제">💳 카카오페이로 예약금 결제 →</a>':'')
         +   (note?'<div class="rv-note">⏰ '+esc(note).replace(/\n/g,'<br>')+'</div>':'')
       + '</div>';
@@ -5080,6 +5084,7 @@
       if(nm){ document.title = nm + ' · 컨텐츠 허브'; setMeta('og:title', nm + ' · 컨텐츠 허브', true); setMeta('twitter:title', nm+' · 컨텐츠 허브', false); }
       if(p.bio){ var desc=String(p.bio).replace(/\n/g,' ').slice(0,110); setMeta('description', desc, false); setMeta('og:description', desc, true); }
       setMeta('og:url', location.href, true);
+      if(p.avatar && /^https?:\/\//i.test(p.avatar)){ setMeta('og:image', p.avatar, true); setMeta('twitter:image', p.avatar, false); }   // 사용자 사진(절대URL)이면 공유 이미지로 (JS 렌더 브라우저·구글봇 대상)
     }catch(e){}
     try{ buildAbout(d); }catch(e){}
     try{ buildCouponRef(d); }catch(e){}
@@ -5110,6 +5115,7 @@
     if(tabParam){ setTimeout(function(){ var nv=document.querySelector('.navitem[data-tab="'+tabParam+'"]'); if(nv) nv.click(); }, 250); }
     if(d.reservation && d.reservation.on){ try{ buildReservation(d.reservation); }catch(e){} }
     else if(typeof EDIT_MODE==='undefined' || !EDIT_MODE){ var _rc=document.querySelector('.resv-cta'); if(_rc) _rc.style.display='none'; }   // 예약 미설정 = 공개페이지선 작동 안 하는 버튼 숨김 (편집 모드는 보여서 설정 가능)
+    if(typeof EDIT_MODE==='undefined' || !EDIT_MODE){ try{ hideEmptyPublicTabs(d); }catch(e){} }   // 🧹 안 채운 탭 = 하드코딩 샘플 대신 아예 숨김 (손님에 가짜 상품·글·문답 노출 방지)
     // 게시물 링크(?p=)로 들어오면 → 홈 착지 + '이어보기' 알약 (의도보존, 홈도 한번 보게)
     var pParam = new URLSearchParams(location.search).get('p');
     if(pParam){ setTimeout(function(){ try{ showResumePost(pParam); }catch(e){} }, 700); }
@@ -5132,6 +5138,21 @@
     }, 70);
     // 🧭 홈페이지 메뉴(고정 상단바) + 단독 모드 — 모든 렌더·타이틀 세팅 '후' 마지막에
     try{ if(window.__renderHubNav) window.__renderHubNav(d); }catch(_){}
+  }
+  // 🧹 발행했지만 안 채운 탭/블록 = 손님에게 하드코딩 샘플 대신 숨김 (가짜 노출 방지 · 편집모드는 제외해 주인이 보고 채우게)
+  function hideEmptyPublicTabs(d){
+    d=d||{};
+    function hideTab(tab, hasData){
+      if(hasData) return;
+      var nv=document.querySelector('.navitem[data-tab="'+tab+'"]'); if(nv) nv.style.display='none';   // 메뉴에서 탭 제거 (buildHomeTabgos도 보이는 탭만 링크하므로 바로가기도 자동 제외)
+      var pane=document.querySelector('.pane[data-pane="'+tab+'"]'); if(pane){ pane.classList.remove('active'); pane.innerHTML=''; }   // 정적 샘플 비움 (빈 데이터라 빌더 미실행 → 안전)
+    }
+    hideTab('archive', !!(d.posts    && d.posts.length));
+    hideTab('shop',    !!(d.products && d.products.length));
+    hideTab('qna',     !!(d.qna      && d.qna.length));
+    if(!(d.blocks && d.blocks.length)){   // 홈 블록 0개 = 정적 프로모·갤러리·죽은링크 샘플 숨김 (홈 탭·프로필은 유지)
+      ['home-promo','home-gallery','home-links'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
+    }
   }
   window.__applyPublicData = applyPublicData;
   // '이 스타일로 예약' → 예약 모달 열고 요청사항에 스타일명 자동 입력 (없으면 예약 블록으로 스크롤)
@@ -5297,7 +5318,10 @@
       var fold=kids.slice(4); if(!fold.length) return;
       fold.forEach(function(el){ el.classList.add('la-folded'); el.style.display='none'; });
       var btn=document.createElement('button'); btn.type='button'; btn.id='home-more-btn'; btn.className='home-more';
-      btn.textContent='▾ 더 보기 ('+fold.length+'개)';
+      var firstT=''; try{ var _h=fold[0].querySelector('.block-h, h3, h4'); if(_h) firstT=(_h.textContent||'').trim().slice(0,14); }catch(_){}
+      btn.textContent = firstT
+        ? ('▾ '+firstT+(fold.length>1?(' 외 '+(fold.length-1)+'개'):'')+' 더 보기')
+        : ('▾ 더 보기 ('+fold.length+'개)');
       fold[0].parentNode.insertBefore(btn, fold[0]);
       btn.onclick=function(){
         fold.forEach(function(el){ el.style.display=''; el.classList.remove('la-folded'); if(el.classList.contains('reveal-blk')) el.classList.add('in'); });
@@ -5561,6 +5585,36 @@
     };
   }
   document.addEventListener('click', function(e){ var b=e.target.closest?e.target.closest('[data-consult]'):null; if(!b) return; e.preventDefault(); if(EDIT_MODE) return; openConsultForm(b.getAttribute('data-consult')); });
+  // 🌱 손님 "준비 중" — 미발행/없는 페이지를 실제 방문자가 열면 가짜 인물 대신 이 화면 (0의 상태)
+  function showGuestPreparing(h){
+    if(document.getElementById('prep-screen')) return;
+    if(!document.getElementById('prep-css')){
+      var st=document.createElement('style'); st.id='prep-css'; st.textContent=
+        '#prep-screen{position:fixed;inset:0;z-index:99990;display:flex;align-items:center;justify-content:center;padding:28px;'
+        +'background:radial-gradient(900px 480px at 50% -10%, rgba(167,139,255,.16), transparent 60%), #08060f;color:#f2eefb;'
+        +'font-family:"Pretendard","Malgun Gothic",system-ui,sans-serif;text-align:center;}'
+        +'.prep-in{max-width:340px;}'
+        +'.prep-core{width:74px;height:74px;border-radius:50%;margin:0 auto;display:grid;place-items:center;'
+        +'background:radial-gradient(circle at 50% 40%, rgba(195,176,255,.34), rgba(167,139,255,.06) 72%);animation:prepB 3.6s ease-in-out infinite;}'
+        +'.prep-core svg{width:34px;height:34px;fill:none;stroke:#dfd3ff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}'
+        +'@keyframes prepB{0%,100%{box-shadow:0 0 0 0 rgba(167,139,255,0);}50%{box-shadow:0 0 36px 6px rgba(167,139,255,.42);}}'
+        +'@media(prefers-reduced-motion:reduce){.prep-core{animation:none;}}'
+        +'.prep-handle{margin-top:16px;font-size:13px;color:#6b6390;font-family:ui-monospace,monospace;}'
+        +'.prep-h{font-size:20px;font-weight:800;margin:18px 0 8px;letter-spacing:-.01em;}'
+        +'.prep-s{font-size:13px;color:#a99fc7;line-height:1.65;}'
+        +'.prep-chip{margin-top:22px;display:inline-block;font-size:11.5px;color:#a99fc7;border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 16px;}';
+      document.head.appendChild(st);
+    }
+    var esc2=function(s){ return String(s==null?'':s).replace(/[<>&"]/g,''); };
+    var el=document.createElement('div'); el.id='prep-screen';
+    el.innerHTML='<div class="prep-in"><div class="prep-core"><svg viewBox="0 0 24 24"><path d="M3.4 11.3 12 4l8.6 7.3"/><path d="M5.6 9.8v9.6h12.8V9.8"/><path d="M9.8 19.4v-5.2h4.4v5.2"/></svg></div>'
+      +'<div class="prep-handle">/u/'+esc2(h)+'</div>'
+      +'<div class="prep-h">곧 만나요</div>'
+      +'<div class="prep-s">이 페이지는 준비 중이에요.<br>조금만 기다려 주세요.</div>'
+      +'<div class="prep-chip">🔒 준비 중</div></div>';
+    document.body.appendChild(el);
+    try{ document.title='준비 중'; }catch(_){}
+  }
   if(EDIT_MODE){
     document.documentElement.setAttribute('data-edit','1');
     var __bridgeGot=false;
@@ -5590,9 +5644,11 @@
     }).catch(function(){}); }catch(e){}
   } else {
     function _pubReady(){ try{ if(parent && parent!==window) parent.postMessage({type:'la-public-ready'}, '*'); }catch(_){} }   // 미리보기 오버레이(부모)에 "실데이터 렌더 끝" 알림 → 골격 깜빡임 방지
+    var _hasU=false; try{ _hasU=!!new URLSearchParams(location.search).get('u'); }catch(_){}   // ?u= 있는 실제 방문만 (파라미터 없는 데모는 샘플 유지)
     window.laRpc('li_public_get', { p_handle: handle }).then(function(res){
-      if(res && res.ok && res.data){ applyPublicData(res.data); }   // 저장된 데이터 없으면 기존 샘플 유지
-    }).catch(function(){}).then(function(){
+      if(res && res.ok && res.data){ applyPublicData(res.data); }   // 저장된 데이터 있으면 진짜 렌더
+      else if(_hasU){ showGuestPreparing(handle); }                 // 미발행/없음 → 가짜 인물 대신 "준비 중"
+    }).catch(function(){ if(_hasU) showGuestPreparing(handle); }).then(function(){
       _pubReady(); setTimeout(_pubReady, 60);   // 실데이터 적용 직후 신호 (rAF는 화면밖 iframe서 throttle되므로 직접+setTimeout)
     });
   }
@@ -5989,7 +6045,7 @@
       +'background:color-mix(in srgb, var(--paper,#0d0b14) 90%, transparent);'
       +'-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);'
       +'border-bottom:1px solid var(--hair,rgba(255,255,255,.09));}'
-      +'.hn-in{max-width:520px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:9px 16px;}'
+      +'.hn-in{max-width:460px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:9px 16px;}'
       +'.hn-brand{font-size:12.5px;font-weight:800;color:var(--ink,#fff);white-space:nowrap;overflow:hidden;'
       +'text-overflow:ellipsis;max-width:40%;cursor:pointer;background:none;border:0;font-family:inherit;padding:0;}'
       +'.hn-items{margin-left:auto;display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;}'
@@ -6000,6 +6056,8 @@
       +'.hn-b.on::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;border-radius:2px;'
       +'background:var(--grad,var(--coral,#a78bff));}'
       +'html.hn-on body{padding-top:47px;}'
+      +'html.hn-on .topbar .handle{display:none!important;}'   /* 메뉴가 브랜드 역할 승계 → 중복 주소바 숨김 */
+      +'html.hn-on #fx-prog{top:47px;}'                        /* 진행선이 메뉴 위에 겹치지 않게 */
       +'html.hn-on .resv-modal{padding-top:58px;align-items:flex-start;}'
       +'html.hn-solo .topbar .settings-link,html.hn-solo .topbar .handle{display:none!important;}'
       +'@media print{#hubnav{display:none;}}';
