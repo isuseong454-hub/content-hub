@@ -4319,10 +4319,45 @@
     document.getElementById('hl-sheet-body').innerHTML = img + '<div class="hl-sheet-title">'+esc(label)+'</div><div class="hl-sheet-text">'+esc(body)+'</div>';
     ov.classList.add('open');
   }
+  // ▣ 시트 스와이프 투 클로즈 — 애플식 스프링+속도 인계(마스터즈서 이식·검증됨). 추가형(×·배경 유지).
+  function attachSheetDrag(sheet, closeFn, opts){
+    if(!sheet || sheet._dragBound) return; sheet._dragBound=true; opts=opts||{};
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var scroller=opts.scroller||sheet;
+    var y=0,dragging=false,startY=0,lastY=0,lastT=0,vel=0,active=false,pid=null,st={x:0,v:0,raf:0};
+    function set(v){ y=v; sheet.style.transform=v?'translateY('+v+'px)':''; }
+    function spring(target,onEnd){ cancelAnimationFrame(st.raf); var last=performance.now();
+      (function step(now){ var dt=Math.min((now-last)/1000,.032); last=now;
+        var a=-190*(st.x-target)-26*st.v; st.v+=a*dt; st.x+=st.v*dt; set(st.x);
+        if(Math.abs(st.x-target)<.4&&Math.abs(st.v)<8){ set(target); if(onEnd)onEnd(); return; }
+        st.raf=requestAnimationFrame(step); })(last); }
+    sheet.addEventListener('pointerdown',function(e){
+      if(e.button&&e.button!==0) return;
+      if(e.target.closest('button,a,input,textarea,select,[contenteditable]')) return;
+      active=true; pid=e.pointerId; startY=e.clientY; lastY=e.clientY; lastT=performance.now(); vel=0; dragging=false;
+    },{passive:true});
+    sheet.addEventListener('pointermove',function(e){
+      if(!active) return; var dy=e.clientY-startY;
+      if(!dragging){
+        if(dy>6&&scroller.scrollTop<=0){ dragging=true; try{sheet.setPointerCapture(pid);}catch(err){} sheet.style.transition='none'; cancelAnimationFrame(st.raf); }
+        else if(dy<-6||scroller.scrollTop>0){ active=false; return; } else return;
+      }
+      var now=performance.now(),dt=now-lastT; if(dt>0){ vel=(e.clientY-lastY)/dt*1000; lastY=e.clientY; lastT=now; }
+      var raw=e.clientY-startY; if(raw<0) raw=-Math.pow(-raw,.72); set(raw); e.preventDefault();
+    });
+    function end(){ if(!active) return; active=false; if(!dragging) return;
+      var H=sheet.getBoundingClientRect().height, proj=y+vel*0.15; st.x=y; st.v=vel;
+      if(proj>H*0.4){ cancelAnimationFrame(st.raf); sheet.style.transition='transform .3s cubic-bezier(.32,.72,0,1)'; set(H+40);
+        var done=function(){ sheet.style.transition=''; sheet.style.transform=''; sheet.removeEventListener('transitionend',done); try{closeFn();}catch(e){} };
+        sheet.addEventListener('transitionend',done);
+      } else { spring(0); } }
+    sheet.addEventListener('pointerup',end); sheet.addEventListener('pointercancel',end);
+  }
   (function(){ var ov=document.getElementById('hl-sheet'); if(!ov) return;
     function close(){ ov.classList.remove('open'); }
     var x=document.getElementById('hl-x'); if(x) x.onclick=close;
     ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    var card=ov.querySelector('.hl-sheet'); if(card) attachSheetDrag(card, close, {scroller:card}); // ▣ 스와이프 닫기
   })();
   // 🎬 스크롤 연출 엔진 (2026-07-13) — 온/오프: home.scrollFx (기본 켬 · 분위기 설정에서 끔)
   // 켜면: 숫자 카운트업(.au-en/.st-num/.coach-num/.gh-big/.ch-lastn/.of-n) + 그래프 그려짐 + 신청게이지 차오름 + 상단 진행선
