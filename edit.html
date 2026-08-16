@@ -12,6 +12,14 @@
 <link rel="manifest" href="la-manifest.json">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <meta name="theme-color" content="#0b0720">
+<script>
+/* 서비스 워커 등록 — 홈 화면 설치 조건 충족용. 네트워크 우선이라 항상 최신이 뜬다 (2026-08-14 추가) */
+if('serviceWorker' in navigator){
+  addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).catch(function(){});
+  });
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Black+Han+Sans&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
 <script src="la-config.js"></script>
@@ -4985,9 +4993,9 @@
     #landing-canvas .lcx-doc .lphoto{ margin:0 0 14px; }
     #landing-canvas .lcx{ --ac:#E0A36B; margin:6px -2px 0; border-radius:18px; overflow:hidden; color:#fff; padding:0 0 26px;
       background:radial-gradient(120% 50% at 50% 0%, color-mix(in srgb, var(--ac) 22%, transparent), transparent 56%), linear-gradient(180deg,#15131b,#0c0a11); }
-    #landing-canvas [data-ce]{ outline:none; border-radius:7px; transition:background .12s, box-shadow .12s; cursor:text; }
-    #landing-canvas [data-ce]:hover{ background:rgba(255,255,255,.05); }
-    #landing-canvas [data-ce]:focus{ background:rgba(255,255,255,.1); box-shadow:0 0 0 2px var(--ac); }
+    #landing-canvas [data-ce]{ outline:none; border-radius:7px; transition:background .18s ease; cursor:text; caret-color:var(--coral); }
+    #landing-canvas [data-ce]:hover{ background:rgba(255,255,255,.04); }
+    #landing-canvas [data-ce]:focus{ background:rgba(255,255,255,.035); box-shadow:none; }   /* 🍎 종이화: 흰박스+2px링 → 옅은 바탕+색 커서(caret) */
     #landing-canvas [data-ce][data-empty]:empty:before{ content:attr(data-empty); color:rgba(255,255,255,.34); }
     #landing-canvas .gd{ background:linear-gradient(100deg,#fff,var(--ac) 60%,#caa07f); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-weight:900; }
     #landing-canvas .em{ color:var(--ac); font-weight:800; }
@@ -5001,10 +5009,12 @@
     .l-postdel:active{ transform:scale(.98); }
     /* 글(블로그) 본문 = 처음부터 큰 작성 영역 (네이버 블로그처럼, 첫 본문만 크게) */
     #landing-canvas .lcx-doc .lc-big{ min-height:240px; }
-    #landing-canvas .lc-body{ outline:none; font-size:14.5px; line-height:1.75; color:#d8d2e0; padding:6px 4px; }
-    #landing-canvas .lc-body:focus{ background:rgba(255,255,255,.04); border-radius:8px; }
-    #landing-canvas .lc-body h4{ font-size:17px; font-weight:800; color:#fff; margin:14px 0 6px; }
-    #landing-canvas .lc-body blockquote{ margin:12px 0; padding:8px 14px; border-left:3px solid var(--ac,#E0A36B); color:#c9c2d4; font-style:italic; }
+    #landing-canvas .lc-body{ outline:none; font-size:16px; line-height:1.78; letter-spacing:-.003em; color:#d8d2e0; padding:6px 4px; caret-color:var(--coral); text-wrap:pretty; }
+    #landing-canvas .lc-body:focus{ background:rgba(255,255,255,.025); border-radius:8px; }
+    #landing-canvas .lc-body h4{ font-size:18px; font-weight:800; color:#fff; margin:20px 0 8px; letter-spacing:-.01em; text-wrap:balance; position:relative; padding-left:14px; }   /* ✨ 소제목 광선바 */
+    #landing-canvas .lc-body h4::before{ content:''; position:absolute; left:0; top:.14em; bottom:.14em; width:4px; border-radius:3px; background:linear-gradient(180deg, var(--ac,#A78BFF), color-mix(in srgb, var(--ac,#A78BFF) 40%, transparent)); box-shadow:0 0 10px color-mix(in srgb, var(--ac,#A78BFF) 65%, transparent); }
+    #landing-canvas .lc-body blockquote{ position:relative; margin:18px 0; padding:16px 18px 15px 20px; border-radius:14px; background:linear-gradient(155deg, color-mix(in srgb, var(--ac,#A78BFF) 11%, transparent), color-mix(in srgb, var(--ac,#A78BFF) 3%, transparent)); border:1px solid color-mix(in srgb, var(--ac,#A78BFF) 22%, transparent); box-shadow:0 10px 30px -14px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.09); color:#e6e0f2; font-style:italic; line-height:1.62; overflow:hidden; }   /* 🪟 인용 = 유리 명패 */
+    #landing-canvas .lc-body blockquote::before{ content:"\201C"; position:absolute; top:-14px; left:8px; font-size:64px; line-height:1; font-family:Georgia,serif; color:color-mix(in srgb, var(--ac,#A78BFF) 30%, transparent); font-style:normal; pointer-events:none; }
     #landing-canvas .lc-body ul,#landing-canvas .lc-body ol{ margin:8px 0; padding-left:22px; }
     #landing-canvas .lc-body img{ display:block; border-radius:12px; margin:12px 0; cursor:pointer; max-width:100%; }
     #landing-canvas .lc-body img.lc-img-sm{ width:45%; }
@@ -5018,10 +5028,11 @@
     #landing-canvas .lc-body .hl-y{ background:linear-gradient(transparent 55%,rgba(255,221,64,.5) 55%); }
     #landing-canvas .lc-body .hl-p{ background:linear-gradient(transparent 55%,rgba(255,120,190,.5) 55%); }
     #landing-canvas .lc-body .hl-m{ background:linear-gradient(transparent 55%,rgba(80,220,180,.5) 55%); }
-    #landing-canvas .lc-body .lc-callout{ margin:12px 0; padding:12px 14px; border-radius:12px; border:1px solid; font-size:14px; line-height:1.65; }
-    #landing-canvas .lc-body .lc-co-tip{ background:rgba(96,165,250,.13); border-color:rgba(96,165,250,.4); }
-    #landing-canvas .lc-body .lc-co-warn{ background:rgba(245,200,75,.13); border-color:rgba(245,200,75,.42); }
-    #landing-canvas .lc-body .lc-co-ok{ background:rgba(52,211,153,.13); border-color:rgba(52,211,153,.4); }
+    #landing-canvas .lc-body .lc-callout{ position:relative; margin:16px 0; padding:13px 15px 13px 18px; border-radius:14px; border:1px solid; font-size:14.5px; line-height:1.62; box-shadow:0 14px 32px -18px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.08); }   /* 🫧 콜아웃 = 떠있음 */
+    #landing-canvas .lc-body .lc-callout::before{ content:''; position:absolute; left:0; top:12px; bottom:12px; width:3px; border-radius:3px; background:var(--co,#6BA5F5); box-shadow:0 0 9px var(--co,#6BA5F5); }
+    #landing-canvas .lc-body .lc-co-tip{ --co:#6BA5F5; background:linear-gradient(150deg, rgba(96,165,250,.16), rgba(96,165,250,.05)); border-color:rgba(96,165,250,.32); }
+    #landing-canvas .lc-body .lc-co-warn{ --co:#F5C84B; background:linear-gradient(150deg, rgba(245,200,75,.16), rgba(245,200,75,.05)); border-color:rgba(245,200,75,.34); }
+    #landing-canvas .lc-body .lc-co-ok{ --co:#34D399; background:linear-gradient(150deg, rgba(52,211,153,.16), rgba(52,211,153,.05)); border-color:rgba(52,211,153,.32); }
     #landing-canvas .lc-body hr{ border:none; border-top:1px solid rgba(255,255,255,.14); margin:18px 0; }
     #landing-canvas .lc-body ul.lc-check{ list-style:none; padding-left:2px; margin:12px 0; }
     #landing-canvas .lc-body ul.lc-check > li{ position:relative; padding-left:30px; margin:7px 0; line-height:1.6; }
@@ -5037,11 +5048,20 @@
     .tb-sw{ width:26px; height:26px; padding:0 !important; border-radius:7px; border:1px solid rgba(255,255,255,.22) !important; cursor:pointer; }
     .sw-y{ background:rgba(255,221,64,.85); } .sw-p{ background:rgba(255,120,190,.85); } .sw-m{ background:rgba(80,220,180,.85); }
     /* 노션식 강조 툴바 */
-    .lc-tb{ position:fixed; z-index:9200; display:none; gap:4px; background:#241b30; border:1px solid rgba(155,61,255,.5); border-radius:10px; padding:5px; box-shadow:0 8px 24px rgba(0,0,0,.5); }
-    .lc-tb.on{ display:flex; }
-    .lc-tb button{ background:rgba(255,255,255,.06); border:none; color:#fff; border-radius:7px; font-family:var(--sans); font-size:12.5px; font-weight:800; padding:7px 11px; cursor:pointer; white-space:nowrap; }
-    .lc-tb button.tb-em{ color:#E0A36B; }
-    .lc-tb button:active{ transform:scale(.94); }
+    /* 선택 버블 = .lc-selbar (표 .lc-tb와 이름 충돌 회피) · 애플 스프링 · 📱터치=iOS 네이티브 선택메뉴와 충돌하므로 숨김(상단 툴바만) */
+    .lc-selbar{ position:fixed; z-index:9200; display:flex; gap:4px; background:#241b30; border:1px solid rgba(155,61,255,.5); border-radius:10px; padding:5px; box-shadow:0 8px 24px rgba(0,0,0,.5); opacity:0; transform:scale(.9) translateY(4px); transform-origin:bottom center; pointer-events:none; transition:opacity .16s ease, transform .2s cubic-bezier(.34,1.56,.5,1); }
+    .lc-selbar.on{ opacity:1; transform:none; pointer-events:auto; }
+    .lc-selbar button{ background:rgba(255,255,255,.06); border:none; color:#fff; border-radius:7px; font-family:var(--sans); font-size:12.5px; font-weight:800; padding:7px 11px; cursor:pointer; white-space:nowrap; }
+    .lc-selbar button.tb-em{ color:#E0A36B; }
+    .lc-selbar button:active{ transform:scale(.94); }
+    @media (pointer:coarse){ .lc-selbar{ display:none !important; } }
+    /* ② 형광펜 잉크 번짐 (칠하는 순간 1회) — hl-ink는 저장 시 sanitizer가 자동 제거 */
+    @keyframes lcInk{ from{ background-size:0% 100%; } to{ background-size:100% 100%; } }
+    #landing-canvas .lc-body .hl-ink{ background-repeat:no-repeat; animation:lcInk .42s cubic-bezier(.4,0,.1,1) both; }
+    /* ③ 블록 스프링 등장 (콜아웃·구분선·표·토글 삽입 시 1회) — lc-in도 sanitizer가 자동 제거 */
+    @keyframes lcBlockIn{ from{ opacity:0; transform:translateY(9px) scale(.98); } to{ opacity:1; transform:none; } }
+    #landing-canvas .lc-body .lc-in{ animation:lcBlockIn .4s cubic-bezier(.34,1.56,.5,1) both; }
+    @media (prefers-reduced-motion:reduce){ #landing-canvas .lc-body .hl-ink,#landing-canvas .lc-body .lc-in{ animation:none !important; } .lc-selbar{ transition:none !important; } }
     /* 편집 툴바 (글) = 화면 하단 고정 (네이버식) */
     /* 글 서식 툴바 = 글쓰기 영역 맨 위에 작게 고정 (네이버 블로그식) — 하단이면 찾기 어려움 */
     #landing-canvas .lc-toolbar{ position:sticky; top:0; z-index:90; display:flex; flex-wrap:nowrap; align-items:center; gap:5px; margin:0 0 14px; padding:7px 8px; background:rgba(24,22,32,.96); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.1); border-radius:12px; box-shadow:0 5px 16px rgba(0,0,0,.35); overflow-x:auto; scrollbar-width:none; }
@@ -5070,6 +5090,7 @@
     .ws-pane[data-pane="page"].fw-mode{ position:fixed; inset:0; z-index:200; background:var(--paper); overflow-y:auto; -webkit-overflow-scrolling:touch; padding:54px 0 96px; margin:0; }
     .fw-mode #home-body{ max-width:820px; margin:0 auto; padding:0 22px; }
     .fw-mode #landing-canvas .lcx{ margin:6px 0 0; }
+    .fw-mode #landing-canvas .lc-body{ max-width:36em; margin-left:auto; margin-right:auto; }   /* ⛶ 전체화면 쓰기: 읽기 좋은 폭 (편집 중엔 넓게 유지) */
     .fw-mode #landing-canvas .lcx-doc .lc-big{ min-height:55vh; }
     .fw-mode #landing-canvas .lc-toolbar{ position:fixed; left:0; right:0; bottom:0; top:auto; margin:0; border-radius:0; border:none; border-top:1px solid rgba(255,255,255,.1); justify-content:center; padding:9px 10px; z-index:210; background:#14131a; overflow-x:auto; }
     .fw-mode #post-apply-wrap{ max-width:820px; margin:0 auto; padding:0 22px; }
@@ -5361,13 +5382,15 @@
     .lcx-quick .lq-skins{ display:inline-flex; gap:3px; margin-right:4px; }
     .lcx-quick .lq-skins button{ font-size:12px; padding:5px 8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:transparent; cursor:pointer; }
     .lcx-quick .lq-skins button.on{ border-color:var(--ac,#E0A36B); background:rgba(224,163,107,.14); }
-    #landing-canvas .lcx.sk-editorial{ --ac:#B0713C; }
-    #landing-canvas .lcx.sk-clean{ --ac:#3D6FE8; }
-    #landing-canvas .lcx.sk-dark{ --ac:#E8C285; }
-    #landing-canvas .lcx.sk-aurora{ --ac:#A78BFF; }
-    #landing-canvas .lcx.sk-crystal{ --ac:#8B5CF6; }
+    /* 🧰 스킨 = 편집기 무드광원(background-image로 은은히 · 기본 배경 안 건드림) — 정확한 손님 모습은 「👁 실제 고객 화면」 */
+    #landing-canvas .lcx.sk-editorial{ --ac:#B0713C; background-image:radial-gradient(58% 26% at 85% 0%, rgba(176,113,60,.10), transparent 70%); }
+    #landing-canvas .lcx.sk-clean{ --ac:#3D6FE8; background-image:radial-gradient(56% 26% at 85% 0%, rgba(61,111,232,.10), transparent 70%); }
+    #landing-canvas .lcx.sk-dark{ --ac:#E8C285; background-image:radial-gradient(56% 26% at 85% 0%, rgba(232,194,133,.12), transparent 70%); }
+    #landing-canvas .lcx.sk-aurora{ --ac:#A78BFF; background-image:radial-gradient(60% 28% at 85% 0%, rgba(167,139,255,.14), transparent 70%), radial-gradient(46% 22% at 6% 42%, rgba(61,111,232,.08), transparent 72%); }
+    #landing-canvas .lcx.sk-crystal{ --ac:#8B5CF6; background-image:radial-gradient(56% 26% at 85% 0%, rgba(139,92,246,.12), transparent 70%); }
     #landing-canvas .lcx.sk-airy{ --ac:#3D6FF0; }
-    #landing-canvas .lcx.sk-lime{ --ac:#D6FF3C; }
+    #landing-canvas .lcx.sk-lime{ --ac:#D6FF3C; background-image:radial-gradient(56% 26% at 85% 0%, rgba(214,255,60,.10), transparent 70%); }
+    #landing-canvas .lcx.sk-crchang{ --ac:#E6F24A; background-image:radial-gradient(48% 26% at 80% 4%, rgba(230,242,74,.15), transparent 66%); }   /* 📦 크창 — 뉴트럴 다크 + 연두레몬 */
     /* 🧰 T1-2: 존별 코치(💡 ✗→✓) · 제목 후보 · 과대광고 경고 */
     #landing-canvas .lco-b{ font:800 9.5px var(--sans); color:#cfc8d8; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); border-radius:99px; padding:3px 9px; cursor:pointer; letter-spacing:0; text-transform:none; }
     #landing-canvas .lco-b.on{ color:#241606; background:var(--ac,#E0A36B); border-color:var(--ac,#E0A36B); }
@@ -8147,10 +8170,11 @@
 
   // ════ 전환 진단 (퍼널 + 단계별 코칭) ════
   var DIAG=[
-    {k:'nopeek', ic:'👀', t:'들어왔는데 안 둘러봐요', diag:'홈에 왔지만 클릭·스크롤이 거의 없어요. 첫 화면(후킹·프로필·대표 게시물)이 시선을 못 잡은 거예요.', act:'<b>후킹 한 줄</b>과 <b>대표 게시물</b>을 강하게. 첫 3초에 "맞아, 내 얘기네" 싶게 — 고객의 <b>상황·고통</b>을 한 줄로 찔러주세요.', go:'page', goT:'홈 구성 다듬기 →'},
-    {k:'notrust', ic:'💔', t:'둘러는 보는데 예약·전환을 안 해요', diag:'관심은 있는데 행동(예약·신청)이 없어요. <b>공감·문제인식·신뢰</b>가 약한 단계예요.', act:'① <b>공감 있는 주제·후킹문구</b>로 "맞아 내 얘기" ② <b>전문가 증명·후기</b>로 신뢰 ③ <b>지금 해야 할 이유</b>. 겉(기능) 말고 속(감정·정체성)을 건드리세요.', go:'posts', goT:'랜딩·후기 게시물 만들기 →'},
-    {k:'weak', ic:'📉', t:'전환율이 낮아요', diag:'전환이 일어나긴 하는데 약해요. 공감→문제인식→해결→예약 흐름 중 한 곳이 헐거워요.', act:'랜딩 게시물을 <b>공감 → 원인 → 전문가 → 해결 → 변화 → 예약</b> 순서로 점검. 후기·전문가 증명을 <b>예약 버튼 가까이</b> 두세요.', go:'posts', goT:'랜딩 게시물 점검 →'},
+    {k:'nopeek', ic:'👀', t:'들어왔는데 안 둘러봐요', diag:'홈에 왔지만 클릭·스크롤이 거의 없어요. 첫 화면(후킹·프로필·대표 게시물)이 시선을 못 잡은 거예요.', act:'<b>후킹 한 줄</b>과 <b>대표 게시물</b>을 강하게. 첫 3초에 "맞아, 내 얘기네" 싶게 — 고객의 <b>상황·고통</b>을 한 줄로 찔러주세요. 내 경력·소개가 먼저 오면 이탈해요 — <b>손님의 문제가 먼저</b>, 내 이야기는 그다음.', go:'page', goT:'홈 구성 다듬기 →'},
+    {k:'notrust', ic:'💔', t:'둘러는 보는데 예약·전환을 안 해요', diag:'관심은 있는데 행동(예약·신청)이 없어요. <b>공감·문제인식·신뢰</b>가 약한 단계예요.', act:'① <b>공감 있는 주제·후킹문구</b>로 "맞아 내 얘기" ② 신뢰는 <b>내 말보다 남의 입</b>이 백 배 세요 — 후기·DM 캡처·재방문 장면·전후 사진이 대신 말하게 ③ <b>지금 해야 할 이유</b>. "정성껏 해드려요" 같은 말은 광고로 읽혀요 — <b>숫자·장면</b>으로 바꾸세요.', go:'posts', goT:'랜딩·후기 게시물 만들기 →'},
+    {k:'weak', ic:'📉', t:'전환율이 낮아요', diag:'전환이 일어나긴 하는데 약해요. 공감→문제인식→해결→예약 흐름 중 한 곳이 헐거워요.', act:'랜딩 게시물을 <b>공감 → 원인 → 전문가 → 해결 → 변화 → 예약</b> 순서로 점검. 후기·전문가 증명을 <b>예약 버튼 가까이</b> 두세요. 각 주장 뒤엔 <b>보이는 근거</b>(사진·숫자·후기)가 붙어 있는지 확인하세요.', go:'posts', goT:'랜딩 게시물 점검 →'},
     {k:'form', ic:'📝', t:'예약창까지 갔는데 신청을 안 해요', diag:'예약 화면은 열었는데 보내지 않았어요. 폼 부담·가격/시술 불명확·불안이 흔한 원인이에요.', act:'<b>시술·가격·주의사항</b>을 명확히, <b>후기</b>로 안심. 카톡 안내 메시지를 친절하게 다듬으세요.', go:'page', goT:'예약 설정 열기 →'},
+    {k:'nofind', ic:'📵', t:'다 봤는데 연락처를 못 찾아요', diag:'마음이 움직여도 <b>예약 버튼·연락처를 못 찾으면 그냥 나갑니다</b>. 사람은 귀찮으면 포기해요 — 잘 만든 페이지가 이 하나로 새는 경우가 정말 많아요.', act:'① 예약·연락 버튼을 <b>맨 아래 한 곳 말고 중간에도</b> ② 긴 게시물 끝엔 반드시 <b>연락 방법 한 줄</b> ③ 홈의 연결 블록(전화·카톡·DM)이 켜져 있는지 확인하세요.', go:'page', goT:'연결 블록 확인 →'},
     {k:'repeat', ic:'🔁', t:'전환은 되는데 단골이 안 돼요', diag:'한 번 오고 끝나요. 사후 연결이 비어 있어요.', act:'<b>단골 등록</b> 유도 + 새 소식·이벤트 알림. 재방문할 이유를 만들어 주세요.', go:'posts', goT:'단골 등록·공지 만들기 →'},
     {k:'collect', ic:'⏳', t:'아직 데이터가 적어요', diag:'방문이 적어 진단이 일러요. 며칠 더 쌓이면 정확해져요.', act:'그동안 <b>인스타·컨텐츠 끝에 홈 링크</b>를 노출해 유입을 늘리세요.', go:'posts', goT:'게시물·컨텐츠 만들기 →'},
     {k:'good', ic:'🏆', t:'좋아요! 흐름이 살아있어요', diag:'전환이 건강하게 일어나고 있어요.', act:'지금 흐름 유지 + <b>유입을 더</b>. 잘 되는 게시물을 대표로 올리세요.', go:'posts', goT:'대표 게시물 관리 →'}
@@ -10926,36 +10950,49 @@
   window.__updateWriteCoach=updateWriteCoach;
   // ② 글 도우미 — 종류+주제 → 소제목 있는 뼈대 자동 조립
   var WRITE_KINDS=[['info','💡 정보·노하우','검색해서 올 유익한 정보'],['case','⭐ 후기·사례','한 사람의 변화 이야기'],['list','🔢 N가지 리스트','“앞머리 5가지” 잘 퍼지는 형식'],['news','📣 소식·이벤트','신규·혜택·마감 알림']];
+  // 🎯 뼈대 생성기 (단일 진실원 — GOAL_DEFS와 통합, 전부 <h4> 소제목이라 목차 자동생성이 항상 잡힘)
   function buildScaffold(kind, topic){
     var t=(topic||'').trim(); var T=t||'이 주제';
     function P(s){ return '<div>'+s+'</div>'; }
+    // ⭐ 후기·사례 — 결과후킹 → Before → 원인진단 → 과정 → After → 후기 → 문의
     if(kind==='case') return {
       title: t?(T+' — 이렇게 달라졌어요'):'한 사람의 변화 이야기',
-      body: '<h4>Before — 이런 고민으로 오셨어요</h4>'+P('처음 오셨을 때 손님의 상황을 그대로 적어요. 실제로 하신 말이 있으면 더 좋아요.')
-        +'<h4>이렇게 진행했어요</h4>'+P('무엇을 어떤 순서로 했는지 — 전문가의 눈이 보이게. 여기에 📷 과정 사진을 넣으면 최고예요.')
-        +'<h4>After — 이렇게 달라졌어요</h4>'+P('변화를 구체적으로. 전·후가 보이는 사진이 있으면 꼭 넣어요.')
-        +'<blockquote>“진작 올 걸 그랬어요” — 손님이 실제로 한 말을 그대로.</blockquote>'
+      body: P('“몇 달을 고생하다 딱 얼마 만에 바뀌었어요” — 결과를 한 줄로 먼저 보여주면 끝까지 읽어요. (후킹)')
+        +'<h4>Before — 이런 고민으로 오셨어요</h4>'+P('처음 오셨을 때 상황을 그대로 적어요. 손님이 실제로 하신 말이 있으면 최고예요. 📷 전(前) 사진.')
+        +'<h4>왜 그랬을까 — 원인</h4>'+P('전문가의 눈으로 진짜 원인을 짚어요. 이 한 단락이 “이 사람 다르다”를 만들어요.')
+        +'<h4>이렇게 진행했어요</h4>'+P('무엇을 어떤 순서로 했는지 — 과정이 보이게. 📷 과정 사진이 있으면 신뢰가 배가돼요.')
+        +'<h4>After — 이렇게 달라졌어요</h4>'+P('변화를 구체적으로. 📷 전·후가 한눈에 보이는 사진을 꼭 넣어요.')
+        +'<blockquote>“진작 올 걸 그랬어요” — 손님이 실제로 한 말 그대로. (없으면 이 줄은 지워도 돼요)</blockquote>'
+        +'<h4>당신도 가능해요</h4>'+P('비슷한 고민이면 → 편하게 문의 주세요. (예약·상담으로 자연스럽게)')
     };
+    // 🔢 N가지 리스트 — 숫자제목 → 도입 → 항목×N → 정리 → 문의
     if(kind==='list') return {
-      title: t?(T+' — 꼭 알아야 할 것'):'꼭 알아야 할 몇 가지',
-      body: P((t?(T+'에 대해 ') : '')+'꼭 알아두면 좋은 것들을 정리했어요. 하나씩 볼게요.')
-        +'<h4>1. 첫 번째</h4>'+P('핵심 하나를 쉽게 설명해요. 한 문단은 3~4줄로.')
-        +'<h4>2. 두 번째</h4>'+P('두 번째 포인트. 예시가 있으면 더 잘 와닿아요.')
-        +'<h4>3. 세 번째</h4>'+P('세 번째 포인트. (필요하면 소제목을 더 늘려도 돼요)')
+      title: t?(T):'꼭 알아야 할 몇 가지',
+      body: P((t?('“'+T+'” — '):'')+'숫자가 들어간 제목이 클릭을 불러요. 왜 이걸 알아야 하는지 한 줄로 도입해요. (도입은 빼도 돼요)')
+        +'<h4>1. 첫 번째</h4>'+P('핵심 하나를 쉽게 설명해요. 한 문단은 3~4줄, 예시가 있으면 더 잘 와닿아요.')
+        +'<h4>2. 두 번째</h4>'+P('두 번째 포인트.')
+        +'<h4>3. 세 번째</h4>'+P('세 번째 포인트. (항목은 소제목을 더 늘려 몇 개든 추가하세요)')
         +'<h4>정리하면</h4>'+P('오늘 내용을 한두 줄로 요약하고, “더 궁금하면 문의 주세요”로 자연스럽게 이어요.')
     };
+    // 📢 소식·이벤트 — 무슨소식 → 핵심내용 → 대상 → 혜택 → 기간·인원(희소성) → 신청
     if(kind==='news') return {
       title: t?(T):'새 소식을 전해요',
-      body: '<h4>무슨 소식인가요?</h4>'+P((t?(T+' — '):'')+'핵심부터 한 줄로.')
-        +'<h4>언제 · 누구에게</h4>'+P('기간과 대상을 분명하게 적어요.')
-        +'<h4>참여 방법</h4>'+'<ul class="lc-check"><li>이렇게 신청/방문하세요</li><li>마감이 있으면 꼭 적어요 (지금 움직일 이유)</li></ul>'
+      body: P('“이번 달, ○○해요” — 무슨 소식인지 한 줄로 먼저.')
+        +'<h4>무엇인가요</h4>'+P((t?(T+' — '):'')+'핵심 내용을 또렷하게. 무엇을 주는지.')
+        +'<h4>이런 분께 좋아요</h4>'+P('누구에게 좋은지 대상을 콕 집어요. (빼도 돼요)')
+        +'<h4>혜택 · 왜 지금</h4>'+P('받는 것/혜택을 구체적으로. 지금 하면 뭐가 좋은지.')
+        +'<h4>기간 · 인원</h4>'+'<ul class="lc-check"><li>언제까지인지 (마감)</li><li>몇 명·몇 개 한정인지 — 지금 움직일 이유</li></ul>'
+        +'<h4>지금 신청하세요</h4>'+P('예약·문의 방법을 분명하게. → 예약하기')
     };
-    // info (기본)
+    // 💡 info (기본) — 후킹 → 공감 → 가치입증 → 원인 → 해결 → 삶의변화 → 문의 (7단)
     return {
       title: t?(T+', 왜 그럴까요?'):'알아두면 좋은 정보',
-      body: P('혹시 '+(t?('“'+T+'”'):'이런 것')+' 때문에 고민이신가요? 오늘 그 이유와 해결법을 정리해드릴게요.')
+      body: P('혹시 '+(t?('“'+T+'”'):'이런 것')+' 때문에 고민이신가요? — 손님이 검색할 그 고민을 첫 줄로. (후킹)')
+        +P('저도 그랬어요, 이런 분들 많더라고요 — 손님 마음에 먼저 공감해요. (빼도 돼요)')
+        +P('저는 ○○을 해온 사람이에요 — 왜 제 말을 믿어도 되는지 한 줄. (빼도 돼요)')
         +'<h4>왜 이런 일이 생길까요?</h4>'+P('원인을 쉬운 말로 설명해요. 어려운 용어 대신 손님의 언어로.')
         +'<h4>이렇게 해결하세요</h4>'+'<ul class="lc-check"><li>오늘 바로 따라할 첫 번째 방법</li><li>두 번째 방법</li><li>세 번째 방법</li></ul>'
+        +'<h4>이렇게 하면 달라져요</h4>'+P('이걸 하면 뭐가 좋아지는지 — 손님의 더 나은 하루를 그려줘요.')
         +'<h4>전문가의 한마디</h4>'+P('그래도 어려우면 제가 봐드릴게요 — 편하게 문의 주세요.')
     };
   }
@@ -11079,7 +11116,7 @@
     } else {
       var _lpSk=((postById(postEditId)||{}).skin)||'';
       h+='<div class="lcx-top"><div class="lcx-help">✏️ 글자를 누르면 그 자리서 바로 고쳐져요 · 손님에게 이 모양 그대로</div><div class="lcx-quick">'
-        +'<span class="lq-skins" title="스킨 — 글 그대로, 무드만 통째 전환 (🎭=홈 테마 따름)">'+[['','🎭','테마 따름'],['aurora','🫧','오로라 글래스'],['crystal','💠','크리스탈 라벤더'],['airy','🪁','에어리 레이어(블루)'],['lime','🍋','차콜×라임']].map(function(s){ return '<button type="button" data-lpskin="'+s[0]+'"'+(_lpSk===s[0]?' class="on"':'')+' title="'+s[2]+'">'+s[1]+'</button>'; }).join('')+'</span>'   /* 🌑📖☀️는 숨김(2026-07-10 사용자) — u.html 렌더 CSS는 보존, 기존 글 정상 표시 */
+        +'<span class="lq-skins" title="스킨 — 글 그대로, 무드만 통째 전환 (🎭=홈 테마 따름)">'+[['','🎭','테마 따름'],['dark','🌙','다크'],['editorial','📰','에디토리얼'],['clean','🤍','클린'],['aurora','🫧','오로라 글래스'],['crystal','💠','크리스탈 라벤더'],['lime','🍋','차콜×라임'],['crchang','📦','크창 (연두레몬)']].map(function(s){ return '<button type="button" data-lpskin="'+s[0]+'"'+(_lpSk===s[0]?' class="on"':'')+' title="'+s[2]+'">'+s[1]+'</button>'; }).join('')+'</span>'   /* 7종(2026-07-23 사용자 확정): 다크·에디토리얼·클린 복귀+조명, 에어리 픽커서 제외(CSS·기존 글 보존), 크창 신규 */
         +'<button type="button" class="lq-btn" data-lcars title="공식 지도 + 무기 카탈로그">🧰 무기고</button><button type="button" class="lq-btn" data-lcvis title="시각 요소 — 오브제·손그림·결과 이미지·뱃지·구분선">🎨 시각</button><button type="button" class="lq-btn" data-lcgaze title="시선 점검 — 손님 눈이 어디부터 볼지 예측">👁 시선</button><button type="button" class="lq-btn" data-lcpf title="발행 전 점검 — 금칙어·빈 단계·사진·연결">🚀 점검</button><button type="button" class="lq-btn" data-lpdemo title="완성된 상세페이지 예시 보기">👁 예시</button><button type="button" class="lq-btn" data-lcphotoadd>📷 사진</button><button type="button" class="lq-btn lq-add" data-lcadd>＋ 구성</button></div></div>';
       h+='<div class="lp-risk" id="lp-risk-bar"></div>';   /* 🛡 과대광고 경고 (금칙어 감지될 때만 보임) */
     }
@@ -11326,7 +11363,7 @@
         renderLandingCanvas(); try{ var lpP=postById(postEditId); if(lpP) lpP.blocks=collectRowsArray(); }catch(_){} return; }
       // 🧰 스킨 전환 (다크/에디토리얼/클린 — 발행하면 손님 모달에 그대로)
       var lpsk=e.target.closest&&e.target.closest('[data-lpskin]');
-      if(lpsk){ var skP=postById(postEditId); if(skP){ skP.skin=lpsk.getAttribute('data-lpskin')||''; renderLandingCanvas(); try{ toast({dark:'🌑 다크 오퍼 스킨',editorial:'📖 에디토리얼 스킨',clean:'☀️ 클린 스킨',aurora:'🫧 오로라 글래스 스킨',crystal:'💠 크리스탈 라벤더 스킨',airy:'🪁 에어리 레이어 스킨 (블루)',lime:'🍋 차콜×라임 스킨'}[skP.skin]||'🎭 테마 따름 — 홈 테마와 한 몸'); }catch(_){} } return; }
+      if(lpsk){ var skP=postById(postEditId); if(skP){ skP.skin=lpsk.getAttribute('data-lpskin')||''; renderLandingCanvas(); try{ toast({dark:'🌙 다크 스킨',editorial:'📰 에디토리얼 스킨',clean:'🤍 클린 스킨',aurora:'🫧 오로라 글래스 스킨',crystal:'💠 크리스탈 라벤더 스킨',airy:'🪁 에어리 레이어 스킨 (블루)',lime:'🍋 차콜×라임 스킨',crchang:'📦 크창 스킨 (연두레몬)'}[skP.skin]||'🎭 테마 따름 — 홈 테마와 한 몸'); }catch(_){} } return; }
       if(phd){ var pdi=+phd.getAttribute('data-lcphotodel'); var rp=lcRows()[pdi]; if(rp){ if(!rp._content) rp._content=[]; rp._content[0]=''; } renderLandingCanvas(); try{ var pp=postById(postEditId); if(pp) pp.blocks=collectRowsArray(); }catch(_){} return; }
       var ph=e.target.closest('[data-lcphoto]');
       if(ph){ var pi=+ph.getAttribute('data-lcphoto'); try{ openVault(function(u){ var rr=lcRows()[pi]; if(rr){ if(!rr._content) rr._content=[]; rr._content[0]=u; } renderLandingCanvas(); try{ var p2=postById(postEditId); if(p2) p2.blocks=collectRowsArray(); }catch(_){} }); }catch(_){ } return; }
@@ -11369,7 +11406,7 @@
       }); }catch(_){}
     }
     // 플로팅 강조 툴바
-    var lctb=document.createElement('div'); lctb.className='lc-tb';
+    var lctb=document.createElement('div'); lctb.className='lc-selbar';
     lctb.innerHTML='<button type="button" data-tb="bold"><b>굵게</b></button><button type="button" data-tb="em" class="tb-em">강조색</button><button type="button" data-tb="hl-y" class="tb-sw sw-y" title="노랑 형광"></button><button type="button" data-tb="hl-p" class="tb-sw sw-p" title="핑크 형광"></button><button type="button" data-tb="hl-m" class="tb-sw sw-m" title="민트 형광"></button><button type="button" data-tb="h4">소제목</button><button type="button" data-tb="quote">❝ 인용</button>';
     document.body.appendChild(lctb);
     function hideTb(){ lctb.classList.remove('on'); }
@@ -11380,6 +11417,7 @@
       var sel=window.getSelection(), block=null;
       if(sel.rangeCount){ var n=sel.getRangeAt(0).startContainer; while(n && n!==body && n.parentNode!==body) n=n.parentNode; if(n && n.parentNode===body) block=n; }
       if(block){ block.parentNode.insertBefore(el, block.nextSibling); } else { body.appendChild(el); }
+      try{ el.classList.add('lc-in'); el.addEventListener('animationend', function(){ el.classList.remove('lc-in'); }, {once:true}); }catch(_){}
       var after=document.createElement('div'); after.appendChild(document.createElement('br'));
       el.parentNode.insertBefore(after, el.nextSibling);
       try{ var r=document.createRange(); r.setStart(after,0); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }catch(_){}
@@ -11394,7 +11432,7 @@
       else if(k==='ul'){ document.execCommand('insertUnorderedList'); }
       else if(k==='ol'){ document.execCommand('insertOrderedList'); }
       else if(k==='check'){ document.execCommand('insertUnorderedList'); try{ var cs=window.getSelection(); if(cs.rangeCount){ var cn=cs.getRangeAt(0).startContainer; var cel=(cn.nodeType===1?cn:cn.parentNode); var cul=cel&&cel.closest?cel.closest('ul'):null; if(cul && body.contains(cul)) cul.classList.add('lc-check'); } }catch(_){} }
-      else if(/^hl-[ypm]$/.test(k)){ var sh=window.getSelection(); if(sh.rangeCount && !sh.isCollapsed){ var rr=sh.getRangeAt(0), hp=document.createElement('span'); hp.className=k; try{ rr.surroundContents(hp); }catch(_){ try{ hp.appendChild(rr.extractContents()); rr.insertNode(hp); }catch(__){} } } else { try{ toast('형광펜 칠할 글자를 먼저 드래그해 선택하세요'); }catch(_){} } }
+      else if(/^hl-[ypm]$/.test(k)){ var sh=window.getSelection(); if(sh.rangeCount && !sh.isCollapsed){ var rr=sh.getRangeAt(0), hp=document.createElement('span'); hp.className=k; try{ rr.surroundContents(hp); }catch(_){ try{ hp.appendChild(rr.extractContents()); rr.insertNode(hp); }catch(__){} } try{ hp.classList.add('hl-ink'); hp.addEventListener('animationend', function(){ hp.classList.remove('hl-ink'); }, {once:true}); }catch(_e){} } else { try{ toast('형광펜 칠할 글자를 먼저 드래그해 선택하세요'); }catch(_){} } }
       else if(/^co-(tip|warn|ok)$/.test(k)){ var ty=k.slice(3), ic={tip:'💡',warn:'⚠️',ok:'✅'}[ty], ph={tip:'여기에 꿀팁을 적어요',warn:'여기에 주의할 점을 적어요',ok:'여기에 핵심 포인트를 적어요'}[ty]; var co=document.createElement('div'); co.className='lc-callout lc-co-'+ty; co.textContent=ic+' '+ph; lcInsertBlock(body, co); }
       else if(k==='hr'){ lcInsertBlock(body, document.createElement('hr')); }
       else if(k==='table'){ var tb2=document.createElement('table'); tb2.className='lc-tb'; tb2.innerHTML='<thead><tr><th>항목</th><th>내용</th><th>비고</th></tr></thead><tbody><tr><td>첫 줄</td><td>칸을 눌러 바로 수정</td><td>-</td></tr><tr><td>둘째 줄</td><td>&nbsp;</td><td>-</td></tr></tbody>'; lcInsertBlock(body, tb2); try{ toast('⊞ 표 — 칸을 눌러 바로 수정, 줄바꿈은 칸 안에서 Enter'); }catch(_){} }
@@ -11815,12 +11853,13 @@
     Object.keys(tw).forEach(function(zi){ var z=blocks[+zi]; if(!z) return; var m=tw[zi];
       Object.keys(m).forEach(function(ci){ z.content[+ci]=m[ci]; }); });
   }
-  function openLandingInterview(){
-    if(!document.getElementById('lgf-css')){ var _lgs=document.createElement('style'); _lgs.id='lgf-css'; _lgs.textContent=
+  function ensureLgfCss(){
+    if(document.getElementById('lgf-css')) return;
+    var _lgs=document.createElement('style'); _lgs.id='lgf-css'; _lgs.textContent=
       '.lgf-wrap{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:13px 11px 11px 9px;margin:4px 0 15px;background:linear-gradient(160deg,rgba(255,255,255,.03),rgba(255,255,255,.008));position:relative}'
       +'.lgf-lab{position:absolute;top:-8px;left:13px;font-size:9px;font-weight:800;color:#8b7fb0;background:#171226;padding:0 6px}'
       +'.lgf-row{position:relative;display:flex;gap:10px;align-items:flex-start;padding-left:26px;padding-bottom:11px;animation:lgfIn .5s cubic-bezier(.2,.7,.2,1) both}'
-      +'.lgf-row:nth-child(2){animation-delay:.10s}.lgf-row:nth-child(3){animation-delay:.19s}.lgf-row:nth-child(4){animation-delay:.28s}.lgf-row:nth-child(5){animation-delay:.37s}.lgf-row:nth-child(6){animation-delay:.46s}'
+      +'.lgf-row:nth-child(2){animation-delay:.10s}.lgf-row:nth-child(3){animation-delay:.19s}.lgf-row:nth-child(4){animation-delay:.28s}.lgf-row:nth-child(5){animation-delay:.37s}.lgf-row:nth-child(6){animation-delay:.46s}.lgf-row:nth-child(7){animation-delay:.55s}.lgf-row:nth-child(8){animation-delay:.64s}'
       +'@keyframes lgfIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}'
       +'.lgf-row:last-child{padding-bottom:0}'
       +'.lgf-row::before{content:"";position:absolute;left:10px;top:22px;bottom:-1px;width:2px;background:rgba(255,255,255,.09)}'
@@ -11832,12 +11871,16 @@
       +'@keyframes lgfDot{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--nc) 30%,transparent),0 0 9px color-mix(in srgb,var(--nc) 45%,transparent)}50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--nc) 15%,transparent),0 0 16px color-mix(in srgb,var(--nc) 70%,transparent)}}'
       +'.lgf-b{flex:1;min-width:0;border-radius:9px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--nc) 20%,rgba(255,255,255,.08));background:color-mix(in srgb,var(--nc) 5%,transparent);opacity:.62}'
       +'.lgf-row.on .lgf-b{opacity:1;border-color:transparent;background:color-mix(in srgb,var(--nc) 13%,transparent);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--nc) 50%,transparent)}'
-      +'.lgf-bt{font-size:8.5px;font-weight:800;color:var(--nc);margin-bottom:3px;opacity:.92}'
+      +'.lgf-bt{font-size:8.5px;font-weight:800;color:var(--nc);margin-bottom:3px;opacity:.92;display:flex;align-items:center;gap:5px}'
+      +'.lgf-opt{font-size:7.5px;font-weight:800;color:#8b7fb0;border:1px solid rgba(255,255,255,.14);border-radius:5px;padding:0 4px}'
       +'.lgf-big{font-size:12.5px;font-weight:800;color:#fff;line-height:1.3}'
       +'.lgf-tx{font-size:10.5px;color:#b3a9cc;line-height:1.45}'
       +'.lgf-cue{display:inline-block;margin-top:4px;font-size:9px;font-weight:700;color:var(--nc)}'
       +'@media (prefers-reduced-motion:reduce){.lgf-row,.lgf-row.on::after,.lgf-row.on .lgf-c{animation:none!important}}';
-      document.head.appendChild(_lgs); }
+    document.head.appendChild(_lgs);
+  }
+  function openLandingInterview(){
+    ensureLgfCss();
     var ov=document.getElementById('liv-ov');
     if(!ov){
       ov=document.createElement('div'); ov.className='ov'; ov.id='liv-ov';
@@ -11934,16 +11977,113 @@
     }catch(_){}
     try{ toast('✨ 조립 완료'+(n?(' — 재료 '+n+'종이 자동으로 들어갔어요'):'')+(hookSynced?' · 홈(세일즈형) 대문에도 연결!':'')+'. 글자를 내 말로 다듬으면 끝!'); }catch(_){}
   }
-  function createGoalPost(goal){
-    if(goal==='sell'){ openLandingInterview(); return; }   // 🎯 백지 대신 60초 인터뷰부터
-    var g=GOAL_DEFS[goal]; if(!g){ createPost('blog'); return; }
-    var p={ id:newPostId(), type:'blog', cat:g.cat, title:g.title, cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:[{type:'text',name:'본문',on:true,content:['', g.body],layout:''}], createdAt:Date.now() };
+  // 🧲 정보글도 «랜딩처럼» — 완성 예시 미리보기 + 주제 한 줄 → 뼈대 주입 (Phase 1, GOAL_DEFS 대체)
+  var SFS_TYPES=[['info','💡 정보·노하우'],['case','⭐ 후기·사례'],['list','🔢 N가지 리스트'],['news','📢 소식·이벤트']];
+  var SFS_PREV={
+    info:{ title:'🧲 알려지기 — 정보·노하우 글', ph:'예: 앞머리 자르기 전 꼭 확인할 것', rows:[
+      {n:'1',c:'#F0A97B',bt:'후킹 · 검색 고민',big:'앞머리, 자르면 왜 더 답답해 보일까요?',cue:'✎ 이 줄부터 내 걸로'},
+      {n:'2',c:'#E68FB0',bt:'공감가는 상황',opt:1,tx:'“나만 왜 이러지…” 후회한 적 있으시죠?'},
+      {n:'3',c:'#E6B84A',bt:'내 가치 입증',opt:1,tx:'3,000명을 만지며 알게 된 것'},
+      {n:'4',c:'#8FA8EE',bt:'원인 · 진단',tx:'진짜 원인은 따로 있어요.'},
+      {n:'5',c:'#5DCAA5',bt:'해결 · 이렇게',tx:'☑ 오늘 바로 할 3가지'},
+      {n:'6',c:'#93D07A',bt:'삶의 변화',tx:'이러면 하루가 이렇게 좋아져요'},
+      {n:'7',c:'#B98CF5',bt:'전문가 한마디 · 문의',tx:'제가 봐드릴게요 → 상담'}
+    ]},
+    case:{ title:'💛 신뢰 쌓기 — 후기·사례 글', ph:'예: 6개월 뻗침머리 → 2주 만에 인생 앞머리', rows:[
+      {n:'1',c:'#F0A97B',bt:'후킹 · 결과 한 컷',big:'6개월을 참다가, 딱 2주 만에 바뀌었어요',cue:'✎ 결과부터 보여주기'},
+      {n:'2',c:'#E68FB0',bt:'처음 상태 · Before',tx:'매일 아침 20분 고데기, 그래도 오후엔 뻗침'},
+      {n:'3',c:'#8FA8EE',bt:'원인 진단 · 전문가 눈',tx:'머릿결이 아니라 «가마 방향»을 거스른 컷'},
+      {n:'4',c:'#E6B84A',bt:'내가 한 것 · 과정',tx:'가마 따라 결 정리 + 홈케어 3단계'},
+      {n:'5',c:'#5DCAA5',bt:'결과 · After',tx:'📷 Before / After 사진'},
+      {n:'6',c:'#93D07A',bt:'손님의 진짜 후기',opt:1,tx:'❝ 왜 진작 안 왔을까요 ❞'},
+      {n:'7',c:'#B98CF5',bt:'당신도 가능해요 · 문의',tx:'비슷한 고민이면 → 상담 예약'}
+    ]},
+    list:{ title:'🔢 리스트 — N가지 글', ph:'예: 앞머리 실패 안 하는 5가지', more:'＋ 항목은 소제목을 늘려 몇 개든 추가할 수 있어요', rows:[
+      {n:'1',c:'#F0A97B',bt:'후킹 제목 · 숫자 약속',big:'앞머리 실패 안 하는 5가지',cue:'✎ 숫자가 클릭을 불러요'},
+      {n:'2',c:'#E68FB0',bt:'도입 · 왜 중요',opt:1,tx:'10명 중 7명이 첫 앞머리를 후회해요'},
+      {n:'3',c:'#E6B84A',bt:'항목 ①',tx:'얼굴형부터 재기 — 비율이 먼저'},
+      {n:'4',c:'#8FA8EE',bt:'항목 ②',tx:'가마 방향 확인 — 결을 거스르면 뻗침'},
+      {n:'5',c:'#5DCAA5',bt:'항목 ③',tx:'길이는 눈썹+1cm — 자르면 올라가요'},
+      {n:'6',c:'#93D07A',bt:'한 줄 정리',tx:'결국 «내 얼굴 데이터»가 먼저'},
+      {n:'7',c:'#B98CF5',bt:'전문가 한마디 · 문의',tx:'직접 재드릴게요 → 예약'}
+    ]},
+    news:{ title:'📢 소식 전하기 — 이벤트·공지', ph:'예: 이번 달 앞머리 클리닉 오픈', rows:[
+      {n:'1',c:'#F0A97B',bt:'후킹 · 무슨 소식',big:'7월 한 달, 앞머리 클리닉 오픈해요',cue:'✎ 소식부터 한 줄'},
+      {n:'2',c:'#8FA8EE',bt:'핵심 내용 · 뭐예요',tx:'1:1 얼굴형 진단 + 셋팅 30분'},
+      {n:'3',c:'#E68FB0',bt:'이런 분께 · 대상',opt:1,tx:'매일 앞머리와 싸우는 분께'},
+      {n:'4',c:'#E6B84A',bt:'혜택 · 왜 지금',tx:'홈케어 키트(2만원 상당) 무료'},
+      {n:'5',c:'#5DCAA5',bt:'기간·인원 · 놓치면',tx:'선착순 15명 · 7/31까지'},
+      {n:'6',c:'#B98CF5',bt:'지금 신청 · 행동',tx:'예약하기 →'}
+    ]}
+  };
+  function sfsRowHtml(r, on){
+    var lab='<div class="lgf-bt">'+r.bt+(r.opt?'<span class="lgf-opt">선택</span>':'')+'</div>';
+    var mid=r.big?('<div class="lgf-big">'+r.big+'</div>'):('<div class="lgf-tx">'+r.tx+'</div>');
+    var cue=(on&&r.cue)?('<span class="lgf-cue">'+r.cue+'</span>'):'';
+    return '<div class="lgf-row'+(on?' on':'')+'" style="--nc:'+r.c+'"><span class="lgf-c">'+r.n+'</span><div class="lgf-b">'+lab+mid+cue+'</div></div>';
+  }
+  function renderSfsPreview(kind){
+    var d=SFS_PREV[kind]||SFS_PREV.info;
+    var wrap=document.getElementById('sfs-preview');
+    if(wrap) wrap.innerHTML='<span class="lgf-lab">완성 예시 · 이렇게 나와요</span>'+d.rows.map(function(r,i){ return sfsRowHtml(r, i===0); }).join('');
+    var mo=document.getElementById('sfs-more'); if(mo){ mo.textContent=d.more||''; mo.style.display=d.more?'block':'none'; }
+    var ti=document.getElementById('sfs-topic'); if(ti) ti.placeholder=d.ph||'';
+    var hd=document.getElementById('sfs-title'); if(hd) hd.textContent=d.title||'새 글';
+  }
+  function openScaffoldStart(kind){
+    ensureLgfCss();
+    if(!document.getElementById('sfs-css')){ var sc=document.createElement('style'); sc.id='sfs-css'; sc.textContent=
+      '#sfs-ov .sfs-type{font:700 12px var(--sans);color:var(--muted);background:var(--surface);border:1px solid var(--hair);border-radius:11px;padding:9px 12px;margin:0 6px 6px 0;cursor:pointer}'
+      +'#sfs-ov .sfs-type.on{color:var(--coral);background:var(--coral-soft);border-color:var(--coral)}'
+      +'#sfs-ov .sfs-skip{display:block;width:100%;margin-top:9px;background:none;border:none;color:var(--muted);font:700 12px var(--sans);padding:9px;cursor:pointer}'
+      +'#sfs-ov .sfs-more{font-size:10.5px;color:var(--muted);margin:-8px 0 12px 4px}';
+      document.head.appendChild(sc); }
+    window.__sfsKind=kind||'info';
+    var ov=document.getElementById('sfs-ov');
+    if(!ov){
+      ov=document.createElement('div'); ov.className='ov'; ov.id='sfs-ov';
+      ov.innerHTML='<div class="sheet">'
+        +'<div class="sheet-h"><span class="t" id="sfs-title">새 글</span><span class="x" id="sfs-x">×</span></div>'
+        +'<div class="desc">아래 <b style="color:var(--coral)">완성 예시</b>처럼 나와요 — 주제 한 줄만 넣으면 이 순서대로 뼈대가 깔려요. <b>백지에 쓰기가 아니라, 완성본 고치기</b>.</div>'
+        +'<div class="field"><label>어떤 글인가요?</label><div id="sfs-types">'
+          + SFS_TYPES.map(function(t){ return '<button type="button" class="sfs-type" data-sfk="'+t[0]+'">'+t[1]+'</button>'; }).join('')
+        +'</div></div>'
+        +'<div class="lgf-wrap" id="sfs-preview"></div>'
+        +'<div class="sfs-more" id="sfs-more"></div>'
+        +'<div class="field"><label>무엇에 대한 글이에요? <small>— 한 줄이면 충분</small></label><input id="sfs-topic" placeholder=""></div>'
+        +'<button type="button" class="nchip-apply" id="sfs-go">✎ 이 뼈대로 시작 →</button>'
+        +'<button type="button" class="sfs-skip" id="sfs-skip">건너뛰고 빈 글로 시작 →</button>'
+        +'</div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='sfs-x') ov.classList.remove('open'); });
+      ov.querySelectorAll('[data-sfk]').forEach(function(b){ b.onclick=function(){ window.__sfsKind=b.getAttribute('data-sfk'); ov.querySelectorAll('[data-sfk]').forEach(function(x){ x.classList.toggle('on', x===b); }); renderSfsPreview(window.__sfsKind); }; });
+      document.getElementById('sfs-skip').onclick=function(){ ov.classList.remove('open'); createPost('blog'); };
+      document.getElementById('sfs-go').onclick=function(){ var topic=(document.getElementById('sfs-topic')||{value:''}).value; ov.classList.remove('open'); startScaffoldPost(window.__sfsKind||'info', topic); };
+    }
+    ov.querySelectorAll('[data-sfk]').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-sfk')===window.__sfsKind); });
+    var ti=document.getElementById('sfs-topic'); if(ti) ti.value='';
+    renderSfsPreview(window.__sfsKind);
+    ov.classList.add('open');
+  }
+  window.__openScaffoldStart=openScaffoldStart;
+  function startScaffoldPost(kind, topic){
+    var sf=buildScaffold(kind, topic);
+    var catMap={info:'정보·노하우', case:'후기·사례', list:'정보·노하우', news:'소식·이벤트'};
+    var p={ id:newPostId(), type:'blog', cat:(catMap[kind]||''), title:sf.title, cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:[{type:'text',name:'본문',on:true,content:['', sf.body],layout:''}], createdAt:Date.now() };
     postsData.push(p);
     try{ var wk=Math.floor(Date.now()/604800000); var arr=JSON.parse(localStorage.getItem('cm-hub-postweeks')||'[]'); if(arr.indexOf(wk)<0){ arr.push(wk); localStorage.setItem('cm-hub-postweeks', JSON.stringify(arr.slice(-60))); } }catch(_){}
     renderPostsLibrary(); try{ renderLandingLib(); }catch(_){}
     openPostEdit(p.id);
     try{ if(window.__sheetAfterCreate) window.__sheetAfterCreate(); }catch(_){}
-    try{ toast(g.cat+' 뼈대를 깔아뒀어요 — 안내 글을 내 얘기로 바꿔 쓰면 끝!'); }catch(_){}
+    try{ toast('✨ '+(catMap[kind]||'글')+' 뼈대가 깔렸어요 — 소제목 아래를 내 얘기로 바꾸면 끝!'); }catch(_){}
+  }
+  window.__startScaffoldPost=startScaffoldPost;
+  function createGoalPost(goal){
+    if(goal==='sell'){ openLandingInterview(); return; }   // 🎯 팔기 = 랜딩 인터뷰
+    var kindMap={know:'info', trust:'case', news:'news'};   // 알려지기·신뢰·소식 = 완성 예시 뼈대 시트
+    var kind=kindMap[goal];
+    if(!kind){ createPost('blog'); return; }
+    openScaffoldStart(kind);
   }
   window.__createGoalPost=createGoalPost;
   (function(){ var cw=document.getElementById('content-chooser'); if(cw) cw.addEventListener('click', function(e){ var b=e.target.closest('[data-goal]'); if(!b) return; createGoalPost(b.getAttribute('data-goal')); }); })();
@@ -14555,5 +14695,6 @@
   paint(); renderXpRev();
 })();
 </script>
+
 </body>
 </html>
