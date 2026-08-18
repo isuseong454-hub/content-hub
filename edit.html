@@ -3448,7 +3448,7 @@ if('serviceWorker' in navigator){
           <div class="pl-av" id="pl-av"></div>
           <div class="pl-nm" id="pl-nm">이름</div>
           <div class="pl-bio" id="pl-bio">한 줄 소개</div>
-          <div class="pl-handle" id="pl-handle">contenthub.kr/u/…</div>
+          <div class="pl-handle" id="pl-handle">내 주소 …</div>
         </div>
       </div>
       <div class="prof-live-div"></div>
@@ -3539,7 +3539,7 @@ if('serviceWorker' in navigator){
       <div class="sec-h" style="margin:0 0 10px;"><span class="t" style="font-size:14px;">🔗 내 주소 · 채널</span><span class="acc-sub">손님이 찾아오는 길</span></div>
       <div class="field">
         <label>내 주소 (핸들)<span class="req-badge">필수</span></label>
-        <div class="handle-row"><span>contenthub.kr/u/</span><input id="pf-handle" placeholder="원하는 주소 (영문·숫자, 예: jigi)" /></div>
+        <div class="handle-row"><span>u.html?u=</span><input id="pf-handle" placeholder="원하는 주소 (영문·숫자, 예: jigi)" /></div>
       </div>
       <div id="profile-channels-slot"></div><!-- 채널·연락처 카드가 JS로 여기로 이동 -->
     </div>
@@ -8360,7 +8360,7 @@ if('serviceWorker' in navigator){
     var hook=String(home.heroText||'').replace(/\*([^*]+)\*/g,'$1').trim();
     var ind=(a&&a.industry)||'beauty';
     var cta = ind==='personal' ? '컨텐츠 보러 오세요' : ind==='brand' ? '매장 보러 오세요' : '예약하러 오세요';
-    return { name:name, bio:bio, handle:handle, hook:hook||bio||'지금 만나보세요', cta:cta, url:'contenthub.kr/u/'+handle, fullUrl:'https://contenthub.kr/u/'+handle };
+    return { name:name, bio:bio, handle:handle, hook:hook||bio||'지금 만나보세요', cta:cta, url:(window.__custUrlDisp?window.__custUrlDisp(handle):('u.html?u='+handle)), fullUrl:(window.__custUrl?window.__custUrl(handle):('https://isuseong454-hub.github.io/content-hub/u.html?u='+handle)) };
   }
   function drawShareCard(canvas, fmtKind){
     var d=shData(), C=shThemeColors(), sq=(fmtKind==='square');
@@ -8431,8 +8431,13 @@ if('serviceWorker' in navigator){
 
   // ════ 손님에게 보낼 링크 바 (운영 화면 최상단) ════
   function custHandle(){ var pf=((document.getElementById('pf-handle')||{}).value||'').trim(); if(pf) return pf; if(window.AUTH&&window.AUTH.handle) return window.AUTH.handle; try{ var la=JSON.parse(localStorage.getItem('la-auth')||'null'); if(la&&la.handle) return la.handle; }catch(e){} return ''; }
+  /* 🚨2026-08-19 사장님 픽 5B — contenthub.kr 도메인이 아직 미연결이라 복사·QR 링크가 전부 404였음.
+     지금 실제로 열리는 주소(현재 도메인 기준)로 생성. 나중에 contenthub.kr을 사서 연결하면 이 헬퍼가 자동으로 그 도메인을 씀. */
+  function custUrl(h){ try{ return location.origin + location.pathname.replace(/[^/]*$/,'u.html') + '?u=' + h; }catch(e){ return 'https://isuseong454-hub.github.io/content-hub/u.html?u='+h; } }
+  function custUrlDisp(h){ return custUrl(h).replace(/^https?:\/\//,''); }
+  window.__custUrl=custUrl; window.__custUrlDisp=custUrlDisp;
   function copyMyLink(){ var h=custHandle(); if(!h||h==='preview'){ if(window.toast) toast('먼저 ⚙설정·프로필에서 내 주소(핸들)를 정해주세요'); return; }
-    var url='https://contenthub.kr/u/'+h;
+    var url=custUrl(h);
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){ if(window.toast) toast('복사됐어요 · 인스타 프로필·손님에게 붙여넣기'); },function(){ if(window.toast) toast(url); }); }
     else { try{ var ta=document.createElement('textarea'); ta.value=url; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); if(window.toast) toast('복사됐어요 · 손님에게 붙여넣기'); }catch(e){ if(window.toast) toast(url); } } }
   window.__copyMyLink=copyMyLink; window.__custHandle=custHandle;
@@ -8932,7 +8937,7 @@ if('serviceWorker' in navigator){
       var nm=((document.getElementById('pf-name')||{}).value||'').trim(), bio=((document.getElementById('pf-bio')||{}).value||'').trim(), h=((document.getElementById('pf-handle')||{}).value||'').trim();
       var e1=document.getElementById('pl-nm'); if(e1) e1.textContent=nm||'이름을 입력하세요';
       var e2=document.getElementById('pl-bio'); if(e2) e2.textContent=bio||'한 줄 소개를 입력하세요';
-      var e3=document.getElementById('pl-handle'); if(e3) e3.textContent='contenthub.kr/u/'+(h||'…');
+      var e3=document.getElementById('pl-handle'); if(e3) e3.textContent=(h&&window.__custUrlDisp)?window.__custUrlDisp(h):('내 주소: '+(h||'…'));
       var av=document.getElementById('pl-av'); if(av){ var url=window.__profileAvatar||''; if(url){ av.style.backgroundImage='url('+url+')'; av.innerHTML=''; } else { av.style.backgroundImage=''; av.innerHTML='<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0"/></svg>'; } }
     }
     window.__updateProfLive=updateProfLive;
@@ -9138,7 +9143,7 @@ if('serviceWorker' in navigator){
       +'<span style="width:9px;height:9px;border-radius:50%;background:'+ac+';flex:0 0 auto;"></span>'
       +'<div style="flex:1;">'+bar('55%',.45)+'</div><span style="color:'+hexA(ink,.4)+';font-size:14px;">→</span></div>'; }
     p.innerHTML =
-      '<div style="font-size:11px;color:'+sub+';text-align:center;margin-bottom:9px;">contenthub.kr/u/'+handle+'</div>'
+      '<div style="font-size:11px;color:'+sub+';text-align:center;margin-bottom:9px;">'+(window.__custUrlDisp?window.__custUrlDisp(handle):handle)+'</div>'
       + '<div class="thp-av" style="background:'+surf+';box-shadow:0 0 18px '+hexA(ac,.5)+';color:'+ac+';">✻</div>'
       + '<div class="thp-h" style="color:'+ink+';">'+hero+'</div>'
       + '<div style="font-size:11.5px;color:'+sub+';text-align:center;margin-top:6px;">'+escT(bioText)+'</div>'
@@ -9198,11 +9203,26 @@ if('serviceWorker' in navigator){
     pv.style.opacity = home.heroOn ? '1' : '.4';
   }
   // ── 커버 사진 편집기 ──
+  /* 🚨2026-08-19 사장님 픽 1A — «커버 단위 전쟁» 수리: 홈꾸미기(pct translate)와 분위기(bgpos)가 서로 리셋 + 손님(u.html)은 bgpos만 인정이라
+     홈꾸미기 초점은 애초에 공개 화면에 반영도 안 됐음 → 전부 bgpos(0~100 background-position)로 통일. 미리보기 공식=u.html applyCoverFit 그대로. */
+  var __covIA={};   // 사진 가로/세로 비율 캐시 (u.html과 동일)
+  function covApplyFit(el, photo, f){
+    if(!el) return; f=f||{}; var z=f.z||1; if(z<1)z=1;
+    var x=(f.u==='bgpos'&&f.x!=null)?Math.max(0,Math.min(100,f.x)):50;
+    var y=(f.u==='bgpos'&&f.y!=null)?Math.max(0,Math.min(100,f.y)):50;
+    el.style.transform='none';
+    el.style.backgroundPosition=x+'% '+y+'%';
+    var r=el.getBoundingClientRect(); var boxA=(r.width&&r.height)?(r.width/r.height):1;
+    function sz(ia){ var bw,bh; if(ia>=boxA){ bh=z*100; bw=z*(ia/boxA)*100; } else { bw=z*100; bh=z*(boxA/ia)*100; } el.style.backgroundSize=bw.toFixed(2)+'% '+bh.toFixed(2)+'%'; }
+    if(__covIA[photo]){ sz(__covIA[photo]); }
+    else { el.style.backgroundSize='cover'; if(photo){ var im=new Image(); im.onload=function(){ if(im.naturalWidth&&im.naturalHeight){ __covIA[photo]=im.naturalWidth/im.naturalHeight; sz(__covIA[photo]); } }; im.src=photo; } }
+  }
   function renderCover(){
-    var c=home.cover; if(!c){ c=home.cover={on:false,photo:'',layout:'half',fit:{z:1,x:0,y:0,u:'pct'}}; } if(!c.fit) c.fit={z:1,x:0,y:0,u:'pct'}; if(c.fit.u!=='pct'){ c.fit.x=0; c.fit.y=0; c.fit.u='pct'; }  /* 레거시 px값 → 1회 중앙 리셋 */
+    var c=home.cover; if(!c){ c=home.cover={on:false,photo:'',layout:'half',fit:{z:1,x:50,y:50,u:'bgpos'}}; } if(!c.fit) c.fit={z:1,x:50,y:50,u:'bgpos'};
+    if(c.fit.u!=='bgpos'){ c.fit={z:(c.fit.z||1), x:50, y:50, u:'bgpos'}; }   /* 옛 pct/px → 1회 중앙 마이그 (공개 화면은 원래 중앙으로 보이고 있었어서 손님 쪽 변화 0) */
     var prev=document.getElementById('cov-prev'), img=document.getElementById('cov-prev-img'); if(!prev||!img) return;
     if(c.photo){ img.style.backgroundImage='url('+c.photo+')'; prev.classList.add('has-photo'); } else { img.style.backgroundImage=''; prev.classList.remove('has-photo'); }
-    img.style.transform='scale('+(c.fit.z||1)+') translate('+(c.fit.x||0)+'%,'+(c.fit.y||0)+'%)';
+    covApplyFit(img, c.photo, c.fit);
     document.querySelectorAll('#cov-layout button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-cl')===(c.layout||'half')); });
     var clr=document.getElementById('cov-clear'); if(clr) clr.style.display=c.photo?'block':'none';
   }
@@ -9211,10 +9231,10 @@ if('serviceWorker' in navigator){
   (function coverInit(){
     var prev=document.getElementById('cov-prev'); if(!prev) return;
     var img=document.getElementById('cov-prev-img');
-    function applyT(){ var f=home.cover.fit; img.style.transform='scale('+(f.z||1)+') translate('+(f.x||0)+'%,'+(f.y||0)+'%)'; }
+    function applyT(){ var f=home.cover.fit; covApplyFit(img, home.cover.photo, f); }   /* bgpos 통일 — 미리보기=손님 공식 동일 */
     function clampZ(z){ return Math.max(1, Math.min(4, z)); }
     var pick=document.getElementById('cov-pick');
-    if(pick) pick.onclick=function(){ if(!window.openVault) return; window.openVault(function(u){ home.cover.photo=u; home.cover.on=true; home.cover.fit={z:1,x:0,y:0,u:'pct'}; renderCover(); coverPersist(); }); };
+    if(pick) pick.onclick=function(){ if(!window.openVault) return; window.openVault(function(u){ home.cover.photo=u; home.cover.on=true; home.cover.fit={z:1,x:50,y:50,u:'bgpos'}; renderCover(); coverPersist(); }); };
     var clr=document.getElementById('cov-clear');
     if(clr) clr.onclick=function(){ home.cover.photo=''; home.cover.on=false; renderCover(); coverPersist(); };
     document.querySelectorAll('#cov-layout button').forEach(function(b){ b.onclick=function(){ home.cover.layout=b.getAttribute('data-cl'); renderCover(); coverPersist(); }; });
@@ -9222,7 +9242,7 @@ if('serviceWorker' in navigator){
     prev.addEventListener('pointerdown', function(e){ if(!home.cover.photo) return; e.preventDefault(); try{ prev.setPointerCapture(e.pointerId); }catch(_){} pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); prev.classList.add('dragging'); if(pts.size===1){ last={x:e.clientX,y:e.clientY}; var r=prev.getBoundingClientRect(); pw=r.width||1; ph=r.height||1; } else if(pts.size===2){ var arr=[]; pts.forEach(function(v){arr.push(v);}); baseDist=Math.hypot(arr[0].x-arr[1].x,arr[0].y-arr[1].y); baseZ=home.cover.fit.z||1; } });
     prev.addEventListener('pointermove', function(e){ if(!pts.has(e.pointerId)) return; pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
       if(pts.size>=2){ var arr=[]; pts.forEach(function(v){arr.push(v);}); var d=Math.hypot(arr[0].x-arr[1].x,arr[0].y-arr[1].y); if(baseDist>0){ home.cover.fit.z=clampZ(baseZ*(d/baseDist)); applyT(); } }
-      else if(last){ var z=home.cover.fit.z||1; home.cover.fit.x=(home.cover.fit.x||0)+(e.clientX-last.x)/z/pw*100; home.cover.fit.y=(home.cover.fit.y||0)+(e.clientY-last.y)/z/ph*100; home.cover.fit.u='pct'; last={x:e.clientX,y:e.clientY}; applyT(); } });
+      else if(last){ var f=home.cover.fit; f.x=Math.max(0,Math.min(100,(f.x==null?50:f.x)-(e.clientX-last.x)/pw*100)); f.y=Math.max(0,Math.min(100,(f.y==null?50:f.y)-(e.clientY-last.y)/ph*100)); f.u='bgpos'; last={x:e.clientX,y:e.clientY}; applyT(); } });   /* 드래그=bgpos (분위기 편집기와 같은 공식·감각) */
     function end(e){ pts.delete(e.pointerId); if(pts.size<2) baseDist=0; if(pts.size===0){ prev.classList.remove('dragging'); last=null; coverPersist(); } else { var arr=[]; pts.forEach(function(v){arr.push(v);}); last={x:arr[0].x,y:arr[0].y}; } }
     prev.addEventListener('pointerup', end); prev.addEventListener('pointercancel', end);
     var wheelT=null;
@@ -9328,7 +9348,7 @@ if('serviceWorker' in navigator){
       zoomEl.addEventListener('change', persistCover); }
     // ↻ 가운데로 — 사진 위치·줌을 정중앙 초기화 (드래그가 어긋났을 때 한 번에 복구)
     var fitCenterBtn=document.getElementById('dz-fit-center');
-    if(fitCenterBtn) fitCenterBtn.addEventListener('click', function(){ if(!cov().photo){ if(window.toast) toast('먼저 사진을 넣어주세요'); return; } cov().fit={z:1,x:0,y:0,u:'pct'}; if(zoomEl) zoomEl.value=100; sendFit(); renderPreview(); persistCover(); if(window.toast) toast('커버를 가운데로 맞췄어요'); });
+    if(fitCenterBtn) fitCenterBtn.addEventListener('click', function(){ if(!cov().photo){ if(window.toast) toast('먼저 사진을 넣어주세요'); return; } cov().fit={z:1,x:50,y:50,u:'bgpos'}; if(zoomEl) zoomEl.value=100; sendFit(); renderPreview(); persistCover(); if(window.toast) toast('커버를 가운데로 맞췄어요'); });   /* bgpos 통일 */
     ldrag.addEventListener('wheel', function(e){ if(!cov().photo) return; e.preventDefault(); cov().fit.z=clampZ((cov().fit.z||1) - e.deltaY*0.0016); clampFit(cov().fit); if(zoomEl) zoomEl.value=Math.round(cov().fit.z*100); sendFit(); clearTimeout(ldrag._wt); ldrag._wt=setTimeout(persistCover,260); }, {passive:false});
     var pts=new Map(), sd=0, sz=1, pan=null;
     function D(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
@@ -12209,9 +12229,12 @@ if('serviceWorker' in navigator){
     var trust=(nm?40:0)+(bio?30:0)+(avatar?30:0);
     var pubs=0; try{ pubs=(postsData||[]).filter(function(p){ return p&&p.on!==false&&p.blocks&&p.blocks.length; }).length; }catch(_){}
     var content=Math.round(Math.min(pubs,3)/3*100);
-    var actTypes={lead:1,service:1,cta:1,reservation:1}, hasAction=false;
-    try{ document.querySelectorAll('#rows .row').forEach(function(r){ if(actTypes[r.dataset.type]) hasAction=true; }); }catch(_){}
+    /* 🚨2026-08-19 사장님 픽 3A — 기본 틀에도 문의 블록이 있어 «처음부터 ✓완료»가 되던 것:
+       실제 연락 수단(예약 ON · 플로팅 카톡 등 링크 · CTA 링크)이 연결됐을 때만 완료로 인정 */
+    var hasAction=false;
     try{ var rsw=document.getElementById('resv-onoff'); if(rsw&&rsw.classList.contains('on')) hasAction=true; }catch(_){}
+    try{ if(!hasAction){ var _hh=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); var _fab=_hh.fab||{}; if(Object.keys(_fab).some(function(k){ return String(_fab[k]||'').trim(); })) hasAction=true; } }catch(_){}
+    try{ if(!hasAction && window.__ctaGet){ var _ct=window.__ctaGet(); if(_ct && String(_ct.url||'').trim()) hasAction=true; } }catch(_){}
     var action=hasAction?100:0;
     var overall=Math.round((trust+content+action)/3);
     var next;
@@ -12264,7 +12287,7 @@ if('serviceWorker' in navigator){
       +'<button class="hub-grow2" id="hub-grow"><span class="hg2-h"><span class="hg2-ic">📈</span><span class="hg2-t"><b>성장 방법</b><small>유입 · 전환 · 단골 · 성과</small></span></span><span class="hg2-body">숫자가 안 오를 때, <b>유입 → 전환</b> 어디가 약한지 짚고 <b>뭘 하면 되는지</b> 방법을 알려드려요.</span><span class="hg2-btn">방법 보러 가기 →</span></button>'
       /* ⑤ 내 페이지 */
       +'<div class="hub-zone"><div class="hub-zone-h">🔗 내 페이지</div>'
-      +  ((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">contenthub.kr/u/'+myH+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
+      +  ((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">'+(window.__custUrlDisp?window.__custUrlDisp(myH):myH)+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
       +  '<div class="hub-tpl" id="hub-tpl"><span class="htp-l">🏠 손님 홈 템플릿</span><div class="htp-seg htp-seg4"><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button><button type="button" data-tpl="free">🧱 자유형</button></div><div class="htp-hint" id="htp-hint"></div></div>'
       +'</div>';
     // (지금할일 hub-hero · 완성도 hub-ns 카드 제거 2026-07-07 — fold 로직 삭제)
@@ -12897,6 +12920,18 @@ if('serviceWorker' in navigator){
       try{ localStorage.setItem('cm-home-v1','{}'); home.menu=null; home.solo=false; }catch(_){}
       try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){}
       try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(_){}
+      /* 🚨2026-08-19 사장님 픽 2B — 프로필도 채널별 완전 격리: 빈 채널에 이전 채널의 명함(권위·후기·숫자칩·사진)이 남지 않게 */
+      try{ sv('pf-bio',''); sv('pf-tagline',''); sv('pf-headline',''); sv('pf-authority',''); sv('pf-stats',''); var _cr=document.getElementById('pf-creds'); if(_cr) _cr.value=''; }catch(_){}
+      try{ if(window.__reviewsSet) window.__reviewsSet([]); }catch(_){}
+      try{ if(window.__ctaLoad) window.__ctaLoad({}); }catch(_){}
+      try{ if(window.__loadChips) window.__loadChips([]); }catch(_){}
+      try{ if(window.__loadWorks) window.__loadWorks([]); }catch(_){}
+      try{ if(window.__loadXp) window.__loadXp(null); }catch(_){}
+      try{ if(window.__evGallerySet) window.__evGallerySet([]); }catch(_){}
+      try{ if(window.__loadAbSections) window.__loadAbSections([]); }catch(_){}
+      try{ if(window.__loadCreator) window.__loadCreator(null); }catch(_){}
+      try{ if(window.__loadStory) window.__loadStory(null); }catch(_){}
+      try{ window.__profileAvatar=''; var _av=document.querySelector('#profile-card .avatar'); if(_av) _av.style.backgroundImage=''; }catch(_){}
       if(res.name) sv('pf-name', res.name);
       var st0=(AUTH&&AUTH.starterStyle);
       if(st0 && STYLE_PRESETS[st0]){ applyStyle(st0); }                                  // 고른 시작 스타일로
@@ -14596,7 +14631,7 @@ if('serviceWorker' in navigator){
         var total=ws.reduce(function(a,b){ return a+b; },0)+(texts.length-1)*13, sx=360-total/2, cy=612;
         texts.forEach(function(t,i){ var w=ws[i]; x.fillStyle='rgba(255,255,255,.07)'; rr(sx,cy-30,w,54,27); x.fill(); x.strokeStyle='rgba(255,255,255,.22)'; x.lineWidth=1.4; rr(sx,cy-30,w,54,27); x.stroke(); x.fillStyle='#ffd77a'; x.fillText(t, sx+w/2, cy+7); sx+=w+13; });
       }
-      if(handle){ x.fillStyle='#a78bff'; x.font='700 25px Pretendard, sans-serif'; x.fillText('contenthub.kr/u/'+handle, 360, 828); }
+      if(handle){ x.fillStyle='#a78bff'; x.font='700 25px Pretendard, sans-serif'; x.fillText((window.__custUrlDisp?window.__custUrlDisp(handle):handle), 360, 828); }
       try{ var a=document.createElement('a'); a.download='명함_'+name+'.png'; a.href=cv.toDataURL('image/png'); a.click(); if(window.toast) toast('🪪 명함 이미지 저장! 인스타 스토리·카톡에 올려보세요'); }
       catch(err){ if(window.toast) toast('외부 사진 때문에 저장이 막혔어요 — 프로필 사진을 보관함(앱 업로드) 사진으로 바꾸면 돼요'); }
     }
