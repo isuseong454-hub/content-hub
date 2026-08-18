@@ -82,7 +82,9 @@ if('serviceWorker' in navigator){
 
   /* 상단 바 */
   .topbar{position:sticky; top:0; z-index:10; background:var(--paper);
-    display:flex; align-items:center; gap:10px; padding:14px 16px; max-width:520px; margin:0 auto;}
+    display:flex; align-items:center; gap:10px; padding:calc(14px + env(safe-area-inset-top,0px)) 16px 14px; max-width:520px; margin:0 auto;}   /* 아이폰 PWA 노치 대비 */
+  /* 📱 iOS 자동 확대 방지 — 입력칸 16px 미만이면 포커스 때 화면이 확대됨 (위화감 4대 1번 · 마스터즈 v572와 동일 처방) */
+  @media (pointer:coarse){ input:not([type=checkbox]):not([type=radio]):not([type=range]), textarea, select{ font-size:16px !important; } }
   /* 손님 링크 카드 (운영 홈 대시보드 맨 위) */
   .hub-link{display:flex; align-items:center; gap:11px; padding:13px 15px; margin-bottom:13px; border-radius:16px; background:radial-gradient(120% 130% at 0% 0%, rgba(126,191,142,.28), transparent 62%), linear-gradient(100deg,#1d3326,#142019); border:1px solid rgba(126,191,142,.32);}
   .hub-link .hl-ic{font-size:18px; flex:0 0 auto;}
@@ -361,7 +363,7 @@ if('serviceWorker' in navigator){
   .vph.pickable:active{transform:scale(.96);}
   .vempty{grid-column:1/-1; text-align:center; color:var(--muted); font-size:12.5px; padding:26px 0;}
   .vhint{font-size:11px; color:var(--muted); text-align:center; margin-top:13px;}
-  .toast{position:fixed; left:50%; bottom:92px; transform:translateX(-50%); background:#2A2622; color:#fff; font-size:12.5px; padding:9px 16px; border-radius:999px; z-index:90; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}
+  .toast{position:fixed; left:50%; bottom:92px; transform:translateX(-50%); background:#2A2622; color:#fff; font-size:12.5px; padding:9px 16px; border-radius:999px; z-index:100200; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}   /* 🚨z90이라 모달(.ov 120·설정 10만대) 안 토스트가 전부 가려지던 것 — 최상위로 (마스터즈 v769와 동형 사고) */
   .toast.show{opacity:.95;}
 
   /* 로그인 화면 */
@@ -1626,7 +1628,7 @@ if('serviceWorker' in navigator){
   .secbtn{margin-left:auto; font-size:12px; color:var(--coral); background:var(--coral-soft); border:1px solid rgba(123,90,255,.35); border-radius:9px; padding:6px 12px; cursor:pointer; font-family:var(--sans); white-space:nowrap;}
   #rows-extra:empty::after, #rows:empty::after{content:'아직 없어요'; display:block; text-align:center; color:var(--muted); font-size:12px; padding:14px 0;}
   .lay-preview{border-radius:14px; overflow:hidden; margin-bottom:13px; border:1px solid var(--hair); min-height:120px; transition:background .2s;}
-  #allprev-ov{position:fixed; inset:0; z-index:95; background:rgba(5,3,16,.82); display:none; align-items:center; justify-content:center; padding:14px;}
+  #allprev-ov{position:fixed; inset:0; z-index:130; background:rgba(5,3,16,.82); display:none; align-items:center; justify-content:center; padding:14px;}   /* 🚨z95라 예약설정(.ov 120) 뒤에 열려 «👁 미리보기»가 죽은 버튼처럼 보이던 것 */
   #allprev-ov.open{display:flex;}
   .allprev-wrap{width:100%; max-width:420px; height:90vh; display:flex; flex-direction:column; background:#16161A; border:1px solid var(--hair); border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.55);}
   .allprev-bar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 16px; font-size:12.5px; color:var(--muted); border-bottom:1px solid var(--hair); flex:0 0 auto;}
@@ -2486,7 +2488,7 @@ if('serviceWorker' in navigator){
         <input class="pin-d" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 4번째">
       </div>
       <input id="lg-pin" type="hidden">
-      <div class="pin-hint">PIN · 숫자 4자리</div>
+      <div class="pin-hint">PIN · 숫자 4자리 <span style="opacity:.75">· 처음이면 코드만 넣고 [로그인] → PIN을 만들어요</span></div>
       <div class="login-err" id="lg-err"></div>
       <button class="login-btn" id="lg-btn">로그인</button>
       <button class="login-btn" id="lg-next">다음 →</button>
@@ -4873,7 +4875,7 @@ if('serviceWorker' in navigator){
     .lce-btn{ flex:1; padding:10px; border-radius:11px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; }
     .lce-btn.del{ flex:0 0 auto; color:#e0607a; }
     /* ＋새 컨텐츠 chooser */
-    .cc-wrap{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:8px 0 4px; }
+    .cc-wrap{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:8px 0 4px; }   /* 목적 4버튼 = 2×2 (3열이라 「소식」만 홀로 아랫줄이던 것 정리) */
     .cc-opt{ display:flex; flex-direction:column; gap:4px; align-items:center; padding:14px 6px; border-radius:13px; border:1px solid var(--hair); background:var(--soft); color:var(--ink); font-family:inherit; font-size:12.5px; font-weight:800; cursor:pointer; }
     .cc-opt:active{ transform:scale(.97); }
     .cc-opt .cc-ico{ font-size:22px; }
@@ -8536,7 +8538,7 @@ if('serviceWorker' in navigator){
     var fb=e.target.closest? e.target.closest('.ab-fmt-btn'):null;
     var tb=e.target.closest? e.target.closest('.ab-tpl-btn'):null;
     var cb=e.target.closest? e.target.closest('.ab-col'):null;
-    if(fb){ window.__pfFormat=fb.getAttribute('data-abfmt')||'pro'; __syncCreatorFields(); if(window.__aboutPreset) window.__aboutPreset(window.__pfFormat); if(window.__renderAboutCanvas) window.__renderAboutCanvas(); }
+    if(fb && fb.hasAttribute('data-abfmt')){ window.__pfFormat=fb.getAttribute('data-abfmt')||'pro'; __syncCreatorFields(); if(window.__aboutPreset) window.__aboutPreset(window.__pfFormat); if(window.__renderAboutCanvas) window.__renderAboutCanvas(); }   /* 🚨CTA 세그(#cta-seg)가 .ab-fmt-btn 클래스를 공유 — data-abfmt 없는 버튼이 소개 유형을 'pro'로 몰래 리셋하던 이중 위임 사고 */
     if(tb){ [].forEach.call(document.querySelectorAll('.ab-tpl-btn'),function(x){x.classList.remove('on');}); tb.classList.add('on'); window.__pfTemplate=tb.getAttribute('data-abtpl'); if(window.__renderAboutCanvas) window.__renderAboutCanvas(); }
     if(cb){ [].forEach.call(document.querySelectorAll('.ab-col'),function(x){x.classList.remove('on');}); cb.classList.add('on'); window.__pfColor=cb.getAttribute('data-abcol')||''; if(window.__renderAboutCanvas) window.__renderAboutCanvas(); }
   });
@@ -9638,7 +9640,7 @@ if('serviceWorker' in navigator){
     try{ new MutationObserver(function(){ if(hov.classList.contains('open')) render(); }).observe(hov,{attributes:true,attributeFilter:['class']}); }catch(_){}
     // 🧭 분위기(dz-ov) → 메뉴·단독 진입 브릿지 (도달성 확보)
     var bridge=document.getElementById('dz-open-menu');
-    if(bridge) bridge.onclick=function(){ var dz=document.getElementById('dz-ov'); if(dz) dz.classList.remove('open'); if(window.__openHomeDeco) window.__openHomeDeco('menu'); };
+    if(bridge) bridge.onclick=function(){ var dz=document.getElementById('dz-ov'); if(dz) dz.classList.remove('open'); try{ if(window.__pageAutosaveResume) window.__pageAutosaveResume(); }catch(_){} if(window.__openHomeDeco) window.__openHomeDeco('menu'); };   /* 🚨dz가 걸어둔 자동저장 일시정지를 안 풀고 나가 이후 모든 편집이 소리 없이 저장 안 되던 것 */
     render();
   })();
   window.__setHeroOn=function(on){ home.heroOn=!!on; try{ var cur=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); cur.heroOn=!!on; localStorage.setItem('cm-home-v1', JSON.stringify(cur)); }catch(e){} try{ if(typeof renderHero==='function') renderHero(); }catch(e){} };   // 후킹문구 삭제(숨김)/켜기 — la-del-core에서 호출 (HKEY 직접 저장 → serialize 반영)
@@ -9705,6 +9707,7 @@ if('serviceWorker' in navigator){
 (function(){
   var AUTH = null;
   try { AUTH = JSON.parse(localStorage.getItem('la-auth')||'null'); } catch(e){}
+  window.AUTH = AUTH;   /* 🚨검수: window.AUTH가 어디서도 할당 안 돼 멀티채널 심의 핸들 동기화(syncAuthHandle)가 전부 no-op이던 것 */
   // 등급 잠금/사용기간(블록 A)이 읽을 수 있게 window로 노출
   function publishTier(){ window.__authTier=(AUTH&&AUTH.industry)||'basic'; window.__authExpires=(AUTH&&AUTH.expiresAt!=null)?AUTH.expiresAt:null; }
   publishTier();
@@ -11142,7 +11145,7 @@ if('serviceWorker' in navigator){
         if(type==='imagetext'){ var img=(c[0]||''); var bg=img?(' style="background-image:url('+String(img).replace(/"/g,'&quot;')+')"'):''; photo='<div class="lphoto'+(img?' has':'')+'" data-lcphoto="'+i+'"'+bg+'>'+(img?'<button class="lphoto-x" data-lcphotodel="'+i+'">✕ 사진 빼기</button>':'＋ 사진 넣기')+'</div>'; }
         var titleHtml='<'+tg+' data-ce data-ri="'+i+'" data-ck="'+ti+'" data-empty="제목을 적어요">'+lcMdToHtml(c[ti]||'')+'</'+tg+'>';
         if(isDoc){
-          body=photo+titleHtml+'<div class="lc-body'+((i===0)?' lc-big':'')+'" data-ce data-rich="1" data-ri="'+i+'" data-ck="'+bi+'" data-empty="첫 문장은 손님 고민으로 — 예: “앞머리가 자꾸 갈라지나요?” 처럼 열면 끝까지 읽어요 · 📷 사진·강조도 돼요">'+lcRichToHtml(c[bi]||'')+'</div>';
+          body=photo+titleHtml+'<div class="lc-body'+((i===0)?' lc-big':'')+'" data-ce data-rich="1" data-ri="'+i+'" data-ck="'+bi+'" data-empty="첫 문장은 손님 고민으로 — 예: “앞머리가 자꾸 갈라지나요?” 처럼 열면 끝까지 읽어요 · 📷 사진·강조도 돼요">'+lcRichToHtml(c[bi]||'').replace(/<details class="lc-tg">/g,'<details class="lc-tg" open>')+'</div>';   /* ▸토글: 편집기에선 항상 펼쳐 내용 수정 가능하게(저장 시 open은 sanitizer가 제거 → 손님은 접힌 채) */
         } else {
           body=photo+titleHtml+'<p data-ce data-ri="'+i+'" data-ck="'+bi+'" data-empty="설명을 적어요">'+lcMdToHtml(c[bi]||'')+'</p>';
         }
@@ -11388,7 +11391,7 @@ if('serviceWorker' in navigator){
         if(window.__createRow){ var rr=window.__createRow({type:'imagetext',name:'사진',on:true,content:['','','']}); if(rr) rr._content=['','','']; } try{ if(window.__updateHomeProgress) window.__updateHomeProgress(); }catch(_){} renderLandingCanvas(); try{ var p3=postById(postEditId); if(p3) p3.blocks=collectRowsArray(); }catch(_){} try{ toast('사진 칸을 추가했어요'); }catch(_){} return;
       }
       if(e.target.closest('[data-lcpostdel]')){ if(!confirm('이 글을 삭제할까요?')) return; var rid=postEditId; postsData=postsData.filter(function(x){return x.id!==rid;}); exitPostMode(); renderPostsLibrary(); try{ renderLandingLib(); }catch(_){} if(window.__switchWs) window.__switchWs('posts'); return; }
-      if(e.target.closest('[data-lcprofile]')){ if(window.__switchWs) window.__switchWs('profile'); return; }
+      if(e.target.closest('[data-lcprofile]')){ if(window.__switchWs) window.__switchWs('page'); return; }   /* 🚨'profile' pane은 존재하지 않아 화면이 백지가 되던 것 — 전문가 증명 입력칸(pf-authority)은 page 탭 */
       if(e.target.closest('[data-lcsales]')){ if(window.__switchWs) window.__switchWs('sales'); return; }
     });
     // ── 노션식 본문: 인라인 사진 + 선택 강조 툴바 ──
@@ -11427,8 +11430,8 @@ if('serviceWorker' in navigator){
       try{ if(lcSavedRange && body.contains(lcSavedRange.startContainer)){ var s=window.getSelection(); s.removeAllRanges(); s.addRange(lcSavedRange); } }catch(_){}
       if(k==='bold'){ document.execCommand('bold'); }
       else if(k==='em'){ var sel=window.getSelection(); if(sel.rangeCount && !sel.isCollapsed){ var r=sel.getRangeAt(0); var sp=document.createElement('span'); sp.className='em'; try{ r.surroundContents(sp); }catch(_){ try{ sp.appendChild(r.extractContents()); r.insertNode(sp);}catch(__){} } } else { try{ toast('강조할 글자를 먼저 드래그해 선택하세요'); }catch(_){} } }
-      else if(k==='h4'){ document.execCommand('formatBlock','H4'); }
-      else if(k==='quote'){ document.execCommand('formatBlock','BLOCKQUOTE'); }
+      else if(k==='h4'){ document.execCommand('formatBlock', false, 'h4'); }        /* 🚨2026-08-19 검수: 2인자 호출이라 소제목 버튼이 무동작이었음(showUI 자리에 'H4') */
+      else if(k==='quote'){ document.execCommand('formatBlock', false, 'blockquote'); }
       else if(k==='ul'){ document.execCommand('insertUnorderedList'); }
       else if(k==='ol'){ document.execCommand('insertOrderedList'); }
       else if(k==='check'){ document.execCommand('insertUnorderedList'); try{ var cs=window.getSelection(); if(cs.rangeCount){ var cn=cs.getRangeAt(0).startContainer; var cel=(cn.nodeType===1?cn:cn.parentNode); var cul=cel&&cel.closest?cel.closest('ul'):null; if(cul && body.contains(cul)) cul.classList.add('lc-check'); } }catch(_){} }
@@ -11864,10 +11867,10 @@ if('serviceWorker' in navigator){
       +'.lgf-row:last-child{padding-bottom:0}'
       +'.lgf-row::before{content:"";position:absolute;left:10px;top:22px;bottom:-1px;width:2px;background:rgba(255,255,255,.09)}'
       +'.lgf-row:last-child::before{display:none}'
-      +'.lgf-row.on::after{content:"";position:absolute;left:6px;top:22px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--nc) 95%,#fff),transparent 68%);filter:blur(.5px);animation:lgfSpark 1.9s ease-in-out .9s infinite}'
+      +'.lgf-row.on::after{content:"";position:absolute;left:6px;top:22px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--nc) 95%,#fff),transparent 68%);filter:blur(.5px);animation:lgfSpark 1.9s ease-in-out .9s 3}'
       +'@keyframes lgfSpark{0%{transform:translateY(0);opacity:0}18%{opacity:1}82%{opacity:1}100%{transform:translateY(28px);opacity:0}}'
       +'.lgf-c{position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;color:var(--nc);border:2px solid var(--nc);background:#181322}'
-      +'.lgf-row.on .lgf-c{background:var(--nc);color:#12101a;border-color:transparent;animation:lgfDot 2.6s ease-in-out infinite}'
+      +'.lgf-row.on .lgf-c{background:var(--nc);color:#12101a;border-color:transparent;animation:lgfDot 2.6s ease-in-out 3}'
       +'@keyframes lgfDot{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--nc) 30%,transparent),0 0 9px color-mix(in srgb,var(--nc) 45%,transparent)}50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--nc) 15%,transparent),0 0 16px color-mix(in srgb,var(--nc) 70%,transparent)}}'
       +'.lgf-b{flex:1;min-width:0;border-radius:9px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--nc) 20%,rgba(255,255,255,.08));background:color-mix(in srgb,var(--nc) 5%,transparent);opacity:.62}'
       +'.lgf-row.on .lgf-b{opacity:1;border-color:transparent;background:color-mix(in srgb,var(--nc) 13%,transparent);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--nc) 50%,transparent)}'
@@ -12217,7 +12220,8 @@ if('serviceWorker' in navigator){
     else if(trust<100) next={t:'<b>프로필·전문성</b>을 더 채우면 신뢰가 올라가요.', label:'👤 프로필 채우기', go:'page'};
     else next={t:'좋아요! 페이지가 탄탄해요. 이제 <b>인스타에 홈 링크를 더 노출</b>해 유입을 늘려요.', label:null, go:null};
     function step(n,t,p,why){ return '<div class="ns-step'+(p>=100?' done':'')+'"><div class="ns-step-n">'+n+'</div><div class="ns-step-main"><div class="ns-step-top"><span class="ns-step-t">'+t+'</span><span class="ns-step-p">'+p+'%</span></div><div class="ns-bar"><i style="width:'+Math.max(p,3)+'%;"></i></div><div class="ns-why">'+why+'</div></div></div>'; }
-    var tier=window.__authTier||'basic', exp=window.__authExpires;
+    var tier=(window.cmTier?cmTier():(window.__authTier||'basic'));   /* 🚨채널별 등급 무시하고 계정 등급만 보여 배지·게이트가 서로 다른 등급을 말하던 것 */
+    var exp=(window.__MC&&window.__MC.on&&window.__MC.cur&&window.__MC.cur.expires_at!=null)?window.__MC.cur.expires_at:window.__authExpires;
     var tierLbl=({basic:'베이직',pro:'프로',premium:'프리미엄'})[tier]||'베이직', dday;
     if(exp){ var left=Math.ceil((exp-Date.now())/86400000); dday=left>0?('사용 D-'+left):'기간 만료'; } else { dday='평생 이용'; }
     var TILES=[['✏️','홈 편집','c-purple','live'],['✍️','새 글','c-violet','newpost'],['🎴','카드뉴스','c-pink','cardnews'],['📥','가져오기','c-gray','import'],['💰','스토어','c-green','store'],['👁','손님 홈','c-orange','realhome'],['📊','고객·분석','c-teal','data'],['🎨','분위기','c-blue','design']];
@@ -12541,7 +12545,7 @@ if('serviceWorker' in navigator){
     (function(){
       var btn=document.getElementById('new-content-btn'), ch=document.getElementById('content-chooser');
       if(btn&&ch){ btn.onclick=function(){ ch.style.display=(ch.style.display==='none'||!ch.style.display)?'grid':'none'; }; }
-      if(ch) ch.querySelectorAll('.cc-opt').forEach(function(o){ o.onclick=function(){ ch.style.display='none'; var k=o.getAttribute('data-cc');
+      if(ch) ch.querySelectorAll('.cc-opt, [data-cc]').forEach(function(o){ o.onclick=function(){ ch.style.display='none'; var k=o.getAttribute('data-cc');   /* 🚨2026-08-19 검수: 「그냥 글」·「카드뉴스」(data-cc)가 배선 밖이라 무반응이었음 */
         if(k==='article'){ try{ showPostTypeChooser(); }catch(_){} }
         else if(k==='cardnews'){ showPwTab('cardnews'); }
         else if(k==='carousel'){ try{ createPost('carousel'); }catch(_){} }
@@ -12575,7 +12579,7 @@ if('serviceWorker' in navigator){
       return '<div class="scard scv'+(open?' open':'')+'" data-pi="'+gi+'">'
         + '<div class="scv-view" data-pexp="'+gi+'">'
         +   '<span class="scv-th'+(p.img?' has':'')+'"'+imgStyle+'>'+(p.img?'':'🛍')+'</span>'
-        +   '<span class="scv-m"><span class="scv-n">'+(esc(p.name)||'<i style="color:var(--muted);">이름 없는 상품</i>')+'</span><span class="scv-p">'+esc(p.price||'')+(p.resv?' · 📅 예약으로 받기':(p.url?'':(coup?'':' · 💬 카톡 문의로')))+'</span></span>'
+        +   '<span class="scv-m"><span class="scv-n">'+(escT(p.name)||'<i style="color:var(--muted);">이름 없는 상품</i>')+'</span><span class="scv-p">'+escT(p.price||'')+(p.resv?' · 📅 예약으로 받기':(p.url?'':(coup?'':' · 💬 카톡 문의로')))+'</span></span>'
         +   '<span class="scv-go">'+(p.resv?'📅':'↗')+'</span>'
         +   '<span class="scv-edit">✎</span>'
         +   '<button type="button" class="sc-del" data-prm="'+gi+'">×</button>'
@@ -12618,7 +12622,7 @@ if('serviceWorker' in navigator){
       box.innerHTML = sec('mine','🛍','내 상품 · 클래스 · 서비스') + sec('coupang','🛒','추천 제품 · 쿠팡 파트너');
       box.querySelectorAll('[data-psectoggle]').forEach(function(h){ h.onclick=function(){ var k=h.getAttribute('data-psectoggle'); prodOpen[k]=!prodOpen[k]; h.closest('.psec').classList.toggle('open', prodOpen[k]); }; });
       box.querySelectorAll('[data-pf]').forEach(function(inp){ inp.oninput=function(){ var i=+inp.closest('[data-pi]').getAttribute('data-pi'); productsData[i][inp.getAttribute('data-pf')]=inp.value; }; });
-      box.querySelectorAll('[data-prm]').forEach(function(x){ x.onclick=function(){ productsData.splice(+x.getAttribute('data-prm'),1); renderProdLib(); }; });
+      box.querySelectorAll('[data-prm]').forEach(function(x){ x.onclick=function(){ if(!confirm('이 상품을 삭제할까요?')) return; productsData.splice(+x.getAttribute('data-prm'),1); renderProdLib(); }; });   /* 실수 한 번에 상품 소멸+자동저장 방지 */
       box.querySelectorAll('[data-pimg]').forEach(function(b){ b.onclick=function(){ var i=+b.getAttribute('data-pimg'); if(window.openVault) window.openVault(function(u){ productsData[i].img=u; renderProdLib(); }); }; });
       box.querySelectorAll('[data-padd]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-padd'); prodOpen[k]=true; productsData.push({name:'',price:'',url:'',img:'',kind:k}); renderProdLib(); var rows=box.querySelectorAll('[data-psec="'+k+'"] .scard'); var last=rows[rows.length-1]; if(last){ var inp=last.querySelector('.sc-name'); if(inp) inp.focus(); } }; });
       // (2026-07-08) 카드↔폼 토글 · 구매 경로 칩 · 예약으로 받기 · 유령 채택
@@ -12885,6 +12889,14 @@ if('serviceWorker' in navigator){
     if(!res || !res.ok) return;
     if(res.data && res.data.blocks && res.data.blocks.length){ applyData(res.data); try{ localStorage.setItem('la-snap-'+AUTH.code, JSON.stringify({data:res.data, at:Date.now()})); }catch(e){} }   // 기존 페이지 → 온보딩 건너뜀 + 로컬 안전 스냅샷
     else {
+      /* 🚨2026-08-19 검수(치명): 빈 채널로 전환하면 applyData가 안 불려 이전 채널의 글·상품·Q&A·예약·홈버전이
+         메모리에 그대로 남고, 저장하는 순간 새 채널로 통째 복제되던 것 — else 경로에도 채널 격리 리셋 */
+      postsData=[]; productsData=[]; qnaData=[]; catColorsData={}; homeVersions={};
+      try{ resvCfg=JSON.parse(JSON.stringify(DEFAULT_RESV)); }catch(_){}
+      try{ if(window.__refreshResvSection) window.__refreshResvSection(); }catch(_){}
+      try{ localStorage.setItem('cm-home-v1','{}'); home.menu=null; home.solo=false; }catch(_){}
+      try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){}
+      try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(_){}
       if(res.name) sv('pf-name', res.name);
       var st0=(AUTH&&AUTH.starterStyle);
       if(st0 && STYLE_PRESETS[st0]){ applyStyle(st0); }                                  // 고른 시작 스타일로
@@ -13026,7 +13038,7 @@ if('serviceWorker' in navigator){
       var c=m.cur;
       document.documentElement.style.setProperty('--mc-acc', c.color||'#a78bff');
       chip.classList.toggle('expired', !!c.expired);
-      chip.innerHTML='<span class="d"'+(c.photo?(' style="background-image:url('+String(c.photo).replace(/"/g,'&quot;')+')"'):'')+'></span>'+(c.name||c.handle||'채널')+(c.expired?' · 만료':'')+' <span style="opacity:.6">▾</span>';
+      chip.innerHTML='<span class="d"'+(c.photo?(' style="background-image:url('+String(c.photo).replace(/"/g,'&quot;')+')"'):'')+'></span>'+escT(c.name||c.handle||'채널')+(c.expired?' · 만료':'')+' <span style="opacity:.6">▾</span>';
     }
     // ── 만료 배너 (회색 화면 + 유예 3일 셀프 신청 1회) ──
     function showExpired(){
@@ -13071,7 +13083,7 @@ if('serviceWorker' in navigator){
         var cur=(m.cur&&c.id===m.cur.id);
         return '<div class="mc-it'+(cur?' cur':'')+(c.expired?' expired':'')+(String(c.id)===String(newborn)?' newborn':'')+'" data-ch="'+i+'" style="--ci:'+(c.color||'#a78bff')+'">'
           +'<span class="mc-cd"'+(c.photo?(' style="background-image:url('+String(c.photo).replace(/"/g,'&quot;')+')"'):'')+'></span>'
-          +'<span class="mc-inf"><span class="mc-nm">'+(c.name||c.handle)+(c.expired?'<span class="mc-exp">만료됨</span>':'')+'</span><span class="mc-hd">u.html?u='+c.handle+'</span></span>'
+          +'<span class="mc-inf"><span class="mc-nm">'+escT(c.name||c.handle)+(c.expired?'<span class="mc-exp">만료됨</span>':'')+'</span><span class="mc-hd">u.html?u='+escT(c.handle)+'</span></span>'
           +(cur?'<span class="mc-ck">✓</span>':'')+'</div>';
       }).join('');
       h+='<div class="mc-add" data-mcadd><span class="pp">＋</span>새 채널 추가</div>'
@@ -13311,7 +13323,7 @@ if('serviceWorker' in navigator){
           err.textContent='이 코드는 “'+(INDLBL[res.industry]||res.industry)+'”용이에요.\n위에서 “'+(INDLBL[res.industry]||res.industry)+'”를 선택하고 다시 로그인하세요.';
           btn.disabled=false; btn.textContent='로그인'; return;
         }
-        AUTH={code:code, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; publishTier();
+        AUTH={code:code, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; window.AUTH=AUTH; publishTier();
         try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',code);}catch(e){} enter();
       }
       else if(res && res.reason==='nopin'){
@@ -13336,7 +13348,7 @@ if('serviceWorker' in navigator){
         var hash=await window.laSha256(p1);
         var res=await window.laRpc('li_set_pin', { p_code:pendingCode, p_pin_hash:hash });
         if(res && res.ok){
-          AUTH={code:pendingCode, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; publishTier();
+          AUTH={code:pendingCode, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; window.AUTH=AUTH; publishTier();
           try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',pendingCode);}catch(e){}
           hideSetPin(); enter();
         } else if(res && res.reason==='already'){ se.textContent='이미 PIN이 설정된 코드예요. 로그인해 주세요'; setTimeout(hideSetPin, 1200); }
@@ -13551,6 +13563,7 @@ if('serviceWorker' in navigator){
     function saveDrafts(arr){ try{ var k=curKey(); if(k) localStorage.setItem(k, JSON.stringify(arr)); }catch(_){} }
     function postSnap(p){ return JSON.stringify({t:p.title||'',s:p.summary||'',c:p.cat||'',cov:p.cover||'',ty:p.type||'',b:p.blocks||[]}); }
     window.__draftSetBaseline=function(){ try{ var p=postById(postEditId); baseline=p?postSnap(p):''; }catch(_){ baseline=''; } };
+    window.__draftDirtyBaseline=function(){ baseline='∅restored'; };   /* 🚨이어쓰기 복원 직후: baseline을 일부러 어긋나게 → 서버 저장 전까지 초안이 삭제되지 않게 */
     function autosaveDraft(){
       try{
         if(postEditId==null) return;                  // 게시물 편집 중일 때만 보관
@@ -13578,7 +13591,13 @@ if('serviceWorker' in navigator){
       var arr=loadDrafts().slice().sort(function(a,b){ return b.at-a.at; });
       if(!arr.length){ box.innerHTML='<div class="post-empty">임시저장된 글이 없어요 · 글 쓰는 중 자동으로 보관돼요</div>'; return; }
       box.innerHTML=arr.map(function(d){ return '<div class="df-row"><span class="df-ic">'+(DICON[d.type]||'📄')+'</span><div class="df-meta"><div class="df-t">'+escT(d.title||'(제목 없음)')+'</div><div class="df-sub">'+fmtAgo(d.at)+'</div></div><button type="button" class="df-open" data-dopen="'+d.postId+'">이어쓰기</button><button type="button" class="df-del" data-ddel="'+d.postId+'">🗑</button></div>'; }).join('');
-      box.querySelectorAll('[data-dopen]').forEach(function(b){ b.onclick=function(){ var pid=b.getAttribute('data-dopen'), d=null; loadDrafts().forEach(function(x){ if(x.postId===pid) d=x; }); if(!d) return; if(!postById(pid)){ postsData.push(JSON.parse(JSON.stringify(d.post))); renderPostsLibrary(); } var ov=document.getElementById('drafts-ov'); if(ov) ov.classList.remove('open'); openPostEdit(pid); }; });
+      box.querySelectorAll('[data-dopen]').forEach(function(b){ b.onclick=function(){ var pid=b.getAttribute('data-dopen'), d=null; loadDrafts().forEach(function(x){ if(x.postId===pid) d=x; }); if(!d) return;
+        /* 🚨2026-08-19 검수: 기존 글이 있으면 초안을 한 줄도 안 덮고 열었음 → 옛 서버본이 열리고 4초 뒤 초안까지 삭제(유일한 최신본 유실). 초안 내용을 실제로 적용하고, baseline을 어긋내 서버 저장 전까지 초안 보존 */
+        var ex=postById(pid), cp=JSON.parse(JSON.stringify(d.post));
+        if(!ex){ postsData.push(cp); } else { Object.keys(cp).forEach(function(kk){ if(kk!=='id') ex[kk]=cp[kk]; }); }
+        renderPostsLibrary();
+        var ov=document.getElementById('drafts-ov'); if(ov) ov.classList.remove('open'); openPostEdit(pid);
+        try{ if(window.__draftDirtyBaseline) window.__draftDirtyBaseline(); }catch(_){} }; });
       box.querySelectorAll('[data-ddel]').forEach(function(b){ b.onclick=function(){ var pid=b.getAttribute('data-ddel'); if(!confirm('이 임시저장을 지울까요?')) return; saveDrafts(loadDrafts().filter(function(x){ return x.postId!==pid; })); renderDraftsList(); updateDraftsBtn(); }; });
     }
     window.__openDrafts=function(){
@@ -14079,7 +14098,7 @@ if('serviceWorker' in navigator){
     window.__newPostSheet=function(){ _newToSheet=true; try{ createPost('blog'); }catch(e){ _newToSheet=false; } };
     window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '게시물 편집'); } };
     window.__openProfileSheet=function(){ _mode='profile'; moveIn(document.getElementById('profile-card'), '프로필 편집'); };
-    window.__openProductsSheet=function(){ _mode='product'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.querySelector('.pw-pane[data-pwpane="product"]'), '스토어 편집'); };
+    window.__openProductsSheet=function(){ _mode='product'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.querySelector('.sl-pane[data-slpane="sell"]')||document.getElementById('prod-lib'), '스토어 편집'); };   /* 🚨상품 목록이 판매 탭으로 이사했는데 옛 주소(pw-pane=product, 이미 없음)를 불러 죽은 버튼이던 것 */
     window.__openQnaSheet=function(){ _mode='qna'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.getElementById('qna-manage'), 'Q&A 편집'); };
     window.__liveSheetOpen=function(){ return lsOv.classList.contains('open'); };
     window.__closeLiveSheet=function(){
@@ -14367,7 +14386,7 @@ if('serviceWorker' in navigator){
     var xb=document.getElementById('le-x'); if(xb) xb.onclick=function(){
       try{ var eo=document.getElementById('edit-ov'); if(eo && eo.classList.contains('open') && window.__collectEdit){ window.__collectEdit(); } }catch(e){}   // 열린 시트 내용 먼저 반영(사진 누락 방지)
       var top=document.querySelector('.topbar .btn.primary'); if(top) top.click();   // 저장·공개
-      try{ toast&&toast('저장·공개됐어요 ✓'); }catch(e){}
+      try{ toast&&toast('저장하는 중…'); }catch(e){}   /* 결과 확인 전 성공 문구는 거짓말 — 성공/실패는 top-save가 표시 */
     };
     // ✕ 나가기 = 편집 닫고 게이트로 (저장은 따로)
     var exb=document.getElementById('le-exit'); if(exb) exb.onclick=function(){ closeLive(); if(window.__showModeGate) setTimeout(window.__showModeGate, 160); };
