@@ -51,6 +51,15 @@
     '멀티채널 핸들 동기화가 전부 no-op이던 사고');
   add('dz→메뉴 자동저장 재개', src.indexOf('__pageAutosaveResume) window.__pageAutosaveResume();') > -1,
     '브릿지가 pause를 안 풀어 이후 편집이 저장 안 되던 사고');
+  // 2026-08-19 사장님 픽 4건
+  add('커버 단위 통일(bgpos)', src.indexOf('function covApplyFit') > -1 && src.indexOf("c.fit.u!=='pct'") < 0,
+    '홈꾸미기 pct가 부활하면 커버가 다시 «가운데로» 리셋됨');
+  add('프로필 채널 격리(2B)', src.indexOf('__reviewsSet) window.__reviewsSet([])') > -1,
+    '빈 채널에 이전 채널 명함·후기가 새던 것');
+  add('연락 걸음 진짜 판정(3A)', src.indexOf('resv-onoff') > -1 && src.indexOf('var actTypes={lead:1,service:1') < 0,
+    '기본 틀만으로 3걸음이 ✓완료 되던 거짓 완료');
+  add('링크 실주소(5B)', src.indexOf('function custUrl') > -1 && src.indexOf("'https://contenthub.kr/u/'+h") < 0,
+    '미연결 도메인(contenthub.kr) 링크로 손님이 404 받던 것');
 
   // ── 5. CSS 층 사고 항목 (자기 소스 fetch로 검사) ──
   add('토스트 최상위(z100200)', /\.toast\{[^}]*z-index:100200/.test(selfHtml),
