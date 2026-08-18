@@ -1274,8 +1274,10 @@
   /* 노션식 본문 (글) */
   .post-body{ font-size:14px; line-height:1.75; color:var(--on,inherit); }
   .post-body div{ min-height:1px; }
-  .post-body h4{ font-size:17px; font-weight:700; margin:16px 0 6px; }
-  .post-body blockquote{ margin:13px 0; padding:8px 15px; border-left:3px solid var(--coral); color:var(--muted); font-style:italic; }
+  .post-body h4{ font-size:17px; font-weight:700; margin:20px 0 8px; position:relative; padding-left:14px; }   /* ✨ 소제목 광선바 */
+  .post-body h4::before{ content:''; position:absolute; left:0; top:.14em; bottom:.14em; width:4px; border-radius:3px; background:linear-gradient(180deg, var(--coral), color-mix(in srgb, var(--coral) 40%, transparent)); box-shadow:0 0 10px color-mix(in srgb, var(--coral) 60%, transparent); }
+  .post-body blockquote{ position:relative; margin:18px 0; padding:16px 18px 15px 20px; border-radius:14px; background:linear-gradient(155deg, color-mix(in srgb, var(--coral) 11%, transparent), color-mix(in srgb, var(--coral) 3%, transparent)); border:1px solid color-mix(in srgb, var(--coral) 22%, transparent); box-shadow:0 10px 30px -14px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12); color:var(--on,inherit); font-style:italic; line-height:1.62; overflow:hidden; }   /* 🪟 인용 = 유리 명패 */
+  .post-body blockquote::before{ content:"\201C"; position:absolute; top:-14px; left:8px; font-size:64px; line-height:1; font-family:Georgia,serif; color:color-mix(in srgb, var(--coral) 30%, transparent); font-style:normal; pointer-events:none; }
   .post-body ul, .post-body ol{ margin:9px 0; padding-left:22px; }
   .post-body li{ margin:3px 0; }
   .post-body img{ display:block; border-radius:12px; margin:13px auto; max-width:100%; }
@@ -1291,10 +1293,17 @@
   .post-body .hl-y{ background:linear-gradient(transparent 55%,rgba(255,221,64,.5) 55%); }
   .post-body .hl-p{ background:linear-gradient(transparent 55%,rgba(255,120,190,.5) 55%); }
   .post-body .hl-m{ background:linear-gradient(transparent 55%,rgba(80,220,180,.5) 55%); }
-  .post-body .lc-callout{ margin:13px 0; padding:12px 15px; border-radius:12px; border:1px solid; font-size:14px; line-height:1.65; }
-  .post-body .lc-co-tip{ background:rgba(96,165,250,.12); border-color:rgba(96,165,250,.38); }
-  .post-body .lc-co-warn{ background:rgba(245,200,75,.12); border-color:rgba(245,200,75,.4); }
-  .post-body .lc-co-ok{ background:rgba(52,211,153,.12); border-color:rgba(52,211,153,.38); }
+  /* 🚨2026-08-19 검수: 편집기 강조(.em/.gd/.big/.sm)가 손님 화면 CSS에 없어 전부 평문으로 보이던 것 */
+  .post-body .em{ color:var(--coral); font-weight:800; }
+  .post-body .gd{ background:var(--grad, linear-gradient(100deg,#E8C285,#FF8FB8)); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; font-weight:900; }
+  .post-body .big{ font-size:1.3em; font-weight:800; }
+  .post-body .sm{ font-size:.8em; opacity:.85; }
+  .post-body .lc-tbwrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }   /* 표 넓으면 표만 가로 스크롤 (모달 잘림 방지) */
+  .post-body .lc-callout{ position:relative; margin:16px 0; padding:13px 15px 13px 18px; border-radius:14px; border:1px solid; font-size:14px; line-height:1.62; box-shadow:0 14px 32px -18px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.1); }   /* 🫧 콜아웃 = 떠있음 */
+  .post-body .lc-callout::before{ content:''; position:absolute; left:0; top:12px; bottom:12px; width:3px; border-radius:3px; background:var(--co,#6BA5F5); box-shadow:0 0 9px var(--co,#6BA5F5); }
+  .post-body .lc-co-tip{ --co:#6BA5F5; background:linear-gradient(150deg, rgba(96,165,250,.15), rgba(96,165,250,.05)); border-color:rgba(96,165,250,.3); }
+  .post-body .lc-co-warn{ --co:#F5C84B; background:linear-gradient(150deg, rgba(245,200,75,.15), rgba(245,200,75,.05)); border-color:rgba(245,200,75,.32); }
+  .post-body .lc-co-ok{ --co:#34D399; background:linear-gradient(150deg, rgba(52,211,153,.15), rgba(52,211,153,.05)); border-color:rgba(52,211,153,.3); }
   .post-body hr{ border:none; border-top:1px solid var(--hair,rgba(128,128,128,.25)); margin:18px 0; }
   .post-body .lc-imgcap{ font-size:12px; color:var(--muted); text-align:center; margin:-6px 0 12px; padding:0 8px; line-height:1.5; }
   .post-body img.lc-img-shadow{ box-shadow:0 12px 30px rgba(0,0,0,.28); }
@@ -1877,13 +1886,14 @@
   .pm-title{font-size:17px; font-weight:700; color:var(--ink); margin:0 34px 14px 2px;}
   /* ══ 🧰 랜딩 무기고 T1 (2026-07-10) ══ */
   /* ── ㉑ 스킨 3종: 모달 범위에서 테마 변수만 갈아끼움 (기존 블록 렌더러 무수정) ── */
-  #post-modal.lps-dark .resv-sheet{background:#0D0B10; color:#D8D2E0; --surface:#17141C; --hair:rgba(255,255,255,.09); --ink:#F3EEE6; --on-strong:#F3EEE6; --on-soft:#9C94A8; --muted:#9C94A8; --coral:#E8C285; --coral-soft:rgba(232,194,133,.13); --grad:linear-gradient(100deg,#E8C285,#FF8FB8);}
+  #post-modal[class*="lps-"] .resv-mclose{ background:var(--surface); color:var(--muted); }   /* 🚨닫기 ✕가 페이지 테마의 --paper를 물려받아 다크 스킨에서 글리프 실종되던 것 — 스킨 변수로 통일 (뒤의 스킨별 오버라이드가 이김) */
+  #post-modal.lps-dark .resv-sheet{background:radial-gradient(52% 24% at 85% -3%, rgba(232,194,133,.16), transparent 70%), radial-gradient(46% 22% at 5% 44%, rgba(232,194,133,.07), transparent 72%), #0D0B10; color:#D8D2E0; --surface:#17141C; --hair:rgba(255,255,255,.09); --ink:#F3EEE6; --on-strong:#F3EEE6; --on-soft:#9C94A8; --muted:#9C94A8; --coral:#E8C285; --coral-soft:rgba(232,194,133,.13); --grad:linear-gradient(100deg,#E8C285,#FF8FB8);}
   #post-modal.lps-dark .pm-title{color:#F3EEE6; font-family:Georgia,'Nanum Myeongjo',serif; font-weight:600;}
   #post-modal.lps-dark .block-h, #post-modal.lps-dark .ly-impact-t{font-family:Georgia,'Nanum Myeongjo',serif; font-weight:600;}
-  #post-modal.lps-editorial .resv-sheet{background:#F4EDE3; color:#4A4238; --surface:#FFFDF9; --hair:rgba(36,29,22,.13); --ink:#241D16; --on-strong:#241D16; --on-soft:#8A7F70; --muted:#8A7F70; --coral:#B0713C; --coral-soft:rgba(176,113,60,.1); --grad:linear-gradient(100deg,#B0713C,#8A5A33);}
+  #post-modal.lps-editorial .resv-sheet{background:radial-gradient(60% 30% at 85% -6%, rgba(176,113,60,.08), transparent 70%), radial-gradient(46% 24% at 4% 100%, rgba(176,113,60,.05), transparent 72%), #F4EDE3; color:#4A4238; --surface:#FFFDF9; --hair:rgba(36,29,22,.13); --ink:#241D16; --on-strong:#241D16; --on-soft:#8A7F70; --muted:#8A7F70; --coral:#B0713C; --coral-soft:rgba(176,113,60,.1); --grad:linear-gradient(100deg,#B0713C,#8A5A33);}
   #post-modal.lps-editorial .pm-title, #post-modal.lps-editorial .block-h, #post-modal.lps-editorial .ly-impact-t, #post-modal.lps-editorial .ly-hero-t{font-family:Georgia,'Nanum Myeongjo',serif; font-weight:600;}
   #post-modal.lps-editorial .resv-mclose{color:#8A7F70;}
-  #post-modal.lps-clean .resv-sheet{background:#FFFFFF; color:#3C4046; --surface:#F6F7F9; --hair:rgba(25,27,31,.1); --ink:#191B1F; --on-strong:#191B1F; --on-soft:#79808A; --muted:#79808A; --coral:#3D6FE8; --coral-soft:rgba(61,111,232,.08); --grad:linear-gradient(100deg,#3D6FE8,#2C55B8);}
+  #post-modal.lps-clean .resv-sheet{background:radial-gradient(56% 26% at 85% -5%, rgba(61,111,232,.06), transparent 70%), radial-gradient(44% 22% at 5% 102%, rgba(61,111,232,.035), transparent 72%), #FFFFFF; color:#3C4046; --surface:#F6F7F9; --hair:rgba(25,27,31,.1); --ink:#191B1F; --on-strong:#191B1F; --on-soft:#79808A; --muted:#79808A; --coral:#3D6FE8; --coral-soft:rgba(61,111,232,.08); --grad:linear-gradient(100deg,#3D6FE8,#2C55B8);}
   #post-modal.lps-clean .resv-mclose{color:#79808A;}
   /* ── 🫧 신규 스킨 4종 (2026-07-10 사용자 채택: 글래스 계열 A·C·D·E) ── */
   /* A. 오로라 글래스 — 깊은 밤 + 오로라 광원 + 유리 카드 */
@@ -1914,14 +1924,23 @@
     color:#C9CEC9; --surface:rgba(255,255,255,.055); --hair:rgba(255,255,255,.12); --ink:#F4F6F0; --on-strong:#F4F6F0; --on-soft:#8C948C; --muted:#8C948C; --coral:#D6FF3C; --coral-soft:rgba(214,255,60,.09); --grad:linear-gradient(100deg,#D6FF3C,#C3F02E);}
   #post-modal.lps-lime .block{background:linear-gradient(170deg, rgba(255,255,255,.065), rgba(255,255,255,.025) 60%); border:1px solid rgba(255,255,255,.12); box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 12px 30px rgba(0,0,0,.35); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);}
   #post-modal.lps-lime .pm-title{color:#F4F6F0;}
-  #post-modal.lps-lime .lp-plan .lpp-rb, #post-modal.lps-lime .pm-buybar .pbb-go, #post-modal.lps-lime .lp-quiz .qz-cta, #post-modal.lps-lime .lp-cpn .cpn-get, #post-modal.lps-lime .cta-btn{color:#0E1011;}
+  #post-modal.lps-lime .lp-plan .lpp-rb, #post-modal.lps-lime .pm-buybar .pbb-go, #post-modal.lps-lime .lp-quiz .qz-cta, #post-modal.lps-lime .lp-cpn .cpn-get, #post-modal.lps-lime .cta-btn, #post-modal.lps-lime .pm-cta{color:#0E1011;}
   #post-modal.lps-lime .lp-plan .lpp-off{color:#D6FF3C;}
   #post-modal.lps-lime .au-en{filter:drop-shadow(0 0 10px rgba(214,255,60,.25));}
+  /* 📦 크창 — 크리에이팅 창고 룩: 뉴트럴 다크 + 연두레몬 #E6F24A + 코어 스파클 (2026-07-23) */
+  #post-modal.lps-crchang .resv-sheet{
+    background:radial-gradient(46% 26% at 80% -3%, rgba(230,242,74,.13), transparent 66%), radial-gradient(40% 20% at 10% 98%, rgba(230,242,74,.05), transparent 72%), linear-gradient(165deg,#151515,#0F0F10 60%,#101011);
+    color:#C9C9C4; --surface:rgba(255,255,255,.05); --hair:rgba(255,255,255,.11); --ink:#F4F5EF; --on-strong:#F4F5EF; --on-soft:#8E8E88; --muted:#8E8E88; --coral:#E6F24A; --coral-soft:rgba(230,242,74,.1); --grad:linear-gradient(100deg,#E6F24A,#C6D82E);}
+  #post-modal.lps-crchang .block{background:linear-gradient(170deg, rgba(255,255,255,.06), rgba(255,255,255,.022) 60%); border:1px solid rgba(230,242,74,.16); box-shadow:inset 0 1px 0 rgba(255,255,255,.09), 0 12px 30px rgba(0,0,0,.4); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);}
+  #post-modal.lps-crchang .pm-title{color:#F4F5EF;}
+  #post-modal.lps-crchang .lp-plan .lpp-rb, #post-modal.lps-crchang .pm-buybar .pbb-go, #post-modal.lps-crchang .lp-quiz .qz-cta, #post-modal.lps-crchang .lp-cpn .cpn-get, #post-modal.lps-crchang .cta-btn, #post-modal.lps-crchang .pm-cta{color:#141414;}
+  #post-modal.lps-crchang .lp-plan .lpp-off{color:#E6F24A;}
+  #post-modal.lps-crchang .au-en{filter:drop-shadow(0 0 12px rgba(230,242,74,.55));}
   /* 🎨 보라 하드코딩 정리: 모달 안 신뢰 숫자는 스킨의 --grad를 따름 (홈 화면은 그대로 — 인라인 보라 유지) */
   #post-modal .au-en{background:var(--grad, linear-gradient(95deg,#8A5CFF,#C13B9E)) !important; -webkit-background-clip:text !important; background-clip:text !important; -webkit-text-fill-color:transparent !important; color:transparent !important;}
   /* ⚡ 인앱 브라우저 다운그레이드 — blur·켄번즈 끔 (인스타 웹뷰에서 3초 렌더 사수, 끝모습은 동일) */
   html.inapp .pm-buybar, html.inapp #pm-chnav{ -webkit-backdrop-filter:none; backdrop-filter:none; }
-  html.inapp #post-modal.lps-aurora .block, html.inapp #post-modal.lps-lime .block{ -webkit-backdrop-filter:none; backdrop-filter:none; }
+  html.inapp #post-modal.lps-aurora .block, html.inapp #post-modal.lps-lime .block, html.inapp #post-modal.lps-crchang .block{ -webkit-backdrop-filter:none; backdrop-filter:none; }
   html.inapp #post-modal[class*="lps-"] .ly-hero-bg{ animation:none; }
   html.inapp .ly-hero-glass{ -webkit-backdrop-filter:none; backdrop-filter:none; }
   /* 💬 후기 받기 화면 (?rv=1) */
@@ -2758,12 +2777,14 @@
     document.documentElement.setAttribute('data-theme', t);
     applyBright();
     swatches.forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-theme') === t); });
-    try { localStorage.setItem('u-theme', t); } catch(e){}
+    try { localStorage.setItem(__themeKey(), t); } catch(e){}
   }
+  /* 🚨2026-08-19 검수: u-theme가 핸들 무관 단일 키라 A 운영자 페이지의 테마가 B 페이지에 새던 것 — 핸들별 키로 격리 */
+  function __themeKey(){ var h=''; try{ h=(new URLSearchParams(location.search).get('u')||'').toLowerCase(); }catch(e){} return 'u-theme'+(h?(':'+h):''); }
   swatches.forEach(function(s){
     s.addEventListener('click', function(){ setTheme(s.getAttribute('data-theme')); });
   });
-  var saved; try { saved = localStorage.getItem('u-theme'); } catch(e){}
+  var saved; try { saved = localStorage.getItem(__themeKey()); } catch(e){}
   if (saved) setTheme(saved); else setTheme('cream');
 
   // ── 커버 사진 핏 적용 (초점=background-position 0~100%, 줌=background-size로 → 어떤 비율·범위든 드래그로 위치 조정 가능, 항상 꽉 참) ──
@@ -3200,7 +3221,7 @@
       else if(tg==='h3'||tg==='h4') out+='<h4>'+inner+'</h4>';
       else if(tg==='hr') out+='<hr>';
       else if(tg==='blockquote') out+='<blockquote>'+inner+'</blockquote>';
-      else if(tg==='table') out+='<table class="lc-tb">'+inner+'</table>';
+      else if(tg==='table') out+='<div class="lc-tbwrap"><table class="lc-tb">'+inner+'</table></div>';
       else if(tg==='thead'||tg==='tbody') out+='<'+tg+'>'+inner+'</'+tg+'>';
       else if(tg==='tr') out+='<tr>'+inner+'</tr>';
       else if(tg==='th') out+='<th>'+inner+'</th>';
@@ -3308,6 +3329,7 @@
     postref: function(c){
       var id=c[0], title=c[1]||'', cover=c[2]||'', summary=c[3]||'';
       var p=null; (window.__POSTS||[]).forEach(function(x){ if(String(x.id)===String(id)) p=x; });
+      if((!p || p.on===false) && !(typeof EDIT_MODE!=='undefined' && EDIT_MODE)) return null;   /* 🚨대상 글이 삭제·비공개면 눌러도 무반응인 죽은 카드 — 손님에겐 스킵 */
       if(p){ title=p.title||title; cover=p.cover||cover; summary=p.summary||summary; }
       window.__hasCurated=true;   // 큐레이션 모드 → 자동 전체 노출 끔
       var a=document.createElement('a'); a.className='pg-card'; a.href='javascript:void 0'; a.setAttribute('data-pid', id); a.style.marginBottom='12px';
@@ -4468,8 +4490,13 @@
     [['archive','archive'],['products','shop'],['qna','qna']].forEach(function(m){
       var b=byType[m[0]]; if(b && b.on===false){ var nav=document.querySelector('.navitem[data-tab="'+m[1]+'"]'); if(nav) nav.style.display='none'; }
     });
-    // 입력된 내용 채우기 (비어있으면 샘플 유지)
-    blocks.forEach(function(b){ if(b.on===false) return; if(!hasContent(b.content)) return; var fn=FILL[b.type]; if(fn) fn(b.content, b); });
+    // 입력된 내용 채우기 (비어있으면 — 편집모드=샘플 유지(주인이 보고 채우게) / 손님=숨김(가짜 샘플·죽은 링크 노출 방지))
+    var __isEdit=(typeof EDIT_MODE!=='undefined' && EDIT_MODE);
+    blocks.forEach(function(b){ if(b.on===false) return;
+      if(!hasContent(b.content)){
+        if(!__isEdit && (b.type==='gallery'||b.type==='links'||b.type==='channels')){ var se=document.querySelector('[data-block="'+b.type+'"]'); if(se) se.style.display='none'; }
+        return; }
+      var fn=FILL[b.type]; if(fn) fn(b.content, b); });
     // 홈 순서 재배치 + 추가 블록
     layoutHome(blocks);
   }
@@ -4552,7 +4579,7 @@
     var d=document.createElement('div'); d.className='block resv'; d.id='resv-section';
     var hintTxt=(cfg.closedDays?DOW.filter(function(_,i){return closedSet[i];}).join('·')+' 휴무 · ':'')+'영업 '+esc(cfg.start||'11:00')+' — '+esc(cfg.end||'17:00');
     d.innerHTML = '<div class="block-h" style="margin-bottom:6px;">'+emph(cfg.title||'예약하기')+'</div><div class="rv-hint">'+hintTxt+'</div>'
-      + '<div class="rv-steps"><span class="rv-st on" data-rvst="cal">📅 날짜·시간</span><span class="rv-st-ar">→</span><span class="rv-st" data-rvst="form">✍️ 정보</span><span class="rv-st-ar">→</span><span class="rv-st" data-rvst="done">💬 카톡 전송</span></div>'
+      + '<div class="rv-steps"><span class="rv-st on" data-rvst="cal">📅 날짜·시간</span><span class="rv-st-ar">→</span><span class="rv-st" data-rvst="form">✍️ 정보</span><span class="rv-st-ar">→</span><span class="rv-st" data-rvst="done">'+(kakao?'💬 카톡 전송':'📨 복사·전송')+'</span></div>'
       + '<div class="rv-step rv-cal-step">'
         +   '<div class="rv-calhead"><button type="button" class="rv-nav rv-prev" aria-label="이전 달">‹</button><span class="rv-month"></span><button type="button" class="rv-nav rv-next" aria-label="다음 달">›</button></div>'
         +   '<div class="rv-dow">'+DOW.map(function(x,i){ return '<span'+(i===0?' class="sun"':(i===6?' class="sat"':''))+'>'+x+'</span>'; }).join('')+'</div>'
@@ -4711,7 +4738,10 @@
       try{ track('resv',{step:'submit', svc:svcName}); track('click',{kind:'cta', label:'예약하기'}); }catch(_){}
       try{ if(window.laRpc){ window.laRpc('li_lead_add',{ p_handle:window.HANDLE, p_name:'[예약] '+(state.m+1)+'/'+state.date.getDate()+' '+bookTime+' · '+svcName+' · '+nm, p_phone:ph }); } }catch(_){}
     };
-    d.querySelector('.rv-copy').onclick=function(){ var ta=d.querySelector('.rv-preview'), btn=this; function ok(){ btn.textContent='✓ 복사됐어요'; setTimeout(function(){ btn.textContent='📋 전체 복사하기'; },1800); } try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(ok,function(){ ta.select(); document.execCommand('copy'); ok(); }); } else { ta.select(); document.execCommand('copy'); ok(); } }catch(_){ ta.select(); } };
+    d.querySelector('.rv-copy').onclick=function(){ var ta=d.querySelector('.rv-preview'), btn=this; function ok(){ btn.textContent='✓ 복사됐어요'; setTimeout(function(){ btn.textContent='📋 전체 복사하기'; },1800);
+        /* 🚨카톡 미설정 계정은 복사→DM이 유일한 접수 경로인데 li_resv_book이 영영 안 불려 슬롯이 안 잡히던 것 — 안내문("보내면 접수돼요") 약속대로 여기서 선점(중복은 DB 방어) */
+        if(!kakao){ try{ if(window.laRpc && pendingBooking && pendingBooking.date && pendingBooking.time){ window.laRpc('li_resv_book',{ p_handle:window.HANDLE, p_date:pendingBooking.date, p_time:pendingBooking.time, p_name:pendingBooking.name, p_phone:pendingBooking.phone, p_menu:pendingBooking.menu, p_visit:pendingBooking.visit, p_memo:pendingBooking.memo }).catch(function(){}); } }catch(_){} }
+      } try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(ok,function(){ ta.select(); document.execCommand('copy'); ok(); }); } else { ta.select(); document.execCommand('copy'); ok(); } }catch(_){ ta.select(); } };
     // 카톡 방 연결 버튼 = 이 순간 슬롯 선점(마감). 링크는 바로 열리고, 예약은 백그라운드로 잡음(중복은 DB가 방어).
     var kkBtn=d.querySelector('.rv-kakao'); if(kkBtn) kkBtn.addEventListener('click', function(){
       try{ track('resv',{step:'kakao'}); }catch(_){}
@@ -4745,9 +4775,10 @@
       document.getElementById('post-mclose').onclick=function(){ ov.classList.remove('open'); };
     }
     document.getElementById('pm-title').textContent=p.title||'';
+    try{ ov.setAttribute('data-pid', String(p.id)); }catch(_){}   /* 🧭 hubnav가 제목 대신 id로 글을 식별하게 (중복·빈 제목 오인 방지 + 꼬리 이동 감지) */
     var bodyEl=document.getElementById('pm-body');
     // 🧰 21 스킨 3종 — 랜딩만, 모달 범위 테마 변수 교체 (skin 없으면 기존 그대로 = 무회귀)
-    ov.classList.remove('lps-dark','lps-editorial','lps-clean','lps-aurora','lps-crystal','lps-airy','lps-lime');
+    ov.classList.remove('lps-dark','lps-editorial','lps-clean','lps-aurora','lps-crystal','lps-airy','lps-lime','lps-crchang');
     if(p.type==='landing' && p.skin) ov.classList.add('lps-'+p.skin);
     window.__lpSelPlan=null;   // 플랜 선택 상태 리셋 (이전 랜딩 잔상 방지)
     renderPostBlocks(bodyEl, p.blocks);
@@ -5126,6 +5157,7 @@
     var theme = (d.home && d.home.theme) || d.theme;
     if(theme && window.setTheme){ window.setTheme(theme); }
     if(d.home){ try{ localStorage.setItem('cm-home-v1', JSON.stringify(d.home)); }catch(e){} if(window.applyHome) window.applyHome(); }
+    else if(!(typeof EDIT_MODE!=='undefined' && EDIT_MODE)){ try{ localStorage.removeItem('cm-home-v1'); }catch(e){} if(window.applyHome) window.applyHome(); }   /* 🚨이전 방문 핸들의 홈설정(스킨·FAB 링크)이 다른 운영자 페이지에 새던 것 — 손님일 때만 리셋 (편집 미리보기는 주인 설정 공유라 제외) */
     window.__POSTS = d.posts || [];          // 베스트 블록이 읽으므로 블록 렌더 '전'에 세팅
     window.__catColors = (d.catColors && typeof d.catColors==='object') ? d.catColors : null;   // 유형별 지정 색 (운영서 고른 것) — buildArchive/catColor가 읽음
     window.__hasCurated = false;             // postref(가져온 글) 있으면 렌더 중 true → 자동 전체 노출 끔
@@ -5182,7 +5214,8 @@
       var nv=document.querySelector('.navitem[data-tab="'+tab+'"]'); if(nv) nv.style.display='none';   // 메뉴에서 탭 제거 (buildHomeTabgos도 보이는 탭만 링크하므로 바로가기도 자동 제외)
       var pane=document.querySelector('.pane[data-pane="'+tab+'"]'); if(pane){ pane.classList.remove('active'); pane.innerHTML=''; }   // 정적 샘플 비움 (빈 데이터라 빌더 미실행 → 안전)
     }
-    hideTab('archive', !!(d.posts    && d.posts.length));
+    var liveN=((d.posts)||[]).filter(function(p){ return p && p.on!==false && ((p.blocks||[]).length>0); }).length;   /* 🚨전부 비공개·빈 글이어도 탭이 살아 가짜 샘플이 노출되던 것 — buildArchive와 같은 기준 */
+    hideTab('archive', liveN>0);
     hideTab('shop',    !!(d.products && d.products.length));
     hideTab('qna',     !!(d.qna      && d.qna.length));
     if(!(d.blocks && d.blocks.length)){   // 홈 블록 0개 = 정적 프로모·갤러리·죽은링크 샘플 숨김 (홈 탭·프로필은 유지)
@@ -5451,7 +5484,7 @@
         }
         // ④-2 스타일 그리드 (룩북 우선, 없으면 명함 작업사진 · 1~3장 적응형)
         var items=[];
-        try{ ((d&&d.blocks)||[]).forEach(function(b){ if(b&&b.type==='lookbook'&&b.on!==false&&items.length===0){ (b.content||[]).forEach(function(c){ if(c&&c[0]&&items.length<3) items.push({img:c[0], nm:(c[2]||''), eng:(c[3]||'')}); }); } }); }catch(_){}
+        try{ ((d&&d.blocks)||[]).forEach(function(b){ if(b&&b.type==='lookbook'&&b.on!==false&&items.length===0){ ((b.content&&b.content[3])||[]).forEach(function(c){ if(c&&c[0]&&items.length<3) items.push({img:c[0], nm:(c[2]||''), eng:(c[3]||'')}); }); } }); }catch(_){}   /* 🚨룩북 content=[제목,크레딧,워터마크,카드배열] — 최상위를 돌면 제목 첫 글자가 타일로 깨져 들어가던 것 */
         if(!items.length) items=((p.works)||[]).filter(Boolean).slice(0,3).map(function(u){ return {img:u, nm:'', eng:''}; });
         if(items.length){
           var sw=document.createElement('div'); sw.id='ed-styles-w';
@@ -6191,20 +6224,30 @@
     var ov=document.getElementById('post-modal'); if(!ov || ov.__hnWatch) return;
     ov.__hnWatch=true;
     var was=ov.classList.contains('open');
+    var lastPid=ov.getAttribute('data-pid')||'';
     new MutationObserver(function(){
       var is=ov.classList.contains('open');
+      var pid=ov.getAttribute('data-pid')||'';
+      if(is && was && pid && pid!==lastPid){   // 모달 연 채 글만 교체(글 꼬리 이동) — 주소·메뉴도 따라가게
+        lastPid=pid; curPost=postById(pid)||null; paint();
+        if(!suppress && curPost && qp('p')!==String(curPost.id)){ try{ history.pushState({hnp:curPost.id},'',urlFor(curPost.id)); }catch(_){} }
+        return;
+      }
       if(is===was) return; was=is;
       if(is){
-        var t=(document.getElementById('pm-title')||{}).textContent||'';
-        curPost=postByTitle(t); paint();
+        lastPid=pid;
+        curPost=(pid?postById(pid):null) || postByTitle((document.getElementById('pm-title')||{}).textContent||''); paint();
         if(!suppress && curPost && qp('p')!==String(curPost.id)){
           try{ history.pushState({hnp:curPost.id},'',urlFor(curPost.id)); }catch(_){}
         }
       } else {
         curPost=null; paint();
-        if(!suppress && qp('p')){ try{ history.back(); }catch(_){} }
+        if(!suppress && qp('p')){
+          if(history.state && history.state.hnp){ try{ history.back(); }catch(_){} }
+          else { try{ history.replaceState(null,'',urlFor(null)); }catch(_){} }   /* 🚨직링크(?p=) 진입은 pushState된 적이 없어 back()이 인스타 등 사이트 밖으로 튕기던 것 — 주소만 정리 */
+        }
       }
-    }).observe(ov,{attributes:true, attributeFilter:['class']});
+    }).observe(ov,{attributes:true, attributeFilter:['class','data-pid']});
   }
   function ensureWatch(){
     if(document.getElementById('post-modal')){ watchModal(); return; }
@@ -6228,7 +6271,8 @@
     D=d||{};
     applySolo(D);
     ensureWatch();
-    var pid=qp('p'); curPost=pid?postById(pid):null;
+    var pid=qp('p'); var __mo=document.getElementById('post-modal');
+    curPost=(pid && __mo && __mo.classList.contains('open'))?postById(pid):null;   /* 직링크 진입 직후엔 아직 홈(이어보기 알약 단계) — 글 메뉴로 그리지 않기 */
     paint();
   };
 })();
