@@ -574,8 +574,8 @@
   function ucard(u){
     var dd=dday(u.expires_at); var tk=tierOf(u);
     var div=document.createElement('div'); div.className='ucard';
-    div.innerHTML='<div class="uc-top"><span class="uc-code">'+hesc(u.code)+'</span><span class="uc-name">'+hesc(u.name||'')+'</span><span class="uc-edit" title="등급·기간 변경">✎</span><span class="uc-del" title="삭제">×</span></div>'
-      +'<div class="uc-meta"><span class="uc-tier" style="color:'+TIER_COLOR[tk]+'; border-color:'+TIER_COLOR[tk]+'66;">'+TIER_LBL[tk]+'</span><span class="uc-dday '+dd.cls+'">'+dd.t+'</span>'+(u.handle?'<span>/u/'+u.handle+'</span>':'<span>주소 미설정</span>')+'</div>';
+    div.innerHTML='<div class="uc-top"><span class="uc-code">'+hesc(u.code)+'</span><span class="uc-name">'+hesc(u.name||'')+'</span><span class="uc-edit" title="등급·기간 변경">✎</span><span class="uc-del" title="계정 삭제">🗑</span></div>'
+      +'<div class="uc-meta"><span class="uc-tier" style="color:'+TIER_COLOR[tk]+'; border-color:'+TIER_COLOR[tk]+'66;">'+TIER_LBL[tk]+'</span><span class="uc-dday '+dd.cls+'">'+dd.t+'</span>'+(u.handle?'<span>/u/'+hesc(u.handle)+'</span>':'<span>주소 미설정</span>')+'</div>';
     div.querySelector('.uc-edit').onclick=function(){ openPlan(u); };
     div.querySelector('.uc-del').onclick=async function(){
       if(!confirm(u.code+' 코드를 삭제할까요? (되돌릴 수 없어요)')) return;
@@ -611,7 +611,7 @@
     var right=c.uiPaused?'<span class="pc-dday" style="color:#FF8FA6">정지</span>':'<span class="pc-dday '+dd.cls+'">'+dd.t+'</span>';
     return '<div class="pc-card'+(c.open?' open':'')+'" data-chid="'+c.id+'">'
       +'<div class="pc-head" data-act="toggle">'
-        +'<span class="pc-dot" style="background:'+(c.color||'#a78bff')+'"></span>'
+        +'<span class="pc-dot" style="background:'+((/^#[0-9a-fA-F]{3,8}$/.test(c.color||''))?c.color:'#a78bff')+'"></span>'   /* 🚨서버 무검증 color가 style에 그대로 꽂혀 관리자 세션 XSS 가능하던 것 — hex만 통과 */
         +'<span class="pc-mid"><span class="pc-nm">'+hesc(c.name||c.handle)+'</span><span class="pc-url">/u/'+hesc(c.handle)+'</span></span>'
         +'<span class="pc-badge" style="color:'+tc+';border-color:'+tc+'66;">'+TIER_LBL[c.uiTier]+'</span>'
         +right+'<span class="pc-cvt">▾</span>'
