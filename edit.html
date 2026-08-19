@@ -1148,6 +1148,71 @@ if('serviceWorker' in navigator){
   .hub-plan2 .hp2-m small{font-size:10.5px;color:var(--muted);font-weight:600;}
   .hub-plan2 .hp2-go{position:relative;flex:0 0 auto;font-size:11px;font-weight:800;color:#1c1710;background:linear-gradient(135deg,#ffe08a,#f0b04a);border-radius:9px;padding:7px 11px;white-space:nowrap;}
 
+  /* ════ 🏠 홈 개편(2026-08-19 픽 B+A) — 「오늘 할 일 하나」 + 「4걸음 공정 지도」 ════ */
+  .hb-do{background:linear-gradient(150deg,rgba(167,139,255,.19),rgba(167,139,255,.045));border:1px solid rgba(167,139,255,.44);border-radius:16px;padding:14px 14px 13px;margin-bottom:13px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.09), 0 12px 30px -20px rgba(124,63,228,.9);}
+  .hb-do .hbd-k{font-size:10px;font-weight:800;color:#c3b0ff;letter-spacing:.04em;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .hb-do .hbd-k i{width:6px;height:6px;border-radius:50%;background:#A78BFF;box-shadow:0 0 9px #A78BFF;flex:none;}
+  .hb-do .hbd-t{font-size:16.5px;font-weight:800;line-height:1.32;letter-spacing:-.01em;color:var(--ink);margin-bottom:5px;}
+  .hb-do .hbd-d{font-size:11.5px;color:var(--muted);line-height:1.6;margin-bottom:11px;}
+  .hb-do .hbd-d b{color:#c3b0ff;}
+  .hb-do .hbd-go{border:0;border-radius:11px;padding:11px 17px;font:800 13px var(--sans);color:#12101a;background:#A78BFF;cursor:pointer;box-shadow:0 8px 20px -10px rgba(167,139,255,.9);}
+  .hb-do .hbd-go:active{transform:scale(.96);}
+  .hb-do .hbd-skip{background:none;border:0;color:var(--muted);font:700 11.5px var(--sans);padding:11px 8px;cursor:pointer;}
+  .hb-raill{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);font-weight:600;margin:0 2px 8px;}
+  .hb-raill i{flex:1;height:1px;background:var(--hair);font-style:normal;}
+  .hb-rail{margin-bottom:12px;}
+  .hb-rail.pre{opacity:.45;}   /* 3걸음 미완 = 예고 */
+  .hb-st{position:relative;display:flex;padding:0 0 11px 26px;background:none;border:0;width:100%;text-align:left;font-family:var(--sans);cursor:pointer;}
+  .hb-st::before{content:"";position:absolute;left:8px;top:22px;bottom:-1px;width:2px;background:var(--hair);}
+  .hb-st:last-child{padding-bottom:0;}
+  .hb-st:last-child::before{display:none;}
+  .hb-st .hbs-c{position:absolute;left:0;top:2px;width:19px;height:19px;border-radius:50%;border:2px solid var(--sc);background:var(--paper);display:grid;place-items:center;font-size:9px;color:var(--sc);font-weight:800;}
+  .hb-st.done .hbs-c{background:var(--sc);color:#12101a;border-color:transparent;}
+  .hb-st.now .hbs-c{animation:hbPulse 2.6s ease-in-out infinite;}
+  @keyframes hbPulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--sc) 34%,transparent);}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--sc) 0%,transparent),0 0 14px color-mix(in srgb,var(--sc) 70%,transparent);}}
+  .hb-st .hbs-b{flex:1;min-width:0;background:color-mix(in srgb,var(--sc) 6%,transparent);border:1px solid color-mix(in srgb,var(--sc) 20%,var(--hair));border-radius:13px;padding:9px 11px;display:flex;align-items:center;gap:8px;transition:background .16s ease,border-color .16s ease;}
+  .hb-st.now .hbs-b{background:color-mix(in srgb,var(--sc) 12%,transparent);border-color:color-mix(in srgb,var(--sc) 44%,transparent);}
+  .hb-st:active .hbs-b{transform:scale(.985);}
+  .hb-st .hbs-m{flex:1;min-width:0;}
+  .hb-st .hbs-n{font-size:13px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .hb-st .hbs-n em{font-style:normal;font-size:9.5px;font-weight:800;color:var(--sc);background:color-mix(in srgb,var(--sc) 15%,transparent);border-radius:6px;padding:2px 6px;}
+  .hb-st .hbs-d{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.45;}
+  .hb-st .hbs-g{flex:0 0 auto;font-size:14px;color:var(--sc);font-weight:800;}
+  .hb-fold{display:flex;align-items:center;gap:7px;width:100%;background:none;border:0;border-top:1px solid var(--hair);padding:11px 4px;font:700 12px var(--sans);color:var(--muted);cursor:pointer;}
+  .hb-fold span:last-child{margin-left:auto;}
+
+  /* ════ 👁 살아있는 미리보기 (데이터 0일 때 «이렇게 채워져요») — 분석·컨텐츠·판매 공용 ════ */
+  .gp-wrap{position:relative;border-radius:16px;margin-bottom:12px;}
+  .gp-lab{position:absolute;top:9px;right:9px;z-index:3;font-size:9.5px;font-weight:800;background:rgba(167,139,255,.18);border:1px solid rgba(167,139,255,.42);color:#c3b0ff;border-radius:999px;padding:4px 9px;}
+  .gp-in{position:relative;padding:2px;}
+  .gp-in::after{content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;background:linear-gradient(180deg,transparent 62%, color-mix(in srgb, var(--paper) 78%, transparent) 100%);}
+  .gp-3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px;}
+  .gp-3 .c{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--hair);border-radius:14px;padding:11px 7px;text-align:center;}
+  .gp-3 .c b{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em;color:var(--ink);}
+  .gp-3 .c small{display:block;font-size:9.5px;color:var(--muted);margin-top:2px;}
+  .gp-3 .c i{font-style:normal;font-size:9.5px;color:#5DCAA5;font-weight:800;}
+  .gp-box{background:rgba(255,255,255,.025);border:1px solid var(--hair);border-radius:14px;padding:11px 12px 8px;margin-bottom:9px;}
+  .gp-box .h{font-size:10.5px;color:var(--muted);font-weight:700;margin-bottom:8px;display:flex;}
+  .gp-box .h span{margin-left:auto;color:#c3b0ff;}
+  .gp-bars{display:flex;align-items:flex-end;gap:6px;height:52px;}
+  .gp-bars i{flex:1;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#8FA8EE,rgba(143,168,238,.22));}
+  .gp-blab{display:flex;gap:6px;margin-top:5px;font-size:9px;color:var(--muted);}
+  .gp-blab span{flex:1;text-align:center;}
+  .gp-fun{display:flex;flex-direction:column;gap:6px;}
+  .gp-fun .f{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--muted);}
+  .gp-fun .f b{width:58px;flex:none;font-weight:700;}
+  .gp-fun .f .tr{flex:1;height:12px;border-radius:7px;background:rgba(255,255,255,.05);overflow:hidden;}
+  .gp-fun .f .tr i{display:block;height:100%;border-radius:7px;}
+  .gp-fun .f em{font-style:normal;width:28px;text-align:right;font-weight:800;font-size:11px;color:var(--ink);}
+  .gp-row{display:flex;align-items:center;gap:9px;background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--hair);border-radius:14px;padding:10px 11px;margin-bottom:7px;}
+  .gp-row .th{width:36px;height:36px;border-radius:10px;flex:none;display:grid;place-items:center;font-size:16px;background:rgba(255,255,255,.06);}
+  .gp-row .m{flex:1;min-width:0;}
+  .gp-row .t{font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .gp-row .d{font-size:10px;color:var(--muted);margin-top:2px;}
+  .gp-row .n{font-size:11px;color:var(--muted);font-weight:800;flex:0 0 auto;}
+  @media (prefers-reduced-motion:reduce){ .hb-st.now .hbs-c{animation:none;} }
+
   /* 🌱 0의 상태 — 빈 화면을 초대로 (보라 한 혈통 · --coral=#A78BFF) */
   #home-hub.zs-empty > #hub-fx-wrap, #home-hub.zs-empty > #hub-today-zone, #home-hub.zs-empty > #hub-grow{display:none;}
   .zs-card{border-radius:20px;margin-bottom:14px;padding:26px 20px 20px;text-align:center;
@@ -8126,6 +8191,11 @@ if('serviceWorker' in navigator){
   }
   function anRerenderOverview(){ var ov=document.querySelector('.an-pane[data-anpane="ov"]'); if(ov && window.__statsCache){ ov.innerHTML=anDashboard(window.__statsCache); wireAnalytics(); } }
   window.__wireAnalytics=wireAnalytics; window.__anDrawLine=anDrawLine;
+  /* 📈 성장 방법 — 홈에서 📊분석 탭으로 이사(2026-08-19 개편): 숫자 옆이 제자리 */
+  function anGrowthBtnHtml(){
+    return '<button class="hub-grow2" id="an-grow" style="margin-top:12px;"><span class="hg2-h"><span class="hg2-ic">📈</span><span class="hg2-t"><b>성장 방법</b><small>유입 · 전환 · 단골 · 성과</small></span></span><span class="hg2-body">숫자가 안 오를 때, <b>유입 → 전환</b> 어디가 약한지 짚고 <b>뭘 하면 되는지</b> 방법을 알려드려요.</span><span class="hg2-btn">방법 보러 가기 →</span></button>';
+  }
+  function anWireGrowthBtn(){ var g=document.getElementById('an-grow'); if(g) g.onclick=function(){ if(window.__openGrowth) window.__openGrowth(); }; }
   // 분석을 지정한 컨테이너에 그려 넣음 (모달 대신 고객·분석 탭 인라인)
   function loadStatsInto(body){
     if(!body) return;
@@ -8139,20 +8209,40 @@ if('serviceWorker' in navigator){
       var res=arr[0], cp=arr[1];
       if(!res||!res.ok){ body.innerHTML='<div class="an-empty">집계 표를 아직 못 불러왔어요<br><span style="font-size:11.5px;">(분석 SQL 실행 여부를 확인하세요)</span></div>'; return; }
       if(!res.views && !res.clicks){
-        body.innerHTML='<div class="pe-invite">'
-          +'<div class="pe-core"><svg viewBox="0 0 24 24"><path d="M4 19V11M10 19V5M16 19v-6M3 19h15"/></svg></div>'
-          +'<div class="pe-h">아직 손님이 오기 전이에요</div>'
-          +'<div class="pe-s">공개 페이지를 <b>인스타·카톡에 공유</b>하면, 방문·클릭·유입이 여기 쌓여요.<br>숫자가 모이면 <b>어디가 약한지</b>까지 짚어드려요.</div>'
-          +'<div style="display:flex;gap:8px;">'
-            +'<button type="button" id="an-copylink" class="pe-go" style="flex:1">🔗 내 링크 복사</button>'
-            +'<button type="button" id="an-viewhome" style="flex:1;border:1px solid var(--hair);background:var(--soft);color:var(--ink);border-radius:14px;padding:14px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--sans)">👁 손님 홈 보기</button>'
-          +'</div></div>';
+        /* 👁 살아있는 미리보기 (2026-08-19 픽) — «아직 없어요» 대신 «이렇게 채워져요»:
+           이 방이 무엇을 보여주는지(요약·추이·요일·여정·인기글)를 또렷한 예시로 먼저 보여주고, 할 일은 하나. */
+        body.innerHTML='<div class="gp-wrap"><span class="gp-lab">예시 화면</span><div class="gp-in">'
+          +'<div class="gp-3"><div class="c"><b>24</b><small>방문</small><i>▲ 8</i></div><div class="c"><b>9</b><small>클릭</small><i>▲ 3</i></div><div class="c"><b>3</b><small>문의·예약</small><i>▲ 1</i></div></div>'
+          +'<div class="gp-box"><div class="h">방문 추이 · 최근 14일<span>+38%</span></div>'
+            +'<svg viewBox="0 0 260 62" preserveAspectRatio="none" style="width:100%;height:62px;display:block">'
+            +'<defs><linearGradient id="gpA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A78BFF" stop-opacity=".45"/><stop offset="1" stop-color="#A78BFF" stop-opacity="0"/></linearGradient></defs>'
+            +'<path d="M0,50 L20,46 L40,48 L60,38 L80,41 L100,30 L120,33 L140,22 L160,26 L180,16 L200,19 L220,11 L240,14 L260,6 L260,62 L0,62 Z" fill="url(#gpA)"/>'
+            +'<polyline points="0,50 20,46 40,48 60,38 80,41 100,30 120,33 140,22 160,26 180,16 200,19 220,11 240,14 260,6" fill="none" stroke="#A78BFF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
+            +'<circle cx="257" cy="6" r="3.2" fill="#fff"/></svg></div>'
+          +'<div class="gp-box"><div class="h">언제 많이 오나 · 요일별</div>'
+            +'<div class="gp-bars"><i style="height:34%"></i><i style="height:52%"></i><i style="height:41%"></i><i style="height:68%"></i><i style="height:88%"></i><i style="height:100%"></i><i style="height:62%"></i></div>'
+            +'<div class="gp-blab"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div></div>'
+          +'<div class="gp-box"><div class="h">어디서 막히나 · 손님 여정</div><div class="gp-fun">'
+            +'<div class="f"><b>홈 방문</b><span class="tr"><i style="width:100%;background:linear-gradient(90deg,#A78BFF,#C3B0FF)"></i></span><em>24</em></div>'
+            +'<div class="f"><b>글 읽음</b><span class="tr"><i style="width:58%;background:linear-gradient(90deg,#8FA8EE,#A9C0F5)"></i></span><em>14</em></div>'
+            +'<div class="f"><b>버튼 클릭</b><span class="tr"><i style="width:37%;background:linear-gradient(90deg,#E6B84A,#F0D089)"></i></span><em>9</em></div>'
+            +'<div class="f"><b>문의·예약</b><span class="tr"><i style="width:12%;background:linear-gradient(90deg,#5DCAA5,#8FE3C2)"></i></span><em>3</em></div>'
+          +'</div></div>'
+          +'<div class="gp-row"><span class="th">🔥</span><div class="m"><div class="t">앞머리 자르기 전 꼭 확인할 것</div><div class="d">가장 많이 읽힌 글 · 12회 · 평균 1분 40초</div></div></div>'
+          +'</div></div>'
+          +'<div class="hb-do" style="margin-bottom:12px"><div class="hbd-k"><i></i>지금 하면 되는 것</div>'
+          +'<div class="hbd-t">내 링크를 한 곳에 올려두세요</div>'
+          +'<div class="hbd-d">손님이 들어오는 순간, 위 화면이 <b>내 숫자</b>로 바뀝니다. 인스타 프로필이 가장 빨라요.</div>'
+          +'<button type="button" class="hbd-go" id="an-copylink">🔗 링크 복사하기</button>'
+          +'<button type="button" class="hbd-skip" id="an-viewhome">👁 손님 화면 보기</button></div>'
+          +anGrowthBtnHtml();
         try{ var _cl=document.getElementById('an-copylink'); if(_cl) _cl.onclick=function(){ if(window.__copyMyLink) window.__copyMyLink(); }; }catch(_){}
         try{ var _vh=document.getElementById('an-viewhome'); if(_vh) _vh.onclick=function(){ if(window.__openCustomerPreview) window.__openCustomerPreview(); else if(window.__openRealHome) window.__openRealHome(); }; }catch(_){}
+        try{ anWireGrowthBtn(); }catch(_){}
         return;
       }
       if(cp && cp.ok && cp.conv_posts) res.conv_posts=cp.conv_posts;   // li_conv_posts SQL 있으면 병합, 없으면 무시
-      body.innerHTML=renderStats(res); try{ wireAnalytics(); }catch(_){}
+      body.innerHTML=renderStats(res)+anGrowthBtnHtml(); try{ wireAnalytics(); }catch(_){} try{ anWireGrowthBtn(); }catch(_){}
     }).catch(function(){ body.innerHTML='<div class="an-empty">불러오기 실패 (네트워크)</div>'; });
   }
   // 고객·분석 탭 진입 시 인라인으로 분석 마운트 (force면 새로 불러옴)
@@ -10114,17 +10204,17 @@ if('serviceWorker' in navigator){
       seg.querySelectorAll('[data-cat]').forEach(function(b){ b.onclick=function(e){ var v=b.getAttribute('data-cat'); if(v!=='__all' && e.target.closest('.pt-dot')){ e.stopPropagation(); openCatPalette(v, b.querySelector('.pt-dot')); return; } postCatFilter=(v==='__all')?null:v; renderPostsLibrary(); }; });
     }
     if(!allPosts.length){
-      box.innerHTML='<div class="pe-invite">'
-        +'<div class="pe-core"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h9"/></svg></div>'
-        +'<div class="pe-h">첫 글이 손님의 신뢰가 돼요</div>'
-        +'<div class="pe-s">글 하나면 “이 사람 진짜네”가 생겨요.<br><b>무엇을 쓸지</b> 세 개 골라뒀어요.</div>'
-        +'<div class="pe-ideas">'
-          +'<button type="button" class="pe-idea" data-pego="know"><b>①</b><span style="margin-left:0;color:var(--ink);flex:1">손님이 자주 묻는 질문 하나 답하기</span><span>→</span></button>'
-          +'<button type="button" class="pe-idea" data-pego="trust"><b>②</b><span style="margin-left:0;color:var(--ink);flex:1">최근 작업 전후 + 한 줄 설명</span><span>→</span></button>'
-          +'<button type="button" class="pe-idea" data-pego="know"><b>③</b><span style="margin-left:0;color:var(--ink);flex:1">내가 이 일을 하는 이유</span><span>→</span></button>'
-        +'</div>'
-        +'<button type="button" class="pe-go" id="pe-start">✍️ 첫 글 쓰기</button>'
-        +'</div>';
+      /* 👁 살아있는 미리보기 (2026-08-19 픽) — «글이 없어요» 대신 «이렇게 쌓여요»: 4종 글이 어떤 모양으로 쌓이는지 먼저 */
+      box.innerHTML='<div class="gp-wrap"><span class="gp-lab">예시 화면</span><div class="gp-in">'
+        +'<div class="gp-row"><span class="th">💡</span><div class="m"><div class="t">앞머리 자르기 전 꼭 확인할 것</div><div class="d">정보·노하우 · 7단 뼈대</div></div><span class="n">34</span></div>'
+        +'<div class="gp-row"><span class="th">⭐</span><div class="m"><div class="t">6개월 뻗침머리 → 2주 만에</div><div class="d">후기·사례 · 전후 사진</div></div><span class="n">21</span></div>'
+        +'<div class="gp-row"><span class="th">🔢</span><div class="m"><div class="t">앞머리 실패 안 하는 5가지</div><div class="d">리스트 · 소셜 최강</div></div><span class="n">18</span></div>'
+        +'<div class="gp-row"><span class="th">📢</span><div class="m"><div class="t">7월 앞머리 클리닉 오픈</div><div class="d">소식·이벤트 · 기간 한정</div></div><span class="n">9</span></div>'
+        +'</div></div>'
+        +'<div class="hb-do"><div class="hbd-k"><i></i>지금 하면 되는 것</div>'
+        +'<div class="hbd-t">손님이 자주 묻는 걸 하나 고르세요</div>'
+        +'<div class="hbd-d">주제 한 줄만 넣으면 <b>7단 뼈대</b>가 깔려요 — 백지에서 시작하지 않아요.</div>'
+        +'<button type="button" class="hbd-go" id="pe-start">✍️ 첫 글 쓰기</button></div>';
       function _peStart(){ var b=document.getElementById('new-content-btn'); if(b) b.click(); }
       var _pg=document.getElementById('pe-start'); if(_pg) _pg.onclick=_peStart;
       box.querySelectorAll('.pe-idea').forEach(function(b){ b.onclick=_peStart; });   // 아이디어 = 영감 + 새 컨텐츠 흐름 시작
@@ -12274,22 +12364,65 @@ if('serviceWorker' in navigator){
         +'<div class="zs-slots">'+zsSlots+'</div><div class="zs-slotn"><b>'+zsDone+'</b> / 3 세움</div>'
         +'<div class="zs-steps">'+zsSteps+'</div></div>';
     }
-    box.innerHTML=zsHtml
-      /* ① 프리미엄 배지 (맨 위 · 상업적) */
-      +'<div class="hub-plan2" id="hub-plan"><span class="hp2-ic">'+(({basic:'🌱',pro:'🚀',premium:'👑'})[tier]||'🌱')+'</span><span class="hp2-m"><b>'+(nm?escT(nm)+'님 · ':'')+'<em>'+tierLbl+'</em></b><small>'+dday+'</small></span><span class="hp2-go">관리 →</span></div>'
-      /* ② 수익화 공식 */
-      +'<div id="hub-fx-wrap">'+hubFormulaHtml(window.__hubStats)+'</div>'
-      /* ③ 오늘 성과 (+ 추이 그래프 = renderTodayCard가 채움) */
-      +'<div class="hub-zone" id="hub-today-zone"><div class="hub-zone-h">📊 오늘 성과 <button type="button" class="hz-more" id="hub-an-more">분석 자세히 →</button></div>'
-      +  '<div id="hub-today" class="today-card"></div>'
-      +'</div>'
-      /* ④ 성장 방법 (히어로 카드) */
-      +'<button class="hub-grow2" id="hub-grow"><span class="hg2-h"><span class="hg2-ic">📈</span><span class="hg2-t"><b>성장 방법</b><small>유입 · 전환 · 단골 · 성과</small></span></span><span class="hg2-body">숫자가 안 오를 때, <b>유입 → 전환</b> 어디가 약한지 짚고 <b>뭘 하면 되는지</b> 방법을 알려드려요.</span><span class="hg2-btn">방법 보러 가기 →</span></button>'
-      /* ⑤ 내 페이지 */
-      +'<div class="hub-zone"><div class="hub-zone-h">🔗 내 페이지</div>'
-      +  ((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">'+(window.__custUrlDisp?window.__custUrlDisp(myH):myH)+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
-      +  '<div class="hub-tpl" id="hub-tpl"><span class="htp-l">🏠 손님 홈 템플릿</span><div class="htp-seg htp-seg4"><button type="button" data-tpl="editorial">📖 에디토리얼형</button><button type="button" data-tpl="trust">🪪 신뢰형</button><button type="button" data-tpl="sales">✨ 세일즈형</button><button type="button" data-tpl="free">🧱 자유형</button></div><div class="htp-hint" id="htp-hint"></div></div>'
+    /* ════ 🏠 홈 개편(2026-08-19 사장님 픽 B+A) ════
+       위=«오늘 할 일 딱 하나» / 아래=«4걸음 공정 지도».
+       성장 방법→📊분석, 손님 홈 템플릿→구성 추가(#add-tpl)로 이사 · 오늘 성과·인기 글은 ④계단에 흡수. */
+    if(!window.__hubStats){ try{ fetchHubStats(); }catch(_){} }
+    var _st=window.__hubStats||null, last7=0, prev7=0;
+    try{ var _dl=(_st&&_st.daily)||[], _L=_dl.length;
+      for(var _i=0;_i<_L;_i++){ var _n=_dl[_i].n||0; if(_i>=_L-7) last7+=_n; else if(_i>=_L-14) prev7+=_n; } }catch(_){}
+    var _dGrow=(prev7>0)?Math.round((last7-prev7)/prev7*100):0;
+    var prodN=0; try{ prodN=(productsData||[]).length; }catch(_){}
+    var _ps={streak:0,thisWeek:false}; try{ _ps=postStreak(); }catch(_){}
+    // 오늘 할 일 — 상태를 보고 «딱 하나»만 고름 (3걸음 미완이면 zs 카드가 그 역할)
+    var todo=null;
+    if(zsDone>=3){
+      if(pubs===0) todo={t:'첫 글 하나 올리기', d:'글이 있어야 검색·SNS에서 손님이 들어와요. 주제 한 줄이면 <b>7단 뼈대</b>가 깔려요.', b:'✍️ 첫 글 쓰기', go:'newpost'};
+      else if(!_ps.thisWeek) todo={t:'이번 주 글 하나 올리기', d:'꾸준함이 곧 유입이에요 — 뼈대는 앱이 깔아드려요.', b:'✍️ 글 쓰러 가기', go:'newpost'};
+      else if(prodN===0) todo={t:'지금 하시는 시술 하나 올리기', d:'이름·가격만 있으면 끝. 손님이 <b>바로 예약</b>할 수 있게 돼요.', b:'＋ 상품 올리기', go:'store'};
+      else if(!last7) todo={t:'내 링크를 한 곳에 올려두세요', d:'손님이 들어오는 순간, 아래 <b>④분석</b>이 내 숫자로 채워져요.', b:'🔗 링크 복사하기', go:'copylink'};
+      else todo={t:'손님 화면 한번 점검하기', d:'실제 손님이 보는 그대로 — 어색한 곳이 없는지 확인해요.', b:'👁 손님 화면 보기', go:'realhome'};
+    }
+    var todoHtml = todo ? ('<div class="hb-do"><div class="hbd-k"><i></i>오늘 할 일 · 딱 하나</div>'
+      +'<div class="hbd-t">'+todo.t+'</div><div class="hbd-d">'+todo.d+'</div>'
+      +'<button type="button" class="hbd-go" data-hbdo="'+todo.go+'">'+todo.b+'</button>'
+      +'<button type="button" class="hbd-skip" data-hbdo="skip">나중에</button></div>') : '';
+    // 4걸음 공정 지도 — 각 계단이 하단 탭과 1:1
+    var STEPS=[
+      {ic:'🏅', nm:'전문성 가시화', c:'#E6B84A', done:(trust>=100),
+       chip:((nm?1:0)+(bio?1:0)+(avatar?1:0))+'/3 채움', d:'명함·전후·후기 — 믿을 이유', go:'page'},
+      {ic:'📄', nm:'컨텐츠', c:'#8FA8EE', done:(pubs>0 && _ps.thisWeek),
+       chip:(pubs?('글 '+pubs+'개'+(_ps.thisWeek?'':' · 이번 주 0')):'글 0개'), d:'손님이 들어오는 문', go:'newpost'},
+      {ic:'💰', nm:'판매·예약', c:'#E68FB0', done:!!hasAction,
+       chip:(hasAction?(prodN?('상품 '+prodN+'개'):'예약 켜짐'):'아직 안 열림'), d:'마음 생긴 손님이 바로 신청', go:'store'},
+      {ic:'📊', nm:'고객·분석', c:'#5DCAA5', done:(last7>0),
+       chip:(last7?('이번 주 '+last7+'명'+(_dGrow>0?(' ▲'+_dGrow+'%'):'')):'링크 뿌리기부터'), d:'뭐가 통했는지 · 다음엔 더 잘', go:'data'}
+    ];
+    var _nowIdx=-1; for(var _s=0;_s<STEPS.length;_s++){ if(!STEPS[_s].done){ _nowIdx=_s; break; } }
+    var _railPre=(zsDone<3);   // 3걸음 미완 = 지도는 «앞으로 이런 길» 예고만 (주인공은 zs 카드)
+    var railHtml='<div class="hb-raill">'+(_railPre?'4걸음 지도':'컨텐츠가 자산이 되는 4걸음')+'<i></i>'+(_railPre?'세 걸음 뒤에 열려요':'내 위치')+'</div><div class="hb-rail'+(_railPre?' pre':'')+'">'
+      + STEPS.map(function(s,i){
+          var cls=s.done?'done':(i===_nowIdx?'now':'');
+          return '<button type="button" class="hb-st '+cls+'" style="--sc:'+s.c+'" data-hbgo="'+s.go+'">'
+            +'<span class="hbs-c">'+(s.done?'✓':(i+1))+'</span>'
+            +'<span class="hbs-b"><span class="hbs-m"><span class="hbs-n">'+s.ic+' '+s.nm+' <em>'+s.chip+'</em></span>'
+            +'<span class="hbs-d">'+s.d+'</span></span><span class="hbs-g">›</span></span></button>';
+        }).join('')
       +'</div>';
+    box.innerHTML=
+      /* ① 프리미엄 배지 */
+      '<div class="hub-plan2" id="hub-plan"><span class="hp2-ic">'+(({basic:'🌱',pro:'🚀',premium:'👑'})[tier]||'🌱')+'</span><span class="hp2-m"><b>'+(nm?escT(nm)+'님 · ':'')+'<em>'+tierLbl+'</em></b><small>'+dday+'</small></span><span class="hp2-go">관리 →</span></div>'
+      /* ② 내 링크 (허브의 심장 — 최상단 고정) */
+      +((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link" style="margin-bottom:13px;"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">'+(window.__custUrlDisp?window.__custUrlDisp(myH):myH)+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
+      /* ③ 0의 상태 3걸음 (미완일 때만) */
+      +zsHtml
+      /* ④ 오늘 할 일 하나 */
+      +todoHtml
+      /* ⑤ 4걸음 공정 지도 */
+      +railHtml
+      /* ⑥ 접힌 줄 */
+      +'<button type="button" class="hb-fold" id="hub-viewhome">👁 손님 화면 그대로 보기 <span>›</span></button>'
+      +'<div id="hub-fx-wrap" style="display:none"></div>';
     // (지금할일 hub-hero · 완성도 hub-ns 카드 제거 2026-07-07 — fold 로직 삭제)
     box.classList.toggle('zs-empty', zsDone===0);   // 완전 빈 사용자 = 공식·성과·성장 숨김(0의 상태 집중)
     var ws=window.__switchWs, pw=window.__showPwTab;
@@ -12300,10 +12433,19 @@ if('serviceWorker' in navigator){
       else if(k==='import'){ if(window.__openImportPicker) window.__openImportPicker(); }
       else if(k==='store'){ if(ws)ws('sales'); if(window.__showSalesSeg) window.__showSalesSeg('sell'); }
       else if(k==='realhome'){ if(window.__openRealHome) window.__openRealHome(); }
-      else if(k==='data'){ if(ws)ws('data'); }
+      else if(k==='data'){ if(ws)ws('data'); try{ if(window.__mountDataAnalytics) window.__mountDataAnalytics(); }catch(_){} }
       else if(k==='design'){ if(ws)ws('design'); }
+      else if(k==='page'){ if(ws)ws('page'); }
+      else if(k==='copylink'){ if(window.__copyMyLink) window.__copyMyLink(); }
     }
-    box.querySelectorAll('.gi').forEach(function(g){ g.onclick=function(){ tileGo(TILES[+g.getAttribute('data-tile')][3]); }; });
+    // 🏠 오늘 할 일 · 4걸음 지도 배선 (2026-08-19 개편)
+    box.querySelectorAll('[data-hbdo]').forEach(function(b){ b.onclick=function(){
+      var k=b.getAttribute('data-hbdo');
+      if(k==='skip'){ b.closest('.hb-do').style.display='none'; return; }   // 이번 방문만 접기(다시 열면 복귀)
+      tileGo(k);
+    }; });
+    box.querySelectorAll('[data-hbgo]').forEach(function(b){ b.onclick=function(){ tileGo(b.getAttribute('data-hbgo')); }; });
+    var hvh=document.getElementById('hub-viewhome'); if(hvh) hvh.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
     // 🌱 0의 상태 3걸음 → 실제 화면으로
     box.querySelectorAll('.zs-st[data-zs]').forEach(function(b){ b.onclick=function(){
       var k=b.getAttribute('data-zs');
@@ -12312,32 +12454,8 @@ if('serviceWorker' in navigator){
       else if(k==='contact'){ if(ws) ws('sales'); try{ if(window.__showSalesSeg) window.__showSalesSeg('book'); }catch(_){} }   // 연락 = 예약·판매 탭 → 예약 세그먼트
     }; });
     var bp=document.getElementById('hub-plan'); if(bp) bp.onclick=function(){ if(ws)ws('design'); };
-    var bn=document.getElementById('hub-an-more'); if(bn) bn.onclick=function(){ if(window.__openStats) window.__openStats(); };   // 분석 자세히 → 고객·분석 탭
-    var hg=document.getElementById('hub-grow'); if(hg) hg.onclick=function(){ if(window.__openGrowth) window.__openGrowth(); };
     var hlc=document.getElementById('hub-link-copy'); if(hlc) hlc.onclick=function(){ if(window.__copyMyLink) window.__copyMyLink(); };
-    // 🏠 손님 홈 템플릿 스위치 (2026-07-08): free=자유형(기본·무회귀) / editorial=에디토리얼형. [적용] 누르면 손님 반영
-    (function(){
-      var box2=document.getElementById('hub-tpl'); if(!box2) return;
-      function curTpl(){ try{ return (JSON.parse(localStorage.getItem('cm-home-v1')||'{}').template)||'free'; }catch(_){ return 'free'; } }
-      function paintTpl(){
-        var c=curTpl();
-        box2.querySelectorAll('[data-tpl]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tpl')===c); });
-        var h2=document.getElementById('htp-hint');
-        if(h2) h2.textContent={
-          editorial:'📖 사진·명함·전후·후기가 잡지처럼 자동 배치돼요 (블록은 그대로 보존)',
-          trust:'🪪 명함·숫자·자격·걸어온 길이 주인공 — 상담 CTA로 마감 (블록 보존)',
-          sales:'✨ 훅→공감→증거→오퍼→마감 D-day 순서로 배치 (블록 보존)'
-        }[c]||'🧱 내가 쌓은 구성 그대로 보여요';
-      }
-      box2.querySelectorAll('[data-tpl]').forEach(function(b){ b.onclick=function(){
-        var v=b.getAttribute('data-tpl');
-        try{ var h3=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); h3.template=v; localStorage.setItem('cm-home-v1', JSON.stringify(h3)); }catch(_){}
-        try{ home.template=v; }catch(_){}
-        paintTpl();
-        try{ toast({editorial:'📖 에디토리얼형',trust:'🪪 신뢰형',sales:'✨ 세일즈형'}[v]?({editorial:'📖 에디토리얼형',trust:'🪪 신뢰형',sales:'✨ 세일즈형'}[v]+' 선택 — [✓ 적용]을 누르면 손님에게 반영돼요 (언제든 자유형 복귀)'):'🧱 자유형으로 되돌렸어요 — [✓ 적용]으로 반영'); }catch(_){}
-      }; });
-      paintTpl();
-    })();
+    /* 🏠 손님 홈 템플릿 스위치는 «구성 추가»(#add-tpl)로 이사 — 홈은 현황판, 꾸미기는 제자리에서 (2026-08-19 개편) */
     var hlq=document.getElementById('hub-link-qr'); if(hlq) hlq.onclick=function(){ if(window.__openShare) window.__openShare(); };
     try{ if(myH&&myH!=='preview'&&!localStorage.getItem('clb-seen')){ localStorage.setItem('clb-seen','1'); var hlb=document.getElementById('hub-link'); if(hlb) setTimeout(function(){ hlb.classList.add('hl-flash'); if(window.toast) toast('👆 이게 손님에게 보낼 링크예요 · 복사해서 인스타·손님에게'); setTimeout(function(){ hlb.classList.remove('hl-flash'); }, 2500); }, 700); } }catch(e){}
     try{ renderTodayCard(); }catch(_){}
@@ -12417,7 +12535,7 @@ if('serviceWorker' in navigator){
     window.__hubStatsFetching=true;
     window.laRpc('li_stats',{ p_code:auth.code, p_pin_hash:auth.pinHash }).then(function(res){
       window.__hubStatsFetching=false;
-      if(res&&res.ok){ window.__hubStats=res; try{ renderTodayCard(); }catch(_){} try{ var fxw=document.getElementById('hub-fx-wrap'); if(fxw) fxw.innerHTML=hubFormulaHtml(res); }catch(_){} try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){} }
+      if(res&&res.ok){ window.__hubStats=res; try{ renderTodayCard(); }catch(_){} try{ var fxw=document.getElementById('hub-fx-wrap'); if(fxw) fxw.innerHTML=hubFormulaHtml(res); }catch(_){} try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){} try{ if(document.getElementById('home-hub') && window.__renderHomeHub) window.__renderHomeHub(); }catch(_){} }   /* 숫자 도착 → 4걸음 지도(④분석 계단) 갱신 */
       else { var e2=document.getElementById('hub-today'); if(e2) e2.innerHTML='<div class="td-empty">📊 방문 기록이 쌓이면 여기 오늘의 현황이 떠요.</div>'; }
     }).catch(function(){ window.__hubStatsFetching=false; var e3=document.getElementById('hub-today'); if(e3) e3.innerHTML=''; });
   }
@@ -12499,7 +12617,12 @@ if('serviceWorker' in navigator){
     function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];}); }
     function render(){
       var box=document.getElementById('ev-gallery'); if(!box) return;
-      if(!data.length){ box.innerHTML='<div class="post-empty" style="margin:0;">아직 없어요 · 자격증·수상·전후·후기캡처를 올려보세요</div>'; bind(box); return; }
+      /* 👁 살아있는 미리보기 (2026-08-19 픽) — «아직 없어요» 대신 «이런 걸 올려요» */
+      if(!data.length){ box.innerHTML='<div class="gp-wrap" style="margin-bottom:8px"><span class="gp-lab">예시 화면</span><div class="gp-in">'
+        +'<div class="gp-row"><span class="th">🏆</span><div class="m"><div class="t">2024 헤어쇼 대상</div><div class="d">수상·자격증 — 실력의 공식 증거</div></div></div>'
+        +'<div class="gp-row"><span class="th">📸</span><div class="m"><div class="t">앞머리 전 · 후</div><div class="d">결과 사진 — 말보다 강한 한 장</div></div></div>'
+        +'<div class="gp-row"><span class="th">💬</span><div class="m"><div class="t">“진작 올 걸 그랬어요”</div><div class="d">후기 캡처 — 손님의 목소리</div></div></div>'
+        +'</div></div><div class="post-empty" style="margin:0;">아래 ＋로 <b>자격증·수상·전후·후기캡처</b>를 올리면 여기에 쌓여요</div>'; bind(box); return; }
       box.innerHTML=data.map(function(it,i){
         var img=it.img?(' style="background-image:url('+it.img+')"'):'';
         return '<div class="evg-row" data-egi="'+i+'"><button type="button" class="evg-img'+(it.img?' has':'')+'" data-egimg="'+i+'"'+img+'>'+(it.img?'':'＋사진')+'</button>'
@@ -12623,13 +12746,19 @@ if('serviceWorker' in navigator){
     function prodSectionBody(kind){
       var h=''; var any=false;
       productsData.forEach(function(p,gi){ if((p.kind||'coupang')!==kind) return; any=true; h+=scardHtml(p,gi); });
-      if(!any && kind==='mine'){   // 유령 상품 예시 (2026-07-08): 탭하면 내 것으로
-        h+='<div class="sc-ghosts">'
-          +'<button type="button" class="sc-ghost" data-sgoal="service"><span class="sc-g-m"><b>💇 예) 퍼스널 컨설팅 30분</b><small>30,000원 · 📅 예약으로 받기</small></span><span class="sc-g-a">＋ 채택</span></button>'
-          +'<button type="button" class="sc-ghost" data-sgoal="ebook"><span class="sc-g-m"><b>📔 예) 전자책 · 노하우 정리</b><small>19,000원 · 💳 링크 또는 카톡</small></span><span class="sc-g-a">＋ 채택</span></button>'
-          +'</div>';
+      if(!any && kind==='mine'){
+        /* 👁 살아있는 미리보기 (2026-08-19 픽) — 3형태(시술·클래스·전자책)를 또렷이 보여주고, 탭하면 바로 내 것으로 채택 */
+        h+='<div class="gp-wrap"><span class="gp-lab">예시 화면 · 탭하면 내 것으로</span><div class="gp-in">'
+          +'<button type="button" class="gp-row" style="width:100%;text-align:left;cursor:pointer;font-family:var(--sans)" data-sgoal="service"><span class="th">💇</span><span class="m"><span class="t" style="display:block">앞머리 진단 + 셋팅</span><span class="d" style="display:block">30분 · 📅 예약으로 받기</span></span><span class="n">30,000</span></button>'
+          +'<button type="button" class="gp-row" style="width:100%;text-align:left;cursor:pointer;font-family:var(--sans)" data-sgoal="class"><span class="th">🎓</span><span class="m"><span class="t" style="display:block">셀프 앞머리 원데이 클래스</span><span class="d" style="display:block">2시간 · 정원 6명</span></span><span class="n">99,000</span></button>'
+          +'<button type="button" class="gp-row" style="width:100%;text-align:left;cursor:pointer;font-family:var(--sans)" data-sgoal="ebook"><span class="th">📕</span><span class="m"><span class="t" style="display:block">얼굴형별 앞머리 가이드북</span><span class="d" style="display:block">PDF · 즉시 전달</span></span><span class="n">19,000</span></button>'
+          +'</div></div>'
+          +'<div class="hb-do" style="margin-bottom:10px"><div class="hbd-k"><i></i>가장 쉬운 첫걸음</div>'
+          +'<div class="hbd-t">지금 하시는 시술 하나만 올려보세요</div>'
+          +'<div class="hbd-d">이름·가격만 있으면 끝. 손님이 <b>바로 예약·문의</b>할 수 있게 돼요.</div>'
+          +'<button type="button" class="hbd-go" data-sgoal="service">＋ 시술 하나 올리기</button></div>';
       }
-      else if(!any) h+='<div class="sc-empty">아직 없어요 · 아래로 추가하세요</div>';
+      else if(!any) h+='<div class="sc-empty">쿠팡 추천 제품은 아래에서 추가할 수 있어요</div>';
       h+='<button type="button" class="sc-add" data-padd="'+kind+'">＋ '+(kind==='coupang'?'추천 제품 추가':'내 상품 추가')+'</button>';
       if(kind==='coupang') h+='<div class="sc-note">쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다. (공개 페이지에 자동 표시)</div>';
       return h;
