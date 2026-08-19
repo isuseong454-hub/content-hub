@@ -2455,7 +2455,7 @@ if('serviceWorker' in navigator){
   #cm-intro.quick .ci-tag, #cm-intro.quick .ci-dots{display:none;}
 
   /* ════ 화면 전환 모션 (고객 화면 → 편집실) — 옛 허브-네트워크 모션 재활용 ════ */
-  #cm-transition{position:fixed; inset:0; z-index:150; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  #cm-transition{position:fixed; inset:0; z-index:150; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; overflow:hidden;   /* 🚨2026-08-19: 투명(opacity:0)이어도 안쪽 300px 무대가 좁은 폰에서 가로 스크롤을 만들던 것 */
     background:radial-gradient(circle at 50% 50%, #15123a 0%, #0a0820 55%, #05030d 100%); opacity:0; pointer-events:none; transition:opacity .32s ease;}
   #cm-transition.show{opacity:1; pointer-events:auto;}
   .ct-hub{position:relative; width:300px; height:330px;}
