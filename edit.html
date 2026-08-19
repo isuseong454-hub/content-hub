@@ -1161,6 +1161,15 @@ if('serviceWorker' in navigator){
   .hb-do .hbd-skip{background:none;border:0;color:var(--muted);font:700 11.5px var(--sans);padding:11px 8px;cursor:pointer;}
   .hb-raill{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);font-weight:600;margin:0 2px 8px;}
   .hb-raill i{flex:1;height:1px;background:var(--hair);font-style:normal;}
+  .hb-live{display:flex;align-items:center;gap:11px;width:100%;text-align:left;margin-bottom:13px;padding:14px 15px;border-radius:16px;cursor:pointer;font-family:var(--sans);
+    border:1px solid rgba(230,184,74,.45);background:radial-gradient(120% 130% at 0% 0%, rgba(230,184,74,.22), transparent 62%), linear-gradient(100deg,#2a2314,#1d1a12);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 12px 28px -20px rgba(230,184,74,.7);}
+  .hb-live:active{transform:scale(.985);}
+  .hb-live .hbl-ic{font-size:19px;flex:0 0 auto;}
+  .hb-live .hbl-m{flex:1;min-width:0;}
+  .hb-live .hbl-m b{display:block;font-size:14.5px;font-weight:800;color:#F5E2AE;line-height:1.25;}
+  .hb-live .hbl-m small{font-size:11px;color:#b9a878;font-weight:600;}
+  .hb-live .hbl-go{flex:0 0 auto;font-size:17px;color:#E6B84A;font-weight:800;}
   .hb-rail{margin-bottom:12px;}
   .hb-rail.pre{opacity:.45;}   /* 3걸음 미완 = 예고 */
   .hb-st{position:relative;display:flex;padding:0 0 11px 26px;background:none;border:0;width:100%;text-align:left;font-family:var(--sans);cursor:pointer;}
@@ -4004,6 +4013,12 @@ if('serviceWorker' in navigator){
         <span class="acct-tl">로그아웃</span>
       </div>
     </div>
+    <!-- 🏠 로그인 착지 (2026-08-19 A안) — 기본=내 홈(현장 편집). 끄면 옛 동작(작업실)으로 즉시 복귀 -->
+    <div class="set" id="set-landing" style="cursor:default; box-shadow:none; margin-top:14px;">
+      <span class="ic">🏠</span>
+      <span class="meta"><span class="nm">로그인하면 내 홈으로</span><span class="sb">손님 화면에서 바로 편집 · 끄면 작업실로 열려요</span></span>
+      <span class="sw on" id="landing-sw"><i></i></span>
+    </div>
     <!-- 손님 Q&A 편집 (위 타일 누르면 펼침) -->
     <div id="qna-collapse" style="display:none; margin-top:14px;">
       <div class="grp-h-lbl">❓ 손님 Q&amp;A <span style="font-weight:400;">· 자주 묻는 질문 (손님 Q&amp;A 탭에 노출)</span></div>
@@ -5891,7 +5906,7 @@ if('serviceWorker' in navigator){
       <button class="le-d le-d-prev" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
       <button class="le-d" id="le-design" title="분위기·테마 꾸미기"><span class="di">🎨</span><span class="le-d-lbl">분위기</span></button>
       <button class="le-d le-d-add" id="le-add-top" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성추가</span></button>
-      <button class="le-d" id="le-opmode" title="작업실로 (예약·분석·설정)"><span class="di">⚙️</span><span class="le-d-lbl">작업실</span></button>
+      <button class="le-d" id="le-opmode" title="관리·성장 — 컨텐츠·판매·예약·분석·설정"><span class="di">⚙️</span><span class="le-d-lbl">관리</span></button>
     </div>
   </div>
 
@@ -9603,6 +9618,19 @@ if('serviceWorker' in navigator){
   var setFab=document.getElementById('set-fab'); if(setFab) setFab.onclick=function(){ openHome('fab'); };
   var setLogout=document.getElementById('set-logout');
   if(setLogout) setLogout.onclick=function(){ if(!confirm('로그아웃 할까요?')) return; try{ localStorage.removeItem('la-auth'); }catch(_){} location.reload(); };
+  /* 🏠 로그인 착지 토글 (A안 되돌리기 장치) */
+  (function(){
+    var sw=document.getElementById('landing-sw'); if(!sw) return;
+    function cur(){ try{ return localStorage.getItem('cm-hub-landing')||'live'; }catch(_){ return 'live'; } }
+    function paint(){ sw.classList.toggle('on', cur()==='live'); }
+    sw.onclick=function(){
+      var v=(cur()==='live')?'desk':'live';
+      try{ localStorage.setItem('cm-hub-landing', v); }catch(_){}
+      paint();
+      try{ toast(v==='live'?'🏠 로그인하면 내 홈(편집)으로 열려요':'🧰 로그인하면 작업실로 열려요'); }catch(_){}
+    };
+    paint();
+  })();
 
   // 내 데이터 내보내기 (셀프, 클라이언트 — 서버 불필요)
   function exportMyData(){
@@ -12410,8 +12438,10 @@ if('serviceWorker' in navigator){
         }).join('')
       +'</div>';
     box.innerHTML=
+      /* ⓪ 내 홈으로 (A안 — 꾸미기는 현장에서) */
+      '<button type="button" class="hb-live" id="hub-golive"><span class="hbl-ic">✏️</span><span class="hbl-m"><b>내 홈 꾸미러 가기</b><small>손님이 보는 화면에서 바로 고쳐요</small></span><span class="hbl-go">→</span></button>'
       /* ① 프리미엄 배지 */
-      '<div class="hub-plan2" id="hub-plan"><span class="hp2-ic">'+(({basic:'🌱',pro:'🚀',premium:'👑'})[tier]||'🌱')+'</span><span class="hp2-m"><b>'+(nm?escT(nm)+'님 · ':'')+'<em>'+tierLbl+'</em></b><small>'+dday+'</small></span><span class="hp2-go">관리 →</span></div>'
+      +'<div class="hub-plan2" id="hub-plan"><span class="hp2-ic">'+(({basic:'🌱',pro:'🚀',premium:'👑'})[tier]||'🌱')+'</span><span class="hp2-m"><b>'+(nm?escT(nm)+'님 · ':'')+'<em>'+tierLbl+'</em></b><small>'+dday+'</small></span><span class="hp2-go">관리 →</span></div>'
       /* ② 내 링크 (허브의 심장 — 최상단 고정) */
       +((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link" style="margin-bottom:13px;"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">'+(window.__custUrlDisp?window.__custUrlDisp(myH):myH)+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
       /* ③ 0의 상태 3걸음 (미완일 때만) */
@@ -12446,6 +12476,7 @@ if('serviceWorker' in navigator){
     }; });
     box.querySelectorAll('[data-hbgo]').forEach(function(b){ b.onclick=function(){ tileGo(b.getAttribute('data-hbgo')); }; });
     var hvh=document.getElementById('hub-viewhome'); if(hvh) hvh.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
+    var hgl=document.getElementById('hub-golive'); if(hgl) hgl.onclick=function(){ if(window.__openLive) window.__openLive(); };   /* A안: 작업실 → 현장 편집 */
     // 🌱 0의 상태 3걸음 → 실제 화면으로
     box.querySelectorAll('.zs-st[data-zs]').forEach(function(b){ b.onclick=function(){
       var k=b.getAttribute('data-zs');
@@ -13084,6 +13115,17 @@ if('serviceWorker' in navigator){
     if(!window.__devEnter){ try{ if(window.__maybeLoginIntro) window.__maybeLoginIntro(); }catch(_){} try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){} }   // ✨ 하루 첫 로그인 = 쌓인 자산 인트로(게이트 위에 뜸, 탭 스킵)
     // 📸 첫 로그인 = 컨텐츠 허브 소개 6장 → 전문성 가시화 체험(데모라인) 1회 자동 · 수익화 이야기는 로그인 💰버튼 (이후 설정에서 다시 보기)
     try{ if(!localStorage.getItem('ch-onboard-v2') && window.__openOnboardIntro){ setTimeout(function(){ try{ window.__openOnboardIntro(); }catch(_){} }, 500); } }catch(_){}
+    /* ════ 🏠 A안 착지 뒤집기 (2026-08-19 사장님 픽) ════
+       로그인하면 «작업실»이 아니라 «내 홈(현장 편집)»에 바로 착지 — 손님이 보는 그 화면에서 바로 고친다.
+       (윅스·스퀘어스페이스 방식) 관리·분석은 현장 하단 도크 «⚙️ 작업실»로 언제든.
+       ⚠️ 되돌리기: ⚙설정에서 «로그인하면 작업실로» 켜면 옛 동작으로 즉시 복귀 (cm-hub-landing='desk'). */
+    try{
+      var _land='live'; try{ _land=localStorage.getItem('cm-hub-landing')||'live'; }catch(_e){}
+      var _isNew=false; try{ _isNew=!localStorage.getItem('ch-onboard-v2'); }catch(_e){}   // 첫 로그인(소개 6장)은 현장 진입 안 함
+      if(_land==='live' && !_isNew && !window.__devEnter){
+        setTimeout(function(){ try{ if(window.__openLive && !window.__liveEditActive) window.__openLive(); }catch(_e){} }, 900);   // 데이터 로드(loadPage) 뒤에 진입
+      }
+    }catch(_){}
   }
 
   // ════ 🔀 멀티 채널 v1 (2026-07-12) — RPC 심(shim): 기존 호출부 0 수정, SQL(content-hub-channels.sql) 미설치면 완전 무시(무회귀) ════
