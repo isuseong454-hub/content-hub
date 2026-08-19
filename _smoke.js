@@ -58,6 +58,10 @@
     '빈 채널에 이전 채널 명함·후기가 새던 것');
   add('연락 걸음 진짜 판정(3A)', src.indexOf('resv-onoff') > -1 && src.indexOf('var actTypes={lead:1,service:1') < 0,
     '기본 틀만으로 3걸음이 ✓완료 되던 거짓 완료');
+  add('A안 착지 뒤집기', src.indexOf("cm-hub-landing") > -1 && src.indexOf("__openLive && !window.__liveEditActive") > -1,
+    '로그인하면 내 홈(현장 편집)으로 착지 — 되돌리기 토글 포함');
+  add('작업실→현장 문', !!document.getElementById('hub-golive') || src.indexOf('hub-golive') > -1,
+    '작업실 홈에서 현장 편집으로 가는 큰 문');
   add('링크 실주소(5B)', src.indexOf('function custUrl') > -1 && src.indexOf("'https://contenthub.kr/u/'+h") < 0,
     '미연결 도메인(contenthub.kr) 링크로 손님이 404 받던 것');
 
