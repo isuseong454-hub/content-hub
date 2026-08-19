@@ -9119,18 +9119,25 @@ if('serviceWorker' in navigator){
 
   // 테마 스와치 (u.html 25종 중 대표 — [키,종이색,포인트색])
   var THEMES = [
-    ['cream','#EFEAE0','#CC785C'],['hero','#EFE7DA','#EF7A33'],['herb','#EEEDE3','#7E8C63'],['mocha','#EDE7DE','#9C8268'],
-    ['midnight','#16161A','#A78BFF','radial-gradient(circle at 28% 26%, rgba(61,123,255,.85), transparent 55%), radial-gradient(circle at 76% 78%, rgba(255,61,192,.72), transparent 55%), #16161A'],
-    ['pink','#FBEDF1','#E5708C'],
-    ['hub','#F2F0FD','#6C4EE6'],
-    ['lavender','#F0EEF9','#8E7BD6'],['pearl','#EEF1F6','#8499C2'],
-    ['forest','#0C140D','#74DB86'],['luxe','#0B0E12','#2DD4BF','radial-gradient(ellipse 90% 55% at 50% -5%, rgba(45,212,191,.42), transparent 60%), #0B0E12'],
-    ['violet','#14101F','#A87CF0'],['aurora','#0E1424','#7AA8FF'],
-    ['framer','#171717','#2D9CFF'],['bokeh','#0A0A0C','#6FD6A0']
+    // ☀️ 라이트 4
+    ['lavender','#F0EEF9','#8E7BD6'],
+    ['cream','#EFEAE0','#CC785C'],
+    ['pearl','#EEF1F6','#8499C2'],
+    ['aqua','#EAF4F5','#4FA8B8'],
+    // 🌙 다크 4
+    ['banghouse','#060B08','#7DBF8E','radial-gradient(ellipse 80% 50% at 50% 0%, rgba(125,191,142,.30), transparent 70%), #060B08'],
+    ['night','#07060B','#8E7BFF','radial-gradient(circle at 30% 25%, rgba(142,123,255,.85), transparent 58%), radial-gradient(circle at 78% 76%, rgba(240,166,255,.65), transparent 55%), #07060B'],
+    ['dusk','#140D12','#F0A6C8','radial-gradient(circle at 26% 28%, rgba(240,166,200,.8), transparent 56%), radial-gradient(circle at 80% 74%, rgba(255,217,138,.65), transparent 54%), #140D12'],
+    ['sea','#0A1016','#7EC8F5','radial-gradient(circle at 28% 26%, rgba(126,200,245,.78), transparent 57%), radial-gradient(circle at 78% 76%, rgba(102,255,217,.5), transparent 55%), #0A1016']
   ];
   // 폐기된(그리드에 없는) 옛 테마 — 예: lemon — 가 저장돼 있으면 기본 크림으로 마이그레이션.
   // 안 그러면 편집기에서 선택 표시가 안 되고(아무 칸도 sel 안 됨) 저장 때 그 옛 테마가 그대로 다시 발행됨 → "크림 저장했는데 노랑" 버그.
-  (function(){ var ok=false; for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme){ ok=true; break; } } if(!ok){ home.theme='cream'; try{ var c=JSON.parse(localStorage.getItem(HKEY)||'{}'); c.theme='cream'; localStorage.setItem(HKEY, JSON.stringify(c)); }catch(e){} } })();
+  /* 🎨 2026-08-19: 픽커를 8종으로 압축. 옛 테마(오로라·보케 등)를 쓰던 분은 «그대로 유지»가 원칙 —
+     u.html에 CSS가 그대로 남아 있어 공개 화면은 정상. 다만 픽커엔 안 보이므로, 다른 걸 고르면 8종 중에서만 고르게 됨.
+     (지우지 않음 = 무회귀. 옛 테마를 다시 픽커에 넣으려면 위 THEMES 배열에 한 줄 추가하면 끝) */
+  (function(){ var ok=false; for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme){ ok=true; break; } }
+    if(!ok && home.theme){ try{ THEMES.push([home.theme, '#2A2632', '#9A94B0']); }catch(e){} }   // 내가 쓰던 테마는 픽커 맨 뒤에 «현재» 칸으로 남김
+  })();
   // ─── 등급(요금제) 기능 잠금 ─── (AUTH는 다른 스크립트 블록이라 window.__authTier로 받음)
   function cmTier(){
     try{ var m=window.__MC; if(m && m.on && m.cur && m.cur.tier){ var ct=m.cur.tier; return (ct==='pro'||ct==='premium')?ct:'basic'; } }catch(_){}
@@ -9358,7 +9365,7 @@ if('serviceWorker' in navigator){
   (function dzInit(){
     var ov=document.getElementById('dz-ov'); if(!ov) return;
     var BTNCOLORS=['#7DCF96','#7CB0FF','#E3B563','#FF9DBA','#B9A6FF','#5FD0C0','#FF9E7A','#A6B0BC'];   // 컨텐츠 유형 톤 파스텔(ARC_PAL 일치): 초록·파랑·골드·로즈·보라·민트·코랄·그레이
-    var DARK_THEMES={midnight:1,forest:1,luxe:1,violet:1,aurora:1,framer:1,bokeh:1,brand:1,prism:1,banghouse:1,nvidia:1,neon:1,cobalt:1,butterfly:1,glacier:1,olive:1};
+    var DARK_THEMES={midnight:1,forest:1,luxe:1,violet:1,aurora:1,framer:1,bokeh:1,brand:1,prism:1,banghouse:1,nvidia:1,neon:1,cobalt:1,butterfly:1,glacier:1,olive:1,night:1,dusk:1,sea:1};
     var phone=document.getElementById('dz-phone'), img=document.getElementById('dz-img'), photo=document.getElementById('dz-photo'), zoomEl=document.getElementById('dz-zoom'), empty=document.getElementById('dz-ph-empty');
     // 커버 사진 = home.cover {on,photo,layout,fit}
     function cov(){ if(!home.cover||typeof home.cover!=='object') home.cover={on:false,photo:'',layout:'full',fit:{z:1,x:50,y:50,u:'bgpos'}}; var c=home.cover; if(!c.fit) c.fit={z:1,x:50,y:50,u:'bgpos'}; if(c.fit.u!=='bgpos'){ c.fit={z:c.fit.z||1, x:50, y:50, u:'bgpos'}; }  /* 옛 단위(px/pct)는 중앙 bgpos로 1회 마이그(초점은 드래그로 다시) */ if(!c.layout) c.layout='full'; return c; }
@@ -9832,7 +9839,7 @@ if('serviceWorker' in navigator){
   };
 
   // 설정 행 라벨(테마 이름 · 플로팅 켜짐/꺼짐)을 실제 상태로 동기화
-  var THEME_NAMES={hero:'히어로 오렌지',herb:'한방 그린',mocha:'모카 살롱',luxe:'럭스',cream:'크림 클래식',hub:'허브 퍼플',brand:'브랜드 그라데이션',midnight:'미드나잇 (딥 퍼플)',butterfly:'버터플라이 (앰버)',peach:'피치',sand:'샌드',rose:'로즈',pink:'핑크',sunset:'선셋',sage:'세이지',clay:'클레이',camel:'카멜',greige:'그레이지',lavender:'라벤더',pearl:'펄',olive:'올리브',forest:'포레스트',nvidia:'네온 그린',violet:'바이올렛',aurora:'오로라',glacier:'글래시어',framer:'프레이머',neon:'네온',prism:'프리즘',cobalt:'코발트',bokeh:'보케',spring:'봄 파스텔',butter:'버터 크림'};
+  var THEME_NAMES={lavender:'라벤더',cream:'크림',pearl:'펄',aqua:'아쿠아',banghouse:'뱅하우스',night:'밤',dusk:'노을',sea:'바다'};
   function updateSettingLabels(){
     var tv=document.getElementById('set-theme-val'); if(tv) tv.textContent=THEME_NAMES[home.theme]||home.theme||'테마';
     var fv=document.getElementById('set-fab-val'); if(fv){ var f=home.fab||{}; var on=FAB_KEYS.some(function(k){ return f[k]; }); fv.textContent=on?'켜짐':'꺼짐'; }
