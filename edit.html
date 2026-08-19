@@ -4460,6 +4460,7 @@ if('serviceWorker' in navigator){
       </div>
 
       <div data-dzpage="2" style="display:none;">
+        <div class="dz-cg"><span class="gl">이렇게 보여요 <span style="font-weight:400; color:var(--muted);">· 손님 홈 / 글 (예시 내용)</span></span><div class="th-prev" id="dz-theme-prev" style="max-height:none;"></div></div>
         <div class="dz-cg"><span class="gl">테마 <span style="font-weight:400; color:var(--muted);">· 완성된 분위기 (라이트·다크·그라데이션)</span></span><div class="hm-themes" id="dz-theme-grid"></div></div>
         <div class="dz-cg"><span class="gl">버튼 색 <span style="font-weight:400; color:var(--muted);">· 테마는 그대로, 버튼만 내 색으로 (선택) · 컨텐츠 톤 파스텔</span></span><div class="dz-sws" id="dz-accent"><span class="dz-sw dz-sw-reset" data-ac="" title="테마 기본색으로">↺</span></div></div>
       </div>
@@ -9228,56 +9229,65 @@ if('serviceWorker' in navigator){
   function hexA(hex,a){ hex=String(hex).replace('#',''); if(hex.length===3) hex=hex.split('').map(function(c){return c+c;}).join(''); var n=parseInt(hex,16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
   function hexLum(hex){ hex=String(hex).replace('#',''); if(hex.length===3) hex=hex.split('').map(function(c){return c+c;}).join(''); var n=parseInt(hex,16); return (0.299*((n>>16)&255)+0.587*((n>>8)&255)+0.114*(n&255))/255; }
   function renderThemePreview(){
-    var p=document.getElementById('theme-prev'); if(!p) return;
+    /* 🎨 2026-08-19 사장님 요청 — 테마 미리보기를 «내용 채운 데모»로.
+       빈 골격(＋사진·회색 막대) 대신 실제 손님 홈/글이 어떻게 보이는지 그대로. 🏠홈 ↔ 📄글 전환. */
+    var boxes=[document.getElementById('theme-prev'), document.getElementById('dz-theme-prev')].filter(Boolean);
+    if(!boxes.length) return;
+    var p=boxes[0];
     var t=null; for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme){ t=THEMES[i]; break; } }
     if(!t) t=THEMES[0];
     var bg=t[1], ac=t[2], bgCss=t[3]||t[1], dark=hexLum(bg)<0.5;
-    var ink=dark?'#EDEAF6':'#23201A', sub=dark?'rgba(237,234,246,.55)':'rgba(35,32,26,.5)', surf=dark?'rgba(255,255,255,.07)':'#ffffff', hair=dark?'rgba(255,255,255,.10)':'rgba(0,0,0,.07)';
-    p.style.background='radial-gradient(circle at 50% -12%, '+hexA(ac,dark?0.42:0.26)+' 0%, transparent 58%), '+bgCss;
-    var hero=(home.heroText||'공부가 *돈이 되는* 순간').replace(/\*([^*]+)\*/, '<span style="color:'+ac+'">$1</span>');
-    var bioText=(((document.getElementById('pf-bio')||{}).value||'컨텐츠 크리에이터 · 공부한 걸 모아 나눕니다').trim());
-    var handle=(((document.getElementById('pf-handle')||{}).value||'jigi').trim()||'jigi');
-    var onAc=(dark?'#0a0712':'#fff');
-    function bubble(lbl){ return '<div style="text-align:center;"><div style="width:46px;height:46px;border-radius:50%;border:2px solid '+ac+';background:'+surf+';margin:0 auto 4px;"></div><div style="font-size:9.5px;color:'+sub+';">'+lbl+'</div></div>'; }
-    function bar(w,a){ return '<div style="height:7px;width:'+w+';border-radius:4px;background:'+hexA(ink,a)+';"></div>'; }
-    function lab(t){ return '<div style="font-size:10px;color:'+sub+';text-align:left;margin:16px 2px 7px;font-weight:500;">'+t+'</div>'; }
-    // 네온 플랫폼 타일 (인트로 레퍼런스: 둥근 사각 + 컬러 테두리·글로우 + 컬러 로고)
-    var IG='<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>';
-    var YT='<svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M8 6.3l11 5.7-11 5.7z"/></svg>';
-    var NV='<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M6 5h4.2l3.6 5.6V5H18v14h-4.2l-3.6-5.6V19H6z"/></svg>';
-    var KK='<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 4.8C7.6 4.8 4 7.5 4 10.9c0 2.2 1.4 4.1 3.6 5.2l-.8 3.1 3.4-1.9c.6.1 1.2.1 1.8.1 4.4 0 8-2.7 8-6.5S16.4 4.8 12 4.8z"/></svg>';
-    function tile(inner,bg,col){ return '<div style="width:40px;height:40px;border-radius:12px;background:'+bg+';color:'+col+';display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.18);">'+inner+'</div>'; }
-    function gcard(){ return '<div style="flex:1;min-width:0;height:66px;border-radius:9px;background:'+hexA(ac,.16)+';border:1px solid '+hair+';"></div>'; }
-    function scard(){ return '<div style="background:'+surf+';border:1px solid '+hair+';border-radius:11px;overflow:hidden;">'
-      +'<div style="height:58px;background:'+hexA(ac,.18)+';"></div>'
-      +'<div style="padding:8px 9px;text-align:left;">'+bar('72%',.5)+'<div style="height:5px"></div>'+bar('46%',.25)+'</div></div>'; }
-    function lpill(){ return '<div style="background:'+surf+';border:1px solid '+hair+';border-radius:11px;padding:11px 12px;display:flex;align-items:center;gap:10px;margin-bottom:8px;text-align:left;">'
-      +'<span style="width:9px;height:9px;border-radius:50%;background:'+ac+';flex:0 0 auto;"></span>'
-      +'<div style="flex:1;">'+bar('55%',.45)+'</div><span style="color:'+hexA(ink,.4)+';font-size:14px;">→</span></div>'; }
-    p.innerHTML =
-      '<div style="font-size:11px;color:'+sub+';text-align:center;margin-bottom:9px;">'+(window.__custUrlDisp?window.__custUrlDisp(handle):handle)+'</div>'
-      + '<div class="thp-av" style="background:'+surf+';box-shadow:0 0 18px '+hexA(ac,.5)+';color:'+ac+';">✻</div>'
-      + '<div class="thp-h" style="color:'+ink+';">'+hero+'</div>'
-      + '<div style="font-size:11.5px;color:'+sub+';text-align:center;margin-top:6px;">'+escT(bioText)+'</div>'
-      + '<div style="display:flex;gap:14px;justify-content:center;margin:16px 0 4px;">'+bubble('가격')+bubble('후기')+bubble('메뉴')+'</div>'
-      // 이벤트 배너
-      + lab('이벤트')
-      + '<div style="background:'+hexA(ac,.14)+';border:1px solid '+hexA(ac,.38)+';border-radius:12px;padding:11px 12px;display:flex;gap:10px;align-items:center;text-align:left;">'
-        + '<span style="font-size:9.5px;color:'+onAc+';background:'+ac+';padding:3px 9px;border-radius:6px;flex:0 0 auto;">EVENT</span>'
-        + '<div style="flex:1;">'+bar('72%',.5)+'</div></div>'
-      // 갤러리 (가로)
-      + lab('갤러리')
-      + '<div style="display:flex;gap:8px;">'+gcard()+gcard()+gcard()+gcard()+'</div>'
-      // 스타일 (2칸)
-      + lab('스타일 갤러리')
-      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">'+scard()+scard()+'</div>'
-      // 링크
-      + lab('링크 · 강의')
-      + lpill()+lpill()
-      // 채널
-      + lab('채널')
-      + '<div style="display:flex;gap:11px;justify-content:center;margin-bottom:4px;">'+tile(IG,'linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)','#fff')+tile(YT,'#FF0000','#fff')+tile(NV,'#03C75A','#fff')+tile(KK,'#FAE100','#3A1D1D')+'</div>'
-      + '<div style="text-align:center;margin-top:16px;"><span class="thp-btn" style="background:'+ac+';color:'+onAc+';">예약하기</span></div>';
+    var ink=dark?'#F0EDF8':'#20242B', sub=dark?'rgba(240,237,248,.58)':'rgba(32,36,43,.55)',
+        surf=dark?'rgba(255,255,255,.06)':'#ffffff', hair=dark?'rgba(255,255,255,.11)':'rgba(0,0,0,.09)',
+        onAc=dark?'#0a0712':'#fff';
+    boxes.forEach(function(b){ b.style.background=bgCss; b.style.padding='0'; b.style.textAlign='left'; });
+    // 내 데이터가 있으면 그걸로, 없으면 데모 문구
+    function gvx(id,d){ var e=document.getElementById(id); var v=e?(e.value||'').trim():''; return v||d; }
+    var nm=gvx('pf-name','지기 헤어'),
+        bio=gvx('pf-bio','10년간 3,000명을 만지며 찾은 얼굴형별 설계로 3주면 잡혀요.'),
+        hero=(home.heroText||'앞머리만 자르면 *얼굴이 커 보이나요?*').replace(/\*([^*]+)\*/,'<span style="color:'+ac+'">$1</span>');
+    var mode=(window.__thPrevMode==='post')?'post':'home';
+    function seg(){
+      return '<div style="display:flex;gap:6px;padding:10px 12px 0;">'
+        +'<button type="button" data-thp="home" style="flex:1;font:800 11px var(--sans);padding:7px;border-radius:9px;cursor:pointer;border:1px solid '+(mode==='home'?ac:hair)+';background:'+(mode==='home'?hexA(ac,.16):'transparent')+';color:'+(mode==='home'?ink:sub)+'">🏠 손님 홈</button>'
+        +'<button type="button" data-thp="post" style="flex:1;font:800 11px var(--sans);padding:7px;border-radius:9px;cursor:pointer;border:1px solid '+(mode==='post'?ac:hair)+';background:'+(mode==='post'?hexA(ac,.16):'transparent')+';color:'+(mode==='post'?ink:sub)+'">📄 글</button></div>';
+    }
+    var W='padding:12px 13px 15px;display:flex;flex-direction:column;gap:9px;';
+    var homeHtml=
+      '<div style="'+W+'">'
+      +'<div style="display:flex;align-items:center;gap:6px;font-size:9px;color:'+sub+'"><span style="width:17px;height:17px;border-radius:50%;background:'+ac+'"></span><b style="font-size:10.5px;color:'+ink+'">'+escT(nm)+'</b><span style="margin-left:auto">홈 · 소개 · 글 · 예약</span></div>'
+      +'<div style="height:66px;border-radius:12px;background:linear-gradient(150deg,'+hexA(ac,.85)+','+hexA(ac,.3)+');display:grid;place-items:center;color:#fff;font-size:10px;font-weight:700;text-shadow:0 1px 5px rgba(0,0,0,.45)">앞머리 전문 · 압구정</div>'
+      +'<div style="font-size:16px;font-weight:800;line-height:1.28;color:'+ink+'">'+hero+'</div>'
+      +'<div style="font-size:10.5px;color:'+sub+';line-height:1.55">'+escT(bio)+'</div>'
+      +'<div style="display:flex;gap:5px;flex-wrap:wrap">'
+        +['#앞머리교정','#얼굴형진단','#10년차'].map(function(c){ return '<span style="font-size:9px;background:'+surf+';border:1px solid '+hair+';border-radius:999px;padding:3px 9px;color:'+sub+'">'+c+'</span>'; }).join('')
+      +'</div>'
+      +'<div style="background:'+ac+';color:'+onAc+';font-size:11px;font-weight:800;border-radius:11px;padding:10px;text-align:center">📅 상담 예약하기</div>'
+      +'<div style="background:'+surf+';border:1px solid '+hair+';border-radius:12px;padding:9px 10px;display:flex;gap:9px;align-items:center">'
+        +'<span style="width:26px;height:26px;border-radius:8px;background:'+hexA(ac,.3)+';flex:none"></span>'
+        +'<span style="flex:1"><b style="display:block;font-size:10.5px;color:'+ink+'">앞머리 진단 + 셋팅</b><small style="font-size:9px;color:'+sub+'">30분 · 30,000원</small></span></div>'
+      +'<div style="background:'+surf+';border:1px solid '+hair+';border-radius:12px;padding:9px 10px;display:flex;gap:9px;align-items:center">'
+        +'<span style="width:26px;height:26px;border-radius:8px;background:'+hexA(ac,.3)+';flex:none"></span>'
+        +'<span style="flex:1"><b style="display:block;font-size:10.5px;color:'+ink+'">❝ 진작 올 걸 그랬어요 ❞</b><small style="font-size:9px;color:'+sub+'">30대 직장인 · ★★★★★</small></span></div>'
+      +'<div style="margin-top:3px;display:flex;justify-content:space-around;border-top:1px solid '+hair+';padding-top:8px;font-size:9px;color:'+sub+'"><b style="color:'+ac+'">홈</b><span>소개</span><span>글</span><span>예약</span></div>'
+      +'</div>';
+    var postHtml=
+      '<div style="'+W+'">'
+      +'<div style="display:flex;font-size:9px;color:'+sub+'"><span style="margin-right:auto">‹ 목록</span><span>공유</span></div>'
+      +'<div style="font-size:15px;font-weight:800;line-height:1.3;color:'+ink+'">앞머리 자르기 전<br>꼭 확인할 것</div>'
+      +'<div style="font-size:9px;color:'+sub+'">정보·노하우 · 3분 읽기 · 오늘</div>'
+      +'<div style="height:44px;border-radius:10px;background:repeating-linear-gradient(135deg,'+hexA(ac,.16)+' 0 7px,'+hexA(ac,.05)+' 7px 14px);border:1px dashed '+hexA(ac,.32)+'"></div>'
+      +'<div style="font-size:11.5px;font-weight:800;color:'+ink+';position:relative;padding-left:10px"><span style="position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:3px;background:'+ac+'"></span>왜 더 답답해 보일까요?</div>'
+      +'<div style="font-size:10px;color:'+sub+';line-height:1.6">숱이 아니라 <span style="background:linear-gradient(transparent 55%,'+hexA(ac,.45)+' 55%);color:'+ink+'">이마 넓이 × 얼굴형</span> 조합이 진짜 원인이에요.</div>'
+      +'<div style="font-size:11.5px;font-weight:800;color:'+ink+';position:relative;padding-left:10px"><span style="position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:3px;background:'+ac+'"></span>이렇게 해결하세요</div>'
+      +'<div style="font-size:10px;color:'+sub+';line-height:1.8"><b style="color:'+ac+'">☑</b> 이마·광대 비율 먼저 재기<br><b style="color:'+ac+'">☑</b> 얼굴형별 앞머리 3가지</div>'
+      +'<div style="border-radius:11px;padding:9px 11px;font-size:10px;font-style:italic;color:'+ink+';background:'+hexA(ac,.1)+';border:1px solid '+hexA(ac,.26)+'">❝ 왜 진작 안 왔을까요 ❞ — 30대 직장인</div>'
+      +'<div style="background:'+ac+';color:'+onAc+';font-size:11px;font-weight:800;border-radius:11px;padding:10px;text-align:center">💬 상담 문의하기</div>'
+      +'</div>';
+    var html = seg() + (mode==='post'?postHtml:homeHtml);
+    boxes.forEach(function(b){ b.innerHTML=html;
+      b.querySelectorAll('[data-thp]').forEach(function(btn){ btn.onclick=function(){ window.__thPrevMode=btn.getAttribute('data-thp'); renderThemePreview(); }; });
+    });
   }
 
   var MOTIONS = [['none','고정',4],['rail','자동 흐름',8],['kenburns','켄번스',4],['fade','페이드',4],['parallax','패럴랙스',4],['stack','스택',4]];
@@ -9477,9 +9487,10 @@ if('serviceWorker' in navigator){
       var NM=(typeof THEME_NAMES!=='undefined')?THEME_NAMES:{};
       THEMES.forEach(function(t){ var o=document.createElement('div'); o.className='hm-th-item'+((home.theme===t[0])?' sel':''); o.title=t[0];
         o.innerHTML='<div class="hm-th-sw" style="background:'+(t[3]||t[1])+'"><span style="background:'+t[2]+'"></span></div><div class="hm-th-nm">'+(NM[t[0]]||t[0])+'</div>';
-        o.onclick=function(){ home.theme=t[0]; persistTheme(); renderDzThemes(); renderPreview(); };
+        o.onclick=function(){ home.theme=t[0]; persistTheme(); renderDzThemes(); renderPreview(); try{ renderThemePreview(); }catch(_){} };
         g.appendChild(o);
       });
+      try{ renderThemePreview(); }catch(_){}   /* 🎨 테마 단계 = 내용 채운 데모도 같이 */
     }
     var dzPage=1, dzSnap=null;
     function showPage(n){ dzPage=n;
