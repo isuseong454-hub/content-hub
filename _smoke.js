@@ -93,8 +93,10 @@
   }
 
   // ── 7. 화면 — 가로 넘침 ──
-  const over = document.documentElement.scrollWidth - document.documentElement.clientWidth;
-  add('가로 넘침', over <= 1, over > 1 ? over + 'px 넘침' : '0px');
+  const cw = document.documentElement.clientWidth;
+  const over = document.documentElement.scrollWidth - cw;
+  if (cw <= 0) add('가로 넘침', false, '창이 0px — 측정 불가(브라우저 창을 띄우고 다시)', 'warn');   // 헤드리스·숨겨진 창에서 거짓 BLOCK 방지
+  else add('가로 넘침', over <= 1, over > 1 ? over + 'px 넘침' : '0px');
 
   // ── 8. 로그인·데이터 무결 (읽기만) ──
   let auth = null; try { auth = JSON.parse(localStorage.getItem('la-auth') || 'null'); } catch (e) {}
