@@ -141,7 +141,7 @@
       add('e 🚧 잠금 표시', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') >= 0 && et.indexOf('.ws-tab.ws-soon{ opacity:.34; }') >= 0,
         '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
       add('e 열린 방 3개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0,
-        '홈 · 프로필(전문성) · 포스팅 — 이 셋은 늘 열려 있어야 한다');
+        '홈 · 프로필 · 포스팅 — 이 셋은 늘 열려 있어야 한다 (2026-08-20 «전문성 가시화»→«프로필» 개명)');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
