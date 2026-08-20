@@ -129,6 +129,19 @@
         '기간 지난 열쇠로 들어가지지 않게');
       add('e 폰 상단바 접기', et.indexOf('.topbar #ws-title .tb-who, .topbar .tb-lg') >= 0 && et.indexOf("_who.className='tb-who'") >= 0 && et.indexOf('class="tb-lg"') >= 0,
         '버튼 4개가 되며 제목이 16px로 눌리던 것 (실측 70px 회복)');
+      /* ✏️ C안 + 📝 글쓰기 + 🚧 도크 잠금 (2026-08-20) */
+      add('e ?live=1 바로 현장편집', et.indexOf("_wantLive=_q.get('live')==='1'") >= 0 && et.indexOf('window.__openLiveAuto()') >= 0,
+        '«고치기»를 누르면 작업실을 안 거치고 바로 편집');
+      add('e ?live=1 착지 안 튕김', et.indexOf('!_fromGear && !_wantLive') >= 0, '현장 편집으로 들어왔는데 손님 화면으로 다시 튕기면 안 된다');
+      add('e 📝 글쓰기 버튼', et.indexOf('id="le-write"') >= 0 && et.indexOf("window.__switchWs('posts')") >= 0,
+        '현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다');
+      add('e switchWs 노출', et.indexOf('window.__switchWs=switchWs') >= 0, '글쓰기 버튼이 부른다');
+      add('e 🚧 도크 잠금', et.indexOf('var WS_SOON = { sales:1, data:1 }') >= 0 && et.indexOf('if(WS_SOON[name])') >= 0,
+        '사장님 «판매·예약 / 고객·분석은 아직 미오픈» — 열 때 WS_SOON만 비우면 된다');
+      add('e 🚧 잠금 표시', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') >= 0 && et.indexOf('.ws-tab.ws-soon{ opacity:.34; }') >= 0,
+        '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
+      add('e 열린 방 3개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0,
+        '홈 · 프로필(전문성) · 포스팅 — 이 셋은 늘 열려 있어야 한다');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
@@ -217,6 +230,11 @@
       /* 🚪 왕복 (2026-08-20 사장님 픽) — 손님 화면 먼저 · ⚙로 편집실 */
       add('u ⚙ → 작업실 직행', ut.indexOf('href="edit.html?desk=1"') >= 0,
         '?desk=1 이 없으면 작업실이 다시 손님 화면으로 튕겨 무한 루프');
+      /* ✏️ C안 (2026-08-20 사장님 픽) — 깨끗한 손님 화면 + «고치기» 한 번 */
+      add('u ✏️ 고치기 = 내 홈만', ut.indexOf("String(a.handle).trim().toLowerCase()!==cur") >= 0 && ut.indexOf("edit.html?live=1") >= 0,
+        '🚨 손님·남의 홈에서 보이면 안 된다 (요소를 아예 안 만든다)');
+      add('u ✏️ 고치기 만료 검사', ut.indexOf('if(a.expiresAt!=null){ var ex=new Date(a.expiresAt)') >= 0,
+        '기간 지난 열쇠로는 안 뜬다');
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
