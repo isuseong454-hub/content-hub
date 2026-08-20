@@ -1401,6 +1401,21 @@ if('serviceWorker' in navigator){
   .add-search input{width:100%; background:var(--soft); border:1px solid var(--hair); border-radius:12px; color:var(--ink); font-family:var(--sans); font-size:14px; padding:11px 13px 11px 38px;}
   .add-search input:focus{outline:none; border-color:var(--coral);}
   .add-search .ass-ic{position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:14px; color:var(--muted);}
+  /* 💡 추천 3개 — 애플식: 이름 한 줄 + 왜 한 줄 + 바로 실행. 설명을 길게 하지 않는다 (2026-08-20) */
+  .add-reco{display:flex;flex-direction:column;gap:7px;margin:0 0 13px;}
+  .add-reco .arc-h{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.2px;margin:2px 2px 1px;}
+  .arc-item{display:flex;align-items:center;gap:11px;width:100%;padding:12px 13px;border-radius:14px;
+    border:1px solid var(--hair);background:var(--soft);cursor:pointer;font-family:var(--sans);text-align:left;
+    transition:transform 120ms cubic-bezier(.2,0,0,1), border-color .18s;}
+  .arc-item:active{transform:scale(.98);}
+  .arc-item .ic{flex:0 0 auto;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+    font-size:16px;background:color-mix(in srgb, var(--coral) 14%, transparent);}
+  .arc-item .m{flex:1;min-width:0;}
+  .arc-item .nm{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.2px;}
+  .arc-item .wy{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.55;}
+  .arc-item .go{flex:0 0 auto;color:var(--muted);font-size:15px;}
+  .arc-item.done{opacity:.5;}
+  .arc-item.done .ic{background:color-mix(in srgb, #7DE0A6 16%, transparent);}
   /* 🎯 내 홈 진단 */
   .add-diag{background:linear-gradient(180deg, rgba(167,139,255,.10), rgba(167,139,255,.02)); border:1px solid rgba(167,139,255,.30); border-radius:15px; padding:13px 14px; margin-bottom:14px;}
   .add-diag-h{display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:700; cursor:pointer; margin-bottom:11px;}
@@ -4071,6 +4086,8 @@ if('serviceWorker' in navigator){
     <div class="sheet">
       <div class="sheet-h"><span class="t">구성 추가</span><span class="x" data-close>×</span></div>
       <div class="desc">홈 템플릿을 고르면 바로 완성 — 세부 블록은 아래 ＋에서</div>
+      <!-- 💡 추천 3개 (2026-08-20) — 구성이 40종이라 처음엔 막막하다. 지금 상태를 재서 «다음 하나»를 짚어준다 -->
+      <div class="add-reco" id="add-reco" hidden></div>
 
       <!-- 🏠 홈 템플릿 = 메인 간판 (2026-07-08 사용자: 템플릿 유도, 자유형 맨 뒤) — 카탈로그·검색·블록세트는 '더 구성 추가' 뒤로 -->
       <div class="hub-tpl" id="add-tpl" style="margin:0 0 12px;">
@@ -6148,6 +6165,7 @@ if('serviceWorker' in navigator){
     try{ wireCatalogSections(); collapseAllSections(); }catch(e){}   // 섹션 접기/펼치기 배선 + 처음엔 전부 접힘
     try{ filterAddCatalog(''); }catch(e){}
     try{ renderHomeDiag(); }catch(e){}
+    try{ if(window.__paintAddReco) window.__paintAddReco(); }catch(e){}   /* 💡 추천 3개 갱신 (2026-08-20) */
     try{ if(window.__decorateProTiles) window.__decorateProTiles(); }catch(e){}
     try{ if(window.__decorateShowroomTiles) window.__decorateShowroomTiles(); }catch(e){}
     try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){}   // 구성 추가는 항상 편집 위에서 — 모드 게이트가 뒤에 남지 않게
@@ -12940,6 +12958,43 @@ if('serviceWorker' in navigator){
       +'<span class="hfx-f go">🏆 <b>'+cv+'</b><em>구매</em></span>'
       +'</div></div>';
   }
+  /* 💡 구성 추가 «추천 3개» — 지금 홈에 뭐가 있는지 세어서 다음 한 걸음을 짚는다 (2026-08-20) */
+  function paintAddReco(){
+    var box=document.getElementById('add-reco'); if(!box) return;
+    function has(t){ try{ return document.querySelectorAll('#rows .row[data-t="'+t+'"]').length>0; }catch(_){ return false; } }
+    function gv(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+    /* [블록타입, 아이콘, 이름, 왜 필요한지] — 순서 = 손님이 마음을 정하는 순서 */
+    var CAND=[
+      ['links',  '🔗','링크 버튼',   '인스타·유튜브·오픈채팅을 한 곳에'],
+      ['review', '💬','후기',        '남이 해준 말이 내 자랑보다 세요'],
+      ['gallery','🖼','사진',        '작업물이 곧 실력 증명이에요'],
+      ['qna',    '❓','자주 묻는 질문','같은 질문을 매번 답하지 않아도 돼요'],
+      ['cta',    '📣','문의 버튼',   '마음 생긴 손님이 바로 누를 곳'],
+      ['stat',   '🔢','숫자',        '«3년 · 500명»처럼 숫자는 바로 믿겨요']
+    ];
+    var pick=[], done=[];
+    CAND.forEach(function(c){ (has(c[0]) ? done : pick).push(c); });
+    var show=pick.slice(0,3);
+    if(!show.length){ box.hidden=true; box.innerHTML=''; return; }
+    box.hidden=false;
+    box.innerHTML='<div class="arc-h">이런 걸 더 놓을 수 있어요</div>'
+      + show.map(function(c){
+          return '<button type="button" class="arc-item" data-reco="'+c[0]+'">'
+            +'<span class="ic">'+c[1]+'</span>'
+            +'<span class="m"><span class="nm">'+c[2]+'</span><span class="wy">'+c[3]+'</span></span>'
+            +'<span class="go">›</span></button>';
+        }).join('');
+    box.querySelectorAll('[data-reco]').forEach(function(b){
+      b.onclick=function(){
+        var t=b.getAttribute('data-reco');
+        /* 검색칸에 넣어 아래 목록에서 바로 찾아지게 — 별도 경로를 만들지 않는다(한 기능 두 군데 금지) */
+        var q=document.getElementById('add-search');
+        var NAME={links:'링크 버튼', review:'후기', gallery:'사진', qna:'Q&A', cta:'CTA 버튼', stat:'숫자 스탯'};
+        if(q){ q.value=NAME[t]||''; q.dispatchEvent(new Event('input',{bubbles:true})); q.scrollIntoView({block:'center'}); }
+      };
+    });
+  }
+
   /* ════ 📣 광고 방 (2026-08-20 사장님 지시 — 메인 메뉴답게) ════
         광고 자체는 기존 «이벤트 배너» 구성이다. 여기선 ①켜고 끄기 ②만들러 가기 두 가지만 한다.
         ⚠️ 켜짐/꺼짐은 home.adOverlay 하나로 «꾸미기»의 스위치(#dz-adov)와 같은 값을 쓴다 — 두 군데가 어긋나지 않게. */
@@ -15386,6 +15441,8 @@ if('serviceWorker' in navigator){
     /* 📝 글쓰기 — 현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다 (2026-08-20) */
     var wb=document.getElementById('le-write'); if(wb) wb.onclick=function(){ closeLive(); try{ if(window.__switchWs) window.__switchWs('posts'); }catch(_){} };
     var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영 → 편집모드 닫고 운영 화면
+    /* 💡 구성 추가를 열 때마다 «다음 하나»를 다시 짚는다 (2026-08-20) */
+    try{ window.__paintAddReco=paintAddReco; }catch(_){}
     var ml=document.getElementById('le-mode-label');
     var EDIT_LBL='✎ 편집 중 <span style="font-weight:400; color:var(--muted); font-size:11px;">· 톡 눌러 고치기</span>';
     window.__leResetToggle=function(){ if(ml) ml.innerHTML=EDIT_LBL; try{ if(window.__leSetPreview) window.__leSetPreview(false); }catch(e){} };
