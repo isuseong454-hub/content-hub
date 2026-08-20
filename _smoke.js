@@ -207,6 +207,8 @@
       add('u ▦ 없앰', ut.indexOf('"arc-crow-th">\u25a6') < 0, '표지 없는 글에 ▦ 네모가 뜨던 것');
       add('u 표지 3단 함수', ut.indexOf('function postCover') >= 0 && ut.indexOf('function firstPhotoIn') >= 0 && ut.indexOf('function firstChar') >= 0, '세 함수 생존');
       add('u 타이포 표지', ut.indexOf('arc-crow-typo') >= 0 && ut.indexOf('arc-nocov-i') >= 0, '줄=첫 글자 칩 · 카드=분류색 큰 글자');
+      /* 🚨 2026-08-20 사고 — .arc-crow-typo 를 .arc-crow-th «앞»에 두니 뒤엣것이 조용히 이겨 글자색이 안 먹었다(에러 0) */
+      add('u 타이포 표지 순서', ut.indexOf('.arc-crow-th.arc-crow-typo{') >= 0 && ut.indexOf('.arc-crow-th{') < ut.indexOf('.arc-crow-th.arc-crow-typo{'), '.arc-crow-th 뒤 + 특이도 (0,2,0)');
       add('u 대표카드 빈표지', ut.indexOf("_fc?' style=\"background-image:url('") >= 0, '표지 없으면 «그냥 검정»이던 것 → 분류색');
 
     }
