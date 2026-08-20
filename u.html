@@ -784,7 +784,12 @@
   .lp-band.bd-card{border-radius:16px; overflow:hidden; border:1px solid var(--hair);}
   /* 상세페이지 모달은 좌우 패딩이 16px → 밴드도 16px만 탈출 (좌우 삐짐 방지) */
   #pm-body .lp-band.bd-full{margin-left:-16px; margin-right:-16px;}
-  #post-modal .resv-sheet{overflow-x:hidden;}
+  #post-modal .resv-sheet{overflow-x:hidden;
+    /* 🌗 글 화면 = «중» 광원 (2026-08-20 재량) — 위 양쪽 모서리 + 아래 은은히. 글자 뒤(가운데)는 비워둠 */
+    background-image:
+      radial-gradient(ellipse 56% 26% at 8% 0%, color-mix(in srgb, var(--coral) 11%, transparent), transparent 62%),
+      radial-gradient(ellipse 56% 26% at 92% 2%, color-mix(in srgb, var(--coral) 9%, transparent), transparent 62%),
+      radial-gradient(ellipse 60% 22% at 50% 102%, color-mix(in srgb, var(--coral) 7%, transparent), transparent 64%);}
   /* 📈 성장 그래프 (2026-07-13) */
   .lp-chart .ch-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:12px;}
   .lp-chart .ch-last{font-family:var(--serif); font-weight:800; font-size:22px; color:var(--coral); white-space:nowrap;}
@@ -1375,6 +1380,34 @@
   .post-body li{ margin:3px 0; }
   .post-body img{ display:block; border-radius:12px; margin:13px auto; max-width:100%; }
   .post-body img.lc-img-sm{ width:45%; }
+  /* ✨ 숫자 자동 강조 — 다크=칩 / 라이트=형광펜 */
+  .num-c{font-weight:800; color:var(--ink);
+    background:color-mix(in srgb, var(--coral) 15%, transparent);
+    border:1px solid color-mix(in srgb, var(--coral) 30%, transparent);
+    border-radius:7px; padding:0 5px; white-space:nowrap;}
+  html[data-bright="light"] .num-c{background:linear-gradient(transparent 58%, color-mix(in srgb, var(--coral) 42%, transparent) 58%);
+    border:none; border-radius:0; padding:0 1px;}
+  /* 🧵 세로 타임라인 (선+점) */
+  .stf-wrap{display:flex; flex-direction:column; padding-left:4px;}
+  .stf-i{display:flex; gap:13px; position:relative; padding-bottom:17px;}
+  .stf-i:last-child{padding-bottom:0;}
+  .stf-i::before{content:''; position:absolute; left:6px; top:17px; bottom:0; width:2px;
+    background:linear-gradient(180deg, var(--coral), color-mix(in srgb, var(--coral) 22%, transparent));}
+  .stf-i:last-child::before{display:none;}
+  .stf-dot{width:14px; height:14px; border-radius:50%; flex:none; margin-top:3px; position:relative; z-index:1;
+    background:var(--coral); border:2.5px solid var(--coral);
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--coral) 16%, transparent);}
+  .stf-c .st-t{font-size:13.5px; font-weight:800; letter-spacing:-.2px;}
+  .stf-c .st-d{margin-top:3px; line-height:1.6;}
+  /* 🎬 영상 썸네일 (클릭 재생) */
+  .vid-thumb{position:absolute; inset:0; width:100%; height:100%; border:none; cursor:pointer; padding:0;
+    background:#111 center/cover no-repeat; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;}
+  .vid-thumb::before{content:''; position:absolute; inset:0; background:rgba(0,0,0,.28);}
+  .vid-playbtn{position:relative; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:20px; color:#fff; background:color-mix(in srgb, var(--coral) 82%, #000);
+    box-shadow:0 0 0 6px color-mix(in srgb, var(--coral) 24%, transparent), 0 8px 24px rgba(0,0,0,.45); padding-left:4px;}
+  .vid-hint{position:relative; font-size:11px; font-weight:700; color:rgba(255,255,255,.85); font-family:var(--sans);}
+  .vid-thumb:active .vid-playbtn{transform:scale(.94);}
   .post-body img.lc-img-md{ width:78%; }
   .post-body img.lc-img-lg{ width:100%; }
   .post-body img.lc-img-full{ display:block; width:calc(100% + 36px); margin:16px -18px; border-radius:0; max-width:none; }
@@ -3331,6 +3364,56 @@
     }); return out; }
     return '<div class="post-body rich">'+walk(tmp)+'</div>';
   }
+  /* 🎬 영상 썸네일 클릭 = 문서 위임 (개별 리스너는 innerHTML 복제 시 소실 — 2026-08-20 사고) */
+  document.addEventListener('click', function(e){
+    var t = e.target && e.target.closest ? e.target.closest('.vid-thumb') : null;
+    if(!t) return;
+    if(document.documentElement.hasAttribute('data-edit')) return;   // 편집 중엔 재생 안 함 (편집 클릭 보호)
+    var emb = t.getAttribute('data-emb'); if(!emb) return;
+    var w = t.closest('.vid-wrap'); if(!w) return;
+    e.preventDefault();
+    w.innerHTML = '<iframe src="'+emb+(emb.indexOf('?')<0?'?':'&')+'autoplay=1" title="영상" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    try{ track('vidplay',{}); }catch(_){}
+  }, true);
+  function statCountWire(scope){
+    var els = scope.querySelectorAll('.stat-cnt'); if(!els.length) return;
+    var reduce=false; try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+    var revealOn = document.documentElement.classList.contains('has-reveal');
+    if(reduce || !revealOn || !('IntersectionObserver' in window)) return;   // 그냥 원래 값 표시
+    var io = new IntersectionObserver(function(ents){
+      ents.forEach(function(en){
+        if(!en.isIntersecting) return;
+        io.unobserve(en.target);   // 🚨 한 번만 (발열 헌법)
+        var raw = en.target.getAttribute('data-v')||'';
+        var m = raw.match(/^([^0-9]*)([\d,\.]+)(.*)$/); if(!m){ return; }
+        var pre=m[1], numStr=m[2].replace(/,/g,''), suf=m[3];
+        var to = parseFloat(numStr); if(!isFinite(to)){ return; }
+        var dec = (numStr.split('.')[1]||'').length;
+        var hasComma = m[2].indexOf(',')>=0;
+        var t0=null, dur=850, el=en.target, done=false;
+        function fmt(v){ var s2 = dec? v.toFixed(dec) : Math.round(v).toString(); if(hasComma) s2 = s2.replace(/\B(?=(\d{3})+(?!\d))/g, ','); return pre+s2+suf; }
+        function fin(){ if(!done){ done=true; el.textContent = raw; } }
+        function step(t){ if(done) return; if(!t0) t0=t; var p=Math.min(1,(t-t0)/dur); var e2=1-Math.pow(1-p,3);
+          el.textContent = fmt(to*e2); if(p<1) requestAnimationFrame(step); else fin(); }
+        requestAnimationFrame(step); setTimeout(fin, dur+200);   // 백그라운드 탭 안전망
+      });
+    }, {threshold:.5});
+    els.forEach(function(el){ io.observe(el); });
+  }
+  /* ✨ 숫자 자동 강조 (2026-08-20) — «3주» «20%» «4배»를 눈에 띄게.
+     🚨형광펜은 다크에서 글자를 가림(사장님 지적) → 다크=칩 / 라이트=형광펜, data-bright로 자동. 블록당 3개까지. */
+  function numMark(html){
+    try{
+      var left = 3;
+      return String(html).split(/(<[^>]+>)/).map(function(part){
+        if(!part || part.charAt(0)==='<' || left<=0) return part;
+        return part.replace(/(\d[\d,\.]*\s?(?:주|일|개월|년|시간|분|%|퍼센트|배|명|건|kg|cm|회))/g, function(mm){
+          if(left<=0) return mm; left--;
+          return '<span class="num-c">'+mm+'</span>';
+        });
+      }).join('');
+    }catch(e){ return html; }
+  }
   function setMeta(key, val, isProp){ var sel=(isProp?'meta[property="':'meta[name="')+key+'"]'; var m=document.querySelector(sel); if(!m){ m=document.createElement('meta'); m.setAttribute(isProp?'property':'name', key); document.head.appendChild(m); } m.setAttribute('content', val); }
   function openPrivacy(){ var o=document.getElementById('privacy-ov'); if(o) o.classList.add('open'); }
   function closePrivacy(){ var o=document.getElementById('privacy-ov'); if(o) o.classList.remove('open'); }
@@ -3433,14 +3516,18 @@
     },
     link: linkCard, newsletter: linkCard,
     video: function(c){
+      /* 🎬 2026-08-20 — 썸네일만 깔고 «누르면» 그때 플레이어 생성 (iframe 즉시 로드 = 손님 데이터·발열) */
       var url=c[0]||''; if(!url) return null;
-      var embed='', m;
-      if((m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([\w-]{6,})/))) embed='https://www.youtube.com/embed/'+m[1];
+      var embed='', m, ytid='';
+      if((m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([\w-]{6,})/))){ ytid=m[1]; embed='https://www.youtube.com/embed/'+ytid; }
       else if((m=url.match(/vimeo\.com\/(?:video\/)?(\d+)/))) embed='https://player.vimeo.com/video/'+m[1];
       if(!embed) return null;
       var vert = /shorts\//.test(url) || /[?&]vertical=1/.test(url);   // 숏츠=세로
-      var d=card(''); d.innerHTML='<div class="vid-wrap'+(vert?' vid-vertical':'')+'"><iframe src="'+esc(embed)+'" title="영상" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
-      return d;
+      var thumb = ytid ? 'https://i.ytimg.com/vi/'+ytid+'/hqdefault.jpg' : '';
+      var d=card(''); d.innerHTML='<div class="vid-wrap'+(vert?' vid-vertical':'')+'">'
+        +'<button type="button" class="vid-thumb" data-emb="'+esc(embed)+'"'+(thumb?' style="background-image:url('+esc(thumb)+')"':'')+' aria-label="영상 재생">'
+        +'<span class="vid-playbtn">▶</span><span class="vid-hint">눌러서 재생</span></button></div>';
+      return d;   /* 클릭 배선은 아래 문서 위임 1곳 — 편집 캔버스가 innerHTML 복제해도 살아남게 (2026-08-20 사고) */
     },
     cta: function(c, layout){
       var text=c[0]||'지금 예약하기', link=c[1]||'#';
@@ -3471,6 +3558,14 @@
       var head=title?'<div class="block-h" style="margin-bottom:15px;">'+emph(title)+'</div>':'';
       var del=EDIT?'<button class="st-edel" title="삭제" style="position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:none;background:#E0566E;color:#fff;font-size:12px;line-height:20px;text-align:center;cursor:pointer;z-index:4;padding:0;">×</button>':'';
       var add=EDIT?'<button class="st-eadd" style="display:block;margin:14px auto 0;background:var(--coral-soft);color:var(--coral);border:1px dashed var(--coral);border-radius:10px;padding:8px 15px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;">＋ 단계 추가</button>':'';
+      if(layout==='flow'){
+        /* 🧵 2026-08-20 사장님 픽 — 세로 선 + 점 (편집: 기존 st-et/st-ed/st-edel/st-eadd 배선 재사용) */
+        var fitems=list.map(function(sx,i){ return '<div class="stf-i st-ei" style="position:relative;">'
+          +'<span class="stf-dot"></span><div class="stf-c"><div class="st-t st-et">'+esc(sx[0]||'')+'</div>'
+          +((sx[1]||EDIT)?'<div class="sub st-d st-ed">'+esc(sx[1]||'')+'</div>':'')+'</div>'+del+'</div>'; }).join('');
+        var fd=card(''); fd.innerHTML=head+'<div class="stf-wrap">'+fitems+'</div>'+add;
+        return fd;
+      }
       if(layout==='list'){
         var items=list.map(function(s,i){ return '<div class="st-item st-ei" style="position:relative;"><span class="st-num">'+(i+1)+'</span><div class="st-body"><div class="st-t st-et">'+esc(s[0]||'')+'</div>'+((s[1]||EDIT)?'<div class="sub st-d st-ed">'+esc(s[1]||'')+'</div>':'')+'</div>'+del+'</div>'; }).join('');
         var d=card(''); d.innerHTML=head+'<div class="st-list">'+items+'</div>'+add;
@@ -3788,14 +3883,16 @@
     quote: function(c){ return card('<div style="font-family:var(--serif);font-size:18px;line-height:1.5;color:var(--on-strong);">“'+esc(c[0]||'')+'”</div>'); },
     text: function(c, layout){
       var title=c[0]||'', body=c[1]||'';
-      var bodyH = body?richBody(body):'';
+      var bodyH = body?numMark(richBody(body)):'';   /* ✨ 숫자+단위 자동 강조 (다크=칩/라이트=형광펜) */
       if(layout==='impact'){ var d=document.createElement('div'); d.className='ly-impact'; d.innerHTML=(title?'<div class="ly-impact-t">'+emph(title)+'</div>':'')+bodyH; return d; }
       if(layout==='quote'){ var q=document.createElement('div'); q.className='ly-quote'; q.innerHTML='<span class="ly-q-mark">“</span>'+(title?'<div class="ly-quote-t">'+emph(title)+'</div>':'')+bodyH; return q; }
       if(layout==='bar'){ var b=document.createElement('div'); b.className='ly-bar'; b.innerHTML=(title?'<div class="block-h" style="margin-bottom:6px;">'+esc(title)+'</div>':'')+bodyH; return b; }
       var h=title?'<div class="block-h" style="margin-bottom:6px;">'+esc(title)+'</div>':'';
       return card(h+bodyH);
     },
-    stat: function(c){ var list=c[0]||[]; if(!list.length) return null; var inner=list.map(function(x){ return '<div style="flex:1;text-align:center;"><div class="st-num" style="font-size:24px;font-weight:700;color:var(--coral);font-family:var(--serif);">'+esc(x[0]||'')+'</div><div class="sub">'+esc(x[1]||'')+'</div></div>'; }).join(''); return card('<div style="display:flex;gap:10px;">'+inner+'</div>'); },
+    stat: function(c){ var list=c[0]||[]; if(!list.length) return null; var inner=list.map(function(x){ return '<div style="flex:1;text-align:center;"><div class="st-num stat-cnt" data-v="'+esc(x[0]||'')+'" style="font-size:24px;font-weight:700;color:var(--coral);font-family:var(--serif);font-variant-numeric:tabular-nums;">'+esc(x[0]||'')+'</div><div class="sub">'+esc(x[1]||'')+'</div></div>'; }).join(''); var d=card('<div style="display:flex;gap:10px;">'+inner+'</div>'); try{ statCountWire(d); }catch(_){} return d; },
+    /* 🔢 숫자 차오름 (2026-08-20) — 보일 때 «한 번만» 0→값. 모션줄이기·reveal 꺼짐이면 그냥 표시 */
+
     /* 🧰 01 가격 플랜 (2티어 고정 · flat content [n,p,d,정가,추천, n,p,d,정가,추천]) — 탭=선택 → 구매바 연동 */
     plans: function(c){
       var ts=[[c[0],c[1],c[2],c[3],c[4]],[c[5],c[6],c[7],c[8],c[9]]].filter(function(t){ return t[0]&&t[1]; });
