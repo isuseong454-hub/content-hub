@@ -3474,9 +3474,10 @@ if('serviceWorker' in navigator){
       <img src="la-192.png" width="27" height="27" alt="컨텐츠 허브" style="border-radius:7px; display:block;">
     </span>
     <span class="title" id="ws-title">작업실</span>
-    <button class="btn" id="top-edit" title="편집 모드 (보면서 수정) — 안에서 👁 미리보기로 손님 화면 확인">✏️ 편집 모드</button>
-    <!-- (정리 2026-07-07) '고객 홈으로'는 홈 구성→👁 미리보기와 중복이라 숨김. 되돌리려면 style 제거. 핸들러·기능은 보존. -->
-    <button class="btn" id="go-customer-top" style="display:none;" title="손님 화면은 '홈 구성 → 👁 미리보기'에서 봐요">🏠 고객 홈으로</button>
+    <button class="btn" id="top-edit" title="편집 모드 (보면서 수정) — 안에서 👁 미리보기로 손님 화면 확인">✏️ 편집<span class="tb-lg"> 모드</span></button>
+    <!-- 🚪 2026-08-20 되살림. 2026-07-07에 «미리보기와 중복»이라 숨겼는데, 진짜 원인은 «배선이 미리보기로 가 있던 것»이었다(아래 goCT 참고).
+         ⚠️ 라벨에 🏠를 쓰지 않는다 — 아래 도크 첫 칸이 이미 「🏠 홈」이라 뜻이 겹친다. -->
+    <button class="btn" id="go-customer-top" title="내 홈을 손님 눈으로 보기 (저장·공개하고 이동)">👁 손님<span class="tb-lg"> 화면</span></button>
     <button class="btn primary" id="top-save" title="내 홈에 적용 (저장 + 손님 페이지 반영)">✓ 적용</button>
     <button class="tb-logout" id="open-settings" title="설정" aria-label="설정">⚙</button>
   </div>
@@ -4026,7 +4027,7 @@ if('serviceWorker' in navigator){
     <!-- 🏠 로그인 착지 (2026-08-19 A안) — 기본=내 홈(현장 편집). 끄면 옛 동작(작업실)으로 즉시 복귀 -->
     <div class="set" id="set-landing" style="cursor:default; box-shadow:none; margin-top:14px;">
       <span class="ic">🏠</span>
-      <span class="meta"><span class="nm">로그인하면 내 홈으로</span><span class="sb">손님 화면에서 바로 편집 · 끄면 작업실로 열려요</span></span>
+      <span class="meta"><span class="nm">로그인하면 내 홈으로</span><span class="sb">손님 눈으로 먼저 봐요 · 고칠 땐 오른쪽 위 ⚙ · 끄면 작업실로 열려요</span></span>
       <span class="sw on" id="landing-sw"><i></i></span>
     </div>
     <!-- 손님 Q&A 편집 (위 타일 누르면 펼침) -->
@@ -5880,6 +5881,15 @@ if('serviceWorker' in navigator){
   #tpk-rail { overscroll-behavior-x: contain; }
   /* ④ 눌렀을 때 파란 사각형 번쩍임 */
   button, a, [role="button"], summary { -webkit-tap-highlight-color: transparent; }
+  /* ⑥ 📱 상단바 — 「👁 손님 화면」이 생겨 버튼이 4개. 폰에선 제목이 16px로 찌그러진다.
+        → «○○님 ·»과 라벨 뒷말을 접는다. 데스크톱은 그대로 (실측: 제목 16px → 45px 이상) */
+  @media (max-width: 480px){
+    .topbar #ws-title .tb-who, .topbar .tb-lg { display: none; }
+    /* 실측: 바 안쪽 343px 을 버튼 293 + gap 50 이 꽉 채워 제목이 25px 로 눌렸다.
+       여백만 조금씩 줄여 제목 자리를 45px 이상 만든다 (버튼 높이·터치 영역은 안 건드림) */
+    .topbar { gap: 7px; padding-left: 13px; padding-right: 13px; }
+    .topbar .btn { padding-left: 10px; padding-right: 10px; }
+  }
   /* ⑤ 눌림 반응 — 오늘 만든 구성 고르기 · 붙여넣기 · 내보내기 */
   #tpk-ov .tpk-card, #tpk-ov .tpk-x, #exp-ov .exp-seg button,
   #pst-ov .pst-help>summary, #exp-fab { transition: transform 120ms cubic-bezier(.2,0,0,1); }
@@ -5985,7 +5995,9 @@ if('serviceWorker' in navigator){
     document.querySelectorAll('.ws-tab').forEach(function(t){ t.onclick=function(){ switchWs(t.getAttribute('data-ws')); }; });
     // 고객 홈으로 = 새 탭(window.open) 말고 인앱 미리보기(allprev iframe)로 — 왔다갔다 없이 "유기체처럼" 한 화면에서 (✎편집하기로 복귀)
     var goCH=document.getElementById('go-customer-home'); if(goCH) goCH.onclick=function(){ if(window.__openCustomerPreview) window.__openCustomerPreview(); else if(window.__openRealHome) window.__openRealHome(); };
-    var goCT=document.getElementById('go-customer-top'); if(goCT) goCT.onclick=function(){ if(window.__openCustomerPreview) window.__openCustomerPreview(); else if(window.__openRealHome) window.__openRealHome(); };
+    /* 🚨 2026-08-20 수리 — 주석은 «진짜 공개 페이지»인데 실제로는 미리보기를 먼저 불렀다.
+          그래서 정말로 «👁 미리보기와 중복»이 되어 버튼이 숨겨졌던 것. 이제 진짜 페이지로 간다(같은 탭). */
+    var goCT=document.getElementById('go-customer-top'); if(goCT) goCT.onclick=function(){ if(window.__openRealHome) window.__openRealHome(true); };
     var topEd=document.getElementById('top-edit'); if(topEd) topEd.onclick=function(){ if(window.__openLive) window.__openLive(); };   // 운영→편집 모드
   })();
 
@@ -9852,7 +9864,7 @@ if('serviceWorker' in navigator){
       var v=(cur()==='live')?'desk':'live';
       try{ localStorage.setItem('cm-hub-landing', v); }catch(_){}
       paint();
-      try{ toast(v==='live'?'🏠 로그인하면 내 홈(편집)으로 열려요':'🧰 로그인하면 작업실로 열려요'); }catch(_){}
+      try{ toast(v==='live'?'🏠 로그인하면 내 홈(손님 눈)으로 열려요':'🧰 로그인하면 작업실로 열려요'); }catch(_){}
     };
     paint();
   })();
@@ -13685,7 +13697,12 @@ if('serviceWorker' in navigator){
     // 로그인 직후 화면은 enter()에서 '고객 홈'으로 처리 (운영 깜빡임 제거) — 게이트는 고객 홈 닫을 때 뜸
     try{ if(window.__updateDraftsBtn) window.__updateDraftsBtn(); }catch(_){}
   }
-  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title'); if(wt) wt.textContent=((AUTH&&AUTH.name)?AUTH.name+'님 · ':'')+'작업실'; }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
+  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title');
+      if(wt){ wt.textContent='';
+        /* 📱 폰에선 «○○님 ·»을 접는다 (버튼 4개라 제목이 16px로 찌그러졌다) — 이름은 textContent 로만 넣는다 */
+        if(AUTH&&AUTH.name){ var _who=document.createElement('span'); _who.className='tb-who'; _who.textContent=AUTH.name+'님 · '; wt.appendChild(_who); }
+        wt.appendChild(document.createTextNode('작업실'));
+      } }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
     // 로그인 직후 → 바로 모드 선택 게이트(무엇부터 해볼까요?). 손님 미리보기는 게이트의 '고객용 화면' 타일에서. dev 자동편집(localhost)은 제외 (사용자 요청 2026-06-29: 미리보기 강제 노출 빼고 바로 게이트)
     if(!window.__devEnter){ try{ if(window.__maybeLoginIntro) window.__maybeLoginIntro(); }catch(_){} try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){} }   // ✨ 하루 첫 로그인 = 쌓인 자산 인트로(게이트 위에 뜸, 탭 스킵)
     // 📸 첫 로그인 = 컨텐츠 허브 소개 6장 → 전문성 가시화 체험(데모라인) 1회 자동 · 수익화 이야기는 로그인 💰버튼 (이후 설정에서 다시 보기)
@@ -13697,8 +13714,19 @@ if('serviceWorker' in navigator){
     try{
       var _land='live'; try{ _land=localStorage.getItem('cm-hub-landing')||'live'; }catch(_e){}
       var _isNew=false; try{ _isNew=!localStorage.getItem('ch-onboard-v2'); }catch(_e){}   // 첫 로그인(소개 6장)은 현장 진입 안 함
-      if(_land==='live' && !_isNew && !window.__devEnter){
-        setTimeout(function(){ try{ if(window.__openLive && !window.__liveEditActive) window.__openLive(); }catch(_e){} }, 900);   // 데이터 로드(loadPage) 뒤에 진입
+      /* 🚪 2026-08-20 사장님 픽 — «우선 우리 홈으로 먼저 보이고, 우측 상단에서 편집실로»
+            로그인하면 «편집 도구가 얹힌 현장»이 아니라 «손님이 보는 그 화면»으로 진짜 이동한다.
+            ⚠️ ⚙(edit.html?desk=1)로 돌아왔을 땐 다시 튕기면 무한 루프 → _fromGear 로 차단 */
+      var _fromGear=false; try{ _fromGear = new URLSearchParams(location.search).get('desk')==='1'; }catch(_e){}
+      if(_land==='live' && !_isNew && !window.__devEnter && !_fromGear){
+        setTimeout(function(){                                          // 데이터 로드(loadPage) 뒤에
+          try{
+            var _h=(((document.getElementById('pf-handle')||{}).value)||'').trim()
+                   || ((window.AUTH&&window.AUTH.handle)||'');
+            if(_h) location.replace('u.html?u='+encodeURIComponent(_h));   // replace = 뒤로가기로 되돌아오지 않게
+            else if(window.__openLive && !window.__liveEditActive) window.__openLive();   // 주소(핸들)가 아직 없으면 옛 동작
+          }catch(_e){}
+        }, 900);
       }
     }catch(_){}
   }
@@ -14158,6 +14186,24 @@ if('serviceWorker' in navigator){
   })();
   // 코드 자동완성 — 한번 로그인하면 다음엔 코드 미리 채움
   (function(){ try{ var lc=localStorage.getItem('la-last-code'); var c=document.getElementById('lg-code'); if(lc && c && !c.value){ c.value=lc; } }catch(e){} })();
+  /* 🔑 자동 로그인 (2026-08-20 사장님 «A 모드» 픽) — 손님은 열쇠가 없으니 그대로 막히고, 사장님만 통과한다.
+        ⚠️ 전엔 enter() 가 «로그인 버튼»에서만 불려서, 열쇠가 있어도 매번 코드+PIN 을 쳐야 했다.
+        만료됐거나 열쇠가 안 맞으면 조용히 버리고 정상 로그인 화면을 띄운다. */
+  (function(){
+    try{
+      if(!AUTH || !AUTH.code || !AUTH.pinHash) return;
+      if(AUTH.expiresAt!=null){                                  // 사용 기간이 지났으면 다시 로그인
+        var _ex=new Date(AUTH.expiresAt);
+        if(!isNaN(_ex.getTime()) && _ex < new Date()) return;
+      }
+      Promise.resolve(window.laRpc('li_get_own', {p_code:AUTH.code, p_pin_hash:AUTH.pinHash}))
+        .then(function(r){
+          if(r && r.ok){ enter(); }
+          else { try{ localStorage.removeItem('la-auth'); }catch(_){} }   // 열쇠가 안 맞음 = 버린다
+        })
+        .catch(function(){});                                    // 인터넷이 없으면 그냥 로그인 화면
+    }catch(_){}
+  })();
   // 🔧 테스트 전용(localhost에서만): localStorage cm-devedit='1' 이면 로그인 화면 건너뛰고 바로 편집모드 진입 (배포엔 영향 없음 — hostname 가드)
   (function(){ try{
     var isLocal=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
@@ -14818,11 +14864,12 @@ if('serviceWorker' in navigator){
     }catch(e){ notify('미리보기 실패: '+e.message); }
   };
   // 고객 홈으로 = 저장·공개 후 진짜 공개 페이지(새 탭)로 — 미리보기 아님
-  window.__openRealHome=async function(){
+  window.__openRealHome=async function(sameTab){
     if(!AUTH){ notify('로그인이 필요해요'); return; }
     var handle=((document.getElementById('pf-handle')||{}).value||'').trim() || AUTH.handle || '';
     if(!handle){ notify('먼저 ⚙설정·내 프로필에서 주소(핸들)를 정해주세요'); return; }
-    var win=null; try{ win=window.open('', 'cmhub_customer'); }catch(e){}   // 고정 이름 → 누를 때마다 같은 탭 재사용 (새 창 안 쌓임)
+    var win=null;
+    if(!sameTab){ try{ win=window.open('', 'cmhub_customer'); }catch(e){} }   // 고정 이름 → 누를 때마다 같은 탭 재사용 (새 창 안 쌓임)
     try{
       var data=serialize();
       if(data.profile.handle && data.profile.handle!==AUTH.handle){
@@ -14832,7 +14879,8 @@ if('serviceWorker' in navigator){
       await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
       await window.laRpc('li_publish',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_published:true});
       var url='u.html?u='+encodeURIComponent(handle);
-      if(win){ win.location.href=url; } else { window.open(url,'cmhub_customer'); }
+      if(sameTab){ location.href=url; }                      /* 손님 화면 ↔ 작업실을 «한 탭»에서 왕복 */
+      else if(win){ win.location.href=url; } else { window.open(url,'cmhub_customer'); }
     }catch(e){ if(win){ try{ win.close(); }catch(_){} } notify('이동 실패: '+e.message); }
   };
   if(prevBtn) prevBtn.addEventListener('click', window.__openCustomerPreview);
