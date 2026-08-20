@@ -123,6 +123,8 @@
       add('꾸미기 2단계', et.indexOf('색 · 테마</span>') >= 0 && et.indexOf('더 다듬기</span>') >= 0 && et.indexOf('for(var i=1;i<=2;i++)') >= 0, '4단계 구조 회귀 금지');
       add('내보내기 엔진', ['function expCaption','function expCards','function openPostExport','window.__openPostExport'].every(function(k){ return et.indexOf(k) >= 0; }), '인스타 캡션 · 카드뉴스 대본 (AI 0원)');
       add('내보내기 버튼 수명', et.indexOf("id='exp-fab'") >= 0 && et.indexOf("if(eb) eb.style.display='none'") >= 0, '포스팅 나가면 숨김 (떠 있는 채로 남던 사고 방지)');
+      add('광고 스위치', et.indexOf('dz-adov') >= 0 && et.indexOf('home.adOverlay') >= 0, '홈 위에 띄우기 온오프');
+      add('칩·매거진 기본값', et.indexOf("marquee:'chips'") >= 0 && et.indexOf("[['chips','정지 칩'") >= 0, '흐르는 띠는 선택지로만');
       add('구성 고르기 화면', ['function openTypePick','window.__openTypePick','tpick-open','tpk-rail','scroll-snap-type'].every(function(k){ return et.indexOf(k) >= 0; }), '유형 4종 스와이프 픽커 (2026-08-20 확정판)');
       add('유형 적용 기록', et.indexOf('home.htype=setKey') >= 0, '«지금 쓰는 중» 배지 근거');
       add('뷰티 확정 구성', et.indexOf("{type:'stylegallery',name:'스타일 갤러리',content:[]},   /* 2026-08-20 확정") >= 0, '사진 아래 = 갤러리·가격·후기');
@@ -148,6 +150,16 @@
       add('u 세로 타임라인', ut.indexOf("layout==='flow'") >= 0 && ut.indexOf('.stf-dot{') >= 0, '선+점 레이아웃');
       add('u 숫자 차오름', ut.indexOf('function statCountWire') >= 0 && ut.indexOf('io.unobserve') >= 0, '보일 때 1회 (무한 금지)');
       add('u 글별 모션 끄기', ut.indexOf('rv-off') >= 0 && ut.indexOf("p.motion==='off'") >= 0, '#post-modal.rv-off 존중');
+      add('u 광고 오버레이', ['function initAdOverlay','function __adShow','function __adPill','uad-rail','scroll-snap-type'].every(function(k){ return ut.indexOf(k) >= 0; }), '3단 흐름 (2026-08-20)');
+      add('u 광고 5원칙', ut.indexOf('__adKey()') >= 0 && ut.indexOf('adOverlay===false') >= 0 && ut.indexOf('uad-x') >= 0, '하루 한 번·사장님 스위치·✕ 오른쪽 위');
+      add('u 광고 손님말 금지', (ut.split('function __adShow')[1]||'').split('function __adClose')[0].indexOf('>광고<') < 0, '손님 화면엔 «광고»라는 글자 안 씀');
+      add('u 정지 칩', ut.indexOf("layout==='chips'") >= 0 && ut.indexOf('.mq-chips{') >= 0, '흐르는 띠 대신 (발열 0)');
+      add('u 매거진 격자', ut.indexOf("layout==='mag'") >= 0, '3장=큰1+작2 · 4장=2×2');
+      // 🚨 발열 헌법 — «장식» 무한 반복은 0. 사용자가 켠 연출(갤러리·진입·레일)만 허용하되 안전망 필수
+      var decorInf = ['laSlotBreathe','rvShim','evSoftPulse','lbPing','lbBlink','lvFloat','lsgPulse','avFloat','avGlow','prepB']
+        .filter(function(k){ return new RegExp(k + '[^;}]*infinite').test(ut); });
+      add('u 장식 무한애니 0', decorInf.length === 0, decorInf.length ? ('아직 무한: ' + decorInf.join(',')) : '장식 반복 전부 3회로 (2026-08-20)');
+      add('u 모션 안전망', ut.indexOf('u-bg-idle') >= 0 && ut.indexOf('animation-play-state:paused') >= 0 && ut.indexOf('발열 헌법 전역 안전망') >= 0, '모션줄이기 + 백그라운드 탭이면 남은 반복도 정지');
       add('u 라이트 유리 보정', ut.indexOf('라이트 유리 보정') >= 0 && ut.indexOf('html[data-theme="lavender"] .block') >= 0, '라이트 4종 .block 규칙 (.card는 존재하지 않는 클래스였음 — 2026-08-20 사고)');
       add('u 라이트 .card 금지', ut.indexOf('html[data-theme="lavender"] .card,') < 0, '매칭 0개 유령 선택자 재발 금지');
       // 🚨2026-08-20: 주석 문자열로 검사하다 내가 주석을 덮어써 오탐 BLOCK — «실물»로 검사한다
