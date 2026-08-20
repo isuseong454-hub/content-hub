@@ -13869,7 +13869,40 @@ if('serviceWorker' in navigator){
     // 로그인 직후 화면은 enter()에서 '고객 홈'으로 처리 (운영 깜빡임 제거) — 게이트는 고객 홈 닫을 때 뜸
     try{ if(window.__updateDraftsBtn) window.__updateDraftsBtn(); }catch(_){}
   }
-  function enter(){ var ov=document.getElementById('login-ov'); if(ov) ov.style.display='none'; try{ var wt=document.getElementById('ws-title');
+  /* 👁 착지가 «손님 화면»으로 예정돼 있나 — 서버를 안 기다리고 즉시 판정 (2026-08-20 깜빡임 수리) */
+  function __willLandHome(){
+    try{
+      var q=new URLSearchParams(location.search);
+      if(q.get('desk')==='1' || q.get('live')==='1') return false;   /* ⚙·고치기로 들어온 경우는 작업실이 맞다 */
+      if(window.__devEnter) return false;
+      if(!localStorage.getItem('ch-onboard-v2')) return false;        /* 첫 로그인은 온보딩부터 */
+      if((localStorage.getItem('cm-hub-landing')||'live')!=='live') return false;
+      var a=JSON.parse(localStorage.getItem('la-auth')||'null');
+      return !!(a && a.handle);                                       /* 주소가 있어야 갈 곳이 있다 */
+    }catch(_){ return false; }
+  }
+  function enter(){
+    var ov=document.getElementById('login-ov');
+    /* 🚨 여기서 덮개를 바로 걷는 바람에 «작업실»이 900ms 동안 보였다가 손님 화면으로 넘어갔다.
+          착지 예정이면 덮개를 그대로 두고 안내만 바꾼다 — 사장님이 작업실을 볼 일이 없게. */
+    if(ov){
+      if(__willLandHome()){
+        try{
+          var _c=ov.querySelector('.login-card');
+          if(_c){ _c.style.transition='opacity .18s'; _c.style.opacity='.0'; }
+          if(!document.getElementById('land-msg')){
+            var _m=document.createElement('div'); _m.id='land-msg';
+            _m.style.cssText='position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;'
+              +'font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.62);letter-spacing:-.2px;';
+            _m.textContent='내 홈으로 가는 중…';
+            ov.appendChild(_m);
+          }
+        }catch(_){}
+      } else {
+        ov.style.display='none';
+      }
+    }
+    try{ var wt=document.getElementById('ws-title');
       if(wt){ wt.textContent='';
         /* 📱 폰에선 «○○님 ·»을 접는다 (버튼 4개라 제목이 16px로 찌그러졌다) — 이름은 textContent 로만 넣는다 */
         if(AUTH&&AUTH.name){ var _who=document.createElement('span'); _who.className='tb-who'; _who.textContent=AUTH.name+'님 · '; wt.appendChild(_who); }
