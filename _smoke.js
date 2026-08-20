@@ -163,6 +163,10 @@
         '이미 있는 구성을 또 권하면 «앱이 내 홈을 모른다»가 된다');
       add('e 추천 = 기존 검색으로', et.indexOf("q.dispatchEvent(new Event('input'") >= 0,
         '별도 경로를 안 만든다(한 기능 두 군데 금지) — 검색칸에 넣어 아래 목록에서 찾게');
+      add('e build 표시 없앰', et.indexOf('build 07·10') < 0,
+        '로그인 화면은 처음 오는 사람이 보는 곳 — 개발용 표시를 두지 않는다');
+      add('e 저장됨 초기 오표시', et.indexOf('id="le-autosave" title="고치면 자동으로 저장돼요"') >= 0 && et.indexOf('le-autosave is-saved" id=') < 0,
+        '🚨 아무것도 저장 안 했는데 「저장됨 ✓」이라 적혀 있던 것 → 「자동 저장」');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
@@ -266,6 +270,11 @@
       /* 🆕 손님 메뉴 3개 확정 (2026-08-20) */
       add('u 포스팅 탭 상시', ut.indexOf("hideTab('archive', true)") >= 0 && ut.indexOf('arc-blank') >= 0,
         '글 0개여도 탭은 남기고 방 안에 정직한 한 줄');
+      /* 🙋 손님 눈 — 「전문성」은 우리끼리 쓰는 말, 손님에겐 «프로필» (2026-08-20) */
+      add('u 손님 화면 전문성 없앰', ut.indexOf('🏅 전문성 · 증거') < 0 && ut.indexOf('🏅 프로필 · 증거') >= 0,
+        '손님이 보는 섹션 제목');
+      add('u 빈 안내도 프로필', ut.indexOf('소개를 채워보세요') < 0,
+        '«소개»가 아니라 «프로필»로 통일');
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
