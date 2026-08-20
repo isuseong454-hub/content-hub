@@ -3780,6 +3780,11 @@ if('serviceWorker' in navigator){
         </div>
         <div class="sec-h" style="display:flex; align-items:center;"><span class="t" id="post-edit-title" style="flex:1;">📄 게시물 편집</span><button type="button" id="post-fw" class="fw-sm">⛶ 전체화면</button></div>
         <div class="field"><label>게시물 제목</label><input id="post-f-title" placeholder="예: 앞머리 시술 랜딩"></div>
+        <div class="field" style="display:flex;align-items:center;gap:10px;">
+          <label style="margin:0;">✨ 스크롤 모션 <small style="color:var(--muted);font-weight:400;">— 내리면 차례로 등장·숫자 차오름 (이 글만)</small></label>
+          <label style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--muted);">
+            <input type="checkbox" id="post-f-motion" checked style="width:16px;height:16px;accent-color:var(--coral);"> 켬</label>
+        </div>
         <div class="field"><label>한 줄 요약 <span style="color:var(--muted);font-size:10.5px;">· 카드에 표시</span></label><input id="post-f-summary" placeholder="예: 왜 저를 믿어도 될까요"></div>
         <div class="field"><label>주제 (카테고리) <span style="color:var(--muted);font-size:10.5px;">· 아카이브에서 칩으로 분류</span></label><input id="post-f-cat" placeholder="예: 고객심리 · 뉴스 해석 · 브랜딩"><div id="post-cat-chips" class="lce-chips" style="margin-top:8px;"></div></div>
         <div class="field" style="margin-bottom:6px;" id="post-cover-field"><label>커버 사진 <span style="color:var(--muted);font-size:10.5px;">· 카드 썸네일(선택)</span></label></div>
@@ -10061,8 +10066,8 @@ if('serviceWorker' in navigator){
     ],
     // 🎓 전문가형 — 큰 이름 + 대표 사진 칸(인물 아니어도 됨) + 숫자·로고 + 상담
     texpert: [
-      {type:'glowhook',name:'이름 후킹',content:['이름','CONTENT EXPERT','한 줄 소개 · 경력 ○년','','BY 나 · 상호']},
-      {type:'cover3',name:'대표 사진',content:['','전문 분야 한 줄','*이런 문제*를 해결합니다','상담 문의하기','']},
+      /* 🚨2026-08-20 수리 — C1 원 픽 = «대표 사진이 위, 이름은 사진 위에». 이름 후킹을 위로 올렸던 드리프트 원복 */
+      {type:'cover3',name:'대표 사진 (인물 아니어도 됨)',content:['','CONTENT EXPERT','*이름* · 한 줄 소개','상담 문의하기','']},
       {type:'stat',name:'숫자 증명',content:[[['1,000+','함께한 고객'],['10년','경력'],['98%','만족도']]]},
       {type:'logowall',name:'함께한 곳',content:['함께한 브랜드 · 매체',[['브랜드 1'],['브랜드 2'],['매체 1'],['매체 2']]]},   // 🚨항목=배열 (문자열이면 첫 글자만 — v747 룩북과 같은 유형 사고)
       {type:'service',name:'프로그램',content:['상담 후 안내',[['1:1 컨설팅 (90분)','상담 후 안내','문의',''],['정규 과정 (12주)','상담 후 안내','문의','']]]},
@@ -12054,6 +12059,7 @@ if('serviceWorker' in navigator){
     try{ document.querySelectorAll('.ws-tab').forEach(function(t){ t.classList.toggle('on', t.getAttribute('data-ws')==='posts'); }); }catch(_){}
     var hb=document.getElementById('home-body'); if(hb) hb.style.display='';
     renderPostMeta(p);
+    try{ var mo=document.getElementById('post-f-motion'); if(mo){ mo.checked=(p.motion!=='off'); mo.onchange=function(){ p.motion=this.checked?'':'off'; }; } }catch(_){}
     renderSavedBlocks(p.blocks||[]);
     // 모든 게시물 = 보면서 수정 캔버스 (랜딩=가운데 B형 / 글=왼쪽 블로그형)
     if(pane){ pane.classList.remove('show-raw'); pane.classList.add('editing-landing'); try{ renderLandingCardEditor(p); }catch(_){} try{ renderLandingCanvas(); }catch(_){} }
@@ -12213,6 +12219,7 @@ if('serviceWorker' in navigator){
         +'<div class="desc">카톡·메모장에 쓴 글을 <b style="color:var(--coral)">그대로</b> 붙여넣으세요. 제목·소제목·목록·인용을 갈라내고 <b>사진 들어갈 자리까지</b> 잡아드려요.</div>'
         +'<div class="field"><label>여기에 붙여넣기 <small>— 줄바꿈만 있으면 충분</small></label><textarea id="pst-src" placeholder="예) 앞머리 자르기 전에 꼭 알아야 할 것&#10;&#10;안녕하세요, 오늘은 상담하면서 제일 많이 듣는 질문을 정리했어요..."></textarea></div>'
         +'<div class="pst-sum" id="pst-sum"></div>'
+        +'<div class="pst-sug" id="pst-sug" style="display:none;margin-top:9px;"><div style="font-size:11px;font-weight:800;color:var(--coral);margin-bottom:6px;">✨ 이 글엔 이것도 어울려요 — 누르면 같이 들어가요</div><div id="pst-sug-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div></div>'
         +'<div class="pst-hint" id="pst-hint">글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요</div>'
         +'<div class="pst-free">✓ AI 안 씁니다 · 비용 0원 · 이 글은 서버로 안 나가요</div>'
         +'<button type="button" class="nchip-apply" id="pst-go">✨ 이대로 포스팅 만들기 →</button>'
@@ -12220,6 +12227,21 @@ if('serviceWorker' in navigator){
       document.body.appendChild(ov);
       ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='pst-x') ov.classList.remove('open'); });
       var ta=document.getElementById('pst-src');
+      /* ✨ 자동 제안 (2026-08-20 확정: 자동으로 «제안»하되 넣는 건 사장님 결정) */
+      window.__pstSug={};
+      function pstSuggest(r, raw){
+        var sug=[];
+        var nums=(raw.match(/\d[\d,\.]*\s?(?:주|일|개월|년|%|명|건|회|배|kg|cm)/g)||[]);
+        if(nums.length>=3) sug.push({k:'stat', t:'🔢 숫자 3칸', d:nums.slice(0,3).join(' · ')});
+        var qs=raw.split(/\r?\n/).filter(function(l){ return /[?？]\s*$/.test(l.trim()) && l.trim().length<60; });
+        if(qs.length>=2) sug.push({k:'qna', t:'❓ 자주 묻는 질문', d:qs.length+'개 질문 발견'});
+        var box=document.getElementById('pst-sug'), chips=document.getElementById('pst-sug-chips');
+        if(!sug.length){ box.style.display='none'; window.__pstSug={}; return; }
+        box.style.display='';
+        chips.innerHTML=sug.map(function(x){ var on=!!window.__pstSug[x.k];
+          return '<button type="button" data-sug="'+x.k+'" style="font-family:var(--sans);cursor:pointer;font-size:11.5px;font-weight:800;border-radius:999px;padding:7px 13px;border:1px solid '+(on?'var(--coral)':'var(--hair)')+';background:'+(on?'var(--coral-soft)':'transparent')+';color:'+(on?'var(--coral)':'var(--muted)')+';">'+(on?'✓ ':'＋ ')+x.t+'<small style="font-weight:500;opacity:.7;"> · '+x.d+'</small></button>'; }).join('');
+        chips.querySelectorAll('[data-sug]').forEach(function(b){ b.onclick=function(){ var k=b.getAttribute('data-sug'); window.__pstSug[k]=!window.__pstSug[k]; pstSuggest(r, raw); }; });
+      }
       function preview(){
         var r=pstAnalyze(ta.value), n={};
         r.items.forEach(function(b){ n[b.k]=(n[b.k]||0)+1; });
@@ -12227,6 +12249,7 @@ if('serviceWorker' in navigator){
         var chips=['h','p','li','q','img'].filter(function(k){ return n[k]; })
           .map(function(k){ return '<i>'+NM[k]+' '+n[k]+'</i>'; }).join('');
         document.getElementById('pst-sum').innerHTML = ta.value.trim()? chips : '';
+        try{ pstSuggest(r, ta.value); }catch(_){}
         document.getElementById('pst-hint').innerHTML = ta.value.trim()
           ? ('제목은 <b>'+((r.title||'').slice(0,24))+'</b> 로 잡았어요 · 칸마다 <b>따로 고칠 수 있는 블록</b>으로 들어갑니다 · 사진은 점선 자리에 넣기만 하면 돼요')
           : '글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요';
@@ -12239,8 +12262,20 @@ if('serviceWorker' in navigator){
         var r=pstAnalyze(v);
         ov.classList.remove('open');
         var bl=pstToBlocks(r);
+        /* ✨ 채택된 제안 블록 덧붙임 — 자동으로 다 넣지 않는다(장난감화 방지), 누른 것만 */
+        try{
+          if(window.__pstSug && window.__pstSug.stat){
+            var nums=(v.match(/\d[\d,\.]*\s?(?:주|일|개월|년|%|명|건|회|배|kg|cm)/g)||[]).slice(0,3);
+            if(nums.length) bl.push({type:'stat', name:'숫자 증명', on:true, content:[nums.map(function(x){ return [x, '']; })], layout:''});
+          }
+          if(window.__pstSug && window.__pstSug.qna){
+            var qs=v.split(/\r?\n/).filter(function(l){ return /[?？]\s*$/.test(l.trim()) && l.trim().length<60; }).slice(0,4);
+            if(qs.length) bl.push({type:'qna', name:'자주 묻는 질문', on:true, content:[qs.map(function(q){ return [q.trim(), '']; })], layout:''});
+          }
+        }catch(e){}
         createPost('blog', bl, r.title);
-        try{ if(window.toast) toast('붙여넣은 글을 '+bl.length+'개 블록으로 나눴어요 · 사진만 넣으면 끝'); }catch(e){}
+        var sugN=(window.__pstSug&&(window.__pstSug.stat?1:0)+(window.__pstSug.qna?1:0))||0;
+        try{ if(window.toast) toast('붙여넣은 글을 '+bl.length+'개 블록으로 나눴어요'+(sugN?' · 제안 '+sugN+'개는 라벨·답만 채워주세요':' · 사진만 넣으면 끝')); }catch(e){}
       };
     }
     var t0=document.getElementById('pst-src'); if(t0){ t0.value=''; }
