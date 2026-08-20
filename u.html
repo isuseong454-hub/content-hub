@@ -579,6 +579,13 @@
   .handle b{color:var(--on-strong); font-weight:500;}
   .topbar .dots{color:var(--on-soft); font-size:20px; line-height:1;}
   .settings-link{color:var(--on-soft); opacity:.5; text-decoration:none; display:flex; transition:opacity .15s;}
+  /* ✏️ 내 홈일 때만 뜨는 «고치기» (2026-08-20) — 손님에겐 절대 안 보인다(로그인 열쇠 + 핸들 일치일 때만 만든다) */
+  .mine-edit{display:inline-flex; align-items:center; gap:5px; text-decoration:none; font-family:var(--sans);
+    font-size:11.5px; font-weight:800; letter-spacing:-.2px; border-radius:999px; padding:6px 11px;
+    background:color-mix(in srgb, var(--coral) 17%, transparent); color:var(--coral);
+    border:1px solid color-mix(in srgb, var(--coral) 34%, transparent);
+    transition:transform 120ms cubic-bezier(.2,0,0,1);}
+  .mine-edit:active{transform:scale(.96);}
   .settings-link svg{width:19px; height:19px; display:block;}
   .settings-link:hover, .settings-link:active{opacity:.9;}
 
@@ -2618,6 +2625,7 @@
 
   <div class="topbar">
     <span class="handle"><span style="opacity:.6">contenthub.kr/u/</span><b>jigi</b></span>
+    <span id="mine-edit-slot"></span>
     <a class="settings-link" href="edit.html?desk=1" aria-label="관리자 페이지">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.6v3M12 18.4v3M2.6 12h3M18.4 12h3M5.05 5.05l2.12 2.12M16.83 16.83l2.12 2.12M18.95 5.05l-2.12 2.12M7.17 16.83l-2.12 2.12"/></svg>
     </a>
@@ -3555,7 +3563,23 @@
     document.documentElement.classList.toggle('u-bg-idle', document.hidden);
   });
   window.__numMark=numMark;   /* 검수용 */
-  window.__initAdOverlay=initAdOverlay; window.__adShow=__adShow; window.__adClose=__adClose;   /* 검수·스모크용 노출 */
+  window.__initAdOverlay=initAdOverlay;
+  /* ✏️ «고치기» — 로그인한 열쇠의 핸들과 «지금 보는 홈»이 같을 때만 만든다.
+        손님은 열쇠가 없으니 이 코드가 아예 아무것도 안 만든다(요소가 생기지 않는다). */
+  (function(){
+    try{
+      var slot=document.getElementById('mine-edit-slot'); if(!slot) return;
+      var a=JSON.parse(localStorage.getItem('la-auth')||'null'); if(!a || !a.code || !a.handle) return;
+      var cur=(new URLSearchParams(location.search).get('u')||'').trim().toLowerCase();
+      if(!cur || String(a.handle).trim().toLowerCase()!==cur) return;      // 남의 홈이면 안 만든다
+      if(a.expiresAt!=null){ var ex=new Date(a.expiresAt); if(!isNaN(ex.getTime()) && ex<new Date()) return; }
+      var b=document.createElement('a');
+      b.className='mine-edit'; b.href='edit.html?live=1';
+      b.setAttribute('aria-label','내 홈 고치기');
+      b.textContent='✏️ 고치기';
+      slot.appendChild(b);
+    }catch(e){}
+  })(); window.__adShow=__adShow; window.__adClose=__adClose;   /* 검수·스모크용 노출 */
   function statCountWire(scope){
     var els = scope.querySelectorAll('.stat-cnt'); if(!els.length) return;
     var reduce=false; try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
