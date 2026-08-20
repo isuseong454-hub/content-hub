@@ -115,6 +115,20 @@
     const ut = await fetch('u.html').then(r => r.text()).catch(() => '');
     if (et) {
       add('테마 9종(라임)', et.indexOf("['lime','#070A05','#C6FF4D'") >= 0, 'THEMES 라임 항목');
+      /* 🚪 왕복 (2026-08-20) — 로그인하면 손님 화면 · ⚙로 편집실 · 비번 안 물음 */
+      add('e 손님 화면 착지', et.indexOf("location.replace('u.html?u='") >= 0 && et.indexOf("get('desk')==='1'") >= 0,
+        '로그인하면 «편집 도구가 얹힌 현장»이 아니라 진짜 손님 페이지로');
+      add('e 착지 루프 차단', et.indexOf('!_fromGear') >= 0, '⚙로 들어왔을 땐 다시 안 튕긴다');
+      add('e 👁 손님 화면 버튼', et.indexOf('id="go-customer-top"') >= 0 && et.indexOf('id="go-customer-top" style="display:none;"') < 0,
+        '2026-07-07에 숨겨졌던 것 — 다시 숨으면 여기서 걸린다');
+      add('e 손님 화면 = 진짜 페이지', et.indexOf('window.__openRealHome(true)') >= 0 && et.indexOf('goCT.onclick=function(){ if(window.__openCustomerPreview)') < 0,
+        '🚨 주석은 «진짜 페이지»인데 미리보기를 부르던 배선 사고');
+      add('e 자동 로그인', et.indexOf("Promise.resolve(window.laRpc('li_get_own'") >= 0 && et.indexOf('if(r && r.ok){ enter(); }') >= 0,
+        'enter()가 «로그인 버튼»에서만 불려 매번 코드+PIN을 쳐야 했다');
+      add('e 자동 로그인 만료 검사', et.indexOf('AUTH.expiresAt!=null') >= 0 && et.indexOf('_ex < new Date()') >= 0,
+        '기간 지난 열쇠로 들어가지지 않게');
+      add('e 폰 상단바 접기', et.indexOf('.topbar #ws-title .tb-who, .topbar .tb-lg') >= 0 && et.indexOf("_who.className='tb-who'") >= 0 && et.indexOf('class="tb-lg"') >= 0,
+        '버튼 4개가 되며 제목이 16px로 눌리던 것 (실측 70px 회복)');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
@@ -200,6 +214,9 @@
         '가드 블록이 통째로 지워지면 여기서 걸린다');
       add('u 자동재생도 가드', ut.indexOf("matchMedia('(hover:hover) and (pointer:fine)').matches") >= 0,
         '룩북 mouseenter 자동재생 — 폰에선 아예 안 단다');
+      /* 🚪 왕복 (2026-08-20 사장님 픽) — 손님 화면 먼저 · ⚙로 편집실 */
+      add('u ⚙ → 작업실 직행', ut.indexOf('href="edit.html?desk=1"') >= 0,
+        '?desk=1 이 없으면 작업실이 다시 손님 화면으로 튕겨 무한 루프');
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
@@ -236,7 +253,7 @@
       add('첫 글자 이모지 안전', eq(FC('🔥 시스루뱅'), '🔥') && eq(FC(''), '·'), 'charAt(0)이면 이모지가 반 토막 난다');
     }
     if (true) {
-    // 런타임: 테마 배열 9종 + 이름표
+          // 런타임: 테마 배열 9종 + 이름표
     if (typeof THEMES !== 'undefined') add('THEMES 런타임 9종', THEMES.length === 9, 'THEMES.length=' + THEMES.length);
     if (typeof THEME_NAMES !== 'undefined') add('라임 이름표', THEME_NAMES.lime === '라임', String(THEME_NAMES.lime));
   }
