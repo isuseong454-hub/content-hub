@@ -1396,6 +1396,10 @@
   .mqc{font-size:11.5px;font-weight:700;border-radius:999px;padding:6px 13px;color:var(--on-strong);
     background:color-mix(in srgb, var(--coral) 12%, transparent);
     border:1px solid color-mix(in srgb, var(--coral) 26%, transparent);}
+  /* ✨ **글자** 강조 */
+  .mk-em{font-weight:800; color:color-mix(in srgb, var(--coral) 78%, var(--ink));}
+  html[data-bright="light"] .mk-em{color:var(--on-strong);
+    background:linear-gradient(transparent 58%, color-mix(in srgb, var(--coral) 38%, transparent) 58%);}
   /* ✨ 숫자 자동 강조 — 다크=칩 / 라이트=형광펜 */
   .num-c{font-weight:800; color:var(--ink);
     background:color-mix(in srgb, var(--coral) 15%, transparent);
@@ -3507,6 +3511,7 @@
   document.addEventListener('visibilitychange', function(){
     document.documentElement.classList.toggle('u-bg-idle', document.hidden);
   });
+  window.__numMark=numMark;   /* 검수용 */
   window.__initAdOverlay=initAdOverlay; window.__adShow=__adShow; window.__adClose=__adClose;   /* 검수·스모크용 노출 */
   function statCountWire(scope){
     var els = scope.querySelectorAll('.stat-cnt'); if(!els.length) return;
@@ -3536,16 +3541,24 @@
   }
   /* ✨ 숫자 자동 강조 (2026-08-20) — «3주» «20%» «4배»를 눈에 띄게.
      🚨형광펜은 다크에서 글자를 가림(사장님 지적) → 다크=칩 / 라이트=형광펜, data-bright로 자동. 블록당 3개까지. */
+  function __markPass(html, fn){
+    return String(html).split(/(<[^>]+>)/).map(function(p){ return (!p || p.charAt(0)==='<') ? p : fn(p); }).join('');
+  }
   function numMark(html){
     try{
+      /* ① **글자** = 강조 (2026-08-20 — 붙여넣기 «기호 사전»이 약속하는 표시) */
+      var out = __markPass(html, function(t){
+        return t.replace(/\*\*([^*\n]{1,60})\*\*/g, '<b class="mk-em">$1</b>');
+      });
+      /* ② 숫자+단위 = 자동 칩 (블록당 3개까지) — ①에서 만든 태그는 __markPass가 건너뜀 */
       var left = 3;
-      return String(html).split(/(<[^>]+>)/).map(function(part){
-        if(!part || part.charAt(0)==='<' || left<=0) return part;
+      return __markPass(out, function(part){
+        if(left<=0) return part;
         return part.replace(/(\d[\d,\.]*\s?(?:주|일|개월|년|시간|분|%|퍼센트|배|명|건|kg|cm|회))/g, function(mm){
           if(left<=0) return mm; left--;
           return '<span class="num-c">'+mm+'</span>';
         });
-      }).join('');
+      });
     }catch(e){ return html; }
   }
   function setMeta(key, val, isProp){ var sel=(isProp?'meta[property="':'meta[name="')+key+'"]'; var m=document.querySelector(sel); if(!m){ m=document.createElement('meta'); m.setAttribute(isProp?'property':'name', key); document.head.appendChild(m); } m.setAttribute('content', val); }
