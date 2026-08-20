@@ -586,6 +586,21 @@
     border:1px solid color-mix(in srgb, var(--coral) 34%, transparent);
     transition:transform 120ms cubic-bezier(.2,0,0,1);}
   .mine-edit:active{transform:scale(.96);}
+  /* 🔑 ⚙ 메뉴 (2026-08-20) — 로그인해 있을 때만: 운영자 모드 / 로그아웃 */
+  .gear-menu{position:absolute; right:0; top:calc(100% + 8px); z-index:60; min-width:172px;
+    background:var(--surface); border:1px solid var(--hair); border-radius:14px; overflow:hidden;
+    box-shadow:0 1px 1px rgba(0,0,0,.28), 0 6px 14px rgba(0,0,0,.24), 0 18px 40px rgba(0,0,0,.28);
+    display:none;}
+  .gear-menu.open{display:block;}
+  .gear-menu button{display:flex; align-items:center; gap:10px; width:100%; padding:13px 15px;
+    background:none; border:0; border-top:1px solid var(--hair); cursor:pointer; font-family:var(--sans);
+    font-size:13px; font-weight:700; color:var(--ink); text-align:left;
+    transition:transform 120ms cubic-bezier(.2,0,0,1), background .15s;}
+  .gear-menu button:first-child{border-top:0;}
+  .gear-menu button:active{transform:scale(.98);}
+  .gear-menu button .gi{font-size:15px; flex:0 0 auto;}
+  .gear-menu button .gs{display:block; font-size:11px; font-weight:400; color:var(--muted); margin-top:2px;}
+  .gear-wrap{position:relative; display:flex; align-items:center;}
   .settings-link svg{width:19px; height:19px; display:block;}
   .settings-link:hover, .settings-link:active{opacity:.9;}
 
@@ -2628,9 +2643,12 @@
   <div class="topbar">
     <span class="handle"><span style="opacity:.6">contenthub.kr/u/</span><b>jigi</b></span>
     <span id="mine-edit-slot"></span>
+    <span class="gear-wrap" id="gear-wrap">
     <a class="settings-link" href="edit.html?desk=1" aria-label="관리자 페이지">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.6v3M12 18.4v3M2.6 12h3M18.4 12h3M5.05 5.05l2.12 2.12M16.83 16.83l2.12 2.12M18.95 5.05l-2.12 2.12M7.17 16.83l-2.12 2.12"/></svg>
     </a>
+    <div class="gear-menu" id="gear-menu" role="menu"></div>
+    </span>
   </div>
 
   <div class="profile">
@@ -3580,6 +3598,46 @@
       b.setAttribute('aria-label','내 홈 고치기');
       b.textContent='✏️ 고치기';
       slot.appendChild(b);
+    }catch(e){}
+  })();
+  /* 🔑 ⚙ 메뉴 — 로그인해 있으면 「운영자 모드 / 로그아웃」을 고르게, 아니면 지금처럼 바로 로그인 화면으로 */
+  (function(){
+    try{
+      var gear=document.querySelector('.settings-link'), menu=document.getElementById('gear-menu');
+      if(!gear || !menu) return;
+      function auth(){ try{ return JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){ return null; } }
+      function build(){
+        menu.innerHTML=''
+          +'<button type="button" data-g="admin"><span class="gi">🛠</span><span>운영자 모드'
+            +'<span class="gs">내 홈을 고치고 관리해요</span></span></button>'
+          +'<button type="button" data-g="out"><span class="gi">🚪</span><span>로그아웃'
+            +'<span class="gs">이 기기에서 나가요</span></span></button>';
+        menu.querySelectorAll('[data-g]').forEach(function(b){
+          b.onclick=function(ev){
+            ev.preventDefault(); ev.stopPropagation();
+            var k=b.getAttribute('data-g');
+            menu.classList.remove('open');
+            if(k==='admin'){ location.href='edit.html?desk=1'; }
+            else {
+              try{ localStorage.removeItem('la-auth'); }catch(_){}
+              try{ localStorage.removeItem('la-last-code'); }catch(_){}
+              location.reload();
+            }
+          };
+        });
+      }
+      gear.addEventListener('click', function(ev){
+        var a=auth();
+        if(!a || !a.code){ return; }              /* 로그인 안 했으면 지금처럼 바로 이동 = 손님은 로그인 화면을 만난다 */
+        ev.preventDefault();
+        if(menu.classList.contains('open')){ menu.classList.remove('open'); return; }
+        build(); menu.classList.add('open');
+      });
+      document.addEventListener('click', function(ev){
+        if(!menu.classList.contains('open')) return;
+        if(ev.target.closest('#gear-wrap')) return;
+        menu.classList.remove('open');
+      });
     }catch(e){}
   })(); window.__adShow=__adShow; window.__adClose=__adClose;   /* 검수·스모크용 노출 */
   function statCountWire(scope){
