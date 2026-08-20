@@ -203,6 +203,11 @@
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
+      /* ══ 🔒 편집 게이트 (2026-08-20 보안 사고) — 손님이 주소에 &edit=1 을 붙이면 편집 버튼 9개가 보였다 ══ */
+      add('u 편집=iframe 안에서만', /get\('edit'\)==='1'[\s\S]{0,220}window\.parent !== window/.test(ut),
+        '주소 조작으로 «＋후기 추가·× 삭제»가 보이던 구멍');
+      add('u 브릿지 출처 검사', ut.indexOf('ev.origin !== location.origin') >= 0,
+        '남이 iframe 으로 감싸 가짜 데이터를 넣는 것 차단');
       /* ══ 📗 글 표지 3단 (2026-08-20) — ①고른 표지 ②글 안 첫 사진 ③제목 첫 글자 ══ */
       add('u ▦ 없앰', ut.indexOf('"arc-crow-th">\u25a6') < 0, '표지 없는 글에 ▦ 네모가 뜨던 것');
       add('u 표지 3단 함수', ut.indexOf('function postCover') >= 0 && ut.indexOf('function firstPhotoIn') >= 0 && ut.indexOf('function firstChar') >= 0, '세 함수 생존');
