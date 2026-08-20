@@ -1566,6 +1566,14 @@
   .arc-clist{display:flex; flex-direction:column; gap:9px; margin-top:4px;}
   .arc-crow{position:relative; display:flex; align-items:center; gap:12px; padding:11px 13px 11px 16px; border-radius:13px; background:var(--surface); border:1px solid var(--hair); overflow:hidden; cursor:pointer; text-decoration:none; color:inherit; transition:border-color .18s, transform .14s;}
   .arc-crow::before{content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--c,var(--coral));}
+  /* 📗 표지 없는 글 = 제목 첫 글자 (▦ 대신 · 2026-08-20) — «없음»을 «고장»처럼 그리지 않는다 */
+  .arc-crow-typo{background:color-mix(in srgb, var(--tc,var(--coral)) 17%, var(--surface)) !important;
+    color:var(--tc,var(--coral)); font-size:20px; font-weight:900; letter-spacing:-1px;
+    border:1px solid color-mix(in srgb, var(--tc,var(--coral)) 26%, transparent);}
+  .arc-nocov-i{position:absolute; right:11px; bottom:8px; font-size:34px; font-weight:900;
+    letter-spacing:-2px; line-height:1; color:color-mix(in srgb, var(--cc,var(--coral)) 62%, var(--ink));
+    opacity:.5; pointer-events:none;}
+  .arc-cover, .arc-photo-cov{position:relative;}
   .arc-crow-th{flex:0 0 auto; width:48px; height:48px; border-radius:11px; background:color-mix(in srgb, var(--c,var(--coral)) 14%, transparent); display:grid; place-items:center; color:var(--c,var(--coral)); font-size:18px; overflow:hidden; background-size:cover; background-position:center;}
   .arc-crow-m{flex:1; min-width:0;}
   .arc-crow-badge{display:inline-block; font-size:9.5px; font-weight:800; border-radius:6px; padding:2px 7px; margin-bottom:3px; color:var(--c,var(--coral)); background:color-mix(in srgb, var(--c,var(--coral)) 15%, transparent);}
@@ -5458,7 +5466,38 @@
     var cats=[]; live.forEach(function(p){ var c=(p.cat||'').trim(); if(c && cats.indexOf(c)<0) cats.push(c); });
     var ARC_PAL=['#7DCF96','#7CB0FF','#E3B563','#FF9DBA','#B9A6FF','#5FD0C0','#FF9E7A','#A6B0BC'];   // 유형 색 팔레트
     function catColor(c){ c=(c||'').trim(); if(!c) return ARC_PAL[7]; if(window.__catColors&&window.__catColors[c]) return window.__catColors[c]; var h=0; for(var i=0;i<c.length;i++) h=(h*31+c.charCodeAt(i))>>>0; return ARC_PAL[h%7]; }   // 저장색 우선, 없으면 이름으로 자동(회색=index7은 '분류없음' 전용이라 자동에선 제외)
-    function covHtml(p, cls){ var cat=p.cat?'<span class="arc-cat">'+esc(p.cat)+'</span>':''; return p.cover ? '<div class="'+cls+'" style="background-image:url('+esc(p.cover)+');background-size:cover;background-position:center;">'+cat+'</div>' : '<div class="'+cls+' arc-nocov" style="--cc:'+catColor(p.cat)+';">'+cat+'</div>'; }
+    /* 📗 표지 3단 (2026-08-20) — ①사장님이 고른 표지 ②글 안 첫 사진(자동) ③제목 첫 글자
+          ⚠️ 허브 사진은 data:image 로 글 안에 들어 있다 → 추가 전송량 0 */
+    var __covCache={};
+    function firstPhotoIn(v, depth){
+      if(depth>6 || v==null) return '';
+      if(typeof v==='string'){
+        if(/^data:image\//i.test(v)) return v;
+        if(/^https?:\/\/[^\s]+\.(jpe?g|png|webp|gif|avif)(\?|#|$)/i.test(v)) return v;
+        return '';
+      }
+      if(Array.isArray(v)){ for(var i=0;i<v.length;i++){ var r=firstPhotoIn(v[i], depth+1); if(r) return r; } return ''; }
+      if(typeof v==='object'){ for(var k in v){ if(!Object.prototype.hasOwnProperty.call(v,k)) continue;
+        var r2=firstPhotoIn(v[k], depth+1); if(r2) return r2; } }
+      return '';
+    }
+    try{ window.__firstPhotoIn=firstPhotoIn; window.__postCover=postCover; window.__firstChar=firstChar; }catch(e){}   /* 검수용 노출 (_smoke.js) */
+    function postCover(p){
+      if(p.cover) return p.cover;
+      var id=p.id||'';
+      if(id && __covCache[id]!=null) return __covCache[id];
+      var got=firstPhotoIn(p.blocks, 0);
+      if(id) __covCache[id]=got;
+      return got;
+    }
+    /* 제목 첫 «글자» — 이모지가 앞에 오면 두 칸짜리라 charAt(0)이 깨진다 */
+    function firstChar(t){ var a=Array.from(String(t||'').trim()); return a.length?a[0]:'·'; }
+    function covHtml(p, cls){
+      var cat=p.cat?'<span class="arc-cat">'+esc(p.cat)+'</span>':'';
+      var cv=postCover(p);
+      if(cv) return '<div class="'+cls+'" style="background-image:url('+esc(cv)+');background-size:cover;background-position:center;">'+cat+'</div>';
+      return '<div class="'+cls+' arc-nocov" style="--cc:'+catColor(p.cat)+';">'+cat+'<span class="arc-nocov-i">'+esc(firstChar(p.title))+'</span></div>';
+    }
     function item(p){
       var head='<div data-pid="'+esc(p.id)+'" data-cat="'+esc(p.cat||'')+'" role="link" tabindex="0"';
       if(view==='photo') return head+' class="arc-photo-cell">'+covHtml(p,'arc-photo-cov')+'</div>';
@@ -5467,10 +5506,14 @@
     var chips='<span class="chip on" data-cat="">전체</span>'+cats.map(function(c){ return '<span class="chip" data-cat="'+esc(c)+'">'+esc(c)+'</span>'; }).join('');
     var bodyHtml;
     var feats=[], rest=[]; live.forEach(function(p){ if(p.featured) feats.push(p); else rest.push(p); });   // 대표 = 큰 매거진 카드 (list·grid 공용)
-    var fh=feats.map(function(feat){ var fcov=feat.cover?' style="background-image:url('+esc(feat.cover)+');background-size:cover;background-position:center;"':'';
+    var fh=feats.map(function(feat){ var _fc=postCover(feat);
+      var fcov=_fc?' style="background-image:url('+esc(_fc)+');background-size:cover;background-position:center;"'
+                  :' style="background:linear-gradient(150deg, color-mix(in srgb, '+catColor(feat.cat)+' 48%, var(--surface)), color-mix(in srgb, '+catColor(feat.cat)+' 12%, var(--surface)));"';
       return '<div data-pid="'+esc(feat.id)+'" data-cat="'+esc(feat.cat||'')+'" role="link" tabindex="0" class="arc-mag"><div class="arc-mag-ph"'+fcov+'></div><div class="arc-mag-grad"></div><span class="arc-mag-tag">★ 대표</span><div class="arc-mag-body">'+(feat.cat?'<div class="arc-mag-cat">'+esc(feat.cat)+'</div>':'')+'<div class="arc-h">'+esc(feat.title||'')+'</div>'+(feat.summary?'<div class="arc-mag-s">'+esc(feat.summary)+'</div>':'')+'</div></div>'; }).join('');
     if(view==='list'){
-      var rows=rest.map(function(p){ var col=catColor(p.cat); var th=p.cover?'<div class="arc-crow-th" style="background-image:url('+esc(p.cover)+');"></div>':'<div class="arc-crow-th">▦</div>';
+      var rows=rest.map(function(p){ var col=catColor(p.cat); var _cv=postCover(p);
+        var th=_cv?'<div class="arc-crow-th" style="background-image:url('+esc(_cv)+');"></div>'
+                  :'<div class="arc-crow-th arc-crow-typo" style="--tc:'+col+'">'+esc(firstChar(p.title))+'</div>';
         return '<div data-pid="'+esc(p.id)+'" data-cat="'+esc(p.cat||'')+'" role="link" tabindex="0" class="arc-crow" style="--c:'+col+';">'+th+'<div class="arc-crow-m">'+(p.cat?'<span class="arc-crow-badge">'+esc(p.cat)+'</span>':'')+'<div class="arc-h">'+esc(p.title||'')+'</div>'+(p.summary?'<div class="arc-d">'+esc(p.summary)+'</div>':'')+'</div></div>'; }).join('');
       bodyHtml='<div id="arc-grid">'+fh+'<div class="arc-clist">'+rows+'</div></div>';
     } else if(view==='photo'){
