@@ -1566,15 +1566,18 @@
   .arc-clist{display:flex; flex-direction:column; gap:9px; margin-top:4px;}
   .arc-crow{position:relative; display:flex; align-items:center; gap:12px; padding:11px 13px 11px 16px; border-radius:13px; background:var(--surface); border:1px solid var(--hair); overflow:hidden; cursor:pointer; text-decoration:none; color:inherit; transition:border-color .18s, transform .14s;}
   .arc-crow::before{content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--c,var(--coral));}
-  /* 📗 표지 없는 글 = 제목 첫 글자 (▦ 대신 · 2026-08-20) — «없음»을 «고장»처럼 그리지 않는다 */
-  .arc-crow-typo{background:color-mix(in srgb, var(--tc,var(--coral)) 17%, var(--surface)) !important;
-    color:var(--tc,var(--coral)); font-size:20px; font-weight:900; letter-spacing:-1px;
-    border:1px solid color-mix(in srgb, var(--tc,var(--coral)) 26%, transparent);}
   .arc-nocov-i{position:absolute; right:11px; bottom:8px; font-size:34px; font-weight:900;
-    letter-spacing:-2px; line-height:1; color:color-mix(in srgb, var(--cc,var(--coral)) 62%, var(--ink));
-    opacity:.5; pointer-events:none;}
+    letter-spacing:-2px; line-height:1; color:color-mix(in srgb, var(--cc,var(--coral)) 45%, var(--on-strong, var(--ink)));
+    opacity:.62; pointer-events:none;}
   .arc-cover, .arc-photo-cov{position:relative;}
   .arc-crow-th{flex:0 0 auto; width:48px; height:48px; border-radius:11px; background:color-mix(in srgb, var(--c,var(--coral)) 14%, transparent); display:grid; place-items:center; color:var(--c,var(--coral)); font-size:18px; overflow:hidden; background-size:cover; background-position:center;}
+  /* 📗 표지 없는 글 = 제목 첫 글자 (▦ 대신 · 2026-08-20) — «없음»을 «고장»처럼 그리지 않는다 */
+  .arc-crow-th.arc-crow-typo{background:color-mix(in srgb, var(--tc,var(--coral)) 17%, var(--surface)) !important;
+    /* ⚠️ 분류색은 전부 파스텔이라 라이트 테마에서 2.5:1 밖에 안 나온다(큰 글자 기준 3:1)
+          → 글자엔 잉크를 섞는다. 다크면 밝아지고 라이트면 어두워져 양쪽 다 올라간다 */
+    color:color-mix(in srgb, var(--tc,var(--coral)) 55%, var(--on-strong, var(--ink)));
+    font-size:20px; font-weight:900; letter-spacing:-1px;
+    border:1px solid color-mix(in srgb, var(--tc,var(--coral)) 30%, transparent);}
   .arc-crow-m{flex:1; min-width:0;}
   .arc-crow-badge{display:inline-block; font-size:9.5px; font-weight:800; border-radius:6px; padding:2px 7px; margin-bottom:3px; color:var(--c,var(--coral)); background:color-mix(in srgb, var(--c,var(--coral)) 15%, transparent);}
   .arc-crow .arc-h{font-size:15px;}
