@@ -3364,6 +3364,11 @@
     }); return out; }
     return '<div class="post-body rich">'+walk(tmp)+'</div>';
   }
+  /* ✨ 포스팅별 모션 끄기 — 이 글 안에서는 등장·차오름 전부 정지 상태로 */
+  (function(){ var st=document.createElement('style'); st.textContent=
+    '#post-modal.rv-off .reveal, #post-modal.rv-off .reveal-blk{opacity:1 !important; transform:none !important; transition:none !important;}'
+    +'#post-modal.rv-off .ch-line, #post-modal.rv-off .ch-bar, #post-modal.rv-off .ch-area{transition:none !important; animation:none !important;}';
+    document.head.appendChild(st); })();
   /* 🎬 영상 썸네일 클릭 = 문서 위임 (개별 리스너는 innerHTML 복제 시 소실 — 2026-08-20 사고) */
   document.addEventListener('click', function(e){
     var t = e.target && e.target.closest ? e.target.closest('.vid-thumb') : null;
@@ -3384,6 +3389,7 @@
       ents.forEach(function(en){
         if(!en.isIntersecting) return;
         io.unobserve(en.target);   // 🚨 한 번만 (발열 헌법)
+        try{ if(en.target.closest('#post-modal.rv-off')) return; }catch(_){}   // 이 글만 모션 끔
         var raw = en.target.getAttribute('data-v')||'';
         var m = raw.match(/^([^0-9]*)([\d,\.]+)(.*)$/); if(!m){ return; }
         var pre=m[1], numStr=m[2].replace(/,/g,''), suf=m[3];
@@ -4965,6 +4971,7 @@
       document.getElementById('post-mclose').onclick=function(){ ov.classList.remove('open'); };
     }
     document.getElementById('pm-title').textContent=p.title||'';
+    try{ ov.classList.toggle('rv-off', p.motion==='off'); }catch(_){}   /* ✨ 이 글만 모션 끄기 (2026-08-20) */
     try{ ov.setAttribute('data-pid', String(p.id)); }catch(_){}   /* 🧭 hubnav가 제목 대신 id로 글을 식별하게 (중복·빈 제목 오인 방지 + 꼬리 이동 감지) */
     var bodyEl=document.getElementById('pm-body');
     // 🧰 21 스킨 3종 — 랜딩만, 모달 범위 테마 변수 교체 (skin 없으면 기존 그대로 = 무회귀)
