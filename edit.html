@@ -5863,6 +5863,29 @@ if('serviceWorker' in navigator){
     .lcx-foot{ margin:18px 16px 0; display:grid; gap:9px; }
     .l-add{ width:100%; padding:13px; background:transparent; border:1px dashed rgba(255,255,255,.22); border-radius:13px; color:var(--ac); font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer; }
     .l-raw{ width:100%; padding:11px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:12px; color:#cfc8d8; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+  
+  /* ═══════════ 📱 손님 화면 UX 마감 (2026-08-20) — 폰에서만 티 나는 것들 ═══════════
+     ① iOS는 «글자 16px 미만인 입력칸»에 커서가 가면 화면을 제멋대로 확대한다.
+        허브엔 18곳 — 하나씩 고치지 않고 폰에서만 한 번에 올린다.
+        maximum-scale=1로 막는 건 «확대를 못 하게» 하는 접근성 위반이라 쓰지 않는다. */
+  @media (max-width: 768px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+    textarea, select, [contenteditable="true"] { font-size: 16px !important; }
+  }
+  /* ② 가로 화면·확대 시 글자만 제멋대로 커지는 iOS 기본 동작 끄기 */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  /* ③ 화면 끝에서 더 당길 때 뒤 화면이 딸려오는 «고무줄» 차단 */
+  html, body { overscroll-behavior-y: none; }
+  #tpk-ov, #pst-ov, #exp-ov, .sheet, .dlg { overscroll-behavior: contain; }
+  #tpk-rail { overscroll-behavior-x: contain; }
+  /* ④ 눌렀을 때 파란 사각형 번쩍임 */
+  button, a, [role="button"], summary { -webkit-tap-highlight-color: transparent; }
+  /* ⑤ 눌림 반응 — 오늘 만든 구성 고르기 · 붙여넣기 · 내보내기 */
+  #tpk-ov .tpk-card, #tpk-ov .tpk-x, #exp-ov .exp-seg button,
+  #pst-ov .pst-help>summary, #exp-fab { transition: transform 120ms cubic-bezier(.2,0,0,1); }
+  #tpk-ov .tpk-card:active, #tpk-ov .tpk-x:active, #exp-ov .exp-seg button:active,
+  #pst-ov .pst-help>summary:active, #exp-fab:active { transform: scale(.96); }
+
   </style>
   <!-- 예약 화면 설정 -->
   <div class="ov" id="resv-setup-ov">
