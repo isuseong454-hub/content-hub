@@ -5,7 +5,7 @@
    - 같은 주소(same-origin)의 GET만 손댄다  → Supabase 호출·외부 요청은 건드리지 않음
    문제가 생기면 이 파일만 지우면 원래대로 돌아온다.
 */
-const CACHE = 'content-hub-v5';   /* 2026-08-20 4차 — 구성 고르기 화면·뷰티 확정 구성·htype 배지 */
+const CACHE = 'content-hub-v6';   /* 2026-08-20 5차 — 광고 오버레이·정지 칩·매거진 격자·무한 애니 전수 정지 */
 
 self.addEventListener('install', () => self.skipWaiting());
 
