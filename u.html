@@ -5768,7 +5768,7 @@
     var chansH= chans?'<div class="ab-chans">'+chans+'</div>':'';
     // 증거 갤러리 (자격증·수상·전후·후기캡처 사진+캡션)
     var gal=((ev.gallery)||[]).filter(function(x){ return x && x.img; });
-    var evgalH = gal.length ? ('<div class="ab-sec ab-evgal"><div class="ab-sh">🏅 전문성 · 증거</div><div class="evg-grid">'+gal.map(function(g){
+    var evgalH = gal.length ? ('<div class="ab-sec ab-evgal"><div class="ab-sh">🏅 프로필 · 증거</div><div class="evg-grid">'+gal.map(function(g){
       return '<figure class="evg-card"><span class="evg-cov" style="background-image:url('+esc(g.img)+')"></span>'+((g.cap||g.sub)?('<figcaption class="evg-cap">'+(g.cap?esc(g.cap):'')+(g.sub?('<small>'+esc(g.sub)+'</small>'):'')+'</figcaption>'):'')+'</figure>';
     }).join('')+'</div></div>') : '';
     // 대표 컨텐츠 (★대표 글, 최대 3) — 소개에 권위 있게 노출
@@ -5815,7 +5815,7 @@
     if(ord.indexOf('ba')<0 && baH){ var bi=ord.indexOf('story'); ord.splice(bi>=0?bi+1:0, 0, 'ba'); }                    // 전후=스토리 다음 (2026-07-08)
     if(ord.indexOf('probmap')<0 && pmH){ var pi2=ord.indexOf('stats'); ord.splice(pi2>=0?pi2+1:0, 0, 'probmap'); }        // 문제지도=지표 다음
     var mid=ord.map(function(k){ return MOD[k]||''; }).join('');
-    pane.innerHTML= (headlineH+hero+auth+mid+cta) || '<div class="ab-empty">소개를 채워보세요 (내 프로필에서)</div>';
+    pane.innerHTML= (headlineH+hero+auth+mid+cta) || '<div class="ab-empty">프로필을 채워보세요</div>';
     if(!EDIT_MODE){ pane.querySelectorAll('.abf-card[data-pid]').forEach(function(a){ a.onclick=function(e){ e.preventDefault(); try{ openPostModal(a.getAttribute('data-pid')); }catch(_){} }; }); }
     try{ setTimeout(decoratePostViews, 120); }catch(e){}
   }
@@ -6077,7 +6077,7 @@
     pane.className='pane about-pane about-creator'+(pane.classList.contains('active')?' active':'');
     pane.style.cssText = (/^#[0-9a-fA-F]{3,8}$/.test(p.color||'')) ? ('--ac:'+p.color) : '';
     var body=('<div class="mk-top">'+ava+(name?'<div class="mk-nm">'+esc(name)+'</div>':'')+(handle?'<div class="mk-handle">'+esc(handle)+'</div>':'')+(identity?'<div class="mk-id">'+emph(identity)+'</div>':'')+'</div>'+statsH+tagsH+reelsH+brandsH+ctaH);
-    pane.innerHTML= body || '<div class="ab-empty">크리에이터 소개를 채워보세요 (내 프로필에서)</div>';
+    pane.innerHTML= body || '<div class="ab-empty">프로필을 채워보세요</div>';
     if(!EDIT_MODE){ pane.querySelectorAll('.mk-reel[data-pid]').forEach(function(a){ a.onclick=function(e){ e.preventDefault(); try{ openPostModal(a.getAttribute('data-pid')); }catch(_){} }; }); }
   }
   function applyAvatar(url){
