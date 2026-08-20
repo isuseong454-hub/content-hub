@@ -4162,7 +4162,7 @@ if('serviceWorker' in navigator){
         <div class="tpl imp" data-ic="📇" data-nm="문의·신청"><span class="tic">📇</span><span><span class="tn">문의·신청 받기</span><span class="ts">이름·연락처 받기</span></span></div>
         <div class="tpl" data-ic="✎" data-nm="문의 폼"><span class="tic">✎</span><span><span class="tn">문의 폼</span><span class="ts">1:1 문의</span></span></div>
         <div class="tpl" data-ic="？" data-nm="Q&amp;A"><span class="tic">？</span><span><span class="tn">Q&amp;A</span><span class="ts">자주 묻는 질문</span></span></div>
-        <div class="tpl" data-ic="📣" data-nm="이벤트 배너"><span class="tic">📣</span><span><span class="tn">이벤트 배너</span><span class="ts">기간 프로모션</span></span></div>
+        <div class="tpl" data-ic="📣" data-nm="이벤트 배너"><span class="tic">📣</span><span><span class="tn">광고</span><span class="ts">기간 한정 · 홈 위에 띄울 수 있어요</span></span></div>
         <div class="tpl" data-ic="🛍" data-nm="추천 제품"><span class="tic">🛍</span><span><span class="tn">추천 제품</span><span class="ts">쿠팡 파트너스</span></span></div>
         <div class="tpl" data-ic="🛡" data-nm="보장 배지"><span class="tic">🛡</span><span><span class="tn">보장 배지</span><span class="ts">환불·만족 보장</span></span></div>
         <div class="tpl" data-ic="⏳" data-nm="카운트다운"><span class="tic">⏳</span><span><span class="tn">카운트다운</span><span class="ts">마감 긴박감</span></span></div>
@@ -4490,6 +4490,9 @@ if('serviceWorker' in navigator){
         </div>
         <div class="dz-cg"><span class="gl">✨ 스크롤 움직임 <span style="font-weight:400; color:var(--muted);">· 내리면 블록이 스윽 떠올라요</span></span>
           <button type="button" id="dz-motion" class="dz-motion-btn"><span class="dzm-sw"><i></i></span><span class="dzm-lbl">켜짐</span></button>
+        </div>
+        <div class="dz-cg"><span class="gl">📣 광고를 홈 위에 띄우기 <span style="font-weight:400; color:var(--muted);">· 들어오자마자 카드로 · 하루 한 번만 · 닫아도 맨 위에 알약으로 남아요</span></span>
+          <button type="button" id="dz-adov" class="dz-motion-btn"><span class="dzm-sw"><i></i></span><span class="dzm-lbl">켜짐</span></button>
         </div>
         <div class="vhint" style="margin-top:2px; line-height:1.6;">💡 <b>진입</b>=들어올 때 1번 · <b>스크롤</b>=내릴 때마다. 따로 작동해요.</div>
       </div>
@@ -6743,11 +6746,13 @@ if('serviceWorker' in navigator){
     stylegallery: [['search','검색형','검색+칩'],['bigba','전후 강조','크게 비교'],['grid','그리드','2열'],['strip','가로 스크롤','옆으로']],
     beforeafter: [['slider','슬라이더','밀어서 비교 · 추천'],['side','나란히','전·후 동시']],
     steps: [['flow','세로 타임라인','선 + 점 · 기본'],['timeline','가로 단계','매장 과정용'],['list','세로 목록','번호 리스트']],
+    marquee: [['chips','정지 칩','안 움직여요 · 기본'],['band','흐르는 띠','좌→우 무한 흐름 (발열 ↑)']],
+    gallery: [['strip','가로 스크롤','옆으로 넘김 · 기본'],['mag','매거진 격자','3장=큰1+작2 · 4장=2×2']],
     band: [['full','꽉 채움','이음새 없이 상세페이지처럼 · 추천'],['card','카드','여백 + 둥근 모서리']],
     chart: [['bars','막대','명확한 비교 · 기본'],['line','성장 곡선','부드러운 라인']],
     best: [['podium','메달 포디움','TOP5 크게 · 기본'],['rail','자동 흐름 레일','인원 제한 없이 순위·조회수 칩 흐름']]
   };
-  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'flow', band:'full', chart:'bars', best:'podium' };   /* 2026-08-20 사장님 확정: 그래프 기본=막대 · 타임라인 기본=세로 선+점 */
+  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'flow', band:'full', chart:'bars', best:'podium', marquee:'chips', gallery:'strip' };   /* 2026-08-20 사장님 확정: 그래프 기본=막대 · 타임라인 기본=세로 선+점 */
   // 표현법(LAYOUTS)은 없지만 편집 패널에 '완성 미리보기'를 띄우는 블록들 (수정→패널 통일: 채우면 바로 완성이 보이게)
   var PREVIEW_NOLAYOUT = { quote:1, stat:1, painsolve:1, diagnostic:1, glowhook:1 };
   function layoutMini(type,k){
@@ -7139,7 +7144,7 @@ if('serviceWorker' in navigator){
     '랭킹 · 가격':'TOP 메뉴+가격으로 <b>고르기 쉽게</b> — 결정 촉진.',
     '문의 폼':'궁금증을 <b>1:1로</b> 받아 놓치지 않게.',
     'Q&A':'걱정을 미리 풀어주면 <b>망설임이 사라져요.</b>',
-    '이벤트 배너':'기간·혜택으로 <b>지금 행동할 이유</b>를.',
+    '이벤트 배너':'기간·혜택으로 <b>지금 행동할 이유</b>를. <b>홈 위에 띄우면</b> 들어오자마자 보여요.',
     '추천 제품':'쓰는 제품 추천 = <b>부가 수익</b> + 신뢰.',
     '보장 배지':'환불·만족 보장으로 <b>구매 불안</b>을 낮게.',
     '카운트다운':'마감까지 카운트 = <b>지금 사야 할 긴박감</b>.',
@@ -9607,6 +9612,10 @@ if('serviceWorker' in navigator){
     // ✨ 스크롤 움직임(등장 효과) 토글 — home.reveal (기본 켜짐)
     function persistMotion(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.reveal=home.reveal; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
     function renderDzMotion(){ var b=document.getElementById('dz-motion'); if(!b) return; var on=(home.reveal!==false); b.classList.toggle('off', !on); var lbl=b.querySelector('.dzm-lbl'); if(lbl) lbl.textContent=on?'켜짐':'꺼짐'; }
+    /* 📣 광고 홈 위 띄우기 (2026-08-20) — 기본 켜짐. 끄면 손님 화면에 오버레이가 안 뜨고 알약도 안 나옴 */
+    function persistAdOv(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.adOverlay=(home.adOverlay!==false); localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+    function renderDzAdOv(){ var b=document.getElementById('dz-adov'); if(!b) return; var on=(home.adOverlay!==false); b.classList.toggle('off', !on); var lbl=b.querySelector('.dzm-lbl'); if(lbl) lbl.textContent=on?'켜짐':'꺼짐'; }
+    (function(){ var b=document.getElementById('dz-adov'); if(b) b.addEventListener('click', function(){ home.adOverlay=(home.adOverlay===false); renderDzAdOv(); persistAdOv(); }); })();
     // 🎬 진입 모션 — home.entrance (무료=rise, 나머지=프로). 들어오자마자 첫 화면(커버·후킹) 살아남
     // [code,이름,설명,티어] — 순차·마스크=기본(무료) / 나머지=프로. 잠그지 않고 표시만(저장 시 게이트)
     var ENTRANCES = [['none','끔','움직임 없음',''],['rise','순차','아래서 위로',''],['mask','마스크','글자 쓱',''],['cinema','시네마틱','사진 줌','pro'],['kinetic','키네틱','통통 튀어','pro'],['aurora','오로라','빛 일렁','pro'],['sheen','광택','빛 스윕','pro']];
@@ -9627,7 +9636,7 @@ if('serviceWorker' in navigator){
       var old=b.querySelector('.tier-badge'); if(old) old.remove(); var t=skinTier(sk); if(t) b.insertAdjacentHTML('beforeend', tierBadgeHTML(t)); }); }
     (function(){ var seg=document.getElementById('dz-skin'); if(seg) seg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; var sk=b.getAttribute('data-sk')||'';
       home.skin=sk; renderDzSkin(); persistSkin(); renderPreview(); if(window.toast){ var t=skinTier(sk); toast(sk?((b.textContent||'스킨').replace(/[✦⚡]/g,'').trim()+' 적용 · 미리보기'+(t?' ('+(t==='premium'?'프리미엄':'프로')+')':'')):'기본 스킨'); } }); })();
-    (function(){ var mb=document.getElementById('dz-motion'); if(mb) mb.addEventListener('click', function(){ home.reveal=(home.reveal===false); renderDzMotion(); persistMotion(); if(window.toast) toast(home.reveal!==false?'스크롤 움직임 켜짐 · 공개 페이지에서 보여요':'스크롤 움직임 꺼짐'); }); })();
+    (function(){ var mb=document.getElementById('dz-motion'); if(mb) mb.addEventListener('click', function(){ home.reveal=(home.reveal===false); renderDzMotion(); try{ renderDzAdOv(); }catch(e){} persistMotion(); if(window.toast) toast(home.reveal!==false?'스크롤 움직임 켜짐 · 공개 페이지에서 보여요':'스크롤 움직임 꺼짐'); }); })();
 
     // 사진 범위(풀/반/배경) — data-dzgrp 있는 세그만 (사진 모드 세그는 제외)
     ov.querySelectorAll('.dz-seg').forEach(function(seg){ var grp=seg.getAttribute('data-dzgrp'); if(!grp) return; seg.addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; cov()[grp]=b.getAttribute('data-v'); renderPreview(); persistCover(); }); });
@@ -9673,7 +9682,7 @@ if('serviceWorker' in navigator){
       for(var i=1;i<=2;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }   /* 2026-08-20 2단계 */
       if(n===2){ renderDzThemes(); }
       if(n===3){ renderDzSkin(); }
-      if(n===4){ renderDzMotion(); renderEntrance(); }
+      if(n===4){ renderDzMotion(); try{ renderDzAdOv(); }catch(e){} renderEntrance(); }
       renderPreview();
       var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
     }
@@ -9685,7 +9694,7 @@ if('serviceWorker' in navigator){
     function dzCancel(){
       if(dzDirty() && !confirm('바꾼 분위기를 저장하지 않고 닫을까요?')) return;
       if(dzSnap){ try{ var s=JSON.parse(dzSnap); home.cover=s.cover; home.theme=s.theme; home.accentOverride=s.accentOverride||''; home.reveal=s.reveal; home.skin=s.skin||''; home.entrance=s.entrance||'rise'; dzPersistAll(); }catch(e){} }
-      try{ renderDzThemes(); renderDzMotion(); renderEntrance(); renderDzSkin(); renderPreview(); }catch(e){}              // dz 미리보기 원복
+      try{ renderDzThemes(); renderDzMotion(); try{ renderDzAdOv(); }catch(e){} renderEntrance(); renderDzSkin(); renderPreview(); }catch(e){}              // dz 미리보기 원복
       try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(e){}   // 뒤 라이브 페이지도 원복
       ov.classList.remove('open');
       try{ if(window.__pageAutosaveResume) window.__pageAutosaveResume(false); }catch(e){}   // 재개(서버 안 바뀜=저장 불필요)
