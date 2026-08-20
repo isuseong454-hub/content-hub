@@ -157,6 +157,12 @@
         '하단 도크와 홈 지도가 같은 이름이어야 헷갈리지 않는다');
       add('e 홈 지도 준비 중', et.indexOf('if(s.soon) cls+=') >= 0 && et.indexOf('!STEPS[_s].soon') >= 0,
         '잠근 칸은 «지금 할 일»로 안 잡힌다');
+      add('e 추천 3개', et.indexOf('function paintAddReco') >= 0 && et.indexOf('이런 걸 더 놓을 수 있어요') >= 0,
+        '구성 40종이라 처음엔 막막 — 지금 상태를 재서 다음 하나를 짚는다');
+      add('e 추천은 이미 넣은 건 안 권함', et.indexOf('(has(c[0]) ? done : pick)') >= 0,
+        '이미 있는 구성을 또 권하면 «앱이 내 홈을 모른다»가 된다');
+      add('e 추천 = 기존 검색으로', et.indexOf("q.dispatchEvent(new Event('input'") >= 0,
+        '별도 경로를 안 만든다(한 기능 두 군데 금지) — 검색칸에 넣어 아래 목록에서 찾게');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
