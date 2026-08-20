@@ -60,10 +60,13 @@
   html[data-theme="brand"], html[data-theme="midnight"], html[data-theme="butterfly"]{ --grad:var(--coral-fill); }   /* 전용 그라데 보유 테마는 그걸로 */
   /* 뱅하우스식 카드 글로우 — 호버/탭 시 테마색으로 빛남 (중요 카드 강조 + 반응) */
   .pg-card, .lbc, .best-hcard, .gcard, .arc-card{ transition:box-shadow .25s ease, border-color .25s ease, transform .18s ease; }
-  .pg-card:hover, .arc-card:hover, .pg-card:active, .arc-card:active{ border-color:color-mix(in srgb, var(--coral) 55%, var(--hair)); box-shadow:0 0 22px var(--cm-glow); }
-  .lbc:hover, .best-hcard:hover, .gcard:hover, .lbc:active, .best-hcard:active, .gcard:active{ box-shadow:0 0 24px var(--cm-glow); }
+  @media (hover:hover) and (pointer:fine){ .pg-card:hover, .arc-card:hover{ border-color:color-mix(in srgb, var(--coral) 55%, var(--hair)); box-shadow:0 0 22px var(--cm-glow); } }
+  .pg-card:active, .arc-card:active{ border-color:color-mix(in srgb, var(--coral) 55%, var(--hair)); box-shadow:0 0 22px var(--cm-glow); }
+  @media (hover:hover) and (pointer:fine){ .lbc:hover, .best-hcard:hover, .gcard:hover{ box-shadow:0 0 24px var(--cm-glow); } }
+  .lbc:active, .best-hcard:active, .gcard:active{ box-shadow:0 0 24px var(--cm-glow); }
   .pg-card.pg-feat{ box-shadow:0 0 16px var(--cm-glow); }
-  .pg-card.pg-feat:hover, .pg-card.pg-feat:active{ box-shadow:0 0 26px var(--cm-glow); }
+  @media (hover:hover) and (pointer:fine){ .pg-card.pg-feat:hover{ box-shadow:0 0 26px var(--cm-glow); } }
+  .pg-card.pg-feat:active{ box-shadow:0 0 26px var(--cm-glow); }
   /* 밝은 포인트색(민트·라임·골드 등) 테마는 강조 배경 위 글자를 어둡게 — 흰 글자 안 보임 방지 */
   html[data-theme="bokeh"], html[data-theme="forest"], html[data-theme="nvidia"], html[data-theme="butter"], html[data-theme="glacier"], html[data-theme="olive"], html[data-theme="spring"]{ --on-coral:#191712; }
   /* 밝은 라벤더 포인트색(brand·midnight) — 평평한 연보라 버튼은 흰 글자가 안 보이고 검은 글자는 칙칙함
@@ -809,7 +812,7 @@
   /* 🎞 자동 흐름 레일 (carousel layout='rail') — 무한 마퀴 (2026-07-13) */
   .u-rail{overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);}
   .u-rail-track{display:flex; gap:10px; width:max-content; animation:uRail var(--dur,38s) linear infinite;}
-  .u-rail:hover .u-rail-track{animation-play-state:paused;}
+  @media (hover:hover) and (pointer:fine){ .u-rail:hover .u-rail-track{animation-play-state:paused;} }
   @keyframes uRail{to{transform:translateX(-50%);}}
   .u-rs{flex:0 0 auto; width:118px; height:158px; border-radius:12px; background-size:cover; background-position:center; background-color:var(--hair);}
   /* 명예의 전당 레일 카드 (best layout='rail') — 순위 칩 + 조회수 */
@@ -1486,7 +1489,7 @@
   .arc-list-item, .arc-card{ position:relative; }
   .arc-share-corner{ position:absolute; top:8px; right:8px; z-index:3; display:inline-grid; place-items:center; width:30px; height:30px; border:none; border-radius:50%; background:rgba(0,0,0,.3); color:#fff; cursor:pointer; opacity:.5; -webkit-tap-highlight-color:transparent; transition:opacity .15s ease, transform .1s ease, background .15s ease; }
   .arc-share-corner svg{ width:16px; height:16px; display:block; }
-  .arc-share-corner:hover{ opacity:.95; background:rgba(0,0,0,.45); }
+  @media (hover:hover) and (pointer:fine){ .arc-share-corner:hover{ opacity:.95; background:rgba(0,0,0,.45); } }
   .arc-share-corner:active{ transform:scale(.85); }
   .arc-share-corner.pop svg{ animation:igpop .45s cubic-bezier(.2,.8,.3,1.35); }
 
@@ -1568,7 +1571,7 @@
   .arc-crow-badge{display:inline-block; font-size:9.5px; font-weight:800; border-radius:6px; padding:2px 7px; margin-bottom:3px; color:var(--c,var(--coral)); background:color-mix(in srgb, var(--c,var(--coral)) 15%, transparent);}
   .arc-crow .arc-h{font-size:15px;}
   .arc-crow .arc-d{font-size:11.5px; margin-top:2px; color:var(--muted);}
-  .arc-crow:hover{border-color:color-mix(in srgb, var(--c,var(--coral)) 50%, var(--hair)); transform:translateX(2px);}
+  @media (hover:hover) and (pointer:fine){ .arc-crow:hover{border-color:color-mix(in srgb, var(--c,var(--coral)) 50%, var(--hair)); transform:translateX(2px);} }
   html.has-skin .arc-crow, html.has-skin .arc-mag{background:rgba(255,255,255,.02);}
 
   /* 추천제품 */
@@ -1849,7 +1852,7 @@
   /* 흐르는 태그 띠 (마퀴) */
   .mq-band{overflow:hidden; padding:9px 0; margin:4px 0; background:transparent !important; border:none !important; -webkit-mask:linear-gradient(90deg,transparent,#000 11%,#000 89%,transparent); mask:linear-gradient(90deg,transparent,#000 11%,#000 89%,transparent);}
   .mq-track{display:inline-flex; gap:9px; white-space:nowrap; animation:mqScroll 24s linear infinite; will-change:transform;}
-  .mq-band:hover .mq-track{animation-play-state:paused;}
+  @media (hover:hover) and (pointer:fine){ .mq-band:hover .mq-track{animation-play-state:paused;} }
   .mq-tag{flex:0 0 auto; padding:7px 15px; border-radius:999px; border:1px solid var(--hair); background:var(--coral-soft); color:var(--coral); font-size:13px; font-weight:700; letter-spacing:.01em;}
   @keyframes mqScroll{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
   @media (prefers-reduced-motion:reduce){ .mq-track{animation:none; flex-wrap:wrap; white-space:normal;} }
@@ -1873,7 +1876,7 @@
   .rv-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:3px;}
   .rv-grid .rv-empty{height:38px;}
   .rv-day{height:38px; border:none; background:transparent; color:var(--ink); font-size:13.5px; border-radius:9px; cursor:pointer;}
-  .rv-day:hover:not(:disabled){background:var(--coral-soft);}
+  @media (hover:hover) and (pointer:fine){ .rv-day:hover:not(:disabled){background:var(--coral-soft);} }
   .rv-day:disabled{cursor:default;}
   .rv-day.rv-closed,.rv-day.rv-past{color:var(--muted); opacity:.4;}
   .rv-day.rv-today{outline:1.5px solid var(--coral); outline-offset:-1.5px;}
@@ -2281,7 +2284,7 @@
   .lp-quiz .qz-dots i.done{background:color-mix(in srgb, var(--coral) 45%, transparent);}
   .lp-quiz .qz-q{font-size:14.5px; font-weight:800; color:var(--on-strong, inherit); line-height:1.5; margin-bottom:11px;}
   .lp-quiz .qz-op{display:block; width:100%; text-align:left; font-family:inherit; font-size:13.5px; font-weight:700; color:var(--on-strong, inherit); background:rgba(127,127,127,.08); border:1.5px solid var(--hair); border-radius:12px; padding:12px 14px; margin-bottom:8px; cursor:pointer;}
-  .lp-quiz .qz-op:hover{border-color:var(--coral);}
+  @media (hover:hover) and (pointer:fine){ .lp-quiz .qz-op:hover{border-color:var(--coral);} }
   .lp-quiz .qz-res{text-align:center; padding:4px 0;}
   .lp-quiz .qz-rt{font-size:17px; font-weight:800; color:var(--on-strong, inherit); line-height:1.4;}
   .lp-quiz .qz-rd{font-size:13px; color:var(--muted); line-height:1.6; margin-top:7px;}
@@ -2341,7 +2344,7 @@
   #pm-toc .pmt-list{display:none; padding:0 8px 9px;}
   #pm-toc.open .pmt-list{display:block;}
   #pm-toc .pmt-list button{display:block; width:100%; text-align:left; font-family:inherit; font-size:13px; color:var(--muted); background:none; border:none; border-left:2px solid var(--hair); padding:7px 11px; cursor:pointer;}
-  #pm-toc .pmt-list button:hover{color:var(--coral); border-left-color:var(--coral);}
+  @media (hover:hover) and (pointer:fine){ #pm-toc .pmt-list button:hover{color:var(--coral); border-left-color:var(--coral);} }
   #pm-tail{margin-top:22px;}
   #pm-tail .pmtl-line{border-top:1px solid var(--hair); margin-bottom:16px;}
   #pm-tail .pmtl-h{font-size:12px; font-weight:800; color:var(--muted); margin-bottom:9px;}
@@ -2404,7 +2407,7 @@
   .channels a::after{content:''; position:absolute; left:0; right:0; top:0; height:46%;
     background:linear-gradient(180deg, rgba(255,255,255,.18), transparent); pointer-events:none;}
   .channels a svg{width:27px; height:27px; position:relative; z-index:1; filter:drop-shadow(0 0 7px currentColor);}
-  .channels a:hover{transform:translateY(-2px);}
+  @media (hover:hover) and (pointer:fine){ .channels a:hover{transform:translateY(-2px);} }
   .channels a:active{transform:scale(.92);}
   .channels a.ch-instagram{color:#E6437F; background:radial-gradient(circle at 50% 30%, rgba(214,41,118,.20), transparent 72%), var(--surface); border-color:rgba(214,41,118,.45); box-shadow:0 6px 22px rgba(214,41,118,.40), inset 0 0 14px rgba(214,41,118,.10);}
   .channels a.ch-youtube{color:#FF3B3B; background:radial-gradient(circle at 50% 30%, rgba(255,0,0,.18), transparent 72%), var(--surface); border-color:rgba(255,45,45,.45); box-shadow:0 6px 22px rgba(255,0,0,.36), inset 0 0 14px rgba(255,0,0,.10);}
@@ -2480,12 +2483,13 @@
   .lb-title span{color:var(--coral); font-size:12px;}
   .lb-grid{display:grid; grid-template-columns:1fr 1fr; gap:11px;}
   .lbc{position:relative; aspect-ratio:3/4; border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:0 8px 24px rgba(0,0,0,.28); cursor:pointer; transition:transform .28s cubic-bezier(.2,.7,.3,1), box-shadow .28s;}
-  html:not([data-edit]) .lbc:hover{transform:translateY(-3px) scale(1.03); box-shadow:0 0 0 1.5px var(--coral), 0 14px 40px var(--coral-soft), 0 8px 20px rgba(0,0,0,.5); z-index:5;}   /* 호버 = 은은한 포인트색 글로우 + 살짝 확대 */
+  @media (hover:hover) and (pointer:fine){ html:not([data-edit]) .lbc:hover{transform:translateY(-3px) scale(1.03); box-shadow:0 0 0 1.5px var(--coral), 0 14px 40px var(--coral-soft), 0 8px 20px rgba(0,0,0,.5); z-index:5;} }   /* 호버 = 은은한 포인트색 글로우 + 살짝 확대 */
   html:not([data-edit]) .lbc.vplay{box-shadow:0 0 0 2px var(--coral), 0 16px 44px var(--coral-soft), 0 8px 20px rgba(0,0,0,.55); z-index:5;}   /* 재생 중 = 포인트색 링 유지 (클릭 고정재생도 표시 명확) */
   .lbc-photo{position:absolute; inset:0; background-size:cover; background-position:center;}
   .lbc-empty{display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:30px;}
   .lbc-video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .35s;}
-  .lbc[data-hasvid]:hover .lbc-video, .lbc.vplay .lbc-video{opacity:1;}
+  @media (hover:hover) and (pointer:fine){ .lbc[data-hasvid]:hover .lbc-video{opacity:1;} }
+  .lbc.vplay .lbc-video{opacity:1;}
   .lbc-embed{position:absolute; inset:0; width:100%; height:100%; border:0; z-index:4; background:transparent; opacity:0; transition:opacity .4s; pointer-events:none;}   /* 로딩 중엔 사진 보이게(투명·페이드인), 클릭은 카드로 통과 → 탭하면 사진 복귀 */
   .lbc-embed.ready{opacity:1;}
   .lbc[data-hasvid]{cursor:pointer;}
@@ -2531,7 +2535,7 @@
   .lbc-en{font-size:10px; letter-spacing:.16em; color:var(--coral); font-weight:800; margin-top:3px; text-shadow:0 1px 4px rgba(0,0,0,.55);}   /* 테마마다 그 테마 포인트색으로 자동 (var(--coral)) */
   /* 영상 표시 = 우상단 작은 라운드 ▶ (테두리만 은은한 그린 → 호버하면 그린 채움) — 호버 시 재생되므로 표시만 */
   .lbc-play{position:absolute; top:9px; right:9px; z-index:3; display:inline-flex; align-items:center; justify-content:center; width:33px; height:26px; border-radius:9px; border:1.5px solid var(--coral); background:rgba(8,16,12,.5); color:var(--coral); font-size:10.5px; padding-left:2px; -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); transition:.22s;}
-  .lbc[data-hasvid]:hover .lbc-play{background:var(--coral); color:var(--on-coral,#06140d); border-color:var(--coral); transform:scale(1.08);}
+  @media (hover:hover) and (pointer:fine){ .lbc[data-hasvid]:hover .lbc-play{background:var(--coral); color:var(--on-coral,#06140d); border-color:var(--coral); transform:scale(1.08);} }
   .lbc.vplay .lbc-play{opacity:0;}
   .lbc[data-hasvid] .lbc-wm{display:none;}   /* 영상 카드는 워터마크 숨김 (▶ 표시가 우상단 차지) */
   /* ── 쇼케이스 카드 = 테마 밝기 따라 톤 분리 (밝은 테마서 이름·숫자 안 보이던 문제) ── */
@@ -2568,7 +2572,29 @@
   .loc-addr{font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5;}
   .loc-hours{font-size:12.5px; color:var(--muted); margin-top:4px;}
   .loc-btn{display:inline-block; margin-top:13px; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:13.5px; font-weight:700; padding:11px 20px; border-radius:11px; text-decoration:none;}
-</style>
+
+  /* ═══════════ 📱 손님 화면 UX 마감 (2026-08-20) — 폰에서만 티 나는 것들 ═══════════
+     ① iOS는 «글자 16px 미만인 입력칸»에 커서가 가면 화면을 제멋대로 확대한다.
+        허브엔 18곳 — 하나씩 고치지 않고 폰에서만 한 번에 올린다.
+        maximum-scale=1로 막는 건 «확대를 못 하게» 하는 접근성 위반이라 쓰지 않는다. */
+  @media (max-width: 768px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+    textarea, select, [contenteditable="true"] { font-size: 16px !important; }
+  }
+  /* ② 가로 화면·확대 시 글자만 제멋대로 커지는 iOS 기본 동작 끄기 */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  /* ③ 화면 끝에서 더 당길 때 뒤 화면이 딸려오는 «고무줄» 차단 */
+  html, body { overscroll-behavior-y: none; }
+  .resv-sheet, .pv-box, .hl-sheet, #uad-ov { overscroll-behavior: contain; }
+  #uad-rail, .sg-chips, .mq-band, .u-rail { overscroll-behavior-x: contain; }
+  /* ④ 눌렀을 때 파란 사각형 번쩍임 */
+  button, a, [role="button"], summary { -webkit-tap-highlight-color: transparent; }
+  /* ⑤ 눌림 반응 — 오늘 만든 것들에 «쏙 들어갔다 나옴»이 빠져 있었다 (scale .96 / 120ms)
+        ⚠️ 상시 transform이 걸린 요소엔 넣지 않는다 (밀려난다) */
+  .uad-go, #uad-x, .mqc, .vid-thumb, .stf-i { transition: transform 120ms cubic-bezier(.2,0,0,1); }
+  .uad-go:active, #uad-x:active, .mqc:active, .vid-thumb:active { transform: scale(.96); }
+
+  </style>
 </head>
 <body>
 <div class="wrap">
@@ -4520,7 +4546,10 @@
           else { var v=card.querySelector('.lbc-video'); if(v){ v.play().catch(function(){}); card.classList.add('vplay'); } } }
         [].forEach.call(wrap.querySelectorAll('.lbc[data-hasvid]'), function(card){
           var emb=card.getAttribute('data-emb'), hoverT=null;
+          /* 🖐 2026-08-20 — 폰엔 «마우스 올림»이 없어 한 번 누르면 재생표시가 붙어버린다. 마우스 기기에만 단다 */
+          if(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches)
           card.addEventListener('mouseenter', function(){ clearTimeout(hoverT); hoverT=setTimeout(function(){ playLbc(card, emb); }, 90); });   // 마우스 올리면 자동재생 (90ms — 스쳐 지나갈 땐 안 뜸)
+          if(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches)
           card.addEventListener('mouseleave', function(){ clearTimeout(hoverT); stopLbc(card); });                                              // 내리면 다시 사진으로
           card.addEventListener('click', function(){ clearTimeout(hoverT); if(card.classList.contains('vplay')) stopLbc(card); else playLbc(card, emb); });   // 모바일/터치 = 탭 토글
         });
