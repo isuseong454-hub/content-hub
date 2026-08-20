@@ -10411,7 +10411,10 @@ if('serviceWorker' in navigator){
     asInflight=true; asPendingAgain=false; setAutosaveStatus('saving');
     try{
       var res=await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
-      await window.laRpc('li_publish',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_published:true});
+      /* 🚨 2026-08-20 — 여기서 li_publish(true) 를 부르는 바람에 «가입만 해도» 손님에게 공개됐다.
+            갓 가입한 사람의 홈엔 아직 «고객이 겪는 문제를 공감되게 적어요» 같은 예시가 그대로 있는데
+            그게 손님에게 나갔다. 자동저장은 «저장»만 한다 — 공개는 사장님이 누를 때만.
+            ⚠️ 이미 공개 중인 페이지를 내리지는 않는다(부르지 않을 뿐). */
       setAutosaveStatus((res&&res.ok)?'saved':'error');
     }catch(e){ setAutosaveStatus('error'); }
     asInflight=false;
@@ -12937,6 +12940,80 @@ if('serviceWorker' in navigator){
       +'<span class="hfx-f go">🏆 <b>'+cv+'</b><em>구매</em></span>'
       +'</div></div>';
   }
+  /* ════ 📣 광고 방 (2026-08-20 사장님 지시 — 메인 메뉴답게) ════
+        광고 자체는 기존 «이벤트 배너» 구성이다. 여기선 ①켜고 끄기 ②만들러 가기 두 가지만 한다.
+        ⚠️ 켜짐/꺼짐은 home.adOverlay 하나로 «꾸미기»의 스위치(#dz-adov)와 같은 값을 쓴다 — 두 군데가 어긋나지 않게. */
+  (function(){
+    function adCount(){ try{ return document.querySelectorAll('#rows .row[data-t="event"]').length; }catch(_){ return 0; } }
+    function adOn(){ try{ var h=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); return h.adOverlay!==false; }catch(_){ return true; } }
+    function setAdOn(v){
+      try{ if(typeof home!=='undefined' && home) home.adOverlay=!!v; }catch(_){}
+      try{ var h=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); h.adOverlay=!!v; localStorage.setItem('cm-home-v1', JSON.stringify(h)); }catch(_){}
+      try{ if(window.__liveRefresh) window.__liveRefresh(); }catch(_){}
+    }
+    function css(){
+      if(document.getElementById('adroom-css')) return;
+      var st=document.createElement('style'); st.id='adroom-css';
+      st.textContent='#adroom-ov{position:fixed;inset:0;z-index:150;display:none;align-items:flex-end;justify-content:center;background:rgba(5,3,16,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}'
+        +'#adroom-ov.open{display:flex;}'
+        +'#adroom-ov .ar-sheet{width:100%;max-width:460px;max-height:88vh;overflow-y:auto;overscroll-behavior:contain;background:var(--surface,#16161A);border:1px solid var(--hair);border-bottom:0;border-radius:20px 20px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom));}'
+        +'#adroom-ov .ar-h{display:flex;align-items:center;gap:9px;margin-bottom:4px;}'
+        +'#adroom-ov .ar-h b{font-size:17px;font-weight:900;letter-spacing:-.4px;color:var(--ink);}'
+        +'#adroom-ov .ar-h .x{margin-left:auto;cursor:pointer;font-size:20px;color:var(--muted);background:none;border:0;}'
+        +'#adroom-ov .ar-d{font-size:12px;color:var(--muted);line-height:1.75;margin-bottom:14px;}'
+        +'#adroom-ov .ar-sw{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;border:1px solid var(--hair);background:var(--soft);margin-bottom:11px;}'
+        +'#adroom-ov .ar-sw .m{flex:1;min-width:0;}'
+        +'#adroom-ov .ar-sw .nm{font-size:13.5px;font-weight:800;color:var(--ink);}'
+        +'#adroom-ov .ar-sw .sb{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.6;}'
+        +'#adroom-ov .ar-tog{flex:0 0 auto;width:46px;height:27px;border-radius:999px;border:0;cursor:pointer;position:relative;background:var(--coral);transition:background .18s;}'
+        +'#adroom-ov .ar-tog i{position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform 180ms cubic-bezier(.23,1,.32,1);}'
+        +'#adroom-ov .ar-tog.off{background:var(--hair);} #adroom-ov .ar-tog.on i{transform:translateX(19px);}'
+        +'#adroom-ov .ar-go{width:100%;padding:14px;border-radius:14px;border:0;cursor:pointer;font-family:var(--sans);font-size:13.5px;font-weight:800;background:var(--coral);color:var(--on-coral,#fff);transition:transform 120ms cubic-bezier(.2,0,0,1);}'
+        +'#adroom-ov .ar-go:active{transform:scale(.96);}'
+        +'#adroom-ov .ar-tip{margin-top:12px;font-size:11.5px;color:var(--muted);line-height:1.8;background:var(--soft);border-radius:12px;padding:11px 13px;}'
+        +'#adroom-ov .ar-tip b{color:var(--ink);}';
+      document.head.appendChild(st);
+    }
+    function paint(){
+      var ov=document.getElementById('adroom-ov'); if(!ov) return;
+      var on=adOn(), n=adCount();
+      var t=ov.querySelector('.ar-tog'); if(t){ t.classList.toggle('on', on); t.classList.toggle('off', !on); }
+      var sb=ov.querySelector('.ar-sw .sb');
+      if(sb) sb.textContent = n===0 ? '아직 만든 광고가 없어요 — 아래에서 하나 만들어 보세요'
+        : (on ? ('손님이 들어오면 홈 위에 카드로 먼저 보여요 · 지금 ' + n + '개')
+              : ('지금은 안 보여요 · 만들어 둔 ' + n + '개는 그대로 있어요'));
+    }
+    window.__openAdRoom=function(){
+      css();
+      var ov=document.getElementById('adroom-ov');
+      if(!ov){
+        ov=document.createElement('div'); ov.id='adroom-ov';
+        ov.innerHTML='<div class="ar-sheet">'
+          +'<div class="ar-h"><span style="font-size:19px;">📣</span><b>광고</b><button class="x" type="button" aria-label="닫기">✕</button></div>'
+          +'<div class="ar-d">손님이 홈에 들어오면 <b>가장 먼저</b> 보여주는 카드예요. 이번 달 이벤트·신규 혜택처럼 <b>기간이 있는 것</b>에 씁니다.</div>'
+          +'<div class="ar-sw"><span style="font-size:17px;">🎁</span><div class="m"><div class="nm">손님에게 보여주기</div><div class="sb"></div></div>'
+            +'<button class="ar-tog" type="button" aria-label="광고 켜기/끄기"><i></i></button></div>'
+          +'<button class="ar-go" type="button">＋ 광고 만들기 · 고치기</button>'
+          +'<div class="ar-tip"><b>이렇게 쓰면 좋아요</b> — 「이번 달 신규 5분 20% 할인」처럼 <b>언제까지·누구에게·무엇을</b> 한 줄로. '
+            +'끝나면 꺼두세요. 지난 혜택이 그대로 떠 있으면 손님이 실망합니다.</div>'
+          +'</div>';
+        document.body.appendChild(ov);
+        ov.addEventListener('click', function(e){
+          if(e.target===ov || e.target.classList.contains('x')){ ov.classList.remove('open'); return; }
+          if(e.target.closest('.ar-tog')){ setAdOn(!adOn()); paint(); return; }
+          if(e.target.closest('.ar-go')){
+            ov.classList.remove('open');
+            try{ if(window.__switchWs) window.__switchWs('home'); }catch(_){}
+            setTimeout(function(){ try{ if(window.__openLive) window.__openLive(); }catch(_){}
+              setTimeout(function(){ var a=document.getElementById('le-add-top'); if(a) a.click(); }, 1100); }, 260);
+          }
+        });
+      }
+      paint();
+      ov.classList.add('open');
+    };
+  })();
+
   // ════ 🏠 홈 허브 — 완성도 북극성(실데이터) + 진입 ════
   function renderHomeHub(){
     var box=document.getElementById('home-hub'); if(!box) return;
@@ -13014,22 +13091,38 @@ if('serviceWorker' in navigator){
       +'<button type="button" class="hbd-go" data-hbdo="'+todo.go+'">'+todo.b+'</button>'
       +'<button type="button" class="hbd-skip" data-hbdo="skip">나중에</button></div>') : '';
     // 4걸음 공정 지도 — 각 계단이 하단 탭과 1:1
+    /* 📣 광고가 지금 켜져 있나 (2026-08-20) — 켜짐 = 손님이 들어오면 홈 위에 카드로 뜬다 */
+    var _adOn = false, _adN = 0;
+    try{
+      var _h=JSON.parse(localStorage.getItem('cm-home-v1')||'{}');
+      _adOn = (_h.adOverlay!==false);
+      _adN = ((typeof homeVersions!=='undefined' && homeVersions) ? 0 : 0);
+      var _bl = (typeof collectBlocks==='function') ? [] : [];
+      _adN = document.querySelectorAll('#rows .row[data-t="event"]').length;
+    }catch(_){}
     var STEPS=[
-      {ic:'🏅', nm:'전문성 가시화', c:'#E6B84A', done:(trust>=100),
+      /* 🚪 이름은 하단 도크와 똑같이 (2026-08-20 «전문성 가시화» → «프로필») */
+      {ic:'👤', nm:'프로필', c:'#E6B84A', done:(trust>=100),
        chip:((nm?1:0)+(bio?1:0)+(avatar?1:0))+'/3 채움', d:'명함·전후·후기 — 믿을 이유', go:'page'},
-      {ic:'📄', nm:'컨텐츠', c:'#8FA8EE', done:(pubs>0 && _ps.thisWeek),
+      {ic:'📝', nm:'포스팅', c:'#8FA8EE', done:(pubs>0 && _ps.thisWeek),
        chip:(pubs?('글 '+pubs+'개'+(_ps.thisWeek?'':' · 이번 주 0')):'글 0개'), d:'손님이 들어오는 문', go:'newpost'},
-      {ic:'💰', nm:'판매·예약', c:'#E68FB0', done:!!hasAction,
-       chip:(hasAction?(prodN?('상품 '+prodN+'개'):'예약 켜짐'):'아직 안 열림'), d:'마음 생긴 손님이 바로 신청', go:'store'},
-      {ic:'📊', nm:'고객·분석', c:'#5DCAA5', done:(last7>0),
-       chip:(last7?('이번 주 '+last7+'명'+(_dGrow>0?(' ▲'+_dGrow+'%'):'')):'링크 뿌리기부터'), d:'뭐가 통했는지 · 다음엔 더 잘', go:'data'}
+      /* 📣 사장님 지시 — 광고를 «메인 메뉴답게» 여기에. 누르면 광고 방(만들기+온/오프) */
+      {ic:'📣', nm:'광고', c:'#C9A227', done:(_adOn && _adN>0),
+       chip:(_adN? (_adOn? ('켜짐 · '+_adN+'개') : ('꺼짐 · '+_adN+'개')) : '아직 없음'),
+       d:'손님이 들어오면 홈 위에 먼저 보여요', go:'ad'},
+      {ic:'💰', nm:'판매·예약', c:'#E68FB0', done:false, soon:true,
+       chip:'준비 중', d:'곧 열려요', go:''},
+      {ic:'📊', nm:'고객·분석', c:'#5DCAA5', done:false, soon:true,
+       chip:'준비 중', d:'곧 열려요', go:''}
     ];
-    var _nowIdx=-1; for(var _s=0;_s<STEPS.length;_s++){ if(!STEPS[_s].done){ _nowIdx=_s; break; } }
+    var _nowIdx=-1; for(var _s=0;_s<STEPS.length;_s++){ if(!STEPS[_s].done && !STEPS[_s].soon){ _nowIdx=_s; break; } }
     var _railPre=(zsDone<3);   // 3걸음 미완 = 지도는 «앞으로 이런 길» 예고만 (주인공은 zs 카드)
     var railHtml='<div class="hb-raill">'+(_railPre?'4걸음 지도':'컨텐츠가 자산이 되는 4걸음')+'<i></i>'+(_railPre?'세 걸음 뒤에 열려요':'내 위치')+'</div><div class="hb-rail'+(_railPre?' pre':'')+'">'
       + STEPS.map(function(s,i){
           var cls=s.done?'done':(i===_nowIdx?'now':'');
-          return '<button type="button" class="hb-st '+cls+'" style="--sc:'+s.c+'" data-hbgo="'+s.go+'">'
+          if(s.soon) cls+=' soon';                                  /* 🚧 아직 안 여는 칸 */
+          return '<button type="button" class="hb-st '+cls+'" style="--sc:'+s.c+'"'
+            +(s.soon?' disabled aria-disabled="true"':' data-hbgo="'+s.go+'"')+'>'
             +'<span class="hbs-c">'+(s.done?'✓':(i+1))+'</span>'
             +'<span class="hbs-b"><span class="hbs-m"><span class="hbs-n">'+s.ic+' '+s.nm+' <em>'+s.chip+'</em></span>'
             +'<span class="hbs-d">'+s.d+'</span></span><span class="hbs-g">›</span></span></button>';
@@ -13065,6 +13158,7 @@ if('serviceWorker' in navigator){
       else if(k==='design'){ if(ws)ws('design'); }
       else if(k==='page'){ if(ws)ws('page'); }
       else if(k==='copylink'){ if(window.__copyMyLink) window.__copyMyLink(); }
+      else if(k==='ad'){ if(window.__openAdRoom) window.__openAdRoom(); }   /* 📣 2026-08-20 */
     }
     // 🏠 오늘 할 일 · 4걸음 지도 배선 (2026-08-19 개편)
     box.querySelectorAll('[data-hbdo]').forEach(function(b){ b.onclick=function(){
@@ -13694,8 +13788,14 @@ if('serviceWorker' in navigator){
       var st0=(AUTH&&AUTH.starterStyle);
       if(st0 && STYLE_PRESETS[st0]){ applyStyle(st0); }                                  // 고른 시작 스타일로
       else { applyPreset(res.industry || (AUTH&&AUTH.industry) || selInd); }             // 기본 프리셋 (온보딩 폐지 — 첫 진입에 안 띄움)
-      // 🏠 신규 계정 기본 홈 템플릿 = 에디토리얼형 (2026-07-10 사용자 채택 · 기존 계정은 applyData 경로라 무회귀, 이미 값 있으면 존중)
+      /* 🎙 신규 계정 기본형 = 크리에이터형 (2026-08-20 사장님 지시 · 이전 기본값은 «에디토리얼형» 2026-07-10)
+            기존 계정은 applyData 경로라 무회귀 · 이미 고른 값이 있으면 존중 */
       try{ var h0=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); if(!h0.template){ h0.template='editorial'; localStorage.setItem('cm-home-v1', JSON.stringify(h0)); } }catch(e){}
+      try{
+        if(!st0 && typeof STYLE_PRESETS!=='undefined' && STYLE_PRESETS['tcreator'] && typeof applyStyle==='function'){
+          applyStyle('tcreator');
+        }
+      }catch(_){}
       try{ curVersion='funnel'; activeVersion='funnel'; captureCurrentVersion(); updateVersionUI(); }catch(e){}
     }
     // 주소(핸들): 계정에 등록된 실제 핸들을 우선 표시. 없으면 빈칸→직접 정하도록 placeholder 노출
@@ -14394,6 +14494,13 @@ if('serviceWorker' in navigator){
       }
       var res=await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
       await window.laRpc('li_publish',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_published:true});
+      /* 📝 2026-08-20 — 예시 문구가 아직 그대로면 알려준다. 막지는 않는다(사장님이 결정) */
+      try{
+        var _left = window.__sampleLeft ? window.__sampleLeft(data) : [];
+        if(_left.length){
+          setTimeout(function(){ notify('공개됐어요 · 아직 예시 그대로인 곳이 ' + _left.length + '군데 있어요 — 손님도 그대로 봅니다'); }, 1800);
+        }
+      }catch(_){}
       if(res&&res.ok){ savedFx(); try{ if(window.__autosaveMarkSaved) window.__autosaveMarkSaved(); }catch(_){} try{ if(window.__pageAutosaveSaved) window.__pageAutosaveSaved(); }catch(_){} } else { notify('저장 실패 — 다시 시도해주세요'); }
     }catch(e){ notify('저장 오류: '+e.message); }
     saveBtn.disabled=false; saveBtn.textContent=o;
@@ -15555,6 +15662,18 @@ if('serviceWorker' in navigator){
     }
     if(typeof prev==='function') wrap(); else setTimeout(wrap, 1500);
   })();
+  /* 📝 2026-08-20 — 가입할 때 깔리는 «예시 문구»가 아직 그대로인지 센다.
+        손님에게 «적어요/예: …» 같은 안내가 나가는 걸 막기 위한 것. 문구를 바꾸면 여기도 같이 바꾼다. */
+  var SAMPLE_MARKS = ['공감되게 적어요','당신만의 해결 방법을 적어요','앞머리만 자르면','얼굴형 진단 후 1:1 맞춤 설계',
+                      '1:1 컨설팅 무료','여기에 적어요','예시를 지우고','나랑 안 어울리면 어쩌죠'];
+  window.__sampleLeft = function(data){
+    try{
+      var t = JSON.stringify((data && data.blocks) || []);
+      var hit = [];
+      SAMPLE_MARKS.forEach(function(m){ if(t.indexOf(m) >= 0) hit.push(m); });
+      return hit;
+    }catch(_){ return []; }
+  };
   window.__loadXp=function(o){
     if(o&&typeof o==='object'){ xp={ adopted:Array.isArray(o.adopted)?o.adopted.slice():[], story:Object.assign({style:'scene',hl:'',why:'',turn:'',now:''}, o.story||{}), ba:Object.assign({b:'',a:'',cap:''}, o.ba||{}), probmap:Array.isArray(o.probmap)?o.probmap.slice():[] }; }
     fillInputs(); paint();
