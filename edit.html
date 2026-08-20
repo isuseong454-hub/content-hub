@@ -3486,8 +3486,8 @@ if('serviceWorker' in navigator){
     <button class="ws-tab on" data-ws="home"><span class="ico">🏠</span>홈</button>
     <button class="ws-tab" data-ws="page"><span class="ico">🏅</span>전문성 가시화</button>
     <button class="ws-tab" data-ws="posts"><span class="ico">📝</span>포스팅</button>
-    <button class="ws-tab" data-ws="sales"><span class="ico">💰</span>판매·예약</button>
-    <button class="ws-tab" data-ws="data"><span class="ico">📊</span>고객·분석</button>
+    <button class="ws-tab ws-soon" data-ws="sales" title="아직 준비 중이에요"><span class="ico">💰</span>판매·예약</button>
+    <button class="ws-tab ws-soon" data-ws="data" title="아직 준비 중이에요"><span class="ico">📊</span>고객·분석</button>
   </div>
 
   <div class="wrap">
@@ -5881,6 +5881,11 @@ if('serviceWorker' in navigator){
   #tpk-rail { overscroll-behavior-x: contain; }
   /* ④ 눌렀을 때 파란 사각형 번쩍임 */
   button, a, [role="button"], summary { -webkit-tap-highlight-color: transparent; }
+  /* 🚧 준비 중 탭 — «없음»을 «고장»처럼 그리지 않는다: 흐릿하게 두고 작은 점 하나만 (2026-08-20) */
+  .ws-tab.ws-soon{ opacity:.34; }
+  .ws-tab.ws-soon .ico{ position:relative; }
+  .ws-tab.ws-soon .ico::after{ content:''; position:absolute; right:-3px; top:-1px; width:5px; height:5px;
+    border-radius:50%; background:currentColor; opacity:.5; }
   /* ⑥ 📱 상단바 — 「👁 손님 화면」이 생겨 버튼이 4개. 폰에선 제목이 16px로 찌그러진다.
         → «○○님 ·»과 라벨 뒷말을 접는다. 데스크톱은 그대로 (실측: 제목 16px → 45px 이상) */
   @media (max-width: 480px){
@@ -5956,6 +5961,7 @@ if('serviceWorker' in navigator){
       <button class="le-d le-d-prev" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
       <button class="le-d" id="le-design" title="분위기·테마 꾸미기"><span class="di">🎨</span><span class="le-d-lbl">분위기</span></button>
       <button class="le-d le-d-add" id="le-add-top" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성추가</span></button>
+      <button class="le-d" id="le-write" title="글 쓰기 — 포스팅 방으로"><span class="di">📝</span><span class="le-d-lbl">글쓰기</span></button>
       <button class="le-d" id="le-opmode" title="관리·성장 — 컨텐츠·판매·예약·분석·설정"><span class="di">⚙️</span><span class="le-d-lbl">관리</span></button>
     </div>
   </div>
@@ -5974,7 +5980,12 @@ if('serviceWorker' in navigator){
   // 워크스페이스 탭 전환 (내 페이지 / 꾸미기 / 분석·고객)
   (function(){
     var curWs='page';
+    /* 🚧 2026-08-20 사장님 지시 — «제품관(판매·예약)»과 «물어보는 칸(고객·분석)»은 아직 안 보여준다.
+          열 때는 이 목록만 비우면 된다. 기능·코드는 그대로 살아 있다. */
+    var WS_SOON = { sales:1, data:1 };
+    try{ window.__switchWs=switchWs; }catch(_){}   /* 현장 편집의 «📝 글쓰기»가 부른다 (함수 선언은 호이스팅돼 여기서 잡힌다) */
     function switchWs(name){
+      if(WS_SOON[name]){ try{ if(window.toast) toast('아직 준비 중이에요 — 곧 열립니다'); }catch(_){} return; }
       if(name!=='page' && window.__leavePostEdit) { try{ window.__leavePostEdit(); }catch(_){} }  // 게시물 편집 중 다른 탭 가면 저장하고 빠져나옴
       // 게시물 편집 중 '프로필' 탭을 직접 누르면 편집 종료 (openPostEdit은 editing-post 설정 전에 호출하므로 안전)
       var _pg=document.querySelector('.ws-pane[data-pane="page"]');
@@ -13717,8 +13728,14 @@ if('serviceWorker' in navigator){
       /* 🚪 2026-08-20 사장님 픽 — «우선 우리 홈으로 먼저 보이고, 우측 상단에서 편집실로»
             로그인하면 «편집 도구가 얹힌 현장»이 아니라 «손님이 보는 그 화면»으로 진짜 이동한다.
             ⚠️ ⚙(edit.html?desk=1)로 돌아왔을 땐 다시 튕기면 무한 루프 → _fromGear 로 차단 */
-      var _fromGear=false; try{ _fromGear = new URLSearchParams(location.search).get('desk')==='1'; }catch(_e){}
-      if(_land==='live' && !_isNew && !window.__devEnter && !_fromGear){
+      var _fromGear=false, _wantLive=false;
+      try{ var _q=new URLSearchParams(location.search); _fromGear=_q.get('desk')==='1'; _wantLive=_q.get('live')==='1'; }catch(_e){}
+      /* ✏️ 손님 화면의 «고치기»로 들어온 경우 — 작업실을 안 거치고 바로 현장 편집 (2026-08-20 사장님 C안) */
+      if(_wantLive){
+        setTimeout(function(){ try{ if(window.__openLiveAuto) window.__openLiveAuto();
+                                    else if(window.__openLive && !window.__liveEditActive) window.__openLive(); }catch(_e){} }, 900);
+      }
+      if(_land==='live' && !_isNew && !window.__devEnter && !_fromGear && !_wantLive){
         setTimeout(function(){                                          // 데이터 로드(loadPage) 뒤에
           try{
             var _h=(((document.getElementById('pf-handle')||{}).value)||'').trim()
@@ -15259,6 +15276,8 @@ if('serviceWorker' in navigator){
     window.__leSetPreview=setLePreview;
     var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ setLePreview(!lePreview); };
     var hc=document.getElementById('le-homeconfig'); if(hc) hc.onclick=function(){ if(window.__openDesign) window.__openDesign(); };   // 🪄 홈 구성 → 디자인 3단계
+    /* 📝 글쓰기 — 현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다 (2026-08-20) */
+    var wb=document.getElementById('le-write'); if(wb) wb.onclick=function(){ closeLive(); try{ if(window.__switchWs) window.__switchWs('posts'); }catch(_){} };
     var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영 → 편집모드 닫고 운영 화면
     var ml=document.getElementById('le-mode-label');
     var EDIT_LBL='✎ 편집 중 <span style="font-weight:400; color:var(--muted); font-size:11px;">· 톡 눌러 고치기</span>';
