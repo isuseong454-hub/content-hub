@@ -177,6 +177,13 @@
       add('e 착지 판정은 서버 안 기다림', et.indexOf("localStorage.getItem('cm-hub-landing')") >= 0 && et.indexOf("q.get('desk')==='1' || q.get('live')==='1'") >= 0,
         'localStorage·URL 만으로 즉시 판정 — 서버를 기다리면 그 사이 화면이 번쩍인다');
       add('e 검사용 파일 안 남음', et.indexOf('_flick.js') < 0, '임시 검사기가 배포에 섞이지 않게');
+      /* 🚪 로그아웃 (2026-08-20 사장님 «로그아웃해도 로그아웃 안 돼») */
+      add('e 로그아웃 = 흔적 전부', et.indexOf('window.__hubLogout') >= 0 && et.indexOf("'la-auth','la-last-code','la-ch-new','cm-hub-landing'") >= 0,
+        '🚨 la-auth 만 지워 로그인칸에 내 코드가 남았다 — «로그아웃 안 된 것처럼» 보였다');
+      add('e 로그아웃 스냅도 삭제', et.indexOf("k.indexOf('la-snap-')===0") >= 0,
+        '옛 계정 데이터가 다음 로그인에 섞이지 않게');
+      add('e 로그아웃 안내', et.indexOf('로그아웃됐어요') >= 0,
+        '끝났다고 눈에 보이게 말해준다 — 안 그러면 «안 됐나?» 한다');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
@@ -290,8 +297,10 @@
         '사장님 «오른쪽 상단 누르면 운영자 모드·로그아웃 골라서»');
       add('u ⚙ 손님은 바로 통과', ut.indexOf('if(!a || !a.code){ return; }') >= 0,
         '로그인 안 한 손님은 메뉴 없이 바로 로그인 화면으로');
-      add('u 로그아웃 열쇠 지움', ut.indexOf("localStorage.removeItem('la-auth')") >= 0 && ut.indexOf("localStorage.removeItem('la-last-code')") >= 0,
-        '로그아웃하면 저장된 열쇠를 지운다(자동 로그인도 같이 풀림)');
+      add('u 로그아웃 열쇠 지움', ut.indexOf("'la-auth','la-last-code'") >= 0,
+        '로그아웃하면 저장된 열쇠를 지운다(자동 로그인도 같이 풀림) · 2026-08-20 «흔적 전부» 방식으로 바뀜');
+      add('u 로그아웃 같은 규칙', ut.indexOf("['la-auth','la-last-code','la-ch-new','cm-hub-landing']") >= 0,
+        '손님 화면 ⚙ 로그아웃도 편집기와 똑같이 지운다 — 한 기능 두 규칙 금지');
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
