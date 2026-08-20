@@ -167,6 +167,10 @@
         '로그인 화면은 처음 오는 사람이 보는 곳 — 개발용 표시를 두지 않는다');
       add('e 저장됨 초기 오표시', et.indexOf('id="le-autosave" title="고치면 자동으로 저장돼요"') >= 0 && et.indexOf('le-autosave is-saved" id=') < 0,
         '🚨 아무것도 저장 안 했는데 「저장됨 ✓」이라 적혀 있던 것 → 「자동 저장」');
+      add('e 제목 한 줄 고정', et.indexOf('white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}') >= 0 && et.indexOf('.topbar{flex-wrap:nowrap;}') >= 0,
+        '🚨 버튼 4개 + 채널 칩이면 제목이 «한 글자씩 세로로» 쏟아져 바가 287px로 부풀었다(실측)');
+      add('e 상단바 접기 폭', et.indexOf('@media (max-width: 980px)') >= 0,
+        '480px가 아니라 «버튼이 다 안 들어가는 폭»부터 접어야 한다 — 760px에서도 눌렸다');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
@@ -275,6 +279,13 @@
         '손님이 보는 섹션 제목');
       add('u 빈 안내도 프로필', ut.indexOf('소개를 채워보세요') < 0,
         '«소개»가 아니라 «프로필»로 통일');
+      /* 🔑 ⚙ 메뉴 (2026-08-20) — 운영자 모드 / 로그아웃 */
+      add('u ⚙ 메뉴 2갈래', ut.indexOf("data-g=\"admin\"") >= 0 && ut.indexOf("data-g=\"out\"") >= 0,
+        '사장님 «오른쪽 상단 누르면 운영자 모드·로그아웃 골라서»');
+      add('u ⚙ 손님은 바로 통과', ut.indexOf('if(!a || !a.code){ return; }') >= 0,
+        '로그인 안 한 손님은 메뉴 없이 바로 로그인 화면으로');
+      add('u 로그아웃 열쇠 지움', ut.indexOf("localStorage.removeItem('la-auth')") >= 0 && ut.indexOf("localStorage.removeItem('la-last-code')") >= 0,
+        '로그아웃하면 저장된 열쇠를 지운다(자동 로그인도 같이 풀림)');
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
