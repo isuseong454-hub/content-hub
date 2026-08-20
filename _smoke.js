@@ -235,6 +235,13 @@
         '🚨 손님·남의 홈에서 보이면 안 된다 (요소를 아예 안 만든다)');
       add('u ✏️ 고치기 만료 검사', ut.indexOf('if(a.expiresAt!=null){ var ex=new Date(a.expiresAt)') >= 0,
         '기간 지난 열쇠로는 안 뜬다');
+      /* 🙋 고객용 모드 탭 (2026-08-20 사장님 지시) — 소개→프로필 · 제품관/물어보는 칸은 아직 안 연다 */
+      add('u 탭 = 프로필', ut.indexOf('<span>프로필</span>') >= 0 && ut.indexOf('<span>소개</span>') < 0,
+        '손님 화면 하단 탭 「소개」 → 「프로필」');
+      add('u 프로필 바로가기', ut.indexOf("'👤 프로필 보기 <b>→</b>'") >= 0 && ut.indexOf("['about','👤','프로필']") >= 0,
+        '홈 안 링크·이름표까지 같이 바뀌었나');
+      add('u 스토어·Q&A 잠금', ut.indexOf('var TAB_SOON = { shop:1, qna:1 }') >= 0 && ut.indexOf('if(TAB_SOON[tab]) hasData=false;') >= 0,
+        '내용이 있어도 손님에겐 감춘다 — 열 때 TAB_SOON만 비우면 됨');
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
