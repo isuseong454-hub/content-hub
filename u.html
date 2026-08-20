@@ -2860,9 +2860,9 @@
       <svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
       <span>홈</span>
     </button>
-    <button class="navitem" data-tab="about" aria-label="소개">
+    <button class="navitem" data-tab="about" aria-label="프로필">
       <svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
-      <span>소개</span>
+      <span>프로필</span>
     </button>
     <button class="navitem" data-tab="archive" aria-label="컨텐츠">
       <svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
@@ -5588,7 +5588,7 @@
       var ev=p.evidence||{}; var hasContent = !!(ev.authority||ev.creds||ev.stats||p.tagline||(p.sections&&p.sections.length)||((p.reviews||[]).some(function(r){ return r&&(r.text||r.img); }))||(p.xp&&(((p.xp.probmap||[]).length)||(p.xp.ba&&p.xp.ba.b)||(p.xp.story&&(p.xp.story.hl||p.xp.story.why)))));
       var lk=document.getElementById('home-about-link');
       if(prof && aboutOn && hasContent){
-        if(!lk){ lk=document.createElement('button'); lk.type='button'; lk.id='home-about-link'; lk.className='home-about-link'; lk.innerHTML='👤 소개 · 전문성 보기 <b>→</b>'; lk.addEventListener('click', function(){ var nv=document.querySelector('.navitem[data-tab="about"]'); if(nv) nv.click(); }); prof.insertAdjacentElement('afterend', lk); }
+        if(!lk){ lk=document.createElement('button'); lk.type='button'; lk.id='home-about-link'; lk.className='home-about-link'; lk.innerHTML='👤 프로필 보기 <b>→</b>'; lk.addEventListener('click', function(){ var nv=document.querySelector('.navitem[data-tab="about"]'); if(nv) nv.click(); }); prof.insertAdjacentElement('afterend', lk); }
         lk.style.display='';
       } else if(lk){ lk.style.display='none'; }
       // 소개 탭 자체 on/off (운영자 설정)
@@ -5657,9 +5657,15 @@
     try{ if(window.__renderHubNav) window.__renderHubNav(d); }catch(_){}
   }
   // 🧹 발행했지만 안 채운 탭/블록 = 손님에게 하드코딩 샘플 대신 숨김 (가짜 노출 방지 · 편집모드는 제외해 주인이 보고 채우게)
+  /* 🚧 2026-08-20 사장님 지시 — 「제품관(스토어)」과 「물어보는 칸(Q&A)」은 아직 안 연다.
+        손님에겐 «준비 중» 껍데기를 보여주지 않고 아예 감춘다(빈 화면을 «고장»처럼 그리지 않기).
+        열 때는 이 목록만 비우면 된다. 담긴 데이터·기능은 그대로 살아 있다.
+        ⚠️ 편집 모드에선 이 함수가 안 불리므로 사장님은 편집 중에 그대로 볼 수 있다. */
+  var TAB_SOON = { shop:1, qna:1 };
   function hideEmptyPublicTabs(d){
     d=d||{};
     function hideTab(tab, hasData){
+      if(TAB_SOON[tab]) hasData=false;      // 🚧 아직 안 여는 탭 — 내용이 있어도 감춘다
       if(hasData) return;
       var nv=document.querySelector('.navitem[data-tab="'+tab+'"]'); if(nv) nv.style.display='none';   // 메뉴에서 탭 제거 (buildHomeTabgos도 보이는 탭만 링크하므로 바로가기도 자동 제외)
       var pane=document.querySelector('.pane[data-pane="'+tab+'"]'); if(pane){ pane.classList.remove('active'); pane.innerHTML=''; }   // 정적 샘플 비움 (빈 데이터라 빌더 미실행 → 안전)
@@ -5855,7 +5861,7 @@
       if(typeof EDIT_MODE!=='undefined' && EDIT_MODE) return;
       var old=document.getElementById('home-tabgos'); if(old) old.remove();
       var home=document.querySelector('[data-pane="home"]'); if(!home) return;
-      var defs=[['about','🏅','소개 · 전문성'],['archive','📄','컨텐츠'],['shop','🛍','스토어']];
+      var defs=[['about','👤','프로필'],['archive','📄','컨텐츠'],['shop','🛍','스토어']];
       var live=defs.filter(function(d){ var nv=document.querySelector('.navitem[data-tab="'+d[0]+'"]'); return nv && getComputedStyle(nv).display!=='none'; });
       if(!live.length) return;
       var w=document.createElement('div'); w.id='home-tabgos'; w.className='home-tabgos';
