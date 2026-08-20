@@ -3619,8 +3619,14 @@
             menu.classList.remove('open');
             if(k==='admin'){ location.href='edit.html?desk=1'; }
             else {
-              try{ localStorage.removeItem('la-auth'); }catch(_){}
-              try{ localStorage.removeItem('la-last-code'); }catch(_){}
+              /* 🚪 편집기 로그아웃과 «같은 규칙» — 이 기기에서 계정 흔적을 전부 지운다 */
+              try{
+                var a=null; try{ a=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){}
+                ['la-auth','la-last-code','la-ch-new','cm-hub-landing'].forEach(function(k){
+                  try{ localStorage.removeItem(k); }catch(_){} });
+                Object.keys(localStorage).forEach(function(k){
+                  if(k.indexOf('la-snap-')===0 || k.indexOf('la-ch-')===0) localStorage.removeItem(k); });
+              }catch(_){}
               location.reload();
             }
           };
