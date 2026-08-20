@@ -142,6 +142,21 @@
         '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
       add('e 열린 방 3개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0,
         '홈 · 프로필 · 포스팅 — 이 셋은 늘 열려 있어야 한다 (2026-08-20 «전문성 가시화»→«프로필» 개명)');
+      /* 🆕 신규 첫 경험 (2026-08-20 사장님 지시 5종) */
+      add('e 자동저장은 공개 안 함', et.indexOf('여기서 li_publish(true) 를 부르는 바람에') >= 0,
+        '🚨 가입만 해도 예시가 손님에게 공개되던 것 — 공개는 「적용」 누를 때만');
+      add('e 예시 남음 경고', et.indexOf('window.__sampleLeft') >= 0 && et.indexOf('아직 예시 그대로인 곳이') >= 0,
+        '배포해도 예시가 남아 있으면 알려준다(막지는 않음)');
+      add('e 크리에이터 기본형', et.indexOf("applyStyle('tcreator')") >= 0,
+        '신규 기본형 = 크리에이터 (이전은 에디토리얼 — 안내문·가짜 이벤트가 딸려왔다)');
+      add('e 광고 = 메인 메뉴', et.indexOf("nm:'광고'") >= 0 && et.indexOf('window.__openAdRoom') >= 0,
+        '사장님 «메인 메뉴답게» — 홈 지도에 광고 칸 + 온/오프');
+      add('e 광고 온오프 한 값', et.indexOf('h.adOverlay=!!v') >= 0,
+        '광고 방과 «꾸미기» 스위치가 home.adOverlay 하나를 같이 쓴다 — 어긋나지 않게');
+      add('e 홈 지도 이름 통일', et.indexOf("nm:'프로필'") >= 0 && et.indexOf("nm:'포스팅'") >= 0 && et.indexOf("nm:'전문성 가시화'") < 0,
+        '하단 도크와 홈 지도가 같은 이름이어야 헷갈리지 않는다');
+      add('e 홈 지도 준비 중', et.indexOf('if(s.soon) cls+=') >= 0 && et.indexOf('!STEPS[_s].soon') >= 0,
+        '잠근 칸은 «지금 할 일»로 안 잡힌다');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
@@ -242,6 +257,9 @@
         '홈 안 링크·이름표까지 같이 바뀌었나');
       add('u 스토어·Q&A 잠금', ut.indexOf('var TAB_SOON = { shop:1, qna:1 }') >= 0 && ut.indexOf('if(TAB_SOON[tab]) hasData=false;') >= 0,
         '내용이 있어도 손님에겐 감춘다 — 열 때 TAB_SOON만 비우면 됨');
+      /* 🆕 손님 메뉴 3개 확정 (2026-08-20) */
+      add('u 포스팅 탭 상시', ut.indexOf("hideTab('archive', true)") >= 0 && ut.indexOf('arc-blank') >= 0,
+        '글 0개여도 탭은 남기고 방 안에 정직한 한 줄');
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
