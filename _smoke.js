@@ -129,6 +129,7 @@
       add('유형 적용 기록', et.indexOf('home.htype=setKey') >= 0, '«지금 쓰는 중» 배지 근거');
       add('뷰티 확정 구성', et.indexOf("{type:'stylegallery',name:'스타일 갤러리',content:[]},   /* 2026-08-20 확정") >= 0, '사진 아래 = 갤러리·가격·후기');
       add('포스팅별 모션 스위치', et.indexOf('post-f-motion') >= 0 && et.indexOf("p.motion=this.checked?'':'off'") >= 0, '발행 전 온오프 (2026-08-20 확정)');
+      add('기호 사전', et.indexOf('pst-help') >= 0 && (et.match(/pr-row/g)||[]).length >= 8, '붙여넣기 화면 8가지 규칙 — 초보자 혼자 쓰기');
       add('붙여넣기 자동 제안', et.indexOf('pstSuggest') >= 0 && et.indexOf('__pstSug') >= 0, '자동으로 «제안»만, 넣는 건 사장님 (다안)');
       add('전문가형=사진 위', et.indexOf('C1 원 픽') >= 0 && /texpert:\s*\[\s*\/\*[^*]*\*\/\s*\{type:'cover3'/.test(et), '이름을 위로 올렸던 드리프트 원복(2026-08-20)');
       add('붙여넣기 포스팅 엔진', ['function pstAnalyze','function pstToBlocks','function openPasteStart','window.__openPasteStart'].every(function(k){ return et.indexOf(k) >= 0; }), '규칙 엔진 4개 생존 (AI 0원)');
@@ -153,6 +154,8 @@
       add('u 광고 오버레이', ['function initAdOverlay','function __adShow','function __adPill','uad-rail','scroll-snap-type'].every(function(k){ return ut.indexOf(k) >= 0; }), '3단 흐름 (2026-08-20)');
       add('u 광고 5원칙', ut.indexOf('__adKey()') >= 0 && ut.indexOf('adOverlay===false') >= 0 && ut.indexOf('uad-x') >= 0, '하루 한 번·사장님 스위치·✕ 오른쪽 위');
       add('u 광고 손님말 금지', (ut.split('function __adShow')[1]||'').split('function __adClose')[0].indexOf('>광고<') < 0, '손님 화면엔 «광고»라는 글자 안 씀');
+      add('u 별표 강조', ut.indexOf('mk-em') >= 0 && ut.indexOf('function __markPass') >= 0, '**글자** = 강조 (기호 사전이 약속한 것)');
+      add('u 마크 태그 안전', ut.indexOf("split(/(<[^>]+>)/)") >= 0, '태그 안(src·alt)은 안 건드림');
       add('u 정지 칩', ut.indexOf("layout==='chips'") >= 0 && ut.indexOf('.mq-chips{') >= 0, '흐르는 띠 대신 (발열 0)');
       add('u 매거진 격자', ut.indexOf("layout==='mag'") >= 0, '3장=큰1+작2 · 4장=2×2');
       // 🚨 발열 헌법 — «장식» 무한 반복은 0. 사용자가 켠 연출(갤러리·진입·레일)만 허용하되 안전망 필수
