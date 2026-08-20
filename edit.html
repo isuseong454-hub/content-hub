@@ -4440,7 +4440,8 @@ if('serviceWorker' in navigator){
     <div class="sheet">
       <div class="sheet-h"><span class="t">분위기</span><span class="x" id="dz-close">×</span></div>
       <div class="desc">맘껏 바꿔보고 <b style="color:var(--coral)">✓ 저장</b>으로 고정 · ×로 닫으면 원래대로</div>
-      <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>커버</span><span class="dz-step" id="dz-st2"><span class="n">2</span>테마</span><span class="dz-step" id="dz-st3"><span class="n">3</span>스킨</span><span class="dz-step" id="dz-st4"><span class="n">4</span>모션</span><button class="btn primary dz-next-top" id="dz-next">✓ 저장</button></div>
+      <!-- 🧹 2026-08-20 꾸미기 = 2단계 (①색 ②더 다듬기) — 스킨·배경은 유형이 대신하므로 «더 다듬기»로 접음 -->
+      <div class="dz-steps"><span class="dz-step on" id="dz-st1"><span class="n">1</span>색 · 테마</span><span class="dz-step" id="dz-st2"><span class="n">2</span>더 다듬기</span><span class="dz-step" id="dz-st3" style="display:none"></span><span class="dz-step" id="dz-st4" style="display:none"></span><button class="btn primary dz-next-top" id="dz-next">✓ 저장</button></div>
 
       <!-- 공유 미리보기 (커버 + 테마 색이 실시간 반영) -->
       <div class="dz-phone" id="dz-phone" data-layout="full" data-bright="light" style="--dzac:#ef7a33;">
@@ -4459,6 +4460,13 @@ if('serviceWorker' in navigator){
       </div>
 
       <div data-dzpage="1">
+        <div class="dz-cg"><span class="gl">이렇게 보여요 <span style="font-weight:400; color:var(--muted);">· 손님 홈 / 글 (예시 내용)</span></span><div class="th-prev" id="dz-theme-prev" style="max-height:none;"></div></div>
+        <div class="dz-cg"><span class="gl">테마 <span style="font-weight:400; color:var(--muted);">· 완성된 분위기 (라이트·다크·그라데이션)</span></span><div class="hm-themes" id="dz-theme-grid"></div></div>
+        <div class="dz-cg"><span class="gl">버튼 색 <span style="font-weight:400; color:var(--muted);">· 테마는 그대로, 버튼만 내 색으로 (선택) · 컨텐츠 톤 파스텔</span></span><div class="dz-sws" id="dz-accent"><span class="dz-sw dz-sw-reset" data-ac="" title="테마 기본색으로">↺</span></div></div>
+      </div>
+
+      <div data-dzpage="2" style="display:none;">
+        <div class="dz-cg" style=""><span class="gl">📷 사진 · 커버 <span style="font-weight:400; color:var(--muted);">· 선택</span></span></div>
         <div class="dz-cg"><span class="gl">사진</span><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">사진 없음</button><button type="button" data-pm="own">📷 내 사진</button><button type="button" data-pm="char">🏠 캐릭터</button></div></div>
         <div class="dz-cg" id="dz-bg-cg"><span class="gl">기본 배경 <span style="font-weight:400; color:var(--muted);">· 고급 · 테마마다 <b>은은한 광원</b>이 이미 깔려요 (보통 «없음»)</span></span><div class="dz-seg dz-pm-seg" id="dz-bgstyle"><button type="button" data-bg="" class="on">없음</button><button type="button" data-bg="glow">은은한 글로우</button><button type="button" data-bg="mesh">소프트 메쉬</button></div></div>
         <div class="dz-cg" id="dz-range-cg" style="display:none;"><span class="gl">커버 모양 <span style="font-weight:400; color:var(--muted);">· 어떻게 보여줄지</span></span><div class="dz-seg" data-dzgrp="layout"><button type="button" data-v="full" class="on">커버 (가로 와이드)</button><button type="button" data-v="bg">배경 (전체화면)</button></div></div>
@@ -4466,20 +4474,10 @@ if('serviceWorker' in navigator){
           <div class="vhint" style="text-align:center; padding:8px 2px; font-size:13px; line-height:1.7;">👆 <b>끌어서</b> 위치 맞추기 &nbsp;·&nbsp; 🔍 <b>두 손가락</b>(또는 휠)로 확대<br><span style="color:var(--muted);">색·분위기는 ② 테마에서</span></div>
         </div>
         <div class="vhint" id="dz-size-hint" style="text-align:left; margin-top:2px; line-height:1.6;">🖼 <b>가로로 넓은 사진</b>(예: 1200×800)이 커버에 좋아요 — 세로가 짧아 후킹 문구가 바로 같이 보여요 · 항상 꽉 채워져요</div>
-      </div>
-
-      <div data-dzpage="2" style="display:none;">
-        <div class="dz-cg"><span class="gl">이렇게 보여요 <span style="font-weight:400; color:var(--muted);">· 손님 홈 / 글 (예시 내용)</span></span><div class="th-prev" id="dz-theme-prev" style="max-height:none;"></div></div>
-        <div class="dz-cg"><span class="gl">테마 <span style="font-weight:400; color:var(--muted);">· 완성된 분위기 (라이트·다크·그라데이션)</span></span><div class="hm-themes" id="dz-theme-grid"></div></div>
-        <div class="dz-cg"><span class="gl">버튼 색 <span style="font-weight:400; color:var(--muted);">· 테마는 그대로, 버튼만 내 색으로 (선택) · 컨텐츠 톤 파스텔</span></span><div class="dz-sws" id="dz-accent"><span class="dz-sw dz-sw-reset" data-ac="" title="테마 기본색으로">↺</span></div></div>
-      </div>
-
-      <div data-dzpage="3" style="display:none;">
+        <div class="dz-cg" style="margin-top:18px; padding-top:14px; border-top:1px solid var(--hair);"><span class="gl">🧥 스킨 <span style="font-weight:400; color:var(--muted);">· 고급</span></span></div>
         <div class="dz-cg" data-dzadv="1"><span class="gl">스킨 <span style="font-weight:400; color:var(--muted);">· 고급 · 보통은 ①에서 <b>유형</b>을 고르면 자동으로 맞춰져요</span></span><div class="dz-seg dz-skin-seg" id="dz-skin"><button type="button" data-sk="" class="on">기본</button><button type="button" data-sk="banghouse">✦ 뱅하우스</button><button type="button" data-sk="transform">⚡ 트랜스폼</button></div></div>
         <div class="vhint" style="margin-top:2px; line-height:1.65;">✦ <b>프리미엄</b> 스킨 — 떠 있는 네모 박스를 없애 손으로 짠 듯 한 편으로 흐르게 해요. 색은 ② 테마에서 골라 조합하세요.</div>
-      </div>
-
-      <div data-dzpage="4" style="display:none;">
+        <div class="dz-cg" style="margin-top:18px; padding-top:14px; border-top:1px solid var(--hair);"><span class="gl">🎬 모션</span></div>
         <div class="dz-cg"><span class="gl">🎬 진입 모션 <span style="font-weight:400; color:var(--muted);">· 들어오자마자 첫 화면(커버·후킹)이 살아나요</span></span>
           <div class="en-grid" id="dz-entrance"></div>
           <div class="vhint" style="margin-top:6px; line-height:1.6;">순차는 무료 · 나머지는 <b style="color:var(--coral)">프로</b>. 사진 있으면 시네마틱·오로라가 멋져요.</div>
@@ -6738,12 +6736,12 @@ if('serviceWorker' in navigator){
     lead:      [['form','등록폼','이름+연락처'],['banner','배너','강조 배경'],['compact','컴팩트','한 줄'],['minimal','미니','연락처만']],
     stylegallery: [['search','검색형','검색+칩'],['bigba','전후 강조','크게 비교'],['grid','그리드','2열'],['strip','가로 스크롤','옆으로']],
     beforeafter: [['slider','슬라이더','밀어서 비교 · 추천'],['side','나란히','전·후 동시']],
-    steps: [['timeline','타임라인','가로 흐름 · 추천'],['list','세로 목록','번호 리스트']],
+    steps: [['flow','세로 타임라인','선 + 점 · 기본'],['timeline','가로 단계','매장 과정용'],['list','세로 목록','번호 리스트']],
     band: [['full','꽉 채움','이음새 없이 상세페이지처럼 · 추천'],['card','카드','여백 + 둥근 모서리']],
-    chart: [['line','성장 곡선','부드러운 라인 · 추천'],['bars','막대','항목 비교']],
+    chart: [['bars','막대','명확한 비교 · 기본'],['line','성장 곡선','부드러운 라인']],
     best: [['podium','메달 포디움','TOP5 크게 · 기본'],['rail','자동 흐름 레일','인원 제한 없이 순위·조회수 칩 흐름']]
   };
-  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'timeline', band:'full', chart:'line', best:'podium' };
+  var LAYOUT_DEFAULT = { imagetext:'card', text:'card', authority:'band', review:'cards', qna:'bubble', service:'grid', event:'banner', lead:'form', stylegallery:'search', beforeafter:'slider', steps:'flow', band:'full', chart:'bars', best:'podium' };   /* 2026-08-20 사장님 확정: 그래프 기본=막대 · 타임라인 기본=세로 선+점 */
   // 표현법(LAYOUTS)은 없지만 편집 패널에 '완성 미리보기'를 띄우는 블록들 (수정→패널 통일: 채우면 바로 완성이 보이게)
   var PREVIEW_NOLAYOUT = { quote:1, stat:1, painsolve:1, diagnostic:1, glowhook:1 };
   function layoutMini(type,k){
@@ -9523,7 +9521,7 @@ if('serviceWorker' in navigator){
     }
     var dzPage=1, dzSnap=null;
     function showPage(n){ dzPage=n;
-      for(var i=1;i<=4;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }
+      for(var i=1;i<=2;i++){ var pg=ov.querySelector('[data-dzpage="'+i+'"]'); if(pg) pg.style.display=(i===n)?'':'none'; var st=document.getElementById('dz-st'+i); if(st) st.classList.toggle('on', i===n); }   /* 2026-08-20 2단계 */
       if(n===2){ renderDzThemes(); }
       if(n===3){ renderDzSkin(); }
       if(n===4){ renderDzMotion(); renderEntrance(); }
@@ -9546,8 +9544,7 @@ if('serviceWorker' in navigator){
     }
     document.getElementById('dz-st1').onclick=function(){ showPage(1); };
     document.getElementById('dz-st2').onclick=function(){ showPage(2); };
-    (function(){ var s3=document.getElementById('dz-st3'); if(s3) s3.onclick=function(){ showPage(3); }; })();
-    (function(){ var s4=document.getElementById('dz-st4'); if(s4) s4.onclick=function(){ showPage(4); }; })();
+    /* 2026-08-20 2단계 — 스텝 3·4 제거 */
     document.getElementById('dz-next').onclick=function(){ dzCommit(); };
     window.__openDesign=function(){ cov(); loadLive(); renderPreview(); showPage(1); dzTakeSnapshot(); try{ if(window.__pageAutosavePause) window.__pageAutosavePause(); }catch(e){} ov.classList.add('open'); };
     var entry=document.getElementById('set-design2'); if(entry) entry.onclick=function(){ window.__openDesign(); };
