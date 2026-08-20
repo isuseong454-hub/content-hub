@@ -109,6 +109,50 @@
   document.querySelectorAll('[id]').forEach(el => { const i = el.id; if (seen[i]) { if (dups.indexOf(i) < 0) dups.push(i); } seen[i] = 1; });
   add('중복 id', !dups.length, dups.length ? dups.slice(0, 6).join(', ') : '0건', 'warn');
 
+  // ── 10. 2026-08-20 리디자인 항목 (유형 4종·라임·유리 도크·작업실 톤) ──
+  {
+    const et = await fetch('edit.html').then(r => r.text()).catch(() => '');
+    const ut = await fetch('u.html').then(r => r.text()).catch(() => '');
+    if (et) {
+      add('테마 9종(라임)', et.indexOf("['lime','#070A05','#C6FF4D'") >= 0, 'THEMES 라임 항목');
+      add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
+      add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
+      add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
+      add('내보내기 엔진', ['function expCaption','function expCards','function openPostExport','window.__openPostExport'].every(function(k){ return et.indexOf(k) >= 0; }), '인스타 캡션 · 카드뉴스 대본 (AI 0원)');
+      add('내보내기 버튼 수명', et.indexOf("id='exp-fab'") >= 0 && et.indexOf("if(eb) eb.style.display='none'") >= 0, '포스팅 나가면 숨김 (떠 있는 채로 남던 사고 방지)');
+      add('붙여넣기 포스팅 엔진', ['function pstAnalyze','function pstToBlocks','function openPasteStart','window.__openPasteStart'].every(function(k){ return et.indexOf(k) >= 0; }), '규칙 엔진 4개 생존 (AI 0원)');
+      add('붙여넣기 입구', et.indexOf("id=\"sfs-paste\"") >= 0 && et.indexOf("getElementById('sfs-paste').onclick") >= 0, '새 글 시트의 «붙여넣기로 시작» 버튼 + 배선');
+      add('제목 렌더 전 확정', et.indexOf('createPost(type, blocksOverride, titleOverride)') >= 0 && et.indexOf('(titleOverride&&String(titleOverride).trim())') >= 0, '카드에 «새 글»로 남던 사고(2026-08-20)');
+      add('logowall 배열형', et.indexOf("[['브랜드 1'],['브랜드 2']") >= 0, '문자열이면 한 글자 칩 «브·브·매·매» (2026-08-20 사고)');
+      add('유형 타일 4종', ['data-set="tbeauty"','data-set="tcreator"','data-set="texpert"','data-set="tresult"'].every(k => et.indexOf(k) >= 0), '구성추가 타일');
+      add('유형=통째 교체', et.indexOf('__typeSwapOK') >= 0 && et.indexOf('T4={tbeauty:1') >= 0, 'insertSet 명시 집합 분기');
+      add('transform 삼킴 금지', et.indexOf('/^t/.test(setKey)') < 0, '정규식 /^t/가 기존 transform 템플릿을 삼키던 사고(2026-08-20)');
+      add('작업실 개인 톤', et.indexOf('function applyEditorTone') >= 0 && /applyEditorTone\(\);\s*\}catch/.test(et), 'applyEditorTone + 즉시 1회');
+      add('작업실 유리 도크', et.indexOf('작업실 유리 도크') >= 0 && et.indexOf('.ws-tab.on::before') >= 0, 'ws-tabs 알약');
+      add('스코프 회귀 금지', et.indexOf('applyComposition(list);') < 0, 'insertSet에서 다른 스코프 applyComposition 직접 호출 금지(2026-08-20 사고)');
+    }
+    if (ut) {
+      add('u 라임 테마', ut.indexOf('data-theme="lime"') >= 0, 'html[data-theme=lime]');
+      add('u 유리 도크', ut.indexOf('유리 도크') >= 0 && ut.indexOf('.navitem.active::before') >= 0, 'botnav 알약+활성 원');
+      add('u 라이트 유리 보정', ut.indexOf('라이트 유리 보정') >= 0 && ut.indexOf('html[data-theme="lavender"] .block') >= 0, '라이트 4종 .block 규칙 (.card는 존재하지 않는 클래스였음 — 2026-08-20 사고)');
+      add('u 라이트 .card 금지', ut.indexOf('html[data-theme="lavender"] .card,') < 0, '매칭 0개 유령 선택자 재발 금지');
+      // 🚨2026-08-20: 주석 문자열로 검사하다 내가 주석을 덮어써 오탐 BLOCK — «실물»로 검사한다
+      var lightBodyDup = ['lavender','cream','pearl','aqua'].filter(function(k){
+        return (ut.match(new RegExp('html\\[data-theme="' + k + '"\\] body\\{', 'g')) || []).length !== 1;
+      });
+      add('라이트 body 규칙 1곳씩', lightBodyDup.length === 0, lightBodyDup.length ? ('중복/누락: ' + lightBodyDup.join(',')) : '4종 각 1곳 (뒤엣것만 이기던 사고 방지)');
+      add('광원 상·하 2점', ['lavender','cream','pearl','aqua','banghouse','night','dusk','sea','lime'].every(function(k){
+        var m = ut.split('html[data-theme="' + k + '"] body')[1] || '';
+        m = m.slice(0, 400);
+        return m.indexOf('at 50% -3%') >= 0 && m.indexOf('at 50% 103%') >= 0;
+      }), '9종 전부 위 하나 + 아래 하나 (사장님 «위에만 몰려 있다»)');
+      add('u 도크 위성 보정', ['.cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(', '.resv-fab{position:fixed; right:16px; bottom:calc(', '.fab{position:fixed; right:18px; bottom:calc('].every(k => ut.indexOf(k) >= 0), 'CTA·FAB 2종이 도크 위로(2026-08-20 겹침 사고)');
+    }
+    // 런타임: 테마 배열 9종 + 이름표
+    if (typeof THEMES !== 'undefined') add('THEMES 런타임 9종', THEMES.length === 9, 'THEMES.length=' + THEMES.length);
+    if (typeof THEME_NAMES !== 'undefined') add('라임 이름표', THEME_NAMES.lime === '라임', String(THEME_NAMES.lime));
+  }
+
   /* ── 결과 출력 ── */
   const bad = R.filter(x => !x.ok && x.level !== 'warn');
   const warn = R.filter(x => !x.ok && x.level === 'warn');
