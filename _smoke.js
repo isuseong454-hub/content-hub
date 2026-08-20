@@ -118,6 +118,9 @@
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
+      add('그래프 기본=막대', et.indexOf("chart:'bars'") >= 0 && et.indexOf("[['bars','막대'") >= 0, '2026-08-20 사장님 확정');
+      add('타임라인 flow 기본', et.indexOf("steps:'flow'") >= 0 && et.indexOf("[['flow','세로 타임라인'") >= 0, '세로 선+점 (1번 픽)');
+      add('꾸미기 2단계', et.indexOf('색 · 테마</span>') >= 0 && et.indexOf('더 다듬기</span>') >= 0 && et.indexOf('for(var i=1;i<=2;i++)') >= 0, '4단계 구조 회귀 금지');
       add('내보내기 엔진', ['function expCaption','function expCards','function openPostExport','window.__openPostExport'].every(function(k){ return et.indexOf(k) >= 0; }), '인스타 캡션 · 카드뉴스 대본 (AI 0원)');
       add('내보내기 버튼 수명', et.indexOf("id='exp-fab'") >= 0 && et.indexOf("if(eb) eb.style.display='none'") >= 0, '포스팅 나가면 숨김 (떠 있는 채로 남던 사고 방지)');
       add('붙여넣기 포스팅 엔진', ['function pstAnalyze','function pstToBlocks','function openPasteStart','window.__openPasteStart'].every(function(k){ return et.indexOf(k) >= 0; }), '규칙 엔진 4개 생존 (AI 0원)');
@@ -134,6 +137,10 @@
     if (ut) {
       add('u 라임 테마', ut.indexOf('data-theme="lime"') >= 0, 'html[data-theme=lime]');
       add('u 유리 도크', ut.indexOf('유리 도크') >= 0 && ut.indexOf('.navitem.active::before') >= 0, 'botnav 알약+활성 원');
+      add('u 영상=썸네일 클릭', ut.indexOf('vid-thumb') >= 0 && ut.indexOf("closest('.vid-thumb')") >= 0 && ut.indexOf('title="영상" loading="lazy"') < 0, '즉시 iframe 로드 금지 + 문서 위임(개별 리스너 소실 사고)');
+      add('u 숫자 자동 강조', ut.indexOf('function numMark') >= 0 && ut.indexOf('.num-c{') >= 0 && ut.indexOf('html[data-bright="light"] .num-c') >= 0, '다크=칩/라이트=형광펜');
+      add('u 세로 타임라인', ut.indexOf("layout==='flow'") >= 0 && ut.indexOf('.stf-dot{') >= 0, '선+점 레이아웃');
+      add('u 숫자 차오름', ut.indexOf('function statCountWire') >= 0 && ut.indexOf('io.unobserve') >= 0, '보일 때 1회 (무한 금지)');
       add('u 라이트 유리 보정', ut.indexOf('라이트 유리 보정') >= 0 && ut.indexOf('html[data-theme="lavender"] .block') >= 0, '라이트 4종 .block 규칙 (.card는 존재하지 않는 클래스였음 — 2026-08-20 사고)');
       add('u 라이트 .card 금지', ut.indexOf('html[data-theme="lavender"] .card,') < 0, '매칭 0개 유령 선택자 재발 금지');
       // 🚨2026-08-20: 주석 문자열로 검사하다 내가 주석을 덮어써 오탐 BLOCK — «실물»로 검사한다
