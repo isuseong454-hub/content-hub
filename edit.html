@@ -1809,10 +1809,15 @@ if('serviceWorker' in navigator){
   .lay-opt.on{border-color:var(--coral); box-shadow:0 0 0 1px var(--coral) inset;}
   .lay-opt .lay-nm{font-size:11.5px; color:var(--ink); margin-top:5px; text-align:center;}
   .lay-opt.on .lay-nm{color:var(--coral); font-weight:600;}
-  .ws-tabs{position:fixed; left:0; right:0; bottom:0; z-index:40; max-width:520px; margin:0 auto; display:flex; gap:6px; padding:8px 12px calc(10px + env(safe-area-inset-bottom)); background:#1A1A1F; border-top:1px solid var(--hair); box-shadow:0 -6px 22px rgba(0,0,0,.35);}
-  .ws-tab{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; border:none; background:transparent; color:var(--muted); border-radius:12px; padding:7px 4px; font-size:11.5px; font-family:var(--sans); cursor:pointer; white-space:nowrap;}
-  .ws-tab .ico{font-size:19px;}
-  .ws-tab.on{color:var(--coral); background:var(--coral-soft); font-weight:700;}
+  /* 🫧 작업실 유리 도크 (2026-08-20) — 손님 화면과 같은 떠 있는 알약 · 활성 = 내 테마색 */
+  .ws-tabs{position:fixed; left:12px; right:12px; bottom:calc(10px + env(safe-area-inset-bottom)); z-index:40; max-width:520px; margin:0 auto; display:flex; gap:2px; padding:7px 9px; border-radius:999px;
+    background:rgba(26,26,31,.78); -webkit-backdrop-filter:blur(20px) saturate(1.4); backdrop-filter:blur(20px) saturate(1.4);
+    border:1px solid var(--hair); box-shadow:inset 0 1px 0 rgba(255,255,255,.10), 0 14px 34px rgba(0,0,0,.40);}
+  .ws-tab{flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; border:none; background:transparent; color:var(--muted); border-radius:999px; padding:5px 2px 4px; font-size:10.5px; font-family:var(--sans); cursor:pointer; white-space:nowrap; position:relative;}
+  .ws-tab .ico{font-size:18px; position:relative; z-index:1;}
+  .ws-tab.on{color:var(--coral); font-weight:800;}
+  .ws-tab.on::before{content:''; position:absolute; inset:0; border-radius:999px; background:var(--coral-soft);
+    box-shadow:0 0 0 1px color-mix(in srgb, var(--coral) 32%, transparent), 0 0 18px color-mix(in srgb, var(--coral) 30%, transparent);}
   /* 판매/예약 세그먼트 */
   .sl-seg{display:flex; gap:6px; background:var(--soft); padding:5px; border-radius:13px; margin:0 0 16px;}
   .sl-seg-b{flex:1; padding:11px 0; border:none; border-radius:9px; text-align:center; font-size:13px; font-weight:700; color:var(--muted); background:transparent; font-family:var(--sans); cursor:pointer;}
@@ -3479,7 +3484,7 @@ if('serviceWorker' in navigator){
   <div class="ws-tabs" id="ws-tabs">
     <button class="ws-tab on" data-ws="home"><span class="ico">🏠</span>홈</button>
     <button class="ws-tab" data-ws="page"><span class="ico">🏅</span>전문성 가시화</button>
-    <button class="ws-tab" data-ws="posts"><span class="ico">📄</span>컨텐츠</button>
+    <button class="ws-tab" data-ws="posts"><span class="ico">📝</span>포스팅</button>
     <button class="ws-tab" data-ws="sales"><span class="ico">💰</span>판매·예약</button>
     <button class="ws-tab" data-ws="data"><span class="ico">📊</span>고객·분석</button>
   </div>
@@ -4164,6 +4169,10 @@ if('serviceWorker' in navigator){
 
       <div class="tcat addsec" style="margin-top:16px;">✨ 블록 세트 <span style="font-weight:600; opacity:.65;">— 검증된 순서로 통째 추가</span></div><!-- '템플릿' 명칭은 홈 템플릿(자유형/에디토리얼형)과 혼동돼 변경 (2026-07-08) -->
       <div class="tgrid">
+        <div class="tpl tpl-set tpl-has-badge" data-set="tbeauty"><span class="tier-badge tb-pro"><svg class="tb-ic" viewBox="0 0 24 24"><path d="M12 3 19 9 12 21 5 9Z"/></svg><span class="tb-tx">프로</span></span><span class="tpl-badge" style="background:var(--coral);color:#120A24">유형</span><span class="tic">🌸</span><span><span class="tn">뷰티형</span><span class="ts">큰 후킹→시그니처 사진→예약 · 헤어·네일·피부</span></span></div>
+        <div class="tpl tpl-set" data-set="tcreator"><span class="tpl-badge" style="background:#7DE0A6;color:#04140B">유형 · 무료</span><span class="tic">🎙</span><span><span class="tn">크리에이터형</span><span class="ts">프로필→링크→채널→구독 · 강사·유튜버·작가</span></span></div>
+        <div class="tpl tpl-set" data-set="texpert"><span class="tpl-badge" style="background:#7DE0A6;color:#04140B">유형 · 무료</span><span class="tic">🎓</span><span><span class="tn">전문가형</span><span class="ts">이름→대표 사진→숫자·로고→상담 · 컨설팅·코칭</span></span></div>
+        <div class="tpl tpl-set tpl-has-badge" data-set="tresult"><span class="tier-badge tb-pro"><svg class="tb-ic" viewBox="0 0 24 24"><path d="M12 3 19 9 12 21 5 9Z"/></svg><span class="tb-tx">프로</span></span><span class="tpl-badge" style="background:var(--coral);color:#120A24">유형</span><span class="tic">⚡</span><span><span class="tn">비포애프터형</span><span class="ts">12주 후킹→전후 증명→프로그램 · PT·교정·시술</span></span></div>
         <div class="tpl tpl-set" data-set="photo"><span class="tpl-badge">템플릿</span><span class="tic">📸</span><span><span class="tn">사진형 세트</span><span class="ts">갤러리→후킹→후기→가격→예약</span></span></div>
         <div class="tpl tpl-set" data-set="profile"><span class="tpl-badge">템플릿</span><span class="tic">👤</span><span><span class="tn">프로필·가치형 세트</span><span class="ts">가치→방식→사례→상담</span></span></div>
         <div class="tpl tpl-set" data-set="content"><span class="tpl-badge">템플릿</span><span class="tic">✍️</span><span><span class="tn">컨텐츠·구독형 세트</span><span class="ts">세계관→컨텐츠→구독</span></span></div>
@@ -4451,7 +4460,7 @@ if('serviceWorker' in navigator){
 
       <div data-dzpage="1">
         <div class="dz-cg"><span class="gl">사진</span><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">사진 없음</button><button type="button" data-pm="own">📷 내 사진</button><button type="button" data-pm="char">🏠 캐릭터</button></div></div>
-        <div class="dz-cg" id="dz-bg-cg"><span class="gl">기본 배경 <span style="font-weight:400; color:var(--muted);">· 사진 없어도 안 휑하게 (테마 색)</span></span><div class="dz-seg dz-pm-seg" id="dz-bgstyle"><button type="button" data-bg="" class="on">없음</button><button type="button" data-bg="glow">은은한 글로우</button><button type="button" data-bg="mesh">소프트 메쉬</button></div></div>
+        <div class="dz-cg" id="dz-bg-cg"><span class="gl">기본 배경 <span style="font-weight:400; color:var(--muted);">· 고급 · 테마마다 <b>은은한 광원</b>이 이미 깔려요 (보통 «없음»)</span></span><div class="dz-seg dz-pm-seg" id="dz-bgstyle"><button type="button" data-bg="" class="on">없음</button><button type="button" data-bg="glow">은은한 글로우</button><button type="button" data-bg="mesh">소프트 메쉬</button></div></div>
         <div class="dz-cg" id="dz-range-cg" style="display:none;"><span class="gl">커버 모양 <span style="font-weight:400; color:var(--muted);">· 어떻게 보여줄지</span></span><div class="dz-seg" data-dzgrp="layout"><button type="button" data-v="full" class="on">커버 (가로 와이드)</button><button type="button" data-v="bg">배경 (전체화면)</button></div></div>
         <div class="dz-cg" id="dz-zoom-cg" style="display:none;">
           <div class="vhint" style="text-align:center; padding:8px 2px; font-size:13px; line-height:1.7;">👆 <b>끌어서</b> 위치 맞추기 &nbsp;·&nbsp; 🔍 <b>두 손가락</b>(또는 휠)로 확대<br><span style="color:var(--muted);">색·분위기는 ② 테마에서</span></div>
@@ -4466,7 +4475,7 @@ if('serviceWorker' in navigator){
       </div>
 
       <div data-dzpage="3" style="display:none;">
-        <div class="dz-cg"><span class="gl">스킨 <span style="font-weight:400; color:var(--muted);">· 박스를 없애 "한 편의 페이지"로 (구조·레이아웃)</span></span><div class="dz-seg dz-skin-seg" id="dz-skin"><button type="button" data-sk="" class="on">기본</button><button type="button" data-sk="banghouse">✦ 뱅하우스</button><button type="button" data-sk="transform">⚡ 트랜스폼</button></div></div>
+        <div class="dz-cg" data-dzadv="1"><span class="gl">스킨 <span style="font-weight:400; color:var(--muted);">· 고급 · 보통은 ①에서 <b>유형</b>을 고르면 자동으로 맞춰져요</span></span><div class="dz-seg dz-skin-seg" id="dz-skin"><button type="button" data-sk="" class="on">기본</button><button type="button" data-sk="banghouse">✦ 뱅하우스</button><button type="button" data-sk="transform">⚡ 트랜스폼</button></div></div>
         <div class="vhint" style="margin-top:2px; line-height:1.65;">✦ <b>프리미엄</b> 스킨 — 떠 있는 네모 박스를 없애 손으로 짠 듯 한 편으로 흐르게 해요. 색은 ② 테마에서 골라 조합하세요.</div>
       </div>
 
@@ -6205,7 +6214,7 @@ if('serviceWorker' in navigator){
     link:[['text','제목',''],['url','링크(URL)','']],
     newsletter:[['text','제목','주간 뉴스레터 구독'],['url','구독 링크','']],
     channels:[['url','인스타그램',''],['url','유튜브',''],['url','블로그',''],['url','카카오톡 오픈채팅','']],
-    archive:[['info','글은 "아카이브 글쓰기" 화면에서 관리해요','']],
+    archive:[['info','글은 "포스팅" 화면에서 관리해요','']],
     products:[['list','추천 제품','제품 이름|가격(선택)|쿠팡 링크']],
     qna:[['list','질문 / 답변','질문|답변']],
     quote:[['textarea','인용 문장','']],
@@ -7256,14 +7265,31 @@ if('serviceWorker' in navigator){
     addpvOv.addEventListener('click', function(e){ if(e.target===addpvOv) addpvOv.classList.remove('open','demo-only'); });
   }
   // 통째로 추가(세트) — STYLE_PRESETS 순서대로 여러 블록을 한 번에
-  var SET_PRO = { hook:1, photo:1, profile:1, premium:1, transform:1 };   // 전환·세일즈 풀세트 = 프로 (content는 베이직 OK)
+  var SET_NAME = { premium:'프리미엄 헤어샵 템플릿', transform:'트랜스폼 템플릿', tbeauty:'🌸 뷰티형', tresult:'⚡ 비포애프터형' };   // 잠금 안내에 뜰 이름
+  var SET_PRO = { hook:1, photo:1, profile:1, premium:1, transform:1, tbeauty:1, tresult:1 };   // 전환·세일즈 풀세트 = 프로 · 🧭유형 중 뷰티(뱅하우스 스킨)·비포애프터(트랜스폼 스킨)도 프로 (2026-08-20 사장님 확정 — 크리에이터·전문가는 기본)
   // 통째 템플릿이 테마·폰트까지 같이 바꾸는 경우 (뱅하우스 톤)
-  var SET_LOOK = { premium:{ theme:'banghouse', font:'impact', skin:'banghouse' }, transform:{ theme:'forest', font:'impact', skin:'transform', accent:'#C6FF4D' } };
+  var SET_LOOK = { premium:{ theme:'banghouse', font:'impact', skin:'banghouse' }, transform:{ theme:'forest', font:'impact', skin:'transform', accent:'#C6FF4D' },
+    /* 🧭 유형 4종 (2026-08-20) — 강조색은 테마값 그대로(accentOverride 없음) · 크리에이터만 프로필 헤더 유지 */
+    tbeauty:{ theme:'banghouse', font:'impact', skin:'banghouse' },
+    tcreator:{ theme:'night', font:'modern', skin:'', keepProfile:true },
+    texpert:{ theme:'sea', font:'modern', skin:'' },
+    tresult:{ theme:'lime', font:'impact', skin:'transform' } };
   function insertSet(setKey){
-    if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':(setKey==='transform'?'트랜스폼 템플릿':'전환 템플릿 (풀세트)'),'pro'); return; }
+    if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ if(window.__cmShowLock) window.__cmShowLock(SET_NAME[setKey]||'전환 템플릿 (풀세트)','pro'); return; }
     var SP = window.__STYLE_PRESETS || {};
     var list = SP[setKey] || null;
     if(!list) return;
+    /* 🧭 유형 4종(2026-08-20) = «홈을 이걸로 시작» — 덧붙이지 않고 통째 교체.
+       (applyComposition은 다른 스코프라 직접 못 씀 → 비우고 아래 기존 삽입 루프가 채우게) */
+    var T4={tbeauty:1,tcreator:1,texpert:1,tresult:1};   // 🚨/^t/ 정규식이 기존 transform 템플릿을 삼키던 사고(2026-08-20 검수) — 명시 집합만
+    if(T4[setKey]){
+      if(rowsBox && rowsBox.children.length>0 && !window.__typeSwapOK){
+        if(!confirm('지금 홈 구성을 이 유형으로 바꿀까요?\n(글·사진·판매 데이터는 그대로 있고, 홈 블록 배치만 바뀌어요)')) return;
+      }
+      if(rowsBox) rowsBox.innerHTML='';
+      window.__insertBeforeRow=null;
+      try{ if(window.toast) toast((setKey==='tbeauty'?'🌸 뷰티형':setKey==='tcreator'?'🎙 크리에이터형':setKey==='texpert'?'🎓 전문가형':'⚡ 비포애프터형')+'으로 시작! 색은 ②테마에서 언제든'); }catch(e){}
+    }
     var ib = window.__insertBeforeRow;   // "+여기" 위치 (없으면 맨 끝)
     var ibOK = ib && ib.parentNode===rowsBox;
     list.forEach(function(item){
@@ -7277,12 +7303,14 @@ if('serviceWorker' in navigator){
     // 통째 템플릿: 테마·폰트·스킨(박스탈출)도 같이 적용
     var look=SET_LOOK[setKey];
     if(look){ try{
-      if(typeof home!=='undefined' && home){ home.theme=look.theme; home.font=look.font; if(look.skin) home.skin=look.skin; home.accentOverride=look.accent||''; }   // accent=포인트색(트랜스폼=라임), 없으면 테마색
+      if(typeof home!=='undefined' && home){ home.theme=look.theme; home.font=look.font; if(look.skin!=null) home.skin=look.skin; home.accentOverride=look.accent||''; }   // accent=포인트색(트랜스폼=라임), 없으면 테마색
       // 통째 템플릿 = 글로우 후킹이 히어로 → 전역 후킹문구·프로필은 끔 (중복·박스 제거, 시안처럼 깔끔히 시작)
       if(typeof window.__setHeroOn==='function') window.__setHeroOn(false);
-      if(typeof window.__setProfileOn==='function') window.__setProfileOn(false);
+      if(!look.keepProfile && typeof window.__setProfileOn==='function') window.__setProfileOn(false);   // 🎙 크리에이터형=프로필이 곧 히어로
+      if(look.keepProfile && typeof window.__setProfileOn==='function') window.__setProfileOn(true);
       if(typeof renderThemes==='function') renderThemes();
       if(typeof renderFonts==='function') renderFonts();
+      if(window.applyEditorTone) window.applyEditorTone();   // 🎨 작업실도 즉시 내 테마색
     }catch(e){} }
     // home(커버·테마·폰트·스킨) HKEY 저장 → serialize·공개에 반영
     try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; if(look){ cur.theme=home.theme; cur.font=home.font; if(home.skin!=null) cur.skin=home.skin; cur.accentOverride=home.accentOverride||''; } localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){}
@@ -7336,7 +7364,7 @@ if('serviceWorker' in navigator){
     var why=document.getElementById('tpp-why'), w=TPL_WHY[setKey];
     if(why){ if(w){ why.innerHTML='<div class="tpw-h">왜 이 흐름일까?</div><div class="tpw-intro">'+w.intro+'</div>'+w.steps.map(function(s,i){ return '<div class="tpw-step"><span class="tpw-n">'+(i+1)+'</span><div><b>'+s[0]+'</b><span>'+s[1]+'</span></div></div>'; }).join('')+'<div class="tpw-foot">순서는 추가 후 <b>드래그로 변경</b>할 수 있어요</div>'; why.style.display=''; } else why.style.display='none'; }
     document.getElementById('tpp-use').onclick=function(){
-      if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ pov.style.display='none'; if(window.__cmShowLock) window.__cmShowLock(setKey==='premium'?'프리미엄 헤어샵 템플릿':(setKey==='transform'?'트랜스폼 템플릿':'전환 템플릿 (풀세트)'),'pro'); return; }
+      if(SET_PRO[setKey] && typeof tierOK==='function' && !tierOK('pro')){ pov.style.display='none'; if(window.__cmShowLock) window.__cmShowLock(SET_NAME[setKey]||'전환 템플릿 (풀세트)','pro'); return; }
       // 템플릿 = 완성된 페이지 그 자체로 시작 (이어붙이기 X → 교체)
       function applyNow(){
         pov.style.display='none';
@@ -9129,7 +9157,8 @@ if('serviceWorker' in navigator){
     ['banghouse','#060B08','#7DBF8E','radial-gradient(ellipse 80% 50% at 50% 0%, rgba(125,191,142,.30), transparent 70%), #060B08'],
     ['night','#07060B','#8E7BFF','radial-gradient(circle at 30% 25%, rgba(142,123,255,.85), transparent 58%), radial-gradient(circle at 78% 76%, rgba(240,166,255,.65), transparent 55%), #07060B'],
     ['dusk','#140D12','#F0A6C8','radial-gradient(circle at 26% 28%, rgba(240,166,200,.8), transparent 56%), radial-gradient(circle at 80% 74%, rgba(255,217,138,.65), transparent 54%), #140D12'],
-    ['sea','#0A1016','#7EC8F5','radial-gradient(circle at 28% 26%, rgba(126,200,245,.78), transparent 57%), radial-gradient(circle at 78% 76%, rgba(102,255,217,.5), transparent 55%), #0A1016']
+    ['sea','#0A1016','#7EC8F5','radial-gradient(circle at 28% 26%, rgba(126,200,245,.78), transparent 57%), radial-gradient(circle at 78% 76%, rgba(102,255,217,.5), transparent 55%), #0A1016'],
+    ['lime','#070A05','#C6FF4D','radial-gradient(ellipse 78% 46% at 50% 0%, rgba(198,255,77,.30), transparent 66%), #070A05']
   ];
   // 폐기된(그리드에 없는) 옛 테마 — 예: lemon — 가 저장돼 있으면 기본 크림으로 마이그레이션.
   // 안 그러면 편집기에서 선택 표시가 안 되고(아무 칸도 sel 안 됨) 저장 때 그 옛 테마가 그대로 다시 발행됨 → "크림 저장했는데 노랑" 버그.
@@ -9221,7 +9250,7 @@ if('serviceWorker' in navigator){
       o.title=t[0];
       var nm=NM[t[0]]||t[0];
       o.innerHTML='<div class="hm-th-sw" style="background:'+(t[3]||t[1])+'"><span style="background:'+t[2]+'"></span></div><div class="hm-th-nm">'+nm+'</div>';
-      o.onclick=function(){ home.theme=t[0]; if(home.design) home.design.on=false; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=t[0]; if(cur.design) cur.design.on=false; localStorage.setItem(HKEY,JSON.stringify(cur)); }catch(e){} renderThemes(); if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); };
+      o.onclick=function(){ home.theme=t[0]; if(home.design) home.design.on=false; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=t[0]; if(cur.design) cur.design.on=false; localStorage.setItem(HKEY,JSON.stringify(cur)); }catch(e){} try{ applyEditorTone(); }catch(e){} renderThemes(); if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); };
       g.appendChild(o);
     });
     renderThemePreview();
@@ -9375,7 +9404,7 @@ if('serviceWorker' in navigator){
   (function dzInit(){
     var ov=document.getElementById('dz-ov'); if(!ov) return;
     var BTNCOLORS=['#7DCF96','#7CB0FF','#E3B563','#FF9DBA','#B9A6FF','#5FD0C0','#FF9E7A','#A6B0BC'];   // 컨텐츠 유형 톤 파스텔(ARC_PAL 일치): 초록·파랑·골드·로즈·보라·민트·코랄·그레이
-    var DARK_THEMES={midnight:1,forest:1,luxe:1,violet:1,aurora:1,framer:1,bokeh:1,brand:1,prism:1,banghouse:1,nvidia:1,neon:1,cobalt:1,butterfly:1,glacier:1,olive:1,night:1,dusk:1,sea:1};
+    var DARK_THEMES={midnight:1,forest:1,luxe:1,violet:1,aurora:1,framer:1,bokeh:1,brand:1,prism:1,banghouse:1,nvidia:1,neon:1,cobalt:1,butterfly:1,glacier:1,olive:1,night:1,dusk:1,sea:1,lime:1};
     var phone=document.getElementById('dz-phone'), img=document.getElementById('dz-img'), photo=document.getElementById('dz-photo'), zoomEl=document.getElementById('dz-zoom'), empty=document.getElementById('dz-ph-empty');
     // 커버 사진 = home.cover {on,photo,layout,fit}
     function cov(){ if(!home.cover||typeof home.cover!=='object') home.cover={on:false,photo:'',layout:'full',fit:{z:1,x:50,y:50,u:'bgpos'}}; var c=home.cover; if(!c.fit) c.fit={z:1,x:50,y:50,u:'bgpos'}; if(c.fit.u!=='bgpos'){ c.fit={z:c.fit.z||1, x:50, y:50, u:'bgpos'}; }  /* 옛 단위(px/pct)는 중앙 bgpos로 1회 마이그(초점은 드래그로 다시) */ if(!c.layout) c.layout='full'; return c; }
@@ -9427,7 +9456,7 @@ if('serviceWorker' in navigator){
       sendLiveSoon();   // 라이브 iframe에도 현재 커버/테마 반영
     }
     function persistCover(){ cov().on=!!cov().photo; try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.cover=home.cover; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
-    function persistTheme(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=home.theme; cur.accentOverride=home.accentOverride||''; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
+    function persistTheme(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.theme=home.theme; cur.accentOverride=home.accentOverride||''; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} try{ applyEditorTone(); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
     // ✨ 스크롤 움직임(등장 효과) 토글 — home.reveal (기본 켜짐)
     function persistMotion(){ try{ var cur=JSON.parse(localStorage.getItem(HKEY)||'{}'); cur.reveal=home.reveal; localStorage.setItem(HKEY, JSON.stringify(cur)); }catch(e){} if(window.__liveEditActive&&window.__liveRefresh) window.__liveRefresh(); }
     function renderDzMotion(){ var b=document.getElementById('dz-motion'); if(!b) return; var on=(home.reveal!==false); b.classList.toggle('off', !on); var lbl=b.querySelector('.dzm-lbl'); if(lbl) lbl.textContent=on?'켜짐':'꺼짐'; }
@@ -9850,7 +9879,17 @@ if('serviceWorker' in navigator){
   };
 
   // 설정 행 라벨(테마 이름 · 플로팅 켜짐/꺼짐)을 실제 상태로 동기화
-  var THEME_NAMES={lavender:'라벤더',cream:'크림',pearl:'펄',aqua:'아쿠아',banghouse:'뱅하우스',night:'밤',dusk:'노을',sea:'바다'};
+  /* 🎨 작업실 개인 테마 (2026-08-20) — 내가 고른 테마의 강조색이 에디터 전체(--coral·도크·버튼)에 입혀짐 */
+  function applyEditorTone(){ try{
+    var t=null; for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===(home&&home.theme)){ t=THEMES[i]; break; } }
+    if(!t) return; var ac=(home.accentOverride||t[2]);
+    var r=document.documentElement.style;
+    r.setProperty('--coral', ac);
+    r.setProperty('--coral-soft', 'color-mix(in srgb, '+ac+' 16%, transparent)');
+  }catch(e){} }
+  window.applyEditorTone=applyEditorTone;
+  try{ applyEditorTone(); }catch(e){}   // 정의 즉시 1회 — 부팅 순서와 무관하게 내 테마색
+  var THEME_NAMES={lavender:'라벤더',cream:'크림',pearl:'펄',aqua:'아쿠아',banghouse:'뱅하우스',night:'밤',dusk:'노을',sea:'바다',lime:'라임'};
   function updateSettingLabels(){
     var tv=document.getElementById('set-theme-val'); if(tv) tv.textContent=THEME_NAMES[home.theme]||home.theme||'테마';
     var fv=document.getElementById('set-fab-val'); if(fv){ var f=home.fab||{}; var on=FAB_KEYS.some(function(k){ return f[k]; }); fv.textContent=on?'켜짐':'꺼짐'; }
@@ -9985,7 +10024,7 @@ if('serviceWorker' in navigator){
     premium: [
       {type:'glowhook',name:'글로우 후킹',content:['70%','WELCOME TO BANG HOUSE','앞머리 디자인','첫인상의','BY ○○ 디자이너 · ○○ 헤어']},
       {type:'marquee',name:'흐르는 태그 띠',content:[[['#얼굴보완'],['#앞머리유선생'],['#묶을때이쁜머리'],['#시스루뱅'],['#히메허쉬'],['#슬릭컷']]]},
-      {type:'lookbook',name:'베스트 앞머리 (LOOKBOOK)',content:['베스트 앞머리 디자인','by ○○ 디자이너','SHOWCASE',[['','','시스루뱅','SEE-THROUGH'],['','','소프트 풀뱅','SOFT FULL'],['','','히메 풀뱅','HIME FULL'],['','','사이드뱅','SIDE BANGS']]]},
+      {type:'lookbook',name:'베스트 앞머리 (LOOKBOOK)',content:['베스트 앞머리 디자인','○○ 디자이너','SHOWCASE',[['','','시스루뱅','SEE-THROUGH'],['','','소프트 풀뱅','SOFT FULL'],['','','히메 풀뱅','HIME FULL'],['','','사이드뱅','SIDE BANGS']]]},
       {type:'text',layout:'quote',name:'스토리',content:['"앞머리 한번 망치면 3달 고생이야"','고객 한 마디로 시작된 노하우 · by ○○ 디자이너']},
       {type:'stylegallery',name:'8 LOOKS',content:[]},
       {type:'ranking',name:'시그니처 TOP 3',content:['SIGNATURE','TOP 3',[['','히메허쉬','가장 인기','55,000원','HOT'],['','슬릭컷','시그니처','55,000원',''],['','허쉬컷','트렌디','55,000원','']]]},
@@ -10006,7 +10045,40 @@ if('serviceWorker' in navigator){
       {type:'lead',name:'무료 체험 신청',content:['무료 체험 신청','⚡ 무료 체험 신청하기','목표·현재 상태만 남겨주시면 맞춤 상담 잡아드려요']},
       {type:'location',name:'위치 · 안내',content:['○○ (지점·상호명)','서울 강남구 ○○','평일 06:00–23:00 · 주말 09:00–18:00','','','']}
     ],
-    blank:   []
+    blank:   [],
+    /* ══ 🧭 유형 4종 (2026-08-20 확정 — «첫 화면 절반을 누가 가져가느냐»만 다름. 첫날부터 차 있게) ══ */
+    // 🌸 뷰티형 — 큰 글자(글로우 후킹) + 룩북(뱅하우스 규격·2/4장 자동) + 예약
+    tbeauty: [
+      {type:'glowhook',name:'글로우 후킹',content:['70%','MY SIGNATURE','첫인상을 바꾸는 디자인','첫인상의','BY ○○ 디자이너']},
+      {type:'lookbook',name:'시그니처 (사진 2~4장)',content:['시그니처','○○ 디자이너','MENU',[['','','시그니처 1','SIGNATURE 01'],['','','시그니처 2','SIGNATURE 02'],['','','시그니처 3','SIGNATURE 03'],['','','시그니처 4','SIGNATURE 04']]]},
+      {type:'service',name:'예약 메뉴',content:['예약하기 · 영업시간 입력',[['대표 시술 (약 30분)','30,000원','예약',''],['풀 케어 (약 90분)','120,000원','예약','']]]},
+      P_REVIEW,
+      {type:'lead',name:'상담 예약',content:['상담 예약','📅 상담 예약하기','원하는 날짜·시간만 남겨주시면 확인 후 연락드려요']}
+    ],
+    // 🎙 크리에이터형 — 프로필 헤더(켜둠) + 링크 + 채널 + 구독
+    tcreator: [
+      {type:'links',name:'대표 링크',content:[[['🔥 클래스 · 모집 알림 신청',''],['▶️ 대표 영상 · 콘텐츠',''],['👥 커뮤니티 입장',''],['💬 강의 제안 · 협업 문의','']]]},
+      {type:'channels',name:'채널',content:['','','','']},
+      {type:'newsletter',name:'뉴스레터 구독',content:['매주 한 통, 3분이면 읽어요']},
+      {type:'lead',name:'문의',content:['문의','✉️ 문의 남기기','협업·강의 제안은 여기로']}
+    ],
+    // 🎓 전문가형 — 큰 이름 + 대표 사진 칸(인물 아니어도 됨) + 숫자·로고 + 상담
+    texpert: [
+      {type:'glowhook',name:'이름 후킹',content:['이름','CONTENT EXPERT','한 줄 소개 · 경력 ○년','','BY 나 · 상호']},
+      {type:'cover3',name:'대표 사진',content:['','전문 분야 한 줄','*이런 문제*를 해결합니다','상담 문의하기','']},
+      {type:'stat',name:'숫자 증명',content:[[['1,000+','함께한 고객'],['10년','경력'],['98%','만족도']]]},
+      {type:'logowall',name:'함께한 곳',content:['함께한 브랜드 · 매체',[['브랜드 1'],['브랜드 2'],['매체 1'],['매체 2']]]},   // 🚨항목=배열 (문자열이면 첫 글자만 — v747 룩북과 같은 유형 사고)
+      {type:'service',name:'프로그램',content:['상담 후 안내',[['1:1 컨설팅 (90분)','상담 후 안내','문의',''],['정규 과정 (12주)','상담 후 안내','문의','']]]},
+      {type:'lead',name:'상담 문의',content:['상담 문의','💬 상담 문의하기','진단지 먼저 보내드려요 · 무료']}
+    ],
+    // ⚡ 비포애프터형 — 12주 후킹(기간형·사장님 픽) + 전후 + 프로그램
+    tresult: [
+      {type:'glowhook',name:'글로우 후킹',content:['12주','RESULT FIRST','면, 결과가 바뀝니다','단','BY ○○ · 1:1 맞춤']},
+      {type:'beforeafter',name:'비포 · 애프터',content:['','','12주 전 → 후 · 실제 고객님','']},
+      {type:'service',name:'프로그램 (최대 5)',content:['상담 후 안내',[['1:1 집중 프로그램 (12주)','상담 후 안내','상담',''],['속성 프로그램 (8주)','상담 후 안내','상담',''],['온라인 코칭 (비대면)','월 정액','상담','']]]},
+      P_REVIEW,
+      {type:'lead',name:'무료 체험 신청',content:['무료 체험 신청','⚡ 무료 체험 신청','목표만 남겨주시면 맞춤 상담 잡아드려요']}
+    ]
   };
   var STYLE_LABEL={photo:'사진형',profile:'프로필·가치형',hook:'후킹·랜딩형',content:'컨텐츠·구독형',blank:'빈 페이지'};
   var INDUSTRY_DEFAULT_STYLE={beauty:'photo',brand:'profile',personal:'content'};
@@ -10260,7 +10332,7 @@ if('serviceWorker' in navigator){
         +'<div class="hb-do"><div class="hbd-k"><i></i>지금 하면 되는 것</div>'
         +'<div class="hbd-t">손님이 자주 묻는 걸 하나 고르세요</div>'
         +'<div class="hbd-d">주제 한 줄만 넣으면 <b>7단 뼈대</b>가 깔려요 — 백지에서 시작하지 않아요.</div>'
-        +'<button type="button" class="hbd-go" id="pe-start">✍️ 첫 글 쓰기</button></div>';
+        +'<button type="button" class="hbd-go" id="pe-start">✍️ 첫 포스팅 쓰기</button></div>';
       function _peStart(){ var b=document.getElementById('new-content-btn'); if(b) b.click(); }
       var _pg=document.getElementById('pe-start'); if(_pg) _pg.onclick=_peStart;
       box.querySelectorAll('.pe-idea').forEach(function(b){ b.onclick=_peStart; });   // 아이디어 = 영감 + 새 컨텐츠 흐름 시작
@@ -11187,7 +11259,7 @@ if('serviceWorker' in navigator){
     }
     ov.setAttribute('data-kind','info');
     ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">✍️ 글 도우미</span><span class="x" id="wh-x">×</span></div>'
-      +'<div class="desc">종류를 고르고 주제만 적으면, <b>소제목이 있는 뼈대</b>가 자동으로 깔려요. 빈칸을 내 이야기로 바꾸면 끝 · 글쓰기가 아니라 채우기</div>'
+      +'<div class="desc">종류를 고르고 주제만 적으면, <b>소제목이 있는 뼈대</b>가 자동으로 깔려요. 빈칸을 내 이야기로 바꾸면 끝 · 포스팅이 아니라 채우기</div>'
       +'<div class="field"><label>1️⃣ 어떤 글인가요?</label><div class="wh-kinds">'+WRITE_KINDS.map(function(k,i){ return '<button type="button" class="wh-kind'+(i===0?' on':'')+'" data-whk="'+k[0]+'"><b>'+k[1]+'</b><span>'+k[2]+'</span></button>'; }).join('')+'</div></div>'
       +'<div class="field"><label>2️⃣ 무엇에 대한 글이에요? <small>— 한 줄이면 충분</small></label><input id="wh-topic" placeholder="예: 앞머리 자르기 전 꼭 확인할 것"></div>'
       +'<button type="button" class="nchip-apply" id="wh-go">✨ 뼈대 만들기</button>'
@@ -11846,6 +11918,133 @@ if('serviceWorker' in navigator){
     actrow.appendChild(feat); actrow.appendChild(del); wrap.appendChild(actrow);
   }
 
+
+  /* ══════════ 📤 내보내기 (2026-08-20) — 인스타 캡션 · 카드뉴스 대본 ══════════
+     이미 쓴 포스팅 블록에서 «인스타에 그대로 올릴 글»과 «카드 장별 문구»를 뽑는다.
+     🚨 AI 안 씀 · 서버 안 감 · 비용 0원. 블록이 이미 소제목/본문/목록으로 나뉘어 있어서 규칙만으로 됨. */
+  function expPick(p){
+    var out={title:(p&&p.title)||'', secs:[], lists:[], quotes:[]};
+    (p&&p.blocks||[]).forEach(function(b){
+      if(!b || b.on===false) return;
+      var c=b.content||[];
+      if(b.type==='text' && b.layout==='quote'){ if(c[0]) out.quotes.push(String(c[0]).trim()); return; }
+      if(b.type==='text'){
+        var h=String(c[0]||'').trim(), body=String(c[1]||'').trim();
+        var li=body.split('\n').filter(function(x){ return /^\s*☑/.test(x); }).map(function(x){ return x.replace(/^\s*☑\s*/,''); });
+        if(li.length) out.lists=out.lists.concat(li);
+        var plain=body.split('\n').filter(function(x){ return x.trim() && !/^\s*☑/.test(x); }).join(' ').trim();
+        if(h || plain) out.secs.push({h:h, tx:plain});
+      }
+    });
+    return out;
+  }
+  function expFirstSentence(t){ var m=String(t||'').match(/^[^.!?…\n]{6,90}[.!?…]?/); return m?m[0].trim():String(t||'').slice(0,80); }
+  /* 인스타 캡션 — 후킹 → 핵심 3줄 → 마무리 → 해시태그 */
+  function expCaption(p){
+    var d=expPick(p), L=[];
+    if(d.title) L.push(d.title);
+    var hook = d.secs.length ? expFirstSentence(d.secs[0].tx || d.secs[0].h) : '';
+    if(hook && hook!==d.title) L.push('', hook);
+    var pts = d.lists.slice(0,5);
+    if(!pts.length) pts = d.secs.filter(function(x){ return x.h; }).slice(0,4).map(function(x){ return x.h; });
+    if(pts.length){ L.push(''); pts.forEach(function(x,i){ L.push('✔️ ' + x); }); }
+    if(d.quotes.length) L.push('', '❝ ' + d.quotes[0] + ' ❞');
+    L.push('', '자세한 내용은 프로필 링크에서 보실 수 있어요 🔗');
+    /* 해시태그 — 조사·어미로 끝나는 토막은 버리고 «말이 되는 낱말»만 (2026-08-20) */
+    var STOP=/(에서|에게|으로|까지|부터|이라|하는|한다|합니다|해요|보기|하기|되는|같은|그리고|그런데|입니다|였다|있는|없는|저는|제가|우리|정말|진짜|너무|가장|조금|많이)$/;
+    var seen={}, tags=[];
+    (d.title + ' ' + pts.join(' ')).replace(/[^가-힣A-Za-z0-9 ]/g,' ').split(/\s+/).forEach(function(w){
+      if(w.length<2 || w.length>7) return;
+      if(STOP.test(w)) return;
+      if(/^[0-9]+$/.test(w)) return;
+      var k=w.toLowerCase(); if(seen[k]) return; seen[k]=1;
+      if(tags.length<5) tags.push('#'+w);
+    });
+    if(tags.length) L.push('', tags.join(' ') + ' #고객관점');
+    return L.join('\n');
+  }
+  /* 카드뉴스 대본 — 표지 → 소제목마다 1장 → 마지막 CTA */
+  function expCards(p){
+    var d=expPick(p), cards=[];
+    cards.push({n:'표지', t:d.title || '제목', s:'가장 큰 글씨 · 사진 위에 얹기'});
+    d.secs.filter(function(x){ return x.h; }).slice(0,6).forEach(function(x){
+      cards.push({n:'본문', t:x.h, s: expFirstSentence(x.tx) || '한 줄로 줄여 적기'});
+    });
+    if(!cards.slice(1).length && d.lists.length){
+      d.lists.slice(0,5).forEach(function(x,i){ cards.push({n:'본문', t:(i+1)+'. '+x, s:''}); });
+    }
+    if(d.quotes.length) cards.push({n:'후기', t:'❝ ' + d.quotes[0] + ' ❞', s:'따옴표 크게 · 배경은 단색'});
+    cards.push({n:'마무리', t:'더 궁금하시면 DM 주세요', s:'프로필 링크 안내 · 저장 유도'});
+    return cards;
+  }
+  function expCardsText(cards){
+    return cards.map(function(c,i){
+      return '[' + (i+1) + '/' + cards.length + '] ' + c.n + '\n' + c.t + (c.s ? ('\n(' + c.s + ')') : '');
+    }).join('\n\n');
+  }
+  function expCopy(txt, btn){
+    function ok(){ var o=btn.textContent; btn.textContent='✓ 복사됐어요'; setTimeout(function(){ btn.textContent=o; }, 1600); }
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function(){ expCopyFallback(txt); ok(); });
+      else { expCopyFallback(txt); ok(); }
+    }catch(e){ expCopyFallback(txt); ok(); }
+  }
+  function expCopyFallback(txt){
+    var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta);
+  }
+  function openPostExport(){
+    var p=postById(postEditId); if(!p){ if(window.toast) toast('먼저 포스팅을 여세요'); return; }
+    if(!document.getElementById('exp-css')){
+      var sc=document.createElement('style'); sc.id='exp-css';
+      sc.textContent='#exp-ov .sheet{max-width:540px}'
+        +'#exp-ov .exp-seg{display:flex;gap:6px;background:var(--soft);padding:5px;border-radius:13px;margin:2px 0 13px}'
+        +'#exp-ov .exp-seg button{flex:1;border:none;border-radius:9px;padding:10px 0;font-family:var(--sans);font-size:13px;font-weight:700;color:var(--muted);background:transparent;cursor:pointer}'
+        +'#exp-ov .exp-seg button.on{background:var(--coral);color:var(--on-coral,#120A24);font-weight:800}'
+        +'#exp-ov textarea{width:100%;min-height:220px;resize:vertical;background:var(--soft);color:var(--ink);border:1px solid var(--hair);border-radius:12px;padding:12px;font-family:var(--sans);font-size:13.5px;line-height:1.75}'
+        +'#exp-ov .exp-hint{font-size:11.5px;color:var(--muted);line-height:1.7;margin:9px 2px 0}'
+        +'#exp-ov .exp-free{font-size:11px;font-weight:800;color:#7DE0A6;margin:7px 2px 0}';
+      document.head.appendChild(sc);
+    }
+    var ov=document.getElementById('exp-ov');
+    if(!ov){
+      ov=document.createElement('div'); ov.className='ov'; ov.id='exp-ov';
+      ov.innerHTML='<div class="sheet">'
+        +'<div class="sheet-h"><span class="t">📤 내보내기</span><span class="x" id="exp-x">×</span></div>'
+        +'<div class="desc">이 포스팅에서 <b style="color:var(--coral)">인스타에 올릴 글</b>과 <b style="color:var(--coral)">카드 장별 문구</b>를 뽑았어요. 복사해서 그대로 쓰세요.</div>'
+        +'<div class="exp-seg"><button type="button" data-exp="cap" class="on">📱 인스타 캡션</button><button type="button" data-exp="card">🎴 카드뉴스 대본</button></div>'
+        +'<textarea id="exp-out" spellcheck="false"></textarea>'
+        +'<div class="exp-hint" id="exp-hint"></div>'
+        +'<div class="exp-free">✓ AI 안 씁니다 · 비용 0원 · 이 글은 서버로 안 나가요</div>'
+        +'<button type="button" class="nchip-apply" id="exp-copy">📋 복사하기</button>'
+        +'</div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='exp-x') ov.classList.remove('open'); });
+      ov.querySelectorAll('[data-exp]').forEach(function(b){
+        b.onclick=function(){ ov.querySelectorAll('[data-exp]').forEach(function(x){ x.classList.toggle('on', x===b); }); expFill(b.getAttribute('data-exp')); };
+      });
+      document.getElementById('exp-copy').onclick=function(){ expCopy(document.getElementById('exp-out').value, this); };
+    }
+    window.__expMode='cap';
+    ov.querySelectorAll('[data-exp]').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-exp')==='cap'); });
+    expFill('cap');
+    ov.classList.add('open');
+  }
+  function expFill(mode){
+    var p=postById(postEditId); if(!p) return;
+    window.__expMode=mode;
+    var ta=document.getElementById('exp-out'), hint=document.getElementById('exp-hint');
+    if(mode==='card'){
+      var cards=expCards(p);
+      ta.value=expCardsText(cards);
+      hint.innerHTML='<b>'+cards.length+'장</b>짜리 카드뉴스예요 · 괄호 안은 <b>만들 때 참고</b>하는 말이라 카드엔 안 넣으셔도 돼요 · 표지 글씨는 <b>제일 크게</b>';
+    } else {
+      ta.value=expCaption(p);
+      var n=(ta.value.match(/#/g)||[]).length;
+      hint.innerHTML='해시태그 <b>'+n+'개</b>를 글에서 뽑았어요 · 첫 두 줄이 <b>«더 보기» 전에 보이는 부분</b>이라 제일 중요해요';
+    }
+  }
+  window.__openPostExport=openPostExport;
   function openPostEdit(id){
     var p=postById(id); if(!p) return;
     if(postEditId!=null && postEditId!==id){ closePostEdit(); }  // 직전 게시물 저장
@@ -11862,9 +12061,22 @@ if('serviceWorker' in navigator){
     // 모든 게시물 = 보면서 수정 캔버스 (랜딩=가운데 B형 / 글=왼쪽 블로그형)
     if(pane){ pane.classList.remove('show-raw'); pane.classList.add('editing-landing'); try{ renderLandingCardEditor(p); }catch(_){} try{ renderLandingCanvas(); }catch(_){} }
     try{ if(window.__draftSetBaseline) window.__draftSetBaseline(); }catch(_){}
+    /* 📤 내보내기 버튼 — 포스팅 편집 중에만 뜨는 플로팅 (2026-08-20) */
+    try{
+      var eb=document.getElementById('exp-fab');
+      if(!eb){
+        eb=document.createElement('button'); eb.id='exp-fab'; eb.type='button';
+        eb.textContent='📤 인스타로 내보내기';
+        eb.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:41;border:1px solid var(--hair);border-radius:999px;padding:11px 18px;font-family:var(--sans);font-size:12.5px;font-weight:800;background:var(--coral);color:var(--on-coral,#120A24);box-shadow:0 8px 24px rgba(0,0,0,.4);cursor:pointer;';
+        eb.onclick=function(){ openPostExport(); };
+        document.body.appendChild(eb);
+      }
+      eb.style.display='';
+    }catch(_){}
     try{ window.scrollTo(0,0); }catch(_){}
   }
   function exitPostMode(){
+    try{ var eb=document.getElementById('exp-fab'); if(eb) eb.style.display='none'; }catch(_){}
     postEditId=null;
     try{ if(window.__exitFw) window.__exitFw(); }catch(_){}
     try{ document.body.classList.remove('post-editing'); }catch(_){}
@@ -11931,10 +12143,119 @@ if('serviceWorker' in navigator){
     }
     ov.classList.add('open');
   }
-  function createPost(type, blocksOverride){
+
+  /* ══════════ 📋 붙여넣기로 포스팅 만들기 (2026-08-20) ══════════
+     카톡·메모장 글을 붙여넣으면 제목·소제목·목록·인용·사진자리로 갈라 «블록»으로 넣어준다.
+     🚨 AI 안 씀 — 글의 «생김새»(줄바꿈·기호·글자수·종결어미)만 본다. 서버로 안 나감. 비용 0원. */
+  var PST_END   = /(다|요|죠|네|음|함|까|래|군|걸|봐|자|랍니다|습니다|어요|아요|에요|예요|입니다)[.!?…]?$/;
+  var PST_LIST  = /^\s*(\d+[.)]|[-–—•·▶▪◦]|[①②③④⑤⑥⑦⑧⑨⑩])\s+/;
+  var PST_QUOTE = /^\s*["“”「『❝'']([\s\S]+)["“”」』❞'']\s*$/;
+  var PST_PHOTO = /(사진|보시면|이렇게|아래|이미지|보세요|모습|결과|전후|비포|애프터)/;
+  function pstAnalyze(raw){
+    var lines=String(raw||'').split(/\r?\n/), out=[], buf=[], paraSince=0, titleTaken=false, title='';
+    function flush(){ if(buf.length){ out.push({k:'li', items:buf.slice()}); buf=[]; } }
+    for(var i=0;i<lines.length;i++){
+      var t=lines[i].trim();
+      if(!t){ flush(); continue; }
+      if(PST_LIST.test(t)){ buf.push(t.replace(PST_LIST,'')); continue; }
+      flush();
+      if(!titleTaken){
+        titleTaken=true; title=t; var rest='';
+        if(t.length>40){ var cut=t.slice(0,40), sp=cut.lastIndexOf(' '); if(sp>18){ title=t.slice(0,sp); rest=t.slice(sp+1); } }
+        if(rest){ out.push({k:'p', tx:rest}); paraSince++; }
+        continue;
+      }
+      var q=t.match(PST_QUOTE);
+      if(q && q[1].length<90){ out.push({k:'q', tx:q[1]}); paraSince=0; continue; }
+      if(t.length<=28 && (/[?？:：]$/.test(t) || (!PST_END.test(t) && !/[.!,…]$/.test(t)))){
+        out.push({k:'h', tx:t}); paraSince=0; continue;
+      }
+      if(t.length>190){   /* 카톡처럼 줄바꿈 없이 길게 쓴 글 = 문장 단위로 쪼갬 */
+        var sents=t.match(/[^.!?…]+[.!?…]*\s*/g)||[t], ch='', chunks=[];
+        sents.forEach(function(x){ if((ch+x).length>150 && ch){ chunks.push(ch.trim()); ch=x; } else ch+=x; });
+        if(ch.trim()) chunks.push(ch.trim());
+        chunks.forEach(function(c){ out.push({k:'p', tx:c}); paraSince++; });
+      } else { out.push({k:'p', tx:t}); paraSince++; }
+      if(PST_PHOTO.test(t) || paraSince>=3){ out.push({k:'img'}); paraSince=0; }
+    }
+    flush();
+    return { title: title||'새 포스팅', items: out };
+  }
+  /* 판정 결과 → 실제 포스팅 블록 (text[제목·내용] / quote / photocard) */
+  function pstToBlocks(r){
+    var blocks=[], pend=null;
+    function pushText(){ if(pend){ blocks.push({type:'text', name:pend[0]||'본문', on:true, content:[pend[0], pend[1]], layout:''}); pend=null; } }
+    r.items.forEach(function(b){
+      if(b.k==='h'){ pushText(); pend=[b.tx, '']; }
+      else if(b.k==='p'){ if(pend) pend[1]=(pend[1]?pend[1]+'\n\n':'')+b.tx; else pend=['', b.tx]; }
+      else if(b.k==='li'){ if(pend) pend[1]=(pend[1]?pend[1]+'\n\n':'')+b.items.map(function(x){ return '☑ '+x; }).join('\n'); else pend=['', b.items.map(function(x){ return '☑ '+x; }).join('\n')]; }
+      else if(b.k==='q'){ pushText(); blocks.push({type:'text', layout:'quote', name:'인용', on:true, content:[b.tx, '']}); }
+      else if(b.k==='img'){ pushText(); blocks.push({type:'photocard', name:'사진', on:true, content:['', '', 'pc-shadow|'], layout:''}); }
+    });
+    pushText();
+    if(!blocks.length) blocks=[{type:'text', name:'본문', on:true, content:['',''], layout:''}];
+    return blocks;
+  }
+  /* 붙여넣기 시트 */
+  function openPasteStart(){
+    if(!document.getElementById('pst-css')){
+      var sc=document.createElement('style'); sc.id='pst-css';
+      sc.textContent='#pst-ov .sheet{max-width:560px}'
+        +'#pst-ov textarea{width:100%;min-height:190px;resize:vertical;background:var(--soft);color:var(--ink);border:1px solid var(--hair);border-radius:12px;padding:12px;font-family:var(--sans);font-size:14px;line-height:1.7}'
+        +'#pst-ov .pst-sum{display:flex;gap:6px;flex-wrap:wrap;margin:11px 0 4px}'
+        +'#pst-ov .pst-sum i{font-style:normal;font-size:11px;font-weight:800;border-radius:999px;padding:4px 10px;background:var(--coral-soft);color:var(--coral)}'
+        +'#pst-ov .pst-hint{font-size:11.5px;color:var(--muted);line-height:1.7;margin:8px 2px 0}'
+        +'#pst-ov .pst-free{font-size:11px;font-weight:800;color:#7DE0A6;margin:6px 2px 0}';
+      document.head.appendChild(sc);
+    }
+    var ov=document.getElementById('pst-ov');
+    if(!ov){
+      ov=document.createElement('div'); ov.className='ov'; ov.id='pst-ov';
+      ov.innerHTML='<div class="sheet">'
+        +'<div class="sheet-h"><span class="t">📋 붙여넣기로 포스팅</span><span class="x" id="pst-x">×</span></div>'
+        +'<div class="desc">카톡·메모장에 쓴 글을 <b style="color:var(--coral)">그대로</b> 붙여넣으세요. 제목·소제목·목록·인용을 갈라내고 <b>사진 들어갈 자리까지</b> 잡아드려요.</div>'
+        +'<div class="field"><label>여기에 붙여넣기 <small>— 줄바꿈만 있으면 충분</small></label><textarea id="pst-src" placeholder="예) 앞머리 자르기 전에 꼭 알아야 할 것&#10;&#10;안녕하세요, 오늘은 상담하면서 제일 많이 듣는 질문을 정리했어요..."></textarea></div>'
+        +'<div class="pst-sum" id="pst-sum"></div>'
+        +'<div class="pst-hint" id="pst-hint">글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요</div>'
+        +'<div class="pst-free">✓ AI 안 씁니다 · 비용 0원 · 이 글은 서버로 안 나가요</div>'
+        +'<button type="button" class="nchip-apply" id="pst-go">✨ 이대로 포스팅 만들기 →</button>'
+        +'</div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='pst-x') ov.classList.remove('open'); });
+      var ta=document.getElementById('pst-src');
+      function preview(){
+        var r=pstAnalyze(ta.value), n={};
+        r.items.forEach(function(b){ n[b.k]=(n[b.k]||0)+1; });
+        var NM={h:'소제목', p:'본문', li:'목록', q:'인용', img:'사진 자리'};
+        var chips=['h','p','li','q','img'].filter(function(k){ return n[k]; })
+          .map(function(k){ return '<i>'+NM[k]+' '+n[k]+'</i>'; }).join('');
+        document.getElementById('pst-sum').innerHTML = ta.value.trim()? chips : '';
+        document.getElementById('pst-hint').innerHTML = ta.value.trim()
+          ? ('제목은 <b>'+((r.title||'').slice(0,24))+'</b> 로 잡았어요 · 칸마다 <b>따로 고칠 수 있는 블록</b>으로 들어갑니다 · 사진은 점선 자리에 넣기만 하면 돼요')
+          : '글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요';
+      }
+      ta.addEventListener('input', preview);
+      ta.addEventListener('paste', function(){ setTimeout(preview, 30); });
+      document.getElementById('pst-go').onclick=function(){
+        var v=(ta.value||'').trim();
+        if(!v){ if(window.toast) toast('먼저 글을 붙여넣어 주세요'); return; }
+        var r=pstAnalyze(v);
+        ov.classList.remove('open');
+        var bl=pstToBlocks(r);
+        createPost('blog', bl, r.title);
+        try{ if(window.toast) toast('붙여넣은 글을 '+bl.length+'개 블록으로 나눴어요 · 사진만 넣으면 끝'); }catch(e){}
+      };
+    }
+    var t0=document.getElementById('pst-src'); if(t0){ t0.value=''; }
+    document.getElementById('pst-sum').innerHTML='';
+    document.getElementById('pst-hint').textContent='글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요';
+    ov.classList.add('open');
+  }
+  window.__openPasteStart=openPasteStart;
+  function createPost(type, blocksOverride, titleOverride){
     var preset=blocksOverride||(POST_PRESETS[type]?POST_PRESETS[type]():[]);
     var titles={blog:'새 글',landing:'새 랜딩',reviews:'후기 모음',style:'스타일 갤러리',notice:'공지',article:'새 글',insight:'새 정리글',checklist:'체크리스트',tip:'노하우 · 꿀팁'};
-    var p={ id:newPostId(), type:type, title:titles[type]||'새 게시물', cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:preset, createdAt:Date.now() };
+    var p={ id:newPostId(), type:type, title:(titleOverride&&String(titleOverride).trim())||titles[type]||'새 게시물', cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:preset, createdAt:Date.now() };
     if(type==='landing') p.skin='aurora';   // 🧰 스킨 기본 = 🫧 오로라 글래스 (2026-07-10 다크 오퍼 숨김에 따라 승계. 기존 랜딩은 그대로)
     postsData.push(p);
     try{ var wk=Math.floor(Date.now()/604800000); var arr=JSON.parse(localStorage.getItem('cm-hub-postweeks')||'[]'); if(arr.indexOf(wk)<0){ arr.push(wk); localStorage.setItem('cm-hub-postweeks', JSON.stringify(arr.slice(-60))); } }catch(_){}
@@ -12045,7 +12366,7 @@ if('serviceWorker' in navigator){
       ov=document.createElement('div'); ov.className='ov'; ov.id='liv-ov';
       ov.innerHTML='<div class="sheet">'
         +'<div class="sheet-h"><span class="t">🎯 팔기 — 새 랜딩</span><span class="x" id="liv-x">×</span></div>'
-        +'<div class="desc">아래 <b style="color:var(--coral)">완성 예시</b>처럼 나와요 — 질문 3개만 답하면 이 순서대로 채워져요. <b>글쓰기가 아니라 고르기</b>.</div>'
+        +'<div class="desc">아래 <b style="color:var(--coral)">완성 예시</b>처럼 나와요 — 질문 3개만 답하면 이 순서대로 채워져요. <b>포스팅이 아니라 고르기</b>.</div>'
         +'<div class="lgf-wrap"><span class="lgf-lab">완성 예시 · 이런 페이지가 나와요</span>'
           +'<div class="lgf-row on" style="--nc:#F0A97B"><span class="lgf-c">1</span><div class="lgf-b"><div class="lgf-bt">첫 줄 · 시선</div><div class="lgf-big">앞머리가 자꾸 갈라지나요? 3주면 잡혀요</div><span class="lgf-cue">✎ 이 줄부터 내 걸로</span></div></div>'
           +'<div class="lgf-row" style="--nc:#E68FB0"><span class="lgf-c">2</span><div class="lgf-b"><div class="lgf-bt">공감 · 마음</div><div class="lgf-tx">그 고민, 저도 알아요 — 손님 마음을 먼저.</div></div></div>'
@@ -12211,12 +12532,13 @@ if('serviceWorker' in navigator){
         +'<div class="sfs-more" id="sfs-more"></div>'
         +'<div class="field"><label>무엇에 대한 글이에요? <small>— 한 줄이면 충분</small></label><input id="sfs-topic" placeholder=""></div>'
         +'<button type="button" class="nchip-apply" id="sfs-go">✎ 이 뼈대로 시작 →</button>'
-        +'<button type="button" class="sfs-skip" id="sfs-skip">건너뛰고 빈 글로 시작 →</button>'
+        +'<button type="button" class="sfs-skip" id="sfs-paste" style="color:var(--coral);font-weight:800">📋 이미 쓴 글이 있어요 — 붙여넣기로 시작 →</button>'+'<button type="button" class="sfs-skip" id="sfs-skip">건너뛰고 빈 글로 시작 →</button>'
         +'</div>';
       document.body.appendChild(ov);
       ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='sfs-x') ov.classList.remove('open'); });
       ov.querySelectorAll('[data-sfk]').forEach(function(b){ b.onclick=function(){ window.__sfsKind=b.getAttribute('data-sfk'); ov.querySelectorAll('[data-sfk]').forEach(function(x){ x.classList.toggle('on', x===b); }); renderSfsPreview(window.__sfsKind); }; });
       document.getElementById('sfs-skip').onclick=function(){ ov.classList.remove('open'); createPost('blog'); };
+      document.getElementById('sfs-paste').onclick=function(){ ov.classList.remove('open'); openPasteStart(); };
       document.getElementById('sfs-go').onclick=function(){ var topic=(document.getElementById('sfs-topic')||{value:''}).value; ov.classList.remove('open'); startScaffoldPost(window.__sfsKind||'info', topic); };
     }
     ov.querySelectorAll('[data-sfk]').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-sfk')===window.__sfsKind); });
@@ -12383,7 +12705,7 @@ if('serviceWorker' in navigator){
     var exp=(window.__MC&&window.__MC.on&&window.__MC.cur&&window.__MC.cur.expires_at!=null)?window.__MC.cur.expires_at:window.__authExpires;
     var tierLbl=({basic:'베이직',pro:'프로',premium:'프리미엄'})[tier]||'베이직', dday;
     if(exp){ var left=Math.ceil((exp-Date.now())/86400000); dday=left>0?('사용 D-'+left):'기간 만료'; } else { dday='평생 이용'; }
-    var TILES=[['✏️','홈 편집','c-purple','live'],['✍️','새 글','c-violet','newpost'],['🎴','카드뉴스','c-pink','cardnews'],['📥','가져오기','c-gray','import'],['💰','스토어','c-green','store'],['👁','손님 홈','c-orange','realhome'],['📊','고객·분석','c-teal','data'],['🎨','분위기','c-blue','design']];
+    var TILES=[['✏️','홈 편집','c-purple','live'],['✍️','새 포스팅','c-violet','newpost'],['🎴','카드뉴스','c-pink','cardnews'],['📥','가져오기','c-gray','import'],['💰','스토어','c-green','store'],['👁','손님 홈','c-orange','realhome'],['📊','고객·분석','c-teal','data'],['🎨','분위기','c-blue','design']];
     var fold; try{ fold=JSON.parse(localStorage.getItem('cm-hub-fold')||'null'); }catch(_){ fold=null; } if(!fold) fold={ns:true,q:true};   // 기본 접힘
     var myH=(window.__custHandle?window.__custHandle():'');
     // 🌱 0의 상태 — 3걸음(소개=신뢰 · 대표작업=컨텐츠 · 연락처=행동). 이미 계산된 신호 재사용.
@@ -12423,7 +12745,7 @@ if('serviceWorker' in navigator){
     // 오늘 할 일 — 상태를 보고 «딱 하나»만 고름 (3걸음 미완이면 zs 카드가 그 역할)
     var todo=null;
     if(zsDone>=3){
-      if(pubs===0) todo={t:'첫 글 하나 올리기', d:'글이 있어야 검색·SNS에서 손님이 들어와요. 주제 한 줄이면 <b>7단 뼈대</b>가 깔려요.', b:'✍️ 첫 글 쓰기', go:'newpost'};
+      if(pubs===0) todo={t:'첫 포스팅 하나 올리기', d:'글이 있어야 검색·SNS에서 손님이 들어와요. 주제 한 줄이면 <b>7단 뼈대</b>가 깔려요.', b:'✍️ 첫 글 쓰기', go:'newpost'};
       else if(!_ps.thisWeek) todo={t:'이번 주 글 하나 올리기', d:'꾸준함이 곧 유입이에요 — 뼈대는 앱이 깔아드려요.', b:'✍️ 글 쓰러 가기', go:'newpost'};
       else if(prodN===0) todo={t:'지금 하시는 시술 하나 올리기', d:'이름·가격만 있으면 끝. 손님이 <b>바로 예약</b>할 수 있게 돼요.', b:'＋ 상품 올리기', go:'store'};
       else if(!last7) todo={t:'내 링크를 한 곳에 올려두세요', d:'손님이 들어오는 순간, 아래 <b>④분석</b>이 내 숫자로 채워져요.', b:'🔗 링크 복사하기', go:'copylink'};
