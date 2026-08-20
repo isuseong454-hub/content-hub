@@ -177,6 +177,32 @@
       }), '9종 전부 위 하나 + 아래 하나 (사장님 «위에만 몰려 있다»)');
       add('u 도크 위성 보정', ['.cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(', '.resv-fab{position:fixed; right:16px; bottom:calc(', '.fab{position:fixed; right:18px; bottom:calc('].every(k => ut.indexOf(k) >= 0), 'CTA·FAB 2종이 도크 위로(2026-08-20 겹침 사고)');
     }
+      /* ══ 📱 UX 마감 (2026-08-20) — 손님이 폰에서 실제로 겪던 4가지. 다시 빠지면 여기서 걸린다 ══ */
+      add('u 입력칸 16px 하한', /font-size: 16px !important/.test(ut) && ut.indexOf('max-width: 768px') >= 0,
+        'iOS가 16px 미만 입력칸에서 화면을 제멋대로 확대하던 것');
+      add('u 체크박스 제외', ut.indexOf('input:not([type="checkbox"])') >= 0,
+        '16px 일괄 적용에서 체크박스·라디오·range는 빼야 모양이 안 깨짐');
+      add('u 글자 확대 차단', ut.indexOf('text-size-adjust: 100%') >= 0, '가로 화면에서 글자만 커지던 것');
+      add('u 고무줄 차단', ut.indexOf('overscroll-behavior-y: none') >= 0 && ut.indexOf('overscroll-behavior: contain') >= 0,
+        '목록 끝에서 뒤 화면이 딸려 내려오던 것');
+      add('u 눌림 반응', /\.uad-go:active[^{]*\{[^}]*scale\(\.96\)/.test(ut),
+        '광고·칩·영상 썸네일에 «쏙 들어갔다 나옴»이 없었음');
+      /* 🚨 폰엔 «마우스 올림»이 없다 — hover 효과가 한 번 누르면 붙어버린다 (2026-08-20 사고) */
+      var hovLeft = (ut.match(/^\s*[^@{}\n]*:hover[^{\n]*\{/gm) || []).filter(function (l) {
+        return l.indexOf('data-edit') < 0            /* 편집기 전용 = 사장님만, 마우스 사용 */
+          && l.indexOf('@media (hover:hover)') < 0   /* 이미 가드 안 */
+          && l.indexOf('.la-slot') < 0              /* display:none, 편집 삽입 모드에서만 보임 */
+          && l.indexOf('.settings-link') < 0;       /* opacity:.9 하나 + :active 짝 있음 = 무해 */
+      });
+      add('u hover 폰 가드', hovLeft.length === 0,
+        hovLeft.length ? ('가드 없는 hover ' + hovLeft.length + '곳: ' + hovLeft[0].trim().slice(0, 50)) : '손님 화면 hover 14곳 전부 @media (hover:hover) 안');
+      add('u hover 가드 개수', (ut.match(/@media \(hover:hover\) and \(pointer:fine\)/g) || []).length >= 14,
+        '가드 블록이 통째로 지워지면 여기서 걸린다');
+      add('u 자동재생도 가드', ut.indexOf("matchMedia('(hover:hover) and (pointer:fine)').matches") >= 0,
+        '룩북 mouseenter 자동재생 — 폰에선 아예 안 단다');
+      add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
+        'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
+
     // 런타임: 테마 배열 9종 + 이름표
     if (typeof THEMES !== 'undefined') add('THEMES 런타임 9종', THEMES.length === 9, 'THEMES.length=' + THEMES.length);
     if (typeof THEME_NAMES !== 'undefined') add('라임 이름표', THEME_NAMES.lime === '라임', String(THEME_NAMES.lime));
