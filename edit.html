@@ -4174,6 +4174,7 @@ if('serviceWorker' in navigator){
 
       <div class="tcat addsec" style="margin-top:16px;">✨ 블록 세트 <span style="font-weight:600; opacity:.65;">— 검증된 순서로 통째 추가</span></div><!-- '템플릿' 명칭은 홈 템플릿(자유형/에디토리얼형)과 혼동돼 변경 (2026-07-08) -->
       <div class="tgrid">
+        <div class="tpl" id="tpick-open" style="grid-column:1/-1;border-color:rgba(167,139,255,.4);background:linear-gradient(135deg,rgba(167,139,255,.13),rgba(167,139,255,.05));"><span class="tic">🧭</span><span><span class="tn">유형 크게 보고 고르기</span><span class="ts">4가지 홈을 실물 크기로 넘겨 보며 선택</span></span></div>
         <div class="tpl tpl-set tpl-has-badge" data-set="tbeauty"><span class="tier-badge tb-pro"><svg class="tb-ic" viewBox="0 0 24 24"><path d="M12 3 19 9 12 21 5 9Z"/></svg><span class="tb-tx">프로</span></span><span class="tpl-badge" style="background:var(--coral);color:#120A24">유형</span><span class="tic">🌸</span><span><span class="tn">뷰티형</span><span class="ts">큰 후킹→시그니처 사진→예약 · 헤어·네일·피부</span></span></div>
         <div class="tpl tpl-set" data-set="tcreator"><span class="tpl-badge" style="background:#7DE0A6;color:#04140B">유형 · 무료</span><span class="tic">🎙</span><span><span class="tn">크리에이터형</span><span class="ts">프로필→링크→채널→구독 · 강사·유튜버·작가</span></span></div>
         <div class="tpl tpl-set" data-set="texpert"><span class="tpl-badge" style="background:#7DE0A6;color:#04140B">유형 · 무료</span><span class="tic">🎓</span><span><span class="tn">전문가형</span><span class="ts">이름→대표 사진→숫자·로고→상담 · 컨설팅·코칭</span></span></div>
@@ -7291,6 +7292,7 @@ if('serviceWorker' in navigator){
       }
       if(rowsBox) rowsBox.innerHTML='';
       window.__insertBeforeRow=null;
+      try{ if(typeof home!=='undefined'&&home){ home.htype=setKey; var _c=JSON.parse(localStorage.getItem(HKEY)||'{}'); _c.htype=setKey; localStorage.setItem(HKEY, JSON.stringify(_c)); } }catch(e){}   // «지금 쓰는 중» 배지용
       try{ if(window.toast) toast((setKey==='tbeauty'?'🌸 뷰티형':setKey==='tcreator'?'🎙 크리에이터형':setKey==='texpert'?'🎓 전문가형':'⚡ 비포애프터형')+'으로 시작! 색은 ②테마에서 언제든'); }catch(e){}
     }
     var ib = window.__insertBeforeRow;   // "+여기" 위치 (없으면 맨 끝)
@@ -7390,6 +7392,148 @@ if('serviceWorker' in navigator){
   ov.querySelectorAll('.tpl[data-set]').forEach(function(t){
     t.addEventListener('click', function(){ openTplPreview(t.getAttribute('data-set')); });
   });
+  /* ══════════ 🧭 구성 고르기 (2026-08-20 확정판) — 유형 4종을 크게 보고 고르는 화면.
+     카드 84% + 옆 카드 가장자리 + 옆으로 밀기(스크롤 스냅) · «지금 쓰는 중» 배지 · ☆ 즐겨찾기 ══════════ */
+  var TPICK = [
+    { k:'tbeauty',  nm:'🌸 뷰티형',      who:'헤어·네일·피부 · 작업물과 예약이 중심', ac:'#7DBF8E', on:'#04140B', bg:'#050A07', pro:1,
+      prev:'<div class="tpk-kick">압구정 · 앞머리 전문</div><div class="tpk-disp">첫인상 70%</div><div class="tpk-lead">앞머리 하나로 얼굴이 바뀝니다</div>'
+        +'<div class="tpk-2col"><div class="tpk-pho"><i>01</i><b>시스루뱅</b><u>30,000</u></div><div class="tpk-pho v2"><i>02</i><b>볼륨 매직</b><u>120,000</u></div></div>'
+        +'<div class="tpk-pn">스타일 갤러리 <em>36</em></div><div class="tpk-pn">시술 가격표</div><div class="tpk-pn">단골 후기 · ★4.9</div>'
+        +'<div class="tpk-cta">📅 상담 예약하기</div>' },
+    { k:'tcreator', nm:'🎙 크리에이터형', who:'강사·유튜버·작가 · 링크가 주인공', ac:'#8E7BFF', on:'#120A2E', bg:'#08060F', pro:0,
+      prev:'<div class="tpk-av"></div><div class="tpk-disp" style="font-size:19px;">블라블라 리지팍</div><div class="tpk-lead">『일상이 돈이 되는 숏폼』 저자</div>'
+        +'<div class="tpk-pn">콘블라 19기 알림 <em>HOT</em></div><div class="tpk-pn">인스타 실수 TOP 5</div><div class="tpk-pn">커뮤니티 입장</div><div class="tpk-pn">강의 제안 · 협업</div>'
+        +'<div class="tpk-cta">✉️ 뉴스레터 구독</div>' },
+    { k:'texpert',  nm:'🎓 전문가형',    who:'컨설팅·코칭·병의원 · 사람이 곧 상품', ac:'#7EC8F5', on:'#04101F', bg:'#05080F', pro:0,
+      prev:'<div class="tpk-kick" style="text-align:left;">CONTENT STRATEGIST</div>'
+        +'<div class="tpk-port"><span>📷 대표 사진</span><div class="tpk-pname">이수성<small>고객관점 대표 · 10년</small></div></div>'
+        +'<div class="tpk-3col"><div><b>3,000</b><small>수강생</small></div><div><b>310</b><small>강의</small></div><div><b>98%</b><small>만족도</small></div></div>'
+        +'<div class="tpk-pn">1:1 브랜딩 컨설팅 <em>4자리</em></div>'
+        +'<div class="tpk-cta">💬 상담 문의하기</div>' },
+    { k:'tresult',  nm:'⚡ 비포애프터형', who:'PT·교정·시술 · 변화가 곧 증거', ac:'#C6FF4D', on:'#0F1600', bg:'#070A05', pro:1,
+      prev:'<div class="tpk-kick">RESULT FIRST</div><div class="tpk-disp">12주</div><div class="tpk-lead">면, 몸이 바뀝니다</div>'
+        +'<div class="tpk-ba"><span class="b">BEFORE</span><span class="a">AFTER</span><i>⇄</i></div>'
+        +'<div class="tpk-pn">1:1 집중 (12주) <em>BEST</em></div><div class="tpk-pn">속성 (8주)</div>'
+        +'<div class="tpk-cta">⚡ 무료 체험 신청</div>' }
+  ];
+  function tpickFavs(){ try{ return JSON.parse(localStorage.getItem('cm-type-favs')||'{}'); }catch(e){ return {}; } }
+  function openTypePick(){
+    if(!document.getElementById('tpk-css')){
+      var sc=document.createElement('style'); sc.id='tpk-css';
+      sc.textContent='#tpk-ov{position:fixed;inset:0;z-index:120;display:none;flex-direction:column;'
+        +'background:radial-gradient(ellipse 96% 40% at 50% -3%, rgba(167,139,255,.28), transparent 66%), radial-gradient(ellipse 88% 32% at 50% 103%, rgba(167,139,255,.12), transparent 64%), #0A0814;}'
+        +'#tpk-ov.open{display:flex;}'
+        +'#tpk-ov .tpk-top{flex:none;display:flex;align-items:center;padding:calc(12px + env(safe-area-inset-top)) 16px 4px;}'
+        +'#tpk-ov .tpk-x{margin-left:auto;width:32px;height:32px;border-radius:50%;border:1px solid var(--hair);background:rgba(255,255,255,.08);color:var(--ink);font-size:15px;cursor:pointer;}'
+        +'#tpk-ov .tpk-hd{flex:none;text-align:center;padding:2px 16px 6px;}'
+        +'#tpk-ov .tpk-hd .k{font-size:9px;font-weight:900;letter-spacing:2.4px;color:var(--coral);}'
+        +'#tpk-ov .tpk-hd h3{font-size:20px;font-weight:900;letter-spacing:-.6px;margin-top:6px;color:var(--ink);}'
+        +'#tpk-ov .tpk-hd p{font-size:11px;color:var(--muted);margin-top:4px;}'
+        +'#tpk-rail{flex:1;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 8vw 6px;min-height:0;-webkit-overflow-scrolling:touch;scrollbar-width:none;}'
+        +'#tpk-rail::-webkit-scrollbar{display:none;}'
+        +'.tpk-card{flex:0 0 84%;max-width:420px;scroll-snap-align:center;border-radius:24px;overflow:hidden;display:flex;flex-direction:column;position:relative;'
+        +'border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 18px 42px rgba(0,0,0,.5);}'
+        +'.tpk-card .tpk-now{position:absolute;left:12px;top:12px;z-index:6;font-size:9px;font-weight:900;border-radius:999px;padding:5px 11px;background:var(--coral);color:#120A24;}'
+        +'.tpk-card .tpk-star{position:absolute;right:12px;top:12px;z-index:6;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.35);color:rgba(255,255,255,.55);font-size:14px;cursor:pointer;}'
+        +'.tpk-card .tpk-star.on{background:#FFCF8A;border-color:#FFCF8A;color:#2A1B06;}'
+        +'.tpk-card .tpk-tier{position:absolute;right:50px;top:15px;z-index:6;font-size:8.5px;font-weight:900;border-radius:999px;padding:4px 9px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.16);}'
+        +'.tpk-prev{flex:1;min-height:0;overflow:hidden;padding:40px 16px 12px;display:flex;flex-direction:column;gap:7px;}'
+        +'.tpk-kick{font-size:8px;font-weight:900;letter-spacing:2.4px;opacity:.6;text-align:center;}'
+        +'.tpk-disp{font-size:32px;font-weight:900;letter-spacing:-1.6px;text-align:center;line-height:1.02;'
+        +'background:linear-gradient(180deg,#fff 40%, var(--tac));-webkit-background-clip:text;background-clip:text;color:transparent;}'
+        +'.tpk-lead{font-size:10px;text-align:center;opacity:.68;}'
+        +'.tpk-2col{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px;}'
+        +'.tpk-pho{aspect-ratio:1/1.05;border-radius:13px;position:relative;overflow:hidden;'
+        +'background:radial-gradient(ellipse 58% 44% at 56% 24%, rgba(255,255,255,.16), transparent 64%), linear-gradient(155deg, color-mix(in srgb, var(--tac) 34%, #000), color-mix(in srgb, var(--tac) 10%, #000));}'
+        +'.tpk-pho.v2{background:radial-gradient(ellipse 58% 44% at 38% 28%, rgba(255,255,255,.13), transparent 64%), linear-gradient(140deg, color-mix(in srgb, var(--tac) 30%, #000), color-mix(in srgb, var(--tac) 8%, #000));}'
+        +'.tpk-pho i{position:absolute;left:8px;top:7px;font-style:normal;font-size:8px;font-weight:900;color:var(--tac);}'
+        +'.tpk-pho b{position:absolute;left:8px;bottom:6px;font-size:10px;font-weight:900;text-shadow:0 1px 5px rgba(0,0,0,.9);}'
+        +'.tpk-pho u{position:absolute;right:8px;bottom:6px;text-decoration:none;font-size:9px;font-weight:900;color:var(--tac);}'
+        +'.tpk-pn{display:flex;align-items:center;gap:8px;border-radius:12px;padding:9px 11px;font-size:10.5px;font-weight:800;'
+        +'background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.14);}'
+        +'.tpk-pn em{font-style:normal;margin-left:auto;font-size:8px;font-weight:900;border-radius:999px;padding:3px 7px;background:var(--tac);color:var(--ton);}'
+        +'.tpk-cta{margin-top:auto;text-align:center;border-radius:14px;padding:11px;font-size:11.5px;font-weight:900;'
+        +'background:linear-gradient(135deg, color-mix(in srgb, var(--tac) 62%, #fff), var(--tac));color:var(--ton);}'
+        +'.tpk-av{width:52px;height:52px;border-radius:50%;margin:2px auto 0;border:1px solid rgba(255,255,255,.2);'
+        +'background:radial-gradient(ellipse 58% 44% at 50% 26%, rgba(255,255,255,.2), transparent 64%), linear-gradient(150deg, color-mix(in srgb, var(--tac) 40%, #000), color-mix(in srgb, var(--tac) 12%, #000));}'
+        +'.tpk-port{height:150px;border-radius:15px;position:relative;overflow:hidden;'
+        +'background:radial-gradient(ellipse 56% 42% at 58% 22%, rgba(255,255,255,.18), transparent 64%), linear-gradient(165deg, color-mix(in srgb, var(--tac) 32%, #000), color-mix(in srgb, var(--tac) 8%, #000));}'
+        +'.tpk-port span{position:absolute;left:9px;top:9px;font-size:7.5px;font-weight:800;border-radius:999px;padding:3px 8px;background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.18);opacity:.85;}'
+        +'.tpk-pname{position:absolute;left:0;right:0;bottom:0;padding:11px 12px;background:linear-gradient(transparent, rgba(0,0,0,.85) 60%);font-size:19px;font-weight:900;letter-spacing:-.6px;}'
+        +'.tpk-pname small{display:block;font-size:8.5px;font-weight:500;opacity:.6;margin-top:2px;}'
+        +'.tpk-3col{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}'
+        +'.tpk-3col div{text-align:center;border-radius:11px;padding:7px 2px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);}'
+        +'.tpk-3col b{display:block;font-size:12.5px;font-weight:900;}'
+        +'.tpk-3col small{font-size:7px;opacity:.5;}'
+        +'.tpk-ba{height:96px;border-radius:14px;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}'
+        +'.tpk-ba::before{content:"";background:linear-gradient(160deg,#2C312A,#0C0F0A);}'
+        +'.tpk-ba::after{content:"";background:radial-gradient(ellipse 60% 44% at 50% 28%, color-mix(in srgb, var(--tac) 34%, transparent), transparent 66%), linear-gradient(160deg, color-mix(in srgb, var(--tac) 26%, #000), #0B1104);}'
+        +'.tpk-ba span{position:absolute;top:8px;font-size:6.5px;font-weight:900;letter-spacing:1.2px;border-radius:999px;padding:3px 7px;z-index:3;}'
+        +'.tpk-ba .b{left:8px;background:rgba(0,0,0,.55);color:rgba(255,255,255,.72);}'
+        +'.tpk-ba .a{right:8px;background:var(--tac);color:var(--ton);}'
+        +'.tpk-ba i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--tac);color:var(--ton);font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px color-mix(in srgb, var(--tac) 70%, transparent);}'
+        +'.tpk-lab{flex:none;padding:10px 14px 13px;border-top:1px solid rgba(255,255,255,.1);}'
+        +'.tpk-lab b{display:block;font-size:14px;font-weight:900;color:#fff;}'
+        +'.tpk-lab small{display:block;font-size:9.5px;opacity:.55;margin-top:2px;color:#fff;}'
+        +'#tpk-dots{flex:none;display:flex;gap:5px;justify-content:center;padding:9px 0 6px;}'
+        +'#tpk-dots i{width:5px;height:5px;border-radius:9px;background:rgba(255,255,255,.24);transition:width .2s;}'
+        +'#tpk-dots i.on{width:15px;background:var(--coral);}'
+        +'#tpk-foot{flex:none;padding:0 16px calc(16px + env(safe-area-inset-bottom));}'
+        +'#tpk-use{width:100%;border:none;border-radius:16px;padding:13px;font-family:var(--sans);font-size:13px;font-weight:900;cursor:pointer;'
+        +'background:linear-gradient(135deg,#C9B6FF,var(--coral));color:#160C2E;box-shadow:0 10px 26px rgba(167,139,255,.28);}'
+        +'#tpk-skip{display:block;width:100%;background:none;border:none;font-family:var(--sans);font-size:10.5px;color:var(--muted);padding:11px 0 0;cursor:pointer;}';
+      document.head.appendChild(sc);
+    }
+    var tov=document.getElementById('tpk-ov');
+    if(!tov){
+      tov=document.createElement('div'); tov.id='tpk-ov';
+      tov.innerHTML='<div class="tpk-top"><button type="button" class="tpk-x" id="tpk-x">×</button></div>'
+        +'<div class="tpk-hd"><div class="k">HOME LAYOUT</div><h3>어떤 홈으로 시작할까요</h3><p>언제든 바꿀 수 있어요 · 넣은 내용은 그대로 옮겨가요</p></div>'
+        +'<div id="tpk-rail"></div><div id="tpk-dots"></div>'
+        +'<div id="tpk-foot"><button type="button" id="tpk-use">이 구성으로 시작</button><button type="button" id="tpk-skip">나중에 고를래요</button></div>';
+      document.body.appendChild(tov);
+      document.getElementById('tpk-x').onclick=function(){ tov.classList.remove('open'); };
+      document.getElementById('tpk-skip').onclick=function(){ tov.classList.remove('open'); };
+      document.getElementById('tpk-use').onclick=function(){
+        var i=window.__tpkIdx||0, it=TPICK[i];
+        tov.classList.remove('open');
+        openTplPreview(it.k);   // 등급 잠금·확인창은 기존 경로가 처리
+      };
+      var rail=document.getElementById('tpk-rail');
+      rail.addEventListener('scroll', function(){
+        clearTimeout(window.__tpkT);
+        window.__tpkT=setTimeout(function(){
+          var cards=rail.querySelectorAll('.tpk-card'), mid=rail.scrollLeft+rail.clientWidth/2, best=0, bd=1e9;
+          [].forEach.call(cards, function(c,i){ var cm=c.offsetLeft+c.offsetWidth/2, dd=Math.abs(cm-mid); if(dd<bd){ bd=dd; best=i; } });
+          window.__tpkIdx=best;
+          [].forEach.call(document.querySelectorAll('#tpk-dots i'), function(d,i){ d.classList.toggle('on', i===best); });
+        }, 80);
+      }, {passive:true});
+    }
+    // 카드 렌더 (열 때마다 — 배지·별 최신)
+    var favs=tpickFavs(), cur=(typeof home!=='undefined'&&home&&home.htype)||'';
+    var rail=document.getElementById('tpk-rail');
+    var ord=TPICK.slice().sort(function(a,b){ return (favs[b.k]?1:0)-(favs[a.k]?1:0); });   // ☆ 즐겨찾기 앞으로
+    rail.innerHTML=ord.map(function(it){
+      return '<div class="tpk-card" data-k="'+it.k+'" style="--tac:'+it.ac+';--ton:'+it.on+';background:radial-gradient(ellipse 96% 38% at 50% -3%, color-mix(in srgb, '+it.ac+' 30%, transparent), transparent 66%), radial-gradient(ellipse 88% 32% at 50% 103%, color-mix(in srgb, '+it.ac+' 13%, transparent), transparent 64%), '+it.bg+';color:#fff;">'
+        +(cur===it.k?'<span class="tpk-now">지금 쓰는 중</span>':'')
+        +(it.pro?'<span class="tpk-tier">◇ 프로</span>':'')
+        +'<button type="button" class="tpk-star'+(favs[it.k]?' on':'')+'" data-fav="'+it.k+'">'+(favs[it.k]?'★':'☆')+'</button>'
+        +'<div class="tpk-prev">'+it.prev+'</div>'
+        +'<div class="tpk-lab"><b>'+it.nm+'</b><small>'+it.who+'</small></div></div>';
+    }).join('');
+    rail.querySelectorAll('[data-fav]').forEach(function(b){
+      b.onclick=function(ev){ ev.stopPropagation(); var f=tpickFavs(); var k=b.getAttribute('data-fav'); f[k]=!f[k];
+        try{ localStorage.setItem('cm-type-favs', JSON.stringify(f)); }catch(e){}
+        b.classList.toggle('on', !!f[k]); b.textContent=f[k]?'★':'☆'; };
+    });
+    var dots=document.getElementById('tpk-dots');
+    dots.innerHTML=ord.map(function(_,i){ return '<i'+(i===0?' class="on"':'')+'></i>'; }).join('');
+    window.__tpkIdx=0; rail.scrollLeft=0;
+    tov.classList.add('open');
+  }
+  window.__openTypePick=openTypePick;
+  (function(){ var b=document.getElementById('tpick-open'); if(b) b.addEventListener('click', function(){ openTypePick(); }); })();
   // 프로필 = 특수 구성 (일반 블록 아님) — 맨 위 프로필 켜기
   ov.querySelectorAll('.tpl[data-special="profile"]').forEach(function(t){
     t.addEventListener('click', function(){
@@ -10053,6 +10197,7 @@ if('serviceWorker' in navigator){
     tbeauty: [
       {type:'glowhook',name:'글로우 후킹',content:['70%','MY SIGNATURE','첫인상을 바꾸는 디자인','첫인상의','BY ○○ 디자이너']},
       {type:'lookbook',name:'시그니처 (사진 2~4장)',content:['시그니처','○○ 디자이너','MENU',[['','','시그니처 1','SIGNATURE 01'],['','','시그니처 2','SIGNATURE 02'],['','','시그니처 3','SIGNATURE 03'],['','','시그니처 4','SIGNATURE 04']]]},
+      {type:'stylegallery',name:'스타일 갤러리',content:[]},   /* 2026-08-20 확정: 사진 아래 = 갤러리·가격·후기 순 */
       {type:'service',name:'예약 메뉴',content:['예약하기 · 영업시간 입력',[['대표 시술 (약 30분)','30,000원','예약',''],['풀 케어 (약 90분)','120,000원','예약','']]]},
       P_REVIEW,
       {type:'lead',name:'상담 예약',content:['상담 예약','📅 상담 예약하기','원하는 날짜·시간만 남겨주시면 확인 후 연락드려요']}
