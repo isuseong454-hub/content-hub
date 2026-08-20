@@ -110,9 +110,10 @@
     --ph1:#16221A; --ph2:#1A2A20; --ph3:#131D17;
   }
   html[data-theme="banghouse"] body{
+    /* 🌗 2026-08-20 광원 = 위 하나 + 아래 하나 (둘 다 가운데·옅게) — 위에만 몰려 보이던 것 */
     background:
-      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(125,191,142,.18), transparent 70%),
-      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(125,191,142,.08), transparent 60%),
+      radial-gradient(ellipse 96% 38% at 50% -3%, rgba(125,191,142,.20), transparent 66%),
+      radial-gradient(ellipse 88% 32% at 50% 103%, rgba(125,191,142,.12), transparent 64%),
       #060B08;
   }
   html[data-theme="banghouse"] body::after{
@@ -130,9 +131,10 @@
     --ph1:#15122A; --ph2:#1D1836; --ph3:#120F22;
   }
   html[data-theme="night"] body{
+    /* 🌗 2026-08-20 광원 = 위 하나 + 아래 하나 (둘 다 가운데·옅게) — 위에만 몰려 보이던 것 */
     background:
-      radial-gradient(ellipse 78% 48% at 30% 0%, rgba(142,123,255,.22), transparent 68%),
-      radial-gradient(ellipse 62% 42% at 90% 96%, rgba(240,166,255,.14), transparent 62%),
+      radial-gradient(ellipse 96% 38% at 50% -3%, rgba(142,123,255,.22), transparent 66%),
+      radial-gradient(ellipse 88% 32% at 50% 103%, rgba(240,166,255,.13), transparent 64%),
       #07060B;
   }
   html[data-theme="dusk"]{
@@ -142,9 +144,10 @@
     --ph1:#241722; --ph2:#2E1C29; --ph3:#1E131C;
   }
   html[data-theme="dusk"] body{
+    /* 🌗 2026-08-20 광원 = 위 하나 + 아래 하나 (둘 다 가운데·옅게) — 위에만 몰려 보이던 것 */
     background:
-      radial-gradient(ellipse 76% 46% at 26% 0%, rgba(240,166,200,.20), transparent 66%),
-      radial-gradient(ellipse 60% 40% at 92% 96%, rgba(255,217,138,.13), transparent 60%),
+      radial-gradient(ellipse 96% 38% at 50% -3%, rgba(240,166,200,.21), transparent 66%),
+      radial-gradient(ellipse 88% 32% at 50% 103%, rgba(255,217,138,.13), transparent 64%),
       #140D12;
   }
   html[data-theme="sea"]{
@@ -154,11 +157,46 @@
     --ph1:#132330; --ph2:#193040; --ph3:#101C26;
   }
   html[data-theme="sea"] body{
+    /* 🌗 2026-08-20 광원 = 위 하나 + 아래 하나 (둘 다 가운데·옅게) — 위에만 몰려 보이던 것 */
     background:
-      radial-gradient(ellipse 78% 48% at 28% 0%, rgba(126,200,245,.20), transparent 67%),
-      radial-gradient(ellipse 60% 40% at 90% 96%, rgba(102,255,217,.12), transparent 60%),
+      radial-gradient(ellipse 96% 38% at 50% -3%, rgba(126,200,245,.21), transparent 66%),
+      radial-gradient(ellipse 88% 32% at 50% 103%, rgba(102,255,217,.12), transparent 64%),
       #0A1016;
   }
+  /* 🍋 라임 (2026-08-20 사장님 픽 — 비포애프터형 기본 · 트랜스폼 라임의 정식 테마 승격) */
+  html[data-theme="lime"]{
+    --paper:#070A05; --surface:#111608; --ink:#EDF4E6; --muted:#9AA88C; --hair:rgba(214,255,138,.10);
+    --coral:#C6FF4D; --coral-soft:rgba(198,255,77,.12); --on-coral:#0F1600;
+    --on-strong:#EDF4E6; --on-soft:#9AA88C;
+    --ph1:#1B2A0C; --ph2:#26380F; --ph3:#141F08;
+  }
+  html[data-theme="lime"] body{
+    /* 🌗 2026-08-20 광원 = 위 하나 + 아래 하나 (둘 다 가운데·옅게) — 위에만 몰려 보이던 것 */
+    background:
+      radial-gradient(ellipse 96% 38% at 50% -3%, rgba(198,255,77,.18), transparent 66%),
+      radial-gradient(ellipse 88% 32% at 50% 103%, rgba(150,200,60,.11), transparent 64%),
+      #070A05;
+  }
+
+  /* ── ✨ 라이트 유리 보정 (2026-08-20) — 다크에서 설계된 유리·광원을 라이트 4종이 살리는 규칙.
+     유리 = 흰 반투명(65%) + blur + «아래 그림자»가 윗선 하이라이트를 대신함. 광원 = 아주 옅게(.10 안팎). */
+  html[data-theme="lavender"] .block, html[data-theme="cream"] .block,
+  html[data-theme="pearl"] .block, html[data-theme="aqua"] .block{
+    background:rgba(255,255,255,.66);
+    -webkit-backdrop-filter:blur(14px) saturate(1.25); backdrop-filter:blur(14px) saturate(1.25);
+    border:1px solid rgba(255,255,255,.85);
+    box-shadow:0 1px 2px rgba(30,25,60,.05), 0 10px 30px rgba(30,25,60,.10);
+  }
+  html[data-theme="lavender"] body{ background:
+    radial-gradient(ellipse 96% 38% at 50% -3%, rgba(142,123,214,.13), transparent 66%),
+    radial-gradient(ellipse 88% 32% at 50% 103%, rgba(142,123,214,.09), transparent 64%), #F0EEF9; }
+  html[data-theme="cream"] body{ background:
+    radial-gradient(ellipse 96% 38% at 50% -3%, rgba(204,120,92,.10), transparent 66%),
+    radial-gradient(ellipse 88% 32% at 50% 103%, rgba(204,120,92,.07), transparent 64%), #EFEAE0; }
+  html[data-theme="pearl"] body{ background:
+    radial-gradient(ellipse 96% 38% at 50% -3%, rgba(132,153,194,.12), transparent 66%),
+    radial-gradient(ellipse 88% 32% at 50% 103%, rgba(132,153,194,.08), transparent 64%), #EEF1F6; }
+
   /* 다크 프리미엄 (카드뉴스 레퍼 톤 — 차콜 + 에메랄드 + 메시 글로우 + 비네팅) */
   html[data-theme="luxe"]{
     --paper:#0B0E12; --surface:#161B20; --ink:#F3F5F4; --muted:#9AA4A3; --hair:rgba(255,255,255,.08);
@@ -246,7 +284,9 @@
     --on-strong:#2E4140; --on-soft:#7A9594;
     --ph1:#CDEDED; --ph2:#E0FCFC; --ph3:#BCE5E5;
   }
-  html[data-theme="aqua"] body{ background:linear-gradient(180deg,#CDEDED 0%,#E2F7F6 52%,#EFF5F4 100%); }
+  html[data-theme="aqua"] body{ background:
+    radial-gradient(ellipse 96% 38% at 50% -3%, rgba(79,168,184,.11), transparent 66%),
+    radial-gradient(ellipse 88% 32% at 50% 103%, rgba(79,168,184,.08), transparent 64%), #EAF4F5; }
   html[data-theme="aqua"] body::before{ background:radial-gradient(circle at 50% 2%, #BFEBEB 0%, transparent 66%); opacity:.4; }
   html[data-theme="aqua"] .hh-text .kw{ background:linear-gradient(95deg,#3E9D9C,#7FD0CE); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; text-shadow:none; }
 
@@ -335,7 +375,7 @@
   /* 펄 미스트 (흰 은빛 연꽃 발광 레퍼 — 쿨톤 화이트+실버블루) */
   html[data-theme="pearl"]{
     --paper:#EEF1F6; --surface:#FFFFFF; --ink:#2B3038; --muted:#8A909E; --hair:#E2E7EF;
-    --coral:#8499C2; --coral-soft:#E7ECF5;
+    --coral:#8499C2; --coral-soft:#E7ECF5; --on-coral:#1E2430;   /* 2026-08-20 도크 활성 원 대비(흰 아이콘 2.9:1 미달) */
     --on-strong:#2B3038; --on-soft:#8A909E;
     --ph1:#E6EAF1; --ph2:#EDF0F5; --ph3:#E0E6EF;
   }
@@ -496,7 +536,7 @@
     font-family:var(--sans);
     color:var(--ink);
     line-height:1.6;
-    padding:env(safe-area-inset-top) 0 96px;
+    padding:env(safe-area-inset-top) 0 calc(124px + env(safe-area-inset-bottom));   /* 2026-08-20 도크가 떠 있으니 바닥 여유 ↑ */
     font-variant-numeric:tabular-nums;
     -webkit-font-smoothing:antialiased;
     position:relative;
@@ -511,7 +551,8 @@
   /* 그라데이션 = 다크 테마만. 라이트 테마는 평평하게 (사용자 결정) */
   html[data-theme="cream"] body::before, html[data-theme="hero"] body::before, html[data-theme="herb"] body::before,
   html[data-theme="mocha"] body::before, html[data-theme="pink"] body::before, html[data-theme="lavender"] body::before,
-  html[data-theme="pearl"] body::before, html[data-theme="peach"] body::before, html[data-theme="sage"] body::before{ opacity:0 !important; }
+  html[data-theme="pearl"] body::before, html[data-theme="peach"] body::before, html[data-theme="sage"] body::before,
+  html[data-theme="aqua"] body::before{ opacity:0 !important; }
   .wrap{max-width:460px; margin:0 auto; padding:24px 22px 0; position:relative; z-index:1;}
 
   /* ── 분위기 미리보기 스와치 (나중엔 편집기 설정으로 이동 · 방문자엔 숨김) ── */
@@ -1208,7 +1249,7 @@
   .promo-go{color:var(--coral); font-size:14px; flex:0 0 auto;}
 
   /* ── 우측하단 플로팅 (네이버 예약 / 카톡 상담) — 관리자가 온/오프 + 개인 링크 ── */
-  .fab{position:fixed; right:18px; bottom:84px; display:flex; flex-direction:column; align-items:flex-end; gap:11px; z-index:30;}
+  .fab{position:fixed; right:18px; bottom:calc(96px + env(safe-area-inset-bottom));   /* 2026-08-20 유리 도크 위로 */ display:flex; flex-direction:column; align-items:flex-end; gap:11px; z-index:30;}
   .fab a{position:relative; display:inline-flex; align-items:center; justify-content:center; gap:8px; height:54px; padding:0 19px; border-radius:27px;
     text-decoration:none; color:#fff; font-size:14.5px; font-weight:700; overflow:hidden;
     animation:fabIn .5s cubic-bezier(.2,.9,.3,1.35) backwards; transition:transform .12s ease, box-shadow .25s ease;}
@@ -1226,19 +1267,34 @@
   @keyframes fabIn{from{opacity:0; transform:translateX(34px) scale(.85);} to{opacity:1; transform:none;}}
 
   /* ── 하단 내비 (스타벅스식 워크스페이스 바) ── */
-  .botnav{position:fixed; left:0; right:0; bottom:0; z-index:25; display:flex; justify-content:center;
-    background:var(--surface); border-top:1px solid var(--hair);}
-  .botnav-inner{display:flex; width:100%; max-width:460px; padding:8px 6px calc(8px + env(safe-area-inset-bottom));}
-  .navitem{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
-    background:none; border:none; cursor:pointer; color:var(--muted);
-    font-family:var(--sans); font-size:11px; font-weight:500; padding:4px 0;}
-  .navitem svg{width:22px; height:22px; stroke:currentColor; fill:none;}
-  .navitem.active{color:var(--coral);}
+  /* 🫧 유리 도크 (2026-08-20 사장님 픽 — 떠 있는 알약 + 활성 = 테마색 원 글로우) */
+  .botnav{position:fixed; left:12px; right:12px; bottom:calc(10px + env(safe-area-inset-bottom)); z-index:25;
+    display:flex; justify-content:center; background:none; border:0; pointer-events:none;}
+  .botnav-inner{display:flex; width:100%; max-width:432px; padding:7px 9px; pointer-events:auto;
+    border-radius:999px; background:color-mix(in srgb, var(--surface) 72%, transparent);
+    -webkit-backdrop-filter:blur(20px) saturate(1.5); backdrop-filter:blur(20px) saturate(1.5);
+    border:1px solid var(--hair);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 14px 34px rgba(0,0,0,.30);}
+  .navitem{flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+    background:none; border:none; cursor:pointer; color:var(--muted); position:relative;
+    font-family:var(--sans); font-size:10px; font-weight:600; padding:3px 0 2px;}
+  .navitem svg{width:21px; height:21px; stroke:currentColor; fill:none; position:relative; z-index:1;}
+  .navitem span{position:relative; z-index:1;}
+  .navitem.active{color:var(--on-coral,#fff);}
+  .navitem.active::before{content:''; position:absolute; z-index:0; top:-9px; left:50%; transform:translateX(-50%);
+    width:44px; height:44px; border-radius:50%; background:var(--coral);
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--coral) 26%, transparent),
+      0 0 22px color-mix(in srgb, var(--coral) 55%, transparent), 0 6px 16px rgba(0,0,0,.35);}
+  .navitem.active span{margin-top:13px; color:var(--coral); font-weight:800;}
+  /* 라이트 테마 = 도크도 밝은 유리 */
+  html[data-theme="lavender"] .botnav-inner, html[data-theme="cream"] .botnav-inner,
+  html[data-theme="pearl"] .botnav-inner, html[data-theme="aqua"] .botnav-inner{
+    background:rgba(255,255,255,.72);
+    box-shadow:0 1px 2px rgba(30,25,60,.06), 0 14px 34px rgba(30,25,60,.14); }
   /* 데스크탑(넓은 화면) — 460px 컬럼을 '의도된 중앙 카드'처럼 (배경 폴리시 A) */
   @media (min-width:600px){
     .wrap{ min-height:100vh; box-shadow:0 0 0 1px var(--hair), 0 16px 70px rgba(0,0,0,.10); }
-    .botnav{ left:50%; right:auto; transform:translateX(-50%); width:100%; max-width:460px;
-      border-left:1px solid var(--hair); border-right:1px solid var(--hair); border-radius:16px 16px 0 0; box-shadow:0 -6px 28px rgba(0,0,0,.07); }
+    .botnav{ left:50%; right:auto; transform:translateX(-50%); width:100%; max-width:460px; }
     .fab, .resv-fab{ right:calc(50vw - 230px + 16px); }
     .cta-sticky{ max-width:460px; }
   }
@@ -1664,7 +1720,7 @@
   /* ── 토스식 누름 피드백 (전역) ── */
   button,.cta-btn,.hh-cta,.resv-cta-btn,.loc-btn,.lead-btn,.cd-btn,.ev-s-btn,.svc2-btn,.navitem{transition:transform .08s ease;}
   button:active,.cta-btn:active,.hh-cta:active,.resv-cta-btn:active,.loc-btn:active,.lead-btn:active,.cd-btn:active,.ev-s-btn:active,.navitem:active{transform:scale(.96);}
-  .cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:62px; width:100%; max-width:520px; padding:8px 14px calc(8px + env(safe-area-inset-bottom)); z-index:33; box-sizing:border-box; pointer-events:none;}
+  .cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(88px + env(safe-area-inset-bottom));   /* 2026-08-20 유리 도크 위로 */ width:100%; max-width:520px; padding:8px 14px calc(8px + env(safe-area-inset-bottom)); z-index:33; box-sizing:border-box; pointer-events:none;}
   .cta-sticky a{pointer-events:auto; display:block; text-align:center; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:15.5px; font-weight:700; padding:14px; border-radius:14px; text-decoration:none; box-shadow:0 6px 22px rgba(0,0,0,.32);}
   /* 플로팅 채널·예약 고정바 = 홈 탭에서만 (소개·컨텐츠·스토어·Q&A선 숨겨 집중) */
   body.cm-not-home #home-fab, body.cm-not-home .cta-sticky{ display:none !important; }
@@ -1820,7 +1876,7 @@
   .rv-ttab{padding:7px 13px; border:1px solid var(--hair); border-radius:999px; background:var(--paper); color:var(--muted); font-size:12.5px; cursor:pointer;}
   .rv-ttab.on{background:var(--coral-fill,var(--coral)); color:var(--on-coral); border-color:var(--coral); font-weight:700;}
   .rv-notice{margin:13px 0 2px; font-size:11.5px; line-height:1.65; color:var(--muted); background:var(--paper); border:1px solid var(--hair); border-radius:11px; padding:11px 13px; white-space:pre-wrap;}
-  .resv-fab{position:fixed; right:16px; bottom:78px; z-index:40; border:none; border-radius:999px; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:14.5px; font-weight:700; padding:13px 20px; box-shadow:0 6px 22px rgba(0,0,0,.28); cursor:pointer;}
+  .resv-fab{position:fixed; right:16px; bottom:calc(92px + env(safe-area-inset-bottom));   /* 2026-08-20 유리 도크 위로 */ z-index:40; border:none; border-radius:999px; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:14.5px; font-weight:700; padding:13px 20px; box-shadow:0 6px 22px rgba(0,0,0,.28); cursor:pointer;}
   .resv-fab:active{transform:scale(.97);}
   .resv-cta{text-align:left;}
   .resv-cta-btn{width:100%; margin-top:12px; padding:14px; border:none; border-radius:12px; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:15px; font-weight:700; cursor:pointer;}
