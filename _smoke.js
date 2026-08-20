@@ -203,6 +203,32 @@
       add('u :active 짝 생존', ut.indexOf('.pg-card:active') >= 0 && ut.indexOf('.gcard:active') >= 0 && ut.indexOf('.lbc.vplay .lbc-video') >= 0,
         'hover를 가드로 옮기며 :active·vplay를 같이 날리지 않았나');
 
+      /* ══ 📗 글 표지 3단 (2026-08-20) — ①고른 표지 ②글 안 첫 사진 ③제목 첫 글자 ══ */
+      add('u ▦ 없앰', ut.indexOf('"arc-crow-th">\u25a6') < 0, '표지 없는 글에 ▦ 네모가 뜨던 것');
+      add('u 표지 3단 함수', ut.indexOf('function postCover') >= 0 && ut.indexOf('function firstPhotoIn') >= 0 && ut.indexOf('function firstChar') >= 0, '세 함수 생존');
+      add('u 타이포 표지', ut.indexOf('arc-crow-typo') >= 0 && ut.indexOf('arc-nocov-i') >= 0, '줄=첫 글자 칩 · 카드=분류색 큰 글자');
+      add('u 대표카드 빈표지', ut.indexOf("_fc?' style=\"background-image:url('") >= 0, '표지 없으면 «그냥 검정»이던 것 → 분류색');
+
+    }
+    /* 🔬 런타임 — 표지 뽑기가 «링크를 사진으로 오인»하지 않나 (제일 위험한 실수) */
+    if (typeof window.__firstPhotoIn === 'function') {
+      var F = window.__firstPhotoIn, C = window.__postCover, FC = window.__firstChar;
+      var eq = function (g, w) { return g === w; };
+      add('표지 깊은 곳 사진 찾기',
+        eq(F([{ type: 'lookbook', content: ['t', '', '', [['x', 'data:image/webp;base64,LB', '', '']]] }], 0), 'data:image/webp;base64,LB'),
+        '중첩 배열 안 사진도 찾는다');
+      add('표지 링크 오인 금지',
+        eq(F([{ type: 'video', content: ['https://youtu.be/abc', 't'] }], 0), '') &&
+        eq(F([{ type: 'links', content: [['예약', 'https://booking.example.com/x']] }], 0), ''),
+        '유튜브·일반 링크를 사진으로 쓰면 깨진 이미지가 뜬다');
+      add('표지 우선순위',
+        eq(C({ id: '_t1', cover: 'data:image/png;base64,MINE', blocks: [{ content: ['data:image/png;base64,AUTO'] }] }), 'data:image/png;base64,MINE') &&
+        eq(C({ id: '_t2', cover: '', blocks: [{ content: ['data:image/png;base64,AUTO'] }] }), 'data:image/png;base64,AUTO'),
+        '사장님이 고른 표지가 항상 이긴다');
+      add('표지 무한재귀 방지', eq(F([[[[[[[['data:image/png;base64,X']]]]]]]], 0), ''), '깊이 6단에서 멈춘다');
+      add('첫 글자 이모지 안전', eq(FC('🔥 시스루뱅'), '🔥') && eq(FC(''), '·'), 'charAt(0)이면 이모지가 반 토막 난다');
+    }
+    if (true) {
     // 런타임: 테마 배열 9종 + 이름표
     if (typeof THEMES !== 'undefined') add('THEMES 런타임 9종', THEMES.length === 9, 'THEMES.length=' + THEMES.length);
     if (typeof THEME_NAMES !== 'undefined') add('라임 이름표', THEME_NAMES.lime === '라임', String(THEME_NAMES.lime));
