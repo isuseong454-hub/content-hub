@@ -6051,7 +6051,15 @@
   window.__applyAvatar=applyAvatar;
 
   // ── 편집 브릿지(?edit=1): 부모(편집기)가 보낸 데이터를 실시간 렌더 + 섹션 탭 보고 ──
-  var EDIT_MODE=false; try{ EDIT_MODE = new URLSearchParams(location.search).get('edit')==='1'; }catch(e){}
+  /* 🔒 2026-08-20 — 편집 브릿지는 «편집기가 iframe으로 띄울 때»만 켠다.
+        손님이 주소 끝에 &edit=1 을 붙여 열면 «＋후기 추가·× 삭제» 같은 편집 버튼 9개가 보였다.
+        (저장은 서버가 PIN으로 막고 있었지만, 보이는 것 자체가 문제)
+        edit.html에서 ?edit=1 을 쓰는 곳은 dz-live-ifr · le-iframe 둘뿐이고 전부 iframe → 무회귀 */
+  var EDIT_MODE=false;
+  try{
+    EDIT_MODE = new URLSearchParams(location.search).get('edit')==='1'
+             && (function(){ try{ return window.parent !== window; }catch(_){ return false; } })();
+  }catch(e){}
   try{ if(new URLSearchParams(location.search).get('dzpv')==='1') document.documentElement.classList.add('dz-pv'); }catch(e){}   // 분위기 미리보기 전용 = 플로팅 링크·예약 숨김(커버/테마 집중)
   // 디자인 모달 라이브 미리보기: 커버 위치/줌만 실시간 갱신 (전체 재렌더 없이 부드럽게)
   function updateCoverFit(f){ if(!f) return; var el=document.querySelector('.top-cover .pc-img')||document.querySelector('.page-cover .pcv-img'); if(!el) return; applyCoverFit(el, f); }
@@ -6113,6 +6121,8 @@
     document.documentElement.setAttribute('data-edit','1');
     var __bridgeGot=false;
     window.addEventListener('message', function(ev){
+      /* 🔒 남이 내 페이지를 iframe으로 감싸 가짜 데이터를 주입하는 것 차단 */
+      try{ if(ev.origin && ev.origin !== location.origin) return; }catch(_){ return; }
       var m=ev.data||{};
       if(m && m.type==='la-edit-data'){ __bridgeGot=true; try{ applyPublicData(m.data); }catch(e){} setTimeout(setupEditTaps, 160); }
       else if(m && m.type==='la-edit-preview'){ if(m.on){ document.documentElement.removeAttribute('data-edit'); } else { document.documentElement.setAttribute('data-edit','1'); }
