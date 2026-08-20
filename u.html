@@ -2593,6 +2593,12 @@
         ⚠️ 상시 transform이 걸린 요소엔 넣지 않는다 (밀려난다) */
   .uad-go, #uad-x, .mqc, .vid-thumb, .stf-i { transition: transform 120ms cubic-bezier(.2,0,0,1); }
   .uad-go:active, #uad-x:active, .mqc:active, .vid-thumb:active { transform: scale(.96); }
+  /* 📝 글(포스팅) 쪽 — 목록·목차를 눌러도 반응이 없었다 (2026-08-20 추가)
+        ⚠️ 폭이 꽉 찬 «줄»에 .96을 주면 접히는 것처럼 보인다 → 줄은 .98, 카드는 .96 */
+  .arc-crow, #pm-toc .pmt-list button { transition: border-color .18s, transform 120ms cubic-bezier(.2,0,0,1); }
+  .arc-card, .arc-mag, .arc-photo-cell { transition: transform 120ms cubic-bezier(.2,0,0,1); }
+  .arc-crow:active, #pm-toc .pmt-list button:active { transform: scale(.98); }
+  .arc-card:active, .arc-mag:active, .arc-photo-cell:active { transform: scale(.96); }
 
   </style>
 </head>
