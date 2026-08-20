@@ -1577,6 +1577,8 @@
     letter-spacing:-2px; line-height:1; color:color-mix(in srgb, var(--cc,var(--coral)) 45%, var(--on-strong, var(--ink)));
     opacity:.62; pointer-events:none;}
   .arc-cover, .arc-photo-cov{position:relative;}
+  /* 🚪 글이 아직 없는 «포스팅» 방 — 비어 있어도 단정하게 (2026-08-20) */
+  .arc-blank{padding:54px 20px; text-align:center; color:var(--muted); font-size:13px; line-height:1.8;}
   .arc-crow-th{flex:0 0 auto; width:48px; height:48px; border-radius:11px; background:color-mix(in srgb, var(--c,var(--coral)) 14%, transparent); display:grid; place-items:center; color:var(--c,var(--coral)); font-size:18px; overflow:hidden; background-size:cover; background-position:center;}
   /* 📗 표지 없는 글 = 제목 첫 글자 (▦ 대신 · 2026-08-20) — «없음»을 «고장»처럼 그리지 않는다 */
   .arc-crow-th.arc-crow-typo{background:color-mix(in srgb, var(--tc,var(--coral)) 17%, var(--surface)) !important;
@@ -5671,7 +5673,13 @@
       var pane=document.querySelector('.pane[data-pane="'+tab+'"]'); if(pane){ pane.classList.remove('active'); pane.innerHTML=''; }   // 정적 샘플 비움 (빈 데이터라 빌더 미실행 → 안전)
     }
     var liveN=((d.posts)||[]).filter(function(p){ return p && p.on!==false && ((p.blocks||[]).length>0); }).length;   /* 🚨전부 비공개·빈 글이어도 탭이 살아 가짜 샘플이 노출되던 것 — buildArchive와 같은 기준 */
-    hideTab('archive', liveN>0);
+    /* 🚪 2026-08-20 사장님 확정 — 손님 메뉴는 «홈 · 프로필 · 포스팅» 셋이 기본.
+          글이 0개여도 탭은 남기고, 방 안에 정직한 한 줄을 둔다(«곧 올라와요» 같은 빈 약속은 안 한다). */
+    hideTab('archive', true);
+    if(!liveN){
+      var _ap=document.querySelector('.pane[data-pane="archive"]');
+      if(_ap) _ap.innerHTML='<div class="arc-blank">아직 올라온 글이 없어요</div>';
+    }
     hideTab('shop',    !!(d.products && d.products.length));
     hideTab('qna',     !!(d.qna      && d.qna.length));
     if(!(d.blocks && d.blocks.length)){   // 홈 블록 0개 = 정적 프로모·갤러리·죽은링크 샘플 숨김 (홈 탭·프로필은 유지)
