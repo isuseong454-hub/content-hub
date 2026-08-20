@@ -9889,7 +9889,38 @@ if('serviceWorker' in navigator){
   var setTheme=document.getElementById('set-theme'); if(setTheme) setTheme.onclick=function(){ openHome('theme'); };
   var setFab=document.getElementById('set-fab'); if(setFab) setFab.onclick=function(){ openHome('fab'); };
   var setLogout=document.getElementById('set-logout');
-  if(setLogout) setLogout.onclick=function(){ if(!confirm('로그아웃 할까요?')) return; try{ localStorage.removeItem('la-auth'); }catch(_){} location.reload(); };
+  /* 🚪 2026-08-20 — 로그아웃은 «이 기기에서 이 계정 흔적을 전부 지운다».
+        전엔 la-auth 만 지워서 로그인칸에 내 코드가 그대로 남았고, 사장님은 «로그아웃이 안 됐다»고 보셨다. */
+  window.__hubLogout = function(){
+    try{
+      var a=null; try{ a=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){}
+      ['la-auth','la-last-code','la-ch-new','cm-hub-landing'].forEach(function(k){
+        try{ localStorage.removeItem(k); }catch(_){} });
+      if(a && a.code){ try{ localStorage.removeItem('la-snap-'+a.code); }catch(_){} }
+      try{ localStorage.removeItem('la-ch-'+((a&&a.code)||'x')); }catch(_){}
+      /* 남은 계정 흔적 쓸기 (다른 코드로 로그인했을 때 옛 데이터가 섞이지 않게) */
+      try{ Object.keys(localStorage).forEach(function(k){
+        if(k.indexOf('la-snap-')===0 || k.indexOf('la-ch-')===0) localStorage.removeItem(k); }); }catch(_){}
+    }catch(_){}
+  };
+  if(setLogout) setLogout.onclick=function(){
+    if(!confirm('로그아웃 할까요?')) return;
+    window.__hubLogout();
+    try{ sessionStorage.setItem('__loggedOut','1'); }catch(_){}
+    location.reload();
+  };
+  /* 로그아웃하고 돌아왔으면 «끝났다»고 눈에 보이게 말해준다 */
+  (function(){
+    try{
+      if(sessionStorage.getItem('__loggedOut')==='1'){
+        sessionStorage.removeItem('__loggedOut');
+        setTimeout(function(){
+          var e=document.getElementById('lg-err');
+          if(e){ e.textContent='로그아웃됐어요 · 다시 들어오려면 코드와 PIN을 넣어주세요'; e.style.color='#7DE0A6'; }
+        }, 400);
+      }
+    }catch(_){}
+  })();
   /* 🏠 로그인 착지 토글 (A안 되돌리기 장치) */
   (function(){
     var sw=document.getElementById('landing-sw'); if(!sw) return;
