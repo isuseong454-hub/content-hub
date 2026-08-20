@@ -2566,7 +2566,7 @@ if('serviceWorker' in navigator){
 
   <!-- 로그인 화면 (로그인 전까지 편집기 덮음) -->
   <div class="login-ov" id="login-ov">
-    <div style="position:absolute; bottom:8px; right:11px; font-size:9.5px; color:rgba(255,255,255,.3); z-index:3; letter-spacing:.03em;">build 07·10 ①</div>
+    <!-- 🧹 2026-08-20 — 개발용 빌드 표시 제거. 로그인 화면은 처음 오는 사람이 보는 곳이라 의미 없는 글자를 두지 않는다 -->
     <a class="lg-admin" href="admin.html" aria-label="관리자 페이지" title="관리자"><span>⚙</span></a>
     <div class="login-card">
       <img class="login-house" src="la-mark.png" alt="컨텐츠 허브">
@@ -5967,7 +5967,7 @@ if('serviceWorker' in navigator){
   <div id="live-edit-ov">
     <!-- 상단 = 문서 유틸리티만 (저장·실행취소). 미리보기·운영은 하단 탭바로 통합 (2026-07-07) -->
     <div class="le-bar le-bar-slim">
-      <span class="le-autosave is-saved" id="le-autosave" title="자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">저장됨 ✓</span></span>
+      <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
       <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" style="margin-left:auto;" disabled>↶</button>
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
       <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
