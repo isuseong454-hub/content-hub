@@ -171,6 +171,12 @@
         '🚨 버튼 4개 + 채널 칩이면 제목이 «한 글자씩 세로로» 쏟아져 바가 287px로 부풀었다(실측)');
       add('e 상단바 접기 폭', et.indexOf('@media (max-width: 980px)') >= 0,
         '480px가 아니라 «버튼이 다 안 들어가는 폭»부터 접어야 한다 — 760px에서도 눌렸다');
+      /* 👁 깜빡임 (2026-08-20 사장님 제보 «홈이나 운영자실이 얼핏 뜨다가 넘어간다») */
+      add('e 착지 전 작업실 안 보임', et.indexOf('function __willLandHome') >= 0 && et.indexOf('내 홈으로 가는 중…') >= 0,
+        '🚨 enter()가 덮개를 즉시 걷어 작업실이 900ms 보였다 — 착지 예정이면 덮개를 유지한다');
+      add('e 착지 판정은 서버 안 기다림', et.indexOf("localStorage.getItem('cm-hub-landing')") >= 0 && et.indexOf("q.get('desk')==='1' || q.get('live')==='1'") >= 0,
+        'localStorage·URL 만으로 즉시 판정 — 서버를 기다리면 그 사이 화면이 번쩍인다');
+      add('e 검사용 파일 안 남음', et.indexOf('_flick.js') < 0, '임시 검사기가 배포에 섞이지 않게');
       add('유형 4종 프리셋', ['tbeauty:','tcreator:','texpert:','tresult:'].every(k => et.indexOf(k) >= 0), 'STYLE_PRESETS t*');
       add('유형 등급 (2026-08-20 확정)', et.indexOf('tbeauty:1, tresult:1') >= 0 && /SET_PRO[^;]*tcreator/.test(et) === false, '뷰티·비포애프터=프로 / 크리에이터·전문가=기본');
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
