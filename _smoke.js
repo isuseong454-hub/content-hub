@@ -643,6 +643,22 @@
       add('출처 줄 제거', et.indexOf('var PST_SRC_LINE') >= 0, '「[출처] …|작성자 …」');
       add('위치 줄은 살림', et.indexOf('var PST_LOC_LINE') >= 0, '「위치이벨로 의정부점」은 찌꺼기가 아니라 정보다');
 
+      /* 🧭 2026-08-21 사장님 «틀마다 주인공이 다르다» — 틀은 순서만 바꾸는 게 아니라
+            «이 글에선 뭐가 주인공이냐»를 정한다. 막지 않고 빠진 것을 알려만 준다. */
+      add('글 틀 5종', et.indexOf('var PST_FRAMES') >= 0 && (et.match(/k:'(info|review|type|offer|vs)'/g)||[]).length >= 5, '정보글·후기·진단·모집·비교');
+      add('틀 고르기 칩', et.indexOf('id="pst-frames"') >= 0 && et.indexOf('.pf-chips{') >= 0, '단계를 늘리지 않게 시트 «안» 맨 위에');
+      add('틀은 기억한다', et.indexOf("localStorage.setItem('cm-pst-frame'") >= 0, '다음에도 같은 종류를 쓸 확률이 높다');
+      add('글에 틀을 심는다', et.indexOf('p.frame=window.__pstFrameK') >= 0, '체크와 캡션이 이걸 본다');
+      add('있어야 살아요 체크', et.indexOf('class=\"dneeds\"') >= 0 && et.indexOf('이건 있어야 살아요') >= 0, '후기글인데 전·후 사진이 없으면 그 글은 죽는다');
+      add('체크는 막지 않는다', et.indexOf('.dneed.ok .i{') >= 0 && et.indexOf('disabled') >= 0, '알려만 주고 결정은 사장님이');
+      add('틀마다 행동 비중', et.indexOf("var _ly=(_fr==='offer'||_fr==='review')?'sticky':'inline';") >= 0, '매출 글은 버튼이 스크롤을 따라다닌다');
+      add('틀에 맞춘 캡션', et.indexOf('var EXP_FRAME_LEAD') >= 0 && et.indexOf('var EXP_FRAME_TAIL') >= 0, '후기는 «이렇게 달라졌어요», 모집은 «마감 전에»');
+      add('틀 없는 옛 글도 그대로', et.indexOf("EXP_FRAME_TAIL[_fk] || '자세한 내용은 프로필 링크에서") >= 0, '무회귀 — 틀이 없으면 하던 대로');
+
+      /* 🔌 사장님 «아직 연결 안 됐으면 흐리게 미오픈이라고» */
+      add('미연결 행동 버튼 표시', et.indexOf('class=\"dsoon\"') >= 0 && et.indexOf('아직 연결 안 됨') >= 0, '모르고 두면 손님이 눌러도 아무 일이 없다');
+      add('미연결은 흐리게', et.indexOf('.dcard.dim{ opacity:.62; border-style:dashed; }') >= 0, '추천은 그대로 두되 «안 열렸다»고 알린다');
+
       /* 🚨 2026-08-21 사장님 픽 ㉮ — 「1. 2. 3.」이 목록인지 «글의 뼈대»인지 가른다.
             목록은 항목이 연달아 나온다. 뼈대는 항목마다 문단이 붙는다.
             전엔 무조건 ☑ 체크목록이라 그 단발 글의 유형 1·2가 본문에 파묻혔다. */
