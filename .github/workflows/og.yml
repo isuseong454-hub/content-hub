@@ -1,0 +1,35 @@
+# DM 카드 껍데기 자동 생성 — 자세한 설명은 tools/og-shells.py 맨 위에.
+# 비밀값 없음: 공개키로 이미 공개된 페이지만 읽고, 커밋은 GITHUB_TOKEN 으로 한다.
+name: DM 카드 껍데기
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: og-shells
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 tools/og-shells.py
+      - name: 바뀐 게 있을 때만 커밋
+        run: |
+          if [ -z "$(git status --porcelain u og)" ]; then
+            echo "바뀐 것 없음"
+            exit 0
+          fi
+          git config user.name og-shells
+          git config user.email og-shells@users.noreply.github.com
+          git add u og
+          git commit -m "DM 카드 껍데기 갱신"
+          git push
