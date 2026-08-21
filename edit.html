@@ -3508,7 +3508,7 @@ if('serviceWorker' in navigator){
     <button class="ws-tab" data-ws="page"><span class="ico">👤</span>프로필</button>
     <button class="ws-tab" data-ws="posts"><span class="ico">📝</span>포스팅</button>
     <button class="ws-tab ws-soon" data-ws="sales" title="아직 준비 중이에요"><span class="ico">💰</span>판매·예약</button>
-    <button class="ws-tab ws-soon" data-ws="data" title="아직 준비 중이에요"><span class="ico">📊</span>고객·분석</button>
+    <button class="ws-tab" data-ws="data"><span class="ico">📊</span>고객·분석</button>
   </div>
 
   <div class="wrap">
@@ -6005,7 +6005,9 @@ if('serviceWorker' in navigator){
     var curWs='page';
     /* 🚧 2026-08-20 사장님 지시 — «제품관(판매·예약)»과 «물어보는 칸(고객·분석)»은 아직 안 보여준다.
           열 때는 이 목록만 비우면 된다. 기능·코드는 그대로 살아 있다. */
-    var WS_SOON = { sales:1, data:1 };
+    /* 📊 2026-08-20 — 「고객·분석」 개방. 추적은 계속 쌓이는데 볼 화면이 막혀 있었다.
+          판매·예약(sales)은 사장님 지시대로 아직 닫아 둔다. */
+    var WS_SOON = { sales:1 };
     try{ window.__switchWs=switchWs; }catch(_){}   /* 현장 편집의 «📝 글쓰기»가 부른다 (함수 선언은 호이스팅돼 여기서 잡힌다) */
     function switchWs(name){
       if(WS_SOON[name]){ try{ if(window.toast) toast('아직 준비 중이에요 — 곧 열립니다'); }catch(_){} return; }
