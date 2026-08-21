@@ -1759,7 +1759,32 @@ if('serviceWorker' in navigator){
   #ls-host #post-edit-banner{ display:block !important; }
   #ls-host #home-body{ display:block !important; }
   #ls-host .pw-pane{ display:block !important; }
-  .le-bar{flex:0 0 auto; display:flex; align-items:center; gap:10px; padding:12px 15px; border-bottom:1px solid var(--hair); background:var(--surface);}
+  .le-bar{flex:0 0 auto; display:flex; align-items:center; gap:8px; padding:11px 13px; border-bottom:1px solid var(--hair); background:var(--surface);}
+  .le-bar-sp{flex:1;}
+  .le-quit{background:transparent; border:1px solid var(--hair); color:var(--ink); border-radius:10px;
+    padding:8px 13px; font-size:12.5px; font-weight:800; font-family:var(--sans); cursor:pointer; white-space:nowrap;
+    transition:transform .08s ease, background .16s ease;}
+  .le-quit:active{transform:scale(.96);}
+  /* 🎨 2026-08-20 사장님 «라이트 버전인데 편집 틀이 어둡다 · 컬러 신경써줘»
+        손님 화면이 밝은 테마면 편집 껍데기(위 바 · 아래 도크)도 같이 밝아진다.
+        색은 손님 화면에서 그대로 가져온다 — 따로 정하면 또 안 어울린다. */
+  #live-edit-ov[data-shell="light"] .le-bar,
+  #live-edit-ov[data-shell="light"] .le-dock{ background:#FBF8F4; border-color:rgba(0,0,0,.09); }
+  #live-edit-ov[data-shell="light"] .le-quit{ color:#2A2530; border-color:rgba(0,0,0,.16); }
+  #live-edit-ov[data-shell="light"] .le-icon-btn{ background:rgba(0,0,0,.04); color:#2A2530; border-color:rgba(0,0,0,.12); }
+  #live-edit-ov[data-shell="light"] .le-d{ color:rgba(42,37,48,.62); }
+  #live-edit-ov[data-shell="light"] .le-d.is-on,
+  #live-edit-ov[data-shell="light"] .le-d:active{ color:#2A2530; }
+  #live-edit-ov[data-shell="light"] .le-autosave{ color:#0E9E72; background:rgba(14,158,114,.10); }
+  #live-edit-ov[data-shell="light"] .le-top-d{ background:rgba(0,0,0,.05); border-color:rgba(0,0,0,.12); color:#2A2530; }
+  /* 📏 2026-08-20 실측 검수가 잡음 — 밝은 껍데기에서 ↶↷·「저장」 글씨가 배경에 묻혔다(1.1:1).
+        흰 바탕엔 어두운 글씨. 「저장」은 그라데이션 위 흰 글씨라 그대로 두되 대비를 확보한다. */
+  #live-edit-ov[data-shell="light"] .le-icon-btn{ color:#2A2530 !important; background:rgba(0,0,0,.05) !important; border-color:rgba(0,0,0,.14) !important; }
+  #live-edit-ov[data-shell="light"] .le-x{ color:#fff !important; }
+  /* 📏 손가락 자리 — 33·30·29px 이던 것을 40px 이상으로 */
+  .le-bar .le-icon-btn{ min-height:40px; min-width:40px; }
+  .le-bar .le-x{ min-height:40px; padding:10px 16px; }
+  .le-quit{ min-height:40px; }
   .le-bar .le-t{font-size:14.5px; font-weight:700; flex:1; display:flex; align-items:center; gap:7px;}
   .le-bar .le-save{background:var(--grad); color:#fff; border:none; border-radius:10px; padding:8px 14px; font-size:12.5px; font-weight:700; font-family:var(--sans); cursor:pointer;}
   .le-bar .le-save:active{transform:scale(.96);}
@@ -1800,11 +1825,9 @@ if('serviceWorker' in navigator){
   .le-dock .le-d{flex:1;}
   /* 🧭 네 걸음 — 번호를 달아 «순서»가 눈에 보이게 (2026-08-20 A안) */
   .le-flow .le-d{position:relative;}
-  .le-flow .le-d[data-step]::before{content:attr(data-step); position:absolute; top:2px; left:50%;
-    transform:translateX(-17px); width:14px; height:14px; border-radius:99px;
-    background:var(--coral); color:#16161A; font-size:9px; font-weight:900;
-    display:flex; align-items:center; justify-content:center; line-height:1;}
-  .le-flow .le-d.step-done[data-step]::before{background:var(--soft); color:var(--muted);}
+  /* 🚨 2026-08-20 사장님 «워크스페이스에 숫자 없애» — 번호 배지 제거.
+        순서는 «왼쪽에서 오른쪽»으로 이미 읽힌다. 배지는 시끄럽기만 했다.
+        (data-step 속성은 남긴다 — 어느 걸음인지 코드가 알아야 한다) */
   .le-flow .le-d.step-done .di{opacity:.45;}
   /* 👁⚙ 위로 올린 둘 — 도크 버튼과 같은 속 구조를 유지해 기존 배선을 안 깬다 */
   .le-top-d{flex:0 0 auto !important; flex-direction:row !important; gap:5px; padding:7px 10px;
@@ -1989,6 +2012,43 @@ if('serviceWorker' in navigator){
   .an-tabs button{flex:0 0 auto; white-space:nowrap; font-size:12.5px; font-weight:700; padding:9px 11px; border-radius:9px; background:transparent; border:none; color:var(--muted); cursor:pointer; font-family:var(--sans);}
   .an-tabs button.on{background:var(--grad); color:#fff; box-shadow:0 4px 12px rgba(124,63,228,.4);}
   .an-pane{display:none;} .an-pane.on{display:block;}
+  /* ✍️ 글쓰기 방 고르기 (2026-08-20) */
+  .wch-i{display:flex; align-items:center; gap:12px; width:100%; padding:15px 14px; border:none;
+    border-bottom:1px solid var(--hair); background:transparent; color:var(--ink); cursor:pointer;
+    font-family:var(--sans); text-align:left; transition:background .16s ease, transform .08s ease;}
+  .wch-i:active{transform:scale(.985);}
+  .wch-i:hover{background:var(--soft);}
+  .wch-i .e{flex:0 0 26px; font-size:19px; text-align:center;}
+  .wch-i .m{flex:1; min-width:0;}
+  .wch-i .m b{display:block; font-size:14.5px; font-weight:750;}
+  .wch-i .m span{display:block; font-size:11.5px; color:var(--muted); margin-top:3px; line-height:1.55;}
+  .wch-i .m span b{display:inline; font-size:11.5px; color:var(--ink); font-weight:700;}
+  .wch-i .go{flex:0 0 auto; color:var(--coral); font-size:15px; font-weight:800;}
+  .wch-note{font-size:11px; color:var(--dim); line-height:1.6; padding:12px 14px 2px; text-align:center;}
+  .wch-note b{color:var(--muted); font-weight:700;}
+  /* 📿 구슬 1-2 — 썸네일 → 본문 (2026-08-20 사장님 「나」 픽) */
+  .pbeads{display:flex; align-items:center; justify-content:center; gap:8px; padding:4px 0 14px;}
+  .pb{display:flex; align-items:center; gap:6px; font-size:11px; font-weight:800; color:var(--dim); cursor:pointer;}
+  .pb i{width:20px; height:20px; border-radius:99px; background:var(--soft); color:var(--dim);
+    display:flex; align-items:center; justify-content:center; font-size:10px; font-style:normal;}
+  .pb.on{color:var(--ink);} .pb.on i{background:var(--grad); color:#fff;}
+  .pb.done i{background:rgba(125,224,166,.2); color:#7DE0A6;}
+  .pbline{width:22px; height:2px; border-radius:2px; background:var(--soft);}
+  #home-body[data-pstepon="1"] [data-pstep="2"]{display:none !important;}
+  #home-body[data-pstepon="2"] [data-pstep="1"]{display:none !important;}
+  #home-body[data-pstepon="2"] #pstep-next{display:none !important;}
+  #home-body[data-pstepon="1"] #pstep-done{display:none !important;}
+  .pstep-next{display:block; width:100%; margin-top:16px; padding:14px; border:none; border-radius:13px;
+    background:var(--grad); color:#fff; font-family:var(--sans); font-size:13.5px; font-weight:800; cursor:pointer;}
+  .pstep-next:active{transform:scale(.985);}
+  .pstep-done{display:flex; align-items:center; gap:10px; padding:11px 12px; margin-bottom:13px;
+    border:1px solid var(--hair); border-radius:12px; background:var(--surface);}
+  .pstep-done .ck{width:19px; height:19px; border-radius:99px; background:rgba(125,224,166,.2); color:#7DE0A6;
+    display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:900;}
+  .pstep-done .m{flex:1;}
+  .pstep-done .m b{display:block; font-size:12.5px; font-weight:700;}
+  .pstep-done .m span{display:block; font-size:10.5px; color:var(--dim);}
+  .pstep-done .ed{font-size:10.5px; font-weight:800; color:var(--coral); cursor:pointer;}
   /* 👤 라이트 프로필 = 마지노선만 (2026-08-20) — 시트로 열렸을 때만 깊은 칸을 접는다 */
   #profile-card.lite [data-deep]{display:none;}
   #profile-card:not(.lite) [data-litenote]{display:none;}
@@ -2640,6 +2700,10 @@ if('serviceWorker' in navigator){
     (function(){
       var intro=document.getElementById('cm-intro'); if(!intro) return;
       function bye(){ if(!intro) return; intro.classList.add('done'); setTimeout(function(){ if(intro&&intro.parentNode) intro.parentNode.removeChild(intro); intro=null; }, 600); }
+      /* 🚨 2026-08-20 사장님 «중간에 허브 창이 왜 뜨냐고 · 직행인데»
+            홈 편집·⚙ 등 «앱 안에서 이동»할 때도 브랜드 인트로가 껴서 한 번씩 끊겼다.
+            주소에 live·desk·tab 이 붙어 있으면 = 안에서 이동 → 인트로 없이 바로 간다. */
+      try{ var _q=location.search||''; if(/[?&](live|desk|tab)=/.test(_q)){ intro.classList.add('done'); if(intro.parentNode) intro.parentNode.removeChild(intro); return; } }catch(e){}
       var seen=false; try{ seen=localStorage.getItem('cm-intro-seen')==='1'; }catch(e){}
       if(seen) intro.classList.add('quick');           // 2회차+ = 짧은 브랜드 플래시
       try{ localStorage.setItem('cm-intro-seen','1'); }catch(e){}
@@ -2658,7 +2722,7 @@ if('serviceWorker' in navigator){
       <div class="login-slogan">컨텐츠를 자산으로 만드는 수익화 개인 홈페이지</div>
       <div class="login-s" id="lg-sub"></div>
       <div class="lg-signup-note" id="lg-signup-note">발급받은 <b>코드</b>를 입력하면, 다음 화면에서 <b>나만의 PIN</b>을 정해요.<br>가입은 이 한 번이면 끝이에요 😊</div>
-      <input id="lg-code" placeholder="발급받은 코드 (6자리)" autocapitalize="characters" autocomplete="off" maxlength="6">
+      <input id="lg-code" placeholder="발급받은 코드 (6자리)" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" maxlength="6">
       <div class="pin-box" id="lg-pin-box">
         <input class="pin-d" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 1번째">
         <input class="pin-d" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="PIN 2번째">
@@ -4553,7 +4617,7 @@ if('serviceWorker' in navigator){
 
       <!-- 공유 미리보기 (커버 + 테마 색이 실시간 반영) -->
       <div class="dz-phone" id="dz-phone" data-layout="full" data-bright="light" style="--dzac:#ef7a33;">
-        <div class="dz-photo" id="dz-photo"><img id="dz-img" alt="" draggable="false"><div class="dz-ph-empty" id="dz-ph-empty">기본 · 동그라미 프사로 보여요</div></div>
+        <div class="dz-photo" id="dz-photo"><img id="dz-img" alt="" draggable="false"><div class="dz-ph-empty" id="dz-ph-empty">커버 없음 · 동그라미 프사만 보여요</div></div>
         <div class="dz-scrim"></div>
         <div class="dz-content">
           <div class="dz-nm" id="dz-nm">내 이름</div>
@@ -4574,10 +4638,14 @@ if('serviceWorker' in navigator){
       </div>
 
       <div data-dzpage="2" style="display:none;">
-        <div class="dz-cg" style=""><span class="gl">👤 프로필 꾸미기 <span style="font-weight:400; color:var(--muted);">· 기본은 동그라미 프사예요</span></span></div>
-        <!-- 👤 2026-08-20 — 「사진 없음 / 내 사진 / 캐릭터」 3개를 2개로. 캐릭터 삭제(내 것 같지 않다는 지적).
-             기본 = 동그라미 프사 + 소개 (커버 사진 없음) / 내 사진 = 커버를 내 사진으로 -->
-        <div class="dz-cg"><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">👤 기본 · 동그라미 프사</button><button type="button" data-pm="own">📷 내 사진</button></div></div>
+        <!-- 🚨 2026-08-20 수정 — 내가 이 칸을 「프로필 꾸미기」로 잘못 이름 붙였다.
+             이건 cov().photo, 즉 «커버(맨 위 배경) 사진»이다. 동그라미 프사(아바타)는 프로필 편집에 따로 있다.
+             둘이 헷갈리면 «사진»이라는 말이 두 곳에서 다른 걸 가리키게 된다. -->
+        <div class="dz-cg" style=""><span class="gl">🖼 커버 사진 <span style="font-weight:400; color:var(--muted);">· 맨 위 배경 (선택)</span></span></div>
+        <!-- 🖼 2026-08-20 — 「사진 없음 / 내 사진 / 캐릭터」 3개를 2개로. 캐릭터 삭제(내 것 같지 않다는 지적). -->
+        <div class="dz-cg"><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">커버 없음</button><button type="button" data-pm="own">📷 내 사진</button></div>
+          <div class="vhint" style="margin-top:6px; text-align:left; line-height:1.6;">커버가 없으면 <b>동그라미 프사 + 소개</b>만 보여요. <b>동그라미 프사</b>는 <b>👤 프로필</b>에서 바꿔요 — 여기는 <b>맨 위 배경</b>입니다.</div>
+        </div>
         <div class="dz-cg" id="dz-bg-cg"><span class="gl">기본 배경 <span style="font-weight:400; color:var(--muted);">· 고급 · 테마마다 <b>은은한 광원</b>이 이미 깔려요 (보통 «없음»)</span></span><div class="dz-seg dz-pm-seg" id="dz-bgstyle"><button type="button" data-bg="" class="on">없음</button><button type="button" data-bg="glow">은은한 글로우</button><button type="button" data-bg="mesh">소프트 메쉬</button></div></div>
         <div class="dz-cg" id="dz-range-cg" style="display:none;"><span class="gl">커버 모양 <span style="font-weight:400; color:var(--muted);">· 어떻게 보여줄지</span></span><div class="dz-seg" data-dzgrp="layout"><button type="button" data-v="full" class="on">커버 (가로 와이드)</button><button type="button" data-v="bg">배경 (전체화면)</button></div></div>
         <div class="dz-cg" id="dz-zoom-cg" style="display:none;">
@@ -6052,16 +6120,20 @@ if('serviceWorker' in navigator){
   <!-- 시안 B: 보면서 수정 라이브 캔버스 -->
   <div id="live-edit-ov">
     <!-- 상단 = 문서 유틸리티만 (저장·실행취소). 미리보기·운영은 하단 탭바로 통합 (2026-07-07) -->
+    <!-- 🚨 2026-08-20 사장님 «편집하는데 위에 이런 기능들이 왜 필요해» — 6개를 3개로.
+         편집 중에 필요한 건 «나가기 · 되돌리기 · 저장» 뿐이다.
+         👁 미리보기 = 「편집 끝내기」가 그 일을 한다 → 뺀다 · ⚙ 운영 = 손님 화면 오른쪽 위 ⚙에 이미 있다 → 뺀다
+         (배선이 걸린 버튼은 지우지 않고 숨긴다 — 지우면 옆 기능이 같이 죽는다) -->
     <div class="le-bar le-bar-slim">
-      <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
-      <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" style="margin-left:auto;" disabled>↶</button>
+      <button class="le-quit" id="le-quit" title="편집을 끝내고 손님 화면으로">‹ 편집 끝내기</button>
+      <span class="le-bar-sp"></span>
+      <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" disabled>↶</button>
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
-      <!-- ✍️ 2026-08-20 사장님 지시 — 글쓰기는 홈 도크가 아니라 «포스팅 칸»에 붙는다.
-           손님 화면에서 「컨텐츠」 탭에 들어가면 이 버튼이 뜬다 (그 칸의 편집 버튼) -->
       <button class="le-d le-top-d le-top-write" id="le-write" title="이 칸 편집 — 글쓰기" style="display:none;"><span class="di">✍️</span><span class="le-d-lbl">글쓰기</span></button>
-      <button class="le-d le-top-d le-d-prev" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
-      <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
-      <button class="le-d le-top-d" id="le-opmode" title="운영자 모드 — 분석·판매·설정"><span class="di">⚙️</span><span class="le-d-lbl">운영</span></button>
+      <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
+      <button class="le-x" id="le-x" title="지금 바로 저장·공개">✓ 저장</button>
+      <button class="le-d" id="le-home" style="display:none !important;"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
+      <button class="le-d" id="le-opmode" style="display:none !important;"><span class="di">⚙️</span><span class="le-d-lbl">운영</span></button>
     </div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe></div>
     <!-- 🧭 네 걸음 (2026-08-20 사장님 A안) — 뼈대 → 색 → 칸 → 내용.
@@ -12672,7 +12744,7 @@ if('serviceWorker' in navigator){
     if(!ov){
       ov=document.createElement('div'); ov.className='ov'; ov.id='pst-ov';
       ov.innerHTML='<div class="sheet">'
-        +'<div class="sheet-h"><span class="t">📋 붙여넣기로 포스팅</span><span class="x" id="pst-x">×</span></div>'
+        +'<div class="sheet-h"><span class="t">🤖 AI 포스팅</span><span class="x" id="pst-x">×</span></div>'
         +'<div class="desc">카톡·메모장에 쓴 글을 <b style="color:var(--coral)">그대로</b> 붙여넣으세요. 제목·소제목·목록·인용을 갈라내고 <b>사진 들어갈 자리까지</b> 잡아드려요.</div>'
         +'<div class="field"><label>여기에 붙여넣기 <small>— 줄바꿈만 있으면 충분</small></label><textarea id="pst-src" placeholder="예) 앞머리 자르기 전에 꼭 알아야 할 것&#10;&#10;안녕하세요, 오늘은 상담하면서 제일 많이 듣는 질문을 정리했어요..."></textarea></div>'
         +'<details class="pst-help"><summary>📖 이렇게 쓰면 이렇게 나와요 <span style="font-weight:400;color:var(--muted);font-size:11px;">— 8가지만 알면 끝</span></summary>'
@@ -12743,7 +12815,9 @@ if('serviceWorker' in navigator){
             if(qs.length) bl.push({type:'qna', name:'자주 묻는 질문', on:true, content:[qs.map(function(q){ return [q.trim(), '']; })], layout:''});
           }
         }catch(e){}
-        createPost('blog', bl, r.title);
+        /* 🚪 현장 편집 중이면 «현장 시트»로 연다 — 작업실(운영자 모드)로 튕기지 않는다 (2026-08-20) */
+        if(window.__liveEditActive && window.__pstToSheet){ window.__pstToSheet(bl, r.title); }
+        else { createPost('blog', bl, r.title); }
         var sugN=(window.__pstSug&&(window.__pstSug.stat?1:0)+(window.__pstSug.qna?1:0))||0;
         try{ if(window.toast) toast('붙여넣은 글을 '+bl.length+'개 블록으로 나눴어요'+(sugN?' · 제안 '+sugN+'개는 라벨·답만 채워주세요':' · 사진만 넣으면 끝')); }catch(e){}
       };
@@ -14096,6 +14170,9 @@ if('serviceWorker' in navigator){
       if(q.get('desk')==='1' || q.get('live')==='1') return false;   /* ⚙·고치기로 들어온 경우는 작업실이 맞다 */
       if(window.__devEnter) return false;
       if(!localStorage.getItem('ch-onboard-v2')) return false;        /* 첫 로그인은 온보딩부터 */
+      /* 🚨 2026-08-20 — 페이지가 아직 없는 계정은 «손님 화면»에 갈 게 없다.
+            여기서 true 를 주면 덮개가 «내 홈으로 가는 중…» 인 채로 영영 안 걷힌다(실측 사고). */
+      try{ var _a0=JSON.parse(localStorage.getItem('la-auth')||'null'); if(_a0 && _a0.hasPage===false) return false; }catch(_){}
       if((localStorage.getItem('cm-hub-landing')||'live')!=='live') return false;
       var a=JSON.parse(localStorage.getItem('la-auth')||'null');
       return !!(a && a.handle);                                       /* 주소가 있어야 갈 곳이 있다 */
@@ -14139,6 +14216,11 @@ if('serviceWorker' in navigator){
     try{
       var _land='live'; try{ _land=localStorage.getItem('cm-hub-landing')||'live'; }catch(_e){}
       var _isNew=false; try{ _isNew=!localStorage.getItem('ch-onboard-v2'); }catch(_e){}   // 첫 로그인(소개 6장)은 현장 진입 안 함
+      /* 🚨 2026-08-20 — 아직 아무것도 없는 계정 처리.
+            손님 화면(u.html)으로 보내면 «준비 중» 빈 화면만 본다. 그렇다고 작업실에 두면 라이트가 아니다.
+            사장님 원칙: «로그인하면 바로 라이트». 그래서 «현장 편집»을 바로 연다.
+            (온보딩 표시는 «계정»이 아니라 «브라우저»에 저장돼 있어, 계정을 갈아타면 새 계정을 «첫 로그인 아님»으로 잘못 본다) */
+      var _noPage=false; try{ _noPage=!!(window.AUTH && window.AUTH.hasPage===false); }catch(_e){}
       /* 🚪 2026-08-20 사장님 픽 — «우선 우리 홈으로 먼저 보이고, 우측 상단에서 편집실로»
             로그인하면 «편집 도구가 얹힌 현장»이 아니라 «손님이 보는 그 화면»으로 진짜 이동한다.
             ⚠️ ⚙(edit.html?desk=1)로 돌아왔을 땐 다시 튕기면 무한 루프 → _fromGear 로 차단 */
@@ -14149,7 +14231,12 @@ if('serviceWorker' in navigator){
         setTimeout(function(){ try{ if(window.__openLiveAuto) window.__openLiveAuto();
                                     else if(window.__openLive && !window.__liveEditActive) window.__openLive(); }catch(_e){} }, 900);
       }
-      if(_land==='live' && !_isNew && !window.__devEnter && !_fromGear && !_wantLive){
+      /* 🆕 아직 페이지가 없는 새 계정 — 손님 화면엔 «준비 중»뿐이고, 작업실은 라이트가 아니다.
+            사장님 원칙 «로그인하면 바로 라이트» → 현장 편집을 바로 연다. */
+      if(_noPage && !_fromGear && !_wantLive && !window.__devEnter){
+        setTimeout(function(){ try{ if(window.__openLive && !window.__liveEditActive) window.__openLive(); }catch(_e){} }, 700);
+      }
+      else if(_land==='live' && !_isNew && !window.__devEnter && !_fromGear && !_wantLive){
         setTimeout(function(){                                          // 데이터 로드(loadPage) 뒤에
           try{
             var _h=(((document.getElementById('pf-handle')||{}).value)||'').trim()
@@ -14533,7 +14620,7 @@ if('serviceWorker' in navigator){
       }
     }
     if(nx) nx.addEventListener('click', async function(){
-      var code=(gv('lg-code')||'').trim().toUpperCase(), err=document.getElementById('lg-err'); err.textContent='';
+      var code=(gv('lg-code')||'').trim(), err=document.getElementById('lg-err'); err.textContent='';
       if(!code){ err.textContent='발급받은 코드를 입력하세요'; return; }
       nx.disabled=true; nx.textContent='확인 중...';
       try{
@@ -14550,20 +14637,27 @@ if('serviceWorker' in navigator){
     });
   })();
   btn.addEventListener('click', async function(){
-    var code=(gv('lg-code')||'').trim().toUpperCase(), pin=(gv('lg-pin')||'').trim();
+    /* 🚨 2026-08-20 사장님 «관리자 아이디가 소문자야» — .toUpperCase() 로 못 박아두면 소문자 코드가 영영 못 들어온다.
+          «친 그대로» 먼저 보내고, 안 맞으면 대문자로 한 번 더. 발급 코드는 대문자라 소문자로 쳐도 들어가진다. */
+    var code=(gv('lg-code')||'').trim(), pin=(gv('lg-pin')||'').trim();
     var err=document.getElementById('lg-err'); err.textContent='';
     if(!code){ err.textContent='코드를 입력하세요'; return; }
     btn.disabled=true; btn.textContent='확인 중...';
     try{
       var hash = pin ? await window.laSha256(pin) : '';
       var res=await window.laRpc('li_login', { p_code:code, p_pin_hash:hash });
+      if(!(res && (res.ok || res.reason==='nopin')) && code!==code.toUpperCase()){
+        var _up=code.toUpperCase();
+        var _r2=await window.laRpc('li_login', { p_code:_up, p_pin_hash:hash });
+        if(_r2 && (_r2.ok || _r2.reason==='nopin')){ res=_r2; code=_up; }
+      }
       if(res && res.ok){
         // 가입한 분야와 선택한 분야가 다르면 로그인 거부
         if(res.industry && selInd && res.industry!==selInd){
           err.textContent='이 코드는 “'+(INDLBL[res.industry]||res.industry)+'”용이에요.\n위에서 “'+(INDLBL[res.industry]||res.industry)+'”를 선택하고 다시 로그인하세요.';
           btn.disabled=false; btn.textContent='로그인'; return;
         }
-        AUTH={code:code, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; window.AUTH=AUTH; publishTier();
+        AUTH={code:code, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null), hasPage:!!res.hasPage, published:!!res.published};   /* 🚨 새 계정 판정용 (2026-08-20) */ window.AUTH=AUTH; publishTier();
         try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',code);}catch(e){} enter();
       }
       else if(res && res.reason==='nopin'){
@@ -15362,9 +15456,12 @@ if('serviceWorker' in navigator){
       }
       _moved=null; lsHost.innerHTML='';
     }
-    window.__openPostSheet=function(id){ _mode='post'; try{ openPostEdit(id); }catch(e){} moveIn(document.getElementById('home-body'), '게시물 편집'); };
+    window.__openPostSheet=function(id){ _mode='post'; try{ openPostEdit(id); }catch(e){} moveIn(document.getElementById('home-body'), '글 쓰기'); setTimeout(function(){ try{ if(window.__markPostSteps) window.__markPostSteps(); }catch(_){} }, 60); };
     window.__newPostSheet=function(){ _newToSheet=true; try{ createPost('blog'); }catch(e){ _newToSheet=false; } };
-    window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '게시물 편집'); } };
+    /* 🚨 2026-08-20 사장님 «글 입력하니까 갑자기 홈으로 가진다» — AI 포스팅으로 만든 글이
+          시트가 아니라 작업실로 떨어졌다(_newToSheet 가 안 켜져서). 블록·제목까지 받아 현장 시트로 연다. */
+    window.__pstToSheet=function(bl, title){ _newToSheet=true; try{ createPost('blog', bl, title); }catch(e){ _newToSheet=false; } };
+    window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '글 쓰기'); setTimeout(function(){ try{ if(window.__markPostSteps) window.__markPostSteps(); }catch(_){} }, 60); } };
     /* 👤 2026-08-20 사장님 지시 — «기본 프로필 마지노선만 라이트에서».
           라이트(현장)에선 사진·이름·한 줄 소개까지만. 숫자 증거·작업 사진·전문성은 운영자 모드에서.
           같은 칸을 그대로 옮겨 쓰므로 «라이트에서 쓴 것 = 운영자 모드에서도 그대로» 다 (데이터가 하나다). */
@@ -15416,7 +15513,11 @@ if('serviceWorker' in navigator){
       loadFrame._heal=setTimeout(function(){ var blank=true; try{ var d=ifr.contentDocument; blank = !d || !d.body || d.body.innerHTML.length<800 || d.querySelectorAll('[data-bt]').length===0; }catch(e){ blank=false; } if(blank && (loadFrame._tries||0)<2){ loadFrame._tries=(loadFrame._tries||0)+1; loadFrame(); } else { loadFrame._tries=0; } }, 3500);
     }
     window.__liveEditActive=false;
-    function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; } window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); ov.classList.add('open'); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){}   // ★ 라이브 편집 진입 시 모드 게이트 항상 닫기 (게이트가 위에 남아 배너만 뜨던 버그 방지)
+    function openLive(){ if(!AUTH){ notify('로그인이 필요해요'); return; }
+      /* 🚨 2026-08-20 사장님 «홈 편집하면 이렇게 중복되는 거 아니야» — 두 번 열려 상단바·도크가 두 겹으로 그려졌다.
+            들어오는 길이 여럿(착지·?live=1·고치기)이라 겹칠 수 있다. 이미 열려 있으면 그냥 나간다. */
+      if(window.__liveEditActive || ov.classList.contains('open')) return;
+      window.__liveEditActive=true; window.__leResetToggle&&window.__leResetToggle(); ov.classList.add('open'); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){}   // ★ 라이브 편집 진입 시 모드 게이트 항상 닫기 (게이트가 위에 남아 배너만 뜨던 버그 방지)
       // 진입 시 최신 저장본을 다시 불러와 편집기를 '공개'와 일치시킴 (공개엔 있는데 편집엔 없는 어긋남 방지)
       // ★ li_get_own 응답이 느리거나 안 와도 편집 화면(iframe)은 무조건 띄운다 — 안 그러면 까만 화면으로 멈춤
       var _framed=false; function _go(){ if(_framed) return; _framed=true; loadFrame(); }
@@ -15431,6 +15532,16 @@ if('serviceWorker' in navigator){
     window.__liveScrollNew=function(row){ if(!window.__liveEditActive) return;
       var idx=-1; try{ if(row){ var on=[].slice.call(document.querySelectorAll('#rows .row')).filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw||sw.classList.contains('on'); }); idx=on.indexOf(row); } }catch(e){}
       setTimeout(function(){ try{ ifr.contentWindow.postMessage({type:'la-scroll-new', idx:idx}, '*'); }catch(e){} }, 380); };
+    /* 🎨 손님 화면 밝기를 껍데기에 옮긴다 — 라이트 테마면 편집 틀도 밝게 (2026-08-20) */
+    function syncShellTone(){
+      try{
+        var d=ifr && ifr.contentDocument; if(!d) return;
+        var b=d.documentElement.getAttribute('data-bright');
+        ov.setAttribute('data-shell', b==='light' ? 'light' : 'dark');
+      }catch(_){}
+    }
+    window.__syncShellTone=syncShellTone;
+    setInterval(function(){ if(window.__liveEditActive) syncShellTone(); }, 900);   // 테마를 바꾸면 따라온다
     window.__openLive=openLive;
     window.__openLiveAuto=function(){ if(AUTH && !window.__liveEditActive && !ov.classList.contains('open')) openLive(); };  // 기본 진입용(자동)
 
@@ -15446,6 +15557,7 @@ if('serviceWorker' in navigator){
       }
       else if(m.type==='la-edit-tap'){ handleTap(m.bt); }
       else if(m.type==='la-block-menu'){ openBlockMenu(m.bt, m.nth, m.name); }   /* 🚨 칸 오른쪽 위 «⋯ 수정» (2026-08-20) */
+      else if(m.type==='la-quit-edit'){ var _q=document.getElementById('le-quit'); if(_q) _q.click(); }   /* 🚪 현장 화면의 «편집 끝내기» (2026-08-20) */
       else if(m.type==='la-pane'){
         /* ✍️ 포스팅(컨텐츠) 칸에서만 «글쓰기»를 띄운다 — 홈에선 홈 도구만, 글은 글 칸에서 (2026-08-20) */
         var wb=document.getElementById('le-write');
@@ -15563,6 +15675,86 @@ if('serviceWorker' in navigator){
       ov.classList.add('open');
     }
     window.__openBlockMenu=openBlockMenu;
+    /* ✍️ 글쓰기 방 고르기 (2026-08-20 사장님 픽) — 「그냥 쓸까 / 이미 쓴 글을 붙일까」를 먼저 묻는다.
+          전엔 새 글 시트 «안»에 작은 글씨로 숨어 있어서(sfs-paste) 아무도 못 찾았다. */
+    function closeWriteChooser(){ var ov=document.getElementById('wch-ov'); if(ov) ov.classList.remove('open'); }
+    function openWriteChooser(){
+      var ov=document.getElementById('wch-ov');
+      if(!ov){
+        ov=document.createElement('div'); ov.className='ov'; ov.id='wch-ov';
+        ov.innerHTML='<div class="sheet">'
+          +'<div class="sheet-h"><span class="t">어떻게 쓸까요?</span><span class="x" id="wch-x">\u00d7</span></div>'
+          +'<button type="button" class="wch-i" data-w="own">'
+            +'<span class="e">\u270d\ufe0f</span><span class="m"><b>직접 쓰기</b>'
+            +'<span>빈 화면부터 — 소제목 뼈대는 깔아드려요</span></span><span class="go">\u2192</span></button>'
+          +'<button type="button" class="wch-i" data-w="paste">'
+            +'<span class="e">🤖</span><span class="m"><b>AI 포스팅</b>'
+            +'<span>카톡·메모장에 쓴 글을 붙이면 <b>제목·소제목·인용·사진자리</b>까지 알아서 갈라드려요</span></span><span class="go">\u2192</span></button>'
+          +'<div class="wch-note">둘 다 나중에 바꿀 수 있어요 \u00b7 붙여넣기는 <b>서버로 안 보내고</b> 이 화면에서 바로 처리해요</div>'
+          +'</div>';
+        document.body.appendChild(ov);
+        ov.addEventListener('click', function(e){ if(e.target===ov) closeWriteChooser(); });
+        ov.querySelector('#wch-x').onclick=closeWriteChooser;
+        ov.querySelectorAll('[data-w]').forEach(function(b){
+          b.onclick=function(){
+            var k=b.getAttribute('data-w'); closeWriteChooser();
+            if(k==='paste'){ try{ if(window.__openPasteStart) window.__openPasteStart(); }catch(_){} return; }
+            try{ if(window.__newPostSheet) window.__newPostSheet(); }catch(_){}
+          };
+        });
+      }
+      ov.classList.add('open');
+    }
+    window.__openWriteChooser=openWriteChooser;
+
+    /* 📿 구슬 1-2 (2026-08-20 사장님 「나」 픽) — 썸네일과 본문은 «하는 일»이 다르다.
+          한 화면에 쌓으면 스크롤이 길어져 «내가 뭘 적었더라»가 된다. 한 번에 하나만.
+          칸을 새로 만들지 않고, 이미 있는 칸에 표시만 붙여 나눈다(데이터는 그대로 하나). */
+    function markPostSteps(){
+      var box=document.getElementById('home-body'); if(!box) return;
+      var form=document.getElementById('post-edit-banner');
+      if(!form || getComputedStyle(form).display==='none') return;   // 글 편집 중일 때만
+      /* 이미 붙인 표시는 지우고 다시 — openPostEdit 이 폼을 다시 그리면 내가 넣은 게 날아간다 */
+      ['pbeads','pstep-next','pstep-done'].forEach(function(id){ var e=document.getElementById(id); if(e) e.remove(); });
+      [].forEach.call(box.querySelectorAll('[data-pstep]'), function(e){ e.removeAttribute('data-pstep'); });
+
+      /* ① 썸네일 = 폼 안에서 「게시물 내용」 라벨 «전»까지 (제목·요약·주제·표지)
+         ② 본문   = 그 라벨부터 + 폼 뒤의 모든 것(블록 목록 등) */
+      var stop=form.querySelector('.grp-h-lbl'), hit=false;
+      [].forEach.call(form.children, function(el){
+        if(el===stop) hit=true;
+        if(el.classList && el.classList.contains('sec-h')) return;   // 「📄 게시물 편집」 줄은 늘 보인다
+        el.setAttribute('data-pstep', hit ? '2' : '1');
+      });
+      var sib=form.nextElementSibling;
+      while(sib){ sib.setAttribute('data-pstep','2'); sib=sib.nextElementSibling; }
+
+      var beads=document.createElement('div'); beads.className='pbeads'; beads.id='pbeads';
+      beads.innerHTML='<span class="pb on" data-pb="1"><i>1</i>썸네일</span><span class="pbline"></span>'
+        +'<span class="pb" data-pb="2"><i>2</i>본문</span>';
+      form.parentNode.insertBefore(beads, form);
+      var done=document.createElement('div'); done.className='pstep-done'; done.id='pstep-done';
+      done.innerHTML='<span class="ck">\u2713</span><span class="m"><b>썸네일 다 됐어요</b><span>제목 \u00b7 요약 \u00b7 표지 \u00b7 주제</span></span><span class="ed">고치기</span>';
+      form.parentNode.insertBefore(done, form);
+      var next=document.createElement('button'); next.type='button'; next.className='pstep-next'; next.id='pstep-next';
+      next.textContent='본문 쓰러 가기 \u2192';
+      form.appendChild(next);
+
+      function go(n){
+        box.setAttribute('data-pstepon', n);
+        beads.querySelectorAll('.pb').forEach(function(b){
+          var k=b.getAttribute('data-pb');
+          b.className='pb'+(k===String(n)?' on':(Number(k)<n?' done':''));
+        });
+        try{ var sh=document.querySelector('#live-sheet-ov .ls-body'); if(sh) sh.scrollTop=0; else window.scrollTo(0,0); }catch(_){}
+      }
+      next.onclick=function(){ go(2); };
+      done.querySelector('.ed').onclick=function(){ go(1); };
+      beads.querySelectorAll('.pb').forEach(function(b){ b.onclick=function(){ go(Number(b.getAttribute('data-pb'))); }; });
+      go(1);
+    }
+    window.__markPostSteps=markPostSteps;
+
     function handleDel(bt, nth){
       if(bt==='hero'||bt==='profile'){ toast('이 구성(프로필·후킹)은 삭제할 수 없어요'); return; }
       var rows=[].slice.call(document.querySelectorAll('#rows .row[data-type="'+bt+'"]'));
@@ -15811,10 +16003,20 @@ if('serviceWorker' in navigator){
           라이브 시트(live-sheet-ov)로 손님 화면 «위»에 글쓰기를 올린다 — 현장을 안 떠난다.
           ⚠️ closeLive()+switchWs('posts')로 되돌리면 다시 운영자 모드로 튕긴다. */
     var wb=document.getElementById('le-write'); if(wb) wb.onclick=function(){
+      /* 🚪 2026-08-20 사장님 픽 — 글쓰기를 누르면 «방 두 개»를 먼저 고른다.
+            ① 직접 쓰기  ② 붙여넣기로 만들기(이미 쓴 글을 붙이면 알아서 갈라준다) */
+      try{ if(window.__openWriteChooser){ window.__openWriteChooser(); return; } }catch(_){}
       try{ if(window.__newPostSheet){ window.__newPostSheet(); return; } }catch(_){}
       closeLive(); try{ if(window.__switchWs) window.__switchWs('posts'); }catch(_){}   /* 시트가 없으면(옛 버전) 예전 길로 */
     };
     var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영자 모드 → 편집모드 닫고 작업실로
+    /* 🚪 편집 끝내기 (2026-08-20 사장님 «편집 종료도 있어야 하고») — 저장하고 손님 화면으로 나간다 */
+    var qb=document.getElementById('le-quit'); if(qb) qb.onclick=function(){
+      try{ if(window.__pageAutosaveNow) window.__pageAutosaveNow(); }catch(_){}
+      var h=''; try{ h=(((document.getElementById('pf-handle')||{}).value)||'').trim() || ((window.AUTH&&window.AUTH.handle)||''); }catch(_){}
+      closeLive();
+      if(h){ setTimeout(function(){ location.replace('u.html?u='+encodeURIComponent(h)); }, 160); }
+    };
     /* 🏠 1걸음 — 홈 유형(뼈대). 스킨을 없애고 이 4종이 그 역할을 흡수한다 (2026-08-20) */
     var ty=document.getElementById('le-type'); if(ty) ty.onclick=function(){ try{ if(window.__openTypePick) window.__openTypePick(); }catch(_){} };
     /* 💡 구성 추가를 열 때마다 «다음 하나»를 다시 짚는다 (2026-08-20) */
