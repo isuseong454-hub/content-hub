@@ -659,11 +659,23 @@
       add('미연결 행동 버튼 표시', et.indexOf('class=\"dsoon\"') >= 0 && et.indexOf('아직 연결 안 됨') >= 0, '모르고 두면 손님이 눌러도 아무 일이 없다');
       add('미연결은 흐리게', et.indexOf('.dcard.dim{ opacity:.62; border-style:dashed; }') >= 0, '추천은 그대로 두되 «안 열렸다»고 알린다');
 
+      /* 🚨 2026-08-21 사장님 «우리 블로그 형식 아니었어?» — 맞았다. 내가 되돌려놨었다.
+            무기고를 열었더니 숫자·Q&A·후기·단계가 전부 「1개 항목 · 고치기 →」 카드가 됐다.
+            문서형으로 만들어 놓고 다시 목록으로 돌아간 셈. 그것들도 «그 자리»에서 고쳐져야 한다. */
+      add('무기고도 문서에서 편집', et.indexOf('var LIST2 = {') >= 0 && et.indexOf('h.querySelectorAll(\'.dtx[data-dl]\')') >= 0, '카드로 두면 문서형이 아니다');
+      add('무기고 네 종류 다', (et.match(/(stat|qna|review|steps):\s*\{ at:/g)||[]).length >= 4, '숫자·Q&A·후기·단계');
+      add('줄 빼기·더하기', et.indexOf('data-dlx') >= 0 && et.indexOf('data-dladd') >= 0, '항목을 그 자리서 늘리고 줄인다');
+      add('다 빼면 블록도 없앰', et.indexOf("if(!arr.length){ row.remove(); reflow(); return; }") >= 0, '빈 껍데기가 손님 화면에 남으면 안 된다');
+      add('목록 마지막 항목 승격 금지', et.indexOf('if(!buf.length && _bare.length<=40') >= 0, '「3. 컬크림 바르기」가 소제목으로 튀어나가던 것 (라이브 검수에서 잡음)');
+
       /* 🚨 2026-08-21 사장님 픽 ㉮ — 「1. 2. 3.」이 목록인지 «글의 뼈대»인지 가른다.
             목록은 항목이 연달아 나온다. 뼈대는 항목마다 문단이 붙는다.
             전엔 무조건 ☑ 체크목록이라 그 단발 글의 유형 1·2가 본문에 파묻혔다. */
       add('번호 줄 = 목록인가 뼈대인가', et.indexOf('function pstNextLine(lines, i)') >= 0 && et.indexOf('function pstLooksBody(t)') >= 0, '내용을 안 읽고도 구조를 아는 유일한 신호');
-      add('번호 뼈대는 소제목으로', et.indexOf("if(_bare.length<=40 && !PST_LIST.test(_nx) && pstLooksBody(_nx))") >= 0, '「1. 하안부…」 뒤에 문단이 붙으면 소제목이다');
+      /* 🚨 2026-08-21 — 이 항목이 조건식을 «통째로» 박아 둬서, 앞에 !buf.length 가드를
+        더하자 빨간 줄이 났다. 항목의 뜻은 «번호 줄 뒤에 문단이 붙으면 소제목»이다.
+        조건식 전체가 아니라 «그 판정을 하는가»를 본다. */
+      add('번호 뼈대는 소제목으로', et.indexOf("!PST_LIST.test(_nx) && pstLooksBody(_nx)") >= 0, '「1. 하안부…」 뒤에 문단이 붙으면 소제목이다');
       add('목록 앞줄도 소제목', et.indexOf('pstLooksBody(_nl) || PST_LIST.test(_nl)') >= 0, '「준비물」 다음에 「- 빗 - 가위」면 준비물은 소제목');
       add('판정 규칙은 한 벌', (et.match(/pstLooksBody\(/g) || []).length >= 2, '소제목·번호 판정이 각자 놀면 반드시 어긋난다');
       add('인스타·카톡 찌꺼기', et.indexOf('var PST_TAGS') >= 0 && et.indexOf('var PST_KKT') >= 0, '해시태그 뭉치·「오전 11:23」 — 출처를 묻지 않고 생김새로 안다');
