@@ -161,6 +161,19 @@
         '고치기·바꾸기·위·아래·숨기기·빼기 — 숨기기와 빼기를 나눈 게 핵심 (2026-08-20)');
       add('e 🧥 스킨 고르는 칸 삭제', et.indexOf('id="dz-skin"') < 0,
         '스킨은 «홈 유형» 4종이 자동으로 입힌다 — 고르는 칸이 부활하면 안 된다 (사장님 지시)');
+      /* 🧱 새 세팅 (2026-08-20) — 유형 4종을 3칸으로 + 구독·문의·예약신청 기본 제외 */
+      add('e 유형 4종 = 3칸', ['tbeauty','tcreator','texpert','tresult'].every(function(k){
+        var m=et.match(new RegExp('\\n    '+k+': \\[([\\s\\S]*?)\\n    \\]'));
+        if(!m) return false;
+        var n=(m[1].match(/\{type:'/g)||[]).length + (m[1].indexOf('P_REVIEW')>=0?1:0);
+        return n===3;
+      }), '새 계정 홈은 3칸으로 시작 — 늘리면 «관리할 목록»처럼 보인다 (사장님 픽)');
+      add('e 홈 기본에 구독·문의 없음', ['tbeauty','tcreator','texpert','tresult'].every(function(k){
+        var m=et.match(new RegExp('\\n    '+k+': \\[([\\s\\S]*?)\\n    \\]'));
+        return m && m[1].indexOf("type:'lead'")<0 && m[1].indexOf("type:'newsletter'")<0 && m[1].indexOf("type:'reservation'")<0;
+      }), '아직 아무것도 없는 홈이 손님에게 뭘 달라고 하면 안 된다 (2026-08-20 사장님 지시)');
+      add('e 크리에이터 예시 문구 비움', et.indexOf('클래스 · 모집 알림 신청') < 0,
+        '또렷한 가짜 문구가 부활하면 «내 것 같지 않다»로 되돌아간다 — 비우면 흐린 뼈대가 뜬다');
       add('e 👤 프로필 꾸미기 2개', et.indexOf('data-pm="char"') < 0 && et.indexOf('기본 · 동그라미 프사') >= 0,
         '캐릭터 삭제 · 기본(동그라미 프사) / 내 사진 두 가지만 (2026-08-20)');
       add('e 🧭 네 걸음 도크', ['id="le-type"   data-step="1"','id="le-design" data-step="2"','data-step="3"','data-step="4"'].every(function(k){ return et.indexOf(k)>=0; }),
@@ -248,7 +261,9 @@
       add('칩·매거진 기본값', et.indexOf("marquee:'chips'") >= 0 && et.indexOf("[['chips','정지 칩'") >= 0, '흐르는 띠는 선택지로만');
       add('구성 고르기 화면', ['function openTypePick','window.__openTypePick','tpick-open','tpk-rail','scroll-snap-type'].every(function(k){ return et.indexOf(k) >= 0; }), '유형 4종 스와이프 픽커 (2026-08-20 확정판)');
       add('유형 적용 기록', et.indexOf('home.htype=setKey') >= 0, '«지금 쓰는 중» 배지 근거');
-      add('뷰티 확정 구성', et.indexOf("{type:'stylegallery',name:'스타일 갤러리',content:[]},   /* 2026-08-20 확정") >= 0, '사진 아래 = 갤러리·가격·후기');
+      /* 🔄 2026-08-20 밤 — 사장님 «3칸으로, 예약·문의는 기본에서 빼» 로 결정이 바뀌었다.
+            옛 항목은 «갤러리·가격·후기»를 요구해 새 결정과 충돌했다. 새 결정 기준으로 갱신. */
+      add('뷰티 확정 구성', et.indexOf("{type:'stylegallery',name:'스타일 갤러리',content:[]}") >= 0, '사진(글로우·룩북) 아래 = 스타일 갤러리 · 3칸');
       add('포스팅별 모션 스위치', et.indexOf('post-f-motion') >= 0 && et.indexOf("p.motion=this.checked?'':'off'") >= 0, '발행 전 온오프 (2026-08-20 확정)');
       add('기호 사전', et.indexOf('pst-help') >= 0 && (et.match(/pr-row/g)||[]).length >= 8, '붙여넣기 화면 8가지 규칙 — 초보자 혼자 쓰기');
       add('붙여넣기 자동 제안', et.indexOf('pstSuggest') >= 0 && et.indexOf('__pstSug') >= 0, '자동으로 «제안»만, 넣는 건 사장님 (다안)');
