@@ -584,6 +584,29 @@
       add('요약이 썸네일 칸까지', et.indexOf('function createPost(type, blocksOverride, titleOverride, summaryOverride)') >= 0 && et.indexOf('window.__pstToSheet=function(bl, title, summary)') >= 0, '뽑아만 놓고 안 넘기면 헛일');
       add('요약을 만들기 전에 보여줌', et.indexOf("if(r.summary) h+='<div class=\"pstp-sum\">'") >= 0, '눈으로 보고 만들지 말지 정한다');
 
+      /* 📇 2026-08-21 DM 카드 공사 — 카톡·인스타의 «미리 읽는 로봇»은 화면 그리는 코드를
+            실행하지 않는다. 그래서 글마다 제목·표지를 미리 적어 둔 껍데기를 만들어 둔다.
+            🚨 짧은 주소는 «껍데기가 있는 글»에만 써야 한다 — 없으면 404다. */
+      add('껍데기 목록 미리 받기', ut.indexOf('function ogPrime()') >= 0 && ut.indexOf("fetch(base+'og/manifest.json'") >= 0, '보내기 누를 때 기다리면 늦다');
+      add('껍데기 없으면 예전 주소', ut.indexOf("if(lst && lst.indexOf(id)>=0)") >= 0 && ut.indexOf('return plain;') >= 0, '방금 쓴 글은 껍데기가 아직 없다 — 404 나면 안 된다');
+      /* 🔬 실물 검사 — «코드가 있나»가 아니라 «파일이 실제로 있고 내용이 맞나».
+            글자 검사만으로는 껍데기가 통째로 없어도 전부 통과한다 (2026-08-21 시트 사고와 같은 종류). */
+      try {
+        const mf = await _fresh('og/manifest.json').then(t => JSON.parse(t)).catch(() => null);
+        add('껍데기 목록 실물', !!(mf && mf.posts && Object.keys(mf.posts).length), mf ? ('핸들 ' + Object.keys(mf.posts || {}).length + '명') : 'og/manifest.json 을 못 읽음');
+        if (mf && mf.posts) {
+          const h0 = Object.keys(mf.posts).find(k => (mf.posts[k] || []).length);
+          const id0 = h0 ? mf.posts[h0][0] : null;
+          if (h0 && id0) {
+            const shell = await _fresh('u/' + h0 + '/' + id0 + '.html').catch(() => '');
+            const og = (shell.match(/property="og:title" content="([^"]*)"/) || [])[1] || '';
+            add('껍데기 실물 + 제목', shell.length > 0 && og.length > 0, og ? ('예: ' + og.slice(0, 24)) : '파일이 없거나 제목이 비었다');
+            add('껍데기 제목이 기본값 아님', og.indexOf('나만의 컨텐츠 공간') < 0, '기본값이면 모두의 카드가 똑같아진다 — 공사한 의미가 없다');
+            add('껍데기가 사람은 통과시킴', shell.indexOf('location.replace(') >= 0, '로봇은 여기서 멈추고, 사람은 진짜 화면으로 가야 한다');
+          }
+        }
+      } catch (e) { add('껍데기 실물 검사', false, '검사 자체가 터짐: ' + e.message); }
+
     }
     /* 🔬 런타임 — 표지 뽑기가 «링크를 사진으로 오인»하지 않나 (제일 위험한 실수) */
     if (typeof window.__firstPhotoIn === 'function') {
