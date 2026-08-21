@@ -415,7 +415,10 @@
       add('전문가형=사진 위', et.indexOf('C1 원 픽') >= 0 && /texpert:\s*\[\s*\/\*[^*]*\*\/\s*\{type:'cover3'/.test(et), '이름을 위로 올렸던 드리프트 원복(2026-08-20)');
       add('붙여넣기 포스팅 엔진', ['function pstAnalyze','function pstToBlocks','function openPasteStart','window.__openPasteStart'].every(function(k){ return et.indexOf(k) >= 0; }), '규칙 엔진 4개 생존 (AI 0원)');
       add('붙여넣기 입구', et.indexOf("id=\"sfs-paste\"") >= 0 && et.indexOf("getElementById('sfs-paste').onclick") >= 0, '새 글 시트의 «붙여넣기로 시작» 버튼 + 배선');
-      add('제목 렌더 전 확정', et.indexOf('createPost(type, blocksOverride, titleOverride)') >= 0 && et.indexOf('(titleOverride&&String(titleOverride).trim())') >= 0, '카드에 «새 글»로 남던 사고(2026-08-20)');
+      /* 🚨 2026-08-21 — 이 항목이 «괄호까지» 박아 두는 바람에, 뒤에 인자 하나(요약) 붙였다고
+        빨간 줄이 났다. 항목의 뜻은 «세 번째가 제목이고, 그 제목을 그리기 전에 쓴다»이다.
+        자릿수가 아니라 «순서»를 본다 — 닫는 괄호를 뺀다. */
+      add('제목 렌더 전 확정', et.indexOf('createPost(type, blocksOverride, titleOverride') >= 0 && et.indexOf('(titleOverride&&String(titleOverride).trim())') >= 0, '카드에 «새 글»로 남던 사고(2026-08-20)');
       add('logowall 배열형', et.indexOf("[['브랜드 1'],['브랜드 2']") >= 0, '문자열이면 한 글자 칩 «브·브·매·매» (2026-08-20 사고)');
       add('유형 타일 4종', ['data-set="tbeauty"','data-set="tcreator"','data-set="texpert"','data-set="tresult"'].every(k => et.indexOf(k) >= 0), '구성추가 타일');
       add('유형=통째 교체', et.indexOf('__typeSwapOK') >= 0 && et.indexOf('T4={tbeauty:1') >= 0, 'insertSet 명시 집합 분기');
@@ -573,6 +576,13 @@
       add('홈 템플릿 스위처 숨김', et.indexOf('#add-tpl-seg,') >= 0 && et.indexOf('#add-tpl-hint{ display:none !important; }') >= 0, '홈 유형과 겹쳐 헷갈리던 것');
       add('홈 템플릿 기능은 생존', et.indexOf('id="add-tpl-seg"') >= 0 && ut.indexOf('applyEditorial') >= 0, '지워버리면 그 값으로 저장된 홈의 모양이 바뀐다');
       add('대문 문구 칸은 생존', et.indexOf('id="ed-hook-in"') >= 0 && et.indexOf('#add-ov.ed-on #add-tpl-fields{display:block;}') >= 0, '스위처와 같이 지우면 옛 템플릿 쓰던 사람이 문구를 못 고친다');
+
+      /* ✏️ 2026-08-21 사장님 «한 줄도 뽑아줘» — 손님이 목록 카드에서 보는 그 한 줄.
+            인사말(「안녕하세요…」)이 그대로 요약이 되면 카드가 다 똑같아 보인다. */
+      add('AI가 한 줄 요약도 뽑음', et.indexOf('return { title: title||\'새 포스팅\', summary: summary, items: out };') >= 0, '제목만 채우고 요약은 비어 있던 것');
+      add('요약에서 인사말 떼기', et.indexOf('var GREET=/^(안녕하세요|안녕하십니까|반갑습니다') >= 0, '「안녕하세요.」로 시작하면 카드가 전부 똑같아진다');
+      add('요약이 썸네일 칸까지', et.indexOf('function createPost(type, blocksOverride, titleOverride, summaryOverride)') >= 0 && et.indexOf('window.__pstToSheet=function(bl, title, summary)') >= 0, '뽑아만 놓고 안 넘기면 헛일');
+      add('요약을 만들기 전에 보여줌', et.indexOf("if(r.summary) h+='<div class=\"pstp-sum\">'") >= 0, '눈으로 보고 만들지 말지 정한다');
 
     }
     /* 🔬 런타임 — 표지 뽑기가 «링크를 사진으로 오인»하지 않나 (제일 위험한 실수) */
