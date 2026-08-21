@@ -584,6 +584,25 @@
       add('요약이 썸네일 칸까지', et.indexOf('function createPost(type, blocksOverride, titleOverride, summaryOverride)') >= 0 && et.indexOf('window.__pstToSheet=function(bl, title, summary)') >= 0, '뽑아만 놓고 안 넘기면 헛일');
       add('요약을 만들기 전에 보여줌', et.indexOf("if(r.summary) h+='<div class=\"pstp-sum\">'") >= 0, '눈으로 보고 만들지 말지 정한다');
 
+      /* 🧭 2026-08-21 사장님 «AI 포스팅인데 썸네일로 튀어서 흐름이 끊긴다» —
+            AI가 제목·요약을 이미 채웠는데 1단계로 떨어뜨리면 «왜 또?»가 된다.
+            쓴 글 맨 위(2단계)에 내려놓고, 썸네일은 위에 접은 채 ▲ 표시만 남긴다. */
+      add('AI 포스팅은 본문에 도착', et.indexOf('function markPostSteps(opt)') >= 0 && et.indexOf('go(opt.start===2 ? 2 : 1)') >= 0, '썸네일로 튀면 흐름이 끊긴다');
+      add('AI 도착 표시는 위쪽 화살표', et.indexOf('위에 썸네일이 있어요') >= 0, '접어 뒀다는 걸 모르면 제목을 못 찾는다');
+      add('직접 쓰기는 그대로 1단계', et.indexOf('window.__markPostSteps(null)') >= 0, '빈 글은 썸네일부터 채우는 게 맞다');
+
+      /* 📄 2026-08-21 사장님 «나안» — 네이버 블로그처럼 글이 그대로 보이고 그 자리에서 고쳐진다.
+            🚨 제일 무서운 사고: 데이터가 두 벌이 되는 것. #rows 가 «유일한 진짜»여야 하고
+               문서 화면은 그것을 다르게 그린 껍데기여야 한다. serialize()·저장·발행은 #rows 만 읽는다. */
+      add('문서형 글 편집 엔진', et.indexOf('window.__docViewOn=') >= 0 && et.indexOf('window.__renderDocView=render') >= 0, '글이 그대로 보이고 그 자리에서 고쳐진다');
+      add('문서형은 껍데기일 뿐', et.indexOf('#home-body[data-docview="1"] #rows{ display:none !important; }') >= 0 && et.indexOf('cont(row)[+e.dataset.dk] = e.textContent') >= 0, '#rows 를 숨길 뿐 지우지 않는다 — 고친 값은 곧바로 row._content 로');
+      add('문서형은 본문 단계에서만', et.indexOf('window.__docViewOn(n===2)') >= 0, '1단계 썸네일은 원래 폼 그대로');
+      add('인용은 layout 으로 가른다', et.indexOf("ty==='text' && (ly==='quote' || ly==='impact')") >= 0, 'AI가 만드는 건 전부 text 블록 — type 만 보면 인용이 소제목 칸으로 떨어진다');
+      add('문단 사이 넣기 네 가지', et.indexOf("['photocard','🖼','사진'") >= 0 && et.indexOf("['text','❝','인용'") >= 0, '글 단락·소제목·사진·인용');
+      add('사진은 보관함으로', et.indexOf('window.__openVault=openVault') >= 0 && et.indexOf('window.__openVault(function(url)') >= 0, '문서에서 사진 자리를 누르면 보관함이 열려야 한다');
+      add('다른 구성 입구는 남긴다', et.indexOf("class=\"dmore\" id=\"dmore\"") >= 0, '「구성 추가」를 그냥 없애면 후기·CTA·숫자를 글에 못 넣는다');
+      add('문서형 붙여넣기는 글자만', et.indexOf("insertText") >= 0, '남의 서식이 딸려오면 글이 깨진다');
+
       /* 📇 2026-08-21 DM 카드 공사 — 카톡·인스타의 «미리 읽는 로봇»은 화면 그리는 코드를
             실행하지 않는다. 그래서 글마다 제목·표지를 미리 적어 둔 껍데기를 만들어 둔다.
             🚨 짧은 주소는 «껍데기가 있는 글»에만 써야 한다 — 없으면 404다. */
