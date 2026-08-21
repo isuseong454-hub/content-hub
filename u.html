@@ -985,6 +985,10 @@
   .la-prof-hide{display:none;}
   html[data-edit] .la-prof-hide{display:inline-flex; position:absolute; top:0; right:0; z-index:7; align-items:center; gap:3px; background:rgba(40,30,55,.92); color:#FFC9C9; font-size:10px; font-weight:700; padding:4px 9px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.4);}
   html[data-edit] .la-prof-hide:active{transform:scale(.94);}
+  /* 🎨 2026-08-21 사장님 «이거 빼기도 좀 라이트하게» — 밝은 테마에서 검보라 알약이 톤을 깼다 */
+  html[data-edit][data-bright="light"] .la-prof-hide{ background:rgba(255,255,255,.94); color:#B0455B;
+    border:1px solid rgba(176,69,91,.28); box-shadow:0 3px 12px rgba(0,0,0,.10); }
+  html[data-edit][data-bright="light"] .la-prof-readd{ background:rgba(124,91,224,.07); border-color:rgba(124,91,224,.35); color:#6A48CF; }
   .la-prof-readd{display:none;}
   html[data-edit] .la-prof-readd{display:block; width:100%; margin:6px 0 14px; padding:14px; background:rgba(123,90,255,.10); border:1.5px dashed rgba(167,139,255,.6); border-radius:14px; color:#A78BFF; font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer;}
   html[data-edit] .la-prof-readd:active{transform:scale(.99);}
@@ -5823,7 +5827,10 @@
     if(tabParam){ setTimeout(function(){ var nv=document.querySelector('.navitem[data-tab="'+tabParam+'"]'); if(nv) nv.click(); }, 250); }
     if(d.reservation && d.reservation.on){ try{ buildReservation(d.reservation); }catch(e){} }
     else if(typeof EDIT_MODE==='undefined' || !EDIT_MODE){ var _rc=document.querySelector('.resv-cta'); if(_rc) _rc.style.display='none'; }   // 예약 미설정 = 공개페이지선 작동 안 하는 버튼 숨김 (편집 모드는 보여서 설정 가능)
-    if(typeof EDIT_MODE==='undefined' || !EDIT_MODE){ try{ hideEmptyPublicTabs(d); }catch(e){} }   // 🧹 안 채운 탭 = 하드코딩 샘플 대신 아예 숨김 (손님에 가짜 상품·글·문답 노출 방지)
+    /* 🚨 2026-08-21 사장님 «첫 로그인인데 왜 이런 게시물들이 있어» + «스토어·Q&A는 나중에 연다고 했잖아»
+          이 함수를 손님에게만 돌려서, «편집 중»엔 잠근 탭(스토어·Q&A)과 하드코딩 가짜 글이 그대로 보였다.
+          편집 중에도 돌린다 — 사장님이 보는 화면 = 손님이 보는 화면이어야 한다. */
+    try{ hideEmptyPublicTabs(d); }catch(e){}   // 🧹 안 채운 탭 = 하드코딩 샘플 대신 아예 숨김 (손님에 가짜 상품·글·문답 노출 방지)
     // 게시물 링크(?p=)로 들어오면 → 홈 착지 + '이어보기' 알약 (의도보존, 홈도 한번 보게)
     var pParam = new URLSearchParams(location.search).get('p');
     if(pParam){ setTimeout(function(){ try{ showResumePost(pParam); }catch(e){} }, 700); }
@@ -5867,7 +5874,10 @@
     hideTab('archive', true);
     if(!liveN){
       var _ap=document.querySelector('.pane[data-pane="archive"]');
-      if(_ap) _ap.innerHTML='<div class="arc-blank">아직 올라온 글이 없어요</div>';
+      var _ed=false; try{ _ed=(typeof EDIT_MODE!=='undefined' && EDIT_MODE) || document.documentElement.hasAttribute('data-edit'); }catch(_){}
+      if(_ap) _ap.innerHTML= _ed
+        ? '<div class="arc-blank">아직 올라온 글이 없어요<br><span style="font-size:11.5px;opacity:.75;">위 <b>✍️ 글쓰기</b>로 첫 글을 써보세요</span></div>'
+        : '<div class="arc-blank">아직 올라온 글이 없어요</div>';
     }
     hideTab('shop',    !!(d.products && d.products.length));
     hideTab('qna',     !!(d.qna      && d.qna.length));
@@ -6724,6 +6734,10 @@
   }
   // 비어 있으면(실데이터 없음) 데모 샘플을 "예시"로 흐릿하게 남기고 안내 (어떻게 보이는지 감 잡게)
   function markDemo(pane){
+    /* 🚨 2026-08-21 — 이제 빈 방은 «가짜 샘플»을 안 남기고 정직한 한 줄만 둔다(사장님 지적).
+          그런데 이 안내만 따로 붙어 «예시예요» 라벨이 빈 화면 위에 홀로 떠 있었다.
+          아래에 보여줄 예시가 실제로 없으면 라벨도 붙이지 않는다. */
+    if(!pane.querySelector('.arc-feat, .arc-card, .arc-crow, .gcard')) return;
     pane.classList.add('la-demo');
     if(!pane.querySelector('.la-demo-note')){
       var n=document.createElement('div'); n.className='la-demo-note'; n.textContent='✨ 아래는 예시예요 · 실제로 올리면 이렇게 보여요';
