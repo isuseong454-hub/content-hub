@@ -132,6 +132,101 @@
   document.querySelectorAll('[id]').forEach(el => { const i = el.id; if (seen[i]) { if (dups.indexOf(i) < 0) dups.push(i); } seen[i] = 1; });
   add('중복 id', !dups.length, dups.length ? dups.slice(0, 6).join(', ') : '0건', 'warn');
 
+  /* ══════════════════════════════════════════════════════════════
+     📏 실측 검사 (2026-08-20 신설) — 사장님 «자동검수를 몇 번 했는데 왜 못 잡느냐»
+        여태 184개가 전부 «코드에 이 글자가 있나»만 봤다. 화면을 안 그려보니
+        겹침·안 읽히는 글씨·중복·작은 버튼을 원리상 못 잡았다.
+        여기부터는 «진짜 화면을 재본다». 열려 있지 않은 화면은 조용히 건너뛴다.
+     ══════════════════════════════════════════════════════════════ */
+  function _vis(el){ if(!el) return false; var cs=getComputedStyle(el);
+    return cs.display!=='none' && cs.visibility!=='hidden' && el.getClientRects().length>0; }
+  function _rect(el){ return el.getBoundingClientRect(); }
+  function _hit(a,b){ return !(a.bottom<=b.top||a.top>=b.bottom||a.right<=b.left||a.left>=b.right); }
+  function _lum(c){ var m=(c||'').match(/[\d.]+/g); if(!m) return null;
+    var f=[0,1,2].map(function(i){ var v=parseFloat(m[i])/255; return v<=.03928? v/12.92 : Math.pow((v+.055)/1.055,2.4); });
+    return .2126*f[0]+.7152*f[1]+.0722*f[2]; }
+  function _contrast(fg,bg){ var a=_lum(fg), b=_lum(bg); if(a==null||b==null) return null;
+    var hi=Math.max(a,b), lo=Math.min(a,b); return (hi+.05)/(lo+.05); }
+
+  /* ① 중복 — 같은 껍데기가 두 번 그려지면 상단바·도크가 두 겹으로 보인다 (2026-08-20 실제 사고) */
+  (function(){
+    var dup=[];
+    [['상단바','.le-bar'],['편집 도크','.le-dock'],['편집 오버레이','#live-edit-ov'],['브랜드 인트로','#cm-intro'],['로그인 덮개','#login-ov']]
+      .forEach(function(x){ var n=document.querySelectorAll(x[1]).length; if(n>1) dup.push(x[0]+' '+n+'개'); });
+    add('📏 껍데기 중복 없음', !dup.length, dup.length? dup.join(', ') : '상단바·도크·오버레이 각 1개');
+  })();
+
+  /* ② 겹침 — 화면에 «떠 있는» 것들끼리 자리를 뺏는지 (편집 버튼 ↔ 배너 사고) */
+  (function(){
+    var fixed=[].slice.call(document.querySelectorAll('body *')).filter(function(el){
+      if(!_vis(el)) return false; var cs=getComputedStyle(el); if(cs.position!=='fixed') return false;
+      var r=_rect(el); return r.width>24 && r.height>16 && r.width<innerWidth*0.98;
+    }).slice(0,24);
+    var bad=[];
+    for(var i=0;i<fixed.length;i++) for(var j=i+1;j<fixed.length;j++){
+      if(fixed[i].contains(fixed[j])||fixed[j].contains(fixed[i])) continue;
+      var a=_rect(fixed[i]), b=_rect(fixed[j]);
+      if(!_hit(a,b)) continue;
+      var ov=Math.min(a.right,b.right)-Math.max(a.left,b.left);
+      var oh=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+      if(ov>10 && oh>10) bad.push((fixed[i].id||fixed[i].className||'?').toString().slice(0,18)+' ↔ '+(fixed[j].id||fixed[j].className||'?').toString().slice(0,18));
+    }
+    add('📏 떠 있는 것 겹침 없음', !bad.length, bad.length? bad.slice(0,3).join(' / ') : '검사한 고정요소 '+fixed.length+'개 · 겹침 0', bad.length?'err':'ok');
+  })();
+
+  /* ③ 글씨가 배경에 묻히나 — «안 보이잖아» 사고 (WCAG 3:1 미만이면 잡는다) */
+  (function(){
+    /* 🚨 2026-08-20 — 반투명 배경(rgba(0,0,0,.05))을 «검정»으로 읽어 멀쩡한 버튼을 1.4:1 로 잡던 계산 결함.
+          알파가 있으면 «뒤 배경 위에 겹쳐» 실제 보이는 색을 만들어야 한다. */
+    function _parse(c){ var m=(c||'').match(/[\d.]+/g); if(!m) return null;
+      return {r:+m[0], g:+m[1], b:+m[2], a:(m.length>3? +m[3] : 1)}; }
+    function bgOf(el){
+      var stack=[], n=el;
+      while(n && n!==document.documentElement){ var c=_parse(getComputedStyle(n).backgroundColor);
+        if(c && c.a>0){ stack.push(c); if(c.a>=1) break; } n=n.parentElement; }
+      var base=_parse(getComputedStyle(document.body).backgroundColor)||{r:255,g:255,b:255,a:1};
+      if(!stack.length || stack[stack.length-1].a<1) stack.push({r:base.r,g:base.g,b:base.b,a:1});
+      var out=stack.pop();
+      while(stack.length){ var t=stack.pop();
+        out={ r:t.r*t.a+out.r*(1-t.a), g:t.g*t.a+out.g*(1-t.a), b:t.b*t.a+out.b*(1-t.a), a:1 }; }
+      return 'rgb('+Math.round(out.r)+', '+Math.round(out.g)+', '+Math.round(out.b)+')';
+    }
+    /* 🚨 그라데이션 배경은 backgroundColor 가 «투명»이라 뒷 배경과 비교돼 «흰 위 흰 글씨»로 오판된다.
+          실제로는 그라데이션(진한 보라) 위 흰 글씨라 잘 보인다 → 그런 요소는 건너뛴다. */
+    function _hasGrad(el){ var n=el; for(var i=0;i<4&&n;i++,n=n.parentElement){
+      var bi=getComputedStyle(n).backgroundImage||''; if(bi.indexOf('gradient')>=0) return true; } return false; }
+    var bad=[], skipped=0;
+    [].slice.call(document.querySelectorAll('.le-bar button, .le-dock .le-d-lbl, .an-tabs button, .ws-tab')).forEach(function(el){
+      if(!_vis(el)) return;
+      if(el.disabled){ skipped++; return; }              /* 꺼진 버튼은 일부러 흐리다 */
+      if(_hasGrad(el)){ skipped++; return; }
+      var r=_contrast(getComputedStyle(el).color, bgOf(el));
+      if(r!=null && r<3) bad.push((el.textContent||'').trim().slice(0,10)+' '+r.toFixed(1)+':1');
+    });
+    add('📏 글씨 대비 3:1 이상', !bad.length, bad.length? ('묻힘: '+bad.slice(0,4).join(', ')) : ('검사한 글자 전부 읽힘'+(skipped?' · 그라데 배경 '+skipped+'개는 잴 수 없어 건너뜀':'')));
+  })();
+
+  /* ④ 손가락 자리 — 44px 권장, 40px 미만이면 잡는다 */
+  (function(){
+    var small=[];
+    [].slice.call(document.querySelectorAll('.le-bar button, .le-dock button, .ws-tab, .an-tabs button')).forEach(function(el){
+      if(!_vis(el)) return; var r=_rect(el);
+      if(r.height>0 && r.height<40) small.push((el.textContent||el.id||'?').trim().slice(0,10)+' '+Math.round(r.height)+'px');
+    });
+    add('📏 누르는 자리 40px 이상', !small.length, small.length? small.slice(0,4).join(', ') : '검사한 버튼 전부 충분', small.length?'warn':'ok');
+  })();
+
+  /* ⑤ 진짜 눌리나 — 버튼 한가운데를 눌렀을 때 그 버튼이 잡히는지 (⚙메뉴 pointer-events 사고) */
+  (function(){
+    var blocked=[];
+    ['le-quit','le-x','new-content-btn'].forEach(function(id){
+      var el=document.getElementById(id); if(!el||!_vis(el)) return;
+      var r=_rect(el); var top=document.elementFromPoint(r.left+r.width/2, r.top+r.height/2);
+      if(!top || !(top===el || el.contains(top) || top.contains(el))) blocked.push(id);
+    });
+    add('📏 버튼이 실제로 눌림', !blocked.length, blocked.length? ('가려짐: '+blocked.join(', ')) : '검사한 버튼 전부 손가락이 닿음');
+  })();
+
   // ── 10. 2026-08-20 리디자인 항목 (유형 4종·라임·유리 도크·작업실 톤) ──
   {
     /* 🚨 2026-08-20 — 여기도 캐시 버스터가 없어 «어제 파일»을 검사했다.
@@ -180,8 +275,10 @@
       }), '아직 아무것도 없는 홈이 손님에게 뭘 달라고 하면 안 된다 (2026-08-20 사장님 지시)');
       add('e 크리에이터 예시 문구 비움', et.indexOf('클래스 · 모집 알림 신청') < 0,
         '또렷한 가짜 문구가 부활하면 «내 것 같지 않다»로 되돌아간다 — 비우면 흐린 뼈대가 뜬다');
-      add('e 👤 프로필 꾸미기 2개', et.indexOf('data-pm="char"') < 0 && et.indexOf('기본 · 동그라미 프사') >= 0,
-        '캐릭터 삭제 · 기본(동그라미 프사) / 내 사진 두 가지만 (2026-08-20)');
+      /* 🔄 2026-08-20 밤 — 사장님 «커버냐 프사냐 구분이 되어야 한다» 지적으로 이름이 바뀌었다.
+            이 칸은 커버(맨 위 배경)다. 동그라미 프사는 프로필 편집에 따로 있다. */
+      add('e 🖼 커버 2개 (캐릭터 삭제)', et.indexOf('data-pm="char"') < 0 && et.indexOf('커버 없음') >= 0,
+        '커버 없음 / 내 사진 두 가지만 · 캐릭터는 「내 것 같지 않다」로 삭제 (2026-08-20)');
       add('e 🧭 세 걸음 도크', ['id="le-type"   data-step="1"','id="le-design" data-step="2"','data-step="3"'].every(function(k){ return et.indexOf(k)>=0; })
         && (et.split('le-dock le-flow')[1]||'').slice(0,900).indexOf('data-step="4"') < 0,
         '홈 유형 → 테마 → 구성 추가. 글쓰기는 홈 도구가 아니다 — 포스팅 칸으로 갔다 (2026-08-20 사장님 지시)');
@@ -189,12 +286,22 @@
         '홈에서 보이면 «홈 도구»로 오해한다 — 컨텐츠 칸에 들어갔을 때만 뜬다');
       add('e 🚪 홈 인라인 «구성 추가» 박스 삭제', uHtml.indexOf("s.className='la-addslot'") < 0,
         '같은 카탈로그를 여는 문이 둘이 된다 (홈 박스 + 도크 ③번) — 사장님 「가」 픽 (2026-08-20)');
-      add('e 미리보기·운영은 위로', et.indexOf('le-top-d le-d-prev" id="le-home"') >= 0 && et.indexOf('le-top-d" id="le-opmode"') >= 0,
-        '도크엔 «순서대로 밟을 것»만 — 미리보기·운영자모드는 오른쪽 최상단 (사장님 지시)');
+      /* 🔄 2026-08-20 밤 — 사장님 «편집하는데 위에 이런 기능들이 왜 필요해» 로 상단바가 3개로 줄었다.
+            미리보기·운영은 «위로»가 아니라 «아예 안 보이게»가 됐다(배선은 살려둠). 항목을 새 기준으로. */
+      add('e 상단바는 세 개만', et.indexOf('id="le-quit"') >= 0 && et.indexOf('le-d" id="le-home" style="display:none !important;"') >= 0,
+        '편집 중엔 «나가기 · 되돌리기 · 저장» 뿐 — 👁미리보기·⚙운영이 다시 나오면 안 된다');
       add('e 도크에 미리보기 없음', et.indexOf('le-dock le-flow') >= 0 && (et.split('le-dock le-flow')[1]||'').slice(0,600).indexOf('le-home') < 0,
         '도크로 되돌아오면 버튼이 다시 5개가 된다');
       add('e 홈 유형 배선', et.indexOf("getElementById('le-type')") >= 0 && et.indexOf('window.__openTypePick') >= 0,
         '1걸음이 무반응이면 흐름 전체가 죽는다');
+      add('e ✍️ 글쓰기 방 두 개', et.indexOf('function openWriteChooser') >= 0 && et.indexOf("data-w=\"paste\"") >= 0 && et.indexOf('window.__openWriteChooser') >= 0,
+        '글쓰기 → ①직접 쓰기 ②붙여넣기로 만들기. 전엔 붙여넣기가 새 글 시트 «안»에 작은 글씨로 숨어 있었다 (2026-08-20 사장님 픽)');
+      add('e 📿 구슬 1-2', et.indexOf('function markPostSteps') >= 0 && et.indexOf('data-pstepon') >= 0,
+        '썸네일 → 본문. 한 화면에 쌓으면 스크롤이 길어 «내가 뭘 적었더라»가 된다 (사장님 「나」 픽)');
+      add('e 구슬은 다시 그린다', et.indexOf("['pbeads','pstep-next','pstep-done'].forEach") >= 0,
+        'openPostEdit 이 폼을 다시 그리면 내가 넣은 구슬이 날아간다 — 열 때마다 새로 붙인다 (2026-08-20 실측 사고)');
+      add('e 커버/프사 구분', et.indexOf('🖼 커버 사진') >= 0 && et.indexOf('👤 프로필 꾸미기') < 0,
+        '🚨 커버(맨 위 배경)를 「프로필 꾸미기」로 잘못 이름 붙였던 것 — 동그라미 프사와 헷갈린다 (2026-08-20)');
       add('e 👤 라이트 프로필 = 마지노선', et.indexOf("card.classList.add('lite')") >= 0 && et.indexOf('#profile-card.lite [data-deep]{display:none;}') >= 0,
         '라이트(현장)는 사진·이름·한 줄 소개까지 — 숫자 증거·작업 사진·전문성은 운영자 모드 (2026-08-20 사장님 지시)');
       add('e 작업실에선 프로필 전부', et.indexOf("_pc.classList.remove('lite')") >= 0,
