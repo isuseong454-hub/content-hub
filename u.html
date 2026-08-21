@@ -5560,13 +5560,42 @@
     try{ localStorage.setItem('cmh-like:'+id, now?'1':'0'); }catch(_){}
     try{ var h=new URLSearchParams(location.search).get('u')||''; if(window.laRpc) window.laRpc('li_post_like',{p_handle:h,p_pid:id,p_on:now}).then(function(r){ if(r&&r.ok&&typeof r.n==='number') _syncLike(id, null, r.n); },function(){}); }catch(_){}
   }
+  /* 🔗 2026-08-21 사장님 «친구들끼리 공유 가능하게» — 보내기가 «복사»만 하던 것.
+        ① 폰이면 그 폰의 보내기 창을 먼저 열어준다 (카톡·인스타 DM·문자가 거기 다 있다)
+        ② 컴퓨터면 지금처럼 링크 복사 (붙여넣는 게 더 빠르다)
+     🚨 주소는 «u·p 두 개만» 남긴다 — 편집·탭·캡쉬 따위가 딸려가면
+        친구가 편집 화면이나 엉뚱한 탭으로 착지한다. */
+  function hubShareUrl(id){
+    var q0=new URLSearchParams(location.search), q=new URLSearchParams();
+    var hu=q0.get('u'); if(hu) q.set('u', hu);
+    q.set('p', id);
+    return location.origin+location.pathname+'?'+q.toString();
+  }
+  window.__hubShareUrl=hubShareUrl;
   function hubShare(id, btn){
-    var q=new URLSearchParams(location.search); q.set('p', id); var url=location.origin+location.pathname+'?'+q.toString();
+    var url=hubShareUrl(id);
     if(btn){ btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); }
     hubBuzz([10,28,12]);
-    function ok(){ hubToast('링크가 복사되었습니다'); }
+    var ttl=''; try{ (window.__POSTS||[]).forEach(function(x){ if(x.id===id) ttl=x.title||''; }); }catch(_){}
+    var who=''; try{ who=String(document.title||'').split(' · ')[0]; }catch(_){}
+    function log(how){ try{ track('share',{ kind:'post', label:(ttl||String(id)), how:how }); }catch(_){} }
+    function ok(){ hubToast('링크가 복사되었습니다'); log('copy'); }
     function fb(){ try{ var ta=document.createElement('textarea'); ta.value=url; ta.style.position='fixed'; ta.style.opacity='0'; ta.style.pointerEvents='none'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); ok(); }catch(e){ prompt('이 링크를 복사하세요', url); } }
-    try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok, fb); } else { fb(); } }catch(_){ fb(); }
+    function copy(){ try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok, fb); } else { fb(); } }catch(_){ fb(); } }
+    var touch=false; try{ touch=!!(window.matchMedia && window.matchMedia('(pointer:coarse)').matches); }catch(_){}
+    if(touch && navigator.share){
+      try{
+        navigator.share({ title:(ttl||who||'컨텐츠 허브'), text:(ttl?(ttl+(who?(' · '+who):'')):who), url:url })
+          .then(function(){ log('send'); }, function(err){
+            /* 손님이 창을 닫은 것은 «실패»가 아니다 — 복사를 또 띄우지 않는다 */
+            var n=(err&&err.name)||'';
+            if(n==='AbortError' || n==='NotAllowedError') return;
+            copy();
+          });
+        return;
+      }catch(_){}
+    }
+    copy();
   }
   // 좋아요·보내기 액션바 DOM 생성 (모달=큰 cls 'pm-foot', 카드=작은 cls 'arc-acts')
   function buildActsBar(id, opts){
