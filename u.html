@@ -3737,9 +3737,13 @@
       if(!gear || !menu) return;
       function auth(){ try{ return JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){ return null; } }
       function build(){
+        /* 🚨 2026-08-21 — 현장 편집에서도 여기로 올 수 있게 «편집하기»를 같이 둔다.
+              출구가 한쪽에만 있으면 반대쪽에서 갇힌다. */
         menu.innerHTML=''
+          +'<button type="button" data-g="edit"><span class="gi">✏️</span><span>현장에서 편집'
+            +'<span class="gs">보면서 바로 고쳐요</span></span></button>'
           +'<button type="button" data-g="admin"><span class="gi">🛠</span><span>운영자 모드'
-            +'<span class="gs">내 홈을 고치고 관리해요</span></span></button>'
+            +'<span class="gs">분석 · 예약 명단 · 설정</span></span></button>'
           +'<button type="button" data-g="out"><span class="gi">🚪</span><span>로그아웃'
             +'<span class="gs">이 기기에서 나가요</span></span></button>';
         menu.querySelectorAll('[data-g]').forEach(function(b){
@@ -3747,7 +3751,8 @@
             ev.preventDefault(); ev.stopPropagation();
             var k=b.getAttribute('data-g');
             menu.classList.remove('open');
-            if(k==='admin'){ location.href='edit.html?desk=1'; }
+            if(k==='edit'){ location.href='edit.html?live=1'; }
+            else if(k==='admin'){ location.href='edit.html?desk=1'; }
             else {
               /* 🚪 편집기 로그아웃과 «같은 규칙» — 이 기기에서 계정 흔적을 전부 지운다 */
               try{
