@@ -1954,6 +1954,79 @@ if('serviceWorker' in navigator){
   html[data-litetone] #live-sheet-ov .imp-sub{ color:#7A2FB8 !important; }
   html[data-litetone] #live-sheet-ov #import-content-btn span{ color:#7A2FB8 !important; }
   html[data-litetone] #live-sheet-ov .grip{ color:rgba(42,37,48,.58) !important; }
+
+  /* ════ 📄 문서형 글 편집 (2026-08-21 사장님 «나안» 픽) ════
+        지금까지는 「본문·인용·사진」이 «줄 목록»으로 서 있고 ✎를 눌러야 딴 창에서 고쳤다.
+        네이버 블로그처럼 «글이 그대로 보이고 그 자리에서» 고쳐지게 한다.
+        🚨 #rows 는 그대로 둔 채 숨기기만 한다 — serialize()·저장·발행이 거기서 읽으므로
+           데이터 모델을 두 벌로 만들면 반드시 어긋난다. 문서 화면은 «껍데기»일 뿐이다. */
+  #home-body[data-docview="1"] #rows{ display:none !important; }
+  /* 목록 시절 물건들 — 문서 모드에선 문단 사이 ＋ 가 대신한다.
+     🚨 「구성 추가」를 그냥 없애면 후기·CTA·숫자를 글에 못 넣는다 →
+        문서 «맨 아래»에 같은 기능의 버튼을 다시 놓는다 (renderDocView 의 .dmore). */
+  #home-body[data-docview="1"] #add-block-btn,
+  #home-body[data-docview="1"] #import-content-btn,
+  #home-body[data-docview="1"] .grp-h-lbl,
+  #home-body[data-docview="1"] #add-slot-end,
+  #home-body[data-docview="1"] .rows-hint{ display:none !important; }
+  .dmore{ display:block; width:100%; margin:18px 0 0; padding:13px; border-radius:12px;
+    border:1px dashed var(--hair); background:transparent; color:var(--muted);
+    font-family:var(--sans); font-size:12.5px; cursor:pointer; min-height:44px; }
+  .dmore:hover{ border-color:var(--coral); color:var(--coral); }
+  #docwrap{ padding:2px 0 20px; }
+  #home-body:not([data-docview="1"]) #docwrap{ display:none !important; }
+
+  .dblk{ position:relative; padding-left:26px; }
+  .dtx{ outline:none; font-size:15px; line-height:1.85; padding:5px 3px; border-radius:6px;
+    transition:background .12s, box-shadow .12s; white-space:pre-wrap; word-break:keep-all; }
+  .dtx:hover{ background:var(--coral-soft); }
+  .dtx:focus{ background:transparent; box-shadow:inset 0 0 0 1px var(--hair); }
+  .dtx.h{ font-size:17.5px; font-weight:700; margin-top:14px; letter-spacing:-.01em; }
+  .dtx.q{ border-left:2px solid var(--coral); padding-left:13px; color:var(--muted); font-style:italic; }
+  .dtx[data-ph]:empty::before{ content:attr(data-ph); color:var(--muted); opacity:.6; }
+
+  .dpic{ margin:11px 0; border:1px dashed var(--hair); border-radius:12px; min-height:120px;
+    display:grid; place-items:center; color:var(--muted); font-size:12.5px; cursor:pointer;
+    background:var(--soft); text-align:center; padding:14px; overflow:hidden; }
+  .dpic:hover{ border-color:var(--coral); color:var(--coral); }
+  .dpic img{ width:100%; border-radius:9px; display:block; }
+  .dcap{ font-size:12px; color:var(--muted); text-align:center; margin-top:-4px; }
+
+  /* 다른 구성(후기·숫자·CTA…) — 글이 아니라 «덩어리»라 이름표만 두고 ✎로 연다 */
+  .dcard{ margin:11px 0; padding:12px 13px; border:1px solid var(--hair); border-radius:11px;
+    background:var(--soft); display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .dcard .di{ width:28px; height:28px; border-radius:8px; background:var(--coral-soft); color:var(--coral);
+    display:grid; place-items:center; font-size:14px; flex:0 0 auto; }
+  .dcard .dm{ flex:1; min-width:0; }
+  .dcard .dm b{ display:block; font-size:13.5px; font-weight:600; }
+  .dcard .dm span{ display:block; font-size:11.5px; color:var(--muted); overflow:hidden;
+    text-overflow:ellipsis; white-space:nowrap; }
+  .dcard .dgo{ font-size:11.5px; color:var(--coral); font-weight:700; flex:0 0 auto; }
+
+  /* 문단 사이 ＋ */
+  .dgap{ height:14px; position:relative; display:flex; align-items:center; justify-content:center; }
+  .dgap::before{ content:''; position:absolute; left:26px; right:0; height:1px;
+    background:var(--hair); opacity:0; transition:opacity .15s; }
+  .dgap button{ opacity:0; transition:opacity .15s, transform .08s; position:relative; z-index:1;
+    width:28px; height:28px; min-height:28px; border-radius:50%; border:1px solid var(--hair);
+    background:var(--surface); color:var(--muted); font-size:15px; line-height:1; cursor:pointer;
+    display:grid; place-items:center; font-family:var(--sans); padding:0; }
+  .dgap:hover::before, .dgap:focus-within::before{ opacity:1; }
+  .dgap:hover button, .dgap:focus-within button{ opacity:1; }
+  .dgap button:active{ transform:scale(.9); }
+
+  /* 왼쪽 손잡이 — 손 댈 때만 («나안»의 핵심: 평소엔 문서, 손대면 조작) */
+  .dgrip{ position:absolute; left:0; top:5px; width:20px; display:flex; flex-direction:column;
+    gap:1px; align-items:center; opacity:0; transition:opacity .15s; }
+  .dblk:hover .dgrip, .dblk:focus-within .dgrip{ opacity:1; }
+  .dgrip button{ width:20px; height:17px; min-height:17px; border:0; background:transparent;
+    color:var(--muted); font-size:11px; line-height:1; cursor:pointer; padding:0; font-family:var(--sans); }
+  .dgrip button:hover{ color:var(--coral); }
+  .dgrip button:disabled{ opacity:.25; cursor:default; }
+  @media (hover:none){ .dgrip{ opacity:.5; } .dgap button{ opacity:.5; } }
+
+  html[data-litetone] #live-sheet-ov .dtx:hover{ background:rgba(107,65,216,.08); }
+  html[data-litetone] #live-sheet-ov .dgap button{ background:#FFFFFF; border-color:rgba(42,37,48,.16); }
   /* (옛 세 걸음 패널 CSS — 더 이상 안 쓰지만 남겨두면 헷갈려 지움) */
   .le-steps{flex:0 0 auto; background:var(--surface); border-top:1px solid var(--hair); padding:11px 12px 9px;}
   .les-h{display:flex; align-items:center; gap:8px; margin-bottom:9px;}
@@ -8228,6 +8301,7 @@ if('serviceWorker' in navigator){
     var up=document.getElementById('vault-up'); if(up) up.textContent = pickCb ? '＋ 새로 올리기' : '＋ 사진 올리기';
     renderCats(); renderGrid(); vov.classList.add('open');
   }
+  window.__openVault=openVault;   /* 📄 문서형 글 편집이 사진 자리를 누를 때 쓴다 (2026-08-21) */
   function closeVault(){ vov.classList.remove('open'); pickCb=null; }
   document.querySelector('[data-vclose]').onclick = closeVault;
   vov.addEventListener('click', function(e){ if(e.target===vov) closeVault(); });
@@ -13191,6 +13265,198 @@ if('serviceWorker' in navigator){
     ov.classList.add('open');
   }
   window.__openPasteStart=openPasteStart;
+
+  /* ════ 📄 문서형 글 편집 (2026-08-21 사장님 «나안» 픽) ════
+        네이버 블로그처럼 «글이 그대로 보이고 그 자리에서» 고쳐진다.
+        평소엔 문서만 보이고, 문단에 손을 대면 왼쪽에 ↑ ↓ ✎ ✕ 가 뜬다.
+
+     🚨 설계 원칙: #rows 가 «유일한 진짜»다.
+        문서 화면은 그것을 다르게 그린 껍데기일 뿐이고, 고친 값은 곧바로 row._content 에 쓴다.
+        저장·발행(serialize)은 지금처럼 #rows 만 읽는다 — 데이터가 두 벌이 되면 반드시 어긋난다. */
+  (function(){
+    var DOC = { text:1, quote:1, photocard:1, imagetext:1 };
+    var FIELD = {
+      text:      [[0,'소제목'], [1,'여기에 이어서 쓰세요']],
+      quote:     [[0,'인용할 한 문장']],
+      imagetext: [[1,'제목'], [2,'설명']]
+    };
+    function box(){ return document.getElementById('rows'); }
+    function body(){ return document.getElementById('home-body'); }
+    function docRows(){
+      var b=box(); if(!b) return [];
+      return [].filter.call(b.children, function(r){
+        return r.classList && r.classList.contains('row') && r.id!=='profile-row';
+      });
+    }
+    function cont(row){ if(!row._content) row._content=[]; return row._content; }
+    function esc2(t){ return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function nameOf(row){ var n=row.querySelector('.nm'); return n?n.textContent.trim():(row.dataset.type||'구성'); }
+    function changed(row){
+      try{ if(row && window.__refreshRowSub) window.__refreshRowSub(row); }catch(_){}
+      try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+    }
+    function reflow(){
+      try{ if(window.__refreshBuilder) window.__refreshBuilder(); }catch(_){}
+      try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(_){}
+      try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+      render();
+    }
+    function host(){
+      var b=box(); if(!b) return null;
+      var h=document.getElementById('docwrap');
+      if(!h){ h=document.createElement('div'); h.id='docwrap'; b.parentNode.insertBefore(h, b.nextSibling); }
+      return h;
+    }
+    function gapHtml(i){
+      return '<div class="dgap"><button type="button" data-dadd="'+i+'" title="여기에 넣기" aria-label="여기에 넣기">＋</button></div>';
+    }
+    function gripHtml(i, last){
+      return '<span class="dgrip">'
+        + '<button type="button" data-dmv="'+i+'" data-d="-1" title="위로"'+(i===0?' disabled':'')+'>↑</button>'
+        + '<button type="button" data-dmv="'+i+'" data-d="1" title="아래로"'+(last?' disabled':'')+'>↓</button>'
+        + '<button type="button" data-ded="'+i+'" title="자세히 고치기">✎</button>'
+        + '<button type="button" data-ddel="'+i+'" title="지우기">✕</button></span>';
+    }
+    function render(){
+      var h=host(); if(!h) return;
+      var rows=docRows(), out=gapHtml(0);
+      rows.forEach(function(row, i){
+        var ty=row.dataset.type||'', c=cont(row), last=(i===rows.length-1);
+        out += '<div class="dblk" data-di="'+i+'">' + gripHtml(i, last);
+        if(DOC[ty]){
+          if(ty==='photocard' || ty==='imagetext'){
+            var ph=c[0]||'';
+            out += '<div class="dpic'+(ph?' has':'')+'" data-dpic="'+i+'">'
+                 + (ph ? '<img src="'+esc2(ph)+'" alt="">' : '＋ 여기에 사진 · 눌러서 고르기') + '</div>';
+          }
+          /* 🚨 AI 포스팅이 만드는 건 «전부 text 블록»이고, 인용·임팩트는 layout 으로 갈린다.
+                (type 만 보면 인용이 소제목 칸으로 떨어진다 — 2026-08-21 실측으로 잡음) */
+          var ly=row._layout||'';
+          if(ty==='text' && (ly==='quote' || ly==='impact')){
+            out += '<div class="dtx '+(ly==='quote'?'q':'h')+'" contenteditable="true" data-di2="'+i+'" data-dk="0" data-ph="'
+                 + (ly==='quote'?'인용할 한 문장':'크게 보일 한 줄') + '">' + esc2(c[0]) + '</div>';
+            if(String(c[1]||'').trim())
+              out += '<div class="dtx" contenteditable="true" data-di2="'+i+'" data-dk="1" data-ph="덧붙일 말 (선택)">'+esc2(c[1])+'</div>';
+          } else {
+            (FIELD[ty]||[]).forEach(function(f){
+              var cls = (ty==='quote') ? 'dtx q' : ((f[0]===0 && ty==='text') ? 'dtx h' : 'dtx');
+              out += '<div class="'+cls+'" contenteditable="true" data-di2="'+i+'" data-dk="'+f[0]+'" data-ph="'+esc2(f[1])+'">'
+                   + esc2(c[f[0]]) + '</div>';
+            });
+          }
+          if(ty==='photocard'){
+            out += '<div class="dtx dcap" contenteditable="true" data-di2="'+i+'" data-dk="1" data-ph="사진 설명 (선택)">'
+                 + esc2(c[1]) + '</div>';
+          }
+        } else {
+          var ic=row.querySelector('.ic'), sb=row.querySelector('.sb');
+          out += '<div class="dcard" data-ded="'+i+'">'
+               + '<span class="di">'+(ic?ic.textContent:'🔗')+'</span>'
+               + '<span class="dm"><b>'+esc2(nameOf(row))+'</b><span>'+esc2(sb?sb.textContent:'')+'</span></span>'
+               + '<span class="dgo">고치기 →</span></div>';
+        }
+        out += '</div>' + gapHtml(i+1);
+      });
+      out += '<button type="button" class="dmore" id="dmore">＋ 다른 구성 넣기 · 후기 · 예약 · 숫자 · CTA …</button>';
+      h.innerHTML = out;
+      var mo2=h.querySelector('#dmore');
+      if(mo2) mo2.onclick=function(){ try{ if(window.__openAddCatalog) window.__openAddCatalog(); }catch(_){} };
+      wire(h, rows);
+    }
+    function wire(h, rows){
+      h.querySelectorAll('.dtx[data-di2]').forEach(function(e){
+        e.addEventListener('input', function(){
+          var row=rows[+e.dataset.di2]; if(!row) return;
+          cont(row)[+e.dataset.dk] = e.textContent;
+          changed(row);
+        });
+        e.addEventListener('paste', function(ev){
+          ev.preventDefault();
+          var t=(ev.clipboardData||window.clipboardData).getData('text/plain')||'';
+          document.execCommand('insertText', false, t);
+        });
+      });
+      h.querySelectorAll('[data-dpic]').forEach(function(e){
+        e.onclick=function(){
+          var row=rows[+e.dataset.dpic]; if(!row) return;
+          try{ if(window.__openVault) window.__openVault(function(url){ cont(row)[0]=url; changed(row); render(); }); }catch(_){}
+        };
+      });
+      h.querySelectorAll('[data-ded]').forEach(function(e){
+        e.onclick=function(ev){ ev.stopPropagation();
+          var row=rows[+e.dataset.ded]; if(!row) return;
+          var pen=row.querySelector('.edit'); if(pen) pen.click();
+        };
+      });
+      h.querySelectorAll('[data-dmv]').forEach(function(e){
+        e.onclick=function(){
+          var i=+e.dataset.dmv, d=+e.dataset.d, a=rows[i], b2=rows[i+d];
+          if(!a||!b2) return;
+          if(d<0) box().insertBefore(a, b2); else box().insertBefore(b2, a);
+          reflow();
+        };
+      });
+      h.querySelectorAll('[data-ddel]').forEach(function(e){
+        e.onclick=function(){
+          var row=rows[+e.dataset.ddel]; if(!row) return;
+          if(!confirm('이 부분을 지울까요?')) return;
+          row.remove(); reflow();
+        };
+      });
+      h.querySelectorAll('[data-dadd]').forEach(function(e){
+        e.onclick=function(){ openAdd(+e.dataset.dadd, rows); };
+      });
+    }
+    var PICK = [
+      ['text','¶','글 단락','그냥 이어서 쓰기', ['','']],
+      ['text','H','소제목','내용을 나눌 때', ['',''], ''],
+      ['photocard','🖼','사진','보관함에서 고르거나 새로 올리기', ['','','pc-shadow|']],
+      ['text','❝','인용','한 문장 강조', [''], 'quote']
+    ];
+    function openAdd(at, rows){
+      var ov=document.getElementById('docadd-ov');
+      if(!ov){
+        ov=document.createElement('div'); ov.className='ov'; ov.id='docadd-ov';
+        ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">여기에 넣기</span><span class="x" id="da-x">×</span></div><div id="da-body"></div></div>';
+        document.body.appendChild(ov);
+        ov.addEventListener('click', function(e){ if(e.target===ov) ov.classList.remove('open'); });
+        ov.querySelector('#da-x').onclick=function(){ ov.classList.remove('open'); };
+      }
+      var h2='';
+      PICK.forEach(function(p, k){
+        h2+='<button type="button" class="lg-l" data-dp="'+k+'">'
+          +'<span class="n">'+p[1]+'</span>'
+          +'<span class="m"><b>'+p[2]+'</b><span>'+p[3]+'</span></span>'
+          +'<span class="go">넣기 →</span></button>';
+      });
+      document.getElementById('da-body').innerHTML=h2;
+      ov.querySelectorAll('[data-dp]').forEach(function(b){
+        b.onclick=function(){
+          var p=PICK[+b.getAttribute('data-dp')];
+          ov.classList.remove('open');
+          if(!window.__createRow) return;
+          var row=window.__createRow({ type:p[0], name:p[2], on:true, content:p[4].slice(), layout:p[5]||'' });
+          if(!row) return;
+          row._content=p[4].slice();
+          if(p[5]) row._layout=p[5];
+          var ref=rows[at];
+          if(ref && ref.parentNode===box()) box().insertBefore(row, ref);
+          reflow();
+          setTimeout(function(){
+            var e2=document.querySelector('#docwrap .dblk[data-di="'+at+'"] .dtx');
+            if(e2){ e2.focus(); try{ e2.scrollIntoView({block:'center', behavior:'smooth'}); }catch(_){} }
+          }, 60);
+        };
+      });
+      ov.classList.add('open');
+    }
+    window.__docViewOn=function(on){
+      var b=body(); if(!b) return;
+      if(on){ b.setAttribute('data-docview','1'); render(); }
+      else { b.removeAttribute('data-docview'); }
+    };
+    window.__renderDocView=render;
+  })();
   function createPost(type, blocksOverride, titleOverride, summaryOverride){
     var preset=blocksOverride||(POST_PRESETS[type]?POST_PRESETS[type]():[]);
     var titles={blog:'새 글',landing:'새 랜딩',reviews:'후기 모음',style:'스타일 갤러리',notice:'공지',article:'새 글',insight:'새 정리글',checklist:'체크리스트',tip:'노하우 · 꿀팁'};
@@ -15805,7 +16071,7 @@ if('serviceWorker' in navigator){
     var lsHost=document.getElementById('ls-host');
     var lsTitle=document.getElementById('ls-title');
     if(!lsOv||!lsHost) return;
-    var _moved=null, _mode=null, _newToSheet=false;
+    var _moved=null, _mode=null, _newToSheet=false, _fromAi=false;
     function moveIn(node, title){
       if(!node) return;
       _moved={node:node, parent:node.parentNode, next:node.nextSibling};
@@ -15822,12 +16088,16 @@ if('serviceWorker' in navigator){
       }
       _moved=null; lsHost.innerHTML='';
     }
-    window.__openPostSheet=function(id){ _mode='post'; try{ openPostEdit(id); }catch(e){} moveIn(document.getElementById('home-body'), '글 쓰기'); setTimeout(function(){ try{ if(window.__markPostSteps) window.__markPostSteps(); }catch(_){} }, 60); };
+    window.__openPostSheet=function(id){ _mode='post'; try{ openPostEdit(id); }catch(e){} moveIn(document.getElementById('home-body'), '글 쓰기'); setTimeout(function(){ try{ if(window.__markPostSteps) window.__markPostSteps(null); }catch(_){} }, 60); };
     window.__newPostSheet=function(){ _newToSheet=true; try{ createPost('blog'); }catch(e){ _newToSheet=false; } };
     /* 🚨 2026-08-20 사장님 «글 입력하니까 갑자기 홈으로 가진다» — AI 포스팅으로 만든 글이
           시트가 아니라 작업실로 떨어졌다(_newToSheet 가 안 켜져서). 블록·제목까지 받아 현장 시트로 연다. */
-    window.__pstToSheet=function(bl, title, summary){ _newToSheet=true; try{ createPost('blog', bl, title, summary); }catch(e){ _newToSheet=false; } };
-    window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '글 쓰기'); setTimeout(function(){ try{ if(window.__markPostSteps) window.__markPostSteps(); }catch(_){} }, 60); } };
+    window.__pstToSheet=function(bl, title, summary){ _newToSheet=true; _fromAi=true; try{ createPost('blog', bl, title, summary); }catch(e){ _newToSheet=false; _fromAi=false; } };
+    window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post';
+      var ai=_fromAi; _fromAi=false;
+      moveIn(document.getElementById('home-body'), ai ? 'AI 포스팅 \u00b7 글 다듬기' : '글 쓰기');
+      /* 🧭 AI로 왔으면 «쓴 글 맨 위»(2단계)로 바로 — 썸네일은 위에 접힌 채 표시만 */
+      setTimeout(function(){ try{ if(window.__markPostSteps) window.__markPostSteps(ai?{start:2, ai:true}:null); }catch(_){} }, 60); } };
     /* 👤 2026-08-20 사장님 지시 — «기본 프로필 마지노선만 라이트에서».
           라이트(현장)에선 사진·이름·한 줄 소개까지만. 숫자 증거·작업 사진·전문성은 운영자 모드에서.
           같은 칸을 그대로 옮겨 쓰므로 «라이트에서 쓴 것 = 운영자 모드에서도 그대로» 다 (데이터가 하나다). */
@@ -16151,7 +16421,11 @@ if('serviceWorker' in navigator){
     /* 📿 구슬 1-2 (2026-08-20 사장님 「나」 픽) — 썸네일과 본문은 «하는 일»이 다르다.
           한 화면에 쌓으면 스크롤이 길어져 «내가 뭘 적었더라»가 된다. 한 번에 하나만.
           칸을 새로 만들지 않고, 이미 있는 칸에 표시만 붙여 나눈다(데이터는 그대로 하나). */
-    function markPostSteps(){
+    /* 🧭 2026-08-21 사장님 «AI 포스팅인데 썸네일로 튀어서 흐름이 끊긴다» —
+          AI가 제목·요약을 이미 채웠는데 다시 1단계로 떨어뜨리면 «왜 또?»가 된다.
+          AI로 온 사람은 «쓴 글 맨 위»에 내려놓고, 썸네일은 위에 접어 둔 채 표시만 남긴다. */
+    function markPostSteps(opt){
+      opt=opt||{};
       var box=document.getElementById('home-body'); if(!box) return;
       var form=document.getElementById('post-edit-banner');
       if(!form || getComputedStyle(form).display==='none') return;   // 글 편집 중일 때만
@@ -16175,7 +16449,9 @@ if('serviceWorker' in navigator){
         +'<span class="pb" data-pb="2"><i>2</i>본문</span>';
       form.parentNode.insertBefore(beads, form);
       var done=document.createElement('div'); done.className='pstep-done'; done.id='pstep-done';
-      done.innerHTML='<span class="ck">\u2713</span><span class="m"><b>썸네일 다 됐어요</b><span>제목 \u00b7 요약 \u00b7 표지 \u00b7 주제</span></span><span class="ed">고치기</span>';
+      done.innerHTML = opt.ai
+        ? '<span class="ck">\u25b2</span><span class="m"><b>위에 썸네일이 있어요</b><span>제목 \u00b7 요약은 AI가 채웠어요 \u00b7 표지만 넣으면 끝</span></span><span class="ed">보기</span>'
+        : '<span class="ck">\u2713</span><span class="m"><b>썸네일 다 됐어요</b><span>제목 \u00b7 요약 \u00b7 표지 \u00b7 주제</span></span><span class="ed">고치기</span>';
       form.parentNode.insertBefore(done, form);
       var next=document.createElement('button'); next.type='button'; next.className='pstep-next'; next.id='pstep-next';
       next.textContent='본문 쓰러 가기 \u2192';
@@ -16188,11 +16464,13 @@ if('serviceWorker' in navigator){
           b.className='pb'+(k===String(n)?' on':(Number(k)<n?' done':''));
         });
         try{ var sh=document.querySelector('#live-sheet-ov .ls-body'); if(sh) sh.scrollTop=0; else window.scrollTo(0,0); }catch(_){}
+        /* 📄 2단계(본문)에서만 문서로 편다 — 1단계 썸네일은 원래 폼 그대로 */
+        try{ if(window.__docViewOn) window.__docViewOn(n===2); }catch(_){}
       }
       next.onclick=function(){ go(2); };
       done.querySelector('.ed').onclick=function(){ go(1); };
       beads.querySelectorAll('.pb').forEach(function(b){ b.onclick=function(){ go(Number(b.getAttribute('data-pb'))); }; });
-      go(1);
+      go(opt.start===2 ? 2 : 1);
     }
     window.__markPostSteps=markPostSteps;
 
