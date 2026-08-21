@@ -147,6 +147,15 @@
       add('e ?live=1 바로 현장편집', et.indexOf("_wantLive=_q.get('live')==='1'") >= 0 && et.indexOf('window.__openLiveAuto()') >= 0,
         '«고치기»를 누르면 작업실을 안 거치고 바로 편집');
       add('e ?live=1 착지 안 튕김', et.indexOf('!_fromGear && !_wantLive') >= 0, '현장 편집으로 들어왔는데 손님 화면으로 다시 튕기면 안 된다');
+      /* 🧭 네 걸음 도크 (2026-08-20 사장님 A안) */
+      add('e 🧭 네 걸음 도크', ['id="le-type"   data-step="1"','id="le-design" data-step="2"','data-step="3"','data-step="4"'].every(function(k){ return et.indexOf(k)>=0; }),
+        '홈 유형 → 테마 → 구성 추가 → 글쓰기 순서. 번호가 빠지면 «순서»가 안 보인다');
+      add('e 미리보기·운영은 위로', et.indexOf('le-top-d le-d-prev" id="le-home"') >= 0 && et.indexOf('le-top-d" id="le-opmode"') >= 0,
+        '도크엔 «순서대로 밟을 것»만 — 미리보기·운영자모드는 오른쪽 최상단 (사장님 지시)');
+      add('e 도크에 미리보기 없음', et.indexOf('le-dock le-flow') >= 0 && (et.split('le-dock le-flow')[1]||'').slice(0,600).indexOf('le-home') < 0,
+        '도크로 되돌아오면 버튼이 다시 5개가 된다');
+      add('e 홈 유형 배선', et.indexOf("getElementById('le-type')") >= 0 && et.indexOf('window.__openTypePick') >= 0,
+        '1걸음이 무반응이면 흐름 전체가 죽는다');
       add('e 📝 글쓰기 버튼', et.indexOf('id="le-write"') >= 0 && et.indexOf("window.__switchWs('posts')") >= 0,
         '현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다');
       add('e switchWs 노출', et.indexOf('window.__switchWs=switchWs') >= 0, '글쓰기 버튼이 부른다');
