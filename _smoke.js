@@ -195,6 +195,10 @@
         '도크로 되돌아오면 버튼이 다시 5개가 된다');
       add('e 홈 유형 배선', et.indexOf("getElementById('le-type')") >= 0 && et.indexOf('window.__openTypePick') >= 0,
         '1걸음이 무반응이면 흐름 전체가 죽는다');
+      add('e 👤 라이트 프로필 = 마지노선', et.indexOf("card.classList.add('lite')") >= 0 && et.indexOf('#profile-card.lite [data-deep]{display:none;}') >= 0,
+        '라이트(현장)는 사진·이름·한 줄 소개까지 — 숫자 증거·작업 사진·전문성은 운영자 모드 (2026-08-20 사장님 지시)');
+      add('e 작업실에선 프로필 전부', et.indexOf("_pc.classList.remove('lite')") >= 0,
+        '시트를 닫고도 lite 가 남으면 작업실에서 깊은 칸이 영영 안 보인다');
       add('e ✍️ 글쓰기는 현장에서', et.indexOf('window.__newPostSheet){ window.__newPostSheet(); return;') >= 0,
         '🚨 눌렀더니 현장을 닫고 작업실(운영자 모드)로 튕기던 것 — 라이브 시트로 손님 화면 위에 올린다 (2026-08-20 사장님 확인)');
       add('e 📝 글쓰기 배선 생존', et.indexOf('id="le-write"') >= 0 && et.indexOf("window.__switchWs('posts')") >= 0,
