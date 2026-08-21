@@ -10424,15 +10424,20 @@ if('serviceWorker' in navigator){
   }
   // ── 분야별 기본 구성(프리셋) — 새 사용자가 로그인하면 분야에 맞게 자동 ──
   var TYPE_NAME = { links:'뉴스레터 · 강의 · 전자책', cardnews:'카드뉴스', gallery:'컨텐츠 갤러리', channels:'채널 링크', stylegallery:'스타일 갤러리', highlights:'하이라이트', products:'추천 제품', event:'이벤트 배너', qna:'Q&A', archive:'아카이브', authority:'전문가 증명', service:'가격표 · 예약', lead:'문의·신청', review:'후기', reservation:'예약 신청', lookbook:'대표 사진 쇼케이스', ranking:'랭킹 · 가격', location:'매장 · 위치' };
-  // 문제 기반 랜딩 = 설득 서사(공감→원인→전문가→해결→변화→예약). 안내문구 미리 채움.
-  var P_EMPATHY={type:'imagetext', layout:'hero', name:'① 공감 · 문제 후킹', content:['','이런 고민, **있으시죠?**','고객이 겪는 문제를 공감되게 적어요. (강조: **두 별표** = 그라데이션, *한 별표* = 포인트색)\n예: "앞머리만 자르면 얼굴이 더 커 보여 늘 고민이셨죠?"']};
-  var P_CAUSE={type:'text', layout:'impact', name:'② 원인 · 근거', content:['사실, **이게 원인**이에요','왜 그 문제가 생기는지 + 근거를 적어요.\n예: "얼굴형을 고려하지 않은 일률적인 커트 때문이에요. 같은 앞머리도 얼굴형에 따라 전혀 다르게 보여요."']};
+  /* 🚨 2026-08-20 사장님 지적 «AI 냄새가 너무 난다» — 미리 써 둔 문구를 전부 비운다.
+        전엔 «이런 고민, 있으시죠?» «사실, 이게 원인이에요» 같은 만들어진 카피가 기본으로 깔렸다.
+        더 나빴던 건 «어떻게 쓰라»는 사장님용 안내문(별표 강조법 설명까지)이
+        그대로 내용 자리에 들어가 «손님 화면에 그대로 나갔다»는 것.
+        이제 이름만 남기고 내용은 비운다 → 편집 모드에선 «흐린 뼈대»가 뜨고, 탭하면 내 말로 쓴다.
+        (무엇을 쓰는 칸인지는 블록 이름과 u.html 의 BLOCK_HINT 가 조용히 알려준다) */
+  var P_EMPATHY={type:'imagetext', layout:'hero', name:'① 공감 · 문제 후킹', content:['','','']};
+  var P_CAUSE={type:'text', layout:'impact', name:'② 원인 · 근거', content:['','']};
   var P_EXPERT={type:'authority', layout:'band', name:'③ 전문가 증명 · 신뢰', content:[]};
-  var P_SOLVE={type:'imagetext', layout:'split', name:'④ 해결 방법', content:['','그래서, **이렇게 해결**해요','당신만의 해결 방법을 적어요.\n예: "얼굴형 진단 후 1:1 맞춤 설계로, 얼굴이 작아 보이는 비율을 찾아드려요."']};
-  var P_DESIRE={type:'text', layout:'quote', name:'⑤ 욕망 · 미래상', content:['이렇게 바뀐 **당신**을 상상해보세요','원하는 미래 모습을 그려줘요(고통 회피 + 욕망 충족).\n예: "아침마다 거울 앞 고민 없이, 어딜 가도 \'머리 어디서 했어?\' 듣는 당신."']};
+  var P_SOLVE={type:'imagetext', layout:'split', name:'④ 해결 방법', content:['','','']};
+  var P_DESIRE={type:'text', layout:'quote', name:'⑤ 욕망 · 미래상', content:['','']};
   var P_REVIEW={type:'review', name:'⑦ 후기 · 진짜 변화', content:[]};
-  var P_OBJECTION={type:'qna', name:'⑧ 걱정 해소 (반론 처리)', content:[[['나랑 안 어울리면 어쩌죠?','얼굴형 진단 후 맞춤 설계라, 어울리는 선에서만 제안드려요.'],['실패한 적 있어 불안해요','상담은 무료예요. 충분히 상의하고 결정하셔도 됩니다.']]]};
-  var P_URGENCY={type:'event', layout:'spotlight', name:'⑨ 지금 예약할 이유 (한정)', content:['이번 달 한정','이번 달 신규 예약 5분께 1:1 컨설팅 무료','','']};
+  var P_OBJECTION={type:'qna', name:'⑧ 걱정 해소 (반론 처리)', content:[[]]};
+  var P_URGENCY={type:'event', layout:'spotlight', name:'⑨ 지금 예약할 이유 (한정)', content:['','','','']};
   var P_SERVICE={type:'service', name:'⑩ 예약 · 상품', content:[]};
   var P_LEAD={type:'lead', name:'⑪ 문의·신청', content:[]};
   var PRESETS = {
@@ -10642,7 +10647,7 @@ if('serviceWorker' in navigator){
     try{
       var res=await window.laRpc('li_save',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_data:data});
       /* 🚨 2026-08-20 — 여기서 li_publish(true) 를 부르는 바람에 «가입만 해도» 손님에게 공개됐다.
-            갓 가입한 사람의 홈엔 아직 «고객이 겪는 문제를 공감되게 적어요» 같은 예시가 그대로 있는데
+            갓 가입한 사람의 홈엔 아직 안내문 예시가 그대로 있는데
             그게 손님에게 나갔다. 자동저장은 «저장»만 한다 — 공개는 사장님이 누를 때만.
             ⚠️ 이미 공개 중인 페이지를 내리지는 않는다(부르지 않을 뿐). */
       setAutosaveStatus((res&&res.ok)?'saved':'error');
@@ -15401,7 +15406,13 @@ if('serviceWorker' in navigator){
     // 자식(iframe)에서 오는 메시지
     window.addEventListener('message', function(ev){
       var m=ev.data||{}; if(!m || !window.__liveEditActive) return;
-      if(m.type==='la-edit-ready'){ sendData(); }
+      if(m.type==='la-edit-ready'){ sendData();
+        /* 🚪 2026-08-20 — 손님 화면에서 «○○ 편집»으로 들어오면 그 칸부터 연다 (홈은 홈만, 포스팅은 포스팅만) */
+        try{ var _t=new URLSearchParams(location.search).get('tab');
+          if(_t && _t!=='home'){ var _fr=document.getElementById('le-iframe');
+            setTimeout(function(){ try{ var d=_fr.contentDocument; var nv=d&&d.querySelector('.navitem[data-tab="'+_t+'"]'); if(nv) nv.click(); }catch(_){} }, 420); }
+        }catch(_){}
+      }
       else if(m.type==='la-edit-tap'){ handleTap(m.bt); }
       else if(m.type==='la-block-menu'){ openBlockMenu(m.bt, m.nth, m.name); }   /* 🚨 칸 오른쪽 위 «⋯ 수정» (2026-08-20) */
       else if(m.type==='la-pane'){
