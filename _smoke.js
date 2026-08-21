@@ -98,6 +98,15 @@
       'left:50%+translateX(-50%) 로 되돌리면 등장 애니(.reveal-blk.in{transform:none})가 지워 바가 오른쪽으로 188px 밀린다 (2026-08-20)');
     add('u: 채널 아이콘이 예약 바를 안 덮음', uHtml.indexOf('body.has-cta-sticky #home-fab{ bottom:calc(168px') > -1,
       '128px 이면 바 윗변(157px)과 29px 겹쳐 「지금 예약하기」를 가린다 (2026-08-20)');
+    /* 🧱 대공사 2026-08-20 — 라이트(현장 편집) 정리 */
+    add('u: 칸 «⋯ 수정» 하나로', uHtml.indexOf("more.className='la-ed-btn la-ed-more'") > -1 && uHtml.indexOf("type:'la-block-menu'") > -1,
+      '칸마다 ✎수정+🗑삭제 두 개가 붙어 «버튼이 너무 많다»던 것 — 하나로 모음 (2026-08-20 사장님 지시)');
+    add('u: 옛 칸 삭제버튼 부활 금지', uHtml.indexOf("la-ed-btn la-ed-del'; del.textContent='🗑 삭제'") < 0,
+      '되살아나면 칸마다 버튼이 다시 두 개가 된다');
+    add('u: 칸 버튼은 오른쪽 위', uHtml.indexOf('.la-ed-bar{position:absolute; top:-30px; right:4px') > -1,
+      '세로 가운데·선택해야 보임으로 되돌리면 있는 줄도 모른다 (사장님: «틀 오른쪽 상단에 조그마한 수정»)');
+    add('u: 흐린 뼈대(애플식)', uHtml.indexOf('la-sk-b') > -1 && uHtml.indexOf('.la-empty-block{background:rgba(255,255,255,.022)') > -1,
+      '또렷한 보라 박스로 되돌리면 «가짜 내용»처럼 읽힌다 — 자리표시는 흐리게 + 막대만 (2026-08-20)');
     add('u: 예약 단계가 label로 저장', uHtml.indexOf("track('resv',{step:'open', label:'open'})") > -1 && uHtml.indexOf("label:'submit'") > -1,
       'li_event 는 payload의 step 키를 버린다 — label 에 안 실으면 예약 4단계가 한 덩어리가 되어 5칸 퍼널이 0으로 나온다 (2026-08-20)');
   } else {
@@ -148,6 +157,12 @@
         '«고치기»를 누르면 작업실을 안 거치고 바로 편집');
       add('e ?live=1 착지 안 튕김', et.indexOf('!_fromGear && !_wantLive') >= 0, '현장 편집으로 들어왔는데 손님 화면으로 다시 튕기면 안 된다');
       /* 🧭 네 걸음 도크 (2026-08-20 사장님 A안) */
+      add('e ⭐ 칸 메뉴 5+1', et.indexOf('function openBlockMenu') >= 0 && et.indexOf("m.type==='la-block-menu'") >= 0,
+        '고치기·바꾸기·위·아래·숨기기·빼기 — 숨기기와 빼기를 나눈 게 핵심 (2026-08-20)');
+      add('e 🧥 스킨 고르는 칸 삭제', et.indexOf('id="dz-skin"') < 0,
+        '스킨은 «홈 유형» 4종이 자동으로 입힌다 — 고르는 칸이 부활하면 안 된다 (사장님 지시)');
+      add('e 👤 프로필 꾸미기 2개', et.indexOf('data-pm="char"') < 0 && et.indexOf('기본 · 동그라미 프사') >= 0,
+        '캐릭터 삭제 · 기본(동그라미 프사) / 내 사진 두 가지만 (2026-08-20)');
       add('e 🧭 네 걸음 도크', ['id="le-type"   data-step="1"','id="le-design" data-step="2"','data-step="3"','data-step="4"'].every(function(k){ return et.indexOf(k)>=0; }),
         '홈 유형 → 테마 → 구성 추가 → 글쓰기 순서. 번호가 빠지면 «순서»가 안 보인다');
       add('e 미리보기·운영은 위로', et.indexOf('le-top-d le-d-prev" id="le-home"') >= 0 && et.indexOf('le-top-d" id="le-opmode"') >= 0,
@@ -173,7 +188,7 @@
         '홈→머묾→누름→예약창→예약완료 · content-hub-funnel5.sql 있을 때만 (B안, 2026-08-20)');
       add('e 5칸 없어도 안 깨짐', et.indexOf('s.funnel5 ? an5Funnel(s)') >= 0 && et.indexOf('f5-need') >= 0,
         'SQL 안 깔린 계정은 옛 3칸 그대로 + 안내 한 줄 — 무회귀 보장');
-      add('e \\U 이스케이프 금지', et.indexOf('\\\\U0001') < 0,
+      add('e \\U 이스케이프 금지', et.indexOf('\\U0001') < 0,
         'JS는 \\U(대문자) 이스케이프를 모른다 — 이모지가 «U0001FAA3» 글자로 새어나온다 (2026-08-20 사고)');
       add('e 🚧 잠금 표시', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') >= 0 && et.indexOf('.ws-tab.ws-soon{ opacity:.34; }') >= 0,
         '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
