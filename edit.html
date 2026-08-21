@@ -13262,7 +13262,9 @@ if('serviceWorker' in navigator){
      카톡·메모장 글을 붙여넣으면 제목·소제목·목록·인용·사진자리로 갈라 «블록»으로 넣어준다.
      🚨 AI 안 씀 — 글의 «생김새»(줄바꿈·기호·글자수·종결어미)만 본다. 서버로 안 나감. 비용 0원. */
   var PST_END   = /(다|요|죠|네|음|함|까|래|군|걸|봐|자|랍니다|습니다|어요|아요|에요|예요|입니다)[.!?…]?$/;
-  var PST_LIST  = /^\s*(\d+[.)]|[-–—•·▶▪◦]|[①②③④⑤⑥⑦⑧⑨⑩])\s+/;
+  /* 🚨 2026-08-21 — ✔ ✅ ▪️ 같은 «사람들이 실제로 쓰는» 기호가 빠져 있어
+        체크리스트가 통째로 문단이 됐다 (해다링 원고에서 잡음). 공백 없이 붙여 쓰는 것도 흔하다. */
+  var PST_LIST  = /^\s*(\d+[.)]|[-–—•·▶▪◦✔✅☑✓■□]️?|[①②③④⑤⑥⑦⑧⑨⑩])\s*/;
   var PST_QUOTE = /^\s*["“”「『❝'']([\s\S]+)["“”」』❞'']\s*$/;
   var PST_PHOTO = /(사진|보시면|이렇게|아래|이미지|보세요|모습|결과|전후|비포|애프터)/;
   /* 🚨 2026-08-21 사장님 «막상 이런 식으로 정리가 된 느낌이 아니네» — 실제 원고로 확인해 보니
@@ -13282,7 +13284,7 @@ if('serviceWorker' in navigator){
   /* 「이벨로 ・ 2026. 6. 10. 16:06」 — 글쓴이＋날짜 한 줄 (블로그 머리글) */
   var PST_BYLINE = /^.{1,14}\s*[・·|]\s*\d{4}\.\s?\d{1,2}\.\s?\d{1,2}\.?(\s+\d{1,2}:\d{2})?$/;
   var PST_LOC_LINE  = /^위치\s*\S/;                                  /* 「위치이벨로 의정부점」 */
-  var PST_DATE = /^\d{1,4}\s*[.\-\/]\s*\d{1,2}\s*[.\-\/]?\s*(\d{1,2}:\d{2})?\s*$/;
+  var PST_DATE = /^\d{1,4}\s*[.\-\/]\s*\d{1,2}\s*[.\-\/]?\s*\d{0,2}\s*\.?\s*(\d{1,2}:\d{2})?\s*$/;
   /* 인스타·카톡에서 온 원고의 찌꺼기 — 출처를 «묻지 않고» 생김새로 안다.
      (사장님께 «어디서 가져왔어요?»를 탭시키는 것보다 정확하고, 할 일이 0이다) */
   var PST_TAGS = /^(#[^\s#]{1,30}[\s]*){2,}$/;              /* 해시태그만 줄줄이 = 인스타 꼬리 */
@@ -13370,6 +13372,8 @@ if('serviceWorker' in navigator){
   var PST_CTA = /(상담|문의|예약|신청|주문|구매|방문)\s*(문의|주세요|해\s?주세요|하세요|바랍니다|남겨주세요|주시면)/;
   /* ⑤ 전·후 */
   var PST_BA = /(비포|before)\s*[·\/,→-]?\s*(애프터|after)|전\s*[·\/,→-]\s*후/i;
+  /* ⑦ 진단 결과 구간 — 「0~1개 : …」「4~5개: …」. 진단글의 심장이다. */
+  var PST_BAND = /^([0-9]+\s*[~\-–]\s*[0-9]+\s*[개점가지]?|[0-9]+\s*[개점]\s*이[상하])\s*[:：]?\s*(.+)$/;
   /* ⑥ 순서 — 「먼저·그다음·마지막」 또는 「1단계」 */
   var PST_SEQ = /(먼저|그다음|그 다음|마지막으로|\d\s?단계|순서대로)/;
 
@@ -13405,6 +13409,8 @@ if('serviceWorker' in navigator){
                 for(var _s2=i+1;_s2<lines.length;_s2++){ if(lines[_s2].trim()===_nx2){ i=_s2; break; } }
                 continue; }
       }
+      var _bd=t.match(PST_BAND);
+      if(_bd && String(_bd[2]||'').length>=4){ flush(); out.push({k:'band', a:_bd[1].trim(), b:_bd[2].trim()}); paraSince=0; continue; }
       if(PST_CTA.test(t) && t.length<=40){ flush(); out.push({k:'cta', tx:t}); paraSince=0; continue; }
       /* 숫자 띠 — 짧은 줄에 「숫자+단위」가 2개 이상이면 «자랑»이다. 띠로 세우면 눈에 박힌다.
             길면 건드리지 않는다 — 문장을 숫자로 토막 내면 뜻이 깨진다. */
@@ -13456,7 +13462,9 @@ if('serviceWorker' in navigator){
         if(ch.trim()) chunks.push(ch.trim());
         chunks.forEach(function(c){ out.push({k:'p', tx:c}); paraSince++; });
       } else { out.push({k:'p', tx:t}); paraSince++; }
-      if(PST_PHOTO.test(t) || paraSince>=3){ out.push({k:'img'}); paraSince=0; }
+      /* 🚨 3문단마다 사진 자리를 박으니 22블록 중 6개가 빈 사진이었다 (해다링 원고).
+            사진은 «사진 얘기가 나올 때» 또는 «한참 글만 이어질 때»만. */
+      if(PST_PHOTO.test(t) || paraSince>=5){ out.push({k:'img'}); paraSince=0; }
     }
     flush();
     /* ✏️ 2026-08-21 사장님 «한 줄도 뽑아줘» — 손님이 «목록 카드»에서 보는 그 한 줄.
@@ -13561,6 +13569,13 @@ if('serviceWorker' in navigator){
         var _ly=(_fr==='offer'||_fr==='review')?'sticky':'inline';   /* 매출 글은 스크롤 따라다니게 */
         blocks.push({type:'cta', name:'행동 버튼', on:true, layout:_ly,
         content:[b.tx.replace(/[:：)]+$/,'').trim(), '']}); }
+      else if(b.k==='band'){
+        /* 연달아 나온 구간은 «한 카드 묶음»으로 — 따로따로면 진단표가 안 된다 */
+        var _lastB=blocks[blocks.length-1];
+        if(_lastB && _lastB.type==='qna' && _lastB.__band){ _lastB.content[0].push([b.a, b.b]); }
+        else { pushText(); var _nb={type:'qna', name:'진단 결과', on:true, layout:'cards', content:[[[b.a, b.b]]]};
+               _nb.__band=true; blocks.push(_nb); }
+      }
       else if(b.k==='num'){ pushText(); blocks.push({type:'stat', name:'숫자', on:true, layout:'band',
         content:[b.items]}); }
       else if(b.k==='loc'){ pushText(); blocks.push({type:'text', name:'위치', on:true, layout:'bar',
