@@ -1961,10 +1961,29 @@ if('serviceWorker' in navigator){
   .trend-empty{color:var(--muted); font-size:12px; text-align:center; padding:18px 4px; line-height:1.6;}
   .trend-empty span{font-size:10.5px; opacity:.8;}
   /* ═══════ 방문 분석 v2 (탭 + 그래프) · an- 네임스페이스 ═══════ */
-  .an-tabs{display:flex; gap:5px; background:var(--soft); border:1px solid var(--hair); border-radius:13px; padding:4px; margin-bottom:15px;}
-  .an-tabs button{flex:1; font-size:12.5px; font-weight:700; padding:9px 4px; border-radius:9px; background:transparent; border:none; color:var(--muted); cursor:pointer; font-family:var(--sans);}
+  /* 🗺 2026-08-20 — 탭이 7개가 되며 글자가 «두 줄»로 눌렸다(60→75px 실측).
+        접지 말고 «옆으로 미는» 한 줄로 — 탭이 더 늘어도 안 눌린다. */
+  .an-tabs{display:flex; gap:5px; background:var(--soft); border:1px solid var(--hair); border-radius:13px; padding:4px; margin-bottom:15px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;}
+  .an-tabs::-webkit-scrollbar{display:none;}
+  .an-tabs button{flex:0 0 auto; white-space:nowrap; font-size:12.5px; font-weight:700; padding:9px 11px; border-radius:9px; background:transparent; border:none; color:var(--muted); cursor:pointer; font-family:var(--sans);}
   .an-tabs button.on{background:var(--grad); color:#fff; box-shadow:0 4px 12px rgba(124,63,228,.4);}
   .an-pane{display:none;} .an-pane.on{display:block;}
+  /* 🗺 홈 지도 (2026-08-20) */
+  .hm-wrap{border:1px solid var(--hair); border-radius:13px; overflow:hidden;}
+  .hm-row{position:relative; display:flex; align-items:center; gap:9px; padding:10px 12px 10px 15px; border-bottom:1px solid var(--hair);}
+  .hm-row:last-child{border-bottom:0;}
+  .hm-heat{position:absolute; left:0; top:0; bottom:0; width:3px;}
+  .hm-name{flex:1; min-width:0; font-size:12.5px; font-weight:650; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .hm-bar{flex:0 0 62px; height:8px; border-radius:5px; background:var(--coral-soft); overflow:hidden;}
+  .hm-bar i{display:block; height:100%; background:var(--grad);}
+  .hm-n{flex:0 0 auto; font-size:13px; font-weight:800; min-width:22px; text-align:right;}
+  .hm-legend{display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color:var(--muted); margin-top:9px; padding:0 2px;}
+  .hm-legend i{display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:4px;}
+  .hm-dead{display:flex; flex-wrap:wrap; gap:6px;}
+  .hm-dead span{font-size:11.5px; color:var(--muted); background:var(--soft); border:1px solid var(--hair); border-radius:8px; padding:5px 9px;}
+  .hm-tip{font-size:11.5px; color:var(--muted); line-height:1.6; margin-top:8px; padding:0 2px;}
+  .hm-tip b{color:var(--ink); font-weight:700;}
   .an-tcat{font-size:12.5px; font-weight:800; color:var(--ink); margin:17px 2px 9px; display:flex; align-items:center; gap:6px;}
   .an-tcat:first-child{margin-top:2px;}
   .an-tcat span{font-weight:400; color:var(--muted); font-size:11px;}
@@ -7898,6 +7917,59 @@ if('serviceWorker' in navigator){
     if(total===0) html+='<div style="color:var(--muted);font-size:11.5px;padding:6px 2px 0;">아직 상품 클릭이 없어요 · 손님이 스토어에서 상품을 누르면 쌓여요</div>';
     return html;
   }
+  /* 🗺 홈 지도 (2026-08-20 사장님 C안 픽) — 손님이 «어느 칸»을 눌렀나.
+        li_stats.labels(라벨별 클릭)만 쓴다 → SQL 변경 0, 오늘 쌓인 데이터로 바로 그려진다.
+        핵심은 «많이 눌린 것»이 아니라 «0번 눌린 것» — 자리는 차지하는데 일을 안 하는 칸을 찾는 화면. */
+  function anHomeMap(s){
+    var labels=(s.labels||[]).filter(function(x){ return (x.label||'').trim(); });
+    var clickMap={}; labels.forEach(function(x){ clickMap[x.label]=(clickMap[x.label]||0)+(x.n||0); });
+    var arr=Object.keys(clickMap).map(function(k){ return {label:k, n:clickMap[k]}; });
+    arr.sort(function(a,b){ return b.n-a.n; });
+
+    if(!arr.length){
+      return '<div class="an-empty">아직 눌린 칸이 없어요<br><span style="font-size:11.5px;">손님이 홈에서 무언가를 누르면 여기 모여요</span></div>';
+    }
+    var max=arr[0].n||1, total=0; arr.forEach(function(x){ total+=x.n; });
+    /* 온도: 상위 1/3 = 잘 눌림, 하위 1/3 = 거의 안 눌림 (칸이 3개 미만이면 전부 «보통») */
+    function heat(n){
+      if(arr.length<3) return 'mid';
+      if(n >= max*0.5) return 'high';
+      if(n <= Math.max(1, max*0.12)) return 'low';
+      return 'mid';
+    }
+    /* 🚨 톤 독립 3색 — var(--coral)은 계정마다 바뀐다(초록 톤이면 «잘 눌림»과 똑같아진다).
+          의미색은 액센트와 분리한다: 초록=일함 / 노랑=보통 / 빨강=죽은 칸 */
+    var HC={high:'#7DE0A6', mid:'#E6B84A', low:'#E0564B'};
+    var rows=arr.map(function(x){
+      var h=heat(x.n);
+      return '<div class="hm-row" data-hm="'+h+'">'
+        +'<span class="hm-heat" style="background:'+HC[h]+'"></span>'
+        +'<span class="hm-name">'+escT(x.label)+'</span>'
+        +'<span class="hm-bar"><i style="width:'+Math.max(4,Math.round(x.n/max*100))+'%"></i></span>'
+        +'<b class="hm-n">'+x.n+'</b></div>';
+    }).join('');
+
+    /* 한 번도 안 눌린 내 상품 — «죽은 칸» */
+    var prods=((window.__getProductsData?window.__getProductsData():[])||[]).filter(function(p){ return (p.name||'').trim(); });
+    var dead=prods.filter(function(p){ return !clickMap[p.name]; }).map(function(p){ return p.name; });
+    var deadHtml='';
+    if(dead.length){
+      deadHtml='<div class="an-tcat" style="margin-top:16px;">한 번도 안 눌린 것 <span>· '+dead.length+'개</span></div>'
+        +'<div class="hm-dead">'+dead.slice(0,8).map(function(n){ return '<span>'+escT(n)+'</span>'; }).join('')+'</div>'
+        +'<div class="hm-tip">자리는 차지하는데 일을 안 하는 칸이에요. <b>빼거나 위로 올려</b> 보세요.</div>';
+    }
+
+    var worst=arr[arr.length-1];
+    var verdict = (arr.length>=3 && worst.n<=Math.max(1,max*0.12))
+      ? '가장 안 눌리는 칸은 <b>'+escT(worst.label)+'</b> ('+worst.n+'번). 1위 <b>'+escT(arr[0].label)+'</b>('+max+'번)과 '+Math.round(max/Math.max(1,worst.n))+'배 차이예요.'
+      : '아직 칸별 차이가 뚜렷하지 않아요 — 방문이 더 쌓이면 갈립니다.';
+
+    return '<div class="an-tcat">어느 칸이 일하나 <span>· 클릭 '+total+'번</span></div>'
+      +'<div class="hm-wrap">'+rows+'</div>'
+      +'<div class="hm-legend"><span><i style="background:#7DE0A6"></i>잘 눌림</span><span><i style="background:#E6B84A"></i>보통</span><span><i style="background:#E0564B"></i>거의 안 눌림</span></div>'
+      +deadHtml
+      +'<div class="an-fdiag" style="margin-top:14px;">'+verdict+'</div>';
+  }
   // ════ 방문 분석 v2 — 탭(개요·추이·유입·콘텐츠) + 그래프 ════
   function anNum(n){ n=n||0; return n>=10000?(Math.round(n/1000)/10)+'만':(n>=1000?(Math.round(n/100)/10)+'천':''+n); }
   function anSrcName(src){ var m={instagram:'instagram', direct:'직접 방문', naver:'naver', google:'google', youtube:'유튜브', kakao:'kakao', tiktok:'틱톡'}; return m[src]||src||'직접'; }
@@ -8412,9 +8484,10 @@ if('serviceWorker' in navigator){
   window.__loadAssetMap=loadAssetMap;
   function renderStats(s){
     window.__statsCache=s;
-    return '<div class="an-tabs"><button class="on" data-antab="ov">📊 분석</button><button data-antab="fn">🪣 퍼널</button><button data-antab="lp">🎯 상세페이지</button><button data-antab="src">🔗 유입</button><button data-antab="ct">📄 콘텐츠</button><button data-antab="am">🌱 자산</button></div>'
+    return '<div class="an-tabs"><button class="on" data-antab="ov">📊 분석</button><button data-antab="fn">🪣 퍼널</button><button data-antab="hm">🗺 홈 지도</button><button data-antab="lp">🎯 상세페이지</button><button data-antab="src">🔗 유입</button><button data-antab="ct">📄 콘텐츠</button><button data-antab="am">🌱 자산</button></div>'
       +'<div class="an-pane on" data-anpane="ov">'+anDashboard(s)+'</div>'
       +'<div class="an-pane" data-anpane="fn">'+anFunnelTab(s)+'</div>'
+      +'<div class="an-pane" data-anpane="hm">'+anHomeMap(s)+'</div>'
       +'<div class="an-pane" data-anpane="lp">'+anLanding(s)+'</div>'
       +'<div class="an-pane" data-anpane="src">'+anSources(s)+'</div>'
       +'<div class="an-pane" data-anpane="ct">'+anContent(s)+'</div>'
