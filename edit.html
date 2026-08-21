@@ -1969,6 +1969,24 @@ if('serviceWorker' in navigator){
   .an-tabs button{flex:0 0 auto; white-space:nowrap; font-size:12.5px; font-weight:700; padding:9px 11px; border-radius:9px; background:transparent; border:none; color:var(--muted); cursor:pointer; font-family:var(--sans);}
   .an-tabs button.on{background:var(--grad); color:#fff; box-shadow:0 4px 12px rgba(124,63,228,.4);}
   .an-pane{display:none;} .an-pane.on{display:block;}
+  /* 🪣 5칸 퍼널 (2026-08-20) */
+  .f5{border:1px solid var(--hair); border-radius:13px; overflow:hidden;}
+  .f5-row{position:relative; display:flex; align-items:center; gap:8px; padding:11px 12px; background:var(--soft);}
+  .f5-fill{position:absolute; left:0; top:0; bottom:0; background:var(--coral-soft);}
+  .f5-row.end .f5-fill{background:rgba(125,224,166,.18);}
+  .f5-row>*{position:relative;}
+  .f5-name{flex:1; min-width:0; font-size:12.5px; font-weight:650; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .f5-n{flex:0 0 auto; font-size:15px; font-weight:800; letter-spacing:-.02em;}
+  .f5-row.end .f5-n{color:#7DE0A6;}
+  .f5-pc{flex:0 0 36px; text-align:right; font-size:11px; color:var(--muted);}
+  .f5-loss{font-size:11.5px; color:#E0564B; font-weight:600; padding:5px 12px 5px 16px; background:var(--paper);}
+  .f5-loss.zero{color:var(--muted); font-weight:400;}
+  .f5-loss.hot{background:rgba(224,86,75,.10);}
+  .f5-loss b{color:#E0564B; font-weight:800;}
+  .f5-need{border:1px dashed var(--hair2,rgba(255,255,255,.16)); border-radius:13px; padding:14px;
+    font-size:12.5px; color:var(--muted); line-height:1.65; text-align:center; margin-bottom:14px;}
+  .f5-need b{color:var(--ink); font-weight:700;}
+  .f5-need span{font-size:11px; color:var(--dim,#6B6F79);}
   /* 🗺 홈 지도 (2026-08-20) */
   .hm-wrap{border:1px solid var(--hair); border-radius:13px; overflow:hidden;}
   .hm-row{position:relative; display:flex; align-items:center; gap:9px; padding:10px 12px 10px 15px; border-bottom:1px solid var(--hair);}
@@ -8055,13 +8073,54 @@ if('serviceWorker' in navigator){
       +'<div class="anb-row goal"><div class="anb-lab">🏆 예약</div><div class="anb-tr"><div class="anb-fl go" style="--w:'+w(cv)+'%"><span>'+anNum(cv)+'</span></div></div></div>'
       +'</div>';
   }
+  /* 🪣 5칸 퍼널 (2026-08-20 사장님 B안) — content-hub-funnel5.sql 이 깔려 있을 때만.
+        옛 3칸(방문·둘러봄·전환)은 «클릭 수»를 섞어 세서 «몇 명이»가 안 보였다.
+        여기는 전부 «사람 수(세션)»다 — 100명이 어느 계단에서 몇 명 빠졌는지가 그대로 읽힌다.
+        SQL 이 없으면 s.funnel5 가 없고, 이 함수는 아예 안 불린다(무회귀). */
+  function an5Funnel(s){
+    var steps=(s.funnel5&&s.funnel5.steps)||[];
+    if(steps.length<2) return '';
+    var top=steps[0].n||0;
+    if(!top) return '<div class="an-empty">아직 방문이 없어요 · 손님이 들어오면 계단이 그려져요</div>';
+    /* 가장 크게 새는 칸 찾기 — «몇 명 잃었나»가 기준 (비율이 아니라 머릿수) */
+    var worst=-1, worstLoss=0;
+    for(var i=1;i<steps.length;i++){
+      var loss=(steps[i-1].n||0)-(steps[i].n||0);
+      if(loss>worstLoss){ worstLoss=loss; worst=i; }
+    }
+    var h='<div class="f5">';
+    steps.forEach(function(st,i){
+      var n=st.n||0, pct=Math.round(n/top*100);
+      var last=i===steps.length-1;
+      h+='<div class="f5-row'+(last?' end':'')+'">'
+        +'<span class="f5-fill" style="width:'+Math.max(4,pct)+'%"></span>'
+        +'<span class="f5-name">'+escT(st.name)+'</span>'
+        +'<b class="f5-n">'+n+'</b><span class="f5-pc">'+pct+'%</span></div>';
+      if(!last){
+        var loss=n-(steps[i+1].n||0);
+        if(loss>0) h+='<div class="f5-loss'+(i+1===worst?' hot':'')+'">\u2193 '+loss+'명 빠짐'
+          +(i+1===worst?' <b>\u2190 여기가 제일 크게 샙니다</b>':'')+'</div>';
+        else h+='<div class="f5-loss zero">\u2193 안 빠짐</div>';
+      }
+    });
+    h+='</div>';
+    var done=steps[steps.length-1].n||0;
+    var rate=Math.round(done/top*1000)/10;
+    h+='<div class="an-fdiag" style="margin-top:12px;">들어온 <b>'+top+'명</b> 중 <b>'+done+'명</b>이 끝까지 갔어요 ('+rate+'%).'
+      +(worst>0&&worstLoss>0 ? ' 가장 크게 새는 곳은 <b>'+escT(steps[worst-1].name)+' \u2192 '+escT(steps[worst].name)+'</b> 구간입니다.' : '')
+      +'</div>';
+    return '<div class="an-tcat">어디서 새나 <span>\u00b7 최근 '+((s.funnel5&&s.funnel5.days)||30)+'일 \u00b7 사람 수</span></div>'+h;
+  }
   function anFunnelInner(s){ return anFunnelView==='bars' ? anFunnelBars(s) : anFunnelSVG(s); }
   function anRenderFunnelBox(){ var box=document.getElementById('an-funnel-box'); if(box) box.innerHTML=anFunnelInner(window.__statsCache||{}); }
   window.__anRenderFunnelBox=anRenderFunnelBox;
   function anFunnelTab(s){
     var cur=anCur(s); var v=cur.visitors||0, c=cur.clicks||0, cv=cur.conv||0;
     var p1=v?Math.round(c/v*100):0, p2=c?Math.round(cv/c*100):0;
-    return '<div id="an-funnel-box" class="an-fbox-top">'+anFunnelInner(s)+'</div>'         // ① 퍼널 이미지 (맨 위 · 제일 중요)
+    var five = s.funnel5 ? an5Funnel(s)
+      : '<div class="f5-need">🪣 <b>5칸으로 보기</b> \u2014 <b>content-hub-funnel5.sql</b> 을 한 번 실행하면<br>«홈 \u2192 머묾 \u2192 누름 \u2192 예약창 \u2192 예약완료» 5단계로 갈라집니다<br><span>(Supabase SQL Editor \u00b7 아래 3칸은 그대로 동작해요)</span></div>';
+    return five
+      +'<div id="an-funnel-box" class="an-fbox-top">'+anFunnelInner(s)+'</div>'         // ① 퍼널 이미지 (맨 위 · 제일 중요)
       +'<div class="an-ftoggle-row"><div class="an-ftoggle">'
       +'<button type="button" class="an-ftg'+(anFunnelView==='funnel'?' on':'')+'" data-fview="funnel">🔻 퍼널</button>'
       +'<button type="button" class="an-ftg'+(anFunnelView==='bars'?' on':'')+'" data-fview="bars">📊 막대</button>'
@@ -8545,9 +8604,10 @@ if('serviceWorker' in navigator){
     body.innerHTML='<div class="an-empty">분석을 불러오는 중…</div>';
     Promise.all([
       window.laRpc('li_stats',{ p_code:auth.code, p_pin_hash:auth.pinHash }),
-      window.laRpc('li_conv_posts',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; })
+      window.laRpc('li_conv_posts',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; }),
+      window.laRpc('li_funnel',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; })
     ]).then(function(arr){
-      var res=arr[0], cp=arr[1];
+      var res=arr[0], cp=arr[1], fv=arr[2];
       if(!res||!res.ok){ body.innerHTML='<div class="an-empty">집계 표를 아직 못 불러왔어요<br><span style="font-size:11.5px;">(분석 SQL 실행 여부를 확인하세요)</span></div>'; return; }
       if(!res.views && !res.clicks){
         /* 👁 살아있는 미리보기 (2026-08-19 픽) — «아직 없어요» 대신 «이렇게 채워져요»:
@@ -8583,6 +8643,7 @@ if('serviceWorker' in navigator){
         return;
       }
       if(cp && cp.ok && cp.conv_posts) res.conv_posts=cp.conv_posts;   // li_conv_posts SQL 있으면 병합, 없으면 무시
+      if(fv && fv.ok && fv.steps) res.funnel5=fv;                      // content-hub-funnel5.sql 있으면 5칸, 없으면 옛 3칸
       body.innerHTML=renderStats(res)+anGrowthBtnHtml(); try{ wireAnalytics(); }catch(_){} try{ anWireGrowthBtn(); }catch(_){}
     }).catch(function(){ body.innerHTML='<div class="an-empty">불러오기 실패 (네트워크)</div>'; });
   }
