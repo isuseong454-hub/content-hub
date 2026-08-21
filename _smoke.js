@@ -90,6 +90,10 @@
     add('u: 표 가로 스크롤', uHtml.indexOf('lc-tbwrap') > -1, '넓은 표가 잘리던 사고');
     add('u: ⚙메뉴 클릭 가능(스킨)', uHtml.indexOf('.gear-menu{ pointer-events:auto') > -1,
       '스킨 켠 페이지에서 topbar의 pointer-events:none 가 ⚙메뉴까지 먹어 「운영자 모드·로그아웃」이 무반응이던 사고 (2026-08-20)');
+    add('u: 예약 바 가운데정렬(transform 비의존)', uHtml.indexOf('.cta-sticky{position:fixed; left:0; right:0; margin-left:auto') > -1,
+      'left:50%+translateX(-50%) 로 되돌리면 등장 애니(.reveal-blk.in{transform:none})가 지워 바가 오른쪽으로 188px 밀린다 (2026-08-20)');
+    add('u: 채널 아이콘이 예약 바를 안 덮음', uHtml.indexOf('body.has-cta-sticky #home-fab{ bottom:calc(168px') > -1,
+      '128px 이면 바 윗변(157px)과 29px 겹쳐 「지금 예약하기」를 가린다 (2026-08-20)');
   } else {
     add('u.html 읽기', false, 'fetch 실패 — u 항목 검사 못 함', 'warn');
   }
