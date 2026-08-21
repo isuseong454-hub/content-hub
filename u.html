@@ -1279,20 +1279,22 @@
   .promo-go{color:var(--coral); font-size:14px; flex:0 0 auto;}
 
   /* ── 우측하단 플로팅 (네이버 예약 / 카톡 상담) — 관리자가 온/오프 + 개인 링크 ── */
-  .fab{position:fixed; right:18px; bottom:calc(96px + env(safe-area-inset-bottom));   /* 2026-08-20 유리 도크 위로 */ display:flex; flex-direction:column; align-items:flex-end; gap:11px; z-index:30;}
-  .fab a{position:relative; display:inline-flex; align-items:center; justify-content:center; gap:8px; height:54px; padding:0 19px; border-radius:27px;
-    text-decoration:none; color:#fff; font-size:14.5px; font-weight:700; overflow:hidden;
+  /* 📏 2026-08-20 사장님 픽 — 채널 아이콘이 사진 위를 너무 크게 덮어 «작게».
+        54px → 42px (아이콘 24→19, 간격 11→9, 그림자도 낮춤). 위치·동작은 그대로. */
+  .fab{position:fixed; right:18px; bottom:calc(96px + env(safe-area-inset-bottom));   /* 2026-08-20 유리 도크 위로 */ display:flex; flex-direction:column; align-items:flex-end; gap:9px; z-index:30;}
+  .fab a{position:relative; display:inline-flex; align-items:center; justify-content:center; gap:7px; height:42px; padding:0 15px; border-radius:21px;
+    text-decoration:none; color:#fff; font-size:13.5px; font-weight:700; overflow:hidden;
     animation:fabIn .5s cubic-bezier(.2,.9,.3,1.35) backwards; transition:transform .12s ease, box-shadow .25s ease;}
   .fab a::before{content:''; position:absolute; left:0; right:0; top:0; height:52%; border-radius:inherit;
     background:linear-gradient(180deg, rgba(255,255,255,.26), transparent); pointer-events:none;}
-  .fab a.icon-only{width:54px; padding:0; border-radius:17px;}
-  .fab a svg{width:24px; height:24px; flex:0 0 auto; position:relative; z-index:1;}
+  .fab a.icon-only{width:42px; padding:0; border-radius:14px;}
+  .fab a svg{width:19px; height:19px; flex:0 0 auto; position:relative; z-index:1;}
   .fab a span{position:relative; z-index:1;}
-  .fab .b-instagram{background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5); box-shadow:0 8px 24px rgba(214,41,118,.5);}
-  .fab .b-youtube{background:#FF0000; box-shadow:0 8px 24px rgba(255,0,0,.46);}
-  .fab .b-blog{background:#1AA845; box-shadow:0 8px 24px rgba(26,168,69,.5);}
-  .fab .b-naver{background:#03C75A; box-shadow:0 8px 24px rgba(3,199,90,.52);}
-  .fab .b-kakao{background:#FEE500; color:#3A1D1D; box-shadow:0 8px 24px rgba(250,225,0,.5);}
+  .fab .b-instagram{background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5); box-shadow:0 6px 18px rgba(214,41,118,.5);}
+  .fab .b-youtube{background:#FF0000; box-shadow:0 6px 18px rgba(255,0,0,.46);}
+  .fab .b-blog{background:#1AA845; box-shadow:0 6px 18px rgba(26,168,69,.5);}
+  .fab .b-naver{background:#03C75A; box-shadow:0 6px 18px rgba(3,199,90,.52);}
+  .fab .b-kakao{background:#FEE500; color:#3A1D1D; box-shadow:0 6px 18px rgba(250,225,0,.5);}
   .fab a:active{transform:scale(.94);}
   @keyframes fabIn{from{opacity:0; transform:translateX(34px) scale(.85);} to{opacity:1; transform:none;}}
 
@@ -1816,12 +1818,18 @@
   /* ── 토스식 누름 피드백 (전역) ── */
   button,.cta-btn,.hh-cta,.resv-cta-btn,.loc-btn,.lead-btn,.cd-btn,.ev-s-btn,.svc2-btn,.navitem{transition:transform .08s ease;}
   button:active,.cta-btn:active,.hh-cta:active,.resv-cta-btn:active,.loc-btn:active,.lead-btn:active,.cd-btn:active,.ev-s-btn:active,.navitem:active{transform:scale(.96);}
-  .cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(88px + env(safe-area-inset-bottom));   /* 2026-08-20 유리 도크 위로 */ width:100%; max-width:520px; padding:8px 14px calc(8px + env(safe-area-inset-bottom)); z-index:33; box-sizing:border-box; pointer-events:none;}
+  /* 🚨 2026-08-20 — 하단 「지금 예약」 바가 화면 오른쪽으로 188px 밀려 반이 잘렸다.
+        left:50% + translateX(-50%) 로 가운데를 맞췄는데, 등장 애니(.reveal-blk.in{transform:none})가
+        그 transform 을 지워버려 «왼쪽 끝이 화면 한가운데»가 됐다.
+        transform 에 기대지 않는 left:0/right:0 + margin auto 로 바꾼다 — 애니가 지워도 안 밀린다. */
+  .cta-sticky{position:fixed; left:0; right:0; margin-left:auto; margin-right:auto; bottom:calc(88px + env(safe-area-inset-bottom));   /* 2026-08-20 유리 도크 위로 */ width:100%; max-width:520px; padding:8px 14px calc(8px + env(safe-area-inset-bottom)); z-index:33; box-sizing:border-box; pointer-events:none;}
   .cta-sticky a{pointer-events:auto; display:block; text-align:center; background:var(--coral-fill,var(--coral)); color:var(--on-coral); font-size:15.5px; font-weight:700; padding:14px; border-radius:14px; text-decoration:none; box-shadow:0 6px 22px rgba(0,0,0,.32);}
   /* 플로팅 채널·예약 고정바 = 홈 탭에서만 (소개·컨텐츠·스토어·Q&A선 숨겨 집중) */
   body.cm-not-home #home-fab, body.cm-not-home .cta-sticky{ display:none !important; }
   /* 예약 고정바와 채널 아이콘이 겹치지 않게 아이콘을 위로 */
-  body.has-cta-sticky #home-fab{ bottom:128px; }
+  /* 🚨 2026-08-20 — 예약 바 위로 올린다는 규칙인데 128px 은 모자랐다(바 윗변이 바닥에서 157px).
+        29px 씩 겹쳐 채널 아이콘이 「지금 예약하기」를 덮고 있었다. 바 윗변 + 여유 11px 로 올리고, 홈바 안전영역도 더한다. */
+  body.has-cta-sticky #home-fab{ bottom:calc(168px + env(safe-area-inset-bottom)); }
   .cd-card{text-align:center;}
   .cd-title{font-size:16px; font-weight:700; color:var(--ink); margin-bottom:13px;}
   .cd-timer{display:flex; justify-content:center; gap:8px; margin-bottom:14px;}
