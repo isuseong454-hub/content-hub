@@ -6525,6 +6525,10 @@ if('serviceWorker' in navigator){
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
       <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
       <button class="le-x" id="le-x" title="지금 바로 저장·공개">✓ 저장</button>
+      <!-- 🚨 2026-08-21 사장님 «자동 로그인인데 로그아웃도 운영자 모드도 못 간다» —
+           상단바를 비우면서 «나가는 문»까지 없앴다. 갇히는 화면은 만들면 안 된다.
+           버튼을 넷 되살리는 대신 ⚙ «하나»에 몰아넣는다. -->
+      <button class="le-icon-btn" id="le-more" title="더보기 — 운영자 모드 · 로그아웃" aria-label="더보기">⋯</button>
       <button class="le-quit" id="le-quit" style="display:none !important;">편집 끝내기</button>
       <button class="le-d" id="le-home" style="display:none !important;"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
       <button class="le-d" id="le-opmode" style="display:none !important;"><span class="di">⚙️</span><span class="le-d-lbl">운영</span></button>
@@ -17447,6 +17451,58 @@ if('serviceWorker' in navigator){
     /* 🏠 1걸음 — 홈 유형(뼈대). 스킨을 없애고 이 4종이 그 역할을 흡수한다 (2026-08-20) */
     var ty=document.getElementById('le-type'); if(ty) ty.onclick=function(){ try{ if(window.__openTypePick) window.__openTypePick(); }catch(_){} };
     var gb=document.getElementById('le-guide'); if(gb) gb.onclick=function(){ try{ if(window.__openGuideSheet) window.__openGuideSheet(); }catch(_){} };
+    /* 🚨 2026-08-21 사장님 «자동 로그인인데 로그아웃도 운영자 모드도 못 간다» —
+          상단바를 비우면서 «나가는 문»까지 없앴다. 갇히는 화면은 만들면 안 된다.
+          버튼 넷을 되살리는 대신 ⋯ «하나»에 몰아넣는다 — 자주 안 쓰는 것들만. */
+    var mb=document.getElementById('le-more');
+    if(mb) mb.onclick=function(){
+      var ov=document.getElementById('le-more-ov');
+      if(!ov){
+        ov=document.createElement('div'); ov.className='ov'; ov.id='le-more-ov';
+        ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">더보기</span><span class="x" id="lm-x">×</span></div><div id="lm-body"></div></div>';
+        document.body.appendChild(ov);
+        ov.addEventListener('click', function(e){ if(e.target===ov) ov.classList.remove('open'); });
+        ov.querySelector('#lm-x').onclick=function(){ ov.classList.remove('open'); };
+      }
+      var ITEMS=[
+        ['home','👁','손님 눈으로 보기','편집을 끝내고 실제 화면으로'],
+        ['admin','🛠','운영자 모드','분석 · 예약 명단 · 설정'],
+        ['out','🚪','로그아웃','이 기기에서 나가요']
+      ];
+      var h='';
+      ITEMS.forEach(function(it){
+        h+='<button type="button" class="lg-l" data-lm="'+it[0]+'">'
+          +'<span class="n">'+it[1]+'</span>'
+          +'<span class="m"><b>'+it[2]+'</b><span>'+it[3]+'</span></span>'
+          +'<span class="go">→</span></button>';
+      });
+      document.getElementById('lm-body').innerHTML=h;
+      ov.querySelectorAll('[data-lm]').forEach(function(b){
+        b.onclick=function(){
+          var k=b.getAttribute('data-lm');
+          ov.classList.remove('open');
+          if(k==='home'){ var q=document.getElementById('le-quit'); if(q) q.click(); return; }
+          if(k==='admin'){
+            /* 작업실로 — 편집한 건 자동저장돼 있다 */
+            try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+            location.href='edit.html?desk=1';
+            return;
+          }
+          if(k==='out'){
+            if(!confirm('로그아웃할까요?\n\n저장 안 한 편집은 사라질 수 있어요.')) return;
+            /* 🚪 편집기·손님 화면과 «같은 규칙» — 이 기기에서 계정 흔적을 전부 지운다 */
+            try{
+              ['la-auth','la-last-code','la-ch-new','cm-hub-landing'].forEach(function(x){
+                try{ localStorage.removeItem(x); }catch(_){} });
+              Object.keys(localStorage).forEach(function(x){
+                if(x.indexOf('la-snap-')===0 || x.indexOf('la-ch-')===0) localStorage.removeItem(x); });
+            }catch(_){}
+            location.replace('edit.html');
+          }
+        };
+      });
+      ov.classList.add('open');
+    };
     /* 💡 구성 추가를 열 때마다 «다음 하나»를 다시 짚는다 (2026-08-20) */
     try{ window.__paintAddReco=paintAddReco; }catch(_){}
     var ml=document.getElementById('le-mode-label');
