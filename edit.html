@@ -1973,6 +1973,10 @@ if('serviceWorker' in navigator){
     border:1px dashed var(--hair); background:transparent; color:var(--muted);
     font-family:var(--sans); font-size:12.5px; cursor:pointer; min-height:44px; }
   .dmore:hover{ border-color:var(--coral); color:var(--coral); }
+  .ddelpost{ display:block; margin:34px auto 4px; padding:11px 16px; border-radius:10px;
+    border:1px solid transparent; background:transparent; color:var(--muted);
+    font-family:var(--sans); font-size:12px; cursor:pointer; min-height:44px; opacity:.75; }
+  .ddelpost:hover{ color:#E0564B; border-color:rgba(224,86,75,.35); background:rgba(224,86,75,.07); opacity:1; }
   #docwrap{ padding:2px 0 20px; }
   #home-body:not([data-docview="1"]) #docwrap{ display:none !important; }
 
@@ -12515,10 +12519,29 @@ if('serviceWorker' in navigator){
         if(isDocPost){ lcInsertInlineImage(); return; }
         if(window.__createRow){ var rr=window.__createRow({type:'imagetext',name:'사진',on:true,content:['','','']}); if(rr) rr._content=['','','']; } try{ if(window.__updateHomeProgress) window.__updateHomeProgress(); }catch(_){} renderLandingCanvas(); try{ var p3=postById(postEditId); if(p3) p3.blocks=collectRowsArray(); }catch(_){} try{ toast('사진 칸을 추가했어요'); }catch(_){} return;
       }
-      if(e.target.closest('[data-lcpostdel]')){ if(!confirm('이 글을 삭제할까요?')) return; var rid=postEditId; postsData=postsData.filter(function(x){return x.id!==rid;}); exitPostMode(); renderPostsLibrary(); try{ renderLandingLib(); }catch(_){} if(window.__switchWs) window.__switchWs('posts'); return; }
+      if(e.target.closest('[data-lcpostdel]')){ if(window.__deletePost) window.__deletePost(); return; }
       if(e.target.closest('[data-lcprofile]')){ if(window.__switchWs) window.__switchWs('page'); return; }   /* 🚨'profile' pane은 존재하지 않아 화면이 백지가 되던 것 — 전문가 증명 입력칸(pf-authority)은 page 탭 */
       if(e.target.closest('[data-lcsales]')){ if(window.__switchWs) window.__switchWs('sales'); return; }
     });
+    /* 🗑 2026-08-21 사장님 «포스팅에 편집은 있는데 삭제가 없다» — 맞다.
+          삭제는 랜딩 캔버스 안에만 묻혀 있었고 일반 글에는 아예 없었다.
+          한 기능 두 규칙을 만들지 않게, 그 로직을 그대로 꺼내 공용으로 쓴다. */
+    window.__deletePost=function(){
+      if(!postEditId) return;
+      var p=null; try{ p=postById(postEditId); }catch(_){}
+      var nm=(p&&p.title)?('「'+String(p.title).slice(0,20)+'」'):'이 글';
+      if(!confirm(nm+'을(를) 삭제할까요?\n\n되돌릴 수 없어요.')) return;
+      var rid=postEditId;
+      postsData=postsData.filter(function(x){ return x.id!==rid; });
+      try{ exitPostMode(); }catch(_){}
+      try{ renderPostsLibrary(); }catch(_){}
+      try{ renderLandingLib(); }catch(_){}
+      try{ if(window.__closeLiveSheet) window.__closeLiveSheet(); }catch(_){}
+      try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(_){}
+      try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+      try{ if(!window.__liveEditActive && window.__switchWs) window.__switchWs('posts'); }catch(_){}
+      try{ toast('삭제했어요 · 상단 ✓저장을 눌러야 손님 화면에도 반영돼요'); }catch(_){}
+    };
     // ── 노션식 본문: 인라인 사진 + 선택 강조 툴바 ──
     var lcActiveBody=null, lcSavedRange=null;
     function lcPersistBody(b){ if(!b) return; try{ var ri=+b.getAttribute('data-ri'), ck=+b.getAttribute('data-ck'); var r=lcRows()[ri]; if(r){ if(!r._content) r._content=[]; while(r._content.length<=ck) r._content.push(''); r._content[ck]=lcSanitizeHtml(b.innerHTML); } var p=postById(postEditId); if(p) p.blocks=collectRowsArray(); }catch(_){} }
@@ -12912,7 +12935,6 @@ if('serviceWorker' in navigator){
         +'<div class="exp-seg"><button type="button" data-exp="cap" class="on">📱 인스타 캡션</button><button type="button" data-exp="card">🎴 카드뉴스 대본</button></div>'
         +'<textarea id="exp-out" spellcheck="false"></textarea>'
         +'<div class="exp-hint" id="exp-hint"></div>'
-        +'<div class="exp-free">✓ AI 안 씁니다 · 비용 0원 · 이 글은 서버로 안 나가요</div>'
         +'<button type="button" class="nchip-apply" id="exp-copy">📋 복사하기</button>'
         +'</div>';
       document.body.appendChild(ov);
@@ -13049,12 +13071,37 @@ if('serviceWorker' in navigator){
   var PST_LIST  = /^\s*(\d+[.)]|[-–—•·▶▪◦]|[①②③④⑤⑥⑦⑧⑨⑩])\s+/;
   var PST_QUOTE = /^\s*["“”「『❝'']([\s\S]+)["“”」』❞'']\s*$/;
   var PST_PHOTO = /(사진|보시면|이렇게|아래|이미지|보세요|모습|결과|전후|비포|애프터)/;
+  /* 🚨 2026-08-21 사장님 «막상 이런 식으로 정리가 된 느낌이 아니네» — 실제 원고로 확인해 보니
+        네이버 블로그에서 통째로 복사한 글이 «블록 90개»로 쪼개져 있었다. 원인 셋:
+          ① 제로폭 공백(U+200B) 줄이 «빈 줄»로 안 걸러져 블록이 됐다 (블로그 빈 줄이 다 이것)
+          ② 「짧고 마침표 없으면 소제목」 규칙 — 블로그·인스타 원고는 원래 그렇게 쓴다.
+             그래서 거의 «모든 줄»이 소제목이 됐다 → 소제목 90개, 본문 0줄.
+          ③ 「프로필 · 이웃추가 · 공감 · 댓글」 같은 블로그 화면 글자가 원고에 섞여 들어왔다.
+        → 빈 줄을 제대로 걸러내고, 소제목은 «뒤에 본문이 따라올 때»만 인정한다. */
+  /* 블로그 화면 글자는 «한 줄에 여러 개»가 붙어 온다 — 「이웃추가 본문 기타 기능」.
+     그래서 줄 전체를 통으로 맞추지 말고, 줄을 단어로 쪼개 «전부 UI 단어면» 버린다.
+     ⚠️ 5단어를 넘으면 손대지 않는다 — 진짜 원고를 잘못 지우는 게 더 큰 사고다. */
+  var PST_JUNK_W = /^(프로필|이웃추가|이웃|추가|본문|기타|기능|공감|댓글|공유하기|공유|신고하기|신고|구독하기|구독|맨위로|목록열기|목록|인쇄|스크랩|URL|복사|전체보기|카테고리|좋아요|보내기|저장|수정|삭제)$/;
+  var PST_DATE = /^\d{1,4}\s*[.\-\/]\s*\d{1,2}\s*[.\-\/]?\s*(\d{1,2}:\d{2})?\s*$/;
+  function PST_JUNK_TEST(t){
+    if(PST_DATE.test(t)) return true;
+    var w=t.split(/\s+/).filter(Boolean);
+    if(!w.length || w.length>5) return false;
+    for(var i=0;i<w.length;i++){ if(!PST_JUNK_W.test(w[i])) return false; }
+    return true;
+  }
+  function pstClean(raw){
+    return String(raw||'')
+      .replace(/[\u200B-\u200D\uFEFF\u2060]/g, '')   /* 제로폭 공백 — 블로그 빈 줄의 정체 */
+      .replace(/\u00A0/g, ' ');                        /* 줄바꿈 안 되는 공백 */
+  }
   function pstAnalyze(raw){
-    var lines=String(raw||'').split(/\r?\n/), out=[], buf=[], paraSince=0, titleTaken=false, title='';
+    var lines=pstClean(raw).split(/\r?\n/), out=[], buf=[], paraSince=0, titleTaken=false, title='';
     function flush(){ if(buf.length){ out.push({k:'li', items:buf.slice()}); buf=[]; } }
     for(var i=0;i<lines.length;i++){
       var t=lines[i].trim();
       if(!t){ flush(); continue; }
+      if(PST_JUNK_TEST(t)) continue;   /* 블로그 화면 글자·날짜 — 원고가 아니다 */
       if(PST_LIST.test(t)){ buf.push(t.replace(PST_LIST,'')); continue; }
       flush();
       if(!titleTaken){
@@ -13065,8 +13112,19 @@ if('serviceWorker' in navigator){
       }
       var q=t.match(PST_QUOTE);
       if(q && q[1].length<90){ out.push({k:'q', tx:q[1]}); paraSince=0; continue; }
+      /* 🚨 소제목은 «뒤에 본문이 따라올 때»만 소제목이다.
+            블로그·인스타 원고는 마침표 없이 짧게 끊어 쓰므로, 그 조건만 보면 전부 소제목이 된다.
+            다음 «내용 있는 줄»이 또 짧고 마침표가 없으면 = 그냥 짧은 문단들이다 → 본문으로 흘린다. */
       if(t.length<=28 && (/[?？:：]$/.test(t) || (!PST_END.test(t) && !/[.!,…]$/.test(t)))){
-        out.push({k:'h', tx:t}); paraSince=0; continue;
+        var nxt='';
+        for(var j=i+1;j<lines.length;j++){
+          var c=lines[j].trim();
+          if(!c || PST_JUNK_TEST(c) || PST_LIST.test(c)) continue;
+          nxt=c; break;
+        }
+        var 본문이따라옴 = !!nxt && (nxt.length>28 || PST_END.test(nxt) || /[.!…]$/.test(nxt));
+        if(본문이따라옴){ out.push({k:'h', tx:t}); paraSince=0; continue; }
+        /* 아니면 소제목이 아니다 — 아래 문단 처리로 내려간다 */
       }
       if(t.length>190){   /* 카톡처럼 줄바꿈 없이 길게 쓴 글 = 문장 단위로 쪼갬 */
         var sents=t.match(/[^.!?…]+[.!?…]*\s*/g)||[t], ch='', chunks=[];
@@ -13124,7 +13182,11 @@ if('serviceWorker' in navigator){
   }
   function pstToBlocks(r){
     var blocks=[], pend=null;
-    function pushText(){ if(pend){ blocks.push({type:'text', name:pend[0]||'본문', on:true, content:[pend[0], pend[1]], layout:''}); pend=null; } }
+    /* 🎨 2026-08-21 사장님 «미리보기처럼 정리된 느낌이 아니다» —
+          예시 화면의 소제목은 «강조바»(왼쪽 컬러 바)라서 눈에 확 들어온다.
+          그런데 만들어지는 건 전부 기본 카드였다. 소제목이 있으면 강조바를 붙인다. */
+    function pushText(){ if(pend){ blocks.push({type:'text', name:pend[0]||'본문', on:true,
+      content:[pend[0], pend[1]], layout: pend[0] ? 'bar' : '' }); pend=null; } }
     r.items.forEach(function(b){
       if(b.k==='h'){ pushText(); pend=[b.tx, '']; }
       else if(b.k==='p'){ if(pend) pend[1]=(pend[1]?pend[1]+'\n\n':'')+b.tx; else pend=['', b.tx]; }
@@ -13185,7 +13247,6 @@ if('serviceWorker' in navigator){
         +'<div class="pst-sum" id="pst-sum"></div>'
         +'<div class="pst-sug" id="pst-sug" style="display:none;margin-top:9px;"><div style="font-size:11px;font-weight:800;color:var(--coral);margin-bottom:6px;">✨ 이 글엔 이것도 어울려요 — 누르면 같이 들어가요</div><div id="pst-sug-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div></div>'
         +'<div class="pst-hint" id="pst-hint">글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요</div>'
-        +'<div class="pst-free">✓ AI 안 씁니다 · 비용 0원 · 이 글은 서버로 안 나가요</div>'
         +'<button type="button" class="nchip-apply" id="pst-go">✓ 이대로 만들기 — 사진·수정은 다음 화면에서</button>'
         +'</div>';
       document.body.appendChild(ov);
@@ -13361,9 +13422,13 @@ if('serviceWorker' in navigator){
         out += '</div>' + gapHtml(i+1);
       });
       out += '<button type="button" class="dmore" id="dmore">＋ 다른 구성 넣기 · 후기 · 예약 · 숫자 · CTA …</button>';
+      /* 🗑 글 통째로 지우기 — 실수로 누르지 않게 맨 아래, 다른 버튼과 멀찍이 */
+      out += '<button type="button" class="ddelpost" id="ddelpost">🗑 이 글 삭제</button>';
       h.innerHTML = out;
       var mo2=h.querySelector('#dmore');
       if(mo2) mo2.onclick=function(){ try{ if(window.__openAddCatalog) window.__openAddCatalog(); }catch(_){} };
+      var dl2=h.querySelector('#ddelpost');
+      if(dl2) dl2.onclick=function(){ try{ if(window.__deletePost) window.__deletePost(); }catch(_){} };
       wire(h, rows);
     }
     function wire(h, rows){
