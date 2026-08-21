@@ -156,7 +156,7 @@
       add('e ?live=1 바로 현장편집', et.indexOf("_wantLive=_q.get('live')==='1'") >= 0 && et.indexOf('window.__openLiveAuto()') >= 0,
         '«고치기»를 누르면 작업실을 안 거치고 바로 편집');
       add('e ?live=1 착지 안 튕김', et.indexOf('!_fromGear && !_wantLive') >= 0, '현장 편집으로 들어왔는데 손님 화면으로 다시 튕기면 안 된다');
-      /* 🧭 네 걸음 도크 (2026-08-20 사장님 A안) */
+      /* 🧭 세 걸음 도크 (2026-08-20 A안 → 글쓰기는 포스팅 칸으로 이사) */
       add('e ⭐ 칸 메뉴 5+1', et.indexOf('function openBlockMenu') >= 0 && et.indexOf("m.type==='la-block-menu'") >= 0,
         '고치기·바꾸기·위·아래·숨기기·빼기 — 숨기기와 빼기를 나눈 게 핵심 (2026-08-20)');
       add('e 🧥 스킨 고르는 칸 삭제', et.indexOf('id="dz-skin"') < 0,
@@ -176,15 +176,20 @@
         '또렷한 가짜 문구가 부활하면 «내 것 같지 않다»로 되돌아간다 — 비우면 흐린 뼈대가 뜬다');
       add('e 👤 프로필 꾸미기 2개', et.indexOf('data-pm="char"') < 0 && et.indexOf('기본 · 동그라미 프사') >= 0,
         '캐릭터 삭제 · 기본(동그라미 프사) / 내 사진 두 가지만 (2026-08-20)');
-      add('e 🧭 네 걸음 도크', ['id="le-type"   data-step="1"','id="le-design" data-step="2"','data-step="3"','data-step="4"'].every(function(k){ return et.indexOf(k)>=0; }),
-        '홈 유형 → 테마 → 구성 추가 → 글쓰기 순서. 번호가 빠지면 «순서»가 안 보인다');
+      add('e 🧭 세 걸음 도크', ['id="le-type"   data-step="1"','id="le-design" data-step="2"','data-step="3"'].every(function(k){ return et.indexOf(k)>=0; })
+        && (et.split('le-dock le-flow')[1]||'').slice(0,900).indexOf('data-step="4"') < 0,
+        '홈 유형 → 테마 → 구성 추가. 글쓰기는 홈 도구가 아니다 — 포스팅 칸으로 갔다 (2026-08-20 사장님 지시)');
+      add('e ✍️ 글쓰기는 포스팅 칸에서만', et.indexOf('le-top-write" id="le-write"') >= 0 && et.indexOf("wb.style.display=(m.pane==='archive')") >= 0,
+        '홈에서 보이면 «홈 도구»로 오해한다 — 컨텐츠 칸에 들어갔을 때만 뜬다');
+      add('e 🚪 홈 인라인 «구성 추가» 박스 삭제', uHtml.indexOf("s.className='la-addslot'") < 0,
+        '같은 카탈로그를 여는 문이 둘이 된다 (홈 박스 + 도크 ③번) — 사장님 「가」 픽 (2026-08-20)');
       add('e 미리보기·운영은 위로', et.indexOf('le-top-d le-d-prev" id="le-home"') >= 0 && et.indexOf('le-top-d" id="le-opmode"') >= 0,
         '도크엔 «순서대로 밟을 것»만 — 미리보기·운영자모드는 오른쪽 최상단 (사장님 지시)');
       add('e 도크에 미리보기 없음', et.indexOf('le-dock le-flow') >= 0 && (et.split('le-dock le-flow')[1]||'').slice(0,600).indexOf('le-home') < 0,
         '도크로 되돌아오면 버튼이 다시 5개가 된다');
       add('e 홈 유형 배선', et.indexOf("getElementById('le-type')") >= 0 && et.indexOf('window.__openTypePick') >= 0,
         '1걸음이 무반응이면 흐름 전체가 죽는다');
-      add('e 📝 글쓰기 버튼', et.indexOf('id="le-write"') >= 0 && et.indexOf("window.__switchWs('posts')") >= 0,
+      add('e 📝 글쓰기 배선 생존', et.indexOf('id="le-write"') >= 0 && et.indexOf("window.__switchWs('posts')") >= 0,
         '현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다');
       add('e switchWs 노출', et.indexOf('window.__switchWs=switchWs') >= 0, '글쓰기 버튼이 부른다');
       add('e 🚧 도크 잠금(판매·예약만)', et.indexOf('var WS_SOON = { sales:1 }') >= 0 && et.indexOf('if(WS_SOON[name])') >= 0,
