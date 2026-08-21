@@ -1989,6 +1989,12 @@ if('serviceWorker' in navigator){
   .an-tabs button{flex:0 0 auto; white-space:nowrap; font-size:12.5px; font-weight:700; padding:9px 11px; border-radius:9px; background:transparent; border:none; color:var(--muted); cursor:pointer; font-family:var(--sans);}
   .an-tabs button.on{background:var(--grad); color:#fff; box-shadow:0 4px 12px rgba(124,63,228,.4);}
   .an-pane{display:none;} .an-pane.on{display:block;}
+  /* 👤 라이트 프로필 = 마지노선만 (2026-08-20) — 시트로 열렸을 때만 깊은 칸을 접는다 */
+  #profile-card.lite [data-deep]{display:none;}
+  #profile-card:not(.lite) [data-litenote]{display:none;}
+  .lite-more{margin-top:14px; padding:11px 13px; border-radius:12px; background:var(--soft);
+    border:1px solid var(--hair); font-size:11.5px; color:var(--muted); line-height:1.6; text-align:center;}
+  .lite-more b{color:var(--ink); font-weight:700;}
   /* ⭐ 칸 «⋯ 수정» 시트 (2026-08-20) */
   .blkm-i{display:flex; align-items:center; gap:11px; width:100%; padding:13px 14px; border:none;
     border-bottom:1px solid var(--hair); background:transparent; color:var(--ink); cursor:pointer;
@@ -15349,6 +15355,7 @@ if('serviceWorker' in navigator){
       try{ document.querySelector('#live-sheet-ov .ls-body').scrollTop=0; }catch(_){}
     }
     function restore(){
+      try{ var _pc=document.getElementById('profile-card'); if(_pc) _pc.classList.remove('lite'); }catch(_){}   /* 작업실에선 전부 보인다 */
       if(_moved && _moved.node && _moved.parent){
         if(_moved.next && _moved.next.parentNode===_moved.parent) _moved.parent.insertBefore(_moved.node, _moved.next);
         else _moved.parent.appendChild(_moved.node);
@@ -15358,7 +15365,31 @@ if('serviceWorker' in navigator){
     window.__openPostSheet=function(id){ _mode='post'; try{ openPostEdit(id); }catch(e){} moveIn(document.getElementById('home-body'), '게시물 편집'); };
     window.__newPostSheet=function(){ _newToSheet=true; try{ createPost('blog'); }catch(e){ _newToSheet=false; } };
     window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '게시물 편집'); } };
-    window.__openProfileSheet=function(){ _mode='profile'; moveIn(document.getElementById('profile-card'), '프로필 편집'); };
+    /* 👤 2026-08-20 사장님 지시 — «기본 프로필 마지노선만 라이트에서».
+          라이트(현장)에선 사진·이름·한 줄 소개까지만. 숫자 증거·작업 사진·전문성은 운영자 모드에서.
+          같은 칸을 그대로 옮겨 쓰므로 «라이트에서 쓴 것 = 운영자 모드에서도 그대로» 다 (데이터가 하나다). */
+    window.__openProfileSheet=function(){
+      _mode='profile';
+      var card=document.getElementById('profile-card');
+      try{
+        if(card && !card.__liteMarked){
+          card.__liteMarked=1;
+          var bio=document.getElementById('pf-bio');
+          var afterBio=bio? bio.closest('.field') : null;
+          var deep=false;
+          [].forEach.call(card.querySelectorAll(':scope .acc-bd > .field'), function(f){
+            if(deep) f.setAttribute('data-deep','1');
+            if(f===afterBio) deep=true;
+          });
+          var note=document.createElement('div');
+          note.className='lite-more'; note.setAttribute('data-litenote','1');
+          note.innerHTML='숫자 증거 \u00b7 작업 사진 \u00b7 전문성은 <b>\u2699 운영</b>에서 채워요';
+          card.querySelector('.acc-bd').appendChild(note);
+        }
+        if(card) card.classList.add('lite');
+      }catch(_){}
+      moveIn(card, '프로필 편집');
+    };
     window.__openProductsSheet=function(){ _mode='product'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.querySelector('.sl-pane[data-slpane="sell"]')||document.getElementById('prod-lib'), '스토어 편집'); };   /* 🚨상품 목록이 판매 탭으로 이사했는데 옛 주소(pw-pane=product, 이미 없음)를 불러 죽은 버튼이던 것 */
     window.__openQnaSheet=function(){ _mode='qna'; try{ if(window.__renderPwManagers) window.__renderPwManagers(); }catch(e){} moveIn(document.getElementById('qna-manage'), 'Q&A 편집'); };
     window.__liveSheetOpen=function(){ return lsOv.classList.contains('open'); };
