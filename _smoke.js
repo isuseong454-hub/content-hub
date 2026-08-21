@@ -189,6 +189,8 @@
         '도크로 되돌아오면 버튼이 다시 5개가 된다');
       add('e 홈 유형 배선', et.indexOf("getElementById('le-type')") >= 0 && et.indexOf('window.__openTypePick') >= 0,
         '1걸음이 무반응이면 흐름 전체가 죽는다');
+      add('e ✍️ 글쓰기는 현장에서', et.indexOf('window.__newPostSheet){ window.__newPostSheet(); return;') >= 0,
+        '🚨 눌렀더니 현장을 닫고 작업실(운영자 모드)로 튕기던 것 — 라이브 시트로 손님 화면 위에 올린다 (2026-08-20 사장님 확인)');
       add('e 📝 글쓰기 배선 생존', et.indexOf('id="le-write"') >= 0 && et.indexOf("window.__switchWs('posts')") >= 0,
         '현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다');
       add('e switchWs 노출', et.indexOf('window.__switchWs=switchWs') >= 0, '글쓰기 버튼이 부른다');
