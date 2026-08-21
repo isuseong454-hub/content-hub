@@ -5565,11 +5565,36 @@
         ② 컴퓨터면 지금처럼 링크 복사 (붙여넣는 게 더 빠르다)
      🚨 주소는 «u·p 두 개만» 남긴다 — 편집·탭·캡쉬 따위가 딸려가면
         친구가 편집 화면이나 엉뚱한 탭으로 착지한다. */
+  /* 📇 2026-08-21 DM 카드 공사 — 껍데기 목록.
+        카톡·인스타의 «미리 읽는 로봇»은 화면 그리는 코드를 안 돌린다. 그래서 글마다
+        제목·표지를 미리 적어 둔 껍데기 파일(u/핸들/글id.html)을 만들어 두고, 그게
+        «있는» 글만 짧은 주소로 보낸다.
+     🚨 방금 쓴 글은 아직 껍데기가 없다 — 그때는 «예전 주소»를 쓴다.
+        목록을 못 받아도 마찬가지. 링크가 404 나는 것보다 카드가 밋밋한 게 백 배 낫다. */
+  var __ogMap=null;
+  function ogPrime(){
+    if(__ogMap!==null) return;
+    __ogMap={};                                  /* 두 번 안 부르게 먼저 막아 둔다 */
+    try{
+      var base=location.pathname.replace(/[^/]*$/, '');
+      fetch(base+'og/manifest.json', {cache:'no-cache'})
+        .then(function(r){ return r.ok?r.json():null; })
+        .then(function(m){ if(m&&m.posts) __ogMap=m; }, function(){});
+    }catch(_){}
+  }
   function hubShareUrl(id){
     var q0=new URLSearchParams(location.search), q=new URLSearchParams();
     var hu=q0.get('u'); if(hu) q.set('u', hu);
     q.set('p', id);
-    return location.origin+location.pathname+'?'+q.toString();
+    var plain=location.origin+location.pathname+'?'+q.toString();
+    try{
+      var lst=(__ogMap&&__ogMap.posts&&hu)?__ogMap.posts[hu]:null;
+      if(lst && lst.indexOf(id)>=0){
+        var base=location.pathname.replace(/[^/]*$/, '');
+        return location.origin+base+'u/'+encodeURIComponent(hu)+'/'+encodeURIComponent(id)+'.html';
+      }
+    }catch(_){}
+    return plain;
   }
   window.__hubShareUrl=hubShareUrl;
   function hubShare(id, btn){
@@ -5859,6 +5884,7 @@
     /* 🚨 2026-08-21 사장님 «첫 로그인인데 왜 이런 게시물들이 있어» + «스토어·Q&A는 나중에 연다고 했잖아»
           이 함수를 손님에게만 돌려서, «편집 중»엔 잠근 탭(스토어·Q&A)과 하드코딩 가짜 글이 그대로 보였다.
           편집 중에도 돌린다 — 사장님이 보는 화면 = 손님이 보는 화면이어야 한다. */
+    try{ ogPrime(); }catch(_){}   /* 📇 껍데기 목록 미리 받아 둔다 — 보내기 누를 때 기다리지 않게 (로드 시 1회) */
     try{ hideEmptyPublicTabs(d); }catch(e){}   // 🧹 안 채운 탭 = 하드코딩 샘플 대신 아예 숨김 (손님에 가짜 상품·글·문답 노출 방지)
     // 게시물 링크(?p=)로 들어오면 → 홈 착지 + '이어보기' 알약 (의도보존, 홈도 한번 보게)
     var pParam = new URLSearchParams(location.search).get('p');
