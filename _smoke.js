@@ -11,8 +11,12 @@
   const add = (name, ok, msg, level) => R.push({ name, ok: !!ok, msg: msg || '', level: level || 'err' });
   const blocks = [...document.scripts].map(s => s.text || '').filter(t => t.trim());
   const src = blocks.join('\n');   // 문자열 검사는 «전 블록 합본»으로 (블록 나뉘어 있어 최대 블록만 보면 오탐)
-  let selfHtml = ''; try { selfHtml = await fetch(location.pathname.replace(/[^/]*$/, 'edit.html')).then(r => r.text()); } catch (e) {}
-  let uHtml = '';    try { uHtml    = await fetch(location.pathname.replace(/[^/]*$/, 'u.html')).then(r => r.text()); } catch (e) {}
+  /* 🚨 2026-08-20 — 캐시 버스터 없이 받아오다가 «어제 파일»을 검사하고 있었다.
+        서비스워커·브라우저 캐시가 옛 사본을 내주면 점검이 통째로 거짓말이 된다(통과도 실패도 못 믿음).
+        ?_smoke=시각 + no-store 로 «지금 서버에 있는 것»만 검사한다. */
+  const _fresh = (name) => fetch(location.pathname.replace(/[^/]*$/, name) + '?_smoke=' + Date.now(), { cache: 'no-store' }).then(r => r.text());
+  let selfHtml = ''; try { selfHtml = await _fresh('edit.html'); } catch (e) {}
+  let uHtml = '';    try { uHtml    = await _fresh('u.html'); } catch (e) {}
 
   // ── 1. 문법 — 스크립트가 통째로 죽는 사고 (블록별 파싱) ──
   try { blocks.forEach(b => new Function(b)); add('스크립트 문법', true, blocks.length + '개 블록 · ' + (src.length / 1024 / 1024).toFixed(2) + 'MB 파싱 OK'); }
@@ -117,8 +121,10 @@
 
   // ── 10. 2026-08-20 리디자인 항목 (유형 4종·라임·유리 도크·작업실 톤) ──
   {
-    const et = await fetch('edit.html').then(r => r.text()).catch(() => '');
-    const ut = await fetch('u.html').then(r => r.text()).catch(() => '');
+    /* 🚨 2026-08-20 — 여기도 캐시 버스터가 없어 «어제 파일»을 검사했다.
+          위에서 이미 받아둔 최신본(selfHtml/uHtml)을 그대로 쓴다 — 왕복도 줄고 항상 «지금 것»이다. */
+    const et = selfHtml || await _fresh('edit.html').catch(() => '');
+    const ut = uHtml    || await _fresh('u.html').catch(() => '');
     if (et) {
       add('테마 9종(라임)', et.indexOf("['lime','#070A05','#C6FF4D'") >= 0, 'THEMES 라임 항목');
       /* 🚪 왕복 (2026-08-20) — 로그인하면 손님 화면 · ⚙로 편집실 · 비번 안 물음 */
@@ -142,12 +148,14 @@
       add('e 📝 글쓰기 버튼', et.indexOf('id="le-write"') >= 0 && et.indexOf("window.__switchWs('posts')") >= 0,
         '현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다');
       add('e switchWs 노출', et.indexOf('window.__switchWs=switchWs') >= 0, '글쓰기 버튼이 부른다');
-      add('e 🚧 도크 잠금', et.indexOf('var WS_SOON = { sales:1, data:1 }') >= 0 && et.indexOf('if(WS_SOON[name])') >= 0,
-        '사장님 «판매·예약 / 고객·분석은 아직 미오픈» — 열 때 WS_SOON만 비우면 된다');
+      add('e 🚧 도크 잠금(판매·예약만)', et.indexOf('var WS_SOON = { sales:1 }') >= 0 && et.indexOf('if(WS_SOON[name])') >= 0,
+        '2026-08-20 「고객·분석」 개방 — 판매·예약만 잠금. 열 때 WS_SOON만 비우면 된다');
+      add('e 📊 고객·분석 개방', et.indexOf('<button class="ws-tab" data-ws="data">') >= 0 && et.indexOf("WS_SOON = { sales:1, data:1 }") < 0,
+        '추적은 쌓이는데 볼 화면이 막혀 있던 것 — 다시 잠기면 여기서 걸린다 (2026-08-20)');
       add('e 🚧 잠금 표시', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') >= 0 && et.indexOf('.ws-tab.ws-soon{ opacity:.34; }') >= 0,
         '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
-      add('e 열린 방 3개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0,
-        '홈 · 프로필 · 포스팅 — 이 셋은 늘 열려 있어야 한다 (2026-08-20 «전문성 가시화»→«프로필» 개명)');
+      add('e 열린 방 4개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0 && et.indexOf('data-ws="data"') >= 0,
+        '홈 · 프로필 · 포스팅 · 고객·분석 — 이 넷은 늘 열려 있어야 한다 (2026-08-20 분석 개방)');
       /* 🆕 신규 첫 경험 (2026-08-20 사장님 지시 5종) */
       add('e 자동저장은 공개 안 함', et.indexOf('여기서 li_publish(true) 를 부르는 바람에') >= 0,
         '🚨 가입만 해도 예시가 손님에게 공개되던 것 — 공개는 「적용」 누를 때만');
