@@ -250,7 +250,7 @@
         m = m.slice(0, 400);
         return m.indexOf('at 50% -3%') >= 0 && m.indexOf('at 50% 103%') >= 0;
       }), '9종 전부 위 하나 + 아래 하나 (사장님 «위에만 몰려 있다»)');
-      add('u 도크 위성 보정', ['.cta-sticky{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(', '.resv-fab{position:fixed; right:16px; bottom:calc(', '.fab{position:fixed; right:18px; bottom:calc('].every(k => ut.indexOf(k) >= 0), 'CTA·FAB 2종이 도크 위로(2026-08-20 겹침 사고)');
+      add('u 도크 위성 보정', ['.cta-sticky{position:fixed; left:0; right:0; margin-left:auto; margin-right:auto; bottom:calc(', '.resv-fab{position:fixed; right:16px; bottom:calc(', '.fab{position:fixed; right:18px; bottom:calc('].every(k => ut.indexOf(k) >= 0), 'CTA·FAB 2종이 도크 위로(2026-08-20 겹침 사고)');
     }
       /* ══ 📱 UX 마감 (2026-08-20) — 손님이 폰에서 실제로 겪던 4가지. 다시 빠지면 여기서 걸린다 ══ */
       add('u 입력칸 16px 하한', /font-size: 16px !important/.test(ut) && ut.indexOf('max-width: 768px') >= 0,
