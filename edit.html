@@ -1838,6 +1838,9 @@ if('serviceWorker' in navigator){
   html[data-litetone] .pstp-ask b{color:#2A2530;}
   .pstp-title{font-size:16px; font-weight:800; letter-spacing:-.01em; line-height:1.35; margin-bottom:10px;}
   .pstp-h{font-size:13px; font-weight:750; margin:12px 0 5px; padding-left:8px; border-left:3px solid var(--coral);}
+  /* 카드에 보일 한 줄 — 제목 바로 밑, 조금 흐리게 (2026-08-21) */
+  .pstp-sum{ font-size:11.5px; line-height:1.55; color:var(--muted); margin:-2px 0 9px; padding-left:9px;
+    border-left:2px solid var(--coral-soft); }
   .pstp-p{font-size:12px; color:var(--muted); line-height:1.65; margin-bottom:6px;}
   .pstp-li{display:flex; flex-direction:column; gap:4px; margin:6px 0 8px;}
   .pstp-li span{font-size:12px; color:var(--ink); background:var(--paper); border-radius:8px; padding:6px 9px;}
@@ -1862,6 +1865,7 @@ if('serviceWorker' in navigator){
   html[data-litetone] .pstp{background:rgba(0,0,0,.03); border-color:rgba(0,0,0,.08);}
   html[data-litetone] .pstp-title, html[data-litetone] .pstp-h{color:#2A2530;}
   html[data-litetone] .pstp-p{color:rgba(42,37,48,.62);}
+  html[data-litetone] .pstp-sum{ color:#6B6376; border-left-color:rgba(107,65,216,.30); }
   html[data-litetone] .pstp-li span, html[data-litetone] .pstp-q{background:#fff; color:#2A2530;}
   html[data-litetone] .pstp-img{border-color:rgba(0,0,0,.14); color:rgba(42,37,48,.55);}
   /* 🎨 라이트 톤 — 현장이 밝을 땐 시트·버튼까지 밝게 (2026-08-21 사장님 «톤이 깨지지 않게»)
@@ -12996,7 +13000,32 @@ if('serviceWorker' in navigator){
       if(PST_PHOTO.test(t) || paraSince>=3){ out.push({k:'img'}); paraSince=0; }
     }
     flush();
-    return { title: title||'새 포스팅', items: out };
+    /* ✏️ 2026-08-21 사장님 «한 줄도 뽑아줘» — 손님이 «목록 카드»에서 보는 그 한 줄.
+          제목은 낚고, 이 한 줄이 «열어볼지»를 정한다. 그래서 인사말은 버린다:
+          「안녕하세요. 오늘은 …를 정리했어요」 → 「오늘은 …를 정리했어요」
+          그래도 짧으면 첫 소제목을 쓴다(소제목은 이미 «요약된 말»이라 잘 맞는다). */
+    var summary='';
+    try{
+      var GREET=/^(안녕하세요|안녕하십니까|반갑습니다|안녕|하이)[^.!?…\n]*[.!?…]?\s*/;
+      function tidy(x){
+        x=String(x||'').replace(/\s+/g,' ').trim();
+        x=x.replace(GREET,'').trim();               // 인사말 떼기
+        x=x.replace(/^[0-9]+[.)]\s*/,'').trim();     // 앞머리 번호 떼기
+        if(x.length<=58) return x;
+        var cut=x.slice(0,58), sp=cut.lastIndexOf(' ');
+        return (sp>28?cut.slice(0,sp):cut).replace(/[,·\-\s]+$/,'')+'…';
+      }
+      var same=function(a,b){ return a.replace(/\s/g,'')===String(b||'').replace(/\s/g,''); };
+      for(var _s=0; _s<out.length && !summary; _s++){
+        if(out[_s].k!=='p') continue;
+        var _c=tidy(out[_s].tx);
+        if(_c.length>=12 && !same(_c,title)) summary=_c;
+      }
+      if(!summary){ for(var _h=0; _h<out.length && !summary; _h++){
+        if(out[_h].k!=='h') continue;
+        var _d=tidy(out[_h].tx); if(_d.length>=8 && !same(_d,title)) summary=_d; } }
+    }catch(_){}
+    return { title: title||'새 포스팅', summary: summary, items: out };
   }
   /* 판정 결과 → 실제 포스팅 블록 (text[제목·내용] / quote / photocard) */
   /* 👁 «이렇게 나와요» — 붙여넣은 글이 어떤 모양으로 바뀌는지 그 자리서 보여준다.
@@ -13005,6 +13034,8 @@ if('serviceWorker' in navigator){
   function pstPreviewHtml(r){
     if(!r || !r.items || !r.items.length) return '';
     var h='<div class="pstp-title">'+escT(r.title||'제목 없음')+'</div>';
+    /* ✏️ 뽑은 한 줄도 여기 보여준다 — 만들기 «전»에 눈으로 확인하고, 고칠 건 다음 화면에서 */
+    if(r.summary) h+='<div class="pstp-sum">'+escT(r.summary)+'</div>';
     r.items.forEach(function(b){
       if(b.k==='h')      h+='<div class="pstp-h">'+escT(b.tx)+'</div>';
       else if(b.k==='p') h+='<div class="pstp-p">'+escT(String(b.tx).slice(0,120))+(String(b.tx).length>120?'…':'')+'</div>';
@@ -13148,8 +13179,8 @@ if('serviceWorker' in navigator){
           }
         }catch(e){}
         /* 🚪 현장 편집 중이면 «현장 시트»로 연다 — 작업실(운영자 모드)로 튕기지 않는다 (2026-08-20) */
-        if(window.__liveEditActive && window.__pstToSheet){ window.__pstToSheet(bl, r.title); }
-        else { createPost('blog', bl, r.title); }
+        if(window.__liveEditActive && window.__pstToSheet){ window.__pstToSheet(bl, r.title, r.summary); }
+        else { createPost('blog', bl, r.title, r.summary); }
         var sugN=(window.__pstSug&&(window.__pstSug.stat?1:0)+(window.__pstSug.qna?1:0))||0;
         try{ if(window.toast) toast('붙여넣은 글을 '+bl.length+'개 블록으로 나눴어요'+(sugN?' · 제안 '+sugN+'개는 라벨·답만 채워주세요':' · 사진만 넣으면 끝')); }catch(e){}
       };
@@ -13160,10 +13191,10 @@ if('serviceWorker' in navigator){
     ov.classList.add('open');
   }
   window.__openPasteStart=openPasteStart;
-  function createPost(type, blocksOverride, titleOverride){
+  function createPost(type, blocksOverride, titleOverride, summaryOverride){
     var preset=blocksOverride||(POST_PRESETS[type]?POST_PRESETS[type]():[]);
     var titles={blog:'새 글',landing:'새 랜딩',reviews:'후기 모음',style:'스타일 갤러리',notice:'공지',article:'새 글',insight:'새 정리글',checklist:'체크리스트',tip:'노하우 · 꿀팁'};
-    var p={ id:newPostId(), type:type, title:(titleOverride&&String(titleOverride).trim())||titles[type]||'새 게시물', cover:'', summary:'', on:true, featured:(postsData.length===0), blocks:preset, createdAt:Date.now() };
+    var p={ id:newPostId(), type:type, title:(titleOverride&&String(titleOverride).trim())||titles[type]||'새 게시물', cover:'', summary:(summaryOverride?String(summaryOverride).trim():''), on:true, featured:(postsData.length===0), blocks:preset, createdAt:Date.now() };
     if(type==='landing') p.skin='aurora';   // 🧰 스킨 기본 = 🫧 오로라 글래스 (2026-07-10 다크 오퍼 숨김에 따라 승계. 기존 랜딩은 그대로)
     postsData.push(p);
     try{ var wk=Math.floor(Date.now()/604800000); var arr=JSON.parse(localStorage.getItem('cm-hub-postweeks')||'[]'); if(arr.indexOf(wk)<0){ arr.push(wk); localStorage.setItem('cm-hub-postweeks', JSON.stringify(arr.slice(-60))); } }catch(_){}
@@ -15795,7 +15826,7 @@ if('serviceWorker' in navigator){
     window.__newPostSheet=function(){ _newToSheet=true; try{ createPost('blog'); }catch(e){ _newToSheet=false; } };
     /* 🚨 2026-08-20 사장님 «글 입력하니까 갑자기 홈으로 가진다» — AI 포스팅으로 만든 글이
           시트가 아니라 작업실로 떨어졌다(_newToSheet 가 안 켜져서). 블록·제목까지 받아 현장 시트로 연다. */
-    window.__pstToSheet=function(bl, title){ _newToSheet=true; try{ createPost('blog', bl, title); }catch(e){ _newToSheet=false; } };
+    window.__pstToSheet=function(bl, title, summary){ _newToSheet=true; try{ createPost('blog', bl, title, summary); }catch(e){ _newToSheet=false; } };
     window.__sheetAfterCreate=function(){ if(_newToSheet){ _newToSheet=false; _mode='post'; moveIn(document.getElementById('home-body'), '글 쓰기'); setTimeout(function(){ try{ if(window.__markPostSteps) window.__markPostSteps(); }catch(_){} }, 60); } };
     /* 👤 2026-08-20 사장님 지시 — «기본 프로필 마지노선만 라이트에서».
           라이트(현장)에선 사진·이름·한 줄 소개까지만. 숫자 증거·작업 사진·전문성은 운영자 모드에서.
