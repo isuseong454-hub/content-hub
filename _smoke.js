@@ -626,7 +626,22 @@
       add('블로그 화면 글자 걸러냄', et.indexOf('function PST_JUNK_TEST(t)') >= 0 && et.indexOf('var PST_JUNK_W') >= 0, '「이웃추가 본문 기타 기능」이 원고로 들어왔다');
       add('찌꺼기 필터 안전장치', et.indexOf('if(!w.length || w.length>5) return false;') >= 0, '5단어 넘으면 손대지 않는다 — 진짜 원고를 지우는 게 더 큰 사고');
       add('소제목은 본문이 따라올 때만', et.indexOf('var 본문이따라옴') >= 0, '블로그·인스타 원고는 마침표 없이 짧게 쓴다 — 그 조건만 보면 전부 소제목이 된다');
-      add('소제목엔 강조바', et.indexOf("layout: pend[0] ? 'bar' : ''") >= 0, '전부 기본 카드라 «정리된 느낌»이 안 났다');
+      add('소제목엔 강조바', et.indexOf("layout: head ? 'bar' : ''") >= 0, '전부 기본 카드라 «정리된 느낌»이 안 났다');
+
+      /* 🧰 2026-08-21 사장님 «무기고를 열자» — 앱엔 표현이 40종 넘는데 붙여넣기는 둘만 썼다.
+            글의 «생김새»만 보고 어떤 표현이 맞는지 알아낸다. 확신 높은 것만 자동으로 바꾼다. */
+      add('무기고 감지 규칙', et.indexOf('var PST_NUM') >= 0 && et.indexOf('var PST_REV') >= 0 && et.indexOf('var PST_CTA') >= 0, '숫자·후기·행동 — 내용을 안 읽고 생김새로');
+      add('숫자 띠', et.indexOf("out.push({k:'num', items:_ns})") >= 0 && et.indexOf("type:'stat'") >= 0, '「경력 10년 · 누적 2,300명」이 그냥 문장이던 것');
+      add('숫자 띠는 짧은 줄만', et.indexOf('if(t.length<=64){') >= 0, '긴 문장을 숫자로 토막 내면 뜻이 깨진다');
+      add('Q·A 말풍선', et.indexOf("out.push({k:'qa'") >= 0 && et.indexOf("type:'qna'") >= 0, 'Q. A. 가 그냥 줄글이던 것');
+      add('후기 인용', et.indexOf("out.push({k:'rev'") >= 0 && et.indexOf("type:'review'") >= 0, '「"…" — 30대 직장인」 패턴');
+      add('행동 버튼', et.indexOf("out.push({k:'cta'") >= 0 && et.indexOf("type:'cta'") >= 0, '「상담 문의 주세요」가 소제목이 되던 것');
+      add('방법 목록은 단계로', et.indexOf('var PST_HOWTO') >= 0 && et.indexOf("type:'steps'") >= 0, '체크목록은 «가진 것», 타임라인은 «하는 차례»');
+      add('단계 꼬리 줄 분리', et.indexOf('var chk=[], tail=[];') >= 0, '한 줄 딸려왔다고 단계 전체가 무산되면 안 된다');
+      add('블로그 머리글 줄 제거', et.indexOf('var PST_BYLINE') >= 0, '「이벨로 ・ 2026. 6. 10. 16:06」');
+      add('블로그 UI 줄 제거', et.indexOf('var PST_JUNK_LINE') >= 0 && et.indexOf('접기\\/펴기') >= 0, '「접기/펴기」가 소제목이 되던 것');
+      add('출처 줄 제거', et.indexOf('var PST_SRC_LINE') >= 0, '「[출처] …|작성자 …」');
+      add('위치 줄은 살림', et.indexOf('var PST_LOC_LINE') >= 0, '「위치이벨로 의정부점」은 찌꺼기가 아니라 정보다');
 
       /* 🚨 2026-08-21 사장님 픽 ㉮ — 「1. 2. 3.」이 목록인지 «글의 뼈대»인지 가른다.
             목록은 항목이 연달아 나온다. 뼈대는 항목마다 문단이 붙는다.
