@@ -3237,6 +3237,9 @@
       return s;
     } catch(e){ return 'n/a'; }
   }
+  /* 🚨 2026-08-20 — li_event 가 저장하는 칸은 type·kind·label·src·sid·pane·sec·ts 뿐이다.
+        payload 의 다른 키(step, svc …)는 서버에서 버려진다 — 예약 4단계가 전부 한 덩어리로 들어가
+        「어디서 새는지」를 못 봤다. 단계는 반드시 label 에 실어 보낼 것. */
   function track(type, data){
     var evt = Object.assign({ h:window.HANDLE||HANDLE, type:type, src:getSource(), sid:sid(), ts:Date.now() }, data||{});
     // Supabase 전송 (로그인 없이 li_event — 공개·존재 핸들만 기록됨)
@@ -5108,7 +5111,7 @@
     var sheet=document.createElement('div'); sheet.className='resv-sheet';
     var closeBtn=document.createElement('button'); closeBtn.type='button'; closeBtn.className='resv-mclose'; closeBtn.setAttribute('aria-label','닫기'); closeBtn.innerHTML='×';
     sheet.appendChild(closeBtn); sheet.appendChild(d); ov.appendChild(sheet); document.body.appendChild(ov);
-    function openModal(){ try{ track('resv',{step:'open'}); }catch(_){} showStep('cal'); ov.classList.add('open'); }
+    function openModal(){ try{ track('resv',{step:'open', label:'open'}); }catch(_){} showStep('cal'); ov.classList.add('open'); }
     function closeModal(){ ov.classList.remove('open'); }
     closeBtn.onclick=closeModal;
     ov.addEventListener('click', function(e){ if(e.target===ov) closeModal(); });
@@ -5202,7 +5205,7 @@
     var visitEl=d.querySelector('.rv-visit');
     visitEl.addEventListener('click', function(e){ var b=e.target.closest('[data-v]'); if(!b) return; state.visit=b.getAttribute('data-v'); [].forEach.call(visitEl.querySelectorAll('button'),function(x){ x.classList.toggle('on', x===b); }); });
     var termsEl=d.querySelector('.lead-terms'); if(termsEl) termsEl.onclick=function(e){ e.preventDefault(); openPrivacy(); };
-    nextBtn.onclick=function(){ d.querySelector('.rv-chosen').textContent='📅 '+(state.m+1)+'월 '+state.date.getDate()+'일 ('+DOW[state.date.getDay()]+') '+state.time; showStep('form'); try{ track('resv',{step:'pick'}); }catch(_){} };
+    nextBtn.onclick=function(){ d.querySelector('.rv-chosen').textContent='📅 '+(state.m+1)+'월 '+state.date.getDate()+'일 ('+DOW[state.date.getDay()]+') '+state.time; showStep('form'); try{ track('resv',{step:'pick', label:'pick'}); }catch(_){} };
 
     var nameEl=d.querySelector('.rv-name'), phoneEl=d.querySelector('.rv-phone'), memoEl=d.querySelector('.rv-memo'), agreeEl=d.querySelector('.rv-agree'), formMsg=d.querySelector('.rv-form-step .rv-msg');
     var pendingBooking=null;   // 카톡 버튼 누를 때 슬롯 선점에 쓸 예약 정보
@@ -5227,7 +5230,7 @@
       if(askLines.length) msg += '\n' + askLines.join('\n');
       d.querySelector('.rv-preview').value=msg;
       showStep('done');
-      try{ track('resv',{step:'submit', svc:svcName}); track('click',{kind:'cta', label:'예약하기'}); }catch(_){}
+      try{ track('resv',{step:'submit', label:'submit', svc:svcName}); track('click',{kind:'cta', label:'예약하기'}); }catch(_){}
       try{ if(window.laRpc){ window.laRpc('li_lead_add',{ p_handle:window.HANDLE, p_name:'[예약] '+(state.m+1)+'/'+state.date.getDate()+' '+bookTime+' · '+svcName+' · '+nm, p_phone:ph }); } }catch(_){}
     };
     d.querySelector('.rv-copy').onclick=function(){ var ta=d.querySelector('.rv-preview'), btn=this; function ok(){ btn.textContent='✓ 복사됐어요'; setTimeout(function(){ btn.textContent='📋 전체 복사하기'; },1800);
@@ -5236,7 +5239,7 @@
       } try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(ok,function(){ ta.select(); document.execCommand('copy'); ok(); }); } else { ta.select(); document.execCommand('copy'); ok(); } }catch(_){ ta.select(); } };
     // 카톡 방 연결 버튼 = 이 순간 슬롯 선점(마감). 링크는 바로 열리고, 예약은 백그라운드로 잡음(중복은 DB가 방어).
     var kkBtn=d.querySelector('.rv-kakao'); if(kkBtn) kkBtn.addEventListener('click', function(){
-      try{ track('resv',{step:'kakao'}); }catch(_){}
+      try{ track('resv',{step:'kakao', label:'kakao'}); }catch(_){}
       try{ if(window.laRpc && pendingBooking && pendingBooking.date && pendingBooking.time){
         window.laRpc('li_resv_book',{ p_handle:window.HANDLE, p_date:pendingBooking.date, p_time:pendingBooking.time, p_name:pendingBooking.name, p_phone:pendingBooking.phone, p_menu:pendingBooking.menu, p_visit:pendingBooking.visit, p_memo:pendingBooking.memo }).catch(function(){});
       } }catch(_){}
