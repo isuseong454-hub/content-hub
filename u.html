@@ -578,7 +578,14 @@
   .handle{font-size:13px; color:var(--on-soft); letter-spacing:.01em;}
   .handle b{color:var(--on-strong); font-weight:500;}
   .topbar .dots{color:var(--on-soft); font-size:20px; line-height:1;}
-  .settings-link{color:var(--on-soft); opacity:.5; text-decoration:none; display:flex; transition:opacity .15s;}
+  /* 🚨 2026-08-21 사장님 «운영자 모드는 어디로 가?» — 여기 있었는데 못 찾으셨다.
+        실측 19x19px. 손가락 최소는 44px 이고, 그나마 흐릿하게(opacity .5) 있었다.
+        이게 «작업실로 가는 유일한 문»이라 못 누르면 갇힌다. 자리는 그대로 두고 손에 잡히게만 키운다. */
+  .settings-link{color:var(--on-soft); opacity:.62; text-decoration:none;
+    display:inline-flex; align-items:center; justify-content:center;
+    width:44px; height:44px; margin:-12px; border-radius:50%;
+    transition:opacity .15s, background .15s;}
+  .settings-link:hover, .settings-link:active{ opacity:1; background:rgba(128,128,128,.14); }
   /* ✏️ 내 홈일 때만 뜨는 «고치기» (2026-08-20) — 손님에겐 절대 안 보인다(로그인 열쇠 + 핸들 일치일 때만 만든다) */
   /* 🚨 2026-08-20 사장님 지적 — «고치기»가 이벤트 배너에 깔려 겹쳤다.
         원인: 스킨일 때 .topbar 가 position:absolute 라 본문 맨 위 배너와 같은 자리를 썼다.
@@ -632,7 +639,6 @@
   .gear-menu button .gs{display:block; font-size:11px; font-weight:400; color:var(--muted); margin-top:2px;}
   .gear-wrap{position:relative; display:flex; align-items:center;}
   .settings-link svg{width:19px; height:19px; display:block;}
-  .settings-link:hover, .settings-link:active{opacity:.9;}
 
   /* ── 프로필 헤더 ── */
   .profile{text-align:center; margin-bottom:18px;}
@@ -2731,7 +2737,7 @@
     <span id="mine-edit-slot"></span>
     <span class="gear-wrap" id="gear-wrap">
     <a class="settings-link" href="edit.html?desk=1" aria-label="관리자 페이지">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.6v3M12 18.4v3M2.6 12h3M18.4 12h3M5.05 5.05l2.12 2.12M16.83 16.83l2.12 2.12M18.95 5.05l-2.12 2.12M7.17 16.83l-2.12 2.12"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </a>
     <div class="gear-menu" id="gear-menu" role="menu"></div>
     </span>
