@@ -1973,7 +1973,40 @@ if('serviceWorker' in navigator){
     border:1px dashed var(--hair); background:transparent; color:var(--muted);
     font-family:var(--sans); font-size:12.5px; cursor:pointer; min-height:44px; }
   .dmore:hover{ border-color:var(--coral); color:var(--coral); }
+  /* 🔌 아직 연결 안 된 행동 버튼 — 흐리게 + 「미오픈」. 추천은 그대로 두되 «안 열렸다»고 알린다 */
+  .dcard.dim{ opacity:.62; border-style:dashed; }
+  .dcard.dim:hover{ opacity:1; }
+  .dsoon{ display:inline-block; font-style:normal; font-size:10px; font-weight:700; margin-left:6px;
+    padding:2px 7px; border-radius:999px; background:rgba(224,170,60,.20); color:#B98A18;
+    vertical-align:middle; }
+  .dcard.dim .dgo{ color:#B98A18; }
+  /* 🧭 「이건 있어야 살아요」 — 틀에서 꼭 필요한 것 체크 (막지 않고 알려만 준다) */
+  .dneeds{ margin-top:18px; padding:13px 14px; border-radius:12px;
+    background:var(--soft); border:1px solid var(--hair); }
+  .dneed-h{ font-size:12.5px; font-weight:700; margin-bottom:9px; }
+  .dneed{ display:flex; gap:9px; align-items:flex-start; padding:7px 0; }
+  .dneed .i{ flex:0 0 auto; width:19px; height:19px; border-radius:50%; display:grid; place-items:center;
+    font-size:10.5px; font-weight:800; background:rgba(224,170,60,.18); color:#B98A18; margin-top:1px; }
+  .dneed.ok .i{ background:rgba(125,224,166,.20); color:#2E9C63; }
+  .dneed .m{ flex:1; min-width:0; }
+  .dneed .m b{ display:block; font-size:12.5px; font-weight:600; }
+  .dneed .m span{ display:block; font-size:11.5px; color:var(--muted); line-height:1.55; margin-top:1px; }
+  .dneed.ok .m b{ color:var(--muted); font-weight:500; }
+  html[data-litetone] #live-sheet-ov .dneeds{ background:#F6F2EC; }
   /* 글 하나에 대한 도구 세 개 — 글 바로 밑, 삭제와는 멀찍이 */
+  /* 🧭 글 틀 고르기 — 단계를 늘리지 않으려고 시트 «안» 맨 위에 둔다 */
+  .pst-frames{ margin:2px 0 13px; }
+  .pf-l{ display:block; font-size:12.5px; font-weight:600; margin-bottom:8px; }
+  .pf-l small{ font-weight:400; color:var(--muted); font-size:11px; }
+  .pf-chips{ display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:none; }
+  .pf-chips::-webkit-scrollbar{ display:none; }
+  .pf-c{ flex:0 0 auto; min-height:44px; padding:8px 13px; border-radius:12px;
+    border:1px solid var(--hair); background:var(--soft); color:var(--ink);
+    font-family:var(--sans); font-size:12.5px; cursor:pointer; text-align:left; line-height:1.35; }
+  .pf-c b{ display:block; font-weight:600; }
+  .pf-c small{ display:block; font-size:10.5px; color:var(--muted); margin-top:1px; }
+  .pf-c.on{ border-color:var(--coral); background:var(--coral-soft); }
+  .pf-c.on b{ color:var(--coral); }
   .autocover-btn{ display:block; width:100%; min-height:44px; margin:-2px 0 10px; padding:11px;
     border-radius:11px; border:1px dashed var(--hair); background:transparent; color:var(--muted);
     font-family:var(--sans); font-size:12.5px; font-weight:600; cursor:pointer; }
@@ -12979,8 +13012,27 @@ if('serviceWorker' in navigator){
   }
   function expFirstSentence(t){ var m=String(t||'').match(/^[^.!?…\n]{6,90}[.!?…]?/); return m?m[0].trim():String(t||'').slice(0,80); }
   /* 인스타 캡션 — 후킹 → 핵심 3줄 → 마무리 → 해시태그 */
+  /* 🧭 2026-08-21 사장님 «틀에 맞춘 인스타 캡션» —
+        같은 글이라도 후기글은 «전·후»를, 모집글은 «마감»을 앞세워야 한다.
+        틀이 없으면(옛 글) 지금까지 하던 대로 — 무회귀. */
+  var EXP_FRAME_LEAD = {
+    review: ['\uD83D\uDCA1 이렇게 달라졌어요', '\u2600\uFE0F 후기'],
+    offer:  ['\u23F0 지금 신청하세요', '\uD83D\uDCE3 모집'],
+    type:   ['\uD83E\uDE9E 나는 어떤 유형일까?', '\uD83E\uDE9E 진단'],
+    vs:     ['\u2696\uFE0F 뭐가 나을까요?', '\u2696\uFE0F 비교'],
+    info:   ['', '\uD83D\uDCD8 정보']
+  };
+  var EXP_FRAME_TAIL = {
+    review: '\uD83D\uDCC5 예약은 프로필 링크에서',
+    offer:  '\u23F3 마감 전에 프로필 링크에서 신청하세요',
+    type:   '\uD83D\uDD17 내 유형 확인은 프로필 링크에서',
+    vs:     '\uD83D\uDD17 자세한 비교는 프로필 링크에서',
+    info:   '자세한 내용은 프로필 링크에서 보실 수 있어요 \uD83D\uDD17'
+  };
   function expCaption(p){
     var d=expPick(p), L=[];
+    var _fk=(p&&p.frame)||'', _lead=EXP_FRAME_LEAD[_fk];
+    if(_lead && _lead[0]) L.push(_lead[0], '');
     if(d.title) L.push(d.title);
     var hook = d.secs.length ? expFirstSentence(d.secs[0].tx || d.secs[0].h) : '';
     if(hook && hook!==d.title) L.push('', hook);
@@ -12988,7 +13040,7 @@ if('serviceWorker' in navigator){
     if(!pts.length) pts = d.secs.filter(function(x){ return x.h; }).slice(0,4).map(function(x){ return x.h; });
     if(pts.length){ L.push(''); pts.forEach(function(x,i){ L.push('✔️ ' + x); }); }
     if(d.quotes.length) L.push('', '❝ ' + d.quotes[0] + ' ❞');
-    L.push('', '자세한 내용은 프로필 링크에서 보실 수 있어요 🔗');
+    L.push('', (EXP_FRAME_TAIL[_fk] || '자세한 내용은 프로필 링크에서 보실 수 있어요 🔗'));
     /* 해시태그 — 조사·어미로 끝나는 토막은 버리고 «말이 되는 낱말»만 (2026-08-20) */
     var STOP=/(에서|에게|으로|까지|부터|이라|하는|한다|합니다|해요|보기|하기|되는|같은|그리고|그런데|입니다|였다|있는|없는|저는|제가|우리|정말|진짜|너무|가장|조금|많이)$/;
     var seen={}, tags=[];
@@ -13227,6 +13279,44 @@ if('serviceWorker' in navigator){
       .replace(/[\u200B-\u200D\uFEFF\u2060]/g, '')   /* 제로폭 공백 — 블로그 빈 줄의 정체 */
       .replace(/\u00A0/g, ' ');                        /* 줄바꿈 안 되는 공백 */
   }
+  /* ════ 🧭 2026-08-21 사장님 «틀마다 주인공이 다르다» ════
+        틀은 순서만 바꾸는 게 아니라 «이 글에선 뭐가 주인공이냐»를 정한다.
+        후기글에 전·후 사진이 없으면 그 글은 죽고, 정보글에 카운트다운이 있으면 이상하다.
+        🚨 틀은 «막지» 않는다 — 빠진 것을 조용히 알려줄 뿐이다. 결정은 사장님이 한다. */
+  var PST_FRAMES = [
+    { k:'info',  ic:'📘', nm:'정보글',  hint:'노하우 · 검색으로 들어옴',
+      star:['h','steps','chk'],
+      need:[ ['h3','소제목 3개 이상','내용이 어디서 바뀌는지 보여야 끝까지 읽어요'],
+             ['photo','사진 1장 이상','글만 있으면 스크롤로 넘겨요'],
+             ['cta','문의·상담 버튼','읽고 마음 생겼을 때 누를 곳'] ] },
+    { k:'review', ic:'💇', nm:'시술 후기', hint:'전환이 제일 센 글',
+      star:['ba','rev','num'],
+      need:[ ['ba','전·후 사진 2장','이게 없으면 후기글이 아니에요'],
+             ['rev','손님이 하신 말 한마디','내 자랑보다 백 배 셉니다'],
+             ['cta','예약 버튼','보고 바로 잡을 수 있게'] ] },
+    { k:'type',  ic:'🪞', nm:'진단·유형', hint:'저장·공유가 제일 많이 나옴',
+      star:['h','photo','chk'],
+      need:[ ['h3','유형 2개 이상','유형이 하나면 진단이 안 돼요'],
+             ['photo','유형마다 사진','글로만 하면 자기 유형을 못 찾아요'],
+             ['cta','상담 버튼','«나는 어디지?» 다음이 있어야'] ] },
+    { k:'offer', ic:'📣', nm:'모집·이벤트', hint:'매출에 바로 붙음',
+      star:['num','cta','chk'],
+      need:[ ['num','마감일 또는 인원','언제까지인지 숫자로 보여야 지금 눌러요'],
+             ['price','가격','가격이 없으면 문의가 안 와요'],
+             ['cta','신청 버튼','제일 크게'] ] },
+    { k:'vs',    ic:'⚖️', nm:'비교글',   hint:'A할까 B할까 고민하는 손님',
+      star:['h','chk','photo'],
+      need:[ ['h3','비교 대상 2개','한쪽만 있으면 비교가 아니에요'],
+             ['concl','결론 한 줄','비교만 하면 손님이 더 헷갈려요'],
+             ['cta','상담 버튼','고민을 끝내주는 곳'] ] }
+  ];
+  function pstFrame(){
+    try{ var k=localStorage.getItem('cm-pst-frame')||'info';
+         for(var i=0;i<PST_FRAMES.length;i++){ if(PST_FRAMES[i].k===k) return PST_FRAMES[i]; } }catch(_){}
+    return PST_FRAMES[0];
+  }
+  window.__pstFrames=PST_FRAMES; window.__pstFrame=pstFrame;
+
   /* ════ 🧰 2026-08-21 사장님 «무기고를 열자» ════
         앱엔 표현이 40종 넘는데 붙여넣기는 text·photocard 둘만 썼다.
         글의 «생김새»만 보고 어떤 표현이 맞는지 알아낸다 — AI 없이.
@@ -13439,7 +13529,11 @@ if('serviceWorker' in navigator){
         content:[[[b.tx, b.who]]]}); }
       else if(b.k==='qa'){ pushText(); blocks.push({type:'qna', name:'자주 묻는 질문', on:true, layout:'bubble',
         content:[[[b.q, b.a]]]}); }
-      else if(b.k==='cta'){ pushText(); blocks.push({type:'cta', name:'행동 버튼', on:true, layout:'inline',
+      else if(b.k==='cta'){ pushText();
+        /* 🧭 틀마다 행동이 다르다 — 후기글은 «예약», 모집글은 «신청», 정보글은 «문의» */
+        var _fr=(typeof pstFrame==='function')?pstFrame().k:'info';
+        var _ly=(_fr==='offer'||_fr==='review')?'sticky':'inline';   /* 매출 글은 스크롤 따라다니게 */
+        blocks.push({type:'cta', name:'행동 버튼', on:true, layout:_ly,
         content:[b.tx.replace(/[:：)]+$/,'').trim(), '']}); }
       else if(b.k==='num'){ pushText(); blocks.push({type:'stat', name:'숫자', on:true, layout:'band',
         content:[b.items]}); }
@@ -13481,6 +13575,8 @@ if('serviceWorker' in navigator){
       ov.innerHTML='<div class="sheet">'
         +'<div class="sheet-h"><span class="t">🤖 AI 포스팅</span><span class="x" id="pst-x">×</span></div>'
         +'<div class="desc">카톡·메모장에 쓴 글을 <b style="color:var(--coral)">그대로</b> 붙여넣으세요. 제목·소제목·목록·인용을 갈라내고 <b>사진 들어갈 자리까지</b> 잡아드려요.</div>'
+        +'<div class="pst-frames"><label class="pf-l">어떤 글인가요? <small>— 이 글에서 뭐가 주인공인지 정해요</small></label>'
+          +'<div class="pf-chips" id="pst-frames"></div></div>'
         +'<div class="field"><label>여기에 붙여넣기 <small>— 줄바꿈만 있으면 충분</small></label><textarea id="pst-src" placeholder="예) 앞머리 자르기 전에 꼭 알아야 할 것&#10;&#10;안녕하세요, 오늘은 상담하면서 제일 많이 듣는 질문을 정리했어요..."></textarea></div>'
         +'<div id="pst-pv" class="pstp" style="display:none"></div>'
         +'<details class="pst-help"><summary>📖 이렇게 쓰면 이렇게 나와요 <span style="font-weight:400;color:var(--muted);font-size:11px;">— 8가지만 알면 끝</span></summary>'
@@ -13569,12 +13665,33 @@ if('serviceWorker' in navigator){
           }
         }catch(e){}
         /* 🚪 현장 편집 중이면 «현장 시트»로 연다 — 작업실(운영자 모드)로 튕기지 않는다 (2026-08-20) */
+        /* 🧭 이 글이 «어떤 틀»인지 기록해 둔다 — 「있어야 살아요」 체크와 인스타 캡션이 이걸 본다 */
+        try{ window.__pstFrameK = pstFrame().k; }catch(_){ window.__pstFrameK='info'; }
         if(window.__liveEditActive && window.__pstToSheet){ window.__pstToSheet(bl, r.title, r.summary); }
         else { createPost('blog', bl, r.title, r.summary); }
         var sugN=(window.__pstSug&&(window.__pstSug.stat?1:0)+(window.__pstSug.qna?1:0))||0;
         try{ if(window.toast) toast('붙여넣은 글을 '+bl.length+'개 블록으로 나눴어요'+(sugN?' · 제안 '+sugN+'개는 라벨·답만 채워주세요':' · 사진만 넣으면 끝')); }catch(e){}
       };
     }
+    /* 🧭 틀 칩 그리기 — 고른 틀은 기억한다 (다음에도 같은 종류를 쓸 확률이 높다) */
+    (function(){
+      var box=document.getElementById('pst-frames'); if(!box) return;
+      var cur=pstFrame().k, h='';
+      PST_FRAMES.forEach(function(f){
+        h+='<button type="button" class="pf-c'+(f.k===cur?' on':'')+'" data-pf="'+f.k+'">'
+          +'<b>'+f.ic+' '+f.nm+'</b><small>'+f.hint+'</small></button>';
+      });
+      box.innerHTML=h;
+      box.querySelectorAll('[data-pf]').forEach(function(b){
+        b.onclick=function(){
+          try{ localStorage.setItem('cm-pst-frame', b.getAttribute('data-pf')); }catch(_){}
+          box.querySelectorAll('.pf-c').forEach(function(x){ x.classList.remove('on'); });
+          b.classList.add('on');
+          /* 틀이 바뀌면 미리보기도 다시 — 주인공이 달라지니까 */
+          try{ var _t=document.getElementById('pst-src'); if(_t && _t.value.trim()) _t.dispatchEvent(new Event('input',{bubbles:true})); }catch(_){}
+        };
+      });
+    })();
     var t0=document.getElementById('pst-src'); if(t0){ t0.value=''; }
     document.getElementById('pst-sum').innerHTML='';
     document.getElementById('pst-hint').textContent='글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요';
@@ -13670,10 +13787,18 @@ if('serviceWorker' in navigator){
           }
         } else {
           var ic=row.querySelector('.ic'), sb=row.querySelector('.sb');
-          out += '<div class="dcard" data-ded="'+i+'">'
+          /* 🔌 2026-08-21 사장님 «아직 연결 안 됐으면 흐리게 미오픈이라고» —
+                추천은 그대로 넣어 두되, 링크가 비었으면 «아직 안 열렸다»고 표시한다.
+                (모르고 그냥 두면 손님이 눌러도 아무 일이 없다) */
+          var _need = ({cta:1, lead:1, links:1, newsletter:1, service:1, products:1})[ty];
+          var _url  = String(c[1]||c[2]||'').trim();
+          var _off  = _need && !/^(https?:|tel:|mailto:|\/)/i.test(_url);
+          out += '<div class="dcard'+(_off?' dim':'')+'" data-ded="'+i+'">'
                + '<span class="di">'+(ic?ic.textContent:'🔗')+'</span>'
-               + '<span class="dm"><b>'+esc2(nameOf(row))+'</b><span>'+esc2(sb?sb.textContent:'')+'</span></span>'
-               + '<span class="dgo">고치기 →</span></div>';
+               + '<span class="dm"><b>'+esc2(nameOf(row))
+               +   (_off?'<i class="dsoon">아직 연결 안 됨</i>':'')+'</b>'
+               +   '<span>'+esc2(_off?'눌러서 링크를 넣으면 손님이 쓸 수 있어요':(sb?sb.textContent:''))+'</span></span>'
+               + '<span class="dgo">'+(_off?'연결하기 →':'고치기 →')+'</span></div>';
         }
         out += '</div>' + gapHtml(i+1);
       });
@@ -13683,6 +13808,41 @@ if('serviceWorker' in navigator){
             (글 하나에 대한 일이므로 여기가 제자리다) */
       var _p=null; try{ _p=postById(postEditId); }catch(_){}
       var _hid = !!(_p && _p.on===false);
+      /* 🧭 「이건 있어야 살아요」 — 이 글의 틀에서 꼭 필요한 게 채워졌나.
+            🚨 막지 않는다. 조용히 알려줄 뿐 — 결정은 사장님이 한다. */
+      try{
+        var _fk=(_p&&_p.frame)||null;
+        if(_fk && window.__pstFrames){
+          var _f=null; window.__pstFrames.forEach(function(x){ if(x.k===_fk) _f=x; });
+          if(_f){
+            var _blocks=(_p.blocks||[]);
+            var _has={};
+            _blocks.forEach(function(bb){
+              var ty=bb.type||'', ly=bb.layout||'', c=bb.content||[];
+              if(ty==='text' && ly==='bar' && String(c[0]||'').trim()) _has.h3=(_has.h3||0)+1;
+              if(ty==='photocard'||ty==='imagetext'||ty==='gallery'){ if(String(c[0]||'').trim()) _has.photo=(_has.photo||0)+1; }
+              if(ty==='beforeafter') _has.ba=(_has.ba||0)+1;
+              if(ty==='review') _has.rev=(_has.rev||0)+1;
+              if(ty==='stat') _has.num=(_has.num||0)+1;
+              if(ty==='cta'||ty==='lead'||ty==='service'||ty==='reservation') _has.cta=(_has.cta||0)+1;
+              if(ty==='service'||ty==='products'||/[0-9][0-9,]*\s?원/.test(JSON.stringify(c))) _has.price=(_has.price||0)+1;
+              if(ty==='text' && /결론|정리하면|추천드려요|이렇게 하세요/.test(JSON.stringify(c))) _has.concl=(_has.concl||0)+1;
+            });
+            var _need=_f.need.map(function(nd){
+              var key=nd[0], want=(key==='h3')?3:1;
+              var ok=(_has[key]||0) >= want;
+              return '<div class="dneed'+(ok?' ok':'')+'">'
+                + '<span class="i">'+(ok?'\u2713':'!')+'</span>'
+                + '<span class="m"><b>'+esc2(nd[1])+'</b><span>'+esc2(nd[2])+'</span></span></div>';
+            }).join('');
+            var _left=_f.need.filter(function(nd){ var w=(nd[0]==='h3')?3:1; return (_has[nd[0]]||0)<w; }).length;
+            out += '<div class="dneeds">'
+                 + '<div class="dneed-h">'+_f.ic+' '+esc2(_f.nm)+' — '
+                 +   (_left? '이건 있어야 살아요' : '다 채우셨어요 \uD83C\uDF89')+'</div>'
+                 + _need + '</div>';
+          }
+        }
+      }catch(_){}
       out += '<div class="dtools">'
            + '<button type="button" class="dtool'+(_hid?' off':'')+'" id="dhide">'
            +   (_hid ? '🔒 비공개 — 나만 봄' : '👁 공개 중 — 손님도 봄') + '</button>'
@@ -13885,6 +14045,7 @@ if('serviceWorker' in navigator){
     var preset=blocksOverride||(POST_PRESETS[type]?POST_PRESETS[type]():[]);
     var titles={blog:'새 글',landing:'새 랜딩',reviews:'후기 모음',style:'스타일 갤러리',notice:'공지',article:'새 글',insight:'새 정리글',checklist:'체크리스트',tip:'노하우 · 꿀팁'};
     var p={ id:newPostId(), type:type, title:(titleOverride&&String(titleOverride).trim())||titles[type]||'새 게시물', cover:'', summary:(summaryOverride?String(summaryOverride).trim():''), on:true, featured:(postsData.length===0), blocks:preset, createdAt:Date.now() };
+    try{ if(window.__pstFrameK){ p.frame=window.__pstFrameK; window.__pstFrameK=null; } }catch(_){}
     if(type==='landing') p.skin='aurora';   // 🧰 스킨 기본 = 🫧 오로라 글래스 (2026-07-10 다크 오퍼 숨김에 따라 승계. 기존 랜딩은 그대로)
     postsData.push(p);
     try{ var wk=Math.floor(Date.now()/604800000); var arr=JSON.parse(localStorage.getItem('cm-hub-postweeks')||'[]'); if(arr.indexOf(wk)<0){ arr.push(wk); localStorage.setItem('cm-hub-postweeks', JSON.stringify(arr.slice(-60))); } }catch(_){}
