@@ -1813,6 +1813,7 @@ if('serviceWorker' in navigator){
   .le-top-d .di{font-size:13px;}
   .le-top-d .le-d-lbl{font-size:11.5px; font-weight:700;}
   .le-top-d:active{transform:scale(.96);}
+  .le-top-write{background:var(--grad) !important; border-color:transparent !important; color:#fff !important;}
   /* 📏 폰에선 글자를 접어 아이콘만 — 대신 손가락 자리는 44px 이상으로 지킨다 */
   @media (max-width:430px){ .le-top-d .le-d-lbl{display:none;}
     .le-top-d{padding:0; min-width:40px; height:40px; justify-content:center;}
@@ -6049,6 +6050,9 @@ if('serviceWorker' in navigator){
       <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
       <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" style="margin-left:auto;" disabled>↶</button>
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
+      <!-- ✍️ 2026-08-20 사장님 지시 — 글쓰기는 홈 도크가 아니라 «포스팅 칸»에 붙는다.
+           손님 화면에서 「컨텐츠」 탭에 들어가면 이 버튼이 뜬다 (그 칸의 편집 버튼) -->
+      <button class="le-d le-top-d le-top-write" id="le-write" title="이 칸 편집 — 글쓰기" style="display:none;"><span class="di">✍️</span><span class="le-d-lbl">글쓰기</span></button>
       <button class="le-d le-top-d le-d-prev" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
       <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
       <button class="le-d le-top-d" id="le-opmode" title="운영자 모드 — 분석·판매·설정"><span class="di">⚙️</span><span class="le-d-lbl">운영</span></button>
@@ -6060,7 +6064,6 @@ if('serviceWorker' in navigator){
       <button class="le-d" id="le-type"   data-step="1" title="홈 유형 — 뼈대 고르기"><span class="di">🏠</span><span class="le-d-lbl">홈 유형</span></button>
       <button class="le-d" id="le-design" data-step="2" title="테마 — 색·분위기"><span class="di">🎨</span><span class="le-d-lbl">테마</span></button>
       <button class="le-d le-d-add" id="le-add-top" data-step="3" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성 추가</span></button>
-      <button class="le-d" id="le-write"  data-step="4" title="글쓰기 — 내용 채우기"><span class="di">✍️</span><span class="le-d-lbl">글쓰기</span></button>
     </div>
   </div>
 
@@ -15398,6 +15401,11 @@ if('serviceWorker' in navigator){
       if(m.type==='la-edit-ready'){ sendData(); }
       else if(m.type==='la-edit-tap'){ handleTap(m.bt); }
       else if(m.type==='la-block-menu'){ openBlockMenu(m.bt, m.nth, m.name); }   /* 🚨 칸 오른쪽 위 «⋯ 수정» (2026-08-20) */
+      else if(m.type==='la-pane'){
+        /* ✍️ 포스팅(컨텐츠) 칸에서만 «글쓰기»를 띄운다 — 홈에선 홈 도구만, 글은 글 칸에서 (2026-08-20) */
+        var wb=document.getElementById('le-write');
+        if(wb) wb.style.display=(m.pane==='archive')?'':'none';
+      }
       else if(m.type==='la-edit-del'){ handleDel(m.bt, m.nth); }
       else if(m.type==='la-del-none'){ toast('삭제할 구성을 먼저 탭해서 선택하세요'); }
       else if(m.type==='la-del-core'){
