@@ -1798,6 +1798,25 @@ if('serviceWorker' in navigator){
   /* 구성 추가 = 워크스페이스 탭(은은한 강조) — 큰 그라데이션 알약 아님 */
   .le-d.le-d-primary{flex:1; background:var(--coral-soft); color:var(--coral); border-radius:12px; padding:7px 2px; font-weight:800;}
   .le-dock .le-d{flex:1;}
+  /* 🧭 네 걸음 — 번호를 달아 «순서»가 눈에 보이게 (2026-08-20 A안) */
+  .le-flow .le-d{position:relative;}
+  .le-flow .le-d[data-step]::before{content:attr(data-step); position:absolute; top:2px; left:50%;
+    transform:translateX(-17px); width:14px; height:14px; border-radius:99px;
+    background:var(--coral); color:#16161A; font-size:9px; font-weight:900;
+    display:flex; align-items:center; justify-content:center; line-height:1;}
+  .le-flow .le-d.step-done[data-step]::before{background:var(--soft); color:var(--muted);}
+  .le-flow .le-d.step-done .di{opacity:.45;}
+  /* 👁⚙ 위로 올린 둘 — 도크 버튼과 같은 속 구조를 유지해 기존 배선을 안 깬다 */
+  .le-top-d{flex:0 0 auto !important; flex-direction:row !important; gap:5px; padding:7px 10px;
+    border-radius:11px; background:var(--soft); border:1px solid var(--hair); color:var(--muted);
+    font-family:var(--sans); cursor:pointer;}
+  .le-top-d .di{font-size:13px;}
+  .le-top-d .le-d-lbl{font-size:11.5px; font-weight:700;}
+  .le-top-d:active{transform:scale(.96);}
+  /* 📏 폰에선 글자를 접어 아이콘만 — 대신 손가락 자리는 44px 이상으로 지킨다 */
+  @media (max-width:430px){ .le-top-d .le-d-lbl{display:none;}
+    .le-top-d{padding:0; min-width:40px; height:40px; justify-content:center;}
+    .le-top-d .di{font-size:16px;} }
   /* 토스 탭바: 구성추가 = 그라데이션 필로 확실히 강조 (2026-07-08 사용자 "눈에 안 띈다") */
   .le-d.le-d-add{background:var(--grad); color:#fff; border:none; border-radius:13px; font-weight:800; padding:7px 2px; box-shadow:0 4px 16px rgba(124,63,228,.5);}
   .le-d.le-d-add .di{font-size:20px;}
@@ -6013,16 +6032,18 @@ if('serviceWorker' in navigator){
       <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
       <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" style="margin-left:auto;" disabled>↶</button>
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
+      <button class="le-d le-top-d le-d-prev" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
       <button class="le-x" id="le-x" title="지금 바로 저장·공개 (자동저장과 별개)">✓ 지금 저장</button>
+      <button class="le-d le-top-d" id="le-opmode" title="운영자 모드 — 분석·판매·설정"><span class="di">⚙️</span><span class="le-d-lbl">운영</span></button>
     </div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe></div>
-    <!-- 하단 탭바 (토스식) · 미리보기 · 분위기 · 구성추가 · 운영 -->
-    <div class="le-dock">
-      <button class="le-d le-d-prev" id="le-home" title="손님이 보는 화면 (편집 ↔ 미리보기)"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
-      <button class="le-d" id="le-design" title="분위기·테마 꾸미기"><span class="di">🎨</span><span class="le-d-lbl">분위기</span></button>
-      <button class="le-d le-d-add" id="le-add-top" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성추가</span></button>
-      <button class="le-d" id="le-write" title="글 쓰기 — 포스팅 방으로"><span class="di">📝</span><span class="le-d-lbl">글쓰기</span></button>
-      <button class="le-d" id="le-opmode" title="관리·성장 — 컨텐츠·판매·예약·분석·설정"><span class="di">⚙️</span><span class="le-d-lbl">관리</span></button>
+    <!-- 🧭 네 걸음 (2026-08-20 사장님 A안) — 뼈대 → 색 → 칸 → 내용.
+         미리보기·운영은 위로 올렸다. 도크에는 «순서대로 밟을 것»만 남긴다. -->
+    <div class="le-dock le-flow">
+      <button class="le-d" id="le-type"   data-step="1" title="홈 유형 — 뼈대 고르기"><span class="di">🏠</span><span class="le-d-lbl">홈 유형</span></button>
+      <button class="le-d" id="le-design" data-step="2" title="테마 — 색·분위기"><span class="di">🎨</span><span class="le-d-lbl">테마</span></button>
+      <button class="le-d le-d-add" id="le-add-top" data-step="3" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성 추가</span></button>
+      <button class="le-d" id="le-write"  data-step="4" title="글쓰기 — 내용 채우기"><span class="di">✍️</span><span class="le-d-lbl">글쓰기</span></button>
     </div>
   </div>
 
@@ -15646,7 +15667,9 @@ if('serviceWorker' in navigator){
     var hc=document.getElementById('le-homeconfig'); if(hc) hc.onclick=function(){ if(window.__openDesign) window.__openDesign(); };   // 🪄 홈 구성 → 디자인 3단계
     /* 📝 글쓰기 — 현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다 (2026-08-20) */
     var wb=document.getElementById('le-write'); if(wb) wb.onclick=function(){ closeLive(); try{ if(window.__switchWs) window.__switchWs('posts'); }catch(_){} };
-    var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영 → 편집모드 닫고 운영 화면
+    var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영자 모드 → 편집모드 닫고 작업실로
+    /* 🏠 1걸음 — 홈 유형(뼈대). 스킨을 없애고 이 4종이 그 역할을 흡수한다 (2026-08-20) */
+    var ty=document.getElementById('le-type'); if(ty) ty.onclick=function(){ try{ if(window.__openTypePick) window.__openTypePick(); }catch(_){} };
     /* 💡 구성 추가를 열 때마다 «다음 하나»를 다시 짚는다 (2026-08-20) */
     try{ window.__paintAddReco=paintAddReco; }catch(_){}
     var ml=document.getElementById('le-mode-label');
