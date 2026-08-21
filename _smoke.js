@@ -399,7 +399,10 @@
       add('잠금 이름 정확', et.indexOf("SET_NAME[setKey]") >= 0 && et.indexOf("tbeauty:'🌸 뷰티형'") >= 0, '잠길 때 남의 템플릿 이름이 뜨던 것 방지');
       add('그래프 기본=막대', et.indexOf("chart:'bars'") >= 0 && et.indexOf("[['bars','막대'") >= 0, '2026-08-20 사장님 확정');
       add('타임라인 flow 기본', et.indexOf("steps:'flow'") >= 0 && et.indexOf("[['flow','세로 타임라인'") >= 0, '세로 선+점 (1번 픽)');
-      add('꾸미기 2단계', et.indexOf('색 · 테마</span>') >= 0 && et.indexOf('더 다듬기</span>') >= 0 && et.indexOf('for(var i=1;i<=2;i++)') >= 0, '4단계 구조 회귀 금지');
+      /* 🚨 2026-08-21 — 이 항목이 «더 다듬기»라는 «이름»을 박아 둬서, 사장님이 이름을
+        «커버 사진»으로 바꾸자 빨간 줄이 났다. 항목의 뜻은 «4단계로 되돌아가지 않았나»이다.
+        이름이 아니라 «단계가 둘인가»를 본다 (id 는 이름이 바뀌어도 그대로다). */
+      add('꾸미기 2단계', et.indexOf('id="dz-st1"') >= 0 && et.indexOf('id="dz-st2"') >= 0 && et.indexOf('for(var i=1;i<=2;i++)') >= 0, '4단계 구조 회귀 금지');
       add('내보내기 엔진', ['function expCaption','function expCards','function openPostExport','window.__openPostExport'].every(function(k){ return et.indexOf(k) >= 0; }), '인스타 캡션 · 카드뉴스 대본 (AI 0원)');
       add('내보내기 버튼 수명', et.indexOf("id='exp-fab'") >= 0 && et.indexOf("if(eb) eb.style.display='none'") >= 0, '포스팅 나가면 숨김 (떠 있는 채로 남던 사고 방지)');
       add('광고 스위치', et.indexOf('dz-adov') >= 0 && et.indexOf('home.adOverlay') >= 0, '홈 위에 띄우기 온오프');
@@ -608,6 +611,14 @@
             작업실로 가는 «유일한 문»이라 못 누르면 갇힌다. */
       add('u ⚙ 손에 잡히나', ut.indexOf('width:44px; height:44px; margin:-12px; border-radius:50%;') >= 0, '19x19 였다 — 작업실 가는 유일한 문');
       add('u ⚙ 안에 운영자 모드', ut.indexOf("data-g=\"admin\"") >= 0 && ut.indexOf("location.href='edit.html?desk=1'") >= 0, '이 메뉴가 사라지면 작업실에 못 간다');
+
+      /* 🚨 2026-08-21 사장님 «테마가 잘 안 나와» — 진짜였다.
+            테마 칸은 «1페이지»에 있는데 그리는 함수는 «2페이지»일 때만 불렸다.
+            (페이지 4장 → 2장으로 줄일 때 조건이 안 따라온 것. 에러 0건 — 그냥 빈 칸) */
+      add('테마 칩이 1페이지에서 그려짐', et.indexOf('if(n===1){ renderDzThemes(); }') >= 0, '2페이지일 때만 그리면 영영 빈 칸이다');
+      add('테마 칸 실물', et.indexOf('id="dz-theme-grid"') >= 0 && et.indexOf('function renderDzThemes()') >= 0, '칸과 그리는 함수 둘 다');
+      add('기본 테마는 크림', et.indexOf("theme:'cream'") >= 0 && et.indexOf("if(THEMES[_c][0]==='cream')") >= 0, '첫 로그인은 크림 · 값이 깨져도 크림으로 떨어진다');
+      add('꾸미기 2단계 = 커버 사진', et.indexOf('<span class="n">2</span>커버 사진</span>') >= 0, '«더 다듬기»는 뭘 하는 칸인지 알 수 없었다');
 
       /* 📇 2026-08-21 DM 카드 공사 — 카톡·인스타의 «미리 읽는 로봇»은 화면 그리는 코드를
             실행하지 않는다. 그래서 글마다 제목·표지를 미리 적어 둔 껍데기를 만들어 둔다.
