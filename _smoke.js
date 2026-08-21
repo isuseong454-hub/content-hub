@@ -217,6 +217,8 @@
         '🚨 가입만 해도 예시가 손님에게 공개되던 것 — 공개는 「적용」 누를 때만');
       add('e 예시 남음 경고', et.indexOf('window.__sampleLeft') >= 0 && et.indexOf('아직 예시 그대로인 곳이') >= 0,
         '배포해도 예시가 남아 있으면 알려준다(막지는 않음)');
+      add('e 템플릿 강제 지정 없음', et.indexOf("h0.template='editorial'") < 0,
+        '«유형»과 «템플릿»이 각각 모양을 정하면 부딪힌다 — 모양은 홈 유형 하나가 책임진다 (2026-08-20 사장님 「가」 픽)');
       add('e 크리에이터 기본형', et.indexOf("applyStyle('tcreator')") >= 0,
         '신규 기본형 = 크리에이터 (이전은 에디토리얼 — 안내문·가짜 이벤트가 딸려왔다)');
       add('e 광고 = 메인 메뉴', et.indexOf("nm:'광고'") >= 0 && et.indexOf('window.__openAdRoom') >= 0,
