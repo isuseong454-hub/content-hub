@@ -152,6 +152,12 @@
         '2026-08-20 「고객·분석」 개방 — 판매·예약만 잠금. 열 때 WS_SOON만 비우면 된다');
       add('e 📊 고객·분석 개방', et.indexOf('<button class="ws-tab" data-ws="data">') >= 0 && et.indexOf("WS_SOON = { sales:1, data:1 }") < 0,
         '추적은 쌓이는데 볼 화면이 막혀 있던 것 — 다시 잠기면 여기서 걸린다 (2026-08-20)');
+      add('e 🗺 홈 지도 탭', et.indexOf('data-antab="hm"') >= 0 && et.indexOf('function anHomeMap') >= 0,
+        '어느 칸이 일하고 어느 칸이 죽었나 — C안 (2026-08-20 사장님 픽)');
+      add('e 홈 지도 온도색 톤독립', et.indexOf("HC={high:'#7DE0A6', mid:'#E6B84A', low:'#E0564B'}") >= 0,
+        'var(--coral)로 되돌리면 초록 톤 계정에서 «잘 눌림»과 «보통»이 같은 색이 된다 (실측 #7DBF8E)');
+      add('e 분석 탭바 한 줄', et.indexOf('.an-tabs{display:flex; gap:5px;') >= 0 && et.indexOf('overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;}') >= 0,
+        '탭 7개가 되며 글자가 두 줄로 눌리던 것 — 가로 스크롤로 한 줄 유지 (75px→45px)');
       add('e 🚧 잠금 표시', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') >= 0 && et.indexOf('.ws-tab.ws-soon{ opacity:.34; }') >= 0,
         '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
       add('e 열린 방 4개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0 && et.indexOf('data-ws="data"') >= 0,
