@@ -1054,6 +1054,49 @@ if('serviceWorker' in navigator){
   #add-ov.open .sheet{ animation:addSlide .28s cubic-bezier(.2,.8,.3,1); }
   @keyframes addSlide{ from{ transform:translateX(44px); opacity:.4; } to{ transform:none; opacity:1; } }
   @media(prefers-reduced-motion:reduce){ #add-ov.open .sheet{ animation:none; } }
+
+  /* 📝 2026-08-21 사장님 «이쪽은 글에 맞는 것만 남기고» — 글 쓰기 시트에서 연 카탈로그.
+        홈 템플릿·홈 진단·홈 추천·발행글 불러오기는 «홈»의 물건이라 글 안에선 감춘다.
+        「더 구성 추가」 토글도 없앤다 — 글에선 목록이 짧아서 바로 보여주는 게 빠르다. */
+  #add-ov[data-ctx="post"] #add-tpl,
+  #add-ov[data-ctx="post"] #add-diag,
+  #add-ov[data-ctx="post"] #add-reco,
+  #add-ov[data-ctx="post"] #add-import-row,
+  #add-ov[data-ctx="post"] #add-myslot{ display:none !important; }
+
+  /* 🏠 2026-08-21 사장님 «홈 템플릿 4가지는 이제 안 쓴다» — ㉮ 숨기기만.
+        기능은 살아 있다: u.html 이 home.template 을 읽어 홈을 다르게 그린다.
+        그래서 «지우지» 않고 스위처(4개 버튼·안내문·간판)만 눈에서 치운다.
+        ⚠️ #add-tpl-fields(대문 문구·안심 한 줄·마감일)는 남긴다 —
+           옛 템플릿을 쓰던 사람이 그 문구를 못 고치게 되면 그게 더 큰 사고다.
+           (free = 지금 기본값이면 이 칸도 원래 안 보이므로 화면엔 아무것도 안 남는다) */
+  #add-tpl > .htp-l,
+  #add-tpl-seg,
+  #add-tpl-hint{ display:none !important; }
+  /* 프로필·깔때기 배지는 «홈»의 언어다 — 글 안에선 뜻이 없다 */
+  #add-ov[data-ctx="post"] .tpl[data-special]{ display:none !important; }
+  #add-ov[data-ctx="post"] .addtrio{ display:none !important; }
+
+  /* 🎨 라이트 톤 — 현장(라이트)에서 열리는 패널이 혼자 까맣던 것.
+        타일·섹션이 전부 토큰을 쓰므로 토큰을 갈아 끼우면 안쪽까지 따라온다. */
+  html[data-litetone] #add-ov .sheet{
+    --surface:#FFFFFF; --soft:#F3EFE9; --paper:#F6F2EC;
+    --ink:#2A2530; --muted:#77707F; --hair:rgba(42,37,48,.11);
+    --coral:#6B41D8; --coral-soft:rgba(107,65,216,.11);
+    --shadow:0 3px 10px rgba(60,48,80,.07);
+    background:linear-gradient(165deg, #FFFFFF, #FAF7F2 62%);
+    border-left:1px solid rgba(42,37,48,.10);
+    box-shadow:-22px 0 60px rgba(60,48,80,.16);
+    color:#2A2530;
+  }
+  html[data-litetone] #add-ov .sheet-h .t,
+  html[data-litetone] #add-ov .addsec{ color:#2A2530; }
+  html[data-litetone] #add-ov .sheet-h .x{ color:rgba(42,37,48,.55); }
+  html[data-litetone] #add-ov .desc,
+  html[data-litetone] #add-ov .tcat{ color:#6B6376; }
+  html[data-litetone] #add-ov .add-search input{ background:#FFFFFF; color:#2A2530; border-color:rgba(42,37,48,.14); }
+  html[data-litetone] #add-ov .add-search input::placeholder{ color:rgba(42,37,48,.42); }
+  html[data-litetone] #add-ov .ti-prev{ background:#F3EFE9; border-color:rgba(42,37,48,.10); }
   /* 🎬 타일 라이브 미리보기 (2026-07-11) — .tpl 아래에 스트립, 클릭 로직 무관 */
   #add-ov .tpl{ flex-wrap:wrap; }
   #add-ov .ti-prev{ flex:0 0 100%; width:100%; margin-top:9px; height:44px; border-radius:9px; background:#0d0b12; border:1px solid rgba(167,139,255,.14); overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; pointer-events:none; }
@@ -1752,6 +1795,10 @@ if('serviceWorker' in navigator){
   .ls-bar .ls-t{flex:1; font-size:14.5px; font-weight:700; text-align:center;}
   .ls-bar .ls-done{background:var(--grad); color:#fff; border:none; border-radius:10px; padding:8px 15px; font-size:12.5px; font-weight:700; font-family:var(--sans); cursor:pointer;}
   .ls-bar .ls-back:active,.ls-bar .ls-done:active{transform:scale(.96);}
+  /* 👆 2026-08-21 실측 — 이 두 버튼이 31px 였다(손가락 최소 40px).
+        「완료」는 글 쓸 때마다 누르는 자리라 제일 커야 한다. */
+  .ls-bar .ls-back, .ls-bar .ls-done{ min-height:40px; }
+  .fw-sm{ min-height:40px; }
   .ls-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;}
   #ls-host{max-width:520px; width:100%; margin:0 auto; padding:16px 16px 48px;}
   /* 호스트 안: 게시물 편집 = 홈 템플릿/프로필행/목록버튼 숨기고 게시물 폼만 */
@@ -1866,6 +1913,43 @@ if('serviceWorker' in navigator){
   .lg-l .m .v{color:var(--ink); font-weight:600;}
   .lg-l .go{flex:0 0 auto; font-size:11px; font-weight:800; color:var(--coral);}
   .lg-note{font-size:11px; color:var(--muted); line-height:1.6; text-align:center; padding:10px 4px 2px;}
+
+  /* 🎨 2026-08-21 사장님 «라이트 톤이 깨지지 않게» — 글 쓰기 시트까지 확장.
+        이 시트는 껍데기가 사라져 있어서(같은 날 복구) 라이트 톤이 한 번도 안 닿았다.
+        칸·버튼이 전부 토큰(--soft·--ink·--hair)을 쓰므로 토큰만 갈아 끼우면 안쪽까지 따라온다. */
+  html[data-litetone] #live-sheet-ov{
+    --paper:#F6F2EC; --surface:#FFFFFF; --soft:#F3EFE9;
+    --ink:#2A2530; --muted:#77707F; --hair:rgba(42,37,48,.11);
+    --shadow:0 6px 20px rgba(60,48,80,.10);
+    --btn-tsh:0 1px 2px rgba(0,0,0,.20);
+    background:#FBF9F6; color:#2A2530;
+  }
+  html[data-litetone] #live-sheet-ov .ls-bar{ background:#FFFFFF; border-bottom-color:rgba(42,37,48,.10); }
+  html[data-litetone] #live-sheet-ov .ls-bar .ls-t{ color:#2A2530; }
+  html[data-litetone] #live-sheet-ov .ls-bar .ls-back{ background:#F3EFE9; color:#3A3442; border-color:rgba(42,37,48,.13); }
+  html[data-litetone] #live-sheet-ov input,
+  html[data-litetone] #live-sheet-ov textarea,
+  html[data-litetone] #live-sheet-ov select{ background:#FFFFFF; color:#2A2530; border-color:rgba(42,37,48,.14); }
+  html[data-litetone] #live-sheet-ov input::placeholder,
+  html[data-litetone] #live-sheet-ov textarea::placeholder{ color:rgba(42,37,48,.42); }
+  /* 블록 줄·구슬 — 어두운 판 기준으로 짜인 것들만 콕 집어 되돌린다 */
+  html[data-litetone] #live-sheet-ov .row,
+  html[data-litetone] #live-sheet-ov .blk-row{ background:#FFFFFF; border-color:rgba(42,37,48,.10); color:#2A2530; }
+  html[data-litetone] #live-sheet-ov .pbead{ background:#EDE7F5; color:#5B4A78; }
+  html[data-litetone] #live-sheet-ov .pbead.now{ background:linear-gradient(120deg,#4571E8,#7C3FE4); color:#fff; }
+  html[data-litetone] #live-sheet-ov .pbead.done{ background:#DCEFE3; color:#2E6B47; }
+  /* 🔍 대비 실측에서 걸린 것들 — 어두운 판에서 예쁘던 파스텔이 흰 판에선 안 읽힌다.
+        (측정값: 연두 1.5:1 · 연보라 2.2:1 · 손잡이 1.9:1 → 전부 3:1 아래) */
+  html[data-litetone] #live-sheet-ov .pb.done i,
+  html[data-litetone] #live-sheet-ov .les-i.done .les-no,
+  html[data-litetone] #live-sheet-ov .lg-l.ok .n,
+  html[data-litetone] #live-sheet-ov .ck{ background:#DCEFE3 !important; color:#20744A !important; }
+  html[data-litetone] #live-sheet-ov .fw-sm{ color:#5B32C4 !important; border-color:rgba(91,50,196,.35) !important;
+    background:rgba(91,50,196,.09) !important; }
+  html[data-litetone] #live-sheet-ov .imp-add,
+  html[data-litetone] #live-sheet-ov .imp-sub{ color:#7A2FB8 !important; }
+  html[data-litetone] #live-sheet-ov #import-content-btn span{ color:#7A2FB8 !important; }
+  html[data-litetone] #live-sheet-ov .grip{ color:rgba(42,37,48,.58) !important; }
   /* (옛 세 걸음 패널 CSS — 더 이상 안 쓰지만 남겨두면 헷갈려 지움) */
   .le-steps{flex:0 0 auto; background:var(--surface); border-top:1px solid var(--hair); padding:11px 12px 9px;}
   .les-h{display:flex; align-items:center; gap:8px; margin-bottom:9px;}
@@ -6295,6 +6379,19 @@ if('serviceWorker' in navigator){
       <button class="le-d le-d-add" id="le-add-top" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성 추가</span></button>
       <button class="le-d le-d-write" id="le-write" title="새 포스팅 쓰기"><span class="di">📝</span><span class="le-d-lbl">새 포스팅</span></button>
     </div>
+  </div>
+
+  <!-- 라이브 위 편집 시트: 게시물 빌더 · 제품 · Q&A 를 손님 화면 위로 올려 편집
+       🚨 2026-08-21 — 이 껍데기가 통째로 사라져 있었다. 안쪽 .ls-body 만 #live-edit-ov 안에
+          고아로 남아, 시트를 여는 함수가 «전부» 정의조차 안 됐다(if(!lsOv) return 에서 되돌아감).
+          증상: AI 포스팅 «이대로 만들기»를 눌러도 글이 안 만들어지고 홈으로 돌아옴.
+          ⚠️ 이 블록은 #live-edit-ov «밖»에 있어야 한다 — 안에 넣으면 같은 사고가 난다. -->
+  <div id="live-sheet-ov">
+    <div class="ls-bar">
+      <button class="ls-back" id="ls-back">← 보면서 수정</button>
+      <span class="ls-t" id="ls-title">편집</span>
+      <button class="ls-done" id="ls-done">✓ 완료</button>
+    </div>
     <div class="ls-body"><div id="ls-host"></div></div>
   </div>
 
@@ -6401,27 +6498,53 @@ if('serviceWorker' in navigator){
   }
   // ── 🔎 검색 필터 ──
   function tileHay(t){ return ((t.getAttribute('data-nm')||'')+' '+((t.querySelector('.tn')||{}).textContent||'')+' '+((t.querySelector('.ts')||{}).textContent||'')).toLowerCase(); }
+  /* 📝 2026-08-21 사장님 «글에 맞는 것만» — 글 쓰기 시트에서 카탈로그를 열면
+        «홈에서만 말이 되는» 구성(프로필 카드·매장·메뉴·뉴스레터 등)을 감춘다.
+        판별은 DOM 하나로 한다 — 시트가 열려 있고 그 안에 게시물 머리띠가 있으면 글이다.
+        (상태 변수를 새로 만들면 두 곳이 어긋나 «가끔 홈 목록이 뜨는» 사고가 난다) */
+  var POST_OK_BLOG=['자유 텍스트','인용구','사진','이미지 + 글','이미지 밴드','영상','컨텐츠 갤러리',
+    '전후사진','후기','성공사례 벽','숫자 스탯','성장 그래프','과정 · 진행 단계','고민 → 해결',
+    'Q&A','링크 버튼','추천 제품','CTA 버튼'];
+  var POST_OK_LANDING=POST_OK_BLOG.concat(['글로우 후킹','3초 커버','전문가 증명','로고 벽','커리큘럼',
+    '얼리버드 신청','가격표','가격','예약','문의·신청','이벤트 배너','보장 배지','카운트다운','구매 버튼']);
+  function inPostSheet(){
+    try{ var sh=document.getElementById('live-sheet-ov');
+      if(!sh || !sh.classList.contains('open')) return false;
+      return !!document.querySelector('#ls-host #post-edit-banner');
+    }catch(_){ return false; }
+  }
+  function postOkSet(){
+    var landing=false;
+    try{ var _p=(typeof postEditId!=='undefined' && postEditId)?postById(postEditId):null;
+         landing=!!(_p && _p.type==='landing'); }catch(_){}
+    var m={}; (landing?POST_OK_LANDING:POST_OK_BLOG).forEach(function(n){ m[n]=1; });
+    return m;
+  }
+  window.__inPostSheet=inPostSheet;
   function filterAddCatalog(q){
     q=(q||'').trim().toLowerCase(); var searching=!!q, any=false, el;
+    var _post=inPostSheet(), _pok=_post?postOkSet():null;
+    function _ctxOk(t){ return !_post || _pok[t.dataset.nm]===1; }
     if(el=document.getElementById('add-diag')) el.style.display=searching?'none':'';
     if(el=document.getElementById('add-import-row')) el.style.display=searching?'none':'';
     [].forEach.call(document.querySelectorAll('#add-all .addsec'), function(h){
       var grid=h.nextElementSibling; if(!grid) return;
       if(!grid.querySelector('.tpl[data-nm]')) return;   // data-nm 타일 없는 섹션(통째로 시작=data-set)은 아래 특수처리에 맡김
       var vis=0;
-      [].forEach.call(grid.querySelectorAll('.tpl[data-nm]'), function(t){ var ok=!q||tileHay(t).indexOf(q)!==-1; t.style.display=ok?'':'none'; if(ok){vis++; any=true;} });
+      [].forEach.call(grid.querySelectorAll('.tpl[data-nm]'), function(t){ var ok=(!q||tileHay(t).indexOf(q)!==-1) && _ctxOk(t); t.style.display=ok?'':'none'; if(ok){vis++; any=true;} });
       h.style.display=vis?'':'none';
       // 검색 중=매칭되면 펼침 / 평소=접힘 상태(collapsed) 존중
       grid.style.display = !vis ? 'none' : (q ? '' : (h.classList.contains('collapsed') ? 'none' : ''));
     });
     var adv=document.getElementById('add-adv');
     if(adv){ var avis=0;
-      [].forEach.call(adv.querySelectorAll('.tpl[data-nm]'), function(t){ var ok=!q||tileHay(t).indexOf(q)!==-1; t.style.display=ok?'':'none'; if(ok){avis++; any=true;} });
+      [].forEach.call(adv.querySelectorAll('.tpl[data-nm]'), function(t){ var ok=(!q||tileHay(t).indexOf(q)!==-1) && _ctxOk(t); t.style.display=ok?'':'none'; if(ok){avis++; any=true;} });
       if(searching){ adv.style.display=avis?'':'none'; if(avis) adv.classList.add('open'); } else { adv.style.display=''; }
     }
     var sg=document.querySelector('#add-all .tpl-set'), setGrid=sg?sg.closest('.tgrid'):null, setHdr=setGrid?setGrid.previousElementSibling:null;
-    if(setGrid) setGrid.style.display = searching ? 'none' : ((setHdr && setHdr.classList.contains('collapsed')) ? 'none' : '');   // 통째로 시작: 검색중 숨김 / 평소=접힘 존중
-    if(setHdr && setHdr.classList.contains('tcat')) setHdr.style.display=searching?'none':'';
+    /* 🚨 블록 세트 = «홈»을 통째로 갈아 끼우는 것 — 글 안에 나오면 글이 홈으로 덮인다 */
+    if(setGrid) setGrid.style.display = (searching||_post) ? 'none' : ((setHdr && setHdr.classList.contains('collapsed')) ? 'none' : '');   // 통째로 시작: 검색중 숨김 / 평소=접힘 존중
+    if(setHdr && setHdr.classList.contains('tcat')) setHdr.style.display=(searching||_post)?'none':'';
     var nr=document.getElementById('add-noresult'); if(nr) nr.style.display=(searching && !any)?'block':'none';
   }
   // 🎬 구성 추가 타일 라이브 미리보기 (2026-07-11) — 클릭 로직 안 건드림, .ti-prev 자식만 주입(멱등)
@@ -6476,6 +6599,32 @@ if('serviceWorker' in navigator){
     try{ if(window.__decorateProTiles) window.__decorateProTiles(); }catch(e){}
     try{ if(window.__decorateShowroomTiles) window.__decorateShowroomTiles(); }catch(e){}
     try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){}   // 구성 추가는 항상 편집 위에서 — 모드 게이트가 뒤에 남지 않게
+    /* 📝 글이냐 홈이냐 — 여는 순간 한 번만 정한다. 문구·목록·펼침이 여기서 갈린다. */
+    try{
+      var _isPost=inPostSheet();
+      ov.setAttribute('data-ctx', _isPost?'post':'home');
+      var _t=ov.querySelector('.sheet-h .t'), _d=ov.querySelector('.desc');
+      if(_t) _t.textContent=_isPost?'글에 넣기':'구성 추가';
+      if(_d) _d.textContent=_isPost?'글 본문에 넣을 구성이에요 · 고르면 글 끝에 붙어요'
+                                   :'필요한 구성을 골라 홈에 넣어요 · 뼈대는 위 🏠홈 유형에서';
+      /* 글에선 목록이 짧다 — 「더 구성 추가」 한 단계를 건너뛰고 바로 펼친다 */
+      if(_isPost){ ov.classList.add('slot-open');
+        /* 글에선 섹션도 펼쳐 둔다 — 남는 게 20종 안쪽이라 접으면 오히려 못 찾는다 */
+        try{ [].forEach.call(document.querySelectorAll('#add-all .addsec'), function(h){ setSecCollapsed(h, false); }); }catch(_){}
+      }
+      /* 섹션 이름도 글의 언어로 — 「첫인상·유입」은 홈 깔때기 용어라 글에선 안 통한다.
+         원래 이름은 한 번 기억해 두고 홈으로 돌아오면 그대로 되돌린다. */
+      try{
+        var _PS=['글감','사진·영상','증거 보여주기','다른 글 붙이기','글 끝 행동'];
+        [].forEach.call(document.querySelectorAll('#add-all .addsec'), function(h, _i){
+          var _n=h.querySelector('.addnum'); if(!_n) return;
+          var _tx=_n.nextSibling; if(!_tx || _tx.nodeType!==3) return;
+          if(h.getAttribute('data-homelbl')==null) h.setAttribute('data-homelbl', _tx.nodeValue);
+          _tx.nodeValue = _isPost ? (_PS[_i] || h.getAttribute('data-homelbl')) : h.getAttribute('data-homelbl');
+        });
+      }catch(_){}
+      try{ filterAddCatalog(''); }catch(_){}   /* 맥락이 정해진 «뒤» 다시 걸러야 홈 구성이 안 샌다 */
+    }catch(_){}
     ov.classList.add('open');
     try{ paintAddPreviews(); }catch(e){}   // 🎬 타일 라이브 미리보기 주입(멱등)
     var sh=ov.querySelector('.sheet'); if(sh) sh.scrollTop=0;
@@ -7051,7 +7200,10 @@ if('serviceWorker' in navigator){
     var c = row._content; if(!c || !c.length) return;
     var preview = '';
     for(var i=0;i<c.length;i++){
-      if(typeof c[i]==='string' && c[i] && !/^data:|^https?:/.test(c[i])){ preview=c[i]; break; }
+      /* 🚨 2026-08-21 — 사진 블록 줄에 «pc-shadow|» 라는 «설정값»이 요약으로 새어 나왔다.
+            사진·캡션이 비면 세 번째 칸(꾸미기 설정)이 첫 «글자»로 뽑혔던 것.
+            설정값은 «영문-영문|색» 꼴에 공백이 없다 — 사람 글이 아니므로 건너뛴다. */
+      if(typeof c[i]==='string' && c[i] && !/^data:|^https?:/.test(c[i]) && !/^[a-z]+-[a-z0-9]+\|/.test(c[i])){ preview=c[i]; break; }
       if(Array.isArray(c[i]) && c[i].length){ preview=c[i].length+'개 항목'; break; }
     }
     if(preview){ sb.textContent = preview.length>22 ? preview.slice(0,22)+'…' : preview; sb.style.color='var(--coral)'; }
