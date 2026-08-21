@@ -580,12 +580,33 @@
   .topbar .dots{color:var(--on-soft); font-size:20px; line-height:1;}
   .settings-link{color:var(--on-soft); opacity:.5; text-decoration:none; display:flex; transition:opacity .15s;}
   /* ✏️ 내 홈일 때만 뜨는 «고치기» (2026-08-20) — 손님에겐 절대 안 보인다(로그인 열쇠 + 핸들 일치일 때만 만든다) */
-  .mine-edit{display:inline-flex; align-items:center; gap:5px; text-decoration:none; font-family:var(--sans);
-    font-size:11.5px; font-weight:800; letter-spacing:-.2px; border-radius:999px; padding:6px 11px;
-    background:color-mix(in srgb, var(--coral) 17%, transparent); color:var(--coral);
-    border:1px solid color-mix(in srgb, var(--coral) 34%, transparent);
+  /* 🚨 2026-08-20 사장님 지적 — «고치기»가 이벤트 배너에 깔려 겹쳤다.
+        원인: 스킨일 때 .topbar 가 position:absolute 라 본문 맨 위 배너와 같은 자리를 썼다.
+        해법 두 겹 — ① 버튼을 화면 고정(스크롤해도 늘 위에) ② 본문 위에 버튼 높이만큼 자리를 비운다. */
+  .mine-edit{position:fixed; top:calc(10px + env(safe-area-inset-top,0px)); right:12px; z-index:95;
+    display:inline-flex; align-items:center; gap:5px; text-decoration:none; font-family:var(--sans);
+    font-size:11.5px; font-weight:800; letter-spacing:-.2px; border-radius:999px; padding:8px 13px;
+    background:var(--bg,#111); color:var(--coral);
+    border:1px solid color-mix(in srgb, var(--coral) 42%, transparent);
+    box-shadow:0 4px 16px rgba(0,0,0,.4);
     transition:transform 120ms cubic-bezier(.2,0,0,1);}
   .mine-edit:active{transform:scale(.96);}
+  /* 실측: 버튼 바닥이 46px — 46 으로 맞추면 «간격 0»이라 붙어 보인다. 12px 숨 쉴 자리를 준다.
+     («포스팅 편집»처럼 글자가 길어져도 버튼은 한 줄이라 높이는 그대로) */
+  html.has-mine-edit .wrap{padding-top:58px;}   /* 배너·프로필이 버튼 밑으로 깔리지 않게 */
+  /* 🎬 편집 모드가 «돌아가는 중»이라는 느낌 — 위아래로 은은한 테두리 + 상단 띠 */
+  html[data-edit] body::after{content:''; position:fixed; inset:0; z-index:90; pointer-events:none;
+    box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--coral) 34%, transparent),
+               inset 0 34px 42px -30px color-mix(in srgb, var(--coral) 42%, transparent);}
+  .edit-flag{position:fixed; top:calc(12px + env(safe-area-inset-top,0px)); left:12px; z-index:96;
+    display:none; align-items:center; gap:6px; font-family:var(--sans); font-size:10.5px; font-weight:800;
+    letter-spacing:.03em; color:var(--coral); background:var(--bg,#111); padding:6px 11px; border-radius:999px;
+    border:1px solid color-mix(in srgb, var(--coral) 30%, transparent); opacity:.85;}
+  html[data-edit] .edit-flag{display:inline-flex;}
+  .edit-flag i{width:6px; height:6px; border-radius:99px; background:var(--coral); display:block;
+    animation:efPulse 1.9s ease-in-out 3;}
+  @keyframes efPulse{0%,100%{opacity:.35;} 50%{opacity:1;}}
+  @media (prefers-reduced-motion:reduce){ .edit-flag i{animation:none;} }
   /* 🔑 ⚙ 메뉴 (2026-08-20) — 로그인해 있을 때만: 운영자 모드 / 로그아웃 */
   .gear-menu{position:absolute; right:0; top:calc(100% + 8px); z-index:60; min-width:172px;
     background:var(--surface); border:1px solid var(--hair); border-radius:14px; overflow:hidden;
@@ -2914,9 +2935,9 @@
       <svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
       <span>프로필</span>
     </button>
-    <button class="navitem" data-tab="archive" aria-label="컨텐츠">
+    <button class="navitem" data-tab="archive" aria-label="포스팅">
       <svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
-      <span>컨텐츠</span>
+      <span>포스팅</span>
     </button>
     <button class="navitem" data-tab="shop" aria-label="스토어">
       <svg viewBox="0 0 24 24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
@@ -3632,9 +3653,27 @@
       if(a.expiresAt!=null){ var ex=new Date(a.expiresAt); if(!isNaN(ex.getTime()) && ex<new Date()) return; }
       var b=document.createElement('a');
       b.className='mine-edit'; b.href='edit.html?live=1';
-      b.setAttribute('aria-label','내 홈 고치기');
-      b.textContent='✏️ 고치기';
+      b.setAttribute('aria-label','이 칸 편집하기');
+      b.textContent='✏️ 편집하기';
       slot.appendChild(b);
+      document.documentElement.classList.add('has-mine-edit');
+      /* 🏷 편집 모드 표시 (편집 중일 때만 보인다) */
+      if(!document.querySelector('.edit-flag')){
+        var f=document.createElement('span'); f.className='edit-flag';
+        f.innerHTML='<i></i>편집 모드'; document.body.appendChild(f);
+      }
+      /* 🚪 2026-08-20 사장님 지시 — «홈은 홈편집만, 프로필은 프로필 편집만, 포스팅은 포스팅만».
+            지금 보고 있는 칸 이름을 버튼에 달고, 그 칸으로 편집을 연다. */
+      var LBL={home:'홈 편집', about:'프로필 편집', archive:'포스팅 편집', shop:'스토어 편집', qna:'Q&A 편집'};
+      function syncEditBtn(){
+        var on=document.querySelector('.navitem.active');
+        var k=on?on.getAttribute('data-tab'):'home';
+        b.textContent='✏️ '+(LBL[k]||'편집하기');
+        b.href='edit.html?live=1&tab='+encodeURIComponent(k);
+        b.setAttribute('aria-label',(LBL[k]||'편집')+'하기');
+      }
+      syncEditBtn();
+      document.querySelectorAll('.navitem').forEach(function(t){ t.addEventListener('click', function(){ setTimeout(syncEditBtn, 30); }); });
     }catch(e){}
   })();
   /* 🔑 ⚙ 메뉴 — 로그인해 있으면 「운영자 모드 / 로그아웃」을 고르게, 아니면 지금처럼 바로 로그인 화면으로 */
