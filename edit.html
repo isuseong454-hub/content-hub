@@ -1988,6 +1988,21 @@ if('serviceWorker' in navigator){
   .an-tabs button{flex:0 0 auto; white-space:nowrap; font-size:12.5px; font-weight:700; padding:9px 11px; border-radius:9px; background:transparent; border:none; color:var(--muted); cursor:pointer; font-family:var(--sans);}
   .an-tabs button.on{background:var(--grad); color:#fff; box-shadow:0 4px 12px rgba(124,63,228,.4);}
   .an-pane{display:none;} .an-pane.on{display:block;}
+  /* ⭐ 칸 «⋯ 수정» 시트 (2026-08-20) */
+  .blkm-i{display:flex; align-items:center; gap:11px; width:100%; padding:13px 14px; border:none;
+    border-bottom:1px solid var(--hair); background:transparent; color:var(--ink); cursor:pointer;
+    font-family:var(--sans); text-align:left; transition:background .16s ease, transform .08s ease;}
+  .blkm-i:last-of-type{border-bottom:0;}
+  .blkm-i:active{transform:scale(.985);}
+  .blkm-i:hover{background:var(--soft);}
+  .blkm-i .e{flex:0 0 24px; font-size:16px; text-align:center;}
+  .blkm-i .m{flex:1; min-width:0;}
+  .blkm-i .m b{display:block; font-size:13.5px; font-weight:650;}
+  .blkm-i .m span{display:block; font-size:11.5px; color:var(--muted); margin-top:1px;}
+  .blkm-i.danger .m b{color:#E0564B;}
+  .blkm-i.off{opacity:.35; cursor:not-allowed;}
+  .blkm-i.off:hover{background:transparent;}
+  .blkm-note{font-size:11.5px; color:var(--muted); line-height:1.6; padding:11px 14px 2px;}
   /* 🪣 5칸 퍼널 (2026-08-20) */
   .f5{border:1px solid var(--hair); border-radius:13px; overflow:hidden;}
   .f5-row{position:relative; display:flex; align-items:center; gap:8px; padding:11px 12px; background:var(--soft);}
@@ -4531,7 +4546,7 @@ if('serviceWorker' in navigator){
 
       <!-- 공유 미리보기 (커버 + 테마 색이 실시간 반영) -->
       <div class="dz-phone" id="dz-phone" data-layout="full" data-bright="light" style="--dzac:#ef7a33;">
-        <div class="dz-photo" id="dz-photo"><img id="dz-img" alt="" draggable="false"><div class="dz-ph-empty" id="dz-ph-empty">사진 없음 · 위에서 선택</div></div>
+        <div class="dz-photo" id="dz-photo"><img id="dz-img" alt="" draggable="false"><div class="dz-ph-empty" id="dz-ph-empty">기본 · 동그라미 프사로 보여요</div></div>
         <div class="dz-scrim"></div>
         <div class="dz-content">
           <div class="dz-nm" id="dz-nm">내 이름</div>
@@ -4552,17 +4567,19 @@ if('serviceWorker' in navigator){
       </div>
 
       <div data-dzpage="2" style="display:none;">
-        <div class="dz-cg" style=""><span class="gl">📷 사진 · 커버 <span style="font-weight:400; color:var(--muted);">· 선택</span></span></div>
-        <div class="dz-cg"><span class="gl">사진</span><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">사진 없음</button><button type="button" data-pm="own">📷 내 사진</button><button type="button" data-pm="char">🏠 캐릭터</button></div></div>
+        <div class="dz-cg" style=""><span class="gl">👤 프로필 꾸미기 <span style="font-weight:400; color:var(--muted);">· 기본은 동그라미 프사예요</span></span></div>
+        <!-- 👤 2026-08-20 — 「사진 없음 / 내 사진 / 캐릭터」 3개를 2개로. 캐릭터 삭제(내 것 같지 않다는 지적).
+             기본 = 동그라미 프사 + 소개 (커버 사진 없음) / 내 사진 = 커버를 내 사진으로 -->
+        <div class="dz-cg"><div class="dz-seg dz-pm-seg" id="dz-photo-mode"><button type="button" data-pm="none" class="on">👤 기본 · 동그라미 프사</button><button type="button" data-pm="own">📷 내 사진</button></div></div>
         <div class="dz-cg" id="dz-bg-cg"><span class="gl">기본 배경 <span style="font-weight:400; color:var(--muted);">· 고급 · 테마마다 <b>은은한 광원</b>이 이미 깔려요 (보통 «없음»)</span></span><div class="dz-seg dz-pm-seg" id="dz-bgstyle"><button type="button" data-bg="" class="on">없음</button><button type="button" data-bg="glow">은은한 글로우</button><button type="button" data-bg="mesh">소프트 메쉬</button></div></div>
         <div class="dz-cg" id="dz-range-cg" style="display:none;"><span class="gl">커버 모양 <span style="font-weight:400; color:var(--muted);">· 어떻게 보여줄지</span></span><div class="dz-seg" data-dzgrp="layout"><button type="button" data-v="full" class="on">커버 (가로 와이드)</button><button type="button" data-v="bg">배경 (전체화면)</button></div></div>
         <div class="dz-cg" id="dz-zoom-cg" style="display:none;">
           <div class="vhint" style="text-align:center; padding:8px 2px; font-size:13px; line-height:1.7;">👆 <b>끌어서</b> 위치 맞추기 &nbsp;·&nbsp; 🔍 <b>두 손가락</b>(또는 휠)로 확대<br><span style="color:var(--muted);">색·분위기는 ② 테마에서</span></div>
         </div>
         <div class="vhint" id="dz-size-hint" style="text-align:left; margin-top:2px; line-height:1.6;">🖼 <b>가로로 넓은 사진</b>(예: 1200×800)이 커버에 좋아요 — 세로가 짧아 후킹 문구가 바로 같이 보여요 · 항상 꽉 채워져요</div>
-        <div class="dz-cg" style="margin-top:18px; padding-top:14px; border-top:1px solid var(--hair);"><span class="gl">🧥 스킨 <span style="font-weight:400; color:var(--muted);">· 고급</span></span></div>
-        <div class="dz-cg" data-dzadv="1"><span class="gl">스킨 <span style="font-weight:400; color:var(--muted);">· 고급 · 보통은 ①에서 <b>유형</b>을 고르면 자동으로 맞춰져요</span></span><div class="dz-seg dz-skin-seg" id="dz-skin"><button type="button" data-sk="" class="on">기본</button><button type="button" data-sk="banghouse">✦ 뱅하우스</button><button type="button" data-sk="transform">⚡ 트랜스폼</button></div></div>
-        <div class="vhint" style="margin-top:2px; line-height:1.65;">✦ <b>프리미엄</b> 스킨 — 떠 있는 네모 박스를 없애 손으로 짠 듯 한 편으로 흐르게 해요. 색은 ② 테마에서 골라 조합하세요.</div>
+        <!-- 🧹 2026-08-20 사장님 지시 — 「스킨」 고르는 칸 삭제. 스킨은 «홈 유형» 4종이 자동으로 입힌다
+             (뷰티→뱅하우스 / 결과형→트랜스폼). 기능(home.skin)은 그대로 살아 있어 기존 페이지는 안 바뀐다.
+             ⚠️ #dz-skin 을 다시 만들면 «고르는 칸»이 부활한다 — 자동검수가 잡는다. -->
         <div class="dz-cg" style="margin-top:18px; padding-top:14px; border-top:1px solid var(--hair);"><span class="gl">🎬 모션</span></div>
         <div class="dz-cg"><span class="gl">🎬 진입 모션 <span style="font-weight:400; color:var(--muted);">· 들어오자마자 첫 화면(커버·후킹)이 살아나요</span></span>
           <div class="en-grid" id="dz-entrance"></div>
@@ -15382,6 +15399,7 @@ if('serviceWorker' in navigator){
       var m=ev.data||{}; if(!m || !window.__liveEditActive) return;
       if(m.type==='la-edit-ready'){ sendData(); }
       else if(m.type==='la-edit-tap'){ handleTap(m.bt); }
+      else if(m.type==='la-block-menu'){ openBlockMenu(m.bt, m.nth, m.name); }   /* 🚨 칸 오른쪽 위 «⋯ 수정» (2026-08-20) */
       else if(m.type==='la-edit-del'){ handleDel(m.bt, m.nth); }
       else if(m.type==='la-del-none'){ toast('삭제할 구성을 먼저 탭해서 선택하세요'); }
       else if(m.type==='la-del-core'){
@@ -15423,6 +15441,77 @@ if('serviceWorker' in navigator){
       try{ openEdit(target); }catch(e){}
     }
     // 라이브에서 구성(블록) 삭제 — 선택된 nth 하나만 (같은 타입 전부 지우던 버그 수정)
+    /* ⭐ 칸 하나로 할 수 있는 일 5가지 (2026-08-20 사장님 픽)
+          전엔 칸마다 «✎수정 · 🗑삭제» 두 버튼이 붙어 있었다. 하나로 모으고, 안에서 고르게.
+          숙기기와 빼기를 나눈 게 핵심 — 전엔 잠깐 감추려고 해도 지우는 수밖에 없었다. */
+    function blockRowAt(bt, nth){
+      var rows=[].slice.call(document.querySelectorAll('#rows .row[data-type="'+bt+'"]'));
+      var onRows=rows.filter(function(r){ var sw=r.querySelector('[data-sw]'); return !sw || sw.classList.contains('on'); });
+      return (typeof nth==='number' && nth>=0 && nth<onRows.length) ? onRows[nth] : (onRows[0]||rows[0]||null);
+    }
+    function closeBlockMenu(){ var ov=document.getElementById('blkmenu-ov'); if(ov) ov.classList.remove('open'); }
+    function openBlockMenu(bt, nth, name){
+      var ov=document.getElementById('blkmenu-ov');
+      if(!ov){
+        ov=document.createElement('div'); ov.className='ov'; ov.id='blkmenu-ov';
+        ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t" id="blkmenu-t">이 칸</span><span class="x" id="blkmenu-x">\u00d7</span></div><div id="blkmenu-body"></div></div>';
+        document.body.appendChild(ov);
+        ov.addEventListener('click', function(e){ if(e.target===ov) closeBlockMenu(); });
+        ov.querySelector('#blkmenu-x').onclick=closeBlockMenu;
+      }
+      var row=blockRowAt(bt, nth);
+      var core=(bt==='hero'||bt==='profile');
+      var t=document.getElementById('blkmenu-t');
+      if(t) t.textContent=(name||'이 칸');
+      var items=[
+        ['edit','\u270f\ufe0f','내용 고치기','글자 \u00b7 사진 \u00b7 링크'],
+        ['swap','🔄','다른 구성으로 바꾸기','이 칸을 빼고 새로 고릅니다'],
+        ['up','\u2191','위로 올리기','손님이 더 먼저 봐요'],
+        ['down','\u2193','아래로 내리기','뒤로 미뤄요'],
+        ['hide','🙈','손님에게 숨기기','지우지 않고 잠깐 감춰둬요'],
+        ['del','🗑','이 칸 빼기','되돌리기(\u21b6)로 살릴 수 있어요']
+      ];
+      var h='';
+      items.forEach(function(it){
+        var off=(core && (it[0]==='del'||it[0]==='swap')) || (!row && it[0]!=='edit');
+        h+='<button type="button" class="blkm-i'+(it[0]==='del'?' danger':'')+(off?' off':'')+'" data-bm="'+it[0]+'"'+(off?' disabled':'')+'>'
+          +'<span class="e">'+it[1]+'</span><span class="m"><b>'+it[2]+'</b><span>'+it[3]+'</span></span></button>';
+      });
+      if(core) h+='<div class="blkm-note">프로필\u00b7후킹은 뺄 수 없어요 \u2014 대신 «숨기기»를 쓰세요</div>';
+      document.getElementById('blkmenu-body').innerHTML=h;
+      document.querySelectorAll('#blkmenu-body [data-bm]').forEach(function(btn){
+        btn.onclick=function(){
+          var k=btn.getAttribute('data-bm'); closeBlockMenu();
+          if(k==='edit'){ handleTap(bt); return; }
+          if(!row){ toast('이 구성은 목록에서 관리해요'); return; }
+          if(k==='hide'){
+            var sw=row.querySelector('[data-sw]');
+            if(sw){ sw.click(); toast('손님에게 숨겼어요 \u00b7 «구성 추가»에서 다시 켤 수 있어요'); }
+            else { toast('이 구성은 숨기기를 지원하지 않아요'); return; }
+            try{ sendData(); }catch(_){}
+            return;
+          }
+          if(k==='up'||k==='down'){
+            var sib=(k==='up')?row.previousElementSibling:row.nextElementSibling;
+            while(sib && !sib.classList.contains('row')) sib=(k==='up')?sib.previousElementSibling:sib.nextElementSibling;
+            if(!sib){ toast(k==='up'?'맨 위예요':'맨 아래예요'); return; }
+            if(k==='up') row.parentNode.insertBefore(row, sib); else row.parentNode.insertBefore(sib, row);
+            try{ refreshBuilder(); }catch(_){}
+            try{ sendData(); }catch(_){}
+            toast(k==='up'?'위로 올렸어요':'아래로 내렸어요');
+            return;
+          }
+          if(k==='del'||k==='swap'){
+            if(!confirm('"'+(name||'이 칸')+'"을(를) '+(k==='swap'?'빼고 새로 고를까요?':'뺄까요?'))) return;
+            try{ var fr=document.getElementById('le-iframe'); if(fr&&fr.contentWindow&&fr.contentWindow.__removeBlockAt) fr.contentWindow.__removeBlockAt(bt, nth); }catch(_){}
+            handleDel(bt, nth);
+            if(k==='swap'){ setTimeout(function(){ try{ if(window.__openAddCatalog) window.__openAddCatalog(); }catch(_){} }, 260); }
+          }
+        };
+      });
+      ov.classList.add('open');
+    }
+    window.__openBlockMenu=openBlockMenu;
     function handleDel(bt, nth){
       if(bt==='hero'||bt==='profile'){ toast('이 구성(프로필·후킹)은 삭제할 수 없어요'); return; }
       var rows=[].slice.call(document.querySelectorAll('#rows .row[data-type="'+bt+'"]'));
