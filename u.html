@@ -2947,6 +2947,9 @@
         else { var h={}; try{ h=JSON.parse(localStorage.getItem('cm-home-v1'))||{}; }catch(e){} prof.style.display=(h.profileOn===false)?'none':''; if(pev) pev.style.display=''; } }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       var ap = document.querySelector('.pane.active'); if(ap){ setTimeout(function(){ revealScan(ap.children); }, 40); }
+      /* 📣 2026-08-20 — 편집기에 «지금 어느 칸을 보고 있는지» 알린다.
+            포스팅(컨텐츠) 칸에 가면 오른쪽 위에 «✍️ 글쓰기»가 뜬다 (사장님: 글쓰기는 저쪽으로) */
+      try{ parent.postMessage({type:'la-pane', pane:id}, '*'); }catch(_){}
     });
   });
 
@@ -3342,6 +3345,7 @@
 
   // 파트 전환 기록
   navs.forEach(function(t){ t.addEventListener('click', function(){ track('tab', { pane: t.getAttribute('data-tab') }); }); });
+  try{ parent.postMessage({type:'la-pane', pane:'home'}, '*'); }catch(_){}   /* 첫 진입도 알린다 */
 
   // 체류시간 기록 (떠날 때)
   var t0 = Date.now();
@@ -6339,14 +6343,12 @@
   }
   window.__setupBlockDrag=setupBlockDrag;
   // 페이지 맨 아래 '＋ 구성 추가' 빈 슬롯 — 항상 보이는 슬롯(탭 → 부모 카탈로그). 재렌더마다 끝에 다시 붙임
+  /* 🚪 2026-08-20 사장님 「가」 픽 — 홈 맨 아래 큰 «＋ 구성 추가» 박스 삭제.
+        같은 카탈로그를 여는 문이 «홈 박스»와 «도크 ③번» 둘이었다. 하나로 줄인다.
+        로그인하면 손님 화면 그대로 보여야 하는데, 큰 보라 박스가 그걸 깼다.
+        ⚠️ 되살리면 입구가 다시 둘이 된다 — 자동검수가 잡는다. */
   function ensureAddSlot(){
-    if(!EDIT_MODE) return;
-    var home=document.querySelector('[data-pane="home"]'); if(!home) return;
-    var old=document.getElementById('la-addslot'); if(old) old.remove();
-    var s=document.createElement('button'); s.type='button'; s.id='la-addslot'; s.className='la-addslot';
-    s.innerHTML='<span class="las-plus">＋</span><span class="las-t">구성 추가</span><span class="las-s">탭해서 새 구성을 더해요 · 위치는 꾹 눌러 옮겨요</span>';
-    s.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); try{ parent.postMessage({type:'la-open-catalog'}, '*'); }catch(_){} });
-    home.appendChild(s);
+    var old=document.getElementById('la-addslot'); if(old) old.remove();   // 옛 슬롯이 남아 있으면 치운다
   }
   function setupEditTaps(){
     if(!EDIT_MODE) return;
