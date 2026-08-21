@@ -156,6 +156,20 @@
     add('📏 껍데기 중복 없음', !dup.length, dup.length? dup.join(', ') : '상단바·도크·오버레이 각 1개');
   })();
 
+  /* ①-2 같은 버튼이 두 번 — «편집 끝내기가 왜 또 두 개냐» (2026-08-21 사고). 화면에 보이는 글자로 센다 */
+  (function(){
+    var seen={}, dup=[];
+    [].slice.call(document.querySelectorAll('button, a[role="button"], .mine-edit')).forEach(function(el){
+      if(!_vis(el)) return;
+      var t=(el.textContent||'').replace(/\s+/g,' ').trim();
+      if(!t || t.length<3 || t.length>16) return;
+      if(!/편집|끝내기|저장|글쓰기|구성 추가|미리보기/.test(t)) return;   // 헷갈리면 큰일 나는 «행동 버튼»만
+      seen[t]=(seen[t]||0)+1;
+    });
+    Object.keys(seen).forEach(function(k){ if(seen[k]>1) dup.push(k+' ×'+seen[k]); });
+    add('📏 같은 행동 버튼 중복 없음', !dup.length, dup.length? dup.join(', ') : '행동 버튼 이름 겹침 0');
+  })();
+
   /* ② 겹침 — 화면에 «떠 있는» 것들끼리 자리를 뺏는지 (편집 버튼 ↔ 배너 사고) */
   (function(){
     var fixed=[].slice.call(document.querySelectorAll('body *')).filter(function(el){
@@ -218,6 +232,10 @@
 
   /* ⑤ 진짜 눌리나 — 버튼 한가운데를 눌렀을 때 그 버튼이 잡히는지 (⚙메뉴 pointer-events 사고) */
   (function(){
+    /* 🚨 시트·팝업이 열려 있으면 뒤 버튼이 가려지는 게 «정상»이다 — 그걸 사고로 잡으면 안 된다 */
+    if(document.querySelector('.ov.open, #tpk-ov.open, #live-sheet-ov.open')){
+      add('📏 버튼이 실제로 눌림', true, '시트가 열려 있어 건너뜀 — 닫고 다시 돌리면 검사한다', 'ok'); return;
+    }
     var blocked=[];
     ['le-quit','le-x','new-content-btn'].forEach(function(id){
       var el=document.getElementById(id); if(!el||!_vis(el)) return;
@@ -279,11 +297,12 @@
             이 칸은 커버(맨 위 배경)다. 동그라미 프사는 프로필 편집에 따로 있다. */
       add('e 🖼 커버 2개 (캐릭터 삭제)', et.indexOf('data-pm="char"') < 0 && et.indexOf('커버 없음') >= 0,
         '커버 없음 / 내 사진 두 가지만 · 캐릭터는 「내 것 같지 않다」로 삭제 (2026-08-20)');
-      add('e 🧭 세 걸음 도크', ['id="le-type"   data-step="1"','id="le-design" data-step="2"','data-step="3"'].every(function(k){ return et.indexOf(k)>=0; })
-        && (et.split('le-dock le-flow')[1]||'').slice(0,900).indexOf('data-step="4"') < 0,
-        '홈 유형 → 테마 → 구성 추가. 글쓰기는 홈 도구가 아니다 — 포스팅 칸으로 갔다 (2026-08-20 사장님 지시)');
-      add('e ✍️ 글쓰기는 포스팅 칸에서만', et.indexOf('le-top-write" id="le-write"') >= 0 && et.indexOf("wb.style.display=(m.pane==='archive')") >= 0,
-        '홈에서 보이면 «홈 도구»로 오해한다 — 컨텐츠 칸에 들어갔을 때만 뜬다');
+      /* 🔄 2026-08-21 사장님 재배치 — 위=모양(홈 유형·테마) / 아래=채우기(구성 추가·새 포스팅) */
+      add('e 🧭 위=모양 아래=채우기', et.indexOf('le-mini" id="le-type"') >= 0 && et.indexOf('le-mini" id="le-design"') >= 0
+        && et.indexOf('id="le-add-top"') >= 0 && et.indexOf('le-d-write" id="le-write"') >= 0,
+        '홈 유형·테마는 위로(작게), 구성 추가·새 포스팅은 아래 도크로 (2026-08-21)');
+      add('e ✍️ 이름은 «새 포스팅»', et.indexOf('<span class="le-d-lbl">새 포스팅</span>') >= 0,
+        '«글쓰기»가 아니라 «새 포스팅» — 사장님 지시 (2026-08-21)');
       add('e 🚪 홈 인라인 «구성 추가» 박스 삭제', uHtml.indexOf("s.className='la-addslot'") < 0,
         '같은 카탈로그를 여는 문이 둘이 된다 (홈 박스 + 도크 ③번) — 사장님 「가」 픽 (2026-08-20)');
       /* 🔄 2026-08-20 밤 — 사장님 «편집하는데 위에 이런 기능들이 왜 필요해» 로 상단바가 3개로 줄었다.
