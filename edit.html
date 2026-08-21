@@ -1973,6 +1973,20 @@ if('serviceWorker' in navigator){
     border:1px dashed var(--hair); background:transparent; color:var(--muted);
     font-family:var(--sans); font-size:12.5px; cursor:pointer; min-height:44px; }
   .dmore:hover{ border-color:var(--coral); color:var(--coral); }
+  /* 글 하나에 대한 도구 세 개 — 글 바로 밑, 삭제와는 멀찍이 */
+  .autocover-btn{ display:block; width:100%; min-height:44px; margin:-2px 0 10px; padding:11px;
+    border-radius:11px; border:1px dashed var(--hair); background:transparent; color:var(--muted);
+    font-family:var(--sans); font-size:12.5px; font-weight:600; cursor:pointer; }
+  .autocover-btn small{ font-weight:400; opacity:.75; }
+  .autocover-btn:hover{ border-color:var(--coral); color:var(--coral); }
+  .dtools{ display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+  .dtool{ flex:1 1 auto; min-height:44px; padding:10px 12px; border-radius:11px;
+    border:1px solid var(--hair); background:var(--soft); color:var(--ink);
+    font-family:var(--sans); font-size:12.5px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .dtool:hover{ border-color:var(--coral); color:var(--coral); }
+  .dtool.off{ background:rgba(224,86,75,.10); border-color:rgba(224,86,75,.32); color:#E0564B; }
+  html[data-litetone] #live-sheet-ov .dtool{ background:#F3EFE9; }
+  html[data-litetone] #live-sheet-ov .dtool.off{ background:rgba(190,60,50,.09); color:#B8362C; border-color:rgba(190,60,50,.30); }
   .ddelpost{ display:block; margin:34px auto 4px; padding:11px 16px; border-radius:10px;
     border:1px solid transparent; background:transparent; color:var(--muted);
     font-family:var(--sans); font-size:12px; cursor:pointer; min-height:44px; opacity:.75; }
@@ -2881,6 +2895,11 @@ if('serviceWorker' in navigator){
   .hs-btn b{font-size:13px; font-weight:700;} .hs-btn span{font-size:11px; color:var(--muted);}
   .hs-btn.on{border-color:var(--coral); background:var(--coral-soft);} .hs-btn.on b{color:var(--coral);}
   .hs-btn:active{transform:scale(.99);}
+  /* 🔑 2026-08-21 사장님 «자동 로그인 버튼» — 기능은 8/20부터 있었는데 «보이지 않아» 모르셨다.
+        끌 수 있게도 해야 한다: 남의 컴퓨터에서 켜 두면 그대로 열린다. */
+  .lg-auto{display:flex; align-items:center; gap:9px; margin:2px 0 12px; cursor:pointer;
+    font-size:12.5px; color:rgba(255,255,255,.72); user-select:none; min-height:44px;}
+  .lg-auto input{width:18px; height:18px; accent-color:#A78BFF; cursor:pointer; flex:0 0 auto;}
   .tf-prev{background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:7px; margin-bottom:14px;}
   .tf-row{background:var(--surface); border:1px solid var(--hair); border-radius:8px; padding:8px 10px; display:flex; align-items:center; gap:8px;}
   .tf-row.tf-hero{justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:13px; color:var(--ink);}
@@ -3043,6 +3062,7 @@ if('serviceWorker' in navigator){
       <input id="lg-pin" type="hidden">
       <div class="pin-hint">PIN · 숫자 4자리 <span style="opacity:.75">· 처음이면 코드만 넣고 [로그인] → PIN을 만들어요</span></div>
       <div class="login-err" id="lg-err"></div>
+      <label class="lg-auto"><input type="checkbox" id="lg-auto" checked><span>이 기기에서 자동 로그인</span></label>
       <button class="login-btn" id="lg-btn">로그인</button>
       <button class="login-btn" id="lg-next">다음 →</button>
       <button type="button" class="lg-switch" id="lg-backlogin">← 이미 PIN이 있어요 (로그인)</button>
@@ -4264,6 +4284,8 @@ if('serviceWorker' in navigator){
         <div class="field"><label>주제 (카테고리) <span style="color:var(--muted);font-size:10.5px;">· 아카이브에서 칩으로 분류</span></label><input id="post-f-cat" placeholder="예: 고객심리 · 뉴스 해석 · 브랜딩"><div id="post-cat-chips" class="lce-chips" style="margin-top:8px;"></div></div>
         <div class="field" style="margin-bottom:6px;" id="post-cover-field"><label>커버 사진 <span style="color:var(--muted);font-size:10.5px;">· 카드 썸네일(선택)</span></label></div>
         <div id="post-cover-wrap" style="margin-bottom:8px;"></div>
+        <!-- ✨ 2026-08-21 사장님 «표지 자동 만들기» — 사진이 없을 때 제목·테마 색으로 그린다 -->
+        <button type="button" id="post-autocover" class="autocover-btn">✨ 표지 자동으로 만들기 <small>제목·테마 색으로</small></button>
         <!-- 📣 랜딩 전용: 손님이 목록에서 보는 카드 그대로 (칸 채우기) -->
         <div id="landing-card-edit"></div>
         <div class="grp-h-lbl">게시물 내용 <span style="font-weight:400;">· 블록을 채우고 꾹 눌러 순서 변경</span></div>
@@ -8192,22 +8214,105 @@ if('serviceWorker' in navigator){
   function fmtSize(b){ return b>1048576 ? (b/1048576).toFixed(1)+'MB' : Math.round(b/1024)+'KB'; }
 
   // 핵심: 업로드 사진을 캔버스로 리사이즈+화질낮춰 압축
+  /* 📸 2026-08-21 사장님 «화질이 나쁘지 않게 적당히 눌러줘»
+        전: 1080px · JPEG 품질 0.72 로 «한 번» 눌렀다 → 머릿결·피부 같은 결이 뭉갰다.
+        후: ① WebP 를 쓴다 — 같은 화질에서 JPEG보다 30~40% 작다 (안 되는 폰이면 JPEG)
+            ② 품질 0.86 에서 시작해 «용량 예산»에 들어올 때까지만 낮춘다
+            ③ 그래도 크면 가로 폭을 줄인다 — 품질을 더 깎는 것보다 덜 티난다
+     🚨 사진은 글 데이터 «안»에 통째로 들어간다. 예산을 안 두면 저장이 막힌다. */
+  var IMG_BUDGET = 170 * 1024;
+  var IMG_WEBP = (function(){
+    try{ var c=document.createElement('canvas'); c.width=c.height=1;
+         return c.toDataURL('image/webp').indexOf('data:image/webp')===0; }catch(_){ return false; }
+  })();
   function compressImage(file, maxW, quality){
     return new Promise(function(resolve, reject){
       var img = new Image();
       img.onload = function(){
-        var scale = Math.min(1, maxW / img.width);
-        var w = Math.max(1, Math.round(img.width * scale));
-        var h = Math.max(1, Math.round(img.height * scale));
-        var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        var type = IMG_WEBP ? 'image/webp' : 'image/jpeg';
+        var widths = [maxW || 1280, 1080, 900, 760];
+        var qs = [quality || 0.86, 0.80, 0.74, 0.68, 0.62];
+        var best = null;
+        function draw(w0, q){
+          var scale = Math.min(1, w0 / img.width);
+          var w = Math.max(1, Math.round(img.width * scale));
+          var h = Math.max(1, Math.round(img.height * scale));
+          var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+          var cx = cv.getContext('2d');
+          cx.imageSmoothingEnabled = true;
+          try{ cx.imageSmoothingQuality = 'high'; }catch(_){}
+          cx.drawImage(img, 0, 0, w, h);
+          return cv.toDataURL(type, q);
+        }
+        for(var wi=0; wi<widths.length; wi++){
+          for(var qi=0; qi<qs.length; qi++){
+            var url = draw(widths[wi], qs[qi]);
+            if(!best || url.length < best.length) best = url;
+            if(url.length <= IMG_BUDGET){ URL.revokeObjectURL(img.src); return resolve(url); }
+          }
+        }
         URL.revokeObjectURL(img.src);
-        resolve(cv.toDataURL('image/jpeg', quality));
+        resolve(best);
       };
       img.onerror = reject;
       img.src = URL.createObjectURL(file);
     });
   }
+
+  /* ✨ 2026-08-21 사장님 «표지 자동 만들기» —
+        지금 글 대부분에 표지가 없어 DM 카드가 밋밋하다. 사진 찍을 시간이 없을 때
+        제목과 지금 테마 색으로 «읽히는 표지»를 만들어 준다. 카드 규격(1200x630).
+     🚨 그림을 그리는 것이지 «사진을 지어내는» 게 아니다 — 글자가 주인공이다. */
+  function autoCover(title, sub){
+    var W=1200, H=630;
+    var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    var cx=cv.getContext('2d');
+
+    /* 지금 테마의 바탕·강조색을 그대로 쓴다 (홈과 따로 놀면 안 된다) */
+    var bg='#EFEAE0', ac='#CC785C';
+    try{
+      for(var i=0;i<THEMES.length;i++){ if(THEMES[i][0]===home.theme){ bg=THEMES[i][1]; ac=THEMES[i][2]; break; } }
+    }catch(_){}
+    var dark=false; try{ dark=hexLum(bg)<0.5; }catch(_){}
+    var ink = dark ? '#F3F0F8' : '#241F2B';
+    var soft = dark ? 'rgba(243,240,248,.62)' : 'rgba(36,31,43,.58)';
+
+    cx.fillStyle=bg; cx.fillRect(0,0,W,H);
+    /* 은은한 광원 — 밋밋한 단색을 피한다 */
+    var g=cx.createRadialGradient(W*0.78, -H*0.18, 40, W*0.78, -H*0.18, W*0.9);
+    g.addColorStop(0, ac+(dark?'55':'40')); g.addColorStop(1, 'rgba(0,0,0,0)');
+    cx.fillStyle=g; cx.fillRect(0,0,W,H);
+
+    /* 왼쪽 강조 바 — 홈의 소제목 강조바와 같은 언어 */
+    cx.fillStyle=ac; cx.fillRect(84, 150, 8, 200);
+
+    /* 제목 — 줄바꿈은 «글자 폭»을 재서 직접 */
+    var t=String(title||'').trim() || '제목 없음';
+    var size = t.length>34 ? 54 : (t.length>20 ? 64 : 74);
+    cx.font='700 '+size+'px "Nanum Myeongjo","Apple SD Gothic Neo",serif';
+    cx.fillStyle=ink; cx.textBaseline='top';
+    var maxW=W-84-110-40, lines=[], line='';
+    for(var c=0;c<t.length;c++){
+      var test=line+t[c];
+      if(cx.measureText(test).width>maxW && line){ lines.push(line); line=t[c]; }
+      else line=test;
+      if(lines.length>=3) break;
+    }
+    if(line && lines.length<3) lines.push(line);
+    var lh=size*1.34, top=Math.round((H-lines.length*lh)/2)-14;
+    lines.forEach(function(ln,k){ cx.fillText(ln, 122, top+k*lh); });
+
+    /* 아래 한 줄 — 이름·핸들 */
+    var s2=String(sub||'').trim();
+    if(s2){
+      cx.font='500 26px "Apple SD Gothic Neo",system-ui,sans-serif';
+      cx.fillStyle=soft;
+      cx.fillText(s2.length>40? s2.slice(0,40)+'…' : s2, 122, top+lines.length*lh+18);
+    }
+    var type=(typeof IMG_WEBP!=='undefined' && IMG_WEBP)?'image/webp':'image/jpeg';
+    return cv.toDataURL(type, 0.9);
+  }
+  window.__autoCover=autoCover;
 
   function curPhotos(){ if(!vault.photos[vault.cur]) vault.photos[vault.cur]=[]; return vault.photos[vault.cur]; }
   function renderCats(){
@@ -8320,7 +8425,7 @@ if('serviceWorker' in navigator){
     for(var i=0;i<files.length;i++){
       origTotal += files[i].size;
       try{
-        var url = await compressImage(files[i], 1080, 0.72);
+        var url = await compressImage(files[i], 1280, 0.86);   /* 폭·품질 올림 — 예산은 함수가 지킨다 */
         newTotal += Math.round(url.length * 0.75);
         curPhotos().push(url); n++; lastUrl=url;
       }catch(_){}
@@ -12821,6 +12926,20 @@ if('serviceWorker' in navigator){
     function paint(){ if(b.dataset.url){ b.style.backgroundImage='url('+b.dataset.url+')'; b.textContent=''; b.classList.add('has'); } else { b.style.backgroundImage=''; b.textContent='＋ 커버 사진'; b.classList.remove('has'); } }
     b.onclick=function(){ openVault(function(u){ b.dataset.url=u; p.cover=u; paint(); }); };
     paint(); wrap.appendChild(b);
+    /* ✨ 표지 자동 만들기 — 제목·테마 색으로 그린다 (사진이 없을 때 회색 네모보다 낫다) */
+    var acb=document.getElementById('post-autocover');
+    if(acb) acb.onclick=function(){
+      var t=((document.getElementById('post-f-title')||{}).value||'').trim() || p.title || '';
+      if(!t){ try{ toast('제목을 먼저 써주세요 — 표지에 그 제목이 들어갑니다'); }catch(_){} return; }
+      var who=''; try{ who=((document.getElementById('pf-name')||{}).value||'').trim(); }catch(_){}
+      try{
+        var u=autoCover(t, who);
+        b.dataset.url=u; p.cover=u; paint();
+        try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){}
+        try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+        toast('표지를 만들었어요 · 마음에 안 들면 ＋커버 사진으로 바꾸세요');
+      }catch(e){ try{ toast('표지 만들기 실패: '+e.message); }catch(_){} }
+    };
     var actrow=document.createElement('div'); actrow.style.cssText='display:flex; gap:8px; margin-top:8px;';
     var feat=document.createElement('button'); feat.type='button'; feat.className='secbtn'; feat.style.flex='1';
     function paintFeat(){ feat.textContent=p.featured?'★ 대표 컨텐츠 (소개·홈 노출)':'☆ 대표로 지정 (최대 3개)'; }
@@ -13454,6 +13573,17 @@ if('serviceWorker' in navigator){
         out += '</div>' + gapHtml(i+1);
       });
       out += '<button type="button" class="dmore" id="dmore">＋ 다른 구성 넣기 · 후기 · 예약 · 숫자 · CTA …</button>';
+      /* 🧰 2026-08-21 사장님 «비공개도 익숙한 곳에 · 임시저장함·캡션 뽑기도 진행»
+            — 셋 다 «작업실 깊은 곳»에만 있어 묻혀 있었다. 글 쓰는 자리 바로 밑에 둔다.
+            (글 하나에 대한 일이므로 여기가 제자리다) */
+      var _p=null; try{ _p=postById(postEditId); }catch(_){}
+      var _hid = !!(_p && _p.on===false);
+      out += '<div class="dtools">'
+           + '<button type="button" class="dtool'+(_hid?' off':'')+'" id="dhide">'
+           +   (_hid ? '🔒 비공개 — 나만 봄' : '👁 공개 중 — 손님도 봄') + '</button>'
+           + '<button type="button" class="dtool" id="dexport">📤 인스타 캡션 뽑기</button>'
+           + '<button type="button" class="dtool" id="ddrafts">🗂 임시저장함</button>'
+           + '</div>';
       /* 🗑 글 통째로 지우기 — 실수로 누르지 않게 맨 아래, 다른 버튼과 멀찍이 */
       out += '<button type="button" class="ddelpost" id="ddelpost">🗑 이 글 삭제</button>';
       h.innerHTML = out;
@@ -13461,6 +13591,21 @@ if('serviceWorker' in navigator){
       if(mo2) mo2.onclick=function(){ try{ if(window.__openAddCatalog) window.__openAddCatalog(); }catch(_){} };
       var dl2=h.querySelector('#ddelpost');
       if(dl2) dl2.onclick=function(){ try{ if(window.__deletePost) window.__deletePost(); }catch(_){} };
+      var hb=h.querySelector('#dhide');
+      if(hb) hb.onclick=function(){
+        var q=null; try{ q=postById(postEditId); }catch(_){}
+        if(!q) return;
+        q.on = (q.on===false);                       /* 껐다 켰다 */
+        try{ if(window.__renderPostsLib) window.__renderPostsLib(); }catch(_){}
+        try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+        try{ if(window.__liveEditActive && window.__liveRefresh) window.__liveRefresh(); }catch(_){}
+        render();
+        try{ toast(q.on===false ? '비공개로 바꿨어요 · 손님 화면에서 사라져요' : '공개로 바꿨어요 · ✓저장을 눌러야 반영돼요'); }catch(_){}
+      };
+      var xb2=h.querySelector('#dexport');
+      if(xb2) xb2.onclick=function(){ try{ if(window.__openPostExport) window.__openPostExport(); }catch(_){} };
+      var db2=h.querySelector('#ddrafts');
+      if(db2) db2.onclick=function(){ try{ if(window.__openDrafts) window.__openDrafts(); }catch(_){} };
       wire(h, rows);
     }
     function wire(h, rows){
@@ -15517,12 +15662,25 @@ if('serviceWorker' in navigator){
   })();
   // 코드 자동완성 — 한번 로그인하면 다음엔 코드 미리 채움
   (function(){ try{ var lc=localStorage.getItem('la-last-code'); var c=document.getElementById('lg-code'); if(lc && c && !c.value){ c.value=lc; } }catch(e){} })();
+  /* 🔑 자동 로그인 스위치 — 기억하고, 끄면 저장된 열쇠까지 버린다 */
+  (function(){ try{
+    var cb=document.getElementById('lg-auto'); if(!cb) return;
+    cb.checked = (localStorage.getItem('cm-autologin')!=='0');
+    cb.addEventListener('change', function(){
+      try{
+        localStorage.setItem('cm-autologin', cb.checked ? '1' : '0');
+        if(!cb.checked) localStorage.removeItem('la-auth');   /* 끄면 지금 열쇠도 버린다 */
+      }catch(_){}
+    });
+  }catch(e){} })();
   /* 🔑 자동 로그인 (2026-08-20 사장님 «A 모드» 픽) — 손님은 열쇠가 없으니 그대로 막히고, 사장님만 통과한다.
         ⚠️ 전엔 enter() 가 «로그인 버튼»에서만 불려서, 열쇠가 있어도 매번 코드+PIN 을 쳐야 했다.
         만료됐거나 열쇠가 안 맞으면 조용히 버리고 정상 로그인 화면을 띄운다. */
   (function(){
     try{
       if(!AUTH || !AUTH.code || !AUTH.pinHash) return;
+      /* 사장님이 «자동 로그인»을 끄면 열쇠가 있어도 통과시키지 않는다 (남의 컴퓨터 대비) */
+      try{ if(localStorage.getItem('cm-autologin')==='0') return; }catch(_){}
       if(AUTH.expiresAt!=null){                                  // 사용 기간이 지났으면 다시 로그인
         var _ex=new Date(AUTH.expiresAt);
         if(!isNaN(_ex.getTime()) && _ex < new Date()) return;
