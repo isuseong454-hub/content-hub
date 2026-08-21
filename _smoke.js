@@ -529,6 +529,51 @@
       add('u 타이포 표지 순서', ut.indexOf('.arc-crow-th.arc-crow-typo{') >= 0 && ut.indexOf('.arc-crow-th{') < ut.indexOf('.arc-crow-th.arc-crow-typo{'), '.arc-crow-th 뒤 + 특이도 (0,2,0)');
       add('u 대표카드 빈표지', ut.indexOf("_fc?' style=\"background-image:url('") >= 0, '표지 없으면 «그냥 검정»이던 것 → 분류색');
 
+      /* 🔗 2026-08-21 사장님 «친구들끼리 공유 가능하게» — 보내기가 클립보드 복사만 하던 것.
+            폰에서 그 폰의 보내기 창이 떠야 카톡·DM으로 친구에게 간다. */
+      add('u 글끝 보내기 버튼', ut.indexOf('ig-btn share') >= 0, '글 끝 ♥·✈ 액션바');
+      add('u 보내기 = 폰 보내기창', ut.indexOf('navigator.share(') >= 0 && ut.indexOf("matchMedia('(pointer:coarse)')") >= 0, '폰이면 보내기창, 컴퓨터면 복사');
+      add('u 보내기 주소 청소', ut.indexOf("var hu=q0.get('u'); if(hu) q.set('u', hu);") >= 0, '주소 전체를 물려주면 편집 화면 링크가 친구에게 간다');
+      add('u 보내기 기록', ut.indexOf("track('share'") >= 0, '몇 명이 친구에게 보냈는지 분석에 쌓인다');
+      add('u 보내기 취소는 실패 아님', ut.indexOf("n==='AbortError'") >= 0, '손님이 창을 닫았는데 복사창이 또 뜨면 성가시다');
+
+      /* 🚨 2026-08-21 최악의 사고 — 글 쓰기 시트의 «껍데기»(#live-sheet-ov)가 마크업에서 통째로
+            사라져 있었다. 안쪽 .ls-body 만 #live-edit-ov 안에 고아로 남아,
+            시트를 여는 함수 다섯 개가 «전부» 정의조차 안 됐다 (if(!lsOv) return 에서 되돌아감).
+            증상: AI 포스팅 「이대로 만들기」를 눌러도 글이 안 만들어지고 홈으로 돌아옴. 에러는 0건.
+            → 껍데기·안쪽·«바깥에 있는지»를 셋 다 본다. */
+      add('글쓰기 시트 껍데기', et.indexOf('<div id="live-sheet-ov">') >= 0, '이게 없으면 시트 함수 다섯 개가 통째로 죽는다');
+      add('글쓰기 시트 속살', et.indexOf('id="ls-title"') >= 0 && et.indexOf('id="ls-host"') >= 0 && et.indexOf('id="ls-done"') >= 0, '제목·담는곳·완료 버튼');
+      add('글쓰기 시트는 편집틀 밖', (function(){
+        var i = et.indexOf('<div id="live-sheet-ov">');
+        var j = et.indexOf('<div class="le-dock');
+        var k = et.indexOf('</div>', j);
+        return i > 0 && i > k;   /* 도크가 닫힌 «뒤»에 온다 = #live-edit-ov 밖 */
+      })(), '안에 넣으면 손님 화면 위로 못 올라온다');
+      add('AI 포스팅은 현장 시트로', et.indexOf('window.__pstToSheet') >= 0 && et.indexOf('if(window.__liveEditActive && window.__pstToSheet)') >= 0, '작업실로 튕기면 쓴 글이 사라진 것처럼 보인다');
+
+      /* 🎨 사장님 «라이트 톤이 깨지지 않게» — 시트가 없던 탓에 여기만 어두운 채로 남아 있었다 */
+      add('글쓰기 시트 라이트 톤', et.indexOf('html[data-litetone] #live-sheet-ov{') >= 0, '현장은 밝고 시트만 까맣던 것');
+      add('글쓰기 시트 누르는 자리', et.indexOf('.ls-bar .ls-back, .ls-bar .ls-done{ min-height:40px; }') >= 0, '31px 였다 — 손가락 최소 40px');
+      add('블록 줄에 설정값 누출 금지', et.indexOf('!/^[a-z]+-[a-z0-9]+\\|/.test(c[i])') >= 0, '사진 줄에 꾸미기 설정값이 요약으로 뜨던 것');
+
+      /* 📝 2026-08-21 사장님 «이쪽은 글에 맞는 것만 남기고 라이트 톤으로» —
+            글 쓰기 시트에서 「구성 추가」를 누르면 «홈» 카탈로그가 통째로 떴다.
+            홈 템플릿·홈 진단·프로필 카드·매장·뉴스레터가 글 안에 나왔고, 패널만 새까맸다. */
+      add('글 카탈로그 맥락 판별', et.indexOf('function inPostSheet()') >= 0 && et.indexOf("ov.setAttribute('data-ctx'") >= 0, '시트가 열려 있고 게시물 머리띠가 있으면 «글»');
+      add('글 카탈로그 허용 목록', et.indexOf('var POST_OK_BLOG=') >= 0 && et.indexOf('var POST_OK_LANDING=') >= 0, '블로그 글과 랜딩 글은 넣을 게 다르다');
+      add('글에선 홈 물건 감춤', et.indexOf('#add-ov[data-ctx="post"] #add-tpl,') >= 0 && et.indexOf('#add-ov[data-ctx="post"] .tpl[data-special]{ display:none !important; }') >= 0, '홈 템플릿·진단·프로필 카드');
+      add('글에선 홈 세트 감춤', et.indexOf('(searching||_post) ? \'none\'') >= 0, '«통째로 시작» 세트는 홈을 갈아 끼우는 것 — 글에 나오면 안 된다');
+      add('글 섹션 이름은 글의 말', et.indexOf("var _PS=['글감','사진·영상','증거 보여주기','다른 글 붙이기','글 끝 행동']") >= 0, '«첫인상·유입»은 홈 깔때기 용어');
+      add('홈으로 돌아오면 원복', et.indexOf("h.getAttribute('data-homelbl')") >= 0, '이름을 기억해 두지 않으면 홈 카탈로그가 «글감»으로 굳는다');
+      add('글 카탈로그 라이트 톤', et.indexOf('html[data-litetone] #add-ov .sheet{') >= 0, '현장은 밝은데 이 패널만 까맣던 것');
+
+      /* 🏠 2026-08-21 사장님 ㉮ — 홈 템플릿 4종은 홈 유형에 밀려 중복. 눈에서만 치운다.
+            기능은 살아 있다(u.html 이 home.template 으로 홈을 다르게 그림) → «지우지 않았나»도 같이 본다. */
+      add('홈 템플릿 스위처 숨김', et.indexOf('#add-tpl-seg,') >= 0 && et.indexOf('#add-tpl-hint{ display:none !important; }') >= 0, '홈 유형과 겹쳐 헷갈리던 것');
+      add('홈 템플릿 기능은 생존', et.indexOf('id="add-tpl-seg"') >= 0 && ut.indexOf('applyEditorial') >= 0, '지워버리면 그 값으로 저장된 홈의 모양이 바뀐다');
+      add('대문 문구 칸은 생존', et.indexOf('id="ed-hook-in"') >= 0 && et.indexOf('#add-ov.ed-on #add-tpl-fields{display:block;}') >= 0, '스위처와 같이 지우면 옛 템플릿 쓰던 사람이 문구를 못 고친다');
+
     }
     /* 🔬 런타임 — 표지 뽑기가 «링크를 사진으로 오인»하지 않나 (제일 위험한 실수) */
     if (typeof window.__firstPhotoIn === 'function') {
