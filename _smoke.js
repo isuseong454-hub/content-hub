@@ -98,6 +98,8 @@
       'left:50%+translateX(-50%) 로 되돌리면 등장 애니(.reveal-blk.in{transform:none})가 지워 바가 오른쪽으로 188px 밀린다 (2026-08-20)');
     add('u: 채널 아이콘이 예약 바를 안 덮음', uHtml.indexOf('body.has-cta-sticky #home-fab{ bottom:calc(168px') > -1,
       '128px 이면 바 윗변(157px)과 29px 겹쳐 「지금 예약하기」를 가린다 (2026-08-20)');
+    add('u: 예약 단계가 label로 저장', uHtml.indexOf("track('resv',{step:'open', label:'open'})") > -1 && uHtml.indexOf("label:'submit'") > -1,
+      'li_event 는 payload의 step 키를 버린다 — label 에 안 실으면 예약 4단계가 한 덩어리가 되어 5칸 퍼널이 0으로 나온다 (2026-08-20)');
   } else {
     add('u.html 읽기', false, 'fetch 실패 — u 항목 검사 못 함', 'warn');
   }
@@ -158,6 +160,12 @@
         'var(--coral)로 되돌리면 초록 톤 계정에서 «잘 눌림»과 «보통»이 같은 색이 된다 (실측 #7DBF8E)');
       add('e 분석 탭바 한 줄', et.indexOf('.an-tabs{display:flex; gap:5px;') >= 0 && et.indexOf('overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;}') >= 0,
         '탭 7개가 되며 글자가 두 줄로 눌리던 것 — 가로 스크롤로 한 줄 유지 (75px→45px)');
+      add('e 🪣 5칸 퍼널', et.indexOf('function an5Funnel') >= 0 && et.indexOf("laRpc('li_funnel'") >= 0,
+        '홈→머묾→누름→예약창→예약완료 · content-hub-funnel5.sql 있을 때만 (B안, 2026-08-20)');
+      add('e 5칸 없어도 안 깨짐', et.indexOf('s.funnel5 ? an5Funnel(s)') >= 0 && et.indexOf('f5-need') >= 0,
+        'SQL 안 깔린 계정은 옛 3칸 그대로 + 안내 한 줄 — 무회귀 보장');
+      add('e \\U 이스케이프 금지', et.indexOf('\\\\U0001') < 0,
+        'JS는 \\U(대문자) 이스케이프를 모른다 — 이모지가 «U0001FAA3» 글자로 새어나온다 (2026-08-20 사고)');
       add('e 🚧 잠금 표시', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') >= 0 && et.indexOf('.ws-tab.ws-soon{ opacity:.34; }') >= 0,
         '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
       add('e 열린 방 4개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0 && et.indexOf('data-ws="data"') >= 0,
