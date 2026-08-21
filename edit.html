@@ -1761,6 +1761,148 @@ if('serviceWorker' in navigator){
   #ls-host .pw-pane{ display:block !important; }
   .le-bar{flex:0 0 auto; display:flex; align-items:center; gap:8px; padding:11px 13px; border-bottom:1px solid var(--hair); background:var(--surface);}
   .le-bar-sp{flex:1;}
+  /* 🧭 위로 올린 «모양» 둘 — 작게 (2026-08-21) */
+  .le-mini{display:inline-flex; align-items:center; gap:5px; padding:0 11px; height:40px; border-radius:11px;
+    background:var(--soft); border:1px solid var(--hair); color:var(--ink);
+    font-family:var(--sans); font-size:11.5px; font-weight:700; cursor:pointer; white-space:nowrap;
+    transition:transform .08s ease;}
+  .le-mini:active{transform:scale(.96);}
+  .le-mini .di{font-size:14px; line-height:1;}
+  #live-edit-ov[data-shell="light"] .le-mini{ background:rgba(0,0,0,.05); border-color:rgba(0,0,0,.12); color:#2A2530; }
+  @media (max-width:400px){ .le-mini .lb{display:none;} .le-mini{padding:0 12px;} }
+  /* 아래 도크 = 두 칸 */
+  .le-d-write{ color:var(--coral); }
+  /* 👁 AI 포스팅 «이렇게 나와요» 미리보기 (2026-08-21) */
+  .pstp{margin-top:12px; padding:14px; border:1px solid var(--hair); border-radius:14px; background:var(--soft);}
+  .pstp-lab{display:none;}
+  .pstp-ba{display:flex; align-items:baseline; gap:7px; margin-bottom:8px;}
+  .pstp-ba .t{font-size:11px; font-weight:800; color:var(--muted); letter-spacing:.02em;}
+  .pstp-ba .s{font-size:10.5px; color:var(--dim,#6B6F79);}
+  .pstp-ba.on .t{color:var(--coral);}
+  .pstp-before{font-size:11.5px; line-height:1.7; color:var(--dim,#6B6F79); background:var(--paper);
+    border:1px solid var(--hair); border-radius:11px; padding:11px 12px; white-space:pre-wrap;
+    max-height:120px; overflow:hidden; position:relative;}
+  .pstp-arrow{text-align:center; font-size:15px; color:var(--coral); margin:9px 0 11px; font-weight:800;}
+  .pstp-after{background:var(--paper); border:1px solid var(--hair); border-radius:11px; padding:13px 12px;}
+  .pstp-ask{font-size:11.5px; color:var(--muted); text-align:center; line-height:1.6; margin-top:12px;}
+  .pstp-ask b{color:var(--ink); font-weight:700;}
+  html[data-litetone] .pstp-before, html[data-litetone] .pstp-after{background:#fff; border-color:rgba(0,0,0,.08);}
+  html[data-litetone] .pstp-before{color:rgba(42,37,48,.5);}
+  html[data-litetone] .pstp-ask b{color:#2A2530;}
+  .pstp-title{font-size:16px; font-weight:800; letter-spacing:-.01em; line-height:1.35; margin-bottom:10px;}
+  .pstp-h{font-size:13px; font-weight:750; margin:12px 0 5px; padding-left:8px; border-left:3px solid var(--coral);}
+  .pstp-p{font-size:12px; color:var(--muted); line-height:1.65; margin-bottom:6px;}
+  .pstp-li{display:flex; flex-direction:column; gap:4px; margin:6px 0 8px;}
+  .pstp-li span{font-size:12px; color:var(--ink); background:var(--paper); border-radius:8px; padding:6px 9px;}
+  .pstp-li .more{color:var(--muted); background:none; padding:2px 0; font-size:11px;}
+  .pstp-q{font-size:12.5px; font-style:italic; color:var(--ink); background:var(--paper);
+    border-radius:11px; padding:11px 12px; margin:8px 0; border-left:3px solid var(--coral);}
+  .pstp-img{font-size:11.5px; color:var(--muted); text-align:center; padding:16px;
+    border:1px dashed var(--hair2,rgba(255,255,255,.16)); border-radius:11px; margin:8px 0;}
+  /* 🎨 시트 안 «입력칸»까지 — 검정 상자가 남으면 라이트 톤이 통째로 깨진다 (2026-08-21) */
+  html[data-litetone] .ov .sheet input,
+  html[data-litetone] .ov .sheet textarea,
+  html[data-litetone] .ov .sheet select{ background:#fff !important; color:#2A2530 !important;
+    border:1px solid rgba(0,0,0,.12) !important; }
+  html[data-litetone] .ov .sheet input::placeholder,
+  html[data-litetone] .ov .sheet textarea::placeholder{ color:rgba(42,37,48,.38) !important; }
+  html[data-litetone] .ov .sheet .desc,
+  html[data-litetone] .ov .sheet label,
+  html[data-litetone] .ov .sheet .vhint{ color:rgba(42,37,48,.66) !important; }
+  html[data-litetone] .ov .sheet .grp-h-lbl{ color:rgba(42,37,48,.72) !important; }
+  html[data-litetone] .pst-help{ background:rgba(0,0,0,.03) !important; border-color:rgba(0,0,0,.08) !important; }
+  html[data-litetone] .pst-help summary{ color:#2A2530 !important; }
+  html[data-litetone] .pstp{background:rgba(0,0,0,.03); border-color:rgba(0,0,0,.08);}
+  html[data-litetone] .pstp-title, html[data-litetone] .pstp-h{color:#2A2530;}
+  html[data-litetone] .pstp-p{color:rgba(42,37,48,.62);}
+  html[data-litetone] .pstp-li span, html[data-litetone] .pstp-q{background:#fff; color:#2A2530;}
+  html[data-litetone] .pstp-img{border-color:rgba(0,0,0,.14); color:rgba(42,37,48,.55);}
+  /* 🎨 라이트 톤 — 현장이 밝을 땐 시트·버튼까지 밝게 (2026-08-21 사장님 «톤이 깨지지 않게»)
+        색을 새로 만들지 않고, 손님 화면의 크림 계열에 맞춘 한 벌만 쓴다. */
+  html[data-litetone] .ov{ background:rgba(40,34,50,.34); }
+  html[data-litetone] .ov .sheet{ background:#FDFBF8; border:1px solid rgba(0,0,0,.08); color:#2A2530;
+    box-shadow:0 18px 50px rgba(60,48,80,.18); }
+  html[data-litetone] .ov .sheet .t,
+  html[data-litetone] .ov .sheet b,
+  html[data-litetone] .ov .sheet .lg-h{ color:#2A2530; }
+  html[data-litetone] .ov .sheet .x{ color:rgba(42,37,48,.55); }
+  html[data-litetone] .lg-l, html[data-litetone] .blkm-i, html[data-litetone] .wch-i{
+    background:rgba(0,0,0,.035); border-color:rgba(0,0,0,.09); color:#2A2530; }
+  html[data-litetone] .lg-l .m span, html[data-litetone] .blkm-i .m span, html[data-litetone] .wch-i .m span{ color:rgba(42,37,48,.62); }
+  html[data-litetone] .lg-l .n{ background:#fff; color:rgba(42,37,48,.6); }
+  html[data-litetone] .lg-bar{ background:rgba(0,0,0,.07); }
+  html[data-litetone] .lg-note, html[data-litetone] .wch-note{ color:rgba(42,37,48,.55); }
+  html[data-litetone] .lg-cnt, html[data-litetone] .lg-l .go, html[data-litetone] .wch-i .go{ color:#7C5BE0; }
+  html[data-litetone] .lg-bar i{ background:linear-gradient(120deg,#8FA8EE,#B08CF0,#E3A6CE); }
+  /* 진한 그라데 버튼 → 라이트 톤에서는 한 단 부드럽게 */
+  #live-edit-ov[data-shell="light"] .le-x,
+  html[data-litetone] .lg-go{ background:linear-gradient(120deg,#7C8FE8,#9B72E6,#D08BC0) !important; }
+  /* 📏 검수가 잡음 — 라벨이 흰색으로 박혀 밝은 배경 위에서 1.2:1 로 묻혔다. 라벨까지 같이 지정한다 */
+  #live-edit-ov[data-shell="light"] .le-d-add{ background:rgba(124,91,224,.10); border-radius:12px; }
+  #live-edit-ov[data-shell="light"] .le-d-add,
+  #live-edit-ov[data-shell="light"] .le-d-add .le-d-lbl,
+  #live-edit-ov[data-shell="light"] .le-d-add .di{ color:#6A48CF !important; }
+  #live-edit-ov[data-shell="light"] .le-d-guide,
+  #live-edit-ov[data-shell="light"] .le-d-write{ color:rgba(42,37,48,.72); }
+  /* 🧭 편집 가이드 — 도크 버튼 + 시트 (2026-08-21) */
+  .le-d-guide{position:relative;}
+  .le-dot{position:absolute; top:4px; right:calc(50% - 18px); width:7px; height:7px; border-radius:99px;
+    background:#E0564B; display:none;}
+  .lg-top{padding:2px 2px 14px;}
+  .lg-h{font-size:15.5px; font-weight:750; letter-spacing:-.01em; line-height:1.35;}
+  .lg-bar{height:5px; border-radius:99px; background:var(--soft); margin:11px 0 6px; overflow:hidden;}
+  .lg-bar i{display:block; height:100%; background:var(--grad); transition:width .4s cubic-bezier(.2,.8,.3,1);}
+  .lg-cnt{font-size:11.5px; font-weight:800; color:var(--coral);}
+  .lg-l{display:flex; align-items:center; gap:11px; width:100%; padding:13px 12px; margin-bottom:7px;
+    border:1px solid var(--hair); border-radius:13px; background:var(--soft); color:var(--ink);
+    font-family:var(--sans); text-align:left; cursor:pointer; transition:transform .08s ease;}
+  .lg-l:active{transform:scale(.985);}
+  .lg-l .n{flex:0 0 auto; width:23px; height:23px; border-radius:99px; background:var(--paper); color:var(--muted);
+    display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:800;}
+  .lg-l.ok .n{background:rgba(125,224,166,.2); color:#7DE0A6;}
+  .lg-l .m{flex:1; min-width:0;}
+  .lg-l .m b{display:block; font-size:13px; font-weight:700;}
+  .lg-l .m span{display:block; font-size:11px; color:var(--muted); margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .lg-l .m .v{color:var(--ink); font-weight:600;}
+  .lg-l .go{flex:0 0 auto; font-size:11px; font-weight:800; color:var(--coral);}
+  .lg-note{font-size:11px; color:var(--muted); line-height:1.6; text-align:center; padding:10px 4px 2px;}
+  /* (옛 세 걸음 패널 CSS — 더 이상 안 쓰지만 남겨두면 헷갈려 지움) */
+  .le-steps{flex:0 0 auto; background:var(--surface); border-top:1px solid var(--hair); padding:11px 12px 9px;}
+  .les-h{display:flex; align-items:center; gap:8px; margin-bottom:9px;}
+  .les-t{flex:1; min-width:0; font-size:11.5px; font-weight:700; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .les-n{flex:0 0 auto; font-size:11px; font-weight:800; color:var(--coral); background:var(--coral-soft); border-radius:99px; padding:3px 9px;}
+  .les-x{flex:0 0 auto; width:24px; height:24px; border-radius:99px; border:1px solid var(--hair); background:transparent;
+    color:var(--muted); font-size:13px; line-height:1; cursor:pointer; font-family:var(--sans);}
+  .les-i{display:flex; align-items:center; gap:10px; width:100%; padding:10px 11px; margin-bottom:6px;
+    border:1px solid var(--hair); border-radius:12px; background:var(--soft); color:var(--ink);
+    font-family:var(--sans); text-align:left; cursor:pointer; transition:transform .08s ease;}
+  .les-i:last-of-type{margin-bottom:0;}
+  .les-i:active{transform:scale(.985);}
+  .les-no{flex:0 0 auto; width:21px; height:21px; border-radius:99px; background:var(--paper); color:var(--muted);
+    display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800;}
+  .les-m{flex:1; min-width:0;}
+  .les-m b{display:block; font-size:12.5px; font-weight:700;}
+  .les-m span{display:block; font-size:10.5px; color:var(--muted); margin-top:1px;}
+  .les-go{flex:0 0 auto; color:var(--coral); font-weight:800; font-size:13px;}
+  .les-i.now{border-color:transparent; background:var(--grad); color:#fff;}
+  .les-i.now .les-m span{color:rgba(255,255,255,.82);}
+  .les-i.now .les-no{background:rgba(255,255,255,.25); color:#fff;}
+  .les-i.now .les-go{color:#fff;}
+  .les-i.done{opacity:.55; cursor:default;}
+  .les-i.done .les-no{background:rgba(125,224,166,.2); color:#7DE0A6;}
+  /* 밝은 껍데기에 맞춤 */
+  #live-edit-ov[data-shell="light"] .le-steps{ background:#FBF8F4; border-top-color:rgba(0,0,0,.09); }
+  #live-edit-ov[data-shell="light"] .les-i{ background:rgba(0,0,0,.035); border-color:rgba(0,0,0,.10); color:#2A2530; }
+  #live-edit-ov[data-shell="light"] .les-m span{ color:rgba(42,37,48,.62); }
+  #live-edit-ov[data-shell="light"] .les-no{ background:#fff; color:rgba(42,37,48,.6); }
+  #live-edit-ov[data-shell="light"] .les-t{ color:rgba(42,37,48,.66); }
+  #live-edit-ov[data-shell="light"] .les-x{ color:rgba(42,37,48,.6); border-color:rgba(0,0,0,.14); }
+  /* 🚨 2026-08-21 — 밝은 껍데기 규칙(.les-i)이 뒤에 와서 «지금 할 걸음»의 그라데이션 배경을 덮었다.
+        배경은 밝은 회색인데 글씨만 흰색 → 안 읽힘. 강조 배경을 다시 세운다. */
+  #live-edit-ov[data-shell="light"] .les-i.now{ background:var(--grad); border-color:transparent; color:#fff; }
+  #live-edit-ov[data-shell="light"] .les-i.now .les-no{ background:rgba(255,255,255,.25); color:#fff; }
+  #live-edit-ov[data-shell="light"] .les-i.now .les-go{ color:#fff; }
+  #live-edit-ov[data-shell="light"] .les-i.now .les-m span{ color:rgba(255,255,255,.85); }
   .le-quit{background:transparent; border:1px solid var(--hair); color:var(--ink); border-radius:10px;
     padding:8px 13px; font-size:12.5px; font-weight:800; font-family:var(--sans); cursor:pointer; white-space:nowrap;
     transition:transform .08s ease, background .16s ease;}
@@ -1840,7 +1982,11 @@ if('serviceWorker' in navigator){
   /* 📏 폰에선 글자를 접어 아이콘만 — 대신 손가락 자리는 44px 이상으로 지킨다 */
   @media (max-width:430px){ .le-top-d .le-d-lbl{display:none;}
     .le-top-d{padding:0; min-width:40px; height:40px; justify-content:center;}
-    .le-top-d .di{font-size:16px;} }
+    .le-top-d .di{font-size:16px;}
+    /* 🚨 2026-08-21 사장님 «포스팅하기 글자 어딨어» — 좁은 화면에서 라벨을 접는 규칙에
+          «글쓰기»까지 걸려 ✍️ 아이콘만 남았다. 포스팅 칸의 유일한 «글 쓰는 입구»라 접으면 안 된다. */
+    .le-top-write .le-d-lbl{display:inline !important;}
+    .le-top-write{padding:0 12px !important; min-width:auto !important; gap:5px;} }
   /* 토스 탭바: 구성추가 = 그라데이션 필로 확실히 강조 (2026-07-08 사용자 "눈에 안 띈다") */
   .le-d.le-d-add{background:var(--grad); color:#fff; border:none; border-radius:13px; font-weight:800; padding:7px 2px; box-shadow:0 4px 16px rgba(124,63,228,.5);}
   .le-d.le-d-add .di{font-size:20px;}
@@ -6124,33 +6270,30 @@ if('serviceWorker' in navigator){
          편집 중에 필요한 건 «나가기 · 되돌리기 · 저장» 뿐이다.
          👁 미리보기 = 「편집 끝내기」가 그 일을 한다 → 뺀다 · ⚙ 운영 = 손님 화면 오른쪽 위 ⚙에 이미 있다 → 뺀다
          (배선이 걸린 버튼은 지우지 않고 숨긴다 — 지우면 옆 기능이 같이 죽는다) -->
+    <!-- 🧭 2026-08-21 사장님 재배치 — «맨 위 공간이 남으니 홈 유형·테마를 작게 올리자»
+         위 = 모양 정하기(홈 유형·테마) + 되돌리기 + 저장 / 아래 = 채우기(구성 추가·새 포스팅)
+         나가는 문(편집 끝내기)은 화면 오른쪽 위 하나뿐 — 스크롤 따라다닌다 -->
     <div class="le-bar le-bar-slim">
-      <button class="le-quit" id="le-quit" title="편집을 끝내고 손님 화면으로">‹ 편집 끝내기</button>
+      <button class="le-mini" id="le-type" title="홈 유형 — 뼈대 고르기"><span class="di">🏠</span><span class="lb">홈 유형</span></button>
+      <button class="le-mini" id="le-design" title="테마 — 색·분위기"><span class="di">🎨</span><span class="lb">테마</span></button>
       <span class="le-bar-sp"></span>
       <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" disabled>↶</button>
       <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
-      <button class="le-d le-top-d le-top-write" id="le-write" title="이 칸 편집 — 글쓰기" style="display:none;"><span class="di">✍️</span><span class="le-d-lbl">글쓰기</span></button>
       <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
       <button class="le-x" id="le-x" title="지금 바로 저장·공개">✓ 저장</button>
+      <button class="le-quit" id="le-quit" style="display:none !important;">편집 끝내기</button>
       <button class="le-d" id="le-home" style="display:none !important;"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
       <button class="le-d" id="le-opmode" style="display:none !important;"><span class="di">⚙️</span><span class="le-d-lbl">운영</span></button>
     </div>
     <div class="le-frame"><div class="le-load" id="le-load">⏳ 내 페이지 불러오는 중…</div><iframe id="le-iframe" title="보면서 수정"></iframe></div>
     <!-- 🧭 네 걸음 (2026-08-20 사장님 A안) — 뼈대 → 색 → 칸 → 내용.
          미리보기·운영은 위로 올렸다. 도크에는 «순서대로 밟을 것»만 남긴다. -->
+    <!-- 아래 = «채우기» 둘만. 모양(홈 유형·테마)은 위로 올라갔다 -->
     <div class="le-dock le-flow">
-      <button class="le-d" id="le-type"   data-step="1" title="홈 유형 — 뼈대 고르기"><span class="di">🏠</span><span class="le-d-lbl">홈 유형</span></button>
-      <button class="le-d" id="le-design" data-step="2" title="테마 — 색·분위기"><span class="di">🎨</span><span class="le-d-lbl">테마</span></button>
-      <button class="le-d le-d-add" id="le-add-top" data-step="3" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성 추가</span></button>
-    </div>
-  </div>
-
-  <!-- 라이브 위 편집 시트: 게시물 빌더 · 제품 · Q&A 를 손님 화면 위로 올려 편집 -->
-  <div id="live-sheet-ov">
-    <div class="ls-bar">
-      <button class="ls-back" id="ls-back">← 보면서 수정</button>
-      <span class="ls-t" id="ls-title">편집</span>
-      <button class="ls-done" id="ls-done">✓ 완료</button>
+      <!-- 🧭 2026-08-21 사장님 순서 지정 — 가이드 · 구성 추가 · 새 포스팅 (포스팅 아이콘 ✍️ → 📝) -->
+      <button class="le-d le-d-guide" id="le-guide" title="편집 가이드 — 뭘 채웠고 뭐가 남았는지"><span class="di">🧭</span><span class="le-d-lbl">가이드</span><i class="le-dot" id="le-guide-dot"></i></button>
+      <button class="le-d le-d-add" id="le-add-top" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성 추가</span></button>
+      <button class="le-d le-d-write" id="le-write" title="새 포스팅 쓰기"><span class="di">📝</span><span class="le-d-lbl">새 포스팅</span></button>
     </div>
     <div class="ls-body"><div id="ls-host"></div></div>
   </div>
@@ -7629,19 +7772,22 @@ if('serviceWorker' in navigator){
      카드 84% + 옆 카드 가장자리 + 옆으로 밀기(스크롤 스냅) · «지금 쓰는 중» 배지 · ☆ 즐겨찾기 ══════════ */
   var TPICK = [
     { k:'tbeauty',  nm:'🌸 뷰티형',      who:'헤어·네일·피부 · 작업물과 예약이 중심', ac:'#7DBF8E', on:'#04140B', bg:'#050A07', pro:1,
-      prev:'<div class="tpk-kick">압구정 · 앞머리 전문</div><div class="tpk-disp">첫인상 70%</div><div class="tpk-lead">앞머리 하나로 얼굴이 바뀝니다</div>'
+      prev:'<div class="tpk-kick">○○동 · 앞머리 전문</div><div class="tpk-disp">첫인상 70%</div><div class="tpk-lead">앞머리 하나로 얼굴이 바뀝니다</div>'
         +'<div class="tpk-2col"><div class="tpk-pho"><i>01</i><b>시스루뱅</b><u>30,000</u></div><div class="tpk-pho v2"><i>02</i><b>볼륨 매직</b><u>120,000</u></div></div>'
         +'<div class="tpk-pn">스타일 갤러리 <em>36</em></div><div class="tpk-pn">시술 가격표</div><div class="tpk-pn">단골 후기 · ★4.9</div>'
         +'<div class="tpk-cta">📅 상담 예약하기</div>' },
     { k:'tcreator', nm:'🎙 크리에이터형', who:'강사·유튜버·작가 · 링크가 주인공', ac:'#8E7BFF', on:'#120A2E', bg:'#08060F', pro:0,
-      prev:'<div class="tpk-av"></div><div class="tpk-disp" style="font-size:19px;">블라블라 리지팍</div><div class="tpk-lead">『일상이 돈이 되는 숏폼』 저자</div>'
-        +'<div class="tpk-pn">콘블라 19기 알림 <em>HOT</em></div><div class="tpk-pn">인스타 실수 TOP 5</div><div class="tpk-pn">커뮤니티 입장</div><div class="tpk-pn">강의 제안 · 협업</div>'
+      /* 🚨 2026-08-21 — 실명·실제 브랜드처럼 읽히는 예시(사람 이름·기수·책 제목)를 전부 뺐다.
+            «남의 것»으로 오해되면 큰일이고, 사장님 말대로 «내 것 같지도» 않다. ○○ 자리표시로 통일. */
+      prev:'<div class="tpk-av"></div><div class="tpk-disp" style="font-size:19px;">○○ 크리에이터</div><div class="tpk-lead">내 소개 한 줄이 여기 들어가요</div>'
+        +'<div class="tpk-pn">이번 기수 모집 알림 <em>NEW</em></div><div class="tpk-pn">대표 영상 · 콘텐츠</div><div class="tpk-pn">커뮤니티 입장</div><div class="tpk-pn">강의 · 협업 문의</div>'
         +'<div class="tpk-cta">✉️ 뉴스레터 구독</div>' },
     { k:'texpert',  nm:'🎓 전문가형',    who:'컨설팅·코칭·병의원 · 사람이 곧 상품', ac:'#7EC8F5', on:'#04101F', bg:'#05080F', pro:0,
-      prev:'<div class="tpk-kick" style="text-align:left;">CONTENT STRATEGIST</div>'
-        +'<div class="tpk-port"><span>📷 대표 사진</span><div class="tpk-pname">이수성<small>고객관점 대표 · 10년</small></div></div>'
-        +'<div class="tpk-3col"><div><b>3,000</b><small>수강생</small></div><div><b>310</b><small>강의</small></div><div><b>98%</b><small>만족도</small></div></div>'
-        +'<div class="tpk-pn">1:1 브랜딩 컨설팅 <em>4자리</em></div>'
+      /* 사장님 «전문직에 적합한 예시로 — 학원강사나 변호사 같은» · 이름은 ○○ 자리표시 */
+      prev:'<div class="tpk-kick" style="text-align:left;">입시 영어 · 15년</div>'
+        +'<div class="tpk-port"><span>📷 대표 사진</span><div class="tpk-pname">○○ 강사<small>○○학원 대표강사</small></div></div>'
+        +'<div class="tpk-3col"><div><b>1,200</b><small>가르친 학생</small></div><div><b>15년</b><small>경력</small></div><div><b>96%</b><small>재등록</small></div></div>'
+        +'<div class="tpk-pn">1:1 입시 상담 <em>마감임박</em></div>'
         +'<div class="tpk-cta">💬 상담 문의하기</div>' },
     { k:'tresult',  nm:'⚡ 비포애프터형', who:'PT·교정·시술 · 변화가 곧 증거', ac:'#C6FF4D', on:'#0F1600', bg:'#070A05', pro:1,
       prev:'<div class="tpk-kick">RESULT FIRST</div><div class="tpk-disp">12주</div><div class="tpk-lead">면, 몸이 바뀝니다</div>'
@@ -7672,9 +7818,9 @@ if('serviceWorker' in navigator){
         +'.tpk-card .tpk-tier{position:absolute;right:50px;top:15px;z-index:6;font-size:8.5px;font-weight:900;border-radius:999px;padding:4px 9px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.16);}'
         +'.tpk-prev{flex:1;min-height:0;overflow:hidden;padding:40px 16px 12px;display:flex;flex-direction:column;gap:7px;}'
         +'.tpk-kick{font-size:8px;font-weight:900;letter-spacing:2.4px;opacity:.6;text-align:center;}'
-        +'.tpk-disp{font-size:32px;font-weight:900;letter-spacing:-1.6px;text-align:center;line-height:1.02;'
+        +'.tpk-disp{font-size:32px;font-weight:900;letter-spacing:-1.6px;text-align:center;line-height:1.08;margin-top:2px;'
         +'background:linear-gradient(180deg,#fff 40%, var(--tac));-webkit-background-clip:text;background-clip:text;color:transparent;}'
-        +'.tpk-lead{font-size:10px;text-align:center;opacity:.68;}'
+        +'.tpk-lead{font-size:10.5px;text-align:center;opacity:.7;margin-top:7px;line-height:1.5;}'
         +'.tpk-2col{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px;}'
         +'.tpk-pho{aspect-ratio:1/1.05;border-radius:13px;position:relative;overflow:hidden;'
         +'background:radial-gradient(ellipse 58% 44% at 56% 24%, rgba(255,255,255,.16), transparent 64%), linear-gradient(155deg, color-mix(in srgb, var(--tac) 34%, #000), color-mix(in srgb, var(--tac) 10%, #000));}'
@@ -7687,7 +7833,7 @@ if('serviceWorker' in navigator){
         +'.tpk-pn em{font-style:normal;margin-left:auto;font-size:8px;font-weight:900;border-radius:999px;padding:3px 7px;background:var(--tac);color:var(--ton);}'
         +'.tpk-cta{margin-top:auto;text-align:center;border-radius:14px;padding:11px;font-size:11.5px;font-weight:900;'
         +'background:linear-gradient(135deg, color-mix(in srgb, var(--tac) 62%, #fff), var(--tac));color:var(--ton);}'
-        +'.tpk-av{width:52px;height:52px;border-radius:50%;margin:2px auto 0;border:1px solid rgba(255,255,255,.2);'
+        +'.tpk-av{width:56px;height:56px;border-radius:50%;margin:6px auto 12px;border:1px solid rgba(255,255,255,.2);'
         +'background:radial-gradient(ellipse 58% 44% at 50% 26%, rgba(255,255,255,.2), transparent 64%), linear-gradient(150deg, color-mix(in srgb, var(--tac) 40%, #000), color-mix(in srgb, var(--tac) 12%, #000));}'
         +'.tpk-port{height:150px;border-radius:15px;position:relative;overflow:hidden;'
         +'background:radial-gradient(ellipse 56% 42% at 58% 22%, rgba(255,255,255,.18), transparent 64%), linear-gradient(165deg, color-mix(in srgb, var(--tac) 32%, #000), color-mix(in srgb, var(--tac) 8%, #000));}'
@@ -12701,6 +12847,21 @@ if('serviceWorker' in navigator){
     return { title: title||'새 포스팅', items: out };
   }
   /* 판정 결과 → 실제 포스팅 블록 (text[제목·내용] / quote / photocard) */
+  /* 👁 «이렇게 나와요» — 붙여넣은 글이 어떤 모양으로 바뀌는지 그 자리서 보여준다.
+        (2026-08-21 사장님 «글자 썼는데 어디로 날아갔는지 모르겠어»)
+        pstToBlocks 와 «같은 재료»(r.items)를 쓴다 — 미리보기와 결과가 어긋나면 안 된다. */
+  function pstPreviewHtml(r){
+    if(!r || !r.items || !r.items.length) return '';
+    var h='<div class="pstp-title">'+escT(r.title||'제목 없음')+'</div>';
+    r.items.forEach(function(b){
+      if(b.k==='h')      h+='<div class="pstp-h">'+escT(b.tx)+'</div>';
+      else if(b.k==='p') h+='<div class="pstp-p">'+escT(String(b.tx).slice(0,120))+(String(b.tx).length>120?'…':'')+'</div>';
+      else if(b.k==='li')h+='<div class="pstp-li">'+b.items.slice(0,4).map(function(x){ return '<span>☑ '+escT(String(x).slice(0,40))+'</span>'; }).join('')+(b.items.length>4?'<span class="more">외 '+(b.items.length-4)+'개</span>':'')+'</div>';
+      else if(b.k==='q') h+='<div class="pstp-q">“'+escT(String(b.tx).slice(0,80))+'”</div>';
+      else if(b.k==='img')h+='<div class="pstp-img">＋ 사진 자리</div>';
+    });
+    return h;
+  }
   function pstToBlocks(r){
     var blocks=[], pend=null;
     function pushText(){ if(pend){ blocks.push({type:'text', name:pend[0]||'본문', on:true, content:[pend[0], pend[1]], layout:''}); pend=null; } }
@@ -12747,6 +12908,7 @@ if('serviceWorker' in navigator){
         +'<div class="sheet-h"><span class="t">🤖 AI 포스팅</span><span class="x" id="pst-x">×</span></div>'
         +'<div class="desc">카톡·메모장에 쓴 글을 <b style="color:var(--coral)">그대로</b> 붙여넣으세요. 제목·소제목·목록·인용을 갈라내고 <b>사진 들어갈 자리까지</b> 잡아드려요.</div>'
         +'<div class="field"><label>여기에 붙여넣기 <small>— 줄바꿈만 있으면 충분</small></label><textarea id="pst-src" placeholder="예) 앞머리 자르기 전에 꼭 알아야 할 것&#10;&#10;안녕하세요, 오늘은 상담하면서 제일 많이 듣는 질문을 정리했어요..."></textarea></div>'
+        +'<div id="pst-pv" class="pstp" style="display:none"></div>'
         +'<details class="pst-help"><summary>📖 이렇게 쓰면 이렇게 나와요 <span style="font-weight:400;color:var(--muted);font-size:11px;">— 8가지만 알면 끝</span></summary>'
           +'<div class="pst-rules">'
             +'<div class="pr-row"><span class="pr-k">빈 줄</span><span class="pr-v"><b>문단이 나뉘어요</b> · 엔터 두 번</span></div>'
@@ -12764,7 +12926,7 @@ if('serviceWorker' in navigator){
         +'<div class="pst-sug" id="pst-sug" style="display:none;margin-top:9px;"><div style="font-size:11px;font-weight:800;color:var(--coral);margin-bottom:6px;">✨ 이 글엔 이것도 어울려요 — 누르면 같이 들어가요</div><div id="pst-sug-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div></div>'
         +'<div class="pst-hint" id="pst-hint">글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요</div>'
         +'<div class="pst-free">✓ AI 안 씁니다 · 비용 0원 · 이 글은 서버로 안 나가요</div>'
-        +'<button type="button" class="nchip-apply" id="pst-go">✨ 이대로 포스팅 만들기 →</button>'
+        +'<button type="button" class="nchip-apply" id="pst-go">✓ 이대로 만들기 — 사진·수정은 다음 화면에서</button>'
         +'</div>';
       document.body.appendChild(ov);
       ov.addEventListener('click', function(e){ if(e.target===ov||e.target.id==='pst-x') ov.classList.remove('open'); });
@@ -12796,6 +12958,24 @@ if('serviceWorker' in navigator){
           ? ('제목은 <b>'+((r.title||'').slice(0,24))+'</b> 로 잡았어요 · 칸마다 <b>따로 고칠 수 있는 블록</b>으로 들어갑니다 · 사진은 점선 자리에 넣기만 하면 돼요')
           : '글을 넣으면 무엇이 몇 개 만들어지는지 여기에 나와요';
       }
+      /* 미리보기도 같이 그린다 */
+      var _origPreview=preview;
+      preview=function(){ _origPreview();
+        try{ var pv=document.getElementById('pst-pv'); if(!pv) return;
+          var v=(ta.value||'').trim();
+          if(!v){ pv.innerHTML=''; pv.style.display='none'; return; }
+          var _r=pstAnalyze(v);
+          var _n=(_r.items||[]).length;
+          pv.innerHTML=
+             '<div class="pstp-ba"><span class="t">그냥 붙이면</span><span class="s">제목도 문단도 없이 한 덩어리</span></div>'
+            +'<div class="pstp-before">'+escT(v.slice(0,260))+(v.length>260?'…':'')+'</div>'
+            +'<div class="pstp-arrow">↓</div>'
+            +'<div class="pstp-ba on"><span class="t">이렇게 바꿨어요</span><span class="s">'+_n+'조각으로 갈라 정리</span></div>'
+            +'<div class="pstp-after">'+pstPreviewHtml(_r)+'</div>'
+            +'<div class="pstp-ask">이렇게 만들까요? <b>사진은 다음 화면에서</b> 넣으시면 돼요</div>';
+          pv.style.display='block';
+        }catch(_){}
+      };
       ta.addEventListener('input', preview);
       ta.addEventListener('paste', function(){ setTimeout(preview, 30); });
       document.getElementById('pst-go').onclick=function(){
@@ -13398,6 +13578,9 @@ if('serviceWorker' in navigator){
     // 🌱 0의 상태 — 3걸음(소개=신뢰 · 대표작업=컨텐츠 · 연락처=행동). 이미 계산된 신호 재사용.
     var zs1=!!(nm && (bio||avatar)), zs2=(pubs>=1), zs3=!!hasAction;
     var zsDone=(zs1?1:0)+(zs2?1:0)+(zs3?1:0), zsHtml='';
+    /* 🚨 2026-08-21 사장님 «가» 픽 — 세 걸음을 «현장»에서도 보여준다.
+          판정을 두 벌 만들면 숫자가 어긋난다 → 여기서 계산한 것을 그대로 내보낸다. */
+    try{ window.__zsState={a:zs1,b:zs2,c:zs3,done:zsDone, nm:(nm||''), bio:(bio||''), pubs:(pubs||0)}; }catch(_){}
     if(zsDone<3){
       var ZST=[{done:zs1,t:'나를 한 줄로 소개하기',d:'누구에게 뭘 해주는 사람인지',go:'intro'},
                {done:zs2,t:'대표 작업 하나 보여주기',d:'실력은 말보다 결과물',go:'work'},
@@ -15525,7 +15708,7 @@ if('serviceWorker' in navigator){
       var _skipFetch = !!window.__pendingTemplateApply;   // ★ 방금 템플릿 적용 → 서버 옛 데이터로 덮어쓰지 않음
       (async function(){ try{ if(!_skipFetch){ var res=await window.laRpc('li_get_own',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}); if(res&&res.ok&&res.data&&res.data.blocks&&res.data.blocks.length){ applyData(res.data); } } }catch(e){} clearTimeout(_t); _go(); try{ if(window.__histInit) setTimeout(window.__histInit, 300); }catch(e){} try{ if(window.__pageAutosaveReady) setTimeout(window.__pageAutosaveReady, 350); }catch(e){} if(_skipFetch){ window.__pendingTemplateApply=false; setTimeout(function(){ try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(e){} }, 800); } })();   // 로드 완료 후 되돌리기 기준선 + 자동저장 시작 (템플릿 적용이면 현재 빌더를 서버에 저장)
     }
-    function closeLive(){ window.__liveEditActive=false; try{ if(window.__pageAutosaveStop) window.__pageAutosaveStop(); }catch(e){} if(window.__setFabInsert) try{ window.__setFabInsert(false); }catch(e){} ov.classList.remove('open'); ifr.src='about:blank'; }
+    function closeLive(){ window.__liveEditActive=false; try{ document.documentElement.removeAttribute('data-litetone'); }catch(_){} try{ if(window.__pageAutosaveStop) window.__pageAutosaveStop(); }catch(e){} if(window.__setFabInsert) try{ window.__setFabInsert(false); }catch(e){} ov.classList.remove('open'); ifr.src='about:blank'; }
     // 편집 후 새로고침: iframe 통째 reload(스크롤 튐) 대신 데이터만 재전송 → 보던 위치 그대로 유지
     window.__liveRefresh=function(){ if(!window.__liveEditActive) return; try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(e){} try{ if(ifr && ifr.contentWindow && ifr.contentWindow.__applyPublicData){ sendData(); } else { loadFrame(); } }catch(e){ loadFrame(); } };
     // 새 구성 추가 후 손님 화면을 '그 새 구성' 자리로 스크롤 (끼워넣기면 그 위치로)
@@ -15537,13 +15720,89 @@ if('serviceWorker' in navigator){
       try{
         var d=ifr && ifr.contentDocument; if(!d) return;
         var b=d.documentElement.getAttribute('data-bright');
-        ov.setAttribute('data-shell', b==='light' ? 'light' : 'dark');
+        var lite = (b==='light');
+        ov.setAttribute('data-shell', lite ? 'light' : 'dark');
+        /* 🎨 2026-08-21 사장님 «라이트 톤이 깨지지 않게» — 시트·팝업은 body 에 붙어서
+              오버레이 안쪽 규칙으로는 못 잡는다. 문서에 표시를 달아 시트까지 같이 밝힌다. */
+        try{ if(lite) document.documentElement.setAttribute('data-litetone','1');
+             else document.documentElement.removeAttribute('data-litetone'); }catch(_){}
       }catch(_){}
     }
     window.__syncShellTone=syncShellTone;
     setInterval(function(){ if(window.__liveEditActive) syncShellTone(); }, 900);   // 테마를 바꾸면 따라온다
+    /* 🌱 세 걸음 — «현장» 위에 얹는다 (2026-08-21 사장님 «가» 픽)
+          전엔 작업실(운영자 모드)에만 있어서, «로그인하면 라이트» 원칙을 지키면 새 사용자가 이 안내를 못 봤다.
+          판정(zs1·zs2·zs3)은 작업실과 같은 것을 쓴다 — 숫자가 어긋나면 안 된다.
+          각 걸음은 «현장을 떠나지 않고» 그 자리에서 열린다. */
+    /* 🧭 편집 가이드 (2026-08-21 사장님 «가이드는 워크스페이스에 넣어줘 · 누르면 쓴 내용들 보이게»)
+          떠다니는 알림이 아니라 «도크에 늘 있는 자리». 누르면 —
+          ① 세 걸음이 어디까지 됐는지 ② 내가 쓴 내용이 그대로 보이고 ③ 누르면 그 자리에서 고친다.
+          고치고 나오면 숫자·체크가 «바로» 갱신된다(닫힐 때 다시 그린다). */
+    function guideOpened(){ try{ return localStorage.getItem('le-guide-seen')==='1'; }catch(_){ return false; } }
+    function markGuideSeen(){ try{ localStorage.setItem('le-guide-seen','1'); }catch(_){} syncGuideDot(); }
+    function syncGuideDot(){
+      var d=document.getElementById('le-guide-dot'); if(!d) return;
+      var z=window.__zsState;
+      var need = z && z.done<3 && !guideOpened();
+      d.style.display = need ? 'block' : 'none';
+    }
+    function cut(t,n){ t=String(t||'').trim(); return t.length>n ? t.slice(0,n)+'…' : t; }
+    function openGuideSheet(){
+      markGuideSeen();
+      var z=window.__zsState||{a:false,b:false,c:false,done:0,nm:'',bio:'',pubs:0};
+      var ov=document.getElementById('le-guide-ov');
+      if(!ov){
+        ov=document.createElement('div'); ov.className='ov'; ov.id='le-guide-ov';
+        ov.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">🧭 편집 가이드</span><span class="x" id="lg-x">×</span></div><div id="lg-body"></div></div>';
+        document.body.appendChild(ov);
+        ov.addEventListener('click', function(e){ if(e.target===ov) closeGuide(); });
+        ov.querySelector('#lg-x').onclick=closeGuide;
+      }
+      var ROWS=[
+        {ok:z.a, k:'intro', t:'나를 한 줄로 소개하기', d:'누구에게 뭘 해주는 사람인지',
+         val: z.nm? (z.nm + (z.bio? ' · '+cut(z.bio,26) : '')) : ''},
+        {ok:z.b, k:'work',  t:'대표 작업 하나 보여주기', d:'실력은 말보다 결과물',
+         val: z.pubs? ('올린 글 '+z.pubs+'개') : ''},
+        {ok:z.c, k:'contact', t:'연락 받을 곳 열기', d:'마음 생긴 손님이 바로',
+         val: z.c? '연락 수단이 켜져 있어요' : ''}
+      ];
+      var h='<div class="lg-top"><div class="lg-h">'+(z.done>=3?'세 걸음 다 세웠어요 🎉':'세 걸음이면 손님이 “믿을 만하네” 해요')+'</div>'
+        +'<div class="lg-bar"><i style="width:'+Math.round(z.done/3*100)+'%"></i></div>'
+        +'<div class="lg-cnt">'+z.done+' / 3 세움</div></div>';
+      ROWS.forEach(function(r,i){
+        h+='<button type="button" class="lg-l'+(r.ok?' ok':'')+'" data-lg="'+r.k+'">'
+          +'<span class="n">'+(r.ok?'✓':(i+1))+'</span>'
+          +'<span class="m"><b>'+r.t+'</b>'
+          +(r.val? '<span class="v">'+escT(r.val)+'</span>' : '<span>'+r.d+'</span>')
+          +'</span><span class="go">'+(r.ok?'고치기':'쓰기')+' →</span></button>';
+      });
+      h+='<div class="lg-note">한 번에 다 안 해도 돼요 · 쓰는 즉시 손님 화면에 반영돼요</div>';
+      document.getElementById('lg-body').innerHTML=h;
+      ov.querySelectorAll('[data-lg]').forEach(function(b){
+        b.onclick=function(){
+          var k=b.getAttribute('data-lg'); closeGuide();
+          if(k==='intro'){ try{ if(window.__openProfileSheet) window.__openProfileSheet(); }catch(_){} return; }
+          if(k==='work'){ try{ if(window.__openWriteChooser) window.__openWriteChooser(); }catch(_){} return; }
+          if(k==='contact'){ try{ if(window.__setFabInsert) window.__setFabInsert(false); }catch(_){}
+            try{ if(window.__openAddCatalog) window.__openAddCatalog(); }catch(_){} return; }
+        };
+      });
+      ov.classList.add('open');
+    }
+    function closeGuide(){ var ov=document.getElementById('le-guide-ov'); if(ov) ov.classList.remove('open');
+      /* 고치고 나오면 «바로» 갱신 — 홈 허브가 다시 계산할 시간을 조금 준다 */
+      try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 200); }catch(_){}
+      setTimeout(syncGuideDot, 500); }
+    window.__openGuideSheet=openGuideSheet;
+    window.__syncGuideDot=syncGuideDot;
+
+    function renderLiveSteps(){ syncGuideDot(); }   /* 떠 있는 패널은 없앴다 — 가이드는 도크에 있다 */
+    window.__renderLiveSteps=renderLiveSteps;
     window.__openLive=openLive;
     window.__openLiveAuto=function(){ if(AUTH && !window.__liveEditActive && !ov.classList.contains('open')) openLive(); };  // 기본 진입용(자동)
+    /* 현장이 열리면 세 걸음을 얹는다 (홈 허브가 계산을 끝낸 뒤라 조금 기다린다) */
+    setTimeout(function(){ try{ if(window.__liveEditActive) renderLiveSteps(); }catch(_){} }, 1200);
+    setInterval(function(){ try{ if(window.__liveEditActive && !document.getElementById('le-steps')) renderLiveSteps(); }catch(_){} }, 2500);
 
     // 자식(iframe)에서 오는 메시지
     window.addEventListener('message', function(ev){
@@ -15559,9 +15818,8 @@ if('serviceWorker' in navigator){
       else if(m.type==='la-block-menu'){ openBlockMenu(m.bt, m.nth, m.name); }   /* 🚨 칸 오른쪽 위 «⋯ 수정» (2026-08-20) */
       else if(m.type==='la-quit-edit'){ var _q=document.getElementById('le-quit'); if(_q) _q.click(); }   /* 🚪 현장 화면의 «편집 끝내기» (2026-08-20) */
       else if(m.type==='la-pane'){
-        /* ✍️ 포스팅(컨텐츠) 칸에서만 «글쓰기»를 띄운다 — 홈에선 홈 도구만, 글은 글 칸에서 (2026-08-20) */
-        var wb=document.getElementById('le-write');
-        if(wb) wb.style.display=(m.pane==='archive')?'':'none';
+        /* 🧭 2026-08-21 사장님 «새 글쓰기를 하단 워크스페이스에 넣어도 괜찮은듯»
+              도크 붙박이가 됐으므로 «포스팅 칸에서만 보이기»는 더 이상 맞지 않다 — 늘 보인다. */
       }
       else if(m.type==='la-edit-del'){ handleDel(m.bt, m.nth); }
       else if(m.type==='la-del-none'){ toast('삭제할 구성을 먼저 탭해서 선택하세요'); }
@@ -15683,7 +15941,7 @@ if('serviceWorker' in navigator){
       if(!ov){
         ov=document.createElement('div'); ov.className='ov'; ov.id='wch-ov';
         ov.innerHTML='<div class="sheet">'
-          +'<div class="sheet-h"><span class="t">어떻게 쓸까요?</span><span class="x" id="wch-x">\u00d7</span></div>'
+          +'<div class="sheet-h"><span class="t">새 포스팅 — 어떻게 쓸까요?</span><span class="x" id="wch-x">\u00d7</span></div>'
           +'<button type="button" class="wch-i" data-w="own">'
             +'<span class="e">\u270d\ufe0f</span><span class="m"><b>직접 쓰기</b>'
             +'<span>빈 화면부터 — 소제목 뼈대는 깔아드려요</span></span><span class="go">\u2192</span></button>'
@@ -16019,6 +16277,7 @@ if('serviceWorker' in navigator){
     };
     /* 🏠 1걸음 — 홈 유형(뼈대). 스킨을 없애고 이 4종이 그 역할을 흡수한다 (2026-08-20) */
     var ty=document.getElementById('le-type'); if(ty) ty.onclick=function(){ try{ if(window.__openTypePick) window.__openTypePick(); }catch(_){} };
+    var gb=document.getElementById('le-guide'); if(gb) gb.onclick=function(){ try{ if(window.__openGuideSheet) window.__openGuideSheet(); }catch(_){} };
     /* 💡 구성 추가를 열 때마다 «다음 하나»를 다시 짚는다 (2026-08-20) */
     try{ window.__paintAddReco=paintAddReco; }catch(_){}
     var ml=document.getElementById('le-mode-label');
