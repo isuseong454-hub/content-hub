@@ -628,6 +628,23 @@
       add('소제목은 본문이 따라올 때만', et.indexOf('var 본문이따라옴') >= 0, '블로그·인스타 원고는 마침표 없이 짧게 쓴다 — 그 조건만 보면 전부 소제목이 된다');
       add('소제목엔 강조바', et.indexOf("layout: pend[0] ? 'bar' : ''") >= 0, '전부 기본 카드라 «정리된 느낌»이 안 났다');
 
+      /* 🚨 2026-08-21 사장님 픽 ㉮ — 「1. 2. 3.」이 목록인지 «글의 뼈대»인지 가른다.
+            목록은 항목이 연달아 나온다. 뼈대는 항목마다 문단이 붙는다.
+            전엔 무조건 ☑ 체크목록이라 그 단발 글의 유형 1·2가 본문에 파묻혔다. */
+      add('번호 줄 = 목록인가 뼈대인가', et.indexOf('function pstNextLine(lines, i)') >= 0 && et.indexOf('function pstLooksBody(t)') >= 0, '내용을 안 읽고도 구조를 아는 유일한 신호');
+      add('번호 뼈대는 소제목으로', et.indexOf("if(_bare.length<=40 && !PST_LIST.test(_nx) && pstLooksBody(_nx))") >= 0, '「1. 하안부…」 뒤에 문단이 붙으면 소제목이다');
+      add('목록 앞줄도 소제목', et.indexOf('pstLooksBody(_nl) || PST_LIST.test(_nl)') >= 0, '「준비물」 다음에 「- 빗 - 가위」면 준비물은 소제목');
+      add('판정 규칙은 한 벌', (et.match(/pstLooksBody\(/g) || []).length >= 2, '소제목·번호 판정이 각자 놀면 반드시 어긋난다');
+      add('인스타·카톡 찌꺼기', et.indexOf('var PST_TAGS') >= 0 && et.indexOf('var PST_KKT') >= 0, '해시태그 뭉치·「오전 11:23」 — 출처를 묻지 않고 생김새로 안다');
+
+      /* ⌨️ 사장님 «다 불편한데» — 손잡이를 6개로 늘리는 대신 버튼 0개로 */
+      add('엔터로 나누기', et.indexOf("if(ev.key==='Enter' && !ev.shiftKey && !ev.isComposing)") >= 0, '노션·워드와 같은 손동작 — 배울 게 없다');
+      add('백스페이스로 합치기', et.indexOf("if(ev.key==='Backspace'") >= 0 && et.indexOf('sel.isCollapsed && caret()===0') >= 0, '맨 앞에서만 — 글 지우다 블록이 합쳐지면 사고');
+      add('한글 조합 중엔 안 가름', (et.match(/isComposing/g) || []).length >= 2, '한글 입력 중 엔터는 «글자 확정»이지 줄바꿈이 아니다');
+      add('사진과는 안 합침', et.indexOf("prev.dataset.type==='photocard' || prev.dataset.type==='imagetext'") >= 0, '글자가 사진 속으로 사라진 것처럼 보인다');
+      add('빈 소제목 칸 안 그림', et.indexOf("if(f[0]===0 && ty==='text' && !String(c[0]||'').length) return;") >= 0, '빈 칸이 첫 칸이 되면 맨 앞 백스페이스가 글자를 삼킨다');
+      add('합칠 땐 모든 칸을 가져감', et.indexOf('var mineTx=') >= 0, '칸이 둘인 블록을 합치면 한 칸이 사라진다');
+
       /* 🗑 사장님 «포스팅에 편집은 있는데 삭제가 없다» — 랜딩 캔버스 안에만 묻혀 있었다 */
       add('글 삭제 공용 함수', et.indexOf('window.__deletePost=function()') >= 0, '한 기능 두 규칙 금지 — 랜딩·블로그가 같은 것을 쓴다');
       add('글 삭제 버튼 실물', et.indexOf('id=\"ddelpost\"') >= 0 && et.indexOf('.ddelpost{') >= 0, '문서형 편집 맨 아래');
