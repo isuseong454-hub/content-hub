@@ -245,7 +245,7 @@
     <div class="login-card">
       <div class="login-t">마스터 관리자</div>
       <div class="login-s">콘텐츠가 모이는 허브를 관리하세요</div>
-      <input id="lg-code" placeholder="마스터 코드" autocapitalize="characters" autocomplete="off">
+      <input id="lg-code" placeholder="마스터 코드" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off">
       <input id="lg-pin" type="password" placeholder="비밀번호 (영문·숫자)" autocomplete="off">
       <div class="login-err" id="lg-err"></div>
       <button class="login-btn" id="lg-btn">로그인</button>
@@ -766,12 +766,20 @@
     var err=$('lg-err'); err.textContent='';
     var left=lockMinsLeft();
     if(left>0){ err.textContent='시도가 많아 잠겼어요 🔒 약 '+left+'분 후 다시 시도하세요.'; return; }
-    var code=($('lg-code').value||'').trim().toUpperCase(), pin=($('lg-pin').value||'').trim();
+    var code=($('lg-code').value||'').trim(), pin=($('lg-pin').value||'').trim();   /* 🚨 2026-08-20 사장님 «관리자 아이디가 소문자야» — .toUpperCase() 가 소문자 코드를 망가뜨렸다 */
     if(!code||!pin){ err.textContent='코드와 PIN을 입력하세요'; return; }
     lb.disabled=true; lb.textContent='확인 중...';
     try{
       var hash=await window.laSha256(pin);
+      /* 🚨 2026-08-20 — 코드는 «친 그대로» 먼저 보낸다(소문자 코드도 있다).
+            안 맞으면 «대문자로 한 번 더» — 발급 코드는 대문자라 소문자로 쳐도 들어가진다.
+            대문자로 못 박아두면 소문자 계정이 영영 못 들어온다. */
       var res=await window.laRpc('li_master_login',{ p_code:code, p_pin_hash:hash });
+      if(!(res&&res.ok) && code!==code.toUpperCase()){
+        var up=code.toUpperCase();
+        var res2=await window.laRpc('li_master_login',{ p_code:up, p_pin_hash:hash });
+        if(res2&&res2.ok){ res=res2; code=up; }
+      }
       if(res&&res.ok){ try{ localStorage.removeItem(LK); }catch(_){} AUTH={code:code, pinHash:hash}; try{ sessionStorage.setItem('cmh-master',JSON.stringify(AUTH)); }catch(e){} enter(); }
       else if(res&&res.reason==='auth'){
         var o=getLock(); o.fails=(o.fails||0)+1;
