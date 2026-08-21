@@ -1351,9 +1351,14 @@
   html.has-skin .pg-card, html.has-skin .gcard, html.has-skin .arc-card, html.has-skin .lbc{ box-shadow:none; }
   html.has-skin .pane-title{ text-align:center; font-weight:600; }
   /* 스킨(에디토리얼) = 위 "주소 바"(contenthub.kr/u/…) 숨겨 시안처럼 맨 위부터 깔끔하게 — 관리자 톱니만 살짝 떠 있게 (진입 유지) */
-  html.has-skin .topbar{ position:absolute; top:0; left:0; right:0; justify-content:flex-end; padding:12px 16px 0; margin:0; z-index:6; pointer-events:none; }
+  html.has-skin .topbar{ position:absolute; top:0; left:0; right:0; justify-content:flex-end; padding:12px 16px 0; margin:0; z-index:70; pointer-events:none; }
   html.has-skin .topbar .handle{ display:none; }
-  html.has-skin .topbar .settings-link{ pointer-events:auto; }
+  /* 🚨 2026-08-20 — 톱니는 눌렸는데 «운영자 모드·로그아웃»이 안 눌렸다.
+        topbar 의 pointer-events:none 를 톱니(.settings-link)만 되살려서, 그 옆 ⚙메뉴가 통째로 통과돼 버렸다.
+        메뉴도 같이 되살린다. (z-index 도 6 → 70 : 메뉴가 본문 아래로 깔리지 않게) */
+  html.has-skin .topbar .settings-link,
+  html.has-skin .topbar .gear-wrap,
+  html.has-skin .topbar .gear-menu{ pointer-events:auto; }
   /* 글로우 후킹 = 에디토리얼 히어로 (시안 그대로: ✱ + 「첫인상의 70%」 + 작가칩) */
   html.has-skin .gh-hook{ padding:42px 14px 30px; }
   html.has-skin .gh-star{ display:block; color:var(--coral); font-size:20px; line-height:1; margin-bottom:14px; text-shadow:0 0 18px var(--coral-soft); }
