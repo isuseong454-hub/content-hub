@@ -15764,7 +15764,14 @@ if('serviceWorker' in navigator){
     var hb=document.getElementById('le-home'); if(hb) hb.onclick=function(){ setLePreview(!lePreview); };
     var hc=document.getElementById('le-homeconfig'); if(hc) hc.onclick=function(){ if(window.__openDesign) window.__openDesign(); };   // 🪄 홈 구성 → 디자인 3단계
     /* 📝 글쓰기 — 현장 편집엔 «홈 구성» 도구뿐이라 글을 쓰려면 작업실을 거쳐야 했다 (2026-08-20) */
-    var wb=document.getElementById('le-write'); if(wb) wb.onclick=function(){ closeLive(); try{ if(window.__switchWs) window.__switchWs('posts'); }catch(_){} };
+    /* 🚨 2026-08-20 사장님 확인 — 글쓰기를 누르면 «현장»을 닫고 작업실(운영자 모드)로 튕겼다.
+          사장님: «바로 현장에서 포스팅하는 걸로 가야 한다, 그 테마 배경에서».
+          라이브 시트(live-sheet-ov)로 손님 화면 «위»에 글쓰기를 올린다 — 현장을 안 떠난다.
+          ⚠️ closeLive()+switchWs('posts')로 되돌리면 다시 운영자 모드로 튕긴다. */
+    var wb=document.getElementById('le-write'); if(wb) wb.onclick=function(){
+      try{ if(window.__newPostSheet){ window.__newPostSheet(); return; } }catch(_){}
+      closeLive(); try{ if(window.__switchWs) window.__switchWs('posts'); }catch(_){}   /* 시트가 없으면(옛 버전) 예전 길로 */
+    };
     var op=document.getElementById('le-opmode'); if(op) op.onclick=function(){ closeLive(); };   // ⚙ 운영자 모드 → 편집모드 닫고 작업실로
     /* 🏠 1걸음 — 홈 유형(뼈대). 스킨을 없애고 이 4종이 그 역할을 흡수한다 (2026-08-20) */
     var ty=document.getElementById('le-type'); if(ty) ty.onclick=function(){ try{ if(window.__openTypePick) window.__openTypePick(); }catch(_){} };
