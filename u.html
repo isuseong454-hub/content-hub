@@ -583,13 +583,22 @@
   /* 🚨 2026-08-20 사장님 지적 — «고치기»가 이벤트 배너에 깔려 겹쳤다.
         원인: 스킨일 때 .topbar 가 position:absolute 라 본문 맨 위 배너와 같은 자리를 썼다.
         해법 두 겹 — ① 버튼을 화면 고정(스크롤해도 늘 위에) ② 본문 위에 버튼 높이만큼 자리를 비운다. */
+  /* 🎨 2026-08-20 사장님 «위에 검은색 버튼 말고 라이트한 걸로»
+        --bg(=까만 배경)를 그대로 쓰니 밝은 테마에서 «검은 알약»이 됐다.
+        밝은 테마면 흰 알약 + 어두운 글씨로 뒤집는다. */
   .mine-edit{position:fixed; top:calc(10px + env(safe-area-inset-top,0px)); right:12px; z-index:95;
     display:inline-flex; align-items:center; gap:5px; text-decoration:none; font-family:var(--sans);
     font-size:11.5px; font-weight:800; letter-spacing:-.2px; border-radius:999px; padding:8px 13px;
-    background:var(--bg,#111); color:var(--coral);
+    background:rgba(20,20,26,.86); color:var(--coral);
     border:1px solid color-mix(in srgb, var(--coral) 42%, transparent);
-    box-shadow:0 4px 16px rgba(0,0,0,.4);
+    box-shadow:0 4px 16px rgba(0,0,0,.28); backdrop-filter:saturate(140%) blur(6px);
     transition:transform 120ms cubic-bezier(.2,0,0,1);}
+  html[data-bright="light"] .mine-edit{ background:rgba(255,255,255,.92); color:#5B3FD6;
+    border-color:rgba(91,63,214,.30); box-shadow:0 4px 14px rgba(0,0,0,.12); }
+  html[data-bright="light"] .edit-flag{ background:rgba(255,255,255,.92); color:#5B3FD6;
+    border-color:rgba(91,63,214,.26); box-shadow:0 3px 12px rgba(0,0,0,.10); }
+  html[data-bright="light"] .edit-flag i{ background:#5B3FD6; }
+  .mine-edit-quit{ font-weight:900; }
   .mine-edit:active{transform:scale(.96);}
   /* 실측: 버튼 바닥이 46px — 46 으로 맞추면 «간격 0»이라 붙어 보인다. 12px 숨 쉴 자리를 준다.
      («포스팅 편집»처럼 글자가 길어져도 버튼은 한 줄이라 높이는 그대로) */
@@ -600,7 +609,7 @@
                inset 0 34px 42px -30px color-mix(in srgb, var(--coral) 42%, transparent);}
   .edit-flag{position:fixed; top:calc(12px + env(safe-area-inset-top,0px)); left:12px; z-index:96;
     display:none; align-items:center; gap:6px; font-family:var(--sans); font-size:10.5px; font-weight:800;
-    letter-spacing:.03em; color:var(--coral); background:var(--bg,#111); padding:6px 11px; border-radius:999px;
+    letter-spacing:.03em; color:var(--coral); background:rgba(20,20,26,.86); padding:6px 11px; border-radius:999px; backdrop-filter:saturate(140%) blur(6px);
     border:1px solid color-mix(in srgb, var(--coral) 30%, transparent); opacity:.85;}
   html[data-edit] .edit-flag{display:inline-flex;}
   .edit-flag i{width:6px; height:6px; border-radius:99px; background:var(--coral); display:block;
@@ -928,6 +937,20 @@
   html[data-edit] .la-ed-hrow{display:flex; align-items:center; gap:8px;}
   html[data-edit] .la-ed-hrow::before{content:''; width:3px; height:12px; border-radius:2px; background:rgba(167,139,255,.85); flex:0 0 auto;}
   html[data-edit] .la-ed-hname{font-size:10.5px; font-weight:800; letter-spacing:.04em; color:rgba(190,172,255,.95); white-space:nowrap;}
+  /* 🚨 2026-08-20 사장님 «이러니까 안 보이잖아» — 편집 라벨 색이 «다크 기준»으로 박혀 있어
+        크림·라이트 테마에선 배경과 붙어 안 읽혔다. 밝은 테마에선 어두운 글씨로 뒤집는다. */
+  html[data-edit][data-theme="lavender"] .la-ed-hname, html[data-edit][data-theme="cream"] .la-ed-hname,
+  html[data-edit][data-theme="pearl"] .la-ed-hname, html[data-edit][data-theme="aqua"] .la-ed-hname,
+  html[data-edit][data-theme="lime"] .la-ed-hname{color:rgba(60,40,120,.92);}
+  html[data-edit][data-theme="lavender"] .la-ed-hhint, html[data-edit][data-theme="cream"] .la-ed-hhint,
+  html[data-edit][data-theme="pearl"] .la-ed-hhint, html[data-edit][data-theme="aqua"] .la-ed-hhint,
+  html[data-edit][data-theme="lime"] .la-ed-hhint{color:rgba(0,0,0,.5);}
+  html[data-edit][data-theme="lavender"] .la-ed-act, html[data-edit][data-theme="cream"] .la-ed-act,
+  html[data-edit][data-theme="pearl"] .la-ed-act, html[data-edit][data-theme="aqua"] .la-ed-act,
+  html[data-edit][data-theme="lime"] .la-ed-act{color:rgba(60,40,120,.8);}
+  html[data-edit][data-theme="lavender"] .la-ed-hrow::before, html[data-edit][data-theme="cream"] .la-ed-hrow::before,
+  html[data-edit][data-theme="pearl"] .la-ed-hrow::before, html[data-edit][data-theme="aqua"] .la-ed-hrow::before,
+  html[data-edit][data-theme="lime"] .la-ed-hrow::before{background:rgba(90,60,180,.75);}
   html[data-edit] .la-ed-hrow::after{content:''; flex:1; height:1px; background:linear-gradient(90deg, rgba(167,139,255,.32), rgba(167,139,255,0));}
   html[data-edit] .la-ed-hhint{font-size:10px; color:rgba(255,255,255,.42); margin-left:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   /* 상호작용 힌트(톡 수정 · 꾹 이동): 평소 숨김 → 호버/선택 시 은은히 */
@@ -2630,6 +2653,14 @@
   .lbc-num, .lbc-wm{z-index:2;}
   /* 밝은 톤 테마: 스크림·글자를 밝게(흰 스크림 + 어두운 글자)로 뒤집어 가독성 확보 */
   html[data-bright="light"] .lbc::after{background:linear-gradient(to top, rgba(255,255,255,.96) 0%, rgba(255,255,255,.6) 46%, transparent 80%);}
+  /* 🚨 2026-08-20 사장님 «검은색 모야 · 너무 안 어울리잖아»
+        ① .lbc-label 의 검정 그라데만 밝은 테마용 짝이 없어 크림 배경 위에 «검은 덩어리»로 남았다.
+        ② 사진이 아직 없는 카드엔 장막 자체가 필요 없다 — 가릴 게 없는데 어둡게만 만든다. */
+  html[data-bright="light"] .lbc-label{background:linear-gradient(to top, rgba(255,255,255,.94) 0%, rgba(255,255,255,.62) 44%, transparent 84%);}
+  .lbc-nopic::after{display:none !important;}
+  .lbc-nopic .lbc-label{background:none !important;}
+  .lbc-nopic .lbc-kr{color:var(--muted) !important; text-shadow:none !important; font-weight:700;}
+  .lbc-nopic .lbc-en{opacity:.55;}
   html[data-bright="light"] .lbc-num{color:var(--cm-disp); text-shadow:0 1px 3px rgba(255,255,255,.9);}
   html[data-bright="light"] .lbc-kr{color:var(--cm-disp); text-shadow:0 1px 2px rgba(255,255,255,.85);}
   html[data-bright="light"] .lbc-en{color:var(--muted); text-shadow:none;}
@@ -3666,6 +3697,18 @@
             지금 보고 있는 칸 이름을 버튼에 달고, 그 칸으로 편집을 연다. */
       var LBL={home:'홈 편집', about:'프로필 편집', archive:'포스팅 편집', shop:'스토어 편집', qna:'Q&A 편집'};
       function syncEditBtn(){
+        /* 🚨 2026-08-20 사장님 «홈 편집했는데 또 홈 편집할 순 없잖아»
+              편집 중(EDIT_MODE)엔 같은 자리가 «편집 끝내기»가 된다 — 나가는 문이 늘 같은 곳에 있다. */
+        var _isEdit=false;
+        try{ _isEdit = (typeof EDIT_MODE!=='undefined' && EDIT_MODE) || document.documentElement.hasAttribute('data-edit'); }catch(_){}
+        if(_isEdit){
+          b.textContent='✓ 편집 끝내기';
+          b.removeAttribute('href');
+          b.classList.add('mine-edit-quit');
+          b.setAttribute('aria-label','편집 끝내기');
+          b.onclick=function(e){ e.preventDefault(); try{ parent.postMessage({type:'la-quit-edit'}, '*'); }catch(_){} };
+          return;
+        }
         var on=document.querySelector('.navitem.active');
         var k=on?on.getAttribute('data-tab'):'home';
         b.textContent='✏️ '+(LBL[k]||'편집하기');
@@ -3673,6 +3716,7 @@
         b.setAttribute('aria-label',(LBL[k]||'편집')+'하기');
       }
       syncEditBtn();
+      setTimeout(syncEditBtn, 260); setTimeout(syncEditBtn, 900);   /* 🚨 EDIT_MODE·data-edit 가 늦게 붙는다 — 한 번 더 확인 */
       document.querySelectorAll('.navitem').forEach(function(t){ t.addEventListener('click', function(){ setTimeout(syncEditBtn, 30); }); });
     }catch(e){}
   })();
@@ -4719,7 +4763,7 @@
         var hasV = !!(emb || isMp4);
         var video= isMp4 ? '<video class="lbc-video" muted loop playsinline preload="metadata" src="'+esc(vid)+'"></video>' : '';
         var resvBtn = '';   // 쇼케이스 카드 '이 스타일로 예약' 버튼 제거 (사용자 요청 — 예약은 예약 블록에서)
-        return '<article class="lbc" data-lbi="'+i+'"'+(hasV?' data-hasvid="1"':'')+(emb?' data-emb="'+esc(emb)+'"':'')+'>'+media+video+'<div class="lbc-corner"></div>'+(wm?'<div class="lbc-wm">'+esc(wm)+'</div>':'')+'<div class="lbc-num">'+num+'</div><div class="lbc-label"><div class="lbc-kr">'+esc(kr)+'</div>'+(en?'<div class="lbc-en">'+esc(en)+'</div>':'')+'</div>'+resvBtn+(hasV?'<div class="lbc-play">▶</div>':'')+(EDIT?'<button type="button" class="lbc-del" title="이 카드 삭제">×</button>':'')+'</article>';
+        return '<article class="lbc'+(ph?'':' lbc-nopic')+'" data-lbi="'+i+'"'+(hasV?' data-hasvid="1"':'')+(emb?' data-emb="'+esc(emb)+'"':'')+'>'+media+video+'<div class="lbc-corner"></div>'+(wm?'<div class="lbc-wm">'+esc(wm)+'</div>':'')+'<div class="lbc-num">'+num+'</div><div class="lbc-label"><div class="lbc-kr">'+esc(kr)+'</div>'+(en?'<div class="lbc-en">'+esc(en)+'</div>':'')+'</div>'+resvBtn+(hasV?'<div class="lbc-play">▶</div>':'')+(EDIT?'<button type="button" class="lbc-del" title="이 카드 삭제">×</button>':'')+'</article>';
       }).join('');
       wrap.innerHTML=head+'<div class="lb-grid">'+grid+'</div>'+(EDIT?'<button type="button" class="lb-addcard">＋ 카드 추가</button>':'');
       if(!EDIT){
