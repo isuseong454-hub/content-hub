@@ -14056,8 +14056,11 @@ if('serviceWorker' in navigator){
       if(st0 && STYLE_PRESETS[st0]){ applyStyle(st0); }                                  // 고른 시작 스타일로
       else { applyPreset(res.industry || (AUTH&&AUTH.industry) || selInd); }             // 기본 프리셋 (온보딩 폐지 — 첫 진입에 안 띄움)
       /* 🎙 신규 계정 기본형 = 크리에이터형 (2026-08-20 사장님 지시 · 이전 기본값은 «에디토리얼형» 2026-07-10)
-            기존 계정은 applyData 경로라 무회귀 · 이미 고른 값이 있으면 존중 */
-      try{ var h0=JSON.parse(localStorage.getItem('cm-home-v1')||'{}'); if(!h0.template){ h0.template='editorial'; localStorage.setItem('cm-home-v1', JSON.stringify(h0)); } }catch(e){}
+            기존 계정은 applyData 경로라 무회귀 · 이미 고른 값이 있으면 존중
+            🚨 2026-08-20 사장님 「가」 픽 — 여기서 새 계정에 «에디토리얼» 템플릿을 강제로 넣던 줄을 삭제했다.
+               «유형»과 «템플릿»이 각각 모양을 정해 서로 부딪혔다(스킨을 없앤 이유와 같은 문제).
+               이제 모양은 «홈 유형» 하나가 온전히 책임진다. 새 계정은 template 없음(=free)으로 시작.
+               ⚠️ 되살리면 유형을 골라도 옆에서 다른 게 모양을 덮어쓴다. */
       try{
         if(!st0 && typeof STYLE_PRESETS!=='undefined' && STYLE_PRESETS['tcreator'] && typeof applyStyle==='function'){
           applyStyle('tcreator');
