@@ -13083,7 +13083,13 @@ if('serviceWorker' in navigator){
      ⚠️ 5단어를 넘으면 손대지 않는다 — 진짜 원고를 잘못 지우는 게 더 큰 사고다. */
   var PST_JUNK_W = /^(프로필|이웃추가|이웃|추가|본문|기타|기능|공감|댓글|공유하기|공유|신고하기|신고|구독하기|구독|맨위로|목록열기|목록|인쇄|스크랩|URL|복사|전체보기|카테고리|좋아요|보내기|저장|수정|삭제)$/;
   var PST_DATE = /^\d{1,4}\s*[.\-\/]\s*\d{1,2}\s*[.\-\/]?\s*(\d{1,2}:\d{2})?\s*$/;
+  /* 인스타·카톡에서 온 원고의 찌꺼기 — 출처를 «묻지 않고» 생김새로 안다.
+     (사장님께 «어디서 가져왔어요?»를 탭시키는 것보다 정확하고, 할 일이 0이다) */
+  var PST_TAGS = /^(#[^\s#]{1,30}[\s]*){2,}$/;              /* 해시태그만 줄줄이 = 인스타 꼬리 */
+  var PST_KKT  = /^(오전|오후)\s*\d{1,2}:\d{2}$/;            /* 카톡 시각 */
+  var PST_MORE = /^(더보기|...더보기|답장|전달|읽음|안 읽음)$/;
   function PST_JUNK_TEST(t){
+    if(PST_TAGS.test(t) || PST_KKT.test(t) || PST_MORE.test(t)) return true;
     if(PST_DATE.test(t)) return true;
     var w=t.split(/\s+/).filter(Boolean);
     if(!w.length || w.length>5) return false;
@@ -13095,6 +13101,19 @@ if('serviceWorker' in navigator){
       .replace(/[\u200B-\u200D\uFEFF\u2060]/g, '')   /* 제로폭 공백 — 블로그 빈 줄의 정체 */
       .replace(/\u00A0/g, ' ');                        /* 줄바꿈 안 되는 공백 */
   }
+  /* «다음에 나오는 내용 줄» — 빈 줄·찌꺼기는 건너뛴다 */
+  function pstNextLine(lines, i){
+    for(var j=i+1;j<lines.length;j++){
+      var c=lines[j].trim();
+      if(!c || PST_JUNK_TEST(c)) continue;
+      return c;
+    }
+    return '';
+  }
+  /* «본문처럼 생겼나» — 길거나, 문장으로 끝나거나 */
+  function pstLooksBody(t){
+    return !!t && (t.length>28 || PST_END.test(t) || /[.!…]$/.test(t));
+  }
   function pstAnalyze(raw){
     var lines=pstClean(raw).split(/\r?\n/), out=[], buf=[], paraSince=0, titleTaken=false, title='';
     function flush(){ if(buf.length){ out.push({k:'li', items:buf.slice()}); buf=[]; } }
@@ -13102,7 +13121,19 @@ if('serviceWorker' in navigator){
       var t=lines[i].trim();
       if(!t){ flush(); continue; }
       if(PST_JUNK_TEST(t)) continue;   /* 블로그 화면 글자·날짜 — 원고가 아니다 */
-      if(PST_LIST.test(t)){ buf.push(t.replace(PST_LIST,'')); continue; }
+      /* 🚨 2026-08-21 사장님 픽 ㉮ — 「1. 2. 3.」이 목록인지 «글의 뼈대»인지 가른다.
+            목록은 항목이 «연달아» 나온다.  뼈대는 항목마다 «문단이 붙는다».
+            전엔 무조건 ☑ 체크목록이라, 그 단발 글의 유형 1·2가 본문 덩어리에 파묻혔다. */
+      if(PST_LIST.test(t)){
+        var _bare=t.replace(PST_LIST,'').trim();
+        var _nx=pstNextLine(lines, i);
+        if(_bare.length<=40 && !PST_LIST.test(_nx) && pstLooksBody(_nx)){
+          flush();                       /* 쌓아 둔 목록이 있으면 먼저 닫는다 */
+          out.push({k:'h', tx:t});       /* 번호를 그대로 살린 소제목 */
+          paraSince=0; continue;
+        }
+        buf.push(_bare); continue;
+      }
       flush();
       if(!titleTaken){
         titleTaken=true; title=t; var rest='';
@@ -13116,13 +13147,10 @@ if('serviceWorker' in navigator){
             블로그·인스타 원고는 마침표 없이 짧게 끊어 쓰므로, 그 조건만 보면 전부 소제목이 된다.
             다음 «내용 있는 줄»이 또 짧고 마침표가 없으면 = 그냥 짧은 문단들이다 → 본문으로 흘린다. */
       if(t.length<=28 && (/[?？:：]$/.test(t) || (!PST_END.test(t) && !/[.!,…]$/.test(t)))){
-        var nxt='';
-        for(var j=i+1;j<lines.length;j++){
-          var c=lines[j].trim();
-          if(!c || PST_JUNK_TEST(c) || PST_LIST.test(c)) continue;
-          nxt=c; break;
-        }
-        var 본문이따라옴 = !!nxt && (nxt.length>28 || PST_END.test(nxt) || /[.!…]$/.test(nxt));
+        /* 뒤에 «본문»이 오거나 «목록·번호»가 오면 이 줄은 머리다.
+           (「준비물」 다음에 「- 빗 - 가위」가 오면 준비물은 당연히 소제목) */
+        var _nl=pstNextLine(lines, i);
+        var 본문이따라옴 = pstLooksBody(_nl) || PST_LIST.test(_nl);
         if(본문이따라옴){ out.push({k:'h', tx:t}); paraSince=0; continue; }
         /* 아니면 소제목이 아니다 — 아래 문단 처리로 내려간다 */
       }
@@ -13403,6 +13431,10 @@ if('serviceWorker' in navigator){
               out += '<div class="dtx" contenteditable="true" data-di2="'+i+'" data-dk="1" data-ph="덧붙일 말 (선택)">'+esc2(c[1])+'</div>';
           } else {
             (FIELD[ty]||[]).forEach(function(f){
+              /* 🚨 소제목이 비어 있으면 그 칸을 «그리지 않는다».
+                    빈 소제목 줄이 본문 위에 유령처럼 뜨고, 그게 «첫 칸»이라
+                    맨 앞 백스페이스가 빈 칸을 잡아 글자가 사라졌다 (2026-08-21 실측). */
+              if(f[0]===0 && ty==='text' && !String(c[0]||'').length) return;
               var cls = (ty==='quote') ? 'dtx q' : ((f[0]===0 && ty==='text') ? 'dtx h' : 'dtx');
               out += '<div class="'+cls+'" contenteditable="true" data-di2="'+i+'" data-dk="'+f[0]+'" data-ph="'+esc2(f[1])+'">'
                    + esc2(c[f[0]]) + '</div>';
@@ -13442,6 +13474,80 @@ if('serviceWorker' in navigator){
           ev.preventDefault();
           var t=(ev.clipboardData||window.clipboardData).getData('text/plain')||'';
           document.execCommand('insertText', false, t);
+        });
+        /* ⌨️ 2026-08-21 사장님 «다 불편한데» — 손잡이를 6개로 늘리는 대신 «버튼 0개»로.
+              노션·워드가 쓰는 손동작 그대로다:
+                문단 중간에서  엔터        → 거기서 갈라진다
+                문단 맨 앞에서 백스페이스   → 위와 합쳐진다
+              글 쓰는 사람이 이미 아는 동작이라 배울 게 없고, 화면엔 아무것도 안 늘어난다. */
+        e.addEventListener('keydown', function(ev){
+          var row=rows[+e.dataset.di2]; if(!row) return;
+          var sel=window.getSelection();
+          if(!sel || !sel.rangeCount) return;
+          var rg=sel.getRangeAt(0);
+
+          /* 캐럿이 이 칸의 몇 번째 글자에 있나 */
+          function caret(){
+            var pre=rg.cloneRange();
+            pre.selectNodeContents(e); pre.setEnd(rg.startContainer, rg.startOffset);
+            return pre.toString().length;
+          }
+
+          if(ev.key==='Enter' && !ev.shiftKey && !ev.isComposing){
+            ev.preventDefault();
+            var txt=e.textContent||'', at=caret();
+            var head=txt.slice(0, at), tail=txt.slice(at);
+            cont(row)[+e.dataset.dk]=head; changed(row);
+            if(!window.__createRow) return;
+            var nr=window.__createRow({ type:'text', name:'본문', on:true, content:['', tail] });
+            if(!nr) return;
+            nr._content=['', tail];
+            if(row.nextSibling) box().insertBefore(nr, row.nextSibling); else box().appendChild(nr);
+            var idx=docRows().indexOf(nr);
+            reflow();
+            setTimeout(function(){
+              var t2=document.querySelector('#docwrap .dblk[data-di="'+idx+'"] .dtx:not(.h)');
+              if(t2){ t2.focus();
+                try{ var r2=document.createRange(); r2.setStart(t2.firstChild||t2, 0); r2.collapse(true);
+                     var s2=window.getSelection(); s2.removeAllRanges(); s2.addRange(r2); }catch(_){}
+              }
+            }, 60);
+            return;
+          }
+
+          if(ev.key==='Backspace' && !ev.isComposing && sel.isCollapsed && caret()===0){
+            /* 이 칸이 «이 블록의 첫 칸»일 때만 위와 합친다 (소제목이 있으면 그건 두 번째 칸) */
+            var mine=e.closest('.dblk');
+            if(!mine || mine.querySelector('.dtx')!==e) return;
+            var i=+e.dataset.di2, prev=rows[i-1];
+            if(!prev) return;
+            /* 사진 블록과는 합치지 않는다 — 글자가 사진 속으로 사라진 것처럼 보인다 */
+            if(prev.dataset.type==='photocard' || prev.dataset.type==='imagetext') return;
+            ev.preventDefault();
+            /* 앞 블록의 «글이 들어가는 칸» — 인용·임팩트는 0번, 보통 글은 1번(본문) */
+            var pty=prev.dataset.type||'', ply=prev._layout||'';
+            var k = (pty==='quote' || (pty==='text' && (ply==='quote'||ply==='impact'))) ? 0 : 1;
+            var pc=cont(prev);
+            while(pc.length<=k) pc.push('');
+            var joinAt=String(pc[k]||'').length;
+            /* 이 블록이 가진 «모든» 글자를 가져간다 (칸이 둘일 수 있다) */
+            var mineTx=[].map.call(mine.querySelectorAll('.dtx'), function(x){ return x.textContent||''; })
+                          .filter(Boolean).join(' ');
+            pc[k]=String(pc[k]||'') + mineTx;
+            row.remove();
+            changed(prev);
+            var pi=docRows().indexOf(prev);
+            reflow();
+            setTimeout(function(){
+              var _all=document.querySelectorAll('#docwrap .dblk[data-di="'+pi+'"] .dtx');
+              var t3=_all[_all.length-1] || _all[0];   /* 본문은 늘 마지막 칸 */
+              if(t3){ t3.focus();
+                try{ var r3=document.createRange(); var node=t3.firstChild||t3;
+                     r3.setStart(node, Math.min(joinAt, (node.textContent||'').length)); r3.collapse(true);
+                     var s3=window.getSelection(); s3.removeAllRanges(); s3.addRange(r3); }catch(_){}
+              }
+            }, 60);
+          }
         });
       });
       h.querySelectorAll('[data-dpic]').forEach(function(e){
