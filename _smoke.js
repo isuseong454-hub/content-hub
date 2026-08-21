@@ -645,6 +645,26 @@
       add('빈 소제목 칸 안 그림', et.indexOf("if(f[0]===0 && ty==='text' && !String(c[0]||'').length) return;") >= 0, '빈 칸이 첫 칸이 되면 맨 앞 백스페이스가 글자를 삼킨다');
       add('합칠 땐 모든 칸을 가져감', et.indexOf('var mineTx=') >= 0, '칸이 둘인 블록을 합치면 한 칸이 사라진다');
 
+      /* 📸 사장님 «사진을 화질 나쁘지 않게 적당히 눌러줘» — 전엔 1080px·JPEG 0.72 한 방이었다 */
+      add('사진 WebP 우선', et.indexOf('var IMG_WEBP') >= 0 && et.indexOf("toDataURL('image/webp')") >= 0, '같은 화질에서 JPEG보다 30~40% 작다');
+      add('사진 용량 예산', et.indexOf('var IMG_BUDGET') >= 0, '사진은 글 데이터 «안»에 들어간다 — 예산이 없으면 저장이 막힌다');
+      add('사진 품질 먼저 폭 나중', et.indexOf('var qs = [quality || 0.86') >= 0, '품질을 더 깎는 것보다 폭을 줄이는 게 덜 티난다');
+      add('사진 실패해도 뭔가 돌려줌', et.indexOf('resolve(best);') >= 0, '예산 못 맞춰도 올리기 자체가 막히면 안 된다');
+
+      /* ✨ 사장님 «표지 자동 만들기» */
+      add('표지 자동 만들기', et.indexOf('function autoCover(title, sub)') >= 0 && et.indexOf('window.__autoCover=autoCover') >= 0, '사진이 없을 때 회색 네모보다 낫다');
+      add('표지는 테마 색을 따름', et.indexOf('if(THEMES[i][0]===home.theme){ bg=THEMES[i][1]; ac=THEMES[i][2]; break; }') >= 0, '홈과 따로 놀면 안 된다');
+      add('표지 버튼 실물', et.indexOf('id="post-autocover"') >= 0 && et.indexOf('.autocover-btn{') >= 0, '썸네일 칸 안, 커버 사진 바로 밑');
+
+      /* 🧰 사장님 «비공개도 익숙한 곳에 · 임시저장함·캡션 뽑기도» */
+      add('글 도구 세 개', et.indexOf('id=\"dhide\"') >= 0 && et.indexOf('id=\"dexport\"') >= 0 && et.indexOf('id=\"ddrafts\"') >= 0, '비공개·캡션 뽑기·임시저장함 — 작업실 깊은 곳에만 있던 것');
+      add('비공개 토글 배선', et.indexOf('q.on = (q.on===false);') >= 0, '껐다 켰다 — 글 하나에 대한 일이라 글 쓰는 자리가 제자리');
+      add('캡션 뽑기 배선', et.indexOf('window.__openPostExport()') >= 0, '이미 있는 기능인데 입구가 깊어 묻혀 있었다');
+
+      /* 🔑 사장님 «자동 로그인 버튼» — 기능은 있었는데 «보이지 않아» 모르셨다 */
+      add('자동 로그인 스위치', et.indexOf('id="lg-auto"') >= 0 && et.indexOf('cm-autologin') >= 0, '있는 걸 보이게 + 끌 수 있게');
+      add('자동 로그인 끄면 통과 금지', et.indexOf("localStorage.getItem('cm-autologin')==='0') return;") >= 0, '남의 컴퓨터에서 켜 두면 그대로 열린다');
+
       /* 🗑 사장님 «포스팅에 편집은 있는데 삭제가 없다» — 랜딩 캔버스 안에만 묻혀 있었다 */
       add('글 삭제 공용 함수', et.indexOf('window.__deletePost=function()') >= 0, '한 기능 두 규칙 금지 — 랜딩·블로그가 같은 것을 쓴다');
       add('글 삭제 버튼 실물', et.indexOf('id=\"ddelpost\"') >= 0 && et.indexOf('.ddelpost{') >= 0, '문서형 편집 맨 아래');
