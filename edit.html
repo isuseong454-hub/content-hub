@@ -1973,6 +1973,29 @@ if('serviceWorker' in navigator){
     border:1px dashed var(--hair); background:transparent; color:var(--muted);
     font-family:var(--sans); font-size:12.5px; cursor:pointer; min-height:44px; }
   .dmore:hover{ border-color:var(--coral); color:var(--coral); }
+  /* 🧰 무기고 블록도 «문서 안에서» — 숫자·Q&A·후기·단계 (2026-08-21 사장님 지적) */
+  .dlist{ margin:10px 0; }
+  .dli{ display:flex; align-items:flex-start; gap:8px; padding:6px 0; }
+  .dli .dno{ flex:0 0 auto; width:20px; height:20px; border-radius:50%; background:var(--coral);
+    color:#fff; display:grid; place-items:center; font-size:10.5px; font-weight:700; margin-top:4px; }
+  .dlf{ flex:1; min-width:0; }
+  .dlx{ flex:0 0 auto; width:24px; height:24px; border:0; background:transparent; color:var(--muted);
+    font-size:11px; cursor:pointer; opacity:0; transition:opacity .15s; margin-top:3px; }
+  .dli:hover .dlx, .dli:focus-within .dlx{ opacity:.7; }
+  .dlx:hover{ opacity:1 !important; color:#E0564B; }
+  .dladd{ display:block; width:100%; margin-top:4px; padding:8px; border-radius:9px;
+    border:1px dashed var(--hair); background:transparent; color:var(--muted);
+    font-family:var(--sans); font-size:11.5px; cursor:pointer; min-height:36px; }
+  .dladd:hover{ border-color:var(--coral); color:var(--coral); }
+  /* 종류별 생김새 — 손님 화면과 비슷하게 보이도록 */
+  .dtx.num{ font-size:19px; font-weight:800; color:var(--coral); line-height:1.3; }
+  .dtx.lbl{ font-size:11.5px; color:var(--muted); }
+  .dtx.q{ font-weight:600; }
+  .dtx.a{ font-size:13px; color:var(--muted); padding-left:11px; border-left:2px solid var(--hair); }
+  .dtx.rv{ font-style:italic; font-size:14px; }
+  .dtx.who{ font-size:11.5px; color:var(--muted); }
+  .dtx.st{ font-weight:600; font-size:13.5px; }
+  .dtx.sd{ font-size:12.5px; color:var(--muted); }
   /* 🔌 아직 연결 안 된 행동 버튼 — 흐리게 + 「미오픈」. 추천은 그대로 두되 «안 열렸다»고 알린다 */
   .dcard.dim{ opacity:.62; border-style:dashed; }
   .dcard.dim:hover{ opacity:1; }
@@ -13397,7 +13420,10 @@ if('serviceWorker' in navigator){
       if(PST_LIST.test(t)){
         var _bare=t.replace(PST_LIST,'').trim();
         var _nx=pstNextLine(lines, i);
-        if(_bare.length<=40 && !PST_LIST.test(_nx) && pstLooksBody(_nx)){
+        /* 🚨 2026-08-21 라이브 검수에서 잡힌 것 — 「1. 2. 3.」 목록의 «마지막 항목»이
+              바로 뒤 문장을 보고 소제목으로 튀어나갔다 (「3. 컬크림 바르기」).
+              이미 목록을 쌓는 중이면(buf) 그건 목록의 일부다 — 승격시키지 않는다. */
+        if(!buf.length && _bare.length<=40 && !PST_LIST.test(_nx) && pstLooksBody(_nx)){
           flush();                       /* 쌓아 둔 목록이 있으면 먼저 닫는다 */
           out.push({k:'h', tx:t});       /* 번호를 그대로 살린 소제목 */
           paraSince=0; continue;
@@ -13708,6 +13734,13 @@ if('serviceWorker' in navigator){
         저장·발행(serialize)은 지금처럼 #rows 만 읽는다 — 데이터가 두 벌이 되면 반드시 어긋난다. */
   (function(){
     var DOC = { text:1, quote:1, photocard:1, imagetext:1 };
+    /* 속이 [[a,b],[a,b]…] 꼴인 표현들 — 문서에서 그 자리 편집 */
+    var LIST2 = {
+      stat:   { at:0, c1:'num', c2:'lbl', p1:'숫자',   p2:'라벨',   add:'숫자 더하기', no:false, head:'' },
+      qna:    { at:0, c1:'q',   c2:'a',   p1:'질문',   p2:'답변',   add:'질문 더하기', no:false, head:'' },
+      review: { at:0, c1:'rv',  c2:'who', p1:'후기 한 줄', p2:'누가 (예: 30대 직장인)', add:'후기 더하기', no:false, head:'' },
+      steps:  { at:1, c1:'st',  c2:'sd',  p1:'단계 이름', p2:'설명 (선택)', add:'단계 더하기', no:true,  head:'제목 (예: 이렇게 진행돼요)' }
+    };
     var FIELD = {
       text:      [[0,'소제목'], [1,'여기에 이어서 쓰세요']],
       quote:     [[0,'인용할 한 문장']],
@@ -13785,7 +13818,32 @@ if('serviceWorker' in navigator){
             out += '<div class="dtx dcap" contenteditable="true" data-di2="'+i+'" data-dk="1" data-ph="사진 설명 (선택)">'
                  + esc2(c[1]) + '</div>';
           }
-        } else {
+        }
+        /* 🚨 2026-08-21 사장님 «우리 블로그 형식 아니었어?» — 맞다. 내가 되돌려놨었다.
+              무기고를 열었더니 숫자·Q&A·후기·단계가 전부 「1개 항목 · 고치기 →」 카드가 됐다.
+              문서형으로 만들어 놓고 다시 목록으로 돌아간 셈이다.
+              → 이것들도 «그 자리에서» 고쳐지게 한다. 속은 전부 [[a,b],[a,b]] 꼴이라 같은 방식으로 편다.
+              ✎(자세히)는 남긴다 — 표현법 바꾸기 같은 건 거기서. */
+        else if(LIST2[ty]){
+          var meta=LIST2[ty];
+          var arr=c[meta.at]; if(!Array.isArray(arr)){ arr=[]; c[meta.at]=arr; }
+          out += '<div class="dlist">';
+          if(meta.head) out += '<div class="dtx h" contenteditable="true" data-di2="'+i+'" data-dk="0" data-ph="'+esc2(meta.head)+'">'+esc2(c[0])+'</div>';
+          arr.forEach(function(it, k){
+            if(!Array.isArray(it)){ it=[String(it||''),'']; arr[k]=it; }
+            out += '<div class="dli">'
+                 + (meta.no ? '<span class="dno">'+(k+1)+'</span>' : '')
+                 + '<span class="dlf">'
+                 +   '<span class="dtx '+meta.c1+'" contenteditable="true" data-dl="'+i+'" data-dk1="'+meta.at+'" data-dr="'+k+'" data-dc="0" data-ph="'+esc2(meta.p1)+'">'+esc2(it[0])+'</span>'
+                 +   '<span class="dtx '+meta.c2+'" contenteditable="true" data-dl="'+i+'" data-dk1="'+meta.at+'" data-dr="'+k+'" data-dc="1" data-ph="'+esc2(meta.p2)+'">'+esc2(it[1])+'</span>'
+                 + '</span>'
+                 + '<button type="button" class="dlx" data-dlx="'+i+'" data-dr="'+k+'" title="이 줄 빼기">✕</button>'
+                 + '</div>';
+          });
+          out += '<button type="button" class="dladd" data-dladd="'+i+'" data-dk1="'+meta.at+'">＋ '+esc2(meta.add)+'</button>';
+          out += '</div>';
+        }
+        else {
           var ic=row.querySelector('.ic'), sb=row.querySelector('.sb');
           /* 🔌 2026-08-21 사장님 «아직 연결 안 됐으면 흐리게 미오픈이라고» —
                 추천은 그대로 넣어 두되, 링크가 비었으면 «아직 안 열렸다»고 표시한다.
@@ -13959,6 +14017,43 @@ if('serviceWorker' in navigator){
             }, 60);
           }
         });
+      });
+      /* 🧰 무기고 블록의 «그 자리» 편집 — 값은 곧바로 row._content 로 */
+      h.querySelectorAll('.dtx[data-dl]').forEach(function(e){
+        e.addEventListener('input', function(){
+          var row=rows[+e.dataset.dl]; if(!row) return;
+          var arr=cont(row)[+e.dataset.dk1]; if(!Array.isArray(arr)) return;
+          var it=arr[+e.dataset.dr]; if(!Array.isArray(it)) return;
+          it[+e.dataset.dc] = e.textContent;
+          changed(row);
+        });
+        e.addEventListener('paste', function(ev){
+          ev.preventDefault();
+          var t=(ev.clipboardData||window.clipboardData).getData('text/plain')||'';
+          document.execCommand('insertText', false, t.replace(/\n+/g,' '));
+        });
+      });
+      h.querySelectorAll('[data-dlx]').forEach(function(e){
+        e.onclick=function(){
+          var row=rows[+e.dataset.dlx]; if(!row) return;
+          var meta=LIST2[row.dataset.type]; if(!meta) return;
+          var arr=cont(row)[meta.at]; if(!Array.isArray(arr)) return;
+          arr.splice(+e.dataset.dr, 1);
+          if(!arr.length){ row.remove(); reflow(); return; }   /* 다 빼면 블록도 없앤다 */
+          changed(row); render();
+        };
+      });
+      h.querySelectorAll('[data-dladd]').forEach(function(e){
+        e.onclick=function(){
+          var row=rows[+e.dataset.dladd]; if(!row) return;
+          var arr=cont(row)[+e.dataset.dk1]; if(!Array.isArray(arr)){ arr=[]; cont(row)[+e.dataset.dk1]=arr; }
+          arr.push(['','']);
+          changed(row); render();
+          setTimeout(function(){
+            var last=document.querySelectorAll('#docwrap .dblk[data-di="'+rows.indexOf(row)+'"] .dtx[data-dl]');
+            if(last.length) last[last.length-2].focus();
+          }, 60);
+        };
       });
       h.querySelectorAll('[data-dpic]').forEach(function(e){
         e.onclick=function(){
