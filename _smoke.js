@@ -460,12 +460,21 @@
           && ut.indexOf('min-width:34px; min-height:34px') >= 0,
           '28px 버튼은 손가락으로 잘못 눌린다', 'warn');
       })();
-      /* 사고: _ibN 을 STEPS 뒤에 선언해 지도 칸이 늘 «아직 없음»으로 떴다 (2026-08-22) */
-      add('e 문의 수는 지도보다 먼저', (function(){
-          var d=et.indexOf('var _ibN='), st=et.indexOf("nm:'판매·예약'"), bd=et.indexOf('var bandHtml');
-          return d>0 && st>d && bd>st;
+      /* 🚨 사고를 «두 번» 밟았다 — _ibN(1차) · _views(2차). 지도가 쓰는 값은 전부 앞에 있어야 한다.
+         var 는 끌어올려져 «없는 변수» 오류가 안 난다 — 조용히 undefined 로 계산돼 늘 0 이 된다.
+         그래서 화면만 봐선 «원래 0인가 보다» 하고 넘어간다. 이 항목이 그걸 막는다. (2026-08-22) */
+      add('e 지도가 쓰는 값은 지도보다 먼저', (function(){
+          var st=et.indexOf("nm:'판매·예약'"), bd=et.indexOf('var bandHtml');
+          if(st<0 || bd<0 || bd<st) return false;
+          return ['var _ibN=','var _views=','last7=0','prodN=0'].every(function(k){
+            var d=et.indexOf(k); return d>0 && d<st;
+          });
         })(),
-        '선언이 뒤에 있으면 5걸음 지도 칸이 항상 «아직 없음»으로 뜬다');
+        'var 는 조용히 undefined 로 계산된다 — 늘 0 이 떠도 오류가 안 나서 못 잡는다');
+      /* 사장님: «판매·예약도 고객·분석도 방은 도는데 지도만 준비 중이었다» */
+      add('e 5걸음 지도에 «준비 중» 없음', et.indexOf("chip:'준비 중', d:'곧 열려요'") < 0
+        && et.indexOf("nm:'고객·분석', c:'#5DCAA5', done:(last7>0)") >= 0,
+        '방이 도는데 지도에 딱지가 남으면, 홈 숫자가 보내는 곳과 앞뒤가 안 맞는다');
       add('e 열린 방 4개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0 && et.indexOf('data-ws="data"') >= 0,
         '홈 · 프로필 · 포스팅 · 고객·분석 — 이 넷은 늘 열려 있어야 한다 (2026-08-20 분석 개방)');
       /* 🆕 신규 첫 경험 (2026-08-20 사장님 지시 5종) */

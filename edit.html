@@ -15978,6 +15978,7 @@ if('serviceWorker' in navigator){
        성장 방법→📊분석, 손님 홈 템플릿→구성 추가(#add-tpl)로 이사 · 오늘 성과·인기 글은 ④계단에 흡수. */
     if(!window.__hubStats){ try{ fetchHubStats(); }catch(_){} }
     if(!window.__inbox){ try{ fetchInbox(); }catch(_){} }   /* 📬 답 안 한 문의 — 도착하면 다시 그린다 */
+    var _views=0; try{ _views=(_st&&_st.views)||0; }catch(_){}   /* 🚨 STEPS 보다 «앞»에 — 뒤에 두면 지도 칸이 늘 0 이다 (2026-08-22 두 번째로 밟은 함정) */
     var _ibN=(window.__inbox&&window.__inbox.n)||0, _ibOld=(window.__inbox&&window.__inbox.oldest)||0;
     var _ibWhen=''; try{
       if(_ibOld){ var _dd=Math.floor((Date.now()-_ibOld)/864e5);
@@ -16026,8 +16027,14 @@ if('serviceWorker' in navigator){
       {ic:'💰', nm:'판매·예약', c:'#E68FB0', done:(_ibN===0 && prodN>0),
        chip:(_ibN? ('답할 문의 '+_ibN+'건') : (prodN? ('상품 '+prodN+'개') : '아직 없음')),
        d:'문의·예약이 여기로 들어와요', go:'store'},
-      {ic:'📊', nm:'고객·분석', c:'#5DCAA5', done:false, soon:true,
-       chip:'준비 중', d:'곧 열려요', go:''}
+      /* 🚨 2026-08-22 — 이 방도 실제로 돌아간다(분석·퍼널·홈 지도·상세·유입·콘텐츠·자산 7칸).
+         2026-08-20 에 개방했는데 지도의 «준비 중» 딱지만 안 고쳤다.
+         이제 홈 숫자 3칸이 여기로 보내므로, 딱지가 남으면 앞뒤가 안 맞는다.
+         🚨 판정: 방문이 «0» 인 건 준비가 안 된 게 아니라 아직 손님이 없는 것 —
+            «곧 열려요»가 아니라 «링크를 알려야 채워져요»로 말한다. */
+      {ic:'📊', nm:'고객·분석', c:'#5DCAA5', done:(last7>0),
+       chip:(last7? ('7일 방문 '+last7) : (_views? ('누적 조회 '+_views) : '아직 기록 없음')),
+       d:(last7? '어디서 새는지 여기서 봐요' : '내 링크를 알리면 채워져요'), go:'data'}
     ];
     var _nowIdx=-1; for(var _s=0;_s<STEPS.length;_s++){ if(!STEPS[_s].done && !STEPS[_s].soon){ _nowIdx=_s; break; } }
     var _railPre=(zsDone<3);   // 3걸음 미완 = 지도는 «앞으로 이런 길» 예고만 (주인공은 zs 카드)
@@ -16055,7 +16062,6 @@ if('serviceWorker' in navigator){
     var bandHtml = _ibN ? ('<button type="button" class="hb-band" id="hub-band">'
       +'<span class="n">'+_ibN+'</span><span class="t">아직 답 안 한 문의가 있어요'
       +(_ibWhen?(' · 가장 오래된 건 '+_ibWhen):'')+'</span><span class="g">→</span></button>') : '';
-    var _views=0; try{ _views=(_st&&_st.views)||0; }catch(_){}
     var _sp=''; try{
       var _d7=_dl.slice(-7), _mx=1; _d7.forEach(function(x){ if((x.n||0)>_mx) _mx=x.n; });
       if(_d7.length) _sp='<span class="hb-spark">'+_d7.map(function(x){
