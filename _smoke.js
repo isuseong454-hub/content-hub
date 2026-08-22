@@ -263,7 +263,8 @@
         '2026-07-07에 숨겨졌던 것 — 다시 숨으면 여기서 걸린다');
       add('e 손님 화면 = 진짜 페이지', et.indexOf('window.__openRealHome(true)') >= 0 && et.indexOf('goCT.onclick=function(){ if(window.__openCustomerPreview)') < 0,
         '🚨 주석은 «진짜 페이지»인데 미리보기를 부르던 배선 사고');
-      add('e 자동 로그인', et.indexOf("Promise.resolve(window.laRpc('li_get_own'") >= 0 && et.indexOf('if(r && r.ok){ enter(); }') >= 0,
+      /* 🚨 2026-08-21 — 이제 «먼저 들어가고 뒤에서 확인»한다. 서버 답을 기다리지 않는다. */
+      add('e 자동 로그인', et.indexOf("Promise.resolve(window.laRpc('li_get_own'") >= 0 && et.indexOf('먼저 들어간다') >= 0,
         'enter()가 «로그인 버튼»에서만 불려 매번 코드+PIN을 쳐야 했다');
       add('e 자동 로그인 만료 검사', et.indexOf('AUTH.expiresAt!=null') >= 0 && et.indexOf('_ex < new Date()') >= 0,
         '기간 지난 열쇠로 들어가지지 않게');
@@ -737,12 +738,18 @@
 
       /* 🔑 사장님 «자동 로그인 버튼» — 기능은 있었는데 «보이지 않아» 모르셨다 */
       add('자동 로그인 스위치', et.indexOf('id="lg-auto"') >= 0 && et.indexOf('cm-autologin') >= 0, '있는 걸 보이게 + 끌 수 있게');
-      /* 🚨 2026-08-21 — ?live=1 이면 자동로그인 설정을 무시하고 통과시켰다가 이 항목이 잡았다.
-            주소창에 쳐도 열리는 구멍이었다. 지금은 u.html 이 남긴 sessionStorage 표(60초)가 있어야 한다. */
-      add('자동 로그인 끄면 통과 금지', et.indexOf("_auto = localStorage.getItem('cm-autologin')!=='0'") >= 0
-        && et.indexOf("sessionStorage.getItem('cm-from-mine')") >= 0
-        && et.indexOf("(Date.now()-_st) < 60000") >= 0,
-        '남의 컴퓨터에서 주소만 쳐서 열리면 안 된다 — 내 화면에서 «방금» 눌러야 통과');
+      /* 🚨 2026-08-21 큰 수리 — ?live=1 특례도, 세션 표도 없앴다. 조건은 «열쇠가 있나» 하나뿐.
+            자동 로그인을 끄면 이 기기에서 열쇠를 «버리므로», 열쇠가 있다 = 자동 로그인이 켜져 있다. */
+      add('자동 로그인 끄면 통과 금지', et.indexOf("localStorage.getItem('cm-autologin')==='0') return;") >= 0
+        && et.indexOf("_q.get('live')==='1'") < 0,
+        '?live=1 특례가 되살아나면 주소창으로 남의 컴퓨터에서 열린다');
+      add('세션 표 폐기 확인', et.indexOf('cm-from-mine') < 0 && ut.indexOf('cm-from-mine') < 0,
+        '한 번 쓰면 지워져서 «왔다갔다 두 번째»부터 로그인창이 떴다 — 되살리지 않는다');
+      add('묻지 않고 들어간다', et.indexOf('먼저 들어간다') >= 0,
+        '서버 답을 기다리며 로그인 카드를 띄우면, 그 왕복이 곧 «다시 로그인하라»는 화면이다');
+      add('편집 입구는 하나', ut.indexOf('window.__goEdit = function') >= 0
+        && (ut.match(/window\.__goEdit\(/g)||[]).length >= 3,
+        '입구가 셋이라 «홈 편집하기»만 로그인창으로 샜다 — 전부 한 문을 지난다');
 
       /* 🗑 사장님 «포스팅에 편집은 있는데 삭제가 없다» — 랜딩 캔버스 안에만 묻혀 있었다 */
       add('글 삭제 공용 함수', et.indexOf('window.__deletePost=function()') >= 0, '한 기능 두 규칙 금지 — 랜딩·블로그가 같은 것을 쓴다');
@@ -859,13 +866,12 @@
   if (true) {
     const E2 = selfHtml || '', U2 = uHtml || '';
     /* 사고: 열쇠가 있어도 서버 왕복이 끝날 때까지 로그인 카드가 떠 있었다 = «다시 로그인하라» */
-    add('로그인 화면 완전 차단', E2.indexOf("_card.style.visibility='hidden'") >= 0
-      && E2.indexOf('if(!_auto && !_live) return;') >= 0,
-      '열쇠가 있으면 «묻기 전에» 감춘다. ?live=1 은 자동로그인 설정과 무관하게 통과');
-    add('로그인 되돌림 안전장치', E2.indexOf('연결이 느려요') >= 0,
-      '서버가 끊겨도 8초 뒤엔 로그인 폼을 돌려준다 — 빈 화면에 갇히지 않게');
-    /* 사장님: «그 자리에서 켜져야지» */
-    add('편집이 보던 자리로', U2.indexOf("var _at=Math.round(window.scrollY") >= 0
+    add('로그인 화면 완전 차단', E2.indexOf('먼저 들어간다') >= 0,
+      '열쇠가 있으면 서버를 기다리지 않고 곧바로 들어간다 — 왕복 자체가 «다시 로그인하라»는 화면이었다');
+    add('열쇠 틀리면 되돌림', E2.indexOf("localStorage.removeItem('la-auth')") >= 0
+      && E2.indexOf('다시 로그인해 주세요') >= 0,
+      '비번을 바꿨거나 해지됐으면 들어간 뒤에라도 내보낸다');
+    add('편집이 보던 자리로', U2.indexOf('window.__goEdit = function') >= 0
       && U2.indexOf("q.get('edit')!=='1'") >= 0
       && E2.indexOf("_keep+='&at='") >= 0,
       '스크롤 위치·열어 둔 글을 편집기 iframe 까지 이어 넘긴다');

@@ -16717,60 +16717,40 @@ if('serviceWorker' in navigator){
         만료됐거나 열쇠가 안 맞으면 조용히 버리고 정상 로그인 화면을 띄운다. */
   (function(){
     try{
+      /* ══ 🔑 자동 입장 — «묻지 않고 들어간다» (2026-08-21 큰 수리) ══════════════════
+         사장님 «편집 누르면 로그인창, 왔다갔다 하면 또 로그인창. 계속 발발할 것 같다»
+         맞다. 구조가 약했다. 원인이 셋이었다.
+
+         ① 서버에 «열쇠 맞나» 물어보고 «답이 올 때까지» 로그인 카드를 띄워 뒀다.
+            그 왕복이 곧 «다시 로그인하라»는 화면이다. 인터넷이 조금만 느려도 매번 겪는다.
+         ② 그걸 가리려고 «?live=1 이면 통과»를 넣었더니 주소창으로 뚫리는 구멍이 됐다.
+         ③ 구멍을 막으려고 «세션 표»를 넣었는데 한 번 쓰면 지워져서,
+            왔다갔다 두 번째부터는 무조건 로그인창이었다. 입구도 셋인데 표는 한 군데서만 남겼다.
+
+         ── 처방: 조건을 하나로 줄인다 ──
+         «자동 로그인»을 끄면 이 기기에서 열쇠를 «버린다»(아래 스위치가 그렇게 한다).
+         그러니 열쇠가 있다 = 자동 로그인이 켜져 있다. 다른 조건이 필요 없다.
+           · 열쇠가 있으면 → 곧바로 들어간다. 서버를 기다리지 않는다.
+           · 서버 확인은 «들어간 뒤» 조용히 한다. 거절당하면 그때 열쇠를 버리고 로그인으로.
+         이러면 ?live=1 특례도, 세션 표도, 입구별 처리도 전부 필요 없다. */
       if(!AUTH || !AUTH.code || !AUTH.pinHash) return;
-      /* 사장님이 «자동 로그인»을 끄면 열쇠가 있어도 통과시키지 않는다 (남의 컴퓨터 대비) */
-      var _auto=true; try{ _auto = localStorage.getItem('cm-autologin')!=='0'; }catch(_){}
-      /* 🔑 «내 홈»의 편집 버튼으로 «방금» 넘어온 경우만 자동 로그인 설정과 무관하게 통과시킨다.
-            이미 내 화면을 보고 있던 사람이다 — 여기서 또 막으면 «편집이 로그인을 요구»하는 꼴이 된다.
-         🔒 그런데 ?live=1 «만» 보면 주소창에 쳐서 남의 컴퓨터에서도 열린다(자동검수가 잡음).
-            그래서 u.html 이 남긴 sessionStorage 표를 «60초 안»일 때만 인정한다.
-            sessionStorage 는 그 탭에서만 살고 주소창으로는 만들 수 없다. */
-      var _live=false;
-      try{
-        if(new URLSearchParams(location.search).get('live')==='1'){
-          var _st=parseInt(sessionStorage.getItem('cm-from-mine')||'0', 10);
-          if(_st && (Date.now()-_st) < 60000) _live=true;
-          sessionStorage.removeItem('cm-from-mine');       /* 한 번만 쓴다 */
-        }
-      }catch(_){}
-      if(!_auto && !_live) return;
-      if(AUTH.expiresAt!=null){                                  // 사용 기간이 지났으면 다시 로그인
+      try{ if(localStorage.getItem('cm-autologin')==='0') return; }catch(_){}   /* 남의 컴퓨터 대비 */
+      if(AUTH.expiresAt!=null){                                  /* 사용 기간이 지났으면 다시 로그인 */
         var _ex=new Date(AUTH.expiresAt);
         if(!isNaN(_ex.getTime()) && _ex < new Date()) return;
       }
-      /* 🚨 2026-08-21 사장님 «포스팅 편집하면 로그인창으로 가서 다시 로그인해야 한다» —
-            열쇠가 있어도 «서버 왕복»이 끝날 때까지 로그인 카드가 떠 있었다.
-            그 왕복이 곧 «다시 로그인하라»는 화면이다.
-            → 열쇠가 있으면 «묻기 전에» 카드를 감춘다. 열쇠가 틀렸을 때만 되돌린다. */
-      var _ov=document.getElementById('login-ov');
-      var _card=_ov && _ov.querySelector('.login-card');
-      if(_card){
-        _card.style.visibility='hidden';
-        if(!document.getElementById('land-msg')){
-          var _m=document.createElement('div'); _m.id='land-msg';
-          _m.style.cssText='position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;'
-            +'font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.62);letter-spacing:-.2px;';
-          _m.textContent = _live ? '편집 화면 여는 중…' : '들어가는 중…';
-          _ov.appendChild(_m);
-        }
-      }
-      function _showLogin(msg){
-        try{
-          if(_card) _card.style.visibility='';
-          var m=document.getElementById('land-msg'); if(m) m.remove();
-          if(msg && window.toast) toast(msg);
-        }catch(_){}
-      }
-      /* 🛟 서버가 느리거나 끊겨도 8초 뒤엔 로그인 폼을 돌려준다 — 빈 화면에 갇히지 않게 */
-      var _guard=setTimeout(function(){ _showLogin('연결이 느려요 · 다시 로그인해 주세요'); }, 8000);
+      /* 먼저 들어간다 — 로그인 화면은 아예 지나가지 않는다 */
+      enter();
+      /* 뒤에서 조용히 확인. 인터넷이 없거나 느려도 사장님 화면은 이미 편집기다. */
       Promise.resolve(window.laRpc('li_get_own', {p_code:AUTH.code, p_pin_hash:AUTH.pinHash}))
         .then(function(r){
-          clearTimeout(_guard);
-          if(r && r.ok){ enter(); }
-          else { try{ localStorage.removeItem('la-auth'); }catch(_){}   // 열쇠가 안 맞음 = 버린다
-                 _showLogin('다시 로그인해 주세요'); }
+          if(r && r.ok) return;                                  /* 정상 — 아무 일 없음 */
+          /* 열쇠가 안 맞다(비번 바꿈·해지). 버리고 로그인 화면으로 되돌린다. */
+          try{ localStorage.removeItem('la-auth'); }catch(_){}
+          try{ if(window.toast) toast('다시 로그인해 주세요'); }catch(_){}
+          setTimeout(function(){ try{ location.replace('edit.html'); }catch(_){ location.reload(); } }, 900);
         })
-        .catch(function(){ clearTimeout(_guard); _showLogin(); });      // 인터넷이 없으면 그냥 로그인 화면
+        .catch(function(){});                                    /* 인터넷 문제면 그냥 둔다 — 저장할 때 다시 걸린다 */
     }catch(_){}
   })();
   // 🔧 테스트 전용(localhost에서만): localStorage cm-devedit='1' 이면 로그인 화면 건너뛰고 바로 편집모드 진입 (배포엔 영향 없음 — hostname 가드)

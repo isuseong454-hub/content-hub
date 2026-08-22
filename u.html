@@ -936,7 +936,24 @@
     .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
   }
 
-  /* 🔁 «그 자리에서» — 편집기 iframe 이 at/p 를 달고 오면 보던 자리로 되돌린다 (2026-08-21) */
+  /* 🚪 편집기로 가는 «단 하나의 문» (2026-08-21 큰 수리)
+        전엔 입구가 셋이었고(홈 편집하기 · 탭별 편집 · ⚙메뉴) 저마다 다르게 갔다.
+        그래서 «홈 편집하기»만 로그인창으로 새고, 어떤 길은 보던 자리를 잃었다.
+        → 전부 여기를 지난다. 보던 자리(at)와 열어 둔 글(p)은 «항상» 따라간다. */
+  window.__goEdit = function(extra){
+    var at=0, pid='';
+    try{ at=Math.round(window.scrollY||window.pageYOffset||0); }catch(_){}
+    try{ var pm=document.getElementById('post-modal');
+         if(pm && pm.classList.contains('open')) pid=String(window.__curPost||''); }catch(_){}
+    var u='edit.html?live=1&at='+at
+        + (pid ? '&p='+encodeURIComponent(pid) : '')
+        + (extra || '');
+    /* 화면을 툭 끊지 않고 잇는다 — 페이지가 바뀐 티를 줄인다 */
+    try{ document.body.style.transition='opacity .16s ease'; document.body.style.opacity='.4'; }catch(_){}
+    setTimeout(function(){ location.href=u; }, 150);
+    return false;
+  };
+  /* 🔁 «그 자리에서» — 편집기 iframe 이 at/p 를 달고 오면 보던 자리로 되돌린다 (2026-08-21) */
   (function(){
     try{
       var q=new URLSearchParams(location.search);
@@ -3771,6 +3788,7 @@
       if(a.expiresAt!=null){ var ex=new Date(a.expiresAt); if(!isNaN(ex.getTime()) && ex<new Date()) return; }
       var b=document.createElement('a');
       b.className='mine-edit'; b.href='edit.html?live=1';
+      b.onclick=function(ev){ ev.preventDefault(); return window.__goEdit(); };   /* 🚪 단 하나의 문으로 */
       b.setAttribute('aria-label','이 칸 편집하기');
       b.textContent='✏️ 편집하기';
       slot.appendChild(b);
@@ -3800,6 +3818,7 @@
         var k=on?on.getAttribute('data-tab'):'home';
         b.textContent='✏️ '+(LBL[k]||'편집하기');
         b.href='edit.html?live=1&tab='+encodeURIComponent(k);
+        b.onclick=function(ev){ ev.preventDefault(); return window.__goEdit('&tab='+encodeURIComponent(k)); };
         b.setAttribute('aria-label',(LBL[k]||'편집')+'하기');
       }
       syncEditBtn();
@@ -3828,20 +3847,7 @@
             ev.preventDefault(); ev.stopPropagation();
             var k=b.getAttribute('data-g');
             menu.classList.remove('open');
-            if(k==='edit'){
-              /* 🚨 2026-08-21 사장님 «편집 누르면 로그인창으로 가고, 그 자리에서 켜져야지» —
-                    ㉮ 보던 스크롤 위치와 ㉯ 열어 둔 글을 들고 간다 → 편집 화면이 «같은 자리»에서 열린다
-                    ㉰ 화면을 툭 끊지 않고 살짝 어둡게 넘긴다 — 페이지가 바뀐 티를 줄인다 */
-              var _at=Math.round(window.scrollY||window.pageYOffset||0);
-              var _pid=''; try{ var _pm=document.getElementById('post-modal');
-                if(_pm && _pm.classList.contains('open')) _pid=String(window.__curPost||''); }catch(_){}
-              /* 🔒 «방금 내 화면에서 눌렀다»는 표. sessionStorage 는 이 탭에서만 살고
-                    주소창에 직접 쳐서는 만들 수 없다 → 남의 컴퓨터에서 ?live=1 로 뚫는 길을 막는다. */
-              try{ sessionStorage.setItem('cm-from-mine', String(Date.now())); }catch(_){}
-              var _u='edit.html?live=1&at='+_at+(_pid?'&p='+encodeURIComponent(_pid):'');
-              try{ document.body.style.transition='opacity .16s ease'; document.body.style.opacity='.4'; }catch(_){}
-              setTimeout(function(){ location.href=_u; }, 150);
-            }
+            if(k==='edit'){ window.__goEdit(); }
             else if(k==='admin'){ location.href='edit.html?desk=1'; }
             else {
               /* 🚪 편집기 로그아웃과 «같은 규칙» — 이 기기에서 계정 흔적을 전부 지운다 */
