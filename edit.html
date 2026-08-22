@@ -78,6 +78,20 @@ if('serviceWorker' in navigator){
   /* 토스식 플랫 — 발광 제거 */
   body::before, body::after{display:none;}
   @keyframes edBlob{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(20px,-24px) scale(1.12);}}
+  /* ═══ 🌌 광원 두 개 (2026-08-22 사장님 지시) ═══════════════════════════
+     «홈도 그렇고 포스팅 배경도 그렇고 항시» — 작업실도 손님 화면과 같은 배경을 쓴다.
+     색은 사장님이 고른 개인 테마색(--coral, applyEditorTone 이 매김) 하나에서
+     둘째 광원을 hue-rotate 로 파생시킨다. u.html 과 같은 규칙 — 두 화면이 어긋나면 안 된다. */
+  .cmorb{ position:fixed; border-radius:50%; pointer-events:none; z-index:0; opacity:.26;
+    background:radial-gradient(circle, var(--coral) 0%, transparent 70%); }
+  .cmorb1{ width:44vmax; height:44vmax; left:-14vmax; top:-16vmax; filter:blur(90px);
+    animation:cmdrift 28s cubic-bezier(.22,.61,.36,1) 1 alternate forwards; }
+  .cmorb2{ width:36vmax; height:36vmax; right:-12vmax; bottom:-10vmax;
+    filter:blur(90px) hue-rotate(46deg) saturate(.92) brightness(1.12);
+    animation:cmdrift 34s cubic-bezier(.22,.61,.36,1) 1 alternate-reverse forwards; }
+  @keyframes cmdrift{ to{ transform:translate(6vmax,4vmax) scale(1.08); } }
+  @media (prefers-reduced-motion:reduce){ .cmorb{ animation:none !important; } }
+  /* 하단 도크·상단 바가 광원 위에 오도록 (둘 다 z-index 를 이미 갖고 있다) */
   .wrap{max-width:520px; margin:0 auto; padding:0 16px; position:relative; z-index:1;}
 
   /* 상단 바 */
@@ -2112,6 +2126,12 @@ if('serviceWorker' in navigator){
     opacity:0; transform:scale(.9); transition:opacity .16s, transform .16s cubic-bezier(.2,.9,.2,1); }
   .dpsz::before{ content:'\2194'; color:#fff; font-size:15px; line-height:1; }
   .dpic.has:hover .dpsz, .dpic.dsizing .dpsz{ opacity:1; transform:none; }
+  /* 🚨 2026-08-22 사장님 «핸드폰으로 어떻게 줄여?» — 손잡이가 :hover 로만 떴다.
+     폰엔 hover 가 없어서 크기 조절이 «존재하지 않는 기능»이었다. 손가락 기기에선 늘 보인다. */
+  @media (hover:none){
+    .dpic.has .dpsz{ opacity:1; transform:none; width:34px; height:34px; }
+    .dpic.has .dpnum{ opacity:.85; }
+  }
   .dpic.dsizing{ border-color:var(--coral); }
   .dpnum{ position:absolute; right:44px; bottom:12px; padding:3px 9px; border-radius:999px;
     background:rgba(0,0,0,.58); color:#fff; font-size:11.5px; font-weight:700;
@@ -4181,7 +4201,7 @@ if('serviceWorker' in navigator){
     <button class="ws-tab on" data-ws="home"><span class="ico">🏠</span>홈</button>
     <button class="ws-tab" data-ws="page"><span class="ico">👤</span>프로필</button>
     <button class="ws-tab" data-ws="posts"><span class="ico">📝</span>포스팅</button>
-    <button class="ws-tab ws-soon" data-ws="sales" title="아직 준비 중이에요"><span class="ico">💰</span>판매·예약</button>
+    <button class="ws-tab" data-ws="sales"><span class="ico">💰</span>판매·예약</button>
     <button class="ws-tab" data-ws="data"><span class="ico">📊</span>고객·분석</button>
   </div>
 
@@ -6590,6 +6610,32 @@ if('serviceWorker' in navigator){
   /* ④ 눌렀을 때 파란 사각형 번쩍임 */
   button, a, [role="button"], summary { -webkit-tap-highlight-color: transparent; }
   /* 🚧 준비 중 탭 — «없음»을 «고장»처럼 그리지 않는다: 흐릿하게 두고 작은 점 하나만 (2026-08-20) */
+  /* 🏠 홈 히어로 B안 (2026-08-22 사장님 픽) — 띠 + 숫자 3칸 + 나머지는 접기 */
+  .hb-band{display:flex; align-items:center; gap:10px; background:rgba(255,122,89,.14);
+    border:1px solid rgba(255,122,89,.4); border-radius:12px; padding:11px 13px; margin-bottom:11px;
+    cursor:pointer; width:100%; font:inherit; color:var(--ink); text-align:left;}
+  .hb-band .n{background:#FF7A59; color:#2a0d04; font-weight:800; font-size:12px; border-radius:999px; padding:2px 9px;}
+  .hb-band .t{font-size:12.5px; font-weight:700;}
+  .hb-band .g{margin-left:auto; color:#FF7A59; font-size:14px;}
+  .hb-3{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px;}
+  .hb-c{background:var(--soft); border:1px solid var(--hair); border-radius:13px; padding:13px 11px;
+    cursor:pointer; text-align:left; font:inherit; color:var(--ink);}
+  .hb-c b{display:block; font-size:24px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-1px;}
+  .hb-c small{display:block; font-size:10.5px; color:var(--muted); margin-top:3px; line-height:1.3;}
+  .hb-c i{font-style:normal; font-size:10.5px; font-weight:700; color:#5DCAA5;}
+  .hb-c.dim b{color:var(--muted);}
+  .hb-c.hot b{color:#FF7A59;}
+  .hb-spark{display:flex; align-items:flex-end; gap:2px; height:20px; margin-top:8px;}
+  .hb-spark s{flex:1; background:var(--coral-soft); border-radius:2px 2px 0 0; text-decoration:none; min-height:2px;}
+  .hb-spark s:last-child{background:var(--coral);}
+  .hb-more{width:100%; background:transparent; border:1px dashed var(--hair); border-radius:11px;
+    color:var(--muted); font:inherit; font-size:12px; padding:11px; cursor:pointer; margin-bottom:12px;}
+  .hb-more:hover{color:var(--ink); border-color:var(--coral);}
+  .hb-morebox{display:none;}
+  .hb-morebox.open{display:block;}
+  .ws-tab{ position:relative; }
+  .ws-bdg{ position:absolute; top:3px; left:50%; margin-left:6px; background:#FF7A59; color:#2a0d04;
+    font-size:9px; font-weight:800; border-radius:999px; padding:1px 5px; line-height:1.5; pointer-events:none; }
   .ws-tab.ws-soon{ opacity:.34; }
   .ws-tab.ws-soon .ico{ position:relative; }
   .ws-tab.ws-soon .ico::after{ content:''; position:absolute; right:-3px; top:-1px; width:5px; height:5px;
@@ -11310,10 +11356,14 @@ if('serviceWorker' in navigator){
     }catch(_){ return list; }
   }
   window.__coupasLast=coupasLast;
-  function serialize(){
-    try{ captureCurrentVersion(); }catch(e){}                          // 현재 편집 중인 버전 먼저 저장
-    var blocks = (homeVersions && homeVersions[activeVersion]) ? homeVersions[activeVersion] : collectRowsArray();  // 공개되는 건 '적용된' 버전
-    blocks = coupasLast(blocks);                                       // 🧾 쿠파스는 언제나 맨 아래
+  function serialize(){
+
+    try{ captureCurrentVersion(); }catch(e){}                          // 현재 편집 중인 버전 먼저 저장
+
+    var blocks = (homeVersions && homeVersions[activeVersion]) ? homeVersions[activeVersion] : collectRowsArray();  // 공개되는 건 '적용된' 버전
+
+    blocks = coupasLast(blocks);                                       // 🧾 쿠파스는 언제나 맨 아래
+
     var home=null; try{ home=JSON.parse(localStorage.getItem('cm-home-v1')||'null'); }catch(e){}
     var theme = (home && home.theme) || null;
     return { v:1, profile:{ name:gv('pf-name'), bio:gv('pf-bio'), handle:gv('pf-handle'), avatar:(window.__profileAvatar||''), avatarFx:gv('pf-avatarfx'), tagline:gv('pf-tagline'), headline:gv('pf-headline'), reviews:(window.__reviewsGet?window.__reviewsGet().filter(function(r){return r&&r.text;}):[]), cta:(window.__ctaGet?window.__ctaGet():{}), template:(window.__pfTemplate||'warm'), color:(window.__pfColor||''), format:(window.__pfFormat||'pro'), creator:(window.__collectCreator?window.__collectCreator():{}), story:(window.__collectStory?window.__collectStory():{}), aboutOrder:(window.__collectAboutOrder?window.__collectAboutOrder():null), aboutOn:(window.__pfAboutOn!==false), sections:(window.__collectAbSections?window.__collectAbSections():[]), chips:(window.__collectChips?window.__collectChips():[]), works:(window.__collectWorks?window.__collectWorks():[]), xp:(window.__collectXp?window.__collectXp():null), evidence:{ authority:(window.__isEvGhost&&window.__isEvGhost('pf-authority'))?'':gv('pf-authority'), creds:(window.__isEvGhost&&window.__isEvGhost('pf-creds'))?'':gv('pf-creds'), stats:(window.__isEvGhost&&window.__isEvGhost('pf-stats'))?'':gv('pf-stats'), gallery:(window.__evGalleryGet?window.__evGalleryGet().filter(function(x){return x&&(x.img||x.cap);}):[]) } }, blocks:blocks, versions:homeVersions, active:activeVersion, home:home, theme:theme, reservation:resvCfg, posts:postsData, products:productsData, qna:qnaData, cats:ensureCats(), catColors:catColorsData, archiveView:archiveView, savedAt:Date.now() };
@@ -15584,6 +15634,12 @@ if('serviceWorker' in navigator){
        위=«오늘 할 일 딱 하나» / 아래=«4걸음 공정 지도».
        성장 방법→📊분석, 손님 홈 템플릿→구성 추가(#add-tpl)로 이사 · 오늘 성과·인기 글은 ④계단에 흡수. */
     if(!window.__hubStats){ try{ fetchHubStats(); }catch(_){} }
+    if(!window.__inbox){ try{ fetchInbox(); }catch(_){} }   /* 📬 답 안 한 문의 — 도착하면 다시 그린다 */
+    var _ibN=(window.__inbox&&window.__inbox.n)||0, _ibOld=(window.__inbox&&window.__inbox.oldest)||0;
+    var _ibWhen=''; try{
+      if(_ibOld){ var _dd=Math.floor((Date.now()-_ibOld)/864e5);
+        _ibWhen=(_dd<=0)?'오늘':((_dd===1)?'어제':(_dd+'일 전')); }
+    }catch(_){}
     var _st=window.__hubStats||null, last7=0, prev7=0;
     try{ var _dl=(_st&&_st.daily)||[], _L=_dl.length;
       for(var _i=0;_i<_L;_i++){ var _n=_dl[_i].n||0; if(_i>=_L-7) last7+=_n; else if(_i>=_L-14) prev7+=_n; } }catch(_){}
@@ -15623,14 +15679,16 @@ if('serviceWorker' in navigator){
       {ic:'📣', nm:'광고', c:'#C9A227', done:(_adOn && _adN>0),
        chip:(_adN? (_adOn? ('켜짐 · '+_adN+'개') : ('꺼짐 · '+_adN+'개')) : '아직 없음'),
        d:'손님이 들어오면 홈 위에 먼저 보여요', go:'ad'},
-      {ic:'💰', nm:'판매·예약', c:'#E68FB0', done:false, soon:true,
-       chip:'준비 중', d:'곧 열려요', go:''},
+      /* 🚨 2026-08-22 — 이 방은 실제로 돌아간다(📋문의 명단·📅예약 현황). «준비 중» 딱지가 거짓말이었다. */
+      {ic:'💰', nm:'판매·예약', c:'#E68FB0', done:(_ibN===0 && prodN>0),
+       chip:(_ibN? ('답할 문의 '+_ibN+'건') : (prodN? ('상품 '+prodN+'개') : '아직 없음')),
+       d:'문의·예약이 여기로 들어와요', go:'store'},
       {ic:'📊', nm:'고객·분석', c:'#5DCAA5', done:false, soon:true,
        chip:'준비 중', d:'곧 열려요', go:''}
     ];
     var _nowIdx=-1; for(var _s=0;_s<STEPS.length;_s++){ if(!STEPS[_s].done && !STEPS[_s].soon){ _nowIdx=_s; break; } }
     var _railPre=(zsDone<3);   // 3걸음 미완 = 지도는 «앞으로 이런 길» 예고만 (주인공은 zs 카드)
-    var railHtml='<div class="hb-raill">'+(_railPre?'4걸음 지도':'컨텐츠가 자산이 되는 4걸음')+'<i></i>'+(_railPre?'세 걸음 뒤에 열려요':'내 위치')+'</div><div class="hb-rail'+(_railPre?' pre':'')+'">'
+    var railHtml='<div class="hb-raill">'+(_railPre?(STEPS.length+'걸음 지도'):('컨텐츠가 자산이 되는 '+STEPS.length+'걸음'))+'<i></i>'+(_railPre?'세 걸음 뒤에 열려요':'내 위치')+'</div><div class="hb-rail'+(_railPre?' pre':'')+'">'
       + STEPS.map(function(s,i){
           var cls=s.done?'done':(i===_nowIdx?'now':'');
           if(s.soon) cls+=' soon';                                  /* 🚧 아직 안 여는 칸 */
@@ -15641,21 +15699,53 @@ if('serviceWorker' in navigator){
             +'<span class="hbs-d">'+s.d+'</span></span><span class="hbs-g">›</span></span></button>';
         }).join('')
       +'</div>';
+    /* ════ 🏠 홈 히어로 B안 (2026-08-22 사장님 픽) ════
+       위 = «답 안 한 문의» 띠 + 숫자 3칸(대시보드) / 아래 = 할 일 하나.
+       ①등급 ②내 링크 ⑤5걸음 지도 ⑥손님 화면 은 «접기» 한 줄 안으로 — 지운 게 아니다.
+       🚨 숫자 기간이 제각각이라 칸마다 기간을 적는다(7일 / 누적 / 답 안 함). 안 적으면 잘못 읽는다.
+       🚨 숫자는 window.__hubStats 하나만 쓴다 — 홈과 분석이 두 벌 계산하면 어긋난다. */
+    var _tierIc=({basic:'🌱',pro:'🚀',premium:'👑'})[tier]||'🌱';
+    /* 접기 딱지에는 «실제로 들어 있는 것»만 적는다 — 없는 걸 적으면 눌러보고 실망한다 */
+    var _moreLbl = [ _tierIc+' '+tierLbl ]
+      .concat((myH&&myH!=='preview') ? ['🔗 내 링크'] : [])
+      .concat(['🗺 '+STEPS.length+'걸음 지도','👁 손님 화면']).join(' · ');
+    var bandHtml = _ibN ? ('<button type="button" class="hb-band" id="hub-band">'
+      +'<span class="n">'+_ibN+'</span><span class="t">아직 답 안 한 문의가 있어요'
+      +(_ibWhen?(' · 가장 오래된 건 '+_ibWhen):'')+'</span><span class="g">→</span></button>') : '';
+    var _views=0; try{ _views=(_st&&_st.views)||0; }catch(_){}
+    var _sp=''; try{
+      var _d7=_dl.slice(-7), _mx=1; _d7.forEach(function(x){ if((x.n||0)>_mx) _mx=x.n; });
+      if(_d7.length) _sp='<span class="hb-spark">'+_d7.map(function(x){
+        return '<s style="height:'+Math.max(6,Math.round((x.n||0)/_mx*100))+'%"></s>'; }).join('')+'</span>';
+    }catch(_){}
+    var _delta=(prev7>0 && last7!==prev7) ? ('<i>'+(last7>prev7?'▲':'▼')+' '+Math.abs(last7-prev7)+'</i>') : '';
+    var n3Html='<div class="hb-3">'
+      +'<button type="button" class="hb-c'+(last7?'':' dim')+'" data-hb3="data"><b>'+last7+'</b>'
+        +'<small>방문 · 7일</small>'+(last7?(_delta+_sp):'')+'</button>'
+      +'<button type="button" class="hb-c'+(_views?'':' dim')+'" data-hb3="data"><b>'+_views+'</b>'
+        +'<small>글 조회 · 누적</small></button>'
+      +'<button type="button" class="hb-c'+(_ibN?' hot':' dim')+'" data-hb3="inbox"><b>'+_ibN+'</b>'
+        +'<small>문의·예약 · 답 안 함</small></button>'
+      +'</div>';
     box.innerHTML=
       /* ⓪ 내 홈으로 (A안 — 꾸미기는 현장에서) */
       '<button type="button" class="hb-live" id="hub-golive"><span class="hbl-ic">✏️</span><span class="hbl-m"><b>내 홈 꾸미러 가기</b><small>손님이 보는 화면에서 바로 고쳐요</small></span><span class="hbl-go">→</span></button>'
-      /* ① 프리미엄 배지 */
-      +'<div class="hub-plan2" id="hub-plan"><span class="hp2-ic">'+(({basic:'🌱',pro:'🚀',premium:'👑'})[tier]||'🌱')+'</span><span class="hp2-m"><b>'+(nm?escT(nm)+'님 · ':'')+'<em>'+tierLbl+'</em></b><small>'+dday+'</small></span><span class="hp2-go">관리 →</span></div>'
-      /* ② 내 링크 (허브의 심장 — 최상단 고정) */
-      +((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link" style="margin-bottom:13px;"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">'+(window.__custUrlDisp?window.__custUrlDisp(myH):myH)+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
+      /* ① 답 안 한 문의 띠 (있을 때만) */
+      +bandHtml
+      /* ② 숫자 3칸 */
+      +n3Html
       /* ③ 0의 상태 3걸음 (미완일 때만) */
       +zsHtml
       /* ④ 오늘 할 일 하나 */
       +todoHtml
-      /* ⑤ 4걸음 공정 지도 */
-      +railHtml
-      /* ⑥ 접힌 줄 */
-      +'<button type="button" class="hb-fold" id="hub-viewhome">👁 손님 화면 그대로 보기 <span>›</span></button>'
+      /* ⑤ 나머지는 접기 — 지운 게 아니다 */
+      +'<button type="button" class="hb-more" id="hub-more">'+_moreLbl+'　▾</button>'
+      +'<div class="hb-morebox" id="hub-morebox">'
+        +'<div class="hub-plan2" id="hub-plan"><span class="hp2-ic">'+_tierIc+'</span><span class="hp2-m"><b>'+(nm?escT(nm)+'님 · ':'')+'<em>'+tierLbl+'</em></b><small>'+dday+'</small></span><span class="hp2-go">관리 →</span></div>'
+        +((myH&&myH!=='preview')?'<div class="hub-link" id="hub-link" style="margin-bottom:13px;"><span class="hl-ic">🔗</span><div class="hl-m"><div class="hl-t">고객에게 보낼 내 링크</div><div class="hl-u">'+(window.__custUrlDisp?window.__custUrlDisp(myH):myH)+'</div></div><button type="button" class="hl-copy" id="hub-link-copy">복사</button><button type="button" class="hl-qr" id="hub-link-qr">QR</button></div>':'')
+        +railHtml
+        +'<button type="button" class="hb-fold" id="hub-viewhome">👁 손님 화면 그대로 보기 <span>›</span></button>'
+      +'</div>'
       +'<div id="hub-fx-wrap" style="display:none"></div>';
     // (지금할일 hub-hero · 완성도 hub-ns 카드 제거 2026-07-07 — fold 로직 삭제)
     box.classList.toggle('zs-empty', zsDone===0);   // 완전 빈 사용자 = 공식·성과·성장 숨김(0의 상태 집중)
@@ -15682,6 +15772,25 @@ if('serviceWorker' in navigator){
     box.querySelectorAll('[data-hbgo]').forEach(function(b){ b.onclick=function(){ tileGo(b.getAttribute('data-hbgo')); }; });
     var hvh=document.getElementById('hub-viewhome'); if(hvh) hvh.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
     var hgl=document.getElementById('hub-golive'); if(hgl) hgl.onclick=function(){ if(window.__openLive) window.__openLive(); };   /* A안: 작업실 → 현장 편집 */
+    /* 🏠 B안 배선 (2026-08-22) — 띠·숫자 3칸·접기 */
+    var hbd=document.getElementById('hub-band');
+    if(hbd) hbd.onclick=function(){ if(window.__switchWs) window.__switchWs('sales'); };
+    box.querySelectorAll('[data-hb3]').forEach(function(c){ c.onclick=function(){
+      var k=c.getAttribute('data-hb3');
+      if(k==='inbox'){ if(window.__switchWs) window.__switchWs('sales'); return; }
+      if(window.__switchWs) window.__switchWs('data');
+      try{ if(window.__mountDataAnalytics) window.__mountDataAnalytics(); }catch(_){}
+    }; });
+    var hmr=document.getElementById('hub-more'), hmb=document.getElementById('hub-morebox');
+    if(hmr&&hmb){
+      /* 펼침 상태는 기억한다 — 링크 복사하러 매번 다시 펴는 건 고문이다 */
+      try{ if(localStorage.getItem('cm-hub-more')==='1'){ hmb.classList.add('open'); hmr.textContent=hmr.textContent.replace('▾','▴'); } }catch(_){}
+      hmr.onclick=function(){
+        var on=hmb.classList.toggle('open');
+        hmr.textContent = on ? hmr.textContent.replace('▾','▴') : hmr.textContent.replace('▴','▾');
+        try{ localStorage.setItem('cm-hub-more', on?'1':'0'); }catch(_){}
+      };
+    }
     // 🌱 0의 상태 3걸음 → 실제 화면으로
     box.querySelectorAll('.zs-st[data-zs]').forEach(function(b){ b.onclick=function(){
       var k=b.getAttribute('data-zs');
@@ -15763,6 +15872,57 @@ if('serviceWorker' in navigator){
     el.innerHTML=h;
     var gb=el.querySelector('#td-graph-btn'); if(gb) gb.onclick=function(){ if(window.__openStats) window.__openStats(); };
   }
+  /* 📬 받은 문의함 (2026-08-22) — «아직 답 안 한 문의·예약» 한 숫자.
+     🚨 판정 기준: cm-lead-done(«연락함» 표시)에 없는 것 = 아직 답 안 함.
+        «읽음»이 아니라 «연락함»이 저장되므로 문구도 «답 안 함»으로 쓴다 — 기준과 말이 어긋나면 안 된다.
+     읽기만 한다 — 서버에 아무것도 안 쓴다. */
+  function inboxDoneSet(){ try{ return JSON.parse(localStorage.getItem('cm-lead-done')||'{}'); }catch(_){ return {}; } }
+  function fetchInbox(){
+    if(window.__inboxFetching) return;
+    var auth=null; try{ auth=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){}
+    if(!auth||!auth.code) return;
+    window.__inboxFetching=true;
+    var done=inboxDoneSet();
+    Promise.all([
+      window.laRpc('li_leads_get',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; }),
+      window.laRpc('li_resv_list',{ p_code:auth.code, p_pin_hash:auth.pinHash }).catch(function(){ return null; })
+    ]).then(function(r){
+      window.__inboxFetching=false;
+      var n=0, oldest=0;
+      try{
+        var L=(r[0]&&r[0].ok&&r[0].list)||[];
+        L.forEach(function(x){
+          if(done[x.key]) return;
+          n++;
+          var t=x.created_at?(+new Date(x.created_at)):0;
+          if(t && (!oldest || t<oldest)) oldest=t;
+        });
+      }catch(_){}
+      try{
+        var R=(r[1]&&r[1].ok&&r[1].list)||[];
+        R.forEach(function(x){
+          var k='resv:'+(x.date||'')+':'+(x.time||'');
+          if(done[k]) return;
+          n++;
+        });
+      }catch(_){}
+      window.__inbox={ n:n, oldest:oldest };
+      try{ if(document.getElementById('home-hub') && window.__renderHomeHub) window.__renderHomeHub(); }catch(_){}
+      try{ if(window.__inboxBadge) window.__inboxBadge(); }catch(_){}
+    }).catch(function(){ window.__inboxFetching=false; });
+  }
+  window.__fetchInbox=fetchInbox;
+  /* 🔴 도크 «판매·예약»에 빨간 배지 — 홈을 안 봐도 알 수 있게 */
+  window.__inboxBadge=function(){
+    try{
+      var tab=document.querySelector('.ws-tab[data-ws="sales"]'); if(!tab) return;
+      var n=(window.__inbox&&window.__inbox.n)||0;
+      var b=tab.querySelector('.ws-bdg');
+      if(!n){ if(b) b.remove(); return; }
+      if(!b){ b=document.createElement('span'); b.className='ws-bdg'; tab.appendChild(b); }
+      b.textContent=(n>99?'99+':n);
+    }catch(_){}
+  };
   function fetchHubStats(){
     if(window.__hubStatsFetching) return;
     var auth=null; try{ auth=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){}
@@ -15775,6 +15935,14 @@ if('serviceWorker' in navigator){
       else { var e2=document.getElementById('hub-today'); if(e2) e2.innerHTML='<div class="td-empty">📊 방문 기록이 쌓이면 여기 오늘의 현황이 떠요.</div>'; }
     }).catch(function(){ window.__hubStatsFetching=false; var e3=document.getElementById('hub-today'); if(e3) e3.innerHTML=''; });
   }
+  /* 🌌 광원 두 개 (2026-08-22) — 작업실 배경. 한 번만 만든다. */
+  (function(){
+    if(document.querySelector('.cmorb1')) return;
+    var o1=document.createElement('div'); o1.className='cmorb cmorb1'; o1.setAttribute('aria-hidden','true');
+    var o2=document.createElement('div'); o2.className='cmorb cmorb2'; o2.setAttribute('aria-hidden','true');
+    document.body.insertBefore(o2, document.body.firstChild);
+    document.body.insertBefore(o1, document.body.firstChild);
+  })();
   window.__renderHomeHub=renderHomeHub;
   try{ renderHomeHub(); }catch(_){}
 

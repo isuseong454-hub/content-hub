@@ -176,6 +176,10 @@
   (function(){
     var fixed=[].slice.call(document.querySelectorAll('body *')).filter(function(el){
       if(!_vis(el)) return false; var cs=getComputedStyle(el); if(cs.position!=='fixed') return false;
+      /* 🚨 2026-08-22 — 배경 광원(.cmorb)은 «일부러» 화면 전체 뒤에 깔리는 장식층이다.
+            눌리지도 않고(pointer-events:none) 글을 가리지도 않는다. 겹침 판정에서 뺀다.
+            같은 이유로 눌리지 않는 장식층은 모두 뺀다 — 개수가 늘 때마다 항목을 고치지 않게. */
+      if(cs.pointerEvents==='none') return false;
       /* 🚨 2026-08-22 — innerWidth 는 «스크롤바를 포함»한다. 브라우저 창에 스크롤바가 있으면
             전체 화면 덮개(login-ov)가 15px 좁아져 «전체가 아니다»로 잡히고,
             그 아래 모든 고정요소와 겹친다고 빨간 줄이 떴다. 스크롤바를 뺀 clientWidth 로 잰다. */
@@ -354,8 +358,64 @@
         'SQL 안 깔린 계정은 옛 3칸 그대로 + 안내 한 줄 — 무회귀 보장');
       add('e \\U 이스케이프 금지', et.indexOf('\\U0001') < 0,
         'JS는 \\U(대문자) 이스케이프를 모른다 — 이모지가 «U0001FAA3» 글자로 새어나온다 (2026-08-20 사고)');
-      add('e 🚧 잠금 표시', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') >= 0 && et.indexOf('.ws-tab.ws-soon{ opacity:.34; }') >= 0,
-        '«없음»을 «고장»처럼 그리지 않는다 — 흐릿하게 + 점 하나');
+      /* 🚨 2026-08-22 결정 변경 — 판매·예약 방은 실제로 돌아간다(📋문의 명단·📅예약 현황).
+         «준비 중» 딱지가 거짓말이었다. 이제 이 방은 열려 있어야 하고, 홈 히어로가 여기로 보낸다. */
+      add('e 판매·예약은 열린 방', et.indexOf('class="ws-tab ws-soon" data-ws="sales"') < 0
+        && et.indexOf('data-ws="sales"') >= 0,
+        '문의·예약 명단이 든 방에 «준비 중» 딱지를 붙이면 안 본다');
+      /* ── 🏠 홈 히어로 B안 (2026-08-22 사장님 픽) ── */
+      add('e 답 안 한 문의 띠', et.indexOf("id=\"hub-band\"") >= 0 && et.indexOf('아직 답 안 한 문의가 있어요') >= 0,
+        '0건이면 아예 안 그리고, 1건이라도 있으면 홈 맨 위에 뜬다');
+      add('e 판정 = 연락함 기준', et.indexOf("localStorage.getItem('cm-lead-done')") >= 0
+        && et.indexOf('«읽음»이 아니라 «연락함»') >= 0,
+        '«안 본»이라 써놓고 연락 기준으로 세면 거짓말이 된다 — 문구는 «답 안 함»');
+      add('e 숫자 3칸에 기간 표기', et.indexOf('방문 · 7일') >= 0 && et.indexOf('글 조회 · 누적') >= 0
+        && et.indexOf('문의·예약 · 답 안 함') >= 0,
+        '기간이 다른 숫자를 기간 없이 나란히 두면 잘못 읽는다');
+      add('e 접힌 것은 지운 게 아니다', et.indexOf("id=\"hub-morebox\"") >= 0
+        && et.indexOf("id=\"hub-plan\"") >= 0 && et.indexOf("id=\"hub-link-copy\"") >= 0
+        && et.indexOf("id=\"hub-viewhome\"") >= 0,
+        '등급·내 링크(복사·QR)·5걸음 지도·손님 화면이 접기 안에 살아 있어야 한다');
+      add('e 펼침 상태 기억', et.indexOf("localStorage.setItem('cm-hub-more'") >= 0,
+        '링크 복사하러 매번 다시 펴는 건 고문이다');
+      add('e 도크 문의 배지', et.indexOf('window.__inboxBadge') >= 0 && et.indexOf('ws-bdg') >= 0,
+        '홈을 안 보고 딴 탭에 있어도 문의가 온 걸 알아야 한다');
+      add('e 문의함은 읽기만', et.indexOf("laRpc('li_leads_get'") >= 0
+        && et.indexOf("laRpc('li_resv_list'") >= 0,
+        '집계는 읽기 전용 — 서버에 아무것도 쓰지 않는다');
+      add('e 숫자는 한 벌만', (et.match(/window\.__hubStats/g)||[]).length >= 2
+        && et.indexOf('두 벌 계산하면 어긋난다') >= 0,
+        '홈과 분석이 각자 계산하면 숫자가 어긋난다');
+      /* ── 🌌 광원 두 개 (2026-08-22 사장님 지시 «생각대로처럼, 항시») ── */
+      add('e 작업실 광원 두 개', et.indexOf('cmorb1') >= 0 && et.indexOf('cmorb2') >= 0
+        && et.indexOf('@keyframes cmdrift') >= 0,
+        '홈도 손님 화면도 같은 배경 — 한쪽만 바뀌면 두 집처럼 보인다');
+      add('u 광원 두 개', ut.indexOf('cmorb1') >= 0 && ut.indexOf('cmorb2') >= 0
+        && ut.indexOf('hue-rotate(46deg)') >= 0,
+        '둘째 색은 강조색을 46° 돌려 만든다 — 테마 47개를 손으로 고르지 않는다');
+      add('u 옛 광원 한 개는 껐다', ut.indexOf('html body::before{ display:none !important; }') >= 0,
+        '끄지 않으면 세 번째 빛이 되어 위쪽만 뿌예진다');
+      add('u 광원은 남의 효과를 안 덮는다', ut.indexOf('.cmorb{ position:fixed') >= 0
+        && ut.indexOf('body::after 는 6개 테마') >= 0,
+        'banghouse·luxe·prism·spring·butter 가 body::after 를 이미 쓰고 있다');
+      add('u 글 종이에도 광원', ut.indexOf('#post-modal .resv-sheet::before') >= 0,
+        '«홈도 포스팅도 항시» — 글만 평평하면 딴 앱처럼 보인다');
+      add('u 밝기별 세기 자동', ut.indexOf('html[data-bright="dark"]{  --orb-op') >= 0
+        && ut.indexOf('html[data-bright="light"]{ --orb-op') >= 0,
+        'applyBright() 판정을 그대로 쓴다 — 새 테마가 늘어도 저절로 맞는다');
+      add('u 발열 헌법', ut.indexOf('1 alternate forwards') >= 0
+        && ut.indexOf('prefers-reduced-motion:reduce){ .cmorb') >= 0,
+        '무한 반복이 아니라 한 번 흐르고 멈춘다 · 모션 끔이면 아예 안 움직인다');
+      /* 사장님 «핸드폰으로 어떻게 줄여?» — 손잡이가 hover 로만 떠서 폰엔 없는 기능이었다 */
+      add('e 사진 손잡이는 폰에도', et.indexOf('@media (hover:none){') >= 0
+        && et.indexOf('.dpic.has .dpsz{ opacity:1') >= 0,
+        'hover 로만 뜨면 폰에선 크기 조절이 «존재하지 않는 기능»이 된다');
+      /* 사고: _ibN 을 STEPS 뒤에 선언해 지도 칸이 늘 «아직 없음»으로 떴다 (2026-08-22) */
+      add('e 문의 수는 지도보다 먼저', (function(){
+          var d=et.indexOf('var _ibN='), st=et.indexOf("nm:'판매·예약'"), bd=et.indexOf('var bandHtml');
+          return d>0 && st>d && bd>st;
+        })(),
+        '선언이 뒤에 있으면 5걸음 지도 칸이 항상 «아직 없음»으로 뜬다');
       add('e 열린 방 4개', et.indexOf('data-ws="home"') >= 0 && et.indexOf('data-ws="page"') >= 0 && et.indexOf('data-ws="posts"') >= 0 && et.indexOf('data-ws="data"') >= 0,
         '홈 · 프로필 · 포스팅 · 고객·분석 — 이 넷은 늘 열려 있어야 한다 (2026-08-20 분석 개방)');
       /* 🆕 신규 첫 경험 (2026-08-20 사장님 지시 5종) */

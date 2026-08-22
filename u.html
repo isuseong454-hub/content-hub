@@ -562,6 +562,45 @@
     opacity:.20 !important; width:640px !important; height:600px !important;
     top:-250px !important; filter:blur(64px) !important;
   }
+  /* ═══ 🌌 광원 두 개 (2026-08-22 사장님 지시) ═══════════════════════════
+     «생각대로»의 배경과 같은 «묘한» 느낌 = 세기가 아니라 구조였다.
+     ① 두 개가 ② 대각선으로 ③ 화면 비례로 크게 ④ 아주 천천히 한 번 흐른다.
+     🚨 색은 테마마다 다르게 «만들지» 않는다 — 그 테마의 강조색(--coral) 하나에서
+        둘째 광원을 hue-rotate 로 파생시킨다. 테마가 47개고 앞으로 더 늘기 때문에,
+        손으로 94색을 고르면 새 테마마다 빠뜨린다.
+     🚨 body::after 는 6개 테마(banghouse·luxe·prism·spring·butter)가 이미 쓰고 있다.
+        그래서 가짜 원소(.cmorb)로 만든다 — 남의 효과를 덮지 않는다.
+     ⚠️ 되돌리기: 아래 .cmorb 규칙의 opacity 를 0 으로 두면 옛 «평평한» 상태. */
+  html body::before{ display:none !important; }   /* 옛 광원 한 개 — 끈다 (세 번째 빛이 되지 않게) */
+  /* 밝기별 세기 — applyBright() 가 매기는 data-bright 를 그대로 쓴다(테마 47개 전부 자동) */
+  html[data-bright="dark"]{  --orb-op:.26; --orb-op-sheet:.17; }
+  html[data-bright="light"]{ --orb-op:.20; --orb-op-sheet:.12; }
+  .cmorb{ position:fixed; border-radius:50%; pointer-events:none; z-index:0;
+    opacity:var(--orb-op,.26);
+    background:radial-gradient(circle, var(--coral) 0%, transparent 70%); }
+  .cmorb1{ width:44vmax; height:44vmax; left:-14vmax; top:-16vmax;
+    filter:blur(90px);
+    animation:cmdrift 28s cubic-bezier(.22,.61,.36,1) 1 alternate forwards; }
+  .cmorb2{ width:36vmax; height:36vmax; right:-12vmax; bottom:-10vmax;
+    filter:blur(90px) hue-rotate(46deg) saturate(.92) brightness(1.12);
+    animation:cmdrift 34s cubic-bezier(.22,.61,.36,1) 1 alternate-reverse forwards; }
+  @keyframes cmdrift{ to{ transform:translate(6vmax,4vmax) scale(1.08); } }
+  /* 발열 헌법 — 한 번 흐르고 멈춘다(무한 반복 아님). 모션 끔 설정이면 아예 안 움직인다. */
+  @media (prefers-reduced-motion:reduce){ .cmorb{ animation:none !important; } }
+  /* 📄 글 종이에도 같은 광원 — «홈도 포스팅도 항시» (사장님 지시)
+     스킨이 각자 배경을 갖고 있어서, 그 위에 얹는 층으로 넣는다.
+     .resv-sheet 는 position:relative 이고 z-index 가 없어서
+     z-index:-1 이 «스킨 배경 위 · 글 아래»에 정확히 낀다. */
+  #post-modal .resv-sheet::before{
+    content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    border-radius:inherit; overflow:hidden;
+    background:
+      radial-gradient(62% 30% at 8% -2%,  var(--coral) 0%, transparent 68%),
+      radial-gradient(54% 26% at 96% 101%, var(--coral) 0%, transparent 70%);
+    opacity:var(--orb-op-sheet,.16);
+    filter:blur(24px);
+  }
+
   .wrap{max-width:460px; margin:0 auto; padding:24px 22px 0; position:relative; z-index:1;}
 
   /* ── 분위기 미리보기 스와치 (나중엔 편집기 설정으로 이동 · 방문자엔 숨김) ── */
@@ -936,7 +975,8 @@
     .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
   }
 
-  /* ── 편집 브릿지(?edit=1): 섹션 탭 편집 시안 B ── */
+  /* ── 편집 브릿지(?edit=1): 섹션 탭 편집 시안 B ── */
+
   html[data-edit] .reveal{opacity:1 !important; transform:none !important;}
   /* ── 홈 구성(.la-hb): 평소 깔끔(손님 화면 그대로), 구분 헤더로 명확히 ── */
   html[data-edit] .la-hb{position:relative; cursor:pointer; outline:1.5px dashed rgba(167,139,255,.16); outline-offset:6px; border-radius:13px; transition:outline .14s ease, background .14s ease; margin:48px 0 16px;}   /* 평소에도 아주 옅은 점선=만질 수 있는 카드란 신호(은은) */
@@ -3256,6 +3296,16 @@
   var saved; try { saved = localStorage.getItem(__themeKey()); } catch(e){}
   if (saved) setTheme(saved); else setTheme('cream');
 
+  /* 🌌 광원 두 개를 깐다 (2026-08-22) — 홈도 글도 «항시».
+     body::after 를 쓰는 테마가 6개라 가짜 원소로 만든다. 한 번만 만든다. */
+  (function(){
+    if(document.querySelector('.cmorb1')) return;
+    var o1=document.createElement('div'); o1.className='cmorb cmorb1'; o1.setAttribute('aria-hidden','true');
+    var o2=document.createElement('div'); o2.className='cmorb cmorb2'; o2.setAttribute('aria-hidden','true');
+    document.body.insertBefore(o2, document.body.firstChild);
+    document.body.insertBefore(o1, document.body.firstChild);
+  })();
+
   // ── 커버 사진 핏 적용 (초점=background-position 0~100%, 줌=background-size로 → 어떤 비율·범위든 드래그로 위치 조정 가능, 항상 꽉 참) ──
   var __ia={};   // 이미지 가로/세로 비율 캐시
   function __coverPhotoOf(el){ var bg=(el&&el.style.backgroundImage)||''; var m=bg.match(/url\((['"]?)(.*?)\1\)/); return m?m[2]:''; }
@@ -3880,7 +3930,8 @@
       if(a.expiresAt!=null){ var ex=new Date(a.expiresAt); if(!isNaN(ex.getTime()) && ex<new Date()) return; }
       var b=document.createElement('a');
       b.className='mine-edit'; b.href='edit.html?live=1';
-      b.onclick=function(ev){ ev.preventDefault(); return window.__goEdit(); };   /* 🚪 단 하나의 문으로 */
+      b.onclick=function(ev){ ev.preventDefault(); return window.__goEdit(); };   /* 🚪 단 하나의 문으로 */
+
       b.setAttribute('aria-label','이 칸 편집하기');
       b.textContent='✏️ 편집하기';
       slot.appendChild(b);
@@ -3910,7 +3961,8 @@
         var k=on?on.getAttribute('data-tab'):'home';
         b.textContent='✏️ '+(LBL[k]||'편집하기');
         b.href='edit.html?live=1&tab='+encodeURIComponent(k);
-        b.onclick=function(ev){ ev.preventDefault(); return window.__goEdit('&tab='+encodeURIComponent(k)); };
+        b.onclick=function(ev){ ev.preventDefault(); return window.__goEdit('&tab='+encodeURIComponent(k)); };
+
         b.setAttribute('aria-label',(LBL[k]||'편집')+'하기');
       }
       syncEditBtn();
@@ -3939,7 +3991,8 @@
     setTimeout(function(){ location.href=u; }, 150);
     return false;
   };
-  /* 🔁 «그 자리에서» — 편집기 iframe 이 at/p 를 달고 오면 보던 자리로 되돌린다 (2026-08-21) */
+  /* 🔁 «그 자리에서» — 편집기 iframe 이 at/p 를 달고 오면 보던 자리로 되돌린다 (2026-08-21) */
+
   (function(){
     try{
       var q=new URLSearchParams(location.search);
@@ -4295,7 +4348,8 @@
           → 둘 다 링크트리 «긴 버튼»과 같은 결. 다른 건 사진·가격 한 줄과 고지문구뿐.
           ⚠️ 기존 products 블록은 «제품 탭» 전용(고정 칸)이라 홈 본문에 못 깐다. 그래서 새로 만든다. */
     myprod: function(c){ return shelfCard(c, false); },
-    coupas: function(c){ return shelfCard(c, true); },
+    coupas: function(c){ return shelfCard(c, true); },
+
     video: function(c){
       /* 🎬 2026-08-20 — 썸네일만 깔고 «누르면» 그때 플레이어 생성 (iframe 즉시 로드 = 손님 데이터·발열) */
       var url=c[0]||''; if(!url) return null;
@@ -6038,7 +6092,8 @@
     try{ window.__goEdit('&addhome='+encodeURIComponent(id)); }
     catch(_){ location.href='edit.html?live=1&addhome='+encodeURIComponent(id); }
   }
-  // 좋아요·보내기 액션바 DOM 생성 (모달=큰 cls 'pm-foot', 카드=작은 cls 'arc-acts')
+  // 좋아요·보내기 액션바 DOM 생성 (모달=큰 cls 'pm-foot', 카드=작은 cls 'arc-acts')
+
   function buildActsBar(id, opts){
     opts=opts||{};
     var liked=_likedLocal(id), cnt=_likeCount(id);
@@ -6186,8 +6241,10 @@
     }
     return a;
   }
-  // 아카이브 탭 = 게시물을 주제(카테고리) 칩으로 분류
-  function buildArchive(posts, view){
+  // 아카이브 탭 = 게시물을 주제(카테고리) 칩으로 분류
+
+  function buildArchive(posts, view){
+
     var sec=document.querySelector('[data-pane="archive"]'); if(!sec) return;
     var live=(posts||[]).filter(function(p){ return p && p.on!==false && p.blocks && p.blocks.length; });
     if(!live.length) return;   // 게시물 없으면 기존 샘플 유지
