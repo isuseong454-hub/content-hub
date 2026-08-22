@@ -3160,6 +3160,12 @@ if('serviceWorker' in navigator){
   /* 🔑 2026-08-21 사장님 «자동 로그인 버튼» — 기능은 8/20부터 있었는데 «보이지 않아» 모르셨다.
         끌 수 있게도 해야 한다: 남의 컴퓨터에서 켜 두면 그대로 열린다. */
   /* 🚨 2026-08-21 사장님 «자동 로그인을 중간 정렬해줘» — 왼쪽에 붙어 혼자 삐뚤어 보였다 */
+  /* 🔍 «왜 또 물어보나요?» — 추측 대신 화면에 적는다 (2026-08-22) */
+  .lg-why{ text-align:left; margin:2px 0 12px; padding:11px 13px; border-radius:11px;
+    background:var(--soft); border:1px solid var(--hair); font-size:11.5px; line-height:1.75; color:var(--muted); }
+  .lg-why .lgw-h{ display:block; font-size:11.5px; font-weight:800; color:var(--ink); margin-bottom:5px; }
+  .lg-why .lgw-l{ display:block; }
+  .lg-why b{ color:var(--ink); font-weight:700; }
   .lg-auto{display:flex; align-items:center; justify-content:center; gap:9px; margin:2px 0 12px; cursor:pointer;
     font-size:12.5px; color:rgba(255,255,255,.72); user-select:none; min-height:44px;}
   .lg-auto input{width:18px; height:18px; accent-color:#A78BFF; cursor:pointer; flex:0 0 auto;}
@@ -16784,7 +16790,7 @@ if('serviceWorker' in navigator){
     var ge=document.getElementById('gate-edit'), gs=document.getElementById('gate-settings'), gb=document.getElementById('gate-back');
     if(ge) ge.onclick=function(){ hideModeGate(); if(window.__openLive) window.__openLive(); };
     if(gs) gs.onclick=function(){ hideModeGate(); var os=document.getElementById('open-settings'); if(os) os.click(); };
-    if(gb) gb.onclick=function(){ hideModeGate(); var lo=document.getElementById('login-ov'); if(lo) lo.style.display='flex'; };
+    if(gb) gb.onclick=function(){ hideModeGate(); var lo=document.getElementById('login-ov'); if(lo) lo.style.display='flex'; try{ loginShowWhy(); }catch(_){} };
     var gh=document.getElementById('gate-home'); if(gh) gh.onclick=function(){ if(window.__openRealHome) window.__openRealHome(); };
   })();
 
@@ -17427,7 +17433,7 @@ if('serviceWorker' in navigator){
           btn.disabled=false; btn.textContent='로그인'; return;
         }
         AUTH={code:code, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null), hasPage:!!res.hasPage, published:!!res.published};   /* 🚨 새 계정 판정용 (2026-08-20) */ window.AUTH=AUTH; publishTier();
-        try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',code);}catch(e){} enter();
+        try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',code);}catch(e){} loginMark(); enter();
       }
       else if(res && res.reason==='nopin'){
         if(res.industry && selInd && res.industry!==selInd){ err.textContent='이 코드는 “'+(INDLBL[res.industry]||res.industry)+'”용이에요.\n위에서 맞는 분야를 선택하고 다시 시도하세요.'; }
@@ -17452,7 +17458,7 @@ if('serviceWorker' in navigator){
         var res=await window.laRpc('li_set_pin', { p_code:pendingCode, p_pin_hash:hash });
         if(res && res.ok){
           AUTH={code:pendingCode, pinHash:hash, handle:res.handle, name:res.name, industry:res.industry||null, expiresAt:(res.expires_at!=null?res.expires_at:null)}; window.AUTH=AUTH; publishTier();
-          try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',pendingCode);}catch(e){}
+          try{localStorage.setItem('la-auth',JSON.stringify(AUTH)); localStorage.setItem('la-last-code',pendingCode);}catch(e){} loginMark();
           hideSetPin(); enter();
         } else if(res && res.reason==='already'){ se.textContent='이미 PIN이 설정된 코드예요. 로그인해 주세요'; setTimeout(hideSetPin, 1200); }
         else se.textContent='설정 실패 ('+((res&&res.reason)||'SQL 미실행?')+')';
@@ -17480,6 +17486,80 @@ if('serviceWorker' in navigator){
   })();
   // 코드 자동완성 — 한번 로그인하면 다음엔 코드 미리 채움
   (function(){ try{ var lc=localStorage.getItem('la-last-code'); var c=document.getElementById('lg-code'); if(lc && c && !c.value){ c.value=lc; } }catch(e){} })();
+  /* ═══ 🔍 «왜 또 로그인을 묻나» 진단 (2026-08-22 사장님 지시) ═══════════════
+     사장님: «처음에 로그인했는데 왜 편집할 때 또또또 로그인해?»
+     코드는 멀쩡했다 — 열쇠가 «그 브라우저»에 없을 뿐이다. 그런데 어느 브라우저인지
+     아무도 몰라서 추측만 했다. 그래서 로그인 창에 «왜 떴는지»를 적어 준다.
+
+     🚨 기록도 같은 저장소에 산다 — 저장소가 통째로 지워지면 기록도 없다.
+        그런데 그게 곧 진단이다: «기록조차 없다» = 지워졌거나 처음 온 브라우저.
+     🚨 남기는 건 «언제·어디서»뿐. 코드·PIN·비밀번호는 절대 남기지 않는다. */
+  function loginWhere(){
+    var ua=''; try{ ua=navigator.userAgent||''; }catch(_){}
+    try{
+      if(/KAKAOTALK/i.test(ua))                 return '카카오톡 안 브라우저';
+      if(/Instagram/i.test(ua))                 return '인스타그램 안 브라우저';
+      if(/FBAN|FBAV/i.test(ua))                 return '페이스북 안 브라우저';
+      if(/NAVER\(inapp/i.test(ua)||/NAVER/i.test(ua)) return '네이버 앱 안 브라우저';
+      if(/Line\//i.test(ua))                    return '라인 안 브라우저';
+      if(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return '홈 화면에 깐 앱';
+      if(window.navigator.standalone)           return '홈 화면에 깐 앱';
+      if(/CriOS/i.test(ua))                     return '크롬(아이폰)';
+      if(/Safari/i.test(ua) && /iPhone|iPad/i.test(ua)) return '사파리';
+      if(/Chrome/i.test(ua))                    return '크롬';
+      if(/Safari/i.test(ua))                    return '사파리';
+    }catch(_){}
+    return '이 브라우저';
+  }
+  function loginMark(){
+    try{ localStorage.setItem('cm-login-log', JSON.stringify({ t:Date.now(), w:loginWhere() })); }catch(_){}
+  }
+  function loginWhy(){
+    var here=loginWhere(), last=null;
+    try{ last=JSON.parse(localStorage.getItem('cm-login-log')||'null'); }catch(_){}
+    var L=['지금 연 곳: <b>'+here+'</b>'];
+    if(!last){
+      L.push('이 브라우저엔 <b>기록이 없어요</b> — 처음이거나, 저장물이 통째로 지워졌어요');
+    } else {
+      var d=new Date(last.t), days=Math.floor((Date.now()-last.t)/864e5);
+      var when=(d.getMonth()+1)+'월 '+d.getDate()+'일';
+      if(last.w && last.w!==here){
+        L.push('마지막 로그인은 <b>'+String(last.w||'').replace(/[<>&]/g,'')+'</b>였어요 ('+when+')');
+        L.push('브라우저가 다르면 <b>열쇠도 따로</b>예요 — 앱 문제가 아니에요');
+      } else if(days>=6){
+        L.push('마지막 로그인 <b>'+when+'</b> ('+days+'일 전) — 오래 안 열면 아이폰이 열쇠를 지워요');
+      } else {
+        L.push('마지막 로그인 <b>'+when+'</b> — 열쇠만 사라졌어요');
+      }
+    }
+    return L;
+  }
+  /* 로그인 창이 뜨면 «왜 떴는지»를 한 번 적는다 */
+  function loginShowWhy(){
+    try{
+      var box=document.getElementById('lg-why');
+      if(!box){
+        var host=document.getElementById('lg-err'); if(!host) return;
+        box=document.createElement('div'); box.id='lg-why'; box.className='lg-why';
+        host.parentNode.insertBefore(box, host);
+      }
+      box.innerHTML='<b class="lgw-h">왜 또 물어보나요?</b>'
+        + loginWhy().map(function(x){ return '<span class="lgw-l">· '+x+'</span>'; }).join('');
+    }catch(_){}
+  }
+  window.__loginWhy=loginWhy;
+  /* 🚨 입구가 여러 개다 — 한 군데만 붙이면 다른 길로 들어온 로그인 창엔 설명이 없다.
+     🚨 «보이면 붙인다»로 만들었더니 타이머가 창이 뜨기 «전»에 지나가 못 붙었다(2026-08-22 실측).
+        그래서 보이든 말든 «미리» 만들어 둔다 — 어차피 로그인 카드 «안»이라 창이 떠야만 보인다.
+        어느 길로 들어와도 통하고, 타이밍을 안 탄다. */
+  (function(){
+    function build(){ try{ if(!document.getElementById('lg-why')) loginShowWhy(); }catch(_){} }
+    try{
+      if(document.readyState!=='loading') build();
+      else document.addEventListener('DOMContentLoaded', build);
+      setTimeout(build, 900);
+    }catch(_){}
+  })();
   /* 🔑 자동 로그인 스위치 — 기억하고, 끄면 저장된 열쇠까지 버린다 */
   (function(){ try{
     var cb=document.getElementById('lg-auto'); if(!cb) return;

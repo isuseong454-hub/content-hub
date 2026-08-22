@@ -657,10 +657,15 @@
     transition:transform 120ms cubic-bezier(.2,0,0,1);}
   html[data-bright="light"] .mine-edit{ background:rgba(255,255,255,.92); color:#5B3FD6;
     border-color:rgba(91,63,214,.30); box-shadow:0 4px 14px rgba(0,0,0,.12); }
-  html[data-bright="light"] .edit-flag{ background:rgba(255,255,255,.92); color:#5B3FD6;
-    border-color:rgba(91,63,214,.26); box-shadow:0 3px 12px rgba(0,0,0,.10); }
-  html[data-bright="light"] .edit-flag i{ background:#5B3FD6; }
+  html[data-bright="light"] .edit-flag{ background:rgba(255,255,255,.90); color:var(--coral);
+    border-bottom-color:color-mix(in srgb, var(--coral) 24%, transparent); }
+  html[data-bright="light"] .edit-flag i{ background:var(--coral); }
   .mine-edit-quit{ font-weight:900; }
+  /* ＋새 포스팅 — «만들기»는 채운 알약으로 (나가기와 생김새가 달라야 헷갈리지 않는다) */
+  .mine-edit-make{ background:var(--coral) !important; color:#fff !important;
+    border-color:transparent !important; font-weight:900; }
+  html[data-bright="light"] .mine-edit-make{ background:rgba(255,255,255,.95) !important;
+    color:var(--coral) !important; border:1px solid color-mix(in srgb, var(--coral) 40%, transparent) !important; }
   .mine-edit:active{transform:scale(.96);}
   /* 실측: 버튼 바닥이 46px — 46 으로 맞추면 «간격 0»이라 붙어 보인다. 12px 숨 쉴 자리를 준다.
      («포스팅 편집»처럼 글자가 길어져도 버튼은 한 줄이라 높이는 그대로) */
@@ -669,11 +674,31 @@
   html[data-edit] body::after{content:''; position:fixed; inset:0; z-index:90; pointer-events:none;
     box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--coral) 34%, transparent),
                inset 0 34px 42px -30px color-mix(in srgb, var(--coral) 42%, transparent);}
-  .edit-flag{position:fixed; top:calc(12px + env(safe-area-inset-top,0px)); left:12px; z-index:96;
-    display:none; align-items:center; gap:6px; font-family:var(--sans); font-size:10.5px; font-weight:800;
-    letter-spacing:.03em; color:var(--coral); background:rgba(20,20,26,.86); padding:6px 11px; border-radius:999px; backdrop-filter:saturate(140%) blur(6px);
-    border:1px solid color-mix(in srgb, var(--coral) 30%, transparent); opacity:.85;}
-  html[data-edit] .edit-flag{display:inline-flex;}
+  /* ═══ 🚪 편집 위 띠 — B안 (2026-08-22 사장님 픽) ═══════════════════════
+     축은 «나가는 문과 만드는 문을 어디에 두나».
+     오른쪽 위는 인스타·블로그에서 «만들기» 자리다 → ＋새 포스팅에게 내준다.
+     나가는 문은 위 띠 오른쪽 — 눌러야 할 버튼처럼 «생겨야» 한다(깃발은 버튼으로 안 읽힌다).
+     기각: A(도크에 끝내기) — 도크가 7칸이 되어 폰에서 글자가 좁아지고 탭처럼 보인다.
+           C(깃발 눌러 나가기) — 가장 빠르지만 나가는 길을 못 찾는다. */
+  .edit-flag{position:fixed; left:0; right:0; top:0; z-index:96;
+    display:none; align-items:center; gap:8px; font-family:var(--sans); font-size:11px; font-weight:800;
+    letter-spacing:.03em; color:var(--coral);
+    padding:calc(9px + env(safe-area-inset-top,0px)) 12px 9px;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    -webkit-backdrop-filter:saturate(140%) blur(10px); backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid color-mix(in srgb, var(--coral) 26%, transparent);}
+  html[data-edit] .edit-flag{display:flex;}
+  .ef-quit{margin-left:auto; font-family:var(--sans); font-size:11.5px; font-weight:800;
+    border:1px solid color-mix(in srgb, var(--coral) 40%, transparent); border-radius:9px;
+    padding:7px 13px; cursor:pointer; background:var(--coral); color:#fff; min-height:34px;
+    box-shadow:0 3px 12px color-mix(in srgb, var(--coral) 34%, transparent);}
+  .ef-quit:active{transform:scale(.96);}
+  html[data-bright="light"] .ef-quit{background:rgba(255,255,255,.95); color:var(--coral);
+    box-shadow:0 3px 12px rgba(0,0,0,.10);}
+  /* 띠가 먹는 자리만큼 내용을 내린다 — 띠가 프로필을 덮으면 안 된다 */
+  html[data-edit] .wrap{padding-top:calc(74px + env(safe-area-inset-top,0px)) !important;}
+  /* ＋새 포스팅은 띠 «아래»에 — 두 개가 겹치지 않게 */
+  html[data-edit] .mine-edit{top:calc(56px + env(safe-area-inset-top,0px));}
   .edit-flag i{width:6px; height:6px; border-radius:99px; background:var(--coral); display:block;
     animation:efPulse 1.9s ease-in-out 3;}
   @keyframes efPulse{0%,100%{opacity:.35;} 50%{opacity:1;}}
@@ -989,15 +1014,15 @@
 
   html[data-edit] .reveal{opacity:1 !important; transform:none !important;}
   /* ── 홈 구성(.la-hb): 평소 깔끔(손님 화면 그대로), 구분 헤더로 명확히 ── */
-  html[data-edit] .la-hb{position:relative; cursor:pointer; outline:1.5px dashed rgba(167,139,255,.16); outline-offset:6px; border-radius:13px; transition:outline .14s ease, background .14s ease; margin:48px 0 16px;}   /* 평소에도 아주 옅은 점선=만질 수 있는 카드란 신호(은은) */
+  html[data-edit] .la-hb{position:relative; cursor:pointer; outline:1.5px dashed color-mix(in srgb, var(--coral) 16%, transparent); outline-offset:6px; border-radius:13px; transition:outline .14s ease, background .14s ease; margin:48px 0 16px;}   /* 평소에도 아주 옅은 점선=만질 수 있는 카드란 신호(은은) */
   html[data-edit] .la-hb:not(#home-gallery):not(.mq-band){overflow:visible;}   /* overflow:hidden 카드의 라벨 잘림 방지 (단 마퀴는 hidden 유지=태그 삐져나옴 방지) */
-  html[data-edit] .la-hb:not(.la-ed-sel):hover{outline-color:rgba(167,139,255,.5); background:rgba(123,90,255,.04);}   /* 호버=상호작용 가능 드러냄 */
-  html[data-edit] .la-hb.la-ed-sel{outline-color:rgba(167,139,255,.9); outline-width:2px; background:rgba(123,90,255,.07);}
+  html[data-edit] .la-hb:not(.la-ed-sel):hover{outline-color:color-mix(in srgb, var(--coral) 50%, transparent); background:color-mix(in srgb, var(--coral) 4%, transparent);}   /* 호버=상호작용 가능 드러냄 */
+  html[data-edit] .la-hb.la-ed-sel{outline-color:color-mix(in srgb, var(--coral) 90%, transparent); outline-width:2px; background:color-mix(in srgb, var(--coral) 7.0%, transparent);}
   /* 구성 구분 헤더 (항상 보임 · 각 구성 위): 이름 + 회색 힌트 + 하어라인 */
   .la-ed-head, .la-ed-bar{display:none;}   /* 편집모드(data-edit) 아닐 땐 편집 UI 숨김 — 디자인 미리보기·손님화면 깨끗하게 */
   html[data-edit] .la-ed-head{position:absolute; top:-42px; left:4px; right:4px; display:flex; flex-direction:column; gap:2px; pointer-events:none; user-select:none;}
   html[data-edit] .la-ed-hrow{display:flex; align-items:center; gap:8px;}
-  html[data-edit] .la-ed-hrow::before{content:''; width:3px; height:12px; border-radius:2px; background:rgba(167,139,255,.85); flex:0 0 auto;}
+  html[data-edit] .la-ed-hrow::before{content:''; width:3px; height:12px; border-radius:2px; background:color-mix(in srgb, var(--coral) 85%, transparent); flex:0 0 auto;}
   html[data-edit] .la-ed-hname{font-size:10.5px; font-weight:800; letter-spacing:.04em; color:rgba(190,172,255,.95); white-space:nowrap;}
   /* 🚨 2026-08-20 사장님 «이러니까 안 보이잖아» — 편집 라벨 색이 «다크 기준»으로 박혀 있어
         크림·라이트 테마에선 배경과 붙어 안 읽혔다. 밝은 테마에선 어두운 글씨로 뒤집는다. */
@@ -1013,7 +1038,7 @@
   html[data-edit][data-theme="lavender"] .la-ed-hrow::before, html[data-edit][data-theme="cream"] .la-ed-hrow::before,
   html[data-edit][data-theme="pearl"] .la-ed-hrow::before, html[data-edit][data-theme="aqua"] .la-ed-hrow::before,
   html[data-edit][data-theme="lime"] .la-ed-hrow::before{background:rgba(90,60,180,.75);}
-  html[data-edit] .la-ed-hrow::after{content:''; flex:1; height:1px; background:linear-gradient(90deg, rgba(167,139,255,.32), rgba(167,139,255,0));}
+  html[data-edit] .la-ed-hrow::after{content:''; flex:1; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--coral) 32%, transparent), color-mix(in srgb, var(--coral) 0%, transparent));}
   html[data-edit] .la-ed-hhint{font-size:10px; color:rgba(255,255,255,.42); margin-left:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   /* 상호작용 힌트(톡 수정 · 꾹 이동): 평소 숨김 → 호버/선택 시 은은히 */
   html[data-edit] .la-ed-act{font-size:9.5px; font-weight:700; color:rgba(190,172,255,.9); margin-left:11px; white-space:nowrap; opacity:0; transform:translateY(-1px); transition:opacity .16s ease, transform .16s ease; pointer-events:none;}
@@ -1027,13 +1052,20 @@
   /* 수정 버튼: 선택된 구성에만 · 오른쪽 세로 중앙 */
   /* 🚨 2026-08-20 — «오른쪽 세로 가운데 · 선택해야 보임»에서 «오른쪽 위 · 항상 보임»으로.
         사장님: «틀 오른쪽 상단에 조그마한 수정». 안 보이면 있는 줄도 모른다. */
-  html[data-edit] .la-ed-bar{position:absolute; top:-30px; right:4px; z-index:9; display:flex; gap:5px;}
+  /* 🚨 2026-08-22 사장님 «바 안쪽으로» — top:-30px 은 블록 «바깥 위»라서
+        (1) 첫 블록에선 프로필과 겹치고 (2) 윗 블록에 붙은 것처럼 보였다.
+        안쪽 오른쪽 위로 넣고, 글 위에 떠도 읽히도록 바탕을 깐다. */
+  html[data-edit] .la-ed-bar{position:absolute; top:8px; right:8px; z-index:9; display:flex; gap:5px;
+    padding:3px; border-radius:999px; background:color-mix(in srgb, var(--paper) 62%, transparent);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);}
+  /* 제목이 오른쪽 위까지 오는 틀(갤러리·흐르는 띠)은 머리말 아래로 내린다 */
+  html[data-edit] #home-gallery.la-hb .la-ed-bar, html[data-edit] .mq-band.la-hb .la-ed-bar{ top:42px; }
   html[data-edit] .la-ed-more{font-size:10.5px !important; padding:4px 9px !important; border-radius:9px !important;
     opacity:.72; transition:opacity .16s ease, transform .08s ease;}
   html[data-edit] .la-hb.la-ed-sel .la-ed-more{opacity:1;}
   html[data-edit] .la-ed-more:active{transform:scale(.94);}
   html[data-edit] .la-hb.la-ed-sel .la-ed-bar{display:flex; flex-direction:row; gap:5px; align-items:center;}
-  html[data-edit] .la-ed-btn{background:#7B5AFF; color:#fff; font-size:11px; font-weight:800; padding:8px 14px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 4px 14px rgba(123,90,255,.5); white-space:nowrap;}
+  html[data-edit] .la-ed-btn{background:var(--coral); color:#fff; font-size:11px; font-weight:800; padding:8px 14px; border:none; border-radius:999px; cursor:pointer; box-shadow:0 4px 14px color-mix(in srgb, var(--coral) 50%, transparent); white-space:nowrap;}
   html[data-edit] .la-ed-btn:active{transform:scale(.94);}
   html[data-edit] .la-ed-del{background:#E0556B; box-shadow:0 4px 14px rgba(224,85,107,.5);}
   /* 🖐 드래그로 순서 변경 (꾹 눌러 끌기) */
@@ -1052,7 +1084,7 @@
     border:1px solid rgba(176,69,91,.28); box-shadow:0 3px 12px rgba(0,0,0,.10); }
   html[data-edit][data-bright="light"] .la-prof-readd{ background:rgba(124,91,224,.07); border-color:rgba(124,91,224,.35); color:#6A48CF; }
   .la-prof-readd{display:none;}
-  html[data-edit] .la-prof-readd{display:block; width:100%; margin:6px 0 14px; padding:14px; background:rgba(123,90,255,.10); border:1.5px dashed rgba(167,139,255,.6); border-radius:14px; color:#A78BFF; font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer;}
+  html[data-edit] .la-prof-readd{display:block; width:100%; margin:6px 0 14px; padding:14px; background:color-mix(in srgb, var(--coral) 10%, transparent); border:1.5px dashed color-mix(in srgb, var(--coral) 60%, transparent); border-radius:14px; color:var(--coral); font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer;}
   html[data-edit] .la-prof-readd:active{transform:scale(.99);}
   /* ✨ 스크롤 등장 효과 (home.reveal · 기본 켜짐, 편집모드·모션줄이기는 자동 꺼짐) — 베스트 조합: 블록 줌인 + 여러 항목 스태거 */
   html.has-reveal .reveal-blk{opacity:0; transform:scale(.95); transition:opacity .5s ease, transform .65s cubic-bezier(.2,.7,.2,1); will-change:opacity, transform;}
@@ -1082,8 +1114,8 @@
   html[data-edit][data-inserting] .la-hb{opacity:.45; pointer-events:none;}
   /* 맨 아래 '＋ 구성 추가' 빈 슬롯 (항상 보임 · 탭하면 카탈로그) */
   .la-addslot{display:none;}
-  html[data-edit] .la-addslot{display:flex; flex-direction:column; align-items:center; gap:3px; width:100%; margin:18px 0 10px; padding:24px 18px; background:rgba(123,90,255,.05); border:2px dashed rgba(167,139,255,.5); border-radius:16px; cursor:pointer; font-family:inherit; color:var(--coral); transition:background .14s, border-color .14s;}
-  html[data-edit] .la-addslot:hover{background:rgba(123,90,255,.1); border-color:rgba(167,139,255,.8);}
+  html[data-edit] .la-addslot{display:flex; flex-direction:column; align-items:center; gap:3px; width:100%; margin:18px 0 10px; padding:24px 18px; background:color-mix(in srgb, var(--coral) 5%, transparent); border:2px dashed color-mix(in srgb, var(--coral) 50%, transparent); border-radius:16px; cursor:pointer; font-family:inherit; color:var(--coral); transition:background .14s, border-color .14s;}
+  html[data-edit] .la-addslot:hover{background:color-mix(in srgb, var(--coral) 10%, transparent); border-color:color-mix(in srgb, var(--coral) 80%, transparent);}
   html[data-edit] .la-addslot:active{transform:scale(.99);}
   html[data-edit] .la-addslot .las-plus{font-size:26px; line-height:1; font-weight:800;}
   html[data-edit] .la-addslot .las-t{font-size:14.5px; font-weight:800;}
@@ -1107,8 +1139,19 @@
   html[data-theme="light"] .la-sk-sq, html[data-theme="light"] .la-sk-b{background:rgba(0,0,0,.05);}
   /* 아카이브/Q&A 카드용(.la-ed-sec): 호버/탭 시 ✎수정 펜 (홈과 별개) */
   html[data-edit] .la-ed-sec{position:relative; cursor:pointer; outline:1.5px dashed transparent; outline-offset:4px; border-radius:13px; transition:outline .14s, background .14s;}
-  html[data-edit] .la-ed-sec:hover{outline-color:rgba(167,139,255,.6); background:rgba(123,90,255,.05);}
-  html[data-edit] .la-ed-pen{position:absolute; top:7px; right:9px; z-index:7; background:#7B5AFF; color:#fff; font-size:10.5px; font-weight:700; padding:4px 11px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .14s; box-shadow:0 3px 10px rgba(0,0,0,.4);}
+  html[data-edit] .la-ed-sec:hover{outline-color:color-mix(in srgb, var(--coral) 60%, transparent); background:color-mix(in srgb, var(--coral) 5%, transparent);}
+  html[data-edit] .la-ed-pen{position:absolute; top:7px; right:9px; z-index:7; background:var(--coral); color:#fff; font-size:10.5px; font-weight:700; padding:4px 11px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .14s; box-shadow:0 3px 10px rgba(0,0,0,.4);}
+  /* 🚨 2026-08-22 — 이 묶음은 반드시 .la-ed-btn/.la-ed-pen «뒤»에 있어야 한다.
+     앞에 두면 특정도가 같아서 나중 규칙(기본 보라)이 이긴다 — 실제로 한 번 그렇게 만들었고,
+     레몬 테마에서 «흰 글씨가 안 읽히는» 것으로 드러났다. 순서가 곧 기능이다. */
+  /* 🎨 밝은 테마 — 사장님이 «빼기»에서 이미 고르신 흰 알약 방식으로 통일 */
+  html[data-edit][data-bright="light"] .la-ed-bar{ background:rgba(255,255,255,.72); }
+  html[data-edit][data-bright="light"] .la-ed-btn{ background:rgba(255,255,255,.95); color:var(--coral);
+    border:1px solid color-mix(in srgb, var(--coral) 34%, transparent); box-shadow:0 3px 12px rgba(0,0,0,.10); }
+  html[data-edit][data-bright="light"] .la-ed-btn.la-ed-del{ background:rgba(255,255,255,.95); color:#B0455B;
+    border-color:rgba(176,69,91,.30); box-shadow:0 3px 12px rgba(0,0,0,.10); }
+  html[data-edit][data-bright="light"] .la-ed-pen{ background:rgba(255,255,255,.95); color:var(--coral);
+    border:1px solid color-mix(in srgb, var(--coral) 34%, transparent); box-shadow:0 3px 12px rgba(0,0,0,.10); }
   html[data-edit] .la-ed-sec:hover .la-ed-pen{opacity:1;}
   @media (hover:none){ html[data-edit] .la-ed-pen{opacity:.85;} }
   /* 프로필 인라인 편집 (이름·소개 그 자리에서 · 아바타 톡=사진) */
@@ -1236,25 +1279,25 @@
   html[data-edit] .la-galcard .la-gpen{position:absolute; left:50%; bottom:8px; transform:translateX(-50%); background:rgba(0,0,0,.6); color:#fff; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px; opacity:0; transition:opacity .14s; white-space:nowrap;}
   html[data-edit] .la-galcard:hover .la-gpen{opacity:1;}
   @media (hover:none){ html[data-edit] .la-galcard .la-gpen{opacity:.9;} }
-  html[data-edit] .la-galadd{border:2px dashed rgba(167,139,255,.7)!important; background:rgba(123,90,255,.08)!important; color:var(--coral)!important; font-size:13px!important; font-weight:800; gap:0;}
+  html[data-edit] .la-galadd{border:2px dashed color-mix(in srgb, var(--coral) 70%, transparent)!important; background:color-mix(in srgb, var(--coral) 8%, transparent)!important; color:var(--coral)!important; font-size:13px!important; font-weight:800; gap:0;}
   /* 대표 사진 쇼케이스 — 홈에서 바로 편집 */
   html[data-edit] .lbc{cursor:pointer;}
-  html[data-edit] .lbc .lbc-photo.lbc-empty{display:flex; align-items:center; justify-content:center; color:var(--coral); font-size:14px; font-weight:800; border:1.5px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07);}
+  html[data-edit] .lbc .lbc-photo.lbc-empty{display:flex; align-items:center; justify-content:center; color:var(--coral); font-size:14px; font-weight:800; border:1.5px dashed color-mix(in srgb, var(--coral) 60%, transparent); background:color-mix(in srgb, var(--coral) 7.0%, transparent);}
   html[data-edit] .lbc-kr.la-ed-inline:empty::before{content:attr(data-ph); color:var(--muted); opacity:.7;}
   /* 범용 인라인 빈칸 힌트 — data-ph 있으면 비었을 때 흐리게 보여줌 (숫자스탯·인용구·진단형 선택지/질문 등 공통) */
   html[data-edit] .la-ed-inline:empty::before{ content:attr(data-ph); color:var(--muted); opacity:.5; font-weight:400; -webkit-text-fill-color:currentColor; pointer-events:none; }
   html[data-edit] .lbc-del{position:absolute; top:8px; right:8px; z-index:5; width:24px; height:24px; border-radius:50%; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:15px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;}
-  html[data-edit] .lb-addcard{display:block; width:100%; margin-top:12px; padding:14px; border-radius:14px; border:2px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07); color:var(--coral); font-size:13.5px; font-weight:800; font-family:inherit; cursor:pointer;}
+  html[data-edit] .lb-addcard{display:block; width:100%; margin-top:12px; padding:14px; border-radius:14px; border:2px dashed color-mix(in srgb, var(--coral) 60%, transparent); background:color-mix(in srgb, var(--coral) 7.0%, transparent); color:var(--coral); font-size:13.5px; font-weight:800; font-family:inherit; cursor:pointer;}
   html[data-edit] .lb-addcard:active{transform:scale(.99);}
   /* 랭킹 in-place */
   html[data-edit] .rk-row{position:relative;}
   html[data-edit] .rk-th{cursor:pointer;}
-  html[data-edit] .rk-th-e{display:flex; align-items:center; justify-content:center; color:var(--coral); font-size:11px; font-weight:800; border:1.5px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07);}
+  html[data-edit] .rk-th-e{display:flex; align-items:center; justify-content:center; color:var(--coral); font-size:11px; font-weight:800; border:1.5px dashed color-mix(in srgb, var(--coral) 60%, transparent); background:color-mix(in srgb, var(--coral) 7.0%, transparent);}
   html[data-edit] .rk-del, html[data-edit] .sgc-del{position:absolute; top:6px; right:6px; z-index:5; width:22px; height:22px; border-radius:50%; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:14px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;}
-  html[data-edit] .rk-add, html[data-edit] .sg-add{display:block; width:100%; margin-top:12px; padding:13px; border-radius:13px; border:2px dashed rgba(167,139,255,.6); background:rgba(123,90,255,.07); color:var(--coral); font-size:13.5px; font-weight:800; font-family:inherit; cursor:pointer;}
+  html[data-edit] .rk-add, html[data-edit] .sg-add{display:block; width:100%; margin-top:12px; padding:13px; border-radius:13px; border:2px dashed color-mix(in srgb, var(--coral) 60%, transparent); background:color-mix(in srgb, var(--coral) 7.0%, transparent); color:var(--coral); font-size:13.5px; font-weight:800; font-family:inherit; cursor:pointer;}
   /* 스타일 갤러리 in-place (편집모드 단순 카드) */
   html[data-edit] .sgc{position:relative; display:flex; gap:10px; align-items:stretch; background:var(--surface); border:1px solid var(--hair); border-radius:14px; padding:10px; margin-bottom:10px;}
-  html[data-edit] .sgc-ph{flex:1; min-height:96px; border-radius:10px; background-size:cover; background-position:center; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:var(--coral); font-size:12px; font-weight:800; border:1.5px dashed rgba(167,139,255,.5); background-color:rgba(123,90,255,.07);}
+  html[data-edit] .sgc-ph{flex:1; min-height:96px; border-radius:10px; background-size:cover; background-position:center; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:var(--coral); font-size:12px; font-weight:800; border:1.5px dashed color-mix(in srgb, var(--coral) 50%, transparent); background-color:color-mix(in srgb, var(--coral) 7.0%, transparent);}
   html[data-edit] .sgc-tx{flex:1.1; display:flex; flex-direction:column; gap:6px; justify-content:center;}
   html[data-edit] .sgc-cap{font-size:10px; color:var(--muted); text-align:center; margin-top:3px;}
   html[data-edit] .sgc-title{font-size:14px; font-weight:800; color:var(--ink);}
@@ -1665,6 +1708,8 @@
   .ig-btn.tohome .th-i{ font-size:20px; line-height:1; }
   .ig-btn.tohome.on{ color:var(--coral); }
   .ig-btn.tohome.on .ig-lbl{ color:var(--coral); font-weight:700; }
+  .ig-btn.pedit .th-i{ font-size:20px; line-height:1; }
+  .ig-btn.pedit{ color:var(--coral); }
   .pm-foot .ig-btn svg{ width:29px; height:29px; }
 
   /* 목록 카드 우측 상단 작은 보내기 (은은) */
@@ -3949,7 +3994,12 @@
       /* 🏷 편집 모드 표시 (편집 중일 때만 보인다) */
       if(!document.querySelector('.edit-flag')){
         var f=document.createElement('span'); f.className='edit-flag';
-        f.innerHTML='<i></i>편집 모드'; document.body.appendChild(f);
+        /* 🚪 B안 — 나가는 문은 «띠 오른쪽». 버튼처럼 생겨야 버튼으로 읽힌다. */
+        f.innerHTML='<i></i>편집 모드<button type="button" class="ef-quit">✓ 끝내기</button>';
+        document.body.appendChild(f);
+        var q=f.querySelector('.ef-quit');
+        if(q) q.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation();
+          try{ parent.postMessage({type:'la-quit-edit'}, '*'); }catch(_){} });
       }
       /* 🚪 2026-08-20 사장님 지시 — «홈은 홈편집만, 프로필은 프로필 편집만, 포스팅은 포스팅만».
             지금 보고 있는 칸 이름을 버튼에 달고, 그 칸으로 편집을 연다. */
@@ -3960,13 +4010,17 @@
         var _isEdit=false;
         try{ _isEdit = (typeof EDIT_MODE!=='undefined' && EDIT_MODE) || document.documentElement.hasAttribute('data-edit'); }catch(_){}
         if(_isEdit){
-          b.textContent='✓ 편집 끝내기';
+          /* 🚨 2026-08-22 B안 — 이 자리(오른쪽 위)는 인스타·블로그에서 «만들기» 자리다.
+             나가기는 위 띠로 옮겼다. 여기서 나가기를 받으면 손이 계속 헷갈린다. */
+          b.textContent='＋ 새 포스팅';
           b.removeAttribute('href');
-          b.classList.add('mine-edit-quit');
-          b.setAttribute('aria-label','편집 끝내기');
-          b.onclick=function(e){ e.preventDefault(); try{ parent.postMessage({type:'la-quit-edit'}, '*'); }catch(_){} };
+          b.classList.remove('mine-edit-quit');
+          b.classList.add('mine-edit-make');
+          b.setAttribute('aria-label','새 포스팅 쓰기');
+          b.onclick=function(e){ e.preventDefault(); try{ parent.postMessage({type:'la-add-post'}, '*'); }catch(_){} };
           return;
         }
+        b.classList.remove('mine-edit-make');
         var on=document.querySelector('.navitem.active');
         var k=on?on.getAttribute('data-tab'):'home';
         b.textContent='✏️ '+(LBL[k]||'편집하기');
@@ -6117,12 +6171,25 @@
       + (isMine() ? '<button type="button" class="ig-btn tohome'+(onHome(id)?' on':'')+'" aria-label="홈에 올리기">'
                     + '<span class="th-i">'+(onHome(id)?'🏠':'⌂')+'</span>'
                     + (opts.lbl?'<span class="ig-lbl">'+(onHome(id)?'홈에 있음':'홈에 올리기')+'</span>':'')
+                    + '</button>' : '')
+      /* ✎ 2026-08-22 — 글을 «보다가» 고치는 길이 없었다. 구성(칸)은 그 자리에서 «⋯수정»이 되는데
+         글만 나가서 편집기를 거쳐야 했다. 같은 자리·같은 말로 맞춘다.
+         🚨 지우기는 여기 안 둔다 — 되돌릴 수 없는 일은 «보는 곳»이 아니라 «고치는 곳»에 있어야 한다.
+            고치기를 누르면 편집기가 열리고, 거기 «🗑 이 글 삭제»가 이미 있다. 길은 하나면 된다. */
+      + (isMine() ? '<button type="button" class="ig-btn pedit" aria-label="이 글 고치기">'
+                    + '<span class="th-i">✎</span>'
+                    + (opts.lbl?'<span class="ig-lbl">고치기</span>':'')
                     + '</button>' : '');
     var likeBtn=bar.querySelector('.like'), nEl=likeBtn.querySelector('.ig-ln'), shareBtn=bar.querySelector('.share');
     likeBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); hubToggleLike(id, likeBtn, nEl); });
     shareBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); hubShare(id, shareBtn); });
     var homeBtn=bar.querySelector('.tohome');
     if(homeBtn) homeBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toHome(id, homeBtn); });
+    /* __goEdit 이 «열려 있는 글»을 알아서 챙긴다(&p=). 새 배선이 필요 없다. */
+    var edBtn=bar.querySelector('.pedit');
+    if(edBtn) edBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation();
+      try{ window.__curPost=id; }catch(_){}
+      try{ if(window.__goEdit) window.__goEdit(); }catch(_){} });
     return bar;
   }
   function buildPostFoot(id){ return buildActsBar(id, { cls:'pm-foot', lbl:true }); }

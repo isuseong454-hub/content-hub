@@ -105,7 +105,9 @@
       '칸마다 ✎수정+🗑삭제 두 개가 붙어 «버튼이 너무 많다»던 것 — 하나로 모음 (2026-08-20 사장님 지시)');
     add('u: 옛 칸 삭제버튼 부활 금지', uHtml.indexOf("la-ed-btn la-ed-del'; del.textContent='🗑 삭제'") < 0,
       '되살아나면 칸마다 버튼이 다시 두 개가 된다');
-    add('u: 칸 버튼은 오른쪽 위', uHtml.indexOf('.la-ed-bar{position:absolute; top:-30px; right:4px') > -1,
+    /* 🚨 2026-08-22 결정 변경 — «오른쪽 위»는 그대로지만 «블록 바깥(-30px)»에서 «안쪽(+8px)»으로.
+       바깥이면 첫 블록에서 프로필과 겹치고, 윗 블록에 붙은 것처럼 보인다. */
+    add('u: 칸 버튼은 오른쪽 위 «안쪽»', uHtml.indexOf('.la-ed-bar{position:absolute; top:8px; right:8px') > -1,
       '세로 가운데·선택해야 보임으로 되돌리면 있는 줄도 모른다 (사장님: «틀 오른쪽 상단에 조그마한 수정»)');
     add('u: 흐린 뼈대(애플식)', uHtml.indexOf('la-sk-b') > -1 && uHtml.indexOf('.la-empty-block{background:rgba(255,255,255,.022)') > -1,
       '또렷한 보라 박스로 되돌리면 «가짜 내용»처럼 읽힌다 — 자리표시는 흐리게 + 막대만 (2026-08-20)');
@@ -410,6 +412,67 @@
       add('e 사진 손잡이는 폰에도', et.indexOf('@media (hover:none){') >= 0
         && et.indexOf('.dpic.has .dpsz{ opacity:1') >= 0,
         'hover 로만 뜨면 폰에선 크기 조절이 «존재하지 않는 기능»이 된다');
+      /* ── 🔍 «왜 또 로그인을 묻나» 진단 (2026-08-22) ── */
+      add('e 로그인 창이 이유를 적는다', et.indexOf('function loginWhy') >= 0
+        && et.indexOf('왜 또 물어보나요?') >= 0 && et.indexOf('function loginWhere') >= 0,
+        '추측으로는 못 고친다 — 어느 브라우저에서 열었는지 화면에 적혀야 원인이 보인다');
+      add('e 로그인 성공을 기록', (et.match(/loginMark\(\)/g)||[]).length >= 3,
+        '기록이 없으면 «마지막 로그인»을 못 보여준다 — 남기는 곳과 읽는 곳이 둘 다 있어야 한다');
+      add('e 비밀번호는 안 남긴다', et.indexOf("cm-login-log', JSON.stringify({ t:Date.now(), w:loginWhere() })") >= 0,
+        '남기는 건 «언제·어디서»뿐 — 코드·PIN 이 기록에 들어가면 안 된다');
+      /* 사고: «보이면 붙인다»로 만들었더니 타이머가 창 뜨기 전에 지나가 못 붙었다 */
+      add('e 설명은 미리 만들어 둔다', et.indexOf('function build(){ try{ if(!document.getElementById(\'lg-why\')) loginShowWhy(); }') >= 0
+        && et.indexOf("o.offsetParent!==null && !document.getElementById('lg-why')") < 0,
+        '«보이면 붙인다»는 타이밍을 탄다 — 창이 늦게 뜨면 설명이 없다 (2026-08-22 실측)');
+      /* ── ✎ 글에서 바로 고치기 (2026-08-22) ── */
+      add('u 글에서 바로 고치기', ut.indexOf('class="ig-btn pedit"') >= 0
+        && ut.indexOf('window.__goEdit()') >= 0,
+        '구성(칸)은 그 자리에서 고쳐지는데 글만 나가서 편집기를 거쳐야 했다');
+      add('u 지우기는 보는 곳에 없다', ut.indexOf('ig-btn pdel') < 0,
+        '되돌릴 수 없는 일은 «보는 곳»이 아니라 «고치는 곳»에 있어야 한다 — 길은 하나면 된다');
+      add('u 고치기는 주인에게만', (function(){
+          var i=ut.indexOf('class="ig-btn pedit"'); if(i<0) return false;
+          return ut.lastIndexOf('isMine()', i) > i-400;
+        })(),
+        '손님에게 보이면 «남의 글을 고칠 수 있나?»가 된다 — 요소 자체를 안 만든다');
+      /* ── 🚪 편집 위 띠 B안 (2026-08-22 사장님 픽) ── */
+      add('u 나가는 문은 위 띠', ut.indexOf("class=\"ef-quit\">\u2713 \ub05d\ub0b4\uae30</button>") >= 0
+        && ut.indexOf('.ef-quit{margin-left:auto;') >= 0,
+        '깃발은 버튼으로 안 읽힌다 — 나가는 문은 눌러야 할 «버튼»처럼 생겨야 한다');
+      add('u 오른쪽 위는 만들기', ut.indexOf("b.textContent='\uFF0B \uc0c8 \ud3ec\uc2a4\ud305'") >= 0
+        && ut.indexOf("type:'la-add-post'") >= 0,
+        '인스타·블로그에서 오른쪽 위는 «만들기» 자리 — 나가기를 두면 손이 계속 헷갈린다');
+      add('u 나가기 부활 금지 (오른쪽 위)', ut.indexOf("b.textContent='\u2713 \ud3b8\uc9d1 \ub05d\ub0b4\uae30'") < 0,
+        '되돌리면 만들기 자리를 다시 나가기가 차지한다');
+      add('u 띠가 내용을 안 덮는다', ut.indexOf('html[data-edit] .wrap{padding-top:calc(74px') >= 0
+        && ut.indexOf('html[data-edit] .mine-edit{top:calc(56px') >= 0,
+        '띠가 먹는 자리만큼 내려야 프로필이 안 가려지고, ＋버튼이 띠와 안 겹친다');
+      add('u 나가기·만들기는 다르게 생겼다', ut.indexOf('.mine-edit-make{ background:var(--coral)') >= 0,
+        '둘이 같은 알약이면 «나가기»를 누르려다 «새 글»을 만든다');
+      add('e 새 포스팅 신호를 받는다', et.indexOf("m.type==='la-add-post'") >= 0,
+        '손님 화면에서 보낸 «새 포스팅»을 편집기가 못 받으면 눌러도 아무 일이 없다');
+      /* ── 🎨 라이트 편집 UI — 테마색 · 바 안쪽 (2026-08-22 사장님 픽) ── */
+      add('u 편집 UI에 하드코딩 보라 없음', (function(){
+          return (ut.match(/html\[data-edit\][^\n]*(?:#7B5AFF|123,\s*90,\s*255|167,\s*139,\s*255)/g)||[]).length === 0;
+        })(),
+        '내 테마가 크림인데 검보라 알약이 뜨면 톤이 깨진다 (2026-08-21 사장님 지적 · 15군데 남아 있었다)');
+      add('u 삭제만 빨강 유지', ut.indexOf('.la-ed-del{background:#E0556B') >= 0,
+        '삭제까지 테마색이면 «위험»이 안 보인다 — 빨강은 뜻이지 장식이 아니다');
+      /* 🚨 주석에 «top:-30px» 이라고 적어 둔 글자까지 «코드»로 세어 한 번 헛걸렸다.
+         검사는 규칙(선언)만 봐야 한다 — 문자열만 세면 설명글이 검사를 망친다. (2026-08-22) */
+      add('u 편집 바는 블록 안쪽', ut.indexOf('html[data-edit] .la-ed-bar{position:absolute; top:8px;') >= 0
+        && ut.indexOf('.la-ed-bar{position:absolute; top:-30px') < 0,
+        'top:-30px 은 블록 «바깥 위» — 첫 블록에선 프로필과 겹치고, 윗 블록에 붙은 것처럼 보였다');
+      add('u 갤러리·띠는 머리말 아래로', ut.indexOf('#home-gallery.la-hb .la-ed-bar, html[data-edit] .mq-band.la-hb .la-ed-bar{ top:42px; }') >= 0,
+        '제목이 오른쪽 위까지 오는 틀은 바가 제목을 덮는다');
+      /* 🚨 사고: 밝은 테마 보정을 기본 규칙 «앞»에 넣어 특정도가 같아 지고, 레몬에서 흰 글씨가 안 읽혔다 */
+      add('u 밝은 테마 보정이 뒤에 온다', (function(){
+          var b1=ut.indexOf('html[data-edit] .la-ed-btn{'),
+              p1=ut.indexOf('html[data-edit] .la-ed-pen{position'),
+              L =ut.indexOf('html[data-edit][data-bright="light"] .la-ed-btn{');
+          return b1>0 && p1>0 && L>b1 && L>p1;
+        })(),
+        '특정도가 같으면 «나중»이 이긴다 — 앞에 두면 보정이 통째로 죽는다 (2026-08-22 실측)');
       /* ── 🖼 사진 편집 툴 B안 (2026-08-22 사장님 픽) ── */
       add('e 사진 툴 띠 (B안)', et.indexOf("tb.className='dptb'") >= 0 && et.indexOf('function dpOpen') >= 0,
         'A(사진 위 알약)는 자르기 격자를 덮고, C(시트)는 PC 관습이 아니다 — B로 픽');
