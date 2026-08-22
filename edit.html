@@ -16198,7 +16198,17 @@ if('serviceWorker' in navigator){
         /* 📱 폰에선 «○○님 ·»을 접는다 (버튼 4개라 제목이 16px로 찌그러졌다) — 이름은 textContent 로만 넣는다 */
         if(AUTH&&AUTH.name){ var _who=document.createElement('span'); _who.className='tb-who'; _who.textContent=AUTH.name+'님 · '; wt.appendChild(_who); }
         wt.appendChild(document.createTextNode('작업실'));
-      } }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
+      } }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){}
+    /* 🚨 2026-08-21 사장님 «로그인하면 잠깐 예전 홈이 떴다가 지금 홈이 뜬다» — 기분 탓이 아니다.
+          enter() 가 로컬에 남은 옛 상태로 «먼저 그리고», 서버 데이터(loadPage)가 «뒤늦게» 와서 다시 그린다.
+          그 사이가 곧 «예전 홈»이다. 착지를 고정 시간(520·620ms)에 걸어 둔 게 원인 —
+          데이터가 언제 오는지와 무관하게 튀어 나갔다.
+          → 착지를 «데이터가 준비된 뒤»로 옮긴다. 늦어도 2.5초엔 나간다(무한 대기 방지). */
+    var _ready = Promise.race([
+      Promise.resolve(loadPage()).catch(function(){}),
+      new Promise(function(r){ setTimeout(r, 2500); })
+    ]);
+    try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
     // 로그인 직후 → 바로 모드 선택 게이트(무엇부터 해볼까요?). 손님 미리보기는 게이트의 '고객용 화면' 타일에서. dev 자동편집(localhost)은 제외 (사용자 요청 2026-06-29: 미리보기 강제 노출 빼고 바로 게이트)
     /* 🚨 게이트·인트로는 «작업실에 머무를 때»만 띄운다.
           다른 데로 갈 거면서 게이트를 띄우면 화면이 두세 번 갈아엎히며 «어디 갔다 왔지?»가 된다. */
@@ -16221,18 +16231,18 @@ if('serviceWorker' in navigator){
         ⚠️ 되돌리기: ⚙설정 «로그인하면 작업실로» → cm-hub-landing='desk') */
     try{
       if(DEST==='live'){
-        setTimeout(function(){ try{
+        _ready.then(function(){ try{
           if(window.__openLiveAuto) window.__openLiveAuto();
           else if(window.__openLive && !window.__liveEditActive) window.__openLive();
-        }catch(_e){} try{ window.__coverOff(); }catch(_e){} }, 520);
+        }catch(_e){} try{ window.__coverOff(); }catch(_e){} });
       }
       else if(DEST==='home'){
-        setTimeout(function(){ try{                                   // 데이터 로드(loadPage) 뒤에
+        _ready.then(function(){ try{                                  // 데이터가 «실제로» 온 뒤에
           var _h=(((document.getElementById('pf-handle')||{}).value)||'').trim()
                  || ((window.AUTH&&window.AUTH.handle)||'');
           if(_h) location.replace('u.html?u='+encodeURIComponent(_h)); // replace = 뒤로가기로 안 돌아오게
           else if(window.__openLive && !window.__liveEditActive) window.__openLive();
-        }catch(_e){} }, 620);
+        }catch(_e){} });
       }
       /* DEST==='onboard' 는 소개 6장이 끝난 뒤 __afterOnboard() 가 착지시킨다.
          DEST==='desk' 는 여기 그대로 머무른다 — 게이트가 이미 떠 있다. */
