@@ -1377,6 +1377,22 @@
 
   /* ── 하단 내비 (스타벅스식 워크스페이스 바) ── */
   /* 🫧 유리 도크 (2026-08-20 사장님 픽 — 떠 있는 알약 + 활성 = 테마색 원 글로우) */
+  /* ══ 🧰 2026-08-21 사장님 안 — «편집기 하단바를 없애고 이 도크를 그대로 도구로 쓴다» ══
+        편집 중엔 «떠 있는 알약»이 글 위를 덮는다(대표 카드 한가운데를 가렸다).
+        → 바닥에 «붙박이»로 세우고, 본문은 그만큼 밀어 준다. 겹칠 자리가 없어진다.
+        그리고 ＋ 한 칸을 더한다 — 지금 «보고 있는 탭»의 것을 더하는 버튼. */
+  html.cm-editdock .botnav{ left:0 !important; right:0 !important; bottom:0 !important;
+    max-width:none !important; transform:none !important; }
+  html.cm-editdock .botnav-inner{ max-width:none !important; border-radius:0 !important;
+    border-left:none !important; border-right:none !important; border-bottom:none !important;
+    padding:7px 6px calc(7px + env(safe-area-inset-bottom)) !important;
+    background:var(--surface) !important; backdrop-filter:none !important; }
+  html.cm-editdock body{ padding-bottom:96px !important; }
+  /* ＋ 칸 — 편집 중에만 만들어진다(손님에겐 요소가 없다) */
+  .navitem.nv-add{ color:#8E7BFF !important; }
+  .navitem.nv-add svg{ display:none; }
+  .navitem.nv-add .plus{ font-size:19px; line-height:1; display:block; margin-bottom:2px; font-weight:800; }
+  .navitem.nv-add span:not(.plus){ font-weight:800; }
   .botnav{position:fixed; left:12px; right:12px; bottom:calc(10px + env(safe-area-inset-bottom)); z-index:25;
     display:flex; justify-content:center; background:none; border:0; pointer-events:none;}
   .botnav-inner{display:flex; width:100%; max-width:432px; padding:7px 9px; pointer-events:auto;
@@ -3058,20 +3074,62 @@
 </nav>
 
 <script>
+  /* ══ 🧰 편집 중 도크 = 도구 (2026-08-21 사장님 안) ═══════════════════════════
+        «홈 워크스페이스 라이트버전에 있는 거 그냥 하단 워크스페이스로 쓰고
+         거기에 구성추가만 더 얹어서 4개로 하면 어때?»
+        ㉮ ＋는 «지금 탭»의 것을 더한다 — 홈:구성 / 프로필:소개 칸 / 포스팅:새 글
+        ㉯ 편집기(부모)에게 알려서 부모가 연다 — 자식이 직접 열면 두 겹으로 뜬다
+        ㉰ 손님에겐 만들지 않는다 — 숨기는 게 아니라 요소가 «없다» */
+  var ADD_BY_TAB = {
+    home:    ['＋','구성',    'la-add-block'],
+    about:   ['＋','소개 칸', 'la-add-about'],
+    archive: ['＋','새 글',   'la-add-post'],
+    shop:    ['＋','상품',    'la-add-shop'],
+    qna:     ['＋','문답',    'la-add-qna']
+  };
+  (function(){
+    try{
+      if(new URLSearchParams(location.search).get('edit')!=='1') return;   /* 손님이면 여기서 끝 */
+      document.documentElement.classList.add('cm-editdock');
+      var inner=document.querySelector('.botnav-inner'); if(!inner) return;
+      var b=document.createElement('button');
+      b.className='navitem nv-add'; b.type='button';
+      b.setAttribute('data-tab','__add'); b.setAttribute('aria-label','추가');
+      b.innerHTML='<span class="plus">＋</span><span>구성</span>';
+      b.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        var cur=(document.querySelector('.navitem.active')||{}).getAttribute
+              ? document.querySelector('.navitem.active').getAttribute('data-tab') : 'home';
+        var m=ADD_BY_TAB[cur]||ADD_BY_TAB.home;
+        try{ parent.postMessage({type:m[2]}, '*'); }catch(_){}
+      });
+      inner.appendChild(b);
+      window.__syncAddLabel=function(tab){
+        var m=ADD_BY_TAB[tab]||ADD_BY_TAB.home;
+        var lb=b.querySelector('span:not(.plus)'); if(lb) lb.textContent=m[1];
+      };
+      window.__syncAddLabel('home');
+    }catch(_){}
+  })();
   // 파트(워크스페이스) 전환 — 하단 내비
   var navs = document.querySelectorAll('.navitem');
   var panes = document.querySelectorAll('.pane');
   navs.forEach(function(t){
     t.addEventListener('click', function(){
       var id = t.getAttribute('data-tab');
+      if(id==='__add') return;                                   /* ＋는 탭이 아니다 */
       navs.forEach(function(x){ x.classList.toggle('active', x === t); });
+      try{ if(window.__syncAddLabel) window.__syncAddLabel(id); }catch(_){}   /* ＋ 이름을 그 탭 것으로 */
       panes.forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-pane') === id); });
       document.body.classList.toggle('cm-not-home', id !== 'home');   // 플로팅 채널·예약바는 홈 탭에서만 (다른 탭선 집중 흐트러짐 방지)
       var hero = document.getElementById('home-hero');
       if(hero && hero.dataset.global){ hero.style.display = (id === 'home' && !hero.hidden) ? '' : 'none'; }
-      // 소개 탭 = 전용 프로필 허브 → 전역 프로필 헤더 숨김 (중복 방지)
+      /* 🚨 2026-08-21 사장님 «포스팅으로 갈 때 맨 위에 프로필이 있던데 그건 필요없잖아» — 맞다.
+            소개 탭은 이미 숨기고 있었다. 포스팅도 같다 —
+            글 보러 온 사람에게 프로필이 화면 위 40%를 먹으면 글이 안 보인다.
+            홈에만 남긴다(거기선 «누구인가»가 먼저다). */
       var prof=document.querySelector('.profile'), pev=document.getElementById('prof-evidence');
-      if(prof){ if(id==='about'){ prof.style.display='none'; if(pev) pev.style.display='none'; }
+      if(prof){ if(id==='about' || id==='archive'){ prof.style.display='none'; if(pev) pev.style.display='none'; }
         else { var h={}; try{ h=JSON.parse(localStorage.getItem('cm-home-v1'))||{}; }catch(e){} prof.style.display=(h.profileOn===false)?'none':''; if(pev) pev.style.display=''; } }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       var ap = document.querySelector('.pane.active'); if(ap){ setTimeout(function(){ revealScan(ap.children); }, 40); }

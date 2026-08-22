@@ -6664,6 +6664,7 @@ if('serviceWorker' in navigator){
       <!-- 🚨 2026-08-21 사장님 «자동 로그인인데 로그아웃도 운영자 모드도 못 간다» —
            상단바를 비우면서 «나가는 문»까지 없앴다. 갇히는 화면은 만들면 안 된다.
            버튼을 넷 되살리는 대신 ⚙ «하나»에 몰아넣는다. -->
+      <button class="le-icon-btn le-d-guide" id="le-guide" title="편집 가이드 — 뭘 채웠고 뭐가 남았는지" aria-label="가이드">🧭<i class="le-dot" id="le-guide-dot"></i></button>
       <button class="le-icon-btn" id="le-more" title="더보기 — 운영자 모드 · 로그아웃" aria-label="더보기">⋯</button>
       <button class="le-quit" id="le-quit" style="display:none !important;">편집 끝내기</button>
       <button class="le-d" id="le-home" style="display:none !important;"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
@@ -6673,11 +6674,14 @@ if('serviceWorker' in navigator){
     <!-- 🧭 네 걸음 (2026-08-20 사장님 A안) — 뼈대 → 색 → 칸 → 내용.
          미리보기·운영은 위로 올렸다. 도크에는 «순서대로 밟을 것»만 남긴다. -->
     <!-- 아래 = «채우기» 둘만. 모양(홈 유형·테마)은 위로 올라갔다 -->
-    <div class="le-dock le-flow">
-      <!-- 🧭 2026-08-21 사장님 순서 지정 — 가이드 · 구성 추가 · 새 포스팅 (포스팅 아이콘 ✍️ → 📝) -->
-      <button class="le-d le-d-guide" id="le-guide" title="편집 가이드 — 뭘 채웠고 뭐가 남았는지"><span class="di">🧭</span><span class="le-d-lbl">가이드</span><i class="le-dot" id="le-guide-dot"></i></button>
-      <button class="le-d le-d-add" id="le-add-top" title="구성 추가 — 후기·예약·사진 등"><span class="di">＋</span><span class="le-d-lbl">구성 추가</span></button>
-      <button class="le-d le-d-write" id="le-write" title="새 포스팅 쓰기"><span class="di">📝</span><span class="le-d-lbl">새 포스팅</span></button>
+    <!-- 🚨 2026-08-21 사장님 안 — «편집기 하단바를 없애고, 손님 도크를 그대로 도구로 쓴다».
+         바가 넷(앱상단·편집배지·손님도크·앱하단)이라 글 영역이 38%뿐이었다.
+         가이드는 위로, 구성 추가·새 포스팅은 손님 도크의 ＋ 한 칸으로 합쳤다
+         (＋는 «지금 보는 탭»의 것을 더한다 — 홈:구성 / 프로필:소개 / 포스팅:새 글).
+         ⚠️ 버튼은 «지우지 않고 숨긴다» — 여러 곳에서 이 id 를 찾는다. 지우면 옆이 죽는다. -->
+    <div class="le-dock le-flow" style="display:none !important;">
+      <button class="le-d le-d-add" id="le-add-top"><span class="di">＋</span><span class="le-d-lbl">구성 추가</span></button>
+      <button class="le-d le-d-write" id="le-write"><span class="di">📝</span><span class="le-d-lbl">새 포스팅</span></button>
     </div>
   </div>
 
@@ -17739,6 +17743,14 @@ if('serviceWorker' in navigator){
       else if(m.type==='la-edit-tap'){ handleTap(m.bt); }
       else if(m.type==='la-block-menu'){ openBlockMenu(m.bt, m.nth, m.name); }   /* 🚨 칸 오른쪽 위 «⋯ 수정» (2026-08-20) */
       else if(m.type==='la-quit-edit'){ var _q=document.getElementById('le-quit'); if(_q) _q.click(); }   /* 🚪 현장 화면의 «편집 끝내기» (2026-08-20) */
+      /* 🧰 2026-08-21 사장님 안 — 도크의 ＋ 는 «지금 탭»의 것을 더한다. 여는 건 부모(편집기) 몫.
+            자식이 직접 열면 시트가 두 겹으로 뜬다. */
+      else if(m.type==='la-add-block'){ var _a=document.getElementById('le-add-top'); if(_a) _a.click(); }
+      else if(m.type==='la-add-post'){  var _w=document.getElementById('le-write');   if(_w) _w.click(); }
+      else if(m.type==='la-add-about'){ try{ if(window.__switchWs) window.__switchWs('page'); }catch(_){}
+                                        try{ if(window.toast) toast('프로필 칸에서 소개를 채워 주세요'); }catch(_){} }
+      else if(m.type==='la-add-shop'){  try{ if(window.__switchWs) window.__switchWs('sales'); }catch(_){} }
+      else if(m.type==='la-add-qna'){   var _a2=document.getElementById('le-add-top'); if(_a2) _a2.click(); }
       else if(m.type==='la-pane'){
         /* 🧭 2026-08-21 사장님 «새 글쓰기를 하단 워크스페이스에 넣어도 괜찮은듯»
               도크 붙박이가 됐으므로 «포스팅 칸에서만 보이기»는 더 이상 맞지 않다 — 늘 보인다. */

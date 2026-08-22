@@ -804,6 +804,25 @@
         '글 쓴 «직후»에 제일 보고 싶은 건 내 글이다 — ⋯ 메뉴 맨 위');
       add('내 글에서 되돌아오는 문', ut.indexOf('.mine-edit{position:fixed') >= 0,
         '편집하기가 화면 고정이라 포스팅 탭에서도 보인다 — 안 그러면 또 갇힌다');
+      /* 🧰 2026-08-21 사장님 안 — «편집기 하단바를 없애고 손님 도크를 도구로 쓴다» */
+      add('편집 중 도크는 붙박이', ut.indexOf('html.cm-editdock .botnav') >= 0
+        && ut.indexOf('html.cm-editdock body{ padding-bottom:96px') >= 0,
+        '떠 있는 알약이면 글 위를 덮는다 — 대표 카드 한가운데를 가렸다');
+      add('도크 ＋ 는 탭 따라', ut.indexOf('var ADD_BY_TAB') >= 0
+        && ut.indexOf('window.__syncAddLabel') >= 0,
+        '홈:구성 / 프로필:소개 칸 / 포스팅:새 글 — 한 칸으로 세 기능');
+      add('＋ 는 편집 중에만', ut.indexOf("get('edit')!=='1') return;   /* 손님이면 여기서 끝 */") >= 0,
+        '손님에겐 숨기는 게 아니라 요소를 «안 만든다»');
+      add('편집기 하단바 숨김', et.indexOf('<div class="le-dock le-flow" style="display:none !important;">') >= 0
+        && et.indexOf('id="le-add-top"') >= 0 && et.indexOf('id="le-write"') >= 0,
+        '🚨 버튼은 지우지 않고 숨긴다 — 여러 곳에서 이 id 를 찾는다');
+      add('＋ 신호 받는 쪽', et.indexOf("m.type==='la-add-block'") >= 0
+        && et.indexOf("m.type==='la-add-post'") >= 0,
+        '자식이 직접 열면 시트가 두 겹으로 뜬다 — 여는 건 부모 몫');
+      add('가이드는 위로', et.indexOf('le-icon-btn le-d-guide') >= 0,
+        '하단바를 없앴으니 가이드는 상단으로 옮겨야 잃지 않는다');
+      add('포스팅 탭엔 프로필 없음', ut.indexOf("id==='about' || id==='archive'") >= 0,
+        '글 보러 온 사람에게 프로필이 화면 위 40%를 먹으면 글이 안 보인다');
       add('포스팅 정렬 3종', ut.indexOf('var ARC_SORTS=') >= 0
         && ut.indexOf("['new','최신순']") >= 0 && ut.indexOf("['hot','인기순']") >= 0
         && ut.indexOf('function arcSort(') >= 0,
