@@ -3078,7 +3078,8 @@ if('serviceWorker' in navigator){
   .hs-btn:active{transform:scale(.99);}
   /* 🔑 2026-08-21 사장님 «자동 로그인 버튼» — 기능은 8/20부터 있었는데 «보이지 않아» 모르셨다.
         끌 수 있게도 해야 한다: 남의 컴퓨터에서 켜 두면 그대로 열린다. */
-  .lg-auto{display:flex; align-items:center; gap:9px; margin:2px 0 12px; cursor:pointer;
+  /* 🚨 2026-08-21 사장님 «자동 로그인을 중간 정렬해줘» — 왼쪽에 붙어 혼자 삐뚤어 보였다 */
+  .lg-auto{display:flex; align-items:center; justify-content:center; gap:9px; margin:2px 0 12px; cursor:pointer;
     font-size:12.5px; color:rgba(255,255,255,.72); user-select:none; min-height:44px;}
   .lg-auto input{width:18px; height:18px; accent-color:#A78BFF; cursor:pointer; flex:0 0 auto;}
   .tf-prev{background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:7px; margin-bottom:14px;}
@@ -4845,6 +4846,8 @@ if('serviceWorker' in navigator){
         <div class="tpl imp" data-ic="🛒" data-nm="가격표 · 예약"><span class="tic">🛒</span><span><span class="tn">가격표 · 예약</span><span class="ts">가격 안내 + 예약·구매 버튼</span></span></div>
         <div class="tpl" data-ic="🔗" data-nm="링크 버튼"><span class="tic">🔗</span><span><span class="tn">링크 버튼</span><span class="ts">인스타·유튜브·카톡</span></span></div>
         <div class="tpl" data-ic="✉" data-nm="뉴스레터"><span class="tic">✉</span><span><span class="tn">뉴스레터</span><span class="ts">구독 받기</span></span></div>
+        <div class="tpl" data-ic="🛒" data-nm="내 제품"><span class="tic">🛒</span><span><span class="tn">내 제품</span><span class="ts">사진+가격, 홈에 메뉴처럼</span></span></div>
+        <div class="tpl" data-ic="🧾" data-nm="쿠파스"><span class="tic">🧾</span><span><span class="tn">쿠파스</span><span class="ts">쿠팡 파트너스 · 고지 자동 · 맨 아래</span></span></div>
         <div class="tpl" data-ic="📍" data-nm="매장 · 위치"><span class="tic">📍</span><span><span class="tn">매장 · 위치</span><span class="ts">주소·지도</span></span></div>
         <div class="tpl" data-ic="🏆" data-nm="랭킹 · 가격"><span class="tic">🏆</span><span><span class="tn">랭킹 · 가격</span><span class="ts">TOP 메뉴+가격</span></span></div>
         <div class="tpl imp" data-ic="📇" data-nm="문의·신청"><span class="tic">📇</span><span><span class="tn">문의·신청 받기</span><span class="ts">이름·연락처 받기</span></span></div>
@@ -7011,7 +7014,7 @@ if('serviceWorker' in navigator){
   var NAME_TYPE = {
     '프로필 헤더':'profile','이벤트 배너':'event','컨텐츠 갤러리':'gallery',
     '뉴스레터 · 강의 · 전자책':'links','아카이브':'archive','추천 제품':'products',
-    'Q&A':'qna','반박 제거':'qna','채널 링크':'channels','링크 버튼':'link','뉴스레터':'newsletter',
+    'Q&A':'qna','반박 제거':'qna','채널 링크':'channels','링크 버튼':'link','뉴스레터':'newsletter','내 제품':'myprod','쿠파스':'coupas',
     '인용구':'quote','전후사진':'beforeafter','자유 텍스트':'text','이미지 + 글':'imagetext','프로필 카드':'profilecard','랜딩 요약':'landsum',
     '강의 · 전자책':'link','숫자 스탯':'stat','후기':'review','문의 폼':'contact',
     '스타일 갤러리':'stylegallery','하이라이트':'highlights','카드뉴스':'cardnews','전문가 증명':'authority','문의·신청':'lead','단골 등록':'lead','강의 신청':'lead','서비스 · 상품':'service','가격표 · 예약':'service',
@@ -7040,6 +7043,13 @@ if('serviceWorker' in navigator){
     channels:[['url','인스타그램',''],['url','유튜브',''],['url','블로그',''],['url','카카오톡 오픈채팅','']],
     archive:[['info','글은 "포스팅" 화면에서 관리해요','']],
     products:[['list','추천 제품','제품 이름|가격(선택)|쿠팡 링크']],
+    /* 🛒 2026-08-21 사장님 3차 — 구성추가 «내 제품»·«쿠파스».
+          둘 다 홈에 링크트리 «긴 버튼»으로 깔린다. 쿠파스는 제휴 고지가 자동으로 붙는다. */
+    myprod:[['text','칸 제목','내 제품'],
+            ['list','제품','제품 이름|한 줄 설명|가격|링크|사진 주소']],
+    coupas:[['text','칸 제목','이런 걸 써요'],
+            ['list','쿠팡 제품','제품 이름|한 줄 설명|가격|쿠팡 링크|사진 주소'],
+            ['info','⚠️ 쿠팡 파트너스 고지 문구가 맨 아래 «자동으로» 붙습니다 — 빼면 안 돼요','']],
     qna:[['list','질문 / 답변','질문|답변']],
     quote:[['textarea','인용 문장','']],
     text:[['text','제목',''],['textarea','내용','']],
@@ -7542,7 +7552,7 @@ if('serviceWorker' in navigator){
   window.__refreshBuilder=refreshBuilder;
 
   // 저장된 블록이 기본 행에 없으면 새 행 생성 (불러오기 복원용)
-  var TYPE_ICON = { event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍', postref:'📄', painsolve:'🎯', bonusstack:'🎁', compare:'⚖', fitcheck:'✅', quiz:'🧠', coupon:'🎟', earlybird:'🐤', mystory:'📖', casestory:'🎞', dialog:'🗨', logowall:'🏛', diagnostic:'🔮', livebadge:'🔥', cover3:'⚡', landsum:'✨', visobj:'🫧', handmark:'✍️', result:'🌈', seal:'🏅', vibe:'〰', curriculum:'📚', winwall:'🏆', coachcard:'🎓', secnav:'🧭', band:'🖼', chart:'📈', offer:'🎫' };
+  var TYPE_ICON = { myprod:'🛒', coupas:'🧾', event:'📣', gallery:'▦', links:'✉', archive:'▤', products:'🛍', qna:'？', channels:'◎', link:'🔗', newsletter:'✉', quote:'❝', beforeafter:'◧', text:'¶', imagetext:'▥', stat:'％', review:'★', contact:'✎', stylegallery:'✂', highlights:'◍', cardnews:'🗞', authority:'🏅', lead:'📇', service:'🛒', video:'🎬', cta:'👆', countdown:'⏳', steps:'🔢', guarantee:'🛡', reservation:'📅', lookbook:'🎞', ranking:'🏆', location:'📍', postref:'📄', painsolve:'🎯', bonusstack:'🎁', compare:'⚖', fitcheck:'✅', quiz:'🧠', coupon:'🎟', earlybird:'🐤', mystory:'📖', casestory:'🎞', dialog:'🗨', logowall:'🏛', diagnostic:'🔮', livebadge:'🔥', cover3:'⚡', landsum:'✨', visobj:'🫧', handmark:'✍️', result:'🌈', seal:'🏅', vibe:'〰', curriculum:'📚', winwall:'🏆', coachcard:'🎓', secnav:'🧭', band:'🖼', chart:'📈', offer:'🎫' };
   window.__createRow = function(b){
     var row=document.createElement('div'); row.className='row'; row.dataset.type=b.type;
     if(b.layout) row._layout=b.layout;
@@ -11144,9 +11154,23 @@ if('serviceWorker' in navigator){
   };
   window.__getResvCfg = function(){ return resvCfg; };
 
-  function serialize(){
-    try{ captureCurrentVersion(); }catch(e){}                          // 현재 편집 중인 버전 먼저 저장
-    var blocks = (homeVersions && homeVersions[activeVersion]) ? homeVersions[activeVersion] : collectRowsArray();  // 공개되는 건 '적용된' 버전
+  /* 🧾 2026-08-21 사장님 픽 ㉯ — «쿠파스는 메뉴보다 아래로 있어야» (드래그해도 위로 못 감).
+        제휴 링크가 맨 위에 있으면 링크트리가 아니라 광고판으로 보인다.
+        드래그를 막는 대신 «내보낼 때» 맨 끝으로 민다 — 편집 중엔 자유롭게 옮겨도
+        손님 화면에선 항상 아래다. 막는 것보다 조용히 바로잡는 쪽이 손이 안 아프다. */
+  function coupasLast(list){
+    try{
+      if(!Array.isArray(list) || !list.length) return list;
+      var rest=[], aff=[];
+      list.forEach(function(b){ (b && b.type==='coupas' ? aff : rest).push(b); });
+      return aff.length ? rest.concat(aff) : list;
+    }catch(_){ return list; }
+  }
+  window.__coupasLast=coupasLast;
+  function serialize(){
+    try{ captureCurrentVersion(); }catch(e){}                          // 현재 편집 중인 버전 먼저 저장
+    var blocks = (homeVersions && homeVersions[activeVersion]) ? homeVersions[activeVersion] : collectRowsArray();  // 공개되는 건 '적용된' 버전
+    blocks = coupasLast(blocks);                                       // 🧾 쿠파스는 언제나 맨 아래
     var home=null; try{ home=JSON.parse(localStorage.getItem('cm-home-v1')||'null'); }catch(e){}
     var theme = (home && home.theme) || null;
     return { v:1, profile:{ name:gv('pf-name'), bio:gv('pf-bio'), handle:gv('pf-handle'), avatar:(window.__profileAvatar||''), avatarFx:gv('pf-avatarfx'), tagline:gv('pf-tagline'), headline:gv('pf-headline'), reviews:(window.__reviewsGet?window.__reviewsGet().filter(function(r){return r&&r.text;}):[]), cta:(window.__ctaGet?window.__ctaGet():{}), template:(window.__pfTemplate||'warm'), color:(window.__pfColor||''), format:(window.__pfFormat||'pro'), creator:(window.__collectCreator?window.__collectCreator():{}), story:(window.__collectStory?window.__collectStory():{}), aboutOrder:(window.__collectAboutOrder?window.__collectAboutOrder():null), aboutOn:(window.__pfAboutOn!==false), sections:(window.__collectAbSections?window.__collectAbSections():[]), chips:(window.__collectChips?window.__collectChips():[]), works:(window.__collectWorks?window.__collectWorks():[]), xp:(window.__collectXp?window.__collectXp():null), evidence:{ authority:(window.__isEvGhost&&window.__isEvGhost('pf-authority'))?'':gv('pf-authority'), creds:(window.__isEvGhost&&window.__isEvGhost('pf-creds'))?'':gv('pf-creds'), stats:(window.__isEvGhost&&window.__isEvGhost('pf-stats'))?'':gv('pf-stats'), gallery:(window.__evGalleryGet?window.__evGalleryGet().filter(function(x){return x&&(x.img||x.cap);}):[]) } }, blocks:blocks, versions:homeVersions, active:activeVersion, home:home, theme:theme, reservation:resvCfg, posts:postsData, products:productsData, qna:qnaData, cats:ensureCats(), catColors:catColorsData, archiveView:archiveView, savedAt:Date.now() };

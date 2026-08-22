@@ -1721,6 +1721,25 @@
   .prod-meta{font-size:12px; color:var(--muted); margin-top:1px;}
   .prod-go{margin-left:auto; color:var(--coral); font-size:14px;}
   .coupang-note{font-size:11px; color:var(--muted); margin-top:11px; text-align:center;}
+  /* 🛒 선반(내 제품 · 쿠파스) — 링크트리 «긴 버튼»과 같은 결 (2026-08-21) */
+  .shelf-block .block-h{ margin-bottom:10px; }
+  .sh-i{ display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:14px;
+    text-decoration:none; color:inherit; border:1px solid var(--hair); background:var(--paper);
+    margin-bottom:8px; transition:border-color .15s, transform .12s cubic-bezier(.2,.9,.2,1); }
+  .sh-i:last-of-type{ margin-bottom:0; }
+  .sh-i:active{ transform:scale(.985); }
+  @media (hover:hover){ .sh-i:hover{ border-color:var(--coral); } }
+  .sh-th{ width:46px; height:46px; border-radius:11px; flex:none;
+    background-size:cover; background-position:center; background-color:var(--soft); }
+  .sh-th-x{ display:grid; place-items:center; font-size:17px; font-weight:800; color:var(--coral);
+    font-family:var(--serif); background:var(--coral-soft); }
+  .sh-m{ flex:1; min-width:0; }
+  .sh-n{ display:block; font-size:14px; font-weight:600; letter-spacing:-.2px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sh-d{ display:block; font-size:11.5px; color:var(--muted); margin-top:2px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sh-go{ flex:none; color:var(--muted); font-size:14px; }
+  @media (prefers-reduced-motion: reduce){ .sh-i{ transition:none; } }
 
   /* 채널 아이콘 줄 (브랜드 로고 네온 타일) */
   .svc2-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
@@ -3945,7 +3964,30 @@
   function closePrivacy(){ var o=document.getElementById('privacy-ov'); if(o) o.classList.remove('open'); }
   (function(){ var o=document.getElementById('privacy-ov'); if(!o) return; o.addEventListener('click',function(e){ if(e.target===o) closePrivacy(); }); var b=o.querySelector('.pv-close'); if(b) b.onclick=closePrivacy; })();
   (function(){ function p(n){return (n<10?'0':'')+n;} function tick(){ var now=Date.now(); [].forEach.call(document.querySelectorAll('.cd-timer[data-cd]'),function(t){ var end=parseInt(t.getAttribute('data-cd'),10); var diff=end-now; if(diff<=0){ t.innerHTML='<span class="cd-ended">마감되었어요</span>'; return; } var s=Math.floor(diff/1000), dd=Math.floor(s/86400), hh=Math.floor(s%86400/3600), mm=Math.floor(s%3600/60), ss=s%60; var b=t.querySelectorAll('b'); if(b.length>=4){ b[0].textContent=dd; b[1].textContent=p(hh); b[2].textContent=p(mm); b[3].textContent=p(ss); } }); } setInterval(tick,1000); tick(); })();
-  function linkCard(c){
+  /* 선반 한 칸 = [이름, 한 줄 설명, 가격, 링크, 사진] */
+  function shelfCard(c, isAff){
+    var title=c[0]||'', list=c[1]||[];
+    if(!list.length) return null;
+    var d=document.createElement('div'); d.className='block shelf-block';
+    var rows=list.map(function(it){
+      var nm=(it[0]||'').trim(), desc=(it[1]||'').trim(), price=(it[2]||'').trim(),
+          url=(it[3]||'').trim(), img=(it[4]||'').trim();
+      if(!nm) return '';
+      var th = img ? '<span class="sh-th" style="background-image:url('+esc(img)+')"></span>'
+                   : '<span class="sh-th sh-th-x">'+esc(Array.from(nm)[0]||'·')+'</span>';
+      var meta = [desc, price].filter(Boolean).map(esc).join(' · ');
+      var inner = th + '<span class="sh-m"><span class="sh-n">'+esc(nm)+'</span>'
+                + (meta?'<span class="sh-d">'+meta+'</span>':'') + '</span><span class="sh-go">→</span>';
+      return url ? '<a class="sh-i" href="'+esc(url)+'" target="_blank" rel="noopener nofollow'+(isAff?' sponsored':'')+'">'+inner+'</a>'
+                 : '<div class="sh-i">'+inner+'</div>';
+    }).join('');
+    if(!rows) return null;
+    d.innerHTML = (title?'<div class="block-h">'+emph(title)+'</div>':'') + rows
+      /* 🚨 제휴 고지는 «법으로» 필요하다. 지우지 말 것. */
+      + (isAff?'<div class="coupang-note">쿠팡 파트너스 활동으로 일정액의 수수료를 제공받을 수 있습니다</div>':'');
+    return d;
+  }
+  function linkCard(c){
     var a=document.createElement('a'); a.className='block'; a.href=c[1]||'#'; a.target='_blank'; a.rel='noopener';
     if(c[0]) a.setAttribute('data-track', c[0]);
     a.innerHTML='<div class="block-h"><span class="left"><span class="ic">→</span><span><span style="display:block">'+esc(c[0]||'링크')+'</span></span></span><span class="chev">→</span></div>';
@@ -4041,6 +4083,13 @@
       return a;
     },
     link: linkCard, newsletter: linkCard,
+    /* ══ 🛒 내 제품 / 🧾 쿠파스 (2026-08-21 사장님 3차) ═══════════════════════
+          «구성추가에 쿠파스가 있고, 누르면 필요한 정보가 나오고, 입력하면 홈에 올라가게»
+          «형식은 메뉴랑 똑같지만 맨 아래», «내 제품도 사진 넣으면 홈에 메뉴로»
+          → 둘 다 링크트리 «긴 버튼»과 같은 결. 다른 건 사진·가격 한 줄과 고지문구뿐.
+          ⚠️ 기존 products 블록은 «제품 탭» 전용(고정 칸)이라 홈 본문에 못 깐다. 그래서 새로 만든다. */
+    myprod: function(c){ return shelfCard(c, false); },
+    coupas: function(c){ return shelfCard(c, true); },
     video: function(c){
       /* 🎬 2026-08-20 — 썸네일만 깔고 «누르면» 그때 플레이어 생성 (iframe 즉시 로드 = 손님 데이터·발열) */
       var url=c[0]||''; if(!url) return null;
@@ -5176,8 +5225,8 @@
   (function(){ var x=document.getElementById('ic-x'); if(x) x.onclick=function(){ var c=document.getElementById('intent-card'); c.classList.remove('show'); setTimeout(function(){ c.hidden=true; }, 360); }; })();
 
   // 블록 타입 → 한글 이름 (빈 구성 플레이스홀더 라벨용)
-  var BLOCK_HINT={ hero:'한 줄로 시선을 잡는 후킹 문구', profile:'이름·소개·사진', best:'대표·인기 컨텐츠를 크게 (사회적 증명)', photocard:'성과·포트폴리오 사진 (프레임 꾸미기)', marquee:'키워드가 좌우로 흐르는 띠', glowhook:'큰 숫자·단어가 빛나게', lookbook:'대표 작업·디자인을 카드로', stylegallery:'분류·검색·전후 사진', gallery:'사진을 가로로 쭉', profilecard:'원형 사진 + 이름 + 설명', imagetext:'사진 + 설명 (좌우 분할)', authority:'수상·자격·경력·숫자로 신뢰', review:'고객 후기·진짜 변화', qna:'자주 묻는 질문·걱정 해소', ranking:'TOP 메뉴·시그니처 + 가격', event:'이번 달 이벤트·프로모션', service:'예약·신청·결제 버튼', lead:'상담·문의·신청 (연락처 받기)', location:'매장 주소·지도·사진', highlights:'후기·가격·메뉴 버블', cardnews:'카드뉴스 글 (링크 복사)', links:'뉴스레터·강의·전자책 버튼', newsletter:'구독 받기', video:'유튜브·비메오 영상', cta:'"지금 예약" 행동 버튼', countdown:'마감까지 실시간 카운트다운', steps:'1·2·3 진행 단계', guarantee:'환불·만족 보장으로 불안 ↓', text:'제목 + 설명', quote:'한 문장 강조', beforeafter:'비포·애프터 사진', products:'추천 제품 (쿠팡 등)', stat:'성과 숫자 강조', contact:'1:1 문의 폼', channels:'인스타·유튜브·카톡 링크' };
-  var BLOCK_NAME={ hero:'후킹 문구', best:'베스트·대표 작업', photocard:'사진', marquee:'흐르는 태그 띠', glowhook:'글로우 후킹', links:'뉴스레터·강의·전자책', newsletter:'뉴스레터', gallery:'컨텐츠 갤러리', stylegallery:'스타일 갤러리', lookbook:'대표 사진 쇼케이스', cardnews:'카드뉴스', highlights:'하이라이트', ranking:'랭킹·가격', authority:'전문가 증명', service:'서비스·상품', lead:'문의·신청', review:'후기', qna:'Q&A', event:'이벤트 배너', countdown:'카운트다운', steps:'이용 방법', guarantee:'보장 배지', video:'영상', profilecard:'프로필 카드', imagetext:'이미지+글', text:'글', cta:'CTA 버튼', location:'매장·위치', reservation:'예약 신청' };
+  var BLOCK_HINT={ myprod:'내 제품·서비스를 사진과 함께 (홈에 메뉴처럼)', coupas:'쿠팡 파트너스 — 고지 문구 자동 · 항상 맨 아래', hero:'한 줄로 시선을 잡는 후킹 문구', profile:'이름·소개·사진', best:'대표·인기 컨텐츠를 크게 (사회적 증명)', photocard:'성과·포트폴리오 사진 (프레임 꾸미기)', marquee:'키워드가 좌우로 흐르는 띠', glowhook:'큰 숫자·단어가 빛나게', lookbook:'대표 작업·디자인을 카드로', stylegallery:'분류·검색·전후 사진', gallery:'사진을 가로로 쭉', profilecard:'원형 사진 + 이름 + 설명', imagetext:'사진 + 설명 (좌우 분할)', authority:'수상·자격·경력·숫자로 신뢰', review:'고객 후기·진짜 변화', qna:'자주 묻는 질문·걱정 해소', ranking:'TOP 메뉴·시그니처 + 가격', event:'이번 달 이벤트·프로모션', service:'예약·신청·결제 버튼', lead:'상담·문의·신청 (연락처 받기)', location:'매장 주소·지도·사진', highlights:'후기·가격·메뉴 버블', cardnews:'카드뉴스 글 (링크 복사)', links:'뉴스레터·강의·전자책 버튼', newsletter:'구독 받기', video:'유튜브·비메오 영상', cta:'"지금 예약" 행동 버튼', countdown:'마감까지 실시간 카운트다운', steps:'1·2·3 진행 단계', guarantee:'환불·만족 보장으로 불안 ↓', text:'제목 + 설명', quote:'한 문장 강조', beforeafter:'비포·애프터 사진', products:'추천 제품 (쿠팡 등)', stat:'성과 숫자 강조', contact:'1:1 문의 폼', channels:'인스타·유튜브·카톡 링크' };
+  var BLOCK_NAME={ myprod:'내 제품', coupas:'쿠파스', hero:'후킹 문구', best:'베스트·대표 작업', photocard:'사진', marquee:'흐르는 태그 띠', glowhook:'글로우 후킹', links:'뉴스레터·강의·전자책', newsletter:'뉴스레터', gallery:'컨텐츠 갤러리', stylegallery:'스타일 갤러리', lookbook:'대표 사진 쇼케이스', cardnews:'카드뉴스', highlights:'하이라이트', ranking:'랭킹·가격', authority:'전문가 증명', service:'서비스·상품', lead:'문의·신청', review:'후기', qna:'Q&A', event:'이벤트 배너', countdown:'카운트다운', steps:'이용 방법', guarantee:'보장 배지', video:'영상', profilecard:'프로필 카드', imagetext:'이미지+글', text:'글', cta:'CTA 버튼', location:'매장·위치', reservation:'예약 신청' };
   function makeEmptyPlaceholder(type){
     var d=document.createElement('div'); d.className='block la-empty-block';
     var nm=BLOCK_NAME[type]||'새 구성';

@@ -758,6 +758,26 @@
         '고정 시간으로 되돌리면 «예전 홈»이 다시 번쩍인다');
       /* 🔢 2026-08-21 사장님 «최신순 오래된순 베스트인기순 · 유튜브 참고» */
       /* 🏠 2026-08-21 사장님 2차 «보내기 옆에 홈버튼 → 홈에 배치» */
+      /* 🛒🧾 2026-08-21 사장님 3차 — 구성추가 «내 제품»·«쿠파스» */
+      add('쿠파스·내 제품 구성', et.indexOf('data-nm="쿠파스"') >= 0
+        && et.indexOf('data-nm="내 제품"') >= 0
+        && et.indexOf("'내 제품':'myprod','쿠파스':'coupas'") >= 0,
+        '구성추가에서 사라지면 만들 길이 없다');
+      add('쿠파스·내 제품 입력칸', et.indexOf('제품 이름|한 줄 설명|가격|쿠팡 링크|사진 주소') >= 0
+        && et.indexOf('제품 이름|한 줄 설명|가격|링크|사진 주소') >= 0,
+        '누르면 필요한 정보가 나와야 채운다');
+      add('선반은 손님 화면에도', ut.indexOf('function shelfCard(') >= 0
+        && ut.indexOf('myprod: function(c){ return shelfCard(c, false); }') >= 0
+        && ut.indexOf('coupas: function(c){ return shelfCard(c, true); }') >= 0,
+        '편집기에만 있고 손님 화면에 없으면 «저장했는데 안 보임»');
+      add('제휴 고지 자동', ut.indexOf("isAff?'<div class=\"coupang-note\">쿠팡 파트너스 활동으로") >= 0
+        && ut.indexOf("rel=\"noopener nofollow") >= 0,
+        '🚨 법으로 필요하다. 고지·nofollow 를 빼면 안 된다');
+      add('쿠파스는 항상 맨 아래', et.indexOf('function coupasLast(') >= 0
+        && et.indexOf('blocks = coupasLast(blocks);') >= 0,
+        '사장님 픽 ㉯ — 제휴가 맨 위면 링크트리가 아니라 광고판으로 보인다');
+      add('자동 로그인 중간 정렬', et.indexOf('.lg-auto{display:flex; align-items:center; justify-content:center;') >= 0,
+        '왼쪽에 붙어 혼자 삐뚤어 보였다');
       add('홈 버튼은 운영자만', ut.indexOf('function isMine()') >= 0
         && ut.indexOf("isMine() ? '<button type=\"button\" class=\"ig-btn tohome") >= 0,
         '손님에겐 요소가 «생기지 않아야» 한다 — 숨기는 게 아니라 안 만든다');
