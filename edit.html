@@ -3194,9 +3194,15 @@ if('serviceWorker' in navigator){
         끌 수 있게도 해야 한다: 남의 컴퓨터에서 켜 두면 그대로 열린다. */
   /* 🚨 2026-08-21 사장님 «자동 로그인을 중간 정렬해줘» — 왼쪽에 붙어 혼자 삐뚤어 보였다 */
   /* 🔍 «왜 또 물어보나요?» — 추측 대신 화면에 적는다 (2026-08-22) */
-  .lg-why{ text-align:left; margin:2px 0 12px; padding:11px 13px; border-radius:11px;
-    background:var(--soft); border:1px solid var(--hair); font-size:11.5px; line-height:1.75; color:var(--muted); }
-  .lg-why .lgw-h{ display:block; font-size:11.5px; font-weight:800; color:var(--ink); margin-bottom:5px; }
+  .lg-why{ text-align:left; margin:2px 0 12px; font-size:11.5px; line-height:1.75; color:var(--muted); }
+  .lg-why .lgw-t{ display:inline-flex; align-items:center; gap:5px; background:none; border:0;
+    padding:6px 2px; font-family:var(--sans); font-size:11.5px; font-weight:600; color:var(--muted);
+    cursor:pointer; opacity:.72; }
+  .lg-why .lgw-t:hover{ opacity:1; }
+  .lg-why .lgw-g{ font-size:12px; }
+  .lg-why .lgw-b{ display:none; margin-top:6px; padding:10px 12px; border-radius:10px;
+    background:var(--soft); border:1px solid var(--hair); }
+  .lg-why.open .lgw-b{ display:block; }
   .lg-why .lgw-l{ display:block; }
   .lg-why b{ color:var(--ink); font-weight:700; }
   .lg-auto{display:flex; align-items:center; justify-content:center; gap:9px; margin:2px 0 12px; cursor:pointer;
@@ -17558,6 +17564,16 @@ if('serviceWorker' in navigator){
   function loginMark(){
     try{ localStorage.setItem('cm-login-log', JSON.stringify({ t:Date.now(), w:loginWhere() })); }catch(_){}
   }
+  /* 🚨 2026-08-22 사장님 «이게 나오는 게 맞아?» — 맞지 않았다.
+     로그인 창이 뜰 때마다 큰 상자로 «왜 또 물어보나요?»가 나왔다.
+     정상 로그인 중에도 뜨니 «뭔가 고장 났나»로 읽힌다. 세 가지를 고친다.
+       ① 처음 로그인(기록 없음)엔 아예 안 보여준다 — 처음 묻는 건 «또»가 아니다
+       ② 상자가 아니라 «접힌 한 줄». 눌러야 펴진다
+       ③ 말을 낮춘다: «왜 또 물어보나요?» → «로그인이 다시 필요한 이유» */
+  function loginWhyShow(){
+    var last=null; try{ last=JSON.parse(localStorage.getItem('cm-login-log')||'null'); }catch(_){}
+    return !!(last && last.t);          /* 전에 로그인한 적이 있을 때만 «또»다 */
+  }
   function loginWhy(){
     var here=loginWhere(), last=null;
     try{ last=JSON.parse(localStorage.getItem('cm-login-log')||'null'); }catch(_){}
@@ -17578,19 +17594,13 @@ if('serviceWorker' in navigator){
     }
     return L;
   }
-  /* 로그인 창이 뜨면 «왜 떴는지»를 한 번 적는다 */
-  function loginShowWhy(){
-    try{
-      var box=document.getElementById('lg-why');
-      if(!box){
-        var host=document.getElementById('lg-err'); if(!host) return;
-        box=document.createElement('div'); box.id='lg-why'; box.className='lg-why';
-        host.parentNode.insertBefore(box, host);
-      }
-      box.innerHTML='<b class="lgw-h">왜 또 물어보나요?</b>'
-        + loginWhy().map(function(x){ return '<span class="lgw-l">· '+x+'</span>'; }).join('');
-    }catch(_){}
-  }
+  /* 🚨 2026-08-22 사장님 «이게 나오는 게 맞아?» → «안 보이게 하던가»
+     로그인 창에 «왜 또 물어보나요?» 상자를 띄웠더니, 정상 로그인 중에도 떠서
+     «뭔가 고장 났나»로 읽혔다. 손님도 아니고 사장님이 매번 놀랄 이유가 없다.
+     → 화면에는 «아무것도» 안 띄운다. 기록(loginMark)과 판정(loginWhy)만 남긴다.
+       또 로그인이 뜨면 그때 콘솔에서 window.__loginWhy() 로 꺼내 본다.
+     ⚠️ 되살리려면: loginShowWhy() 를 다시 부르되, 반드시 «접힌 한 줄»로. 상자는 안 된다. */
+  function loginShowWhy(){ /* 일부러 아무 것도 하지 않는다 — 위 주석 참고 */ }
   window.__loginWhy=loginWhy;
   /* 🚨 입구가 여러 개다 — 한 군데만 붙이면 다른 길로 들어온 로그인 창엔 설명이 없다.
      🚨 «보이면 붙인다»로 만들었더니 타이머가 창이 뜨기 «전»에 지나가 못 붙었다(2026-08-22 실측).

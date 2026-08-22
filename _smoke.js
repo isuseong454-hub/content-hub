@@ -459,9 +459,20 @@
       add('e 🧭 아이콘 가이드 폐기', et.indexOf('id="le-guide" title="편집 가이드" aria-label="가이드" style="display:none') >= 0,
         '나침반 아이콘은 뜻이 안 읽혔다 — 되살아나면 바가 다시 6칸이 된다');
       /* ── 🔍 «왜 또 로그인을 묻나» 진단 (2026-08-22) ── */
-      add('e 로그인 창이 이유를 적는다', et.indexOf('function loginWhy') >= 0
-        && et.indexOf('왜 또 물어보나요?') >= 0 && et.indexOf('function loginWhere') >= 0,
-        '추측으로는 못 고친다 — 어느 브라우저에서 열었는지 화면에 적혀야 원인이 보인다');
+      /* 🚨 2026-08-22 결정 뒤집힘 — 사장님 «이게 나오는 게 맞아?» → «안 보이게 하던가».
+         로그인 창에 상자로 띄웠더니 정상 로그인 중에도 떠서 «고장 났나»로 읽혔다.
+         판정은 남기되 «화면에는 안 띄운다». 되살리려면 반드시 접힌 한 줄로. */
+      /* 🚨 오늘 두 번째로 «주석에 적어 둔 글자»에 걸렸다(top:-30px 에 이어).
+         검사는 «주석을 뺀 코드»만 봐야 한다. 설명글이 검사를 망치면 안 된다. (2026-08-22) */
+      add('e 로그인 창에 진단 상자 없음', (function(){
+          var code=et.replace(/\/\*[\s\S]*?\*\//g,'').replace(/<!--[\s\S]*?-->/g,'');
+          return code.indexOf('왜 또 물어보나요') < 0
+            && et.indexOf('function loginShowWhy(){ /* 일부러 아무 것도 하지 않는다') >= 0;
+        })(),
+        '정상 로그인 중에 그 상자가 뜨면 고장 난 것처럼 보인다');
+      add('e 진단은 콘솔에 남아 있다', et.indexOf('function loginWhy') >= 0
+        && et.indexOf('function loginWhere') >= 0 && et.indexOf('window.__loginWhy=loginWhy') >= 0,
+        '화면에서 뺐다고 판정까지 지우면, 또 로그인이 떴을 때 원인을 다시 추측하게 된다');
       add('e 로그인 성공을 기록', (et.match(/loginMark\(\)/g)||[]).length >= 3,
         '기록이 없으면 «마지막 로그인»을 못 보여준다 — 남기는 곳과 읽는 곳이 둘 다 있어야 한다');
       add('e 비밀번호는 안 남긴다', et.indexOf("cm-login-log', JSON.stringify({ t:Date.now(), w:loginWhere() })") >= 0,
