@@ -7042,7 +7042,15 @@ if('serviceWorker' in navigator){
     chart:[['text','제목','📈 조회수 성장'],['list','데이터 (위→아래 = 왼→오른쪽)','라벨 (예: 시작)|숫자 (예: 3000)'],['text','단위 (선택 · 예: 회/명/만원)','']],
     offer:[['text','작은 태그 (선택 · 예: 3기 모집 · 마감 임박)','3기 모집 · 마감 임박'],['text','제목','얼리버드 신청'],['text','신청 현황 (선택 · "신청/정원" 예: 17/20)',''],['list','옵션 (이름·가격·정가·뱃지)','이름 (예: 원데이 클래스)|가격 (예: 12만원)|정가(선택 · 예: 15만원)|뱃지(선택 · 예: ⭐추천 / 한정 20석)'],['text','버튼 글자','DM으로 신청하기'],['url','버튼 링크 (DM·카톡·예약)','']],
     links:[['list','링크 버튼들','제목|링크(URL)']],
-    link:[['text','제목',''],['url','링크(URL)','']],
+    /* 🔗 2026-08-22 사장님 픽 «B안» — 긴 버튼에 아이콘·설명·가격·강조를 담는다.
+          앞 두 칸(제목·링크)은 «순서 그대로» 둔다 — 기존 글이 안 깨진다.
+          ⚠️ 스위치 칸은 이 편집기에 없다 → 강조는 «⭐ 한 글자»로 받는다. 칸을 새로 만들지 않는다. */
+    link:[['text','제목',''],
+          ['url','링크(URL)',''],
+          ['text','한 줄 설명 (선택)','예: 얼굴형 보고 기장 잡아드려요 · 30분'],
+          ['text','가격 (선택)','예: 5만 · 9,900 · 3천~'],
+          ['text','아이콘 (선택)','💌 📚 🎬 ☕ 🔔 🛒 🧾 📷 ▶️ 중 하나'],
+          ['text','⭐ 강조 — 색을 채워 제일 눈에 띄게','⭐ 를 넣으면 강조 (하나만 권장)']],
     newsletter:[['text','제목','주간 뉴스레터 구독'],['url','구독 링크','']],
     channels:[['url','인스타그램',''],['url','유튜브',''],['url','블로그',''],['url','카카오톡 오픈채팅','']],
     archive:[['info','글은 "포스팅" 화면에서 관리해요','']],
@@ -16180,9 +16188,12 @@ if('serviceWorker' in navigator){
         var c=r._content||[]; c.forEach(function(v){ if(typeof v==='string' && v.indexOf('p='+pid)>=0) dup=true; }); }); }catch(_){}
       if(dup){ try{ if(window.toast) toast('이미 홈에 있어요'); }catch(_){} return false; }
       var label=String(post.title||'글 보기').trim().slice(0,40);
-      var row=window.__createRow({ type:'links', name:label, on:true, content:[label, url], layout:'' });
+      /* 🚨 2026-08-22 — 여기서 'links'(복수)를 썼는데 그건 «고정 칸» 전용이라 홈 본문에 안 뜬다.
+            홈 본문에 놓이는 자유 블록은 'link'(단수)다. B안 칸에 맞춰 아이콘도 넣는다. */
+      var _c=[label, url, '', '', '📄', ''];
+      var row=window.__createRow({ type:'link', name:label, on:true, content:_c.slice(), layout:'' });
       if(!row) return false;
-      row._content=[label, url];
+      row._content=_c.slice();
       try{ if(window.__refreshBuilder) window.__refreshBuilder(); }catch(_){}
       try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
       /* 바로 저장 — 사장님이 «올렸는데 안 올라갔네» 하는 일이 없게 */

@@ -176,7 +176,11 @@
   (function(){
     var fixed=[].slice.call(document.querySelectorAll('body *')).filter(function(el){
       if(!_vis(el)) return false; var cs=getComputedStyle(el); if(cs.position!=='fixed') return false;
-      var r=_rect(el); return r.width>24 && r.height>16 && r.width<innerWidth*0.98;
+      /* 🚨 2026-08-22 — innerWidth 는 «스크롤바를 포함»한다. 브라우저 창에 스크롤바가 있으면
+            전체 화면 덮개(login-ov)가 15px 좁아져 «전체가 아니다»로 잡히고,
+            그 아래 모든 고정요소와 겹친다고 빨간 줄이 떴다. 스크롤바를 뺀 clientWidth 로 잰다. */
+      var W=document.documentElement.clientWidth||innerWidth;
+      var r=_rect(el); return r.width>24 && r.height>16 && r.width<W*0.96;
     }).slice(0,24);
     var bad=[];
     for(var i=0;i<fixed.length;i++) for(var j=i+1;j<fixed.length;j++){
@@ -785,7 +789,7 @@
         && et.indexOf('window.__addHomeFromPost') >= 0
         && et.indexOf("get('addhome')") >= 0,
         '손님 화면에서 서버에 쓰면 권한·충돌 사고가 난다');
-      add('홈에 올린 글은 링크트리 버튼', et.indexOf("type:'links', name:label") >= 0,
+      add('홈에 올린 글은 링크트리 버튼', et.indexOf("type:'link', name:label") >= 0,
         '사장님 픽 ㉯ — 메뉴는 버튼, 글 카드는 포스팅 쪽');
       add('두 번 올려도 하나', ut.indexOf('function onHome(') >= 0
         && et.indexOf('이미 홈에 있어요') >= 0,
@@ -823,6 +827,18 @@
         '하단바를 없앴으니 가이드는 상단으로 옮겨야 잃지 않는다');
       add('포스팅 탭엔 프로필 없음', ut.indexOf("id==='about' || id==='archive'") >= 0,
         '글 보러 온 사람에게 프로필이 화면 위 40%를 먹으면 글이 안 보인다');
+      /* 🔗 2026-08-22 사장님 픽 «B안» — 긴 버튼에 아이콘·설명·가격·강조 */
+      add('긴 버튼 B안', ut.indexOf('lcb-hero') >= 0 && ut.indexOf('var LC_ICON=') >= 0
+        && ut.indexOf("a.className='block lcb'") >= 0,
+        '제목+화살표뿐이면 여덟 개가 다 똑같아 뭐가 중요한지 안 보인다');
+      add('강조는 ⭐ 한 글자', ut.indexOf('/[⭐★]/.test') >= 0
+        && et.indexOf('⭐ 강조 — 색을 채워 제일 눈에 띄게') >= 0,
+        '스위치 칸이 없어 글자로 받는다 — 칸을 새로 만들면 다른 블록이 다친다');
+      add('옛 버튼 안 깨짐', ut.indexOf("var title=c[0]||'링크', url=c[1]||'#'") >= 0,
+        '앞 두 칸(제목·링크)이 «순서 그대로»여야 기존 글이 산다');
+      add('홈에 올리기는 link(단수)', et.indexOf("type:'link', name:label") >= 0
+        && et.indexOf("type:'links', name:label") < 0,
+        'links(복수)는 «고정 칸» 전용이라 홈 본문에 안 뜬다 — 2026-08-22 실측으로 잡음');
       add('포스팅 정렬 3종', ut.indexOf('var ARC_SORTS=') >= 0
         && ut.indexOf("['new','최신순']") >= 0 && ut.indexOf("['hot','인기순']") >= 0
         && ut.indexOf('function arcSort(') >= 0,

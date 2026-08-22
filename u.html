@@ -1737,6 +1737,27 @@
   .prod-meta{font-size:12px; color:var(--muted); margin-top:1px;}
   .prod-go{margin-left:auto; color:var(--coral); font-size:14px;}
   .coupang-note{font-size:11px; color:var(--muted); margin-top:11px; text-align:center;}
+  /* 🔗 긴 버튼 B안 — 선반과 같은 결. 다른 건 «사진 대신 아이콘»뿐 (2026-08-22) */
+  .block.lcb{ display:flex; align-items:center; gap:12px; padding:13px 15px; text-decoration:none; color:inherit;
+    transition:border-color .15s, transform .12s cubic-bezier(.2,.9,.2,1); }
+  .block.lcb:active{ transform:scale(.985); }
+  @media (hover:hover){ .block.lcb:hover{ border-color:var(--coral); } }
+  .lcb-ic{ width:38px; height:38px; border-radius:11px; flex:none; display:grid; place-items:center;
+    font-size:18px; background:var(--soft, color-mix(in srgb, var(--ink) 6%, transparent)); }
+  .lcb-m{ flex:1; min-width:0; }
+  .lcb-m b{ display:block; font-size:14px; font-weight:600; letter-spacing:-.2px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lcb-m small{ display:block; font-size:11.5px; color:var(--muted); margin-top:2px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lcb-pr{ flex:none; font-size:12.5px; font-weight:800; color:var(--coral); font-variant-numeric:tabular-nums; }
+  .lcb-ch{ flex:none; color:var(--muted); font-size:14px; }
+  /* ★ 강조 하나 — «제일 벌고 싶은 것». 여덟 개가 다 같으면 아무것도 안 보인다 */
+  .block.lcb-hero{ background:var(--coral) !important; border-color:var(--coral) !important; color:var(--on-coral,#fff);
+    box-shadow:0 10px 26px -12px var(--coral); }
+  .lcb-hero .lcb-ic{ background:rgba(255,255,255,.2); }
+  .lcb-hero .lcb-m small, .lcb-hero .lcb-ch{ color:rgba(255,255,255,.85); }
+  .lcb-hero .lcb-pr{ color:#fff; }
+  @media (prefers-reduced-motion: reduce){ .block.lcb{ transition:none; } }
   /* 🛒 선반(내 제품 · 쿠파스) — 링크트리 «긴 버튼»과 같은 결 (2026-08-21) */
   .shelf-block .block-h{ margin-bottom:10px; }
   .sh-i{ display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:14px;
@@ -4048,10 +4069,29 @@
       + (isAff?'<div class="coupang-note">쿠팡 파트너스 활동으로 일정액의 수수료를 제공받을 수 있습니다</div>':'');
     return d;
   }
-  function linkCard(c){
-    var a=document.createElement('a'); a.className='block'; a.href=c[1]||'#'; a.target='_blank'; a.rel='noopener';
-    if(c[0]) a.setAttribute('data-track', c[0]);
-    a.innerHTML='<div class="block-h"><span class="left"><span class="ic">→</span><span><span style="display:block">'+esc(c[0]||'링크')+'</span></span></span><span class="chev">→</span></div>';
+  /* ══ 🔗 긴 버튼 «B안 · 한 줄 더» (2026-08-22 사장님 픽) ═══════════════════
+        전엔 «제목 + 화살표»뿐이라 여덟 개가 전부 똑같이 생겼다.
+        「상담 신청」(5만원)과 「인스타그램」(공짜)이 같은 무게였고, 가격은 눌러야 알았다.
+        → 아이콘 · 설명 한 줄 · 가격을 담고, «제일 벌고 싶은 것» 하나만 색을 채운다.
+        칸: [제목, 링크, 설명, 가격, 아이콘, 강조] — 앞 둘은 옛 순서 그대로라 기존 글이 안 깨진다. */
+  var LC_ICON={ msg:'💌', book:'📚', klass:'🎬', coffee:'☕', bell:'🔔', cart:'🛒',
+                receipt:'🧾', cam:'📷', play:'▶️', link:'🔗', mail:'✉️', cal:'📅' };
+  function linkCard(c){
+    var title=c[0]||'링크', url=c[1]||'#', desc=String(c[2]||'').trim(),
+        price=String(c[3]||'').trim(), ico=String(c[4]||'').trim();
+    /* 강조는 «⭐ 한 글자»로 받는다 — 편집기에 스위치 칸이 없어서 (칸을 새로 만들면 다른 블록이 다친다) */
+    var hero = /[⭐★]/.test(String(c[5]||'')) || c[5]===true;
+    var a=document.createElement('a');
+    a.className='block lcb'+(hero?' lcb-hero':'');
+    a.href=url; a.target='_blank'; a.rel='noopener';
+    a.setAttribute('data-track', title);
+    var icon = LC_ICON[ico] || (ico && Array.from(ico).length<=2 ? ico : '🔗');
+    a.innerHTML =
+      '<span class="lcb-ic">'+esc(icon)+'</span>'
+      + '<span class="lcb-m"><b>'+esc(title)+'</b>'
+      + (desc?'<small>'+esc(desc)+'</small>':'') + '</span>'
+      + (price?'<span class="lcb-pr">'+esc(price)+'</span>':'')
+      + '<span class="lcb-ch">→</span>';
     return a;
   }
   // ════ 🎨 시각 서랍 — 순수 SVG/CSS 시각 요소 (2026-07-11) · 글래스 타일=흰 글리프, 색은 테마 var(--grad) 상속, 모션 은은 ════
