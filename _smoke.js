@@ -813,9 +813,13 @@
     /* 사고: ☑ 가 마크업 없이 글자로만 찍혀 목록이 문단에 묻혔다 */
     add('☑ 진짜 체크박스', U.indexOf('function chkList') >= 0 && U.indexOf('chkList(richText(s))') >= 0,
       '☑ 두 줄 이상이면 ul.lc-check 로 세운다');
-    /* 사장님 픽: 카드 11장·간격 전부 13px → «촙촙해서 답답» */
-    add('글 여백 C안', U.indexOf('#pm-body .block{ background:transparent') >= 0 && U.indexOf('#pm-body .block:has(.stf-wrap)') >= 0,
-      '본문은 바닥에, 강조(단계·Q&A·체크·숫자)만 카드');
+    /* 사장님 픽: 처음 C안(카드 벗기기) → «밋밋하다» → B안(카드는 남기고 간격을 가른다) */
+    add('글 여백 B안', U.indexOf('«B안 · 숨 쉬는 카드»') >= 0
+      && U.indexOf('#pm-body .block:has(.block-h){ margin-top:34px; }') >= 0
+      && U.indexOf('#pm-body .block{ margin:0 0 12px;') >= 0,
+      '간격이 전부 13px 로 돌아가면 다시 «촙촙»해진다');
+    add('소제목 강조바 — 편집=손님', E.indexOf('.dtx.h{') >= 0 && /\.dtx\.h\{[\s\S]{0,200}?border-left:4px solid var\(--coral\)/.test(E),
+      '편집 화면에만 바가 없어 «주제 표시가 없다»고 하셨다');
     /* 사장님 픽: 라이트 테마 배경 발광 «은은하게» */
     add('라이트 배경 발광', /html\[data-theme="cream"\] body::before[\s\S]{0,400}?opacity:\.20/.test(U),
       '0 으로 되돌아가면 «평평한» 옛 상태');
