@@ -18221,7 +18221,11 @@ if('serviceWorker' in navigator){
         ov.addEventListener('click', function(e){ if(e.target===ov) ov.classList.remove('open'); });
         ov.querySelector('#lm-x').onclick=function(){ ov.classList.remove('open'); };
       }
+      /* 🚨 2026-08-21 사장님 «라이트로 포스팅하고 내 것을 보고 싶을 때 통로가 없다» —
+            맞다. 나가는 문은 «홈»뿐이었고, 내 글 목록으로 가려면 홈에서 한 번 더 눌러야 했다.
+            글을 쓴 «직후»에 제일 보고 싶은 건 내 글이다. 그래서 맨 위에 둔다. */
       var ITEMS=[
+        ['posts','📝','내 글 보러 가기','방금 쓴 글을 손님 화면에서'],
         ['home','👁','손님 눈으로 보기','편집을 끝내고 실제 화면으로'],
         ['admin','🛠','운영자 모드','분석 · 예약 명단 · 설정'],
         ['out','🚪','로그아웃','이 기기에서 나가요']
@@ -18238,6 +18242,16 @@ if('serviceWorker' in navigator){
         b.onclick=function(){
           var k=b.getAttribute('data-lm');
           ov.classList.remove('open');
+          if(k==='posts'){
+            /* 저장하고 → 손님 화면의 «포스팅» 탭으로 바로 (u.html 이 ?tab= 을 지원한다) */
+            try{ if(window.__pageAutosaveNow) window.__pageAutosaveNow(); }catch(_){}
+            var _h=''; try{ _h=(((document.getElementById('pf-handle')||{}).value)||'').trim()
+                            || ((window.AUTH&&window.AUTH.handle)||''); }catch(_e){}
+            if(!_h){ try{ if(window.toast) toast('먼저 내 주소(핸들)를 정해주세요'); }catch(_e){} return; }
+            try{ closeLive(); }catch(_e){}
+            setTimeout(function(){ location.replace('u.html?u='+encodeURIComponent(_h)+'&tab=archive'); }, 160);
+            return;
+          }
           if(k==='home'){ var q=document.getElementById('le-quit'); if(q) q.click(); return; }
           if(k==='admin'){
             /* 작업실로 — 편집한 건 자동저장돼 있다 */

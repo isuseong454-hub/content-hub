@@ -798,6 +798,12 @@
         '시험용 가짜 글이 분석에 쌓이면 인기순이 거짓말을 한다');
       add('조회수는 살아 있는 글만', ut.indexOf('if(!alive[x.pid]) return;') >= 0,
         '지운 글·찌꺼기가 «인기»를 차지하던 것 — 이미 쌓인 것도 이걸로 무시된다');
+      /* 🚨 2026-08-21 사장님 «라이트로 포스팅하고 내 것을 보고 싶을 때 통로가 없다» */
+      add('현장 편집 → 내 글 보기', et.indexOf("['posts','📝','내 글 보러 가기'") >= 0
+        && et.indexOf("'&tab=archive'") >= 0,
+        '글 쓴 «직후»에 제일 보고 싶은 건 내 글이다 — ⋯ 메뉴 맨 위');
+      add('내 글에서 되돌아오는 문', ut.indexOf('.mine-edit{position:fixed') >= 0,
+        '편집하기가 화면 고정이라 포스팅 탭에서도 보인다 — 안 그러면 또 갇힌다');
       add('포스팅 정렬 3종', ut.indexOf('var ARC_SORTS=') >= 0
         && ut.indexOf("['new','최신순']") >= 0 && ut.indexOf("['hot','인기순']") >= 0
         && ut.indexOf('function arcSort(') >= 0,
