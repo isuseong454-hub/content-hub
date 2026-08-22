@@ -3389,6 +3389,9 @@
         payload 의 다른 키(step, svc …)는 서버에서 버려진다 — 예약 4단계가 전부 한 덩어리로 들어가
         「어디서 새는지」를 못 봤다. 단계는 반드시 label 에 실어 보낼 것. */
   function track(type, data){
+    /* 🚨 2026-08-21 — 비교 미리보기가 «가짜 글»(__pv_…)을 열면서 분석에 조회수를 쌓았다.
+          실제로 test22 상위 5개가 전부 미리보기 찌꺼기였다. 시험이 통계를 오염시키면 안 된다. */
+    try{ var _lb=String((data&&data.label)||''); if(/^__pv_|^__(rt|bar|preview)/.test(_lb)) return; }catch(_){}
     var evt = Object.assign({ h:window.HANDLE||HANDLE, type:type, src:getSource(), sid:sid(), ts:Date.now() }, data||{});
     // Supabase 전송 (로그인 없이 li_event — 공개·존재 핸들만 기록됨)
     try { if (window.laRpc) window.laRpc('li_event', { p_handle: evt.h, p_payload: evt }); } catch(e){}
@@ -5880,8 +5883,11 @@
     try{
       window.laRpc('li_post_views',{ p_handle: window.HANDLE }).then(function(r){
         if(!r||!r.ok||!r.posts||!r.posts.length) return;
+        /* 🚨 지금 살아 있는 글만 센다 — 지운 글·미리보기 찌꺼기가 «인기»를 차지하던 것 */
+        var alive={}; (window.__POSTS||[]).forEach(function(p2){ if(p2&&p2.id) alive[p2.id]=1; });
         var map={}, top=null, topN=0;
-        r.posts.forEach(function(x){ map[x.pid]=x.n; if(x.n>topN){ topN=x.n; top=x.pid; } });
+        r.posts.forEach(function(x){ if(!alive[x.pid]) return;
+          map[x.pid]=x.n; if(x.n>topN){ topN=x.n; top=x.pid; } });
         /* 🔢 정렬(인기순)이 이 숫자를 쓴다. 서버에서 늦게 오므로 도착하면 한 번 다시 줄 세운다. */
         try{ window.__viewMap=map; if(window.__arcResort) window.__arcResort(); }catch(_){}
         document.querySelectorAll('[data-pid]').forEach(function(card){
