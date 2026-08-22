@@ -936,7 +936,26 @@
     .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
   }
 
-  /* ── 편집 브릿지(?edit=1): 섹션 탭 편집 시안 B ── */
+  /* 🔁 «그 자리에서» — 편집기 iframe 이 at/p 를 달고 오면 보던 자리로 되돌린다 (2026-08-21) */
+  (function(){
+    try{
+      var q=new URLSearchParams(location.search);
+      if(q.get('edit')!=='1') return;
+      var at=parseInt(q.get('at')||'', 10), pid=q.get('p')||'';
+      if(!at && !pid) return;
+      var n=0, t=setInterval(function(){
+        n++;
+        try{
+          if((window.__POSTS||[]).length || n>26){
+            clearInterval(t);
+            if(pid && window.__openPostModal){ window.__openPostModal(pid); }
+            else if(at>0){ window.scrollTo({top:at, behavior:'instant'}); }
+          }
+        }catch(_){ clearInterval(t); }
+      }, 220);
+    }catch(_){}
+  })();
+  /* ── 편집 브릿지(?edit=1): 섹션 탭 편집 시안 B ── */
   html[data-edit] .reveal{opacity:1 !important; transform:none !important;}
   /* ── 홈 구성(.la-hb): 평소 깔끔(손님 화면 그대로), 구분 헤더로 명확히 ── */
   html[data-edit] .la-hb{position:relative; cursor:pointer; outline:1.5px dashed rgba(167,139,255,.16); outline-offset:6px; border-radius:13px; transition:outline .14s ease, background .14s ease; margin:48px 0 16px;}   /* 평소에도 아주 옅은 점선=만질 수 있는 카드란 신호(은은) */
@@ -3809,7 +3828,20 @@
             ev.preventDefault(); ev.stopPropagation();
             var k=b.getAttribute('data-g');
             menu.classList.remove('open');
-            if(k==='edit'){ location.href='edit.html?live=1'; }
+            if(k==='edit'){
+              /* 🚨 2026-08-21 사장님 «편집 누르면 로그인창으로 가고, 그 자리에서 켜져야지» —
+                    ㉮ 보던 스크롤 위치와 ㉯ 열어 둔 글을 들고 간다 → 편집 화면이 «같은 자리»에서 열린다
+                    ㉰ 화면을 툭 끊지 않고 살짝 어둡게 넘긴다 — 페이지가 바뀐 티를 줄인다 */
+              var _at=Math.round(window.scrollY||window.pageYOffset||0);
+              var _pid=''; try{ var _pm=document.getElementById('post-modal');
+                if(_pm && _pm.classList.contains('open')) _pid=String(window.__curPost||''); }catch(_){}
+              /* 🔒 «방금 내 화면에서 눌렀다»는 표. sessionStorage 는 이 탭에서만 살고
+                    주소창에 직접 쳐서는 만들 수 없다 → 남의 컴퓨터에서 ?live=1 로 뚫는 길을 막는다. */
+              try{ sessionStorage.setItem('cm-from-mine', String(Date.now())); }catch(_){}
+              var _u='edit.html?live=1&at='+_at+(_pid?'&p='+encodeURIComponent(_pid):'');
+              try{ document.body.style.transition='opacity .16s ease'; document.body.style.opacity='.4'; }catch(_){}
+              setTimeout(function(){ location.href=_u; }, 150);
+            }
             else if(k==='admin'){ location.href='edit.html?desk=1'; }
             else {
               /* 🚪 편집기 로그아웃과 «같은 규칙» — 이 기기에서 계정 흔적을 전부 지운다 */
@@ -5602,7 +5634,7 @@
     try{ if(p.type==='landing' && window.__revealScan) window.__revealScan([].slice.call(bodyEl.children)); }catch(_e){}
     try{ track('postview',{ kind:'post', label:id }); }catch(_){}
   }
-  window.__openPostModal=openPostModal;
+  window.__openPostModal=function(id){ try{ window.__curPost=id; }catch(_){} return openPostModal(id); };
   // ── ♥ 좋아요 + ✈ 보내기 (인스타식, 게시물 하단 + 카드) ──
   function hubBuzz(pat){ try{ if(navigator.vibrate) navigator.vibrate(pat||14); }catch(_){} }
   function hubToast(msg){
@@ -5722,7 +5754,7 @@
       },function(){});
     }catch(_){}
   }
-  window.__openPostModal=openPostModal;
+  window.__openPostModal=function(id){ try{ window.__curPost=id; }catch(_){} return openPostModal(id); };
   // ── 👁 게시물 조회수 배지 + "인기" 표시 (손님 화면 권위 표시) ──
   function fmtViews(n){ n=+n||0; return n>=1000 ? ((n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k') : (''+n); }
   function decoratePostViews(){

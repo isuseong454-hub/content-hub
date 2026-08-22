@@ -697,7 +697,7 @@
       add('나가는 문 세 갈래', et.indexOf("['home','") >= 0 && et.indexOf("['admin','") >= 0 && et.indexOf("['out','") >= 0 && et.indexOf("getAttribute('data-lm')") >= 0, '손님 눈으로 · 운영자 모드 · 로그아웃');
       add('버튼 넷 대신 하나', et.indexOf('id="le-more" title="더보기') >= 0 && et.indexOf('style="display:none !important;">편집 끝내기') >= 0, '사장님 «버튼 너무 많다»와 «갇힌다»를 둘 다 지킨다');
       add('로그아웃은 같은 규칙', et.indexOf("if(x.indexOf('la-snap-')===0 || x.indexOf('la-ch-')===0) localStorage.removeItem(x);") >= 0, '한 기능 두 규칙 금지 — 손님 화면 로그아웃과 똑같이 지운다');
-      add('u ⚙에 현장 편집', ut.indexOf("data-g=\"edit\"") >= 0 && ut.indexOf("location.href='edit.html?live=1'") >= 0, '출구가 한쪽에만 있으면 반대쪽에서 갇힌다');
+      add('u ⚙에 현장 편집', ut.indexOf("data-g=\"edit\"") >= 0 && ut.indexOf("edit.html?live=1&at=") >= 0, '출구가 한쪽에만 있으면 반대쪽에서 갇힌다');
 
       /* 🚨 2026-08-21 사장님 픽 ㉮ — 「1. 2. 3.」이 목록인지 «글의 뼈대»인지 가른다.
             목록은 항목이 연달아 나온다. 뼈대는 항목마다 문단이 붙는다.
@@ -737,7 +737,12 @@
 
       /* 🔑 사장님 «자동 로그인 버튼» — 기능은 있었는데 «보이지 않아» 모르셨다 */
       add('자동 로그인 스위치', et.indexOf('id="lg-auto"') >= 0 && et.indexOf('cm-autologin') >= 0, '있는 걸 보이게 + 끌 수 있게');
-      add('자동 로그인 끄면 통과 금지', et.indexOf("localStorage.getItem('cm-autologin')==='0') return;") >= 0, '남의 컴퓨터에서 켜 두면 그대로 열린다');
+      /* 🚨 2026-08-21 — ?live=1 이면 자동로그인 설정을 무시하고 통과시켰다가 이 항목이 잡았다.
+            주소창에 쳐도 열리는 구멍이었다. 지금은 u.html 이 남긴 sessionStorage 표(60초)가 있어야 한다. */
+      add('자동 로그인 끄면 통과 금지', et.indexOf("_auto = localStorage.getItem('cm-autologin')!=='0'") >= 0
+        && et.indexOf("sessionStorage.getItem('cm-from-mine')") >= 0
+        && et.indexOf("(Date.now()-_st) < 60000") >= 0,
+        '남의 컴퓨터에서 주소만 쳐서 열리면 안 된다 — 내 화면에서 «방금» 눌러야 통과');
 
       /* 🗑 사장님 «포스팅에 편집은 있는데 삭제가 없다» — 랜딩 캔버스 안에만 묻혀 있었다 */
       add('글 삭제 공용 함수', et.indexOf('window.__deletePost=function()') >= 0, '한 기능 두 규칙 금지 — 랜딩·블로그가 같은 것을 쓴다');
@@ -847,6 +852,30 @@
     /* 사고(2026-08-20): 껍데기가 통째로 사라져도 오류 0으로 통과했다 */
     add('현장 시트 껍데기', E.indexOf('id="live-sheet-ov"') >= 0 && E.indexOf('id="ls-host"') >= 0,
       '없어지면 시트 함수 5개가 조용히 죽는다');
+  }
+
+
+  /* ══ 2026-08-21 54차 — «편집 누르면 로그인창», «다른 틀은 어둡게 나옴» ══ */
+  if (true) {
+    const E2 = selfHtml || '', U2 = uHtml || '';
+    /* 사고: 열쇠가 있어도 서버 왕복이 끝날 때까지 로그인 카드가 떠 있었다 = «다시 로그인하라» */
+    add('로그인 화면 완전 차단', E2.indexOf("_card.style.visibility='hidden'") >= 0
+      && E2.indexOf('if(!_auto && !_live) return;') >= 0,
+      '열쇠가 있으면 «묻기 전에» 감춘다. ?live=1 은 자동로그인 설정과 무관하게 통과');
+    add('로그인 되돌림 안전장치', E2.indexOf('연결이 느려요') >= 0,
+      '서버가 끊겨도 8초 뒤엔 로그인 폼을 돌려준다 — 빈 화면에 갇히지 않게');
+    /* 사장님: «그 자리에서 켜져야지» */
+    add('편집이 보던 자리로', U2.indexOf("var _at=Math.round(window.scrollY") >= 0
+      && U2.indexOf("q.get('edit')!=='1'") >= 0
+      && E2.indexOf("_keep+='&at='") >= 0,
+      '스크롤 위치·열어 둔 글을 편집기 iframe 까지 이어 넘긴다');
+    /* 사장님: «정보글 말고 다른 게 어둡게» */
+    add('글 틀 칩 — 안 고른 것도 밝게', E2.indexOf('.pf-c:hover{ border-color:var(--coral)') >= 0
+      && E2.indexOf(".pf-c.on b::after{ content:' ✓'") >= 0,
+      '고른 것만 밝으면 나머지가 «못 고르는 것»으로 보인다');
+    /* 사고: 5개 틀 중 «진단·유형» 하나만 실제로 순서를 바꿨다 — 나머지는 무반응 */
+    add('틀마다 «있어야 살아요»', E2.indexOf("needBox.id='pf-need'") >= 0 && E2.indexOf('function drawNeed') >= 0,
+      '재료가 없어 순서가 안 바뀌어도, 뭘 넣어야 하는지는 알려준다');
   }
 
   /* ── 결과 출력 ── */

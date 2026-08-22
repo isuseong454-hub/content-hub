@@ -2024,15 +2024,42 @@ if('serviceWorker' in navigator){
   .pst-frames{ margin:2px 0 13px; }
   .pf-l{ display:block; font-size:12.5px; font-weight:600; margin-bottom:8px; }
   .pf-l small{ font-weight:400; color:var(--muted); font-size:11px; }
-  .pf-chips{ display:flex; gap:6px; overflow-x:auto; padding-bottom:3px; scrollbar-width:none; }
+  /* 🚨 2026-08-21 사장님 «정보글 말고 다른 게 어둡게 나오는데?» —
+        고른 칩만 산호빛이고 나머지는 어두운 회색이라 «못 고르는 것»처럼 보였다.
+        글자 대비는 13:1 로 충분했지만, «고름 vs 못 고름»으로 읽히는 게 문제였다.
+        → 안 고른 것도 «고를 수 있음»으로 보이게 올리고, 고른 것엔 ✓ 를 준다. */
+  .pf-chips{ display:flex; gap:7px; overflow-x:auto; padding:1px 1px 4px; scrollbar-width:none;
+    position:relative; scroll-snap-type:x proximity; }
   .pf-chips::-webkit-scrollbar{ display:none; }
-  .pf-c{ flex:0 0 auto; min-height:44px; padding:8px 13px; border-radius:12px;
-    border:1px solid var(--hair); background:var(--soft); color:var(--ink);
-    font-family:var(--sans); font-size:12.5px; cursor:pointer; text-align:left; line-height:1.35; }
-  .pf-c b{ display:block; font-weight:600; }
-  .pf-c small{ display:block; font-size:10.5px; color:var(--muted); margin-top:1px; }
-  .pf-c.on{ border-color:var(--coral); background:var(--coral-soft); }
+  /* 오른쪽에 더 있다는 신호 — 잘려 보이면 «그게 끝»인 줄 안다 */
+  .pst-frames{ position:relative; }
+  .pst-frames::after{ content:''; position:absolute; right:0; bottom:4px; width:34px; top:26px;
+    pointer-events:none; background:linear-gradient(90deg, transparent, var(--card,#16161a) 82%); }
+  .pf-c{ flex:0 0 auto; min-height:46px; padding:9px 14px; border-radius:12px; scroll-snap-align:start;
+    border:1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+    background:color-mix(in srgb, var(--ink) 8%, transparent); color:var(--ink);
+    font-family:var(--sans); font-size:12.5px; cursor:pointer; text-align:left; line-height:1.35;
+    transition:border-color .15s, background .15s, transform .12s cubic-bezier(.2,.9,.2,1); }
+  .pf-c:hover{ border-color:var(--coral); background:color-mix(in srgb, var(--coral) 10%, transparent); }
+  .pf-c:active{ transform:scale(.97); }
+  .pf-c b{ display:block; font-weight:700; }
+  .pf-c small{ display:block; font-size:10.5px; color:var(--muted); margin-top:2px; }
+  .pf-c.on{ border-color:var(--coral); background:var(--coral-soft);
+    box-shadow:0 0 0 1px var(--coral), 0 4px 14px -8px var(--coral); }
   .pf-c.on b{ color:var(--coral); }
+  .pf-c.on b::after{ content:' ✓'; font-weight:900; }
+  @media (prefers-reduced-motion: reduce){ .pf-c{ transition:none; } }
+  /* 「이건 있어야 살아요」 — 막지 않고 알려만 준다 */
+  #pf-need{ margin:9px 0 13px; padding:10px 12px; border-radius:11px;
+    background:color-mix(in srgb, var(--coral) 7%, transparent);
+    border:1px solid color-mix(in srgb, var(--coral) 22%, transparent); }
+  #pf-need:empty{ display:none; }
+  #pf-need .pn-h{ font-size:11.5px; font-weight:700; color:var(--coral); margin-bottom:7px; }
+  #pf-need .pn-i{ display:flex; gap:8px; align-items:baseline; margin:4px 0; font-size:12px; line-height:1.45; }
+  #pf-need .pn-i::before{ content:'·'; color:var(--coral); font-weight:900; }
+  #pf-need .pn-i b{ font-weight:700; flex:0 0 auto; }
+  #pf-need .pn-i span{ color:var(--muted); font-size:11.5px; }
+  #pf-need .pn-t{ margin-top:7px; font-size:11px; color:var(--muted); }
   .autocover-btn{ display:block; width:100%; min-height:44px; margin:-2px 0 10px; padding:11px;
     border-radius:11px; border:1px dashed var(--hair); background:transparent; color:var(--muted);
     font-family:var(--sans); font-size:12.5px; font-weight:600; cursor:pointer; }
@@ -13906,11 +13933,30 @@ if('serviceWorker' in navigator){
           +'<b>'+f.ic+' '+f.nm+'</b><small>'+f.hint+'</small></button>';
       });
       box.innerHTML=h;
+      /* 🚨 2026-08-21 사장님 «유형들도 체크해줘» —
+            같은 원고에 5가지 틀을 다 걸어보니 «진단·유형»만 실제로 순서가 바뀌고
+            후기·모집은 그 재료(전후 사진·가격·숫자)가 글에 없어 «무반응»이었다.
+            설계상 맞지만, 눌러도 아무 일이 없으면 고장으로 보인다.
+            → 틀마다 «있어야 살아요» 목록을 띄운다. 막지 않고 알려만 준다. */
+      var needBox=document.getElementById('pf-need');
+      if(!needBox){ needBox=document.createElement('div'); needBox.id='pf-need'; box.parentNode.insertBefore(needBox, box.nextSibling); }
+      function drawNeed(k){
+        var f=null; PST_FRAMES.forEach(function(x){ if(x.k===k) f=x; });
+        if(!f || !f.need || !f.need.length){ needBox.innerHTML=''; return; }
+        var raw=''; try{ raw=(document.getElementById('pst-src')||{}).value||''; }catch(_){}
+        needBox.innerHTML='<div class="pn-h">'+f.ic+' '+f.nm+' — 이건 있어야 살아요</div>'
+          + f.need.map(function(n){
+              return '<div class="pn-i"><b>'+n[1]+'</b><span>'+n[2]+'</span></div>'; }).join('')
+          + (raw.trim() ? '' : '<div class="pn-t">글을 붙여넣으면 뭐가 빠졌는지 여기서 짚어드려요</div>');
+      }
+      drawNeed(cur);
       box.querySelectorAll('[data-pf]').forEach(function(b){
         b.onclick=function(){
-          try{ localStorage.setItem('cm-pst-frame', b.getAttribute('data-pf')); }catch(_){}
+          var k=b.getAttribute('data-pf');
+          try{ localStorage.setItem('cm-pst-frame', k); }catch(_){}
           box.querySelectorAll('.pf-c').forEach(function(x){ x.classList.remove('on'); });
           b.classList.add('on');
+          drawNeed(k);
           /* 틀이 바뀌면 미리보기도 다시 — 주인공이 달라지니까 */
           try{ var _t=document.getElementById('pst-src'); if(_t && _t.value.trim()) _t.dispatchEvent(new Event('input',{bubbles:true})); }catch(_){}
         };
@@ -16673,17 +16719,58 @@ if('serviceWorker' in navigator){
     try{
       if(!AUTH || !AUTH.code || !AUTH.pinHash) return;
       /* 사장님이 «자동 로그인»을 끄면 열쇠가 있어도 통과시키지 않는다 (남의 컴퓨터 대비) */
-      try{ if(localStorage.getItem('cm-autologin')==='0') return; }catch(_){}
+      var _auto=true; try{ _auto = localStorage.getItem('cm-autologin')!=='0'; }catch(_){}
+      /* 🔑 «내 홈»의 편집 버튼으로 «방금» 넘어온 경우만 자동 로그인 설정과 무관하게 통과시킨다.
+            이미 내 화면을 보고 있던 사람이다 — 여기서 또 막으면 «편집이 로그인을 요구»하는 꼴이 된다.
+         🔒 그런데 ?live=1 «만» 보면 주소창에 쳐서 남의 컴퓨터에서도 열린다(자동검수가 잡음).
+            그래서 u.html 이 남긴 sessionStorage 표를 «60초 안»일 때만 인정한다.
+            sessionStorage 는 그 탭에서만 살고 주소창으로는 만들 수 없다. */
+      var _live=false;
+      try{
+        if(new URLSearchParams(location.search).get('live')==='1'){
+          var _st=parseInt(sessionStorage.getItem('cm-from-mine')||'0', 10);
+          if(_st && (Date.now()-_st) < 60000) _live=true;
+          sessionStorage.removeItem('cm-from-mine');       /* 한 번만 쓴다 */
+        }
+      }catch(_){}
+      if(!_auto && !_live) return;
       if(AUTH.expiresAt!=null){                                  // 사용 기간이 지났으면 다시 로그인
         var _ex=new Date(AUTH.expiresAt);
         if(!isNaN(_ex.getTime()) && _ex < new Date()) return;
       }
+      /* 🚨 2026-08-21 사장님 «포스팅 편집하면 로그인창으로 가서 다시 로그인해야 한다» —
+            열쇠가 있어도 «서버 왕복»이 끝날 때까지 로그인 카드가 떠 있었다.
+            그 왕복이 곧 «다시 로그인하라»는 화면이다.
+            → 열쇠가 있으면 «묻기 전에» 카드를 감춘다. 열쇠가 틀렸을 때만 되돌린다. */
+      var _ov=document.getElementById('login-ov');
+      var _card=_ov && _ov.querySelector('.login-card');
+      if(_card){
+        _card.style.visibility='hidden';
+        if(!document.getElementById('land-msg')){
+          var _m=document.createElement('div'); _m.id='land-msg';
+          _m.style.cssText='position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;'
+            +'font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.62);letter-spacing:-.2px;';
+          _m.textContent = _live ? '편집 화면 여는 중…' : '들어가는 중…';
+          _ov.appendChild(_m);
+        }
+      }
+      function _showLogin(msg){
+        try{
+          if(_card) _card.style.visibility='';
+          var m=document.getElementById('land-msg'); if(m) m.remove();
+          if(msg && window.toast) toast(msg);
+        }catch(_){}
+      }
+      /* 🛟 서버가 느리거나 끊겨도 8초 뒤엔 로그인 폼을 돌려준다 — 빈 화면에 갇히지 않게 */
+      var _guard=setTimeout(function(){ _showLogin('연결이 느려요 · 다시 로그인해 주세요'); }, 8000);
       Promise.resolve(window.laRpc('li_get_own', {p_code:AUTH.code, p_pin_hash:AUTH.pinHash}))
         .then(function(r){
+          clearTimeout(_guard);
           if(r && r.ok){ enter(); }
-          else { try{ localStorage.removeItem('la-auth'); }catch(_){} }   // 열쇠가 안 맞음 = 버린다
+          else { try{ localStorage.removeItem('la-auth'); }catch(_){}   // 열쇠가 안 맞음 = 버린다
+                 _showLogin('다시 로그인해 주세요'); }
         })
-        .catch(function(){});                                    // 인터넷이 없으면 그냥 로그인 화면
+        .catch(function(){ clearTimeout(_guard); _showLogin(); });      // 인터넷이 없으면 그냥 로그인 화면
     }catch(_){}
   })();
   // 🔧 테스트 전용(localhost에서만): localStorage cm-devedit='1' 이면 로그인 화면 건너뛰고 바로 편집모드 진입 (배포엔 영향 없음 — hostname 가드)
@@ -17469,7 +17556,14 @@ if('serviceWorker' in navigator){
     function sendData(){ try{ ifr.contentWindow.postMessage({type:'la-edit-data', data:curData()}, '*'); }catch(e){} }
     function loadFrame(){ if(frame) frame.classList.remove('loaded'); if(loadFrame._heal) clearTimeout(loadFrame._heal);
       ifr.onload=function(){ if(frame) frame.classList.add('loaded'); };
-      ifr.src='u.html?edit=1&u='+encodeURIComponent(curHandle())+'&cb='+Date.now();
+      /* 🔁 «그 자리에서» — 손님 화면에서 들고 온 스크롤 위치(at)·열어 둔 글(p)을 그대로 넘긴다.
+            이게 없으면 편집을 누를 때마다 글 맨 위로 튕겨 «어디 갔지?» 가 된다 (2026-08-21) */
+      var _keep=''; try{ var _q=new URLSearchParams(location.search);
+        var _at=_q.get('at'), _p=_q.get('p');
+        if(_at) _keep+='&at='+encodeURIComponent(_at);
+        if(_p)  _keep+='&p='+encodeURIComponent(_p);
+      }catch(_e){}
+      ifr.src='u.html?edit=1&u='+encodeURIComponent(curHandle())+_keep+'&cb='+Date.now();
       // ★ 자가복구: 3.5초 뒤에도 iframe이 비어 있으면(로드 실패·CDN 전파지연·캐시 깨짐) 자동 재시도 — 까만 미리보기 멈춤 방지 (최대 2회)
       loadFrame._heal=setTimeout(function(){ var blank=true; try{ var d=ifr.contentDocument; blank = !d || !d.body || d.body.innerHTML.length<800 || d.querySelectorAll('[data-bt]').length===0; }catch(e){ blank=false; } if(blank && (loadFrame._tries||0)<2){ loadFrame._tries=(loadFrame._tries||0)+1; loadFrame(); } else { loadFrame._tries=0; } }, 3500);
     }
