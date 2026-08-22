@@ -1755,6 +1755,8 @@ if('serviceWorker' in navigator){
   .fbadge{font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:6px; white-space:nowrap; flex:0 0 auto;
     background:rgba(255,140,60,.14); color:#D67A2E; border:1px solid rgba(255,140,60,.3);}
   .fbadge.done{background:rgba(60,200,120,.16); color:#1FA45C; border-color:rgba(60,200,120,.35);}
+  /* ⚠ 홈에 안 뜨는 버튼 — «왜»를 배지에 직접 쓴다 (2026-08-22) */
+  .fbadge.warn{ background:rgba(224,134,107,.16); color:#E0866B; border-color:rgba(224,134,107,.4); font-weight:700; }
   .tpl.imp .tn::after{content:" ⭐"; font-size:10px;}
   .tpl.imp{border-color:rgba(245,200,75,.4);}
   /* 강조/보조 툴바 (드래그 선택 후 색 입히기) */
@@ -3082,6 +3084,11 @@ if('serviceWorker' in navigator){
   .lg-auto{display:flex; align-items:center; justify-content:center; gap:9px; margin:2px 0 12px; cursor:pointer;
     font-size:12.5px; color:rgba(255,255,255,.72); user-select:none; min-height:44px;}
   .lg-auto input{width:18px; height:18px; accent-color:#A78BFF; cursor:pointer; flex:0 0 auto;}
+  /* 🧰 «어떤 버튼인가» 고르기 (2026-08-22) */
+  .lk-lead{ font-size:12px; color:var(--muted); margin:-2px 0 11px; }
+  .lk-i.lk-off{ opacity:.6; }
+  .lk-i.lk-off .m span{ color:#E0866B; font-weight:600; }
+  .lk-i.lk-off .go{ color:#E0866B; font-weight:900; }
   .tf-prev{background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:7px; margin-bottom:14px;}
   .tf-row{background:var(--surface); border:1px solid var(--hair); border-radius:8px; padding:8px 10px; display:flex; align-items:center; gap:8px;}
   .tf-row.tf-hero{justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:13px; color:var(--ink);}
@@ -7050,7 +7057,8 @@ if('serviceWorker' in navigator){
           ['text','한 줄 설명 (선택)','예: 얼굴형 보고 기장 잡아드려요 · 30분'],
           ['text','가격 (선택)','예: 5만 · 9,900 · 3천~'],
           ['text','아이콘 (선택)','💌 📚 🎬 ☕ 🔔 🛒 🧾 📷 ▶️ 중 하나'],
-          ['text','⭐ 강조 — 색을 채워 제일 눈에 띄게','⭐ 를 넣으면 강조 (하나만 권장)']],
+          ['text','⭐ 강조 — 색을 채워 제일 눈에 띄게','⭐ 를 넣으면 강조 (하나만 권장)'],
+          ['info','종류는 «＋구성 → 링크 버튼»에서 고르면 자동으로 채워져요','']],
     newsletter:[['text','제목','주간 뉴스레터 구독'],['url','구독 링크','']],
     channels:[['url','인스타그램',''],['url','유튜브',''],['url','블로그',''],['url','카카오톡 오픈채팅','']],
     archive:[['info','글은 "포스팅" 화면에서 관리해요','']],
@@ -7537,6 +7545,17 @@ if('serviceWorker' in navigator){
     var acts=row.querySelector('.acts'); if(!acts) return;
     var b=row.querySelector('.fbadge');
     if(!b){ b=document.createElement('span'); b.className='fbadge'; acts.insertBefore(b, acts.firstChild); }
+    /* 🔒 2026-08-22 — 버튼·선반은 «손댔나»가 아니라 «홈에 뜰 수 있나»로 판정한다.
+          전엔 손만 대면 ✓채움이라, 가격 없는 판매 버튼도 «다 됐다»고 나왔다. */
+    var ty=row.dataset.type||'';
+    if(ty==='link' && typeof btnReadyE==='function'){
+      var c=row._content||[];
+      var kind=String(c[6]||'').trim() || (LINK_NEED[String(c[4]||'').trim()] ? String(c[4]).trim() : 'link');
+      var rd=btnReadyE(c, kind);
+      if(rd.ok){ b.className='fbadge done'; b.textContent='✓ 홈에 떠요'; b.title=''; }
+      else { b.className='fbadge warn'; b.textContent='⚠ '+rd.why; b.title='손님 화면엔 안 보여요 — 채우면 바로 떠요'; }
+      return;
+    }
     if(row._filled){ b.className='fbadge done'; b.textContent='✓ 채움'; }
     else { b.className='fbadge'; b.textContent='✍ 채우기'; }
   }
@@ -7999,10 +8018,63 @@ if('serviceWorker' in navigator){
     if(t.dataset.set) return;   // 세트 타일은 아래에서 별도 처리(통째로 추가)
     if(t.dataset.special) return;   // 프로필 등 특수 구성은 별도 핸들러
     t.addEventListener('click', function(){
-      if(t.dataset.nm==='링크 버튼'){ try{ ov.classList.remove('open'); }catch(e){} if(window.__openChannelManager) window.__openChannelManager(); return; }   // '링크 버튼' = 채널·연락처 매니저로 통일(프로필 home.fab 동기화)
+      /* 🧰 2026-08-22 사장님 — «링크 버튼»을 누르면 «어떤 버튼인가»부터 고른다.
+            전엔 채널 매니저(인스타·카톡)로 새서, 상담·전자책 같은 «돈 받는 버튼»을 만들 길이 없었다.
+            고르면 아이콘·연결·설명 예시가 미리 채워진다 — 빈 칸 여섯 개를 마주하지 않게. */
+      if(t.dataset.nm==='링크 버튼'){ try{ ov.classList.remove('open'); }catch(e){} openLinkKind(); return; }
       openBlockPreview(t);
     });   // 탭 → 미리보기 → 넣기
   });
+  /* ══ 🧰 «어떤 버튼인가» 고르기 (2026-08-22) ═══════════════════════════════
+        고른 종류가 아이콘·연결·설명 예시를 «미리» 채운다.
+        내부 연결(#resv·#lead)은 앱 안의 받는 곳으로 — 사장님이 주소를 몰라도 된다.
+        연결 대상이 꺼져 있으면 여기서 «미리» 알려준다(만든 뒤에 알면 늦다). */
+  function linkDestLive(dest){
+    if(dest==='#resv'){ try{ var sw=document.getElementById('resv-onoff');
+      return !!(sw && sw.classList.contains('on')); }catch(_){ return false; } }
+    if(dest==='#lead'){ try{ return [].some.call(document.querySelectorAll('#rows .row'),
+      function(r){ return r.dataset.type==='lead'; }); }catch(_){ return false; } }
+    return true;
+  }
+  function openLinkKind(){
+    var ov2=document.getElementById('lkind-ov');
+    if(!ov2){
+      ov2=document.createElement('div'); ov2.className='ov'; ov2.id='lkind-ov';
+      ov2.innerHTML='<div class="sheet"><div class="sheet-h"><span class="t">어떤 버튼인가요?</span>'
+        +'<span class="x" id="lk-x">×</span></div>'
+        +'<div class="lk-lead">고르면 아이콘·연결·예시가 미리 채워져요</div><div id="lk-body"></div></div>';
+      document.body.appendChild(ov2);
+      ov2.addEventListener('click', function(e){ if(e.target===ov2) ov2.classList.remove('open'); });
+      ov2.querySelector('#lk-x').onclick=function(){ ov2.classList.remove('open'); };
+    }
+    var h='';
+    LINK_KINDS.forEach(function(k,i){
+      var live=linkDestLive(k[4]);
+      h+='<button type="button" class="lg-l lk-i'+(live?'':' lk-off')+'" data-lk="'+i+'">'
+        +'<span class="n">'+k[1]+'</span>'
+        +'<span class="m"><b>'+k[2]+'</b><span>'+(live?k[3]:'⚠️ '+(k[4]==='#resv'?'예약이 꺼져 있어요 — 켜고 오세요':'문의 받기 칸이 홈에 없어요'))+'</span></span>'
+        +'<span class="go">'+(live?'→':'!')+'</span></button>';
+    });
+    document.getElementById('lk-body').innerHTML=h;
+    ov2.querySelectorAll('[data-lk]').forEach(function(b){
+      b.onclick=function(){
+        var k=LINK_KINDS[+b.getAttribute('data-lk')];
+        ov2.classList.remove('open');
+        /* [제목, 링크, 설명, 가격, 아이콘, 강조, 종류] */
+        var c=['', k[4]||'', '', '', k[0], '', k[0]];
+        var row=window.__createRow({ type:'link', name:k[2], on:true, content:c.slice(), layout:'' });
+        if(!row) return;
+        row._content=c.slice();
+        try{ if(window.__refreshBuilder) window.__refreshBuilder(); }catch(_){}
+        try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+        /* 바로 채우게 열어 준다 — 만들고 «어디서 채우지?» 하지 않게 */
+        setTimeout(function(){ try{ var pen=row.querySelector('.edit'); if(pen) pen.click(); }catch(_){} }, 220);
+        try{ if(window.toast) toast(k[1]+' '+k[2]+' 버튼을 만들었어요 · 제목'+(k[6]?'·가격':'')+'을 채우면 홈에 떠요'); }catch(_){}
+      };
+    });
+    ov2.classList.add('open');
+  }
+  window.__openLinkKind=openLinkKind;
   // 실제 추가 (미리보기 "넣기" 또는 직접)
   function addBlockFromTile(t){
       var row = document.createElement('div');
@@ -11833,6 +11905,57 @@ if('serviceWorker' in navigator){
   function lcRichToHtml(s){ s=String(s==null?'':s); return /[<]/.test(s) ? lcSanitizeHtml(s) : lcMdToHtml(s); }
   window.__lcSanitizeHtml=lcSanitizeHtml;
   window.__lcRichToHtml=lcRichToHtml;   /* 📝 라이트 문서 편집기 툴바가 쓴다 (2026-08-21) */
+  /* ══ 🔒 «필수» 게이트 — 판정표 (2026-08-22 사장님) ══════════════════════════
+     🚨 이 표는 u.html 에도 «똑같이» 있다. 한쪽만 고치면 편집기와 손님 화면이 어긋난다.
+        (_smoke 가 두 파일을 대조한다)
+     원칙: 필수는 «정말 없으면 안 되는 것»만. 막는 건 손님 화면뿐, 만들기·저장은 자유. */
+  var LINK_NEED = {
+    msg:    ['title','link'],            /* 💌 상담   — 가격은 선택(무료 상담도 있다) */
+    bell:   ['title','link'],            /* 🔔 대기자 — 돈을 안 받는다 */
+    coffee: ['title','link'],            /* ☕ 후원   — 금액은 선택(자유 후원) */
+    book:   ['title','link','price'],    /* 📚 전자책 — 가격 없는 판매 버튼은 안 눌린다 */
+    klass:  ['title','link','price'],    /* 🎬 강의 */
+    cart:   ['title','link','price'],    /* 🛒 내 제품 */
+    receipt:['title','link'],            /* 🧾 쿠파스 — 고지는 자동 */
+    link:   ['title','link']             /* 🔗 그냥 링크 */
+  };
+  window.__LINK_NEED=LINK_NEED;
+  /* «쓸 수 있나» — u.html 과 «같은 규칙». 빈칸이 아닌 것만으론 부족하다. */
+  function _nHasTitle(v){ return String(v||'').trim().length>=2; }
+  function _nHasPrice(v){ return /[0-9]/.test(String(v||'')); }
+  function _nHasLink(v){ v=String(v||'').trim(); if(!v) return false;
+    if(v.charAt(0)==='#') return /^#(resv|lead|kakao|post:)/.test(v);
+    return /^https?:\/\//i.test(v); }
+  function btnReadyE(c, kind){
+    kind = kind || 'link';
+    var need=LINK_NEED[kind]||LINK_NEED.link, val={title:c[0], link:c[1], price:c[3]}, miss=[];
+    need.forEach(function(k){
+      var v=val[k];
+      var ok=(k==='title')?_nHasTitle(v):(k==='price')?_nHasPrice(v):_nHasLink(v);
+      if(!ok) miss.push(k);
+    });
+    if(!miss.length){
+      var d=String(c[1]||'').trim();
+      if((d==='#resv'||d==='#lead') && !linkDestLive(d))
+        return { ok:false, why: d==='#resv' ? '예약이 꺼져 있어요' : '문의 받기 칸이 홈에 없어요' };
+      return { ok:true, why:'' };
+    }
+    var NM={title:'제목', link:'링크', price:'가격'};
+    var txt=miss.map(function(k){ return NM[k]; }).join('·');
+    var lc=txt.charCodeAt(txt.length-1);
+    var jong=(lc>=0xAC00 && lc<=0xD7A3) && ((lc-0xAC00)%28)!==0;
+    return { ok:false, why:txt+(jong?'이':'가')+' 없어요' };
+  }
+  window.__btnReadyE=btnReadyE;
+  /* 🧰 버튼 종류 — 고르면 아이콘·연결·설명 예시가 «미리» 채워진다. 빈 칸을 마주하지 않게. */
+  var LINK_KINDS = [
+    ['msg',    '💌','상담 신청',   '예약 시트가 열려요',        '#resv',  '얼굴형 보고 기장 잡아드려요 · 30분', '5만'],
+    ['book',   '📚','전자책·템플릿','판매 링크가 필요해요',      '',       '52p · 유형별 정리',                  '9,900'],
+    ['klass',  '🎬','강의·클래스',  '신청 링크가 필요해요',      '',       '남은 자리 3',                        '18만'],
+    ['coffee', '☕','후원하기',     '송금 링크가 필요해요',      '',       '글이 도움 됐다면',                   '3천~'],
+    ['bell',   '🔔','대기자 등록',  '문의 받기 칸으로 보내요',   '#lead',  '곧 열려요 · 먼저 알림 받기',         ''],
+    ['link',   '🔗','그냥 링크',    '인스타·유튜브 등',          '',       '',                                   '']
+  ];
   function lcRows(){ return [].slice.call(document.querySelectorAll('#rows .row')); }
   function lcStripNum(s){ return String(s||'').replace(/^[①②③④⑤⑥⑦⑧⑨⑩⑪]\s*/,''); }
   var LC_AUTO={service:1,reservation:1};

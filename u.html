@@ -1757,7 +1757,19 @@
   .lcb-hero .lcb-ic{ background:rgba(255,255,255,.2); }
   .lcb-hero .lcb-m small, .lcb-hero .lcb-ch{ color:rgba(255,255,255,.85); }
   .lcb-hero .lcb-pr{ color:#fff; }
-  @media (prefers-reduced-motion: reduce){ .block.lcb{ transition:none; } }
+  /* 🔒 미완성 버튼 — 편집 화면에서만 보인다. «왜»를 반드시 같이 말한다 (2026-08-22) */
+  .block.lcb-todo{ opacity:.55; border-style:dashed !important; flex-wrap:wrap; }
+  .lcb-warn{ flex:0 0 100%; margin-top:7px; font-size:11px; font-weight:700; color:#C0392B;
+    background:rgba(192,57,43,.09); border-radius:8px; padding:5px 9px; }
+  .block.lcb-todo.lcb-hero{ background:transparent !important; color:inherit;
+    border-color:var(--coral) !important; box-shadow:none; }
+  .block.lcb-todo.lcb-hero .lcb-m small, .block.lcb-todo.lcb-hero .lcb-ch{ color:var(--muted); }
+  .block.lcb-todo.lcb-hero .lcb-pr{ color:var(--coral); }
+  .block.lcb-todo.lcb-hero .lcb-ic{ background:var(--soft, color-mix(in srgb, var(--ink) 6%, transparent)); }
+  /* 🔗 #lead 로 보냈을 때 «여기예요» 깜빡임 — 스크롤만 하면 어디로 갔는지 모른다 */
+  .lead-flash{ animation:leadFlash 1.4s ease; }
+  @keyframes leadFlash{ 0%,100%{ box-shadow:none; } 25%,75%{ box-shadow:0 0 0 3px var(--coral); } }
+  @media (prefers-reduced-motion: reduce){ .block.lcb{ transition:none; } .lead-flash{ animation:none; } }
   /* 🛒 선반(내 제품 · 쿠파스) — 링크트리 «긴 버튼»과 같은 결 (2026-08-21) */
   .shelf-block .block-h{ margin-bottom:10px; }
   .sh-i{ display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:14px;
@@ -4054,7 +4066,10 @@
     var rows=list.map(function(it){
       var nm=(it[0]||'').trim(), desc=(it[1]||'').trim(), price=(it[2]||'').trim(),
           url=(it[3]||'').trim(), img=(it[4]||'').trim();
-      if(!nm) return '';
+      /* 🔒 필수 게이트 — 이름·링크가 없으면 «죽은 칸». 손님에겐 안 보인다(편집 중엔 흐리게). */
+      var _rd = _hasTitle(nm) && _hasLink(url) && (isAff || _hasPrice(price) || !price ? true : true);
+      if(!_hasTitle(nm)) return '';
+      if(!_hasLink(url) && !isEditView()) return '';
       var th = img ? '<span class="sh-th" style="background-image:url('+esc(img)+')"></span>'
                    : '<span class="sh-th sh-th-x">'+esc(Array.from(nm)[0]||'·')+'</span>';
       var meta = [desc, price].filter(Boolean).map(esc).join(' · ');
@@ -4069,6 +4084,82 @@
       + (isAff?'<div class="coupang-note">쿠팡 파트너스 활동으로 일정액의 수수료를 제공받을 수 있습니다</div>':'');
     return d;
   }
+  /* ══════════════════════════════════════════════════════════════════════
+     🔒 «필수» 게이트 (2026-08-22 사장님) — 「필요한 게 담겨 있어야 홈에 오픈」
+     ⚠️ 원칙 셋. 이걸 어기면 «내가 만들었는데 왜 안 보여?» 가 된다.
+       ㉮ 필수는 «정말 없으면 안 되는 것»만. 사진·설명은 필수가 아니다.
+       ㉯ 막는 건 «손님 화면»뿐. 만들기·저장은 언제나 자유.
+       ㉰ 편집 화면에선 «흐리게 + 왜 안 보이는지»를 반드시 같이 말한다.
+     🚨 이 표는 edit.html 에도 «똑같이» 있다. 한쪽만 고치면 어긋난다(_smoke 가 본다).
+     ══════════════════════════════════════════════════════════════════════ */
+  var LINK_NEED = {
+    msg:    ['title','link'],            /* 💌 상담   — 가격은 선택(무료 상담도 있다) */
+    bell:   ['title','link'],            /* 🔔 대기자 — 돈을 안 받는다 */
+    coffee: ['title','link'],            /* ☕ 후원   — 금액은 선택(자유 후원) */
+    book:   ['title','link','price'],    /* 📚 전자책 — 가격 없는 판매 버튼은 안 눌린다 */
+    klass:  ['title','link','price'],    /* 🎬 강의   — 같음 */
+    cart:   ['title','link','price'],    /* 🛒 내 제품 */
+    receipt:['title','link'],            /* 🧾 쿠파스 — 고지는 자동으로 붙는다 */
+    link:   ['title','link']             /* 🔗 그냥 링크 */
+  };
+  /* 🔗 내부 주소 — 앱 «안»에 이미 있는 받는 곳으로 보낸다. 밖으로 나갈 이유가 없다. */
+  var LINK_INNER = {
+    '#resv':  { label:'예약',      live:function(){ return !!window.__resvOn; },
+                why:'예약이 꺼져 있어요', go:function(){ var b=document.querySelector('.resv-cta-btn'); if(b) b.click(); } },
+    '#lead':  { label:'문의 받기', live:function(){ return !!document.querySelector('.lead-form'); },
+                why:'문의 받기 칸이 홈에 없어요',
+                go:function(){ var f=document.querySelector('.lead-form');
+                  if(f){ try{ f.scrollIntoView({behavior:'smooth',block:'center'}); }catch(_){}
+                         f.classList.add('lead-flash'); setTimeout(function(){ f.classList.remove('lead-flash'); }, 1400); } } },
+    '#kakao': { label:'카톡',      live:function(){ return !!window.__CTA_URL; },
+                why:'카톡 링크가 아직 없어요',
+                go:function(){ try{ if(window.__CTA_URL) open(window.__CTA_URL,'_blank','noopener'); }catch(_){} } }
+  };
+  function linkInner(url){
+    url=String(url||'').trim();
+    if(LINK_INNER[url]) return LINK_INNER[url];
+    if(url.indexOf('#post:')===0) return { label:'글 보기',
+      live:function(){ var id=url.slice(6); return (window.__POSTS||[]).some(function(p){ return p && String(p.id)===id && p.on!==false; }); },
+      why:'그 글이 비공개거나 지워졌어요',
+      go:function(){ try{ if(window.__openPostModal) window.__openPostModal(url.slice(6)); }catch(_){} } };
+    return null;
+  }
+  /* «쓸 수 있나» — 빈칸이 아닌 것만으론 부족하다 */
+  function _hasTitle(v){ return String(v||'').trim().length>=2; }
+  function _hasPrice(v){ return /[0-9]/.test(String(v||'')); }          /* 「문의」만 쓰면 가격이 아니다 */
+  function _hasLink(v){
+    v=String(v||'').trim(); if(!v) return false;
+    if(v.charAt(0)==='#') return !!linkInner(v);                        /* 내부 주소 */
+    return /^https?:\/\//i.test(v);                                     /* www. 만 쓰면 깨진다 */
+  }
+  /* 홈에 내보낼 수 있나 — {ok, miss:[…], why} */
+  function btnReady(c, kind){
+    kind = kind || 'link';
+    var need = LINK_NEED[kind] || LINK_NEED.link;
+    var val = { title:c[0], link:c[1], price:c[3] };
+    var miss=[];
+    need.forEach(function(k){
+      var v=val[k];
+      var ok = (k==='title') ? _hasTitle(v) : (k==='price') ? _hasPrice(v) : _hasLink(v);
+      if(!ok) miss.push(k);
+    });
+    if(miss.length){
+      /* 받침에 따라 «이/가»를 가른다 — 「링크이 없어요」는 사람이 쓴 말이 아니다 */
+      var NM={title:'제목', link:'링크', price:'가격'};
+      var txt=miss.map(function(k){ return NM[k]; }).join('·');
+      var _last=txt.charAt(txt.length-1), _code=_last.charCodeAt(0);
+      var _jong=(_code>=0xAC00 && _code<=0xD7A3) && ((_code-0xAC00)%28)!==0;
+      return { ok:false, miss:miss, why:txt+(_jong?'이':'가')+' 없어요' };
+    }
+    /* 🚨 버튼만 보면 안 된다 — «연결 대상»이 살아 있어야 눌러서 일이 일어난다.
+          이걸 안 보면 «눌러도 무반응»이 그대로 재현된다. */
+    var inner=linkInner(c[1]);
+    if(inner && !inner.live()) return { ok:false, miss:['dest'], why:inner.why };
+    return { ok:true, miss:[], why:'' };
+  }
+  function isEditView(){ try{ return new URLSearchParams(location.search).get('edit')==='1'; }catch(_){ return false; } }
+  try{ window.__btnReady=btnReady; window.__LINK_NEED=LINK_NEED; }catch(_){}
+
   /* ══ 🔗 긴 버튼 «B안 · 한 줄 더» (2026-08-22 사장님 픽) ═══════════════════
         전엔 «제목 + 화살표»뿐이라 여덟 개가 전부 똑같이 생겼다.
         「상담 신청」(5만원)과 「인스타그램」(공짜)이 같은 무게였고, 가격은 눌러야 알았다.
@@ -4077,13 +4168,19 @@
   var LC_ICON={ msg:'💌', book:'📚', klass:'🎬', coffee:'☕', bell:'🔔', cart:'🛒',
                 receipt:'🧾', cam:'📷', play:'▶️', link:'🔗', mail:'✉️', cal:'📅' };
   function linkCard(c){
-    var title=c[0]||'링크', url=c[1]||'#', desc=String(c[2]||'').trim(),
+    var title=c[0]||'링크', url=String(c[1]||'').trim(), desc=String(c[2]||'').trim(),
         price=String(c[3]||'').trim(), ico=String(c[4]||'').trim();
     /* 강조는 «⭐ 한 글자»로 받는다 — 편집기에 스위치 칸이 없어서 (칸을 새로 만들면 다른 블록이 다친다) */
     var hero = /[⭐★]/.test(String(c[5]||'')) || c[5]===true;
-    var a=document.createElement('a');
-    a.className='block lcb'+(hero?' lcb-hero':'');
-    a.href=url; a.target='_blank'; a.rel='noopener';
+    var kind = String(c[6]||'').trim() || (LINK_NEED[ico] ? ico : 'link');   /* 종류 — 없으면 아이콘으로 추정 */
+    /* 🔒 필수 게이트 — 손님에겐 «죽은 버튼»을 안 보여준다. 편집 중엔 왜인지 알려준다. */
+    var rd = btnReady(c, kind);
+    if(!rd.ok && !isEditView()) return null;
+    var inner = linkInner(url);
+    var a=document.createElement(inner ? 'button' : 'a');
+    a.className='block lcb'+(hero?' lcb-hero':'')+(rd.ok?'':' lcb-todo');
+    if(inner){ a.type='button'; if(rd.ok) a.addEventListener('click', function(e){ e.preventDefault(); inner.go(); }); }
+    else { a.href=url||'#'; a.target='_blank'; a.rel='noopener'; }
     a.setAttribute('data-track', title);
     var icon = LC_ICON[ico] || (ico && Array.from(ico).length<=2 ? ico : '🔗');
     a.innerHTML =
@@ -4091,7 +4188,9 @@
       + '<span class="lcb-m"><b>'+esc(title)+'</b>'
       + (desc?'<small>'+esc(desc)+'</small>':'') + '</span>'
       + (price?'<span class="lcb-pr">'+esc(price)+'</span>':'')
-      + '<span class="lcb-ch">→</span>';
+      + '<span class="lcb-ch">→</span>'
+      /* ⚠️ 편집 화면에서만 — «왜 손님에게 안 보이는지». 이 한 줄이 없으면 새 혼란이 된다. */
+      + (rd.ok?'':'<span class="lcb-warn">⚠️ '+esc(rd.why)+' · 손님에겐 안 보여요</span>');
     return a;
   }
   // ════ 🎨 시각 서랍 — 순수 SVG/CSS 시각 요소 (2026-07-11) · 글래스 타일=흰 글리프, 색은 테마 var(--grad) 상속, 모션 은은 ════

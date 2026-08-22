@@ -828,13 +828,45 @@
       add('포스팅 탭엔 프로필 없음', ut.indexOf("id==='about' || id==='archive'") >= 0,
         '글 보러 온 사람에게 프로필이 화면 위 40%를 먹으면 글이 안 보인다');
       /* 🔗 2026-08-22 사장님 픽 «B안» — 긴 버튼에 아이콘·설명·가격·강조 */
+      /* 🔒 2026-08-22 사장님 — «필요한 게 담겨 있어야 홈에 오픈» */
+      add('필수 판정표 두 파일 일치',
+        (function(){
+          function tbl(t){ var i=t.indexOf('var LINK_NEED'); if(i<0) return null;
+            var j=t.indexOf('};', i); return t.slice(i, j).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\s+/g,''); }
+          var a=tbl(ut), b=tbl(et); return !!a && a===b; })(),
+        '🚨 u.html 과 edit.html 에 같은 표가 있다 — 한쪽만 고치면 편집기와 손님 화면이 어긋난다');
+      add('필수는 «없으면 안 되는 것»만', ut.indexOf("msg:    ['title','link']") >= 0
+        && ut.indexOf("book:   ['title','link','price']") >= 0,
+        '상담은 무료도 있어 가격이 선택 · 파는 것만 가격 필수');
+      add('가격은 숫자가 있어야', ut.indexOf("function _hasPrice") >= 0
+        && ut.indexOf("/[0-9]/.test") >= 0,
+        '「문의」라고만 쓰면 가격이 아니다');
+      add('링크는 http 로 시작', ut.indexOf('/^https?:\\/\\//i.test(v)') >= 0,
+        'www. 만 쓰면 깨진다');
+      add('연결 대상이 살아 있나', ut.indexOf('var LINK_INNER') >= 0
+        && ut.indexOf("if(inner && !inner.live())") >= 0,
+        '🚨 버튼만 보면 «눌러도 무반응»이 그대로 재현된다 — 예약이 꺼졌는지까지 본다');
+      add('죽은 버튼은 손님에게 안 보임', ut.indexOf('if(!rd.ok && !isEditView()) return null;') >= 0,
+        '막는 건 손님 화면뿐 — 만들기·저장은 자유');
+      add('편집 화면엔 «왜»를 말함', ut.indexOf('lcb-warn') >= 0
+        && ut.indexOf('손님에겐 안 보여요') >= 0,
+        '🚨 흐리기만 하면 «내가 만들었는데 왜 안 보여?» 가 된다');
+      add('버튼 종류 6개', et.indexOf('var LINK_KINDS') >= 0
+        && et.indexOf('function openLinkKind') >= 0
+        && et.indexOf("t.dataset.nm==='링크 버튼'){ try{ ov.classList.remove('open'); }catch(e){} openLinkKind()") >= 0,
+        '전엔 채널 매니저로 새서 «돈 받는 버튼»을 만들 길이 없었다');
+      add('종류 고를 때 미리 경고', et.indexOf('function linkDestLive') >= 0,
+        '만든 뒤에 «예약이 꺼져 있다»를 알면 늦다');
+      add('배지 = 홈에 뜰 수 있나', et.indexOf('function btnReadyE') >= 0
+        && et.indexOf("b.textContent='✓ 홈에 떠요'") >= 0,
+        '전엔 손만 대면 ✓채움이라 가격 없는 판매 버튼도 «다 됐다»고 나왔다');
       add('긴 버튼 B안', ut.indexOf('lcb-hero') >= 0 && ut.indexOf('var LC_ICON=') >= 0
         && ut.indexOf("a.className='block lcb'") >= 0,
         '제목+화살표뿐이면 여덟 개가 다 똑같아 뭐가 중요한지 안 보인다');
       add('강조는 ⭐ 한 글자', ut.indexOf('/[⭐★]/.test') >= 0
         && et.indexOf('⭐ 강조 — 색을 채워 제일 눈에 띄게') >= 0,
         '스위치 칸이 없어 글자로 받는다 — 칸을 새로 만들면 다른 블록이 다친다');
-      add('옛 버튼 안 깨짐', ut.indexOf("var title=c[0]||'링크', url=c[1]||'#'") >= 0,
+      add('옛 버튼 안 깨짐', ut.indexOf("var title=c[0]||'링크', url=String(c[1]||'').trim()") >= 0,
         '앞 두 칸(제목·링크)이 «순서 그대로»여야 기존 글이 산다');
       add('홈에 올리기는 link(단수)', et.indexOf("type:'link', name:label") >= 0
         && et.indexOf("type:'links', name:label") < 0,

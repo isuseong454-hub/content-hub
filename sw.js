@@ -5,7 +5,7 @@
    - 같은 주소(same-origin)의 GET만 손댄다  → Supabase 호출·외부 요청은 건드리지 않음
    문제가 생기면 이 파일만 지우면 원래대로 돌아온다.
 */
-const CACHE = 'content-hub-v65';  /* 2026-08-22 64차 — 홈 긴 버튼 B안: 아이콘·설명·가격·강조 하나 · 홈에 올리기 link(단수) 버그 수정 */
+const CACHE = 'content-hub-v66';  /* 2026-08-22 65차 — 필수 게이트: 필요한 게 담겨야 홈에 오픈 · 버튼 종류 6개 · 내부 연결(#resv·#lead) */
 
 self.addEventListener('install', () => self.skipWaiting());
 
