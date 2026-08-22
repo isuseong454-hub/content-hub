@@ -369,6 +369,9 @@ if('serviceWorker' in navigator){
   .vph.pickable:active{transform:scale(.96);}
   .vempty{grid-column:1/-1; text-align:center; color:var(--muted); font-size:12.5px; padding:26px 0;}
   .vhint{font-size:11px; color:var(--muted); text-align:center; margin-top:13px;}
+  /* 🚨 2026-08-21 자동검수 «toast ↔ exp-fab» — 사진을 넣으면 뜨는 알림이 📤 내보내기 버튼과 겹쳤다.
+        글 편집 중일 때만 한 칸 위로 올린다. */
+  body.post-editing .toast{ bottom:150px; }
   .toast{position:fixed; left:50%; bottom:92px; transform:translateX(-50%); background:#2A2622; color:#fff; font-size:12.5px; padding:9px 16px; border-radius:999px; z-index:100200; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}   /* 🚨z90이라 모달(.ov 120·설정 10만대) 안 토스트가 전부 가려지던 것 — 최상위로 (마스터즈 v769와 동형 사고) */
   .toast.show{opacity:.95;}
 
@@ -2063,8 +2066,98 @@ if('serviceWorker' in navigator){
     display:grid; place-items:center; color:var(--muted); font-size:12.5px; cursor:pointer;
     background:var(--soft); text-align:center; padding:14px; overflow:hidden; }
   .dpic:hover{ border-color:var(--coral); color:var(--coral); }
-  .dpic img{ width:100%; border-radius:9px; display:block; }
+  /* 🖼 2026-08-21 사장님 «네이버 블로그처럼 내 맘대로 줄일 수 있게» — 폭은 %로 기억한다 */
+  .dpic{ position:relative; }
+  .dpic img{ width:var(--dpw,100%); border-radius:9px; display:block; margin:0 auto;
+    transition:width .14s cubic-bezier(.2,0,0,1); }
+  .dpic.dsizing img{ transition:none; }
+  .dpsz{ position:absolute; right:9px; bottom:9px; width:28px; height:28px; border-radius:9px;
+    background:rgba(0,0,0,.5); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.32); cursor:ew-resize; touch-action:none;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:scale(.9); transition:opacity .16s, transform .16s cubic-bezier(.2,.9,.2,1); }
+  .dpsz::before{ content:'\2194'; color:#fff; font-size:15px; line-height:1; }
+  .dpic.has:hover .dpsz, .dpic.dsizing .dpsz{ opacity:1; transform:none; }
+  .dpic.dsizing{ border-color:var(--coral); }
+  .dpnum{ position:absolute; right:44px; bottom:12px; padding:3px 9px; border-radius:999px;
+    background:rgba(0,0,0,.58); color:#fff; font-size:11.5px; font-weight:700;
+    font-variant-numeric:tabular-nums; opacity:0; transition:opacity .16s; pointer-events:none; }
+  .dpic.dsizing .dpnum{ opacity:1; }
+  @media (prefers-reduced-motion: reduce){ .dpic img{ transition:none; } }
   .dcap{ font-size:12px; color:var(--muted); text-align:center; margin-top:-4px; }
+
+  /* ✏️ 2026-08-21 사장님 «블로거처럼 위에, 자주 쓰는 것만 앞에, 나머지는 더보기» —
+        도구가 19개라 다 깔면 그것만으로 화면이 찬다. 손이 매번 가는 6개만 남겼다. */
+  #dtool{ position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:5px;
+    margin:0 0 10px; padding:6px 7px; border:1px solid var(--hair); border-radius:12px;
+    background:color-mix(in srgb, var(--card,#1b1922) 94%, transparent);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    box-shadow:0 4px 14px rgba(0,0,0,.28); overflow-x:auto; scrollbar-width:none; }
+  #dtool::-webkit-scrollbar{ display:none; }
+  #dtool button{ flex:0 0 auto; border:none; border-radius:8px; cursor:pointer;
+    background:var(--soft); color:var(--ink); font-family:var(--sans);
+    font-size:12.5px; font-weight:700; padding:7px 10px; line-height:1;
+    transition:background .14s, transform .12s cubic-bezier(.2,.9,.2,1); }
+  #dtool button:hover{ background:var(--coral-soft); color:var(--coral); }
+  #dtool button:active{ transform:scale(.94); }
+  #dtool .dt-sep{ flex:0 0 auto; width:1px; height:17px; background:var(--hair); margin:0 2px; }
+  #dtool .dt-hl{ padding:7px 9px; }
+  #dtool .dt-sw{ display:inline-block; width:15px; height:15px; border-radius:4px; vertical-align:-2px; }
+  #dtool .sw-y{ background:#F5E17A; } #dtool .sw-p{ background:#F2A7C3; } #dtool .sw-m{ background:#9EDCC4; }
+  #dtool .dt-more{ margin-left:auto; background:transparent; color:var(--muted); }
+  #dtool .dt-more.on{ background:var(--coral-soft); color:var(--coral); }
+  /* 더보기 = 두 번째 줄. 접혀 있을 땐 자리도 차지하지 않는다 */
+  #dtool2{ display:none; gap:5px; flex-wrap:wrap; margin:-6px 0 12px; padding:0 2px; }
+  #dtool2.on{ display:flex; animation:dt2in .2s cubic-bezier(.2,.9,.2,1); }
+  @keyframes dt2in{ from{ opacity:0; transform:translateY(-5px); } to{ opacity:1; transform:none; } }
+  #dtool2 button{ border:1px solid var(--hair); border-radius:8px; cursor:pointer;
+    background:transparent; color:var(--muted); font-family:var(--sans);
+    font-size:12px; font-weight:600; padding:6px 10px; line-height:1; }
+  #dtool2 button:hover{ border-color:var(--coral); color:var(--coral); }
+  /* 서식 칸 안의 모양 — 손님 화면과 같은 규칙으로 보이게 */
+  .dtx[data-drich] b{ font-weight:800; }
+  .dtx[data-drich] .hl-y, .dtx[data-drich] .hl-p, .dtx[data-drich] .hl-m{
+    border-radius:4px; padding:1px 3px; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  .dtx[data-drich] .hl-y{ background:rgba(245,225,122,.34); }
+  .dtx[data-drich] .hl-p{ background:rgba(242,167,195,.30); }
+  .dtx[data-drich] .hl-m{ background:rgba(158,220,196,.30); }
+  .dtx[data-drich] ul.lc-check{ list-style:none; padding-left:2px; margin:9px 0; }
+  .dtx[data-drich] ul.lc-check > li{ position:relative; padding-left:26px; margin:6px 0; }
+  .dtx[data-drich] ul.lc-check > li::before{ content:''; position:absolute; left:0; top:.2em;
+    width:16px; height:16px; border-radius:5px; border:2px solid var(--coral); box-sizing:border-box; }
+  .dtx[data-drich] .lc-callout{ position:relative; margin:11px 0; padding:10px 12px 10px 15px;
+    border-radius:11px; border:1px solid var(--hair); background:var(--soft); }
+  .dtx[data-drich] .lc-callout::before{ content:''; position:absolute; left:0; top:9px; bottom:9px;
+    width:3px; border-radius:3px; background:var(--co,var(--coral)); }
+  .dtx[data-drich] .lc-co-tip{ --co:#F5C77A; } .dtx[data-drich] .lc-co-warn{ --co:#F0A08C; }
+  .dtx[data-drich] .lc-co-ok{ --co:#8FCB99; }
+  .dtx[data-drich] table.lc-tb{ width:100%; border-collapse:collapse; margin:10px 0; font-size:12.5px; }
+  .dtx[data-drich] .lc-tb th, .dtx[data-drich] .lc-tb td{ border:1px solid var(--hair); padding:6px 8px; text-align:left; }
+  .dtx[data-drich] .lc-tb th{ background:var(--soft); font-weight:700; }
+  .dtx[data-drich] details.lc-tg{ border:1px solid var(--hair); border-radius:10px; margin:10px 0; padding:2px 0; }
+  .dtx[data-drich] .lc-tg summary{ cursor:pointer; font-weight:700; padding:8px 11px; }
+  .dtx[data-drich] .lc-tg > div{ padding:0 11px 9px; }
+  .dtx[data-drich] h4{ font-size:15px; font-weight:800; margin:14px 0 6px; }
+  .dtx[data-drich] blockquote{ margin:11px 0; padding:4px 0 4px 13px; border-left:3px solid var(--coral); color:var(--muted); }
+  .dtx[data-drich] hr{ border:none; border-top:1px solid var(--hair); margin:14px 0; }
+  @media (prefers-reduced-motion: reduce){ #dtool2.on{ animation:none; } }
+
+  /* 🖼 끌어다 놓기 — 네이버 블로그처럼 «문단 사이»에 내려앉는다 (2026-08-21) */
+  #docwrap{ position:relative; }
+  /* 🚨 받는 중 표시는 «옅게». 글 전체가 산호색으로 물들면 딴 앱처럼 보인다 (사장님 «이질감 없게») */
+  #docwrap.ddrag{ box-shadow:inset 0 0 0 1.5px var(--coral); border-radius:14px; }
+  #docwrap.dbusy{ opacity:.55; pointer-events:none; }
+  .ddropline{ position:absolute; left:26px; right:2px; height:3px; border-radius:2px; background:var(--coral);
+    opacity:0; transform:scaleX(.55); transform-origin:left center; pointer-events:none; z-index:6;
+    transition:top .13s cubic-bezier(.2,.8,.2,1), opacity .13s, transform .18s cubic-bezier(.2,.8,.2,1); }
+  .ddropline.on{ opacity:1; transform:scaleX(1); }
+  .ddropline::before{ content:'여기'; position:absolute; left:0; top:-9px; padding:1px 6px;
+    font-size:10px; font-weight:700; color:#fff; background:var(--coral); border-radius:5px; letter-spacing:-.01em; }
+  .dblk.dnew > .dpic{ animation:dnewin .48s cubic-bezier(.2,.9,.2,1); }
+  @keyframes dnewin{ from{ opacity:0; transform:translateY(10px) scale(.985); } to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){
+    .ddropline{ transition:none; } .dblk.dnew > .dpic{ animation:none; }
+  }
 
   /* 다른 구성(후기·숫자·CTA…) — 글이 아니라 «덩어리»라 이름표만 두고 ✎로 연다 */
   .dcard{ margin:11px 0; padding:12px 13px; border:1px solid var(--hair); border-radius:11px;
@@ -3641,7 +3734,11 @@ if('serviceWorker' in navigator){
       // (2026-07-10 사용자: 수익화 이야기 자동 재생 제거 — 아래 ▶ 재생 카드로 원할 때만)
     };
     var _stb=document.getElementById('dmt-story-btn'); if(_stb) _stb.onclick=function(){ if(window.__openRevenueStory) window.__openRevenueStory(); };
-    document.getElementById('dmt-skip').onclick=close;
+    /* 🚨 소개 6장에서 이어온 데모라면, 닫을 때 작업실에 덩그러니 두지 않고 착지시킨다 */
+    document.getElementById('dmt-skip').onclick=function(){
+      close();
+      if(window.__obChain){ window.__obChain=0; try{ if(window.__afterOnboard) window.__afterOnboard(); }catch(e){} }
+    };
     document.getElementById('dmt-make').onclick=function(){
       if(_tplMode){ try{ if(window.__applyTplChoice) window.__applyTplChoice(_tplKey); }catch(e){} close(); return; }   // 보고 있던 템플릿으로 확정 저장
       close(); try{ if(window.__hideModeGate) window.__hideModeGate(); }catch(e){} var ge=document.getElementById('gate-edit'); if(ge) ge.click(); };
@@ -3725,7 +3822,11 @@ if('serviceWorker' in navigator){
       [].forEach.call(dots.children, function(d){ d.onclick=function(){ go(+d.getAttribute('data-i')); }; });
     }
     function closeOb(){ ov.classList.remove('open'); }
-    function toDemo(){ closeOb(); try{ if(window.__openDemoTour) window.__openDemoTour(); }catch(e){} }
+    /* 🚨 2026-08-21 — «건너뛰기»를 눌러도 데모 투어가 떠서 화면이 또 한 번 갈아엎혔다.
+          건너뛰기는 «그만 보고 싶다»는 뜻이다 → 곧장 착지시킨다.
+          마지막 장의 «✨ 체험 →»만 데모로 간다 (그건 사장님이 «누른» 것이라 이질감이 없다). */
+    function land(){ closeOb(); try{ if(window.__afterOnboard) window.__afterOnboard(); }catch(e){} }
+    function toDemo(){ closeOb(); window.__obChain=1; try{ if(window.__openDemoTour) window.__openDemoTour(); }catch(e){} }
     function go(i){
       idx=Math.max(0, Math.min(N-1, i));
       track.style.transform='translateX(-'+(idx*100)+'%)';
@@ -3736,7 +3837,7 @@ if('serviceWorker' in navigator){
     window.__openOnboardIntro=function(){ try{ localStorage.setItem('ch-onboard-v2','1'); }catch(e){} build(); ov.classList.add('open'); go(0); };
     prev.onclick=function(){ go(idx-1); };
     next.onclick=function(){ if(idx===N-1) toDemo(); else go(idx+1); };
-    document.getElementById('ob-skip').onclick=toDemo;
+    document.getElementById('ob-skip').onclick=land;
   })();
   </script>
 
@@ -8496,6 +8597,20 @@ if('serviceWorker' in navigator){
     if(pickCb && n===1 && lastUrl){ var cb=pickCb, u=lastUrl; closeVault(); cb(u); }
   }
   document.getElementById('vault-file').onchange = function(e){ handleVaultFiles(e.target.files); e.target.value=''; };
+  /* 📄 글 편집기가 «화면을 열지 않고» 사진만 맡길 때 쓰는 창구 (2026-08-21)
+        압축·보관함 저장까지 똑같이 하고, 주소만 돌려준다. */
+  window.__vaultIngest = async function(fileList){
+    var files=[].slice.call(fileList||[]).filter(function(f){ return f && /^image\//.test(f.type); });
+    if(!files.length) return [];
+    var urls=[], o=0, n2=0;
+    for(var i=0;i<files.length;i++){
+      o += files[i].size;
+      try{ var u=await compressImage(files[i], 1280, 0.86); n2 += Math.round(u.length*0.75); curPhotos().push(u); urls.push(u); }catch(_){}
+    }
+    if(urls.length){ vSave(); try{ renderGrid(); }catch(_){}
+      toast('사진 '+urls.length+'장 · '+fmtSize(o)+' → '+fmtSize(n2)); }
+    return urls;
+  };
   // 드래그 & 드롭 (모달 어디든 사진 끌어다 놓기)
   (function(){ var sheet=vov.querySelector('.sheet'); if(!sheet) return;
     sheet.addEventListener('dragover', function(e){ if(e.dataTransfer && [].indexOf.call(e.dataTransfer.types||[],'Files')>=0){ e.preventDefault(); sheet.classList.add('vdrag'); } });
@@ -11649,6 +11764,7 @@ if('serviceWorker' in navigator){
   }
   function lcRichToHtml(s){ s=String(s==null?'':s); return /[<]/.test(s) ? lcSanitizeHtml(s) : lcMdToHtml(s); }
   window.__lcSanitizeHtml=lcSanitizeHtml;
+  window.__lcRichToHtml=lcRichToHtml;   /* 📝 라이트 문서 편집기 툴바가 쓴다 (2026-08-21) */
   function lcRows(){ return [].slice.call(document.querySelectorAll('#rows .row')); }
   function lcStripNum(s){ return String(s||'').replace(/^[①②③④⑤⑥⑦⑧⑨⑩⑪]\s*/,''); }
   var LC_AUTO={service:1,reservation:1};
@@ -13396,7 +13512,11 @@ if('serviceWorker' in navigator){
   }
   function pstAnalyze(raw){
     var lines=pstClean(raw).split(/\r?\n/), out=[], buf=[], paraSince=0, titleTaken=false, title='';
-    function flush(){ if(buf.length){ out.push({k:'li', items:buf.slice()}); buf=[]; } }
+    /* 🚨 2026-08-21 사장님 «측정 방법이 1.2.3 인데 왜 순서가 아니야?» —
+          「1. 2. 3.」과 「✅ ✅」를 한 통에 부어 다섯 줄짜리 한 덩어리가 됐다.
+          번호 목록과 체크 목록은 «다른 것»이다. 표시가 바뀌면 거기서 끊는다. */
+    var bufOrd=null;
+    function flush(){ if(buf.length){ out.push({k:'li', ord:!!bufOrd, items:buf.slice()}); buf=[]; } bufOrd=null; }
     for(var i=0;i<lines.length;i++){
       var t=lines[i].trim();
       if(!t){ flush(); continue; }
@@ -13438,6 +13558,9 @@ if('serviceWorker' in navigator){
           out.push({k:'h', tx:t});       /* 번호를 그대로 살린 소제목 */
           paraSince=0; continue;
         }
+        var _ord=/^\s*(\d+[.)]|[①②③④⑤⑥⑦⑧⑨⑩])/.test(t);
+        if(buf.length && bufOrd!==null && bufOrd!==_ord) flush();   /* 「1.2.3」 뒤의 「✅」는 딴 목록이다 */
+        bufOrd=_ord;
         buf.push(_bare); continue;
       }
       flush();
@@ -13524,6 +13647,15 @@ if('serviceWorker' in navigator){
     /* 🧰 소제목이 «방법·과정·순서·단계»이고 본문이 ☑ 목록뿐이면 «단계 타임라인»으로.
           체크목록은 «가진 것»을 세는 것이고, 타임라인은 «하는 차례»를 보여준다. */
     var PST_HOWTO = /(방법|과정|순서|단계|하는\s?법|스텝)/;
+    /* 🚨 2026-08-21 사장님 «왜 저렇게 분해해 봤어?» — 앞 세 어절을 무조건 잘라
+          「연필을 턱 아래에 / 수평으로 대주세요」처럼 한 문장을 반 토막 내고 있었다.
+          «진짜 가름선»(: 또는 —)이 있을 때만 둘로 나눈다. 없으면 문장 그대로 한 줄. */
+    function pstStepPair(x){
+      var t=String(x==null?'':x).trim();
+      var m=t.match(/^(.{2,24}?)\s*[:：]\s*(.+)$/) || t.match(/^(.{2,24}?)\s*[—–]\s*(.+)$/);
+      if(m) return [m[1].trim(), m[2].trim()];
+      return [t, ''];
+    }
     function pushText(){
       if(!pend) return;
       var head=pend[0]||'', body=pend[1]||'';
@@ -13541,13 +13673,7 @@ if('serviceWorker' in navigator){
         items = chk;
         blocks.push({type:'steps', name:head, on:true, layout:'flow',
           content:[head, items.map(function(x){
-            var t2=x.replace(/^\u2611\s*/,'').trim();
-            var cut=t2.indexOf(' ');
-            /* 「제목|설명」 — 앞 두 어절을 제목으로, 나머지를 설명으로 */
-            var w=t2.split(/\s+/);
-            var ttl=w.slice(0, Math.min(3, w.length)).join(' ').replace(/[.,]$/,'');
-            var dsc=w.slice(3).join(' ');
-            return [ttl, dsc];
+            return pstStepPair(x.replace(/^\u2611\s*/,''));   /* 🚨 어절 세 개로 자르던 것 폐기 */
           })]});
         if(tail.length) blocks.push({type:'text', name:'본문', on:true, content:['', tail.join('\n\n')], layout:''});
         pend=null; return;
@@ -13559,7 +13685,19 @@ if('serviceWorker' in navigator){
     r.items.forEach(function(b){
       if(b.k==='h'){ pushText(); pend=[b.tx, '']; }
       else if(b.k==='p'){ if(pend) pend[1]=(pend[1]?pend[1]+'\n\n':'')+b.tx; else pend=['', b.tx]; }
-      else if(b.k==='li'){ if(pend) pend[1]=(pend[1]?pend[1]+'\n\n':'')+b.items.map(function(x){ return '☑ '+x; }).join('\n'); else pend=['', b.items.map(function(x){ return '☑ '+x; }).join('\n')]; }
+      else if(b.k==='li'){
+        /* 🔢 소제목이 「방법·과정·순서」이고 «바로 밑»이 번호 목록이면 그게 단계다.
+              ☑ 로 뭉뚱그려 넘기면 뒤따라온 ✅ 결과 두 줄까지 단계로 빨려 들어갔다. */
+        var _hd=(pend && !String(pend[1]||'').trim()) ? String(pend[0]||'') : '';
+        if(b.ord && b.items.length>=2 && _hd && PST_HOWTO.test(_hd)){
+          pend=null;
+          blocks.push({type:'steps', name:_hd, on:true, layout:'flow',
+            content:[_hd, b.items.map(pstStepPair)]});
+        } else {
+          var _lt=b.items.map(function(x){ return '☑ '+x; }).join('\n');
+          if(pend) pend[1]=(pend[1]?pend[1]+'\n\n':'')+_lt; else pend=['', _lt];
+        }
+      }
       else if(b.k==='q'){ pushText(); blocks.push({type:'text', layout:'quote', name:'인용', on:true, content:[b.tx, '']}); }
       else if(b.k==='img'){ pushText(); blocks.push({type:'photocard', name:'사진', on:true, content:['', '', 'pc-shadow|'], layout:''}); }
       /* 🧰 무기고 — 전용 조각을 «그 표현»으로 */
@@ -13589,6 +13727,40 @@ if('serviceWorker' in navigator){
     if(!blocks.length) blocks=[{type:'text', name:'본문', on:true, content:['',''], layout:''}];
     return blocks;
   }
+  /* ════ 🧭 2026-08-21 사장님 «3번째는 왜 안 나왔어?» — 안 만들었었다. 만든다.
+        틀이 «순서»까지 손본다. 다만 통째로 다시 짜지는 않는다 —
+        원고 순서를 뒤엎으면 «잘못 바꾸면 글이 망가지는» 일이 된다.
+        대신 «그 틀의 주인공»을 앞으로 끌어올린다. 나머지는 쓰신 순서 그대로. */
+  function pstReorder(blocks, fk){
+    if(!blocks || blocks.length<4) return blocks;
+    function isHead(b){ return b.type==='text' && !String((b.content||[])[0]||'').trim(); }  /* 인사·리드 */
+    /* 인사말 한두 덩어리는 맨 앞에 남긴다 — 갑자기 체크리스트부터 나오면 당황한다 */
+    var keep=0;
+    while(keep<blocks.length && keep<2 && blocks[keep].type==='text') keep++;
+
+    function pull(test){
+      var got=[], rest=[];
+      blocks.forEach(function(b,i){ if(i>=keep && test(b)) got.push(b); else rest.push(b); });
+      if(!got.length) return null;
+      return rest.slice(0,keep).concat(got, rest.slice(keep));
+    }
+    var out=null;
+    if(fk==='type'){
+      /* 진단글 — «체크리스트»와 «결과»를 맨 앞으로. 손님이 먼저 참여하고 이유를 읽는다 */
+      out = pull(function(b){
+        if(b.type==='qna' && /결과|유형|점수/.test(String(b.name||''))) return true;
+        var body=String((b.content||[])[1]||'');
+        return b.type==='text' && (body.match(/\u2611/g)||[]).length>=3;
+      });
+    } else if(fk==='review'){
+      out = pull(function(b){ return b.type==='beforeafter' || b.type==='review'; });
+    } else if(fk==='offer'){
+      out = pull(function(b){ return b.type==='countdown' || b.type==='service' || b.type==='stat'; });
+    }
+    /* 정보글·비교글은 «쓰신 순서»가 이미 읽는 순서다 — 건드리지 않는다 */
+    return out || blocks;
+  }
+
   /* 붙여넣기 시트 */
   function openPasteStart(){
     if(!document.getElementById('pst-css')){
@@ -13712,6 +13884,8 @@ if('serviceWorker' in navigator){
         /* 🚪 현장 편집 중이면 «현장 시트»로 연다 — 작업실(운영자 모드)로 튕기지 않는다 (2026-08-20) */
         /* 🧭 이 글이 «어떤 틀»인지 기록해 둔다 — 「있어야 살아요」 체크와 인스타 캡션이 이걸 본다 */
         try{ window.__pstFrameK = pstFrame().k; }catch(_){ window.__pstFrameK='info'; }
+        /* 🧭 틀이 정한 «주인공»을 앞으로 */
+        try{ bl = pstReorder(bl, window.__pstFrameK); }catch(_){}
         if(window.__liveEditActive && window.__pstToSheet){ window.__pstToSheet(bl, r.title, r.summary); }
         else { createPost('blog', bl, r.title, r.summary); }
         var sugN=(window.__pstSug&&(window.__pstSug.stat?1:0)+(window.__pstSug.qna?1:0))||0;
@@ -13743,6 +13917,14 @@ if('serviceWorker' in navigator){
     ov.classList.add('open');
   }
   window.__openPasteStart=openPasteStart;
+  /* 🔬 2026-08-21 — 원고 한 덩이를 넣으면 «화면을 안 건드리고» 블록으로 갈라 돌려주는 창구.
+        비교 미리보기와 자동검수가 엔진을 직접 시험할 때 쓴다. 저장하지 않는다. */
+  window.__pstBuild=function(raw, frameK){
+    var r=pstAnalyze(String(raw||''));
+    var bl=pstToBlocks(r);
+    if(frameK){ try{ bl=pstReorder(bl, frameK); }catch(_){} }
+    return { title:r.title, summary:r.summary, blocks:bl };
+  };
 
   /* ════ 📄 문서형 글 편집 (2026-08-21 사장님 «나안» 픽) ════
         네이버 블로그처럼 «글이 그대로 보이고 그 자리에서» 고쳐진다.
@@ -13792,6 +13974,119 @@ if('serviceWorker' in navigator){
       if(!h){ h=document.createElement('div'); h.id='docwrap'; b.parentNode.insertBefore(h, b.nextSibling); }
       return h;
     }
+    /* ✏️ 도구막대 — 사장님 픽: «자주 쓰는 6개는 앞에, 나머지는 더보기» (2026-08-21)
+          기준은 «블로그 쓸 때 손이 몇 번 가나». 굵게·형광펜·소제목·체크는 매 글마다,
+          표·접기는 어쩌다 쓴다. 도구 19개를 다 깔면 그것만으로 화면이 찬다. */
+    var DT1=[
+      ['bold',  '<b>B</b>',                              '굵게'],
+      ['hl-y',  '<span class="dt-sw sw-y"></span>',      '노랑 형광펜', 'dt-hl'],
+      ['h4',    '소제목',                                 '소제목'],
+      ['check', '☑',                                     '체크리스트'],
+      ['co-tip','💡',                                    '팁 박스'],
+      ['photo', '📷',                                    '사진 넣기']
+    ];
+    var DT2=[
+      ['em',     '강조색'], ['quote',  '❝ 인용'],
+      ['hl-p',   '🩷 형광펜'], ['hl-m', '🌿 형광펜'],
+      ['co-warn','⚠️ 주의 박스'], ['co-ok','✅ 포인트 박스'],
+      ['ol',     '1. 번호 목록'], ['hr', '─ 구분선'],
+      ['table',  '⊞ 표'], ['toggle','▸ 접기']
+    ];
+    function toolHtml(){
+      var h='<div id="dtool">';
+      DT1.forEach(function(b, i){
+        if(i===1 || i===3 || i===5) h+='<span class="dt-sep"></span>';
+        h+='<button type="button" data-dt="'+b[0]+'" title="'+b[2]+'"'+(b[3]?' class="'+b[3]+'"':'')+'>'+b[1]+'</button>';
+      });
+      h+='<button type="button" class="dt-more" data-dtmore="1" title="나머지 도구">⋯ 더보기</button></div>';
+      h+='<div id="dtool2">'+DT2.map(function(b){
+        return '<button type="button" data-dt="'+b[0]+'">'+b[1]+'</button>'; }).join('')+'</div>';
+      return h;
+    }
+    /* 어느 칸에 쓰고 있었는지 기억한다 — 툴바를 누르면 선택이 풀리기 때문 */
+    var dtField=null, dtRange=null;
+    function dtRemember(){
+      try{
+        var s2=window.getSelection(); if(!s2||!s2.rangeCount) return;
+        var n=s2.anchorNode; n=n&&(n.nodeType===1?n:n.parentNode);
+        var f=n&&n.closest?n.closest('.dtx[data-drich]'):null;
+        if(f){ dtField=f; dtRange=s2.getRangeAt(0).cloneRange(); }
+      }catch(_){}
+    }
+    document.addEventListener('selectionchange', dtRemember);
+
+    function dtApply(k){
+      var f=dtField;
+      if(!f || !document.body.contains(f)){
+        f=document.querySelector('#docwrap .dtx[data-drich]');
+        if(!f){ try{ if(window.toast) toast('먼저 글 본문을 눌러 커서를 놓아주세요'); }catch(_){} return; }
+      }
+      f.focus();
+      try{ if(dtRange && f.contains(dtRange.startContainer)){
+        var s3=window.getSelection(); s3.removeAllRanges(); s3.addRange(dtRange); } }catch(_){}
+      var sel=window.getSelection();
+      var picked = sel && sel.rangeCount && !sel.isCollapsed;
+      function needPick(){ try{ if(window.toast) toast('꾸밀 글자를 먼저 드래그해 주세요'); }catch(_){} }
+      function wrap(cls){
+        if(!picked){ needPick(); return; }
+        var r=sel.getRangeAt(0), sp=document.createElement('span'); sp.className=cls;
+        try{ r.surroundContents(sp); }catch(_){ try{ sp.appendChild(r.extractContents()); r.insertNode(sp); }catch(__){} }
+      }
+      function put(html){
+        var r=(sel&&sel.rangeCount)?sel.getRangeAt(0):null;
+        var d2=document.createElement('div'); d2.innerHTML=html;
+        var node=d2.firstChild;
+        if(r){ r.collapse(false); r.insertNode(node); }
+        else f.appendChild(node);
+        var br=document.createElement('div'); br.innerHTML='<br>';
+        if(node.parentNode) node.parentNode.insertBefore(br, node.nextSibling);
+      }
+      if(k==='bold')        document.execCommand('bold');
+      else if(k==='em')     wrap('em');
+      else if(/^hl-/.test(k)) wrap(k);
+      else if(k==='h4')     document.execCommand('formatBlock', false, 'h4');
+      else if(k==='quote')  document.execCommand('formatBlock', false, 'blockquote');
+      else if(k==='ol')     document.execCommand('insertOrderedList');
+      else if(k==='hr')     put('<hr>');
+      else if(k==='check')  put('<ul class="lc-check"><li>첫 번째 항목</li><li>두 번째 항목</li></ul>');
+      else if(k==='co-tip') put('<div class="lc-callout lc-co-tip">알아두면 좋은 것을 여기에</div>');
+      else if(k==='co-warn')put('<div class="lc-callout lc-co-warn">주의할 점을 여기에</div>');
+      else if(k==='co-ok')  put('<div class="lc-callout lc-co-ok">꼭 기억할 것을 여기에</div>');
+      else if(k==='table')  put('<table class="lc-tb"><tr><th>구분</th><th>내용</th></tr>'
+                              + '<tr><td>첫째</td><td>설명</td></tr><tr><td>둘째</td><td>설명</td></tr></table>');
+      else if(k==='toggle') put('<details class="lc-tg" open><summary>눌러서 펴는 제목</summary>'
+                              + '<div>접어 둘 내용을 여기에</div></details>');
+      else if(k==='photo'){
+        var bl=[].slice.call(document.querySelectorAll('#docwrap .dblk'));
+        var cur=f.closest('.dblk');
+        openAdd(cur ? bl.indexOf(cur)+1 : bl.length, docRows());
+        return;
+      }
+      /* 바뀐 마크업을 그 자리서 저장한다 — 다시 그리지 않는다(커서가 튄다) */
+      try{
+        var row=docRows()[+f.getAttribute('data-di2')];
+        if(row && window.__lcSanitizeHtml){
+          cont(row)[+f.getAttribute('data-dk')] = window.__lcSanitizeHtml(f.innerHTML);
+          changed(row);
+        }
+      }catch(_){}
+      dtRemember();
+    }
+    function armTool(h){
+      var bar=h.querySelector('#dtool'); if(!bar || bar._armed) return; bar._armed=1;
+      /* 눌러도 본문 선택이 풀리지 않게 */
+      function keep(e){ if(e.target.closest('button')) e.preventDefault(); }
+      bar.addEventListener('mousedown', keep);
+      var more=h.querySelector('#dtool2'); if(more) more.addEventListener('mousedown', keep);
+      h.addEventListener('click', function(e){
+        var m=e.target.closest('[data-dtmore]');
+        if(m){ var box2=h.querySelector('#dtool2');
+               if(box2){ box2.classList.toggle('on'); m.classList.toggle('on', box2.classList.contains('on')); }
+               return; }
+        var b=e.target.closest('[data-dt]');
+        if(b){ e.preventDefault(); dtApply(b.getAttribute('data-dt')); }
+      });
+    }
     function gapHtml(i){
       return '<div class="dgap"><button type="button" data-dadd="'+i+'" title="여기에 넣기" aria-label="여기에 넣기">＋</button></div>';
     }
@@ -13804,15 +14099,19 @@ if('serviceWorker' in navigator){
     }
     function render(){
       var h=host(); if(!h) return;
-      var rows=docRows(), out=gapHtml(0);
+      var rows=docRows(), out=toolHtml() + gapHtml(0);
       rows.forEach(function(row, i){
         var ty=row.dataset.type||'', c=cont(row), last=(i===rows.length-1);
         out += '<div class="dblk" data-di="'+i+'">' + gripHtml(i, last);
         if(DOC[ty]){
           if(ty==='photocard' || ty==='imagetext'){
             var ph=c[0]||'';
-            out += '<div class="dpic'+(ph?' has':'')+'" data-dpic="'+i+'">'
-                 + (ph ? '<img src="'+esc2(ph)+'" alt="">' : '＋ 여기에 사진 · 눌러서 고르기') + '</div>';
+            /* 폭은 photofx 세 번째 칸에 «%»로 산다 — 「효과|색|폭」 (없으면 100%) */
+            var _pw = (ty==='photocard') ? (String(c[2]||'').split('|')[2]||'') : '';
+            var _grip = (ph && ty==='photocard')
+              ? '<span class="dpnum">'+(_pw||100)+'%</span><span class="dpsz" data-dsz="'+i+'" title="끌어서 크기 조절"></span>' : '';
+            out += '<div class="dpic'+(ph?' has':'')+'" data-dpic="'+i+'"'+(_pw?' style="--dpw:'+_pw+'%"':'')+'>'
+                 + (ph ? '<img src="'+esc2(ph)+'" alt="">'+_grip : '＋ 여기에 사진 · 눌러서 고르기') + '</div>';
           }
           /* 🚨 AI 포스팅이 만드는 건 «전부 text 블록»이고, 인용·임팩트는 layout 으로 갈린다.
                 (type 만 보면 인용이 소제목 칸으로 떨어진다 — 2026-08-21 실측으로 잡음) */
@@ -13829,8 +14128,13 @@ if('serviceWorker' in navigator){
                     맨 앞 백스페이스가 빈 칸을 잡아 글자가 사라졌다 (2026-08-21 실측). */
               if(f[0]===0 && ty==='text' && !String(c[0]||'').length) return;
               var cls = (ty==='quote') ? 'dtx q' : ((f[0]===0 && ty==='text') ? 'dtx h' : 'dtx');
-              out += '<div class="'+cls+'" contenteditable="true" data-di2="'+i+'" data-dk="'+f[0]+'" data-ph="'+esc2(f[1])+'">'
-                   + esc2(c[f[0]]) + '</div>';
+              /* 📝 2026-08-21 — «본문» 칸만 서식(굵게·형광펜·박스·표…)을 담는다.
+                    소제목·캡션은 글자만 — 거기까지 열면 제목에 표가 들어가는 사고가 난다. */
+              var _rich = (ty==='text' && f[0]===1);
+              var _val  = _rich ? (window.__lcRichToHtml ? window.__lcRichToHtml(c[1]||'') : esc2(c[1]))
+                                : esc2(c[f[0]]);
+              out += '<div class="'+cls+'" contenteditable="true" data-di2="'+i+'" data-dk="'+f[0]+'"'
+                   + (_rich?' data-drich="1"':'') + ' data-ph="'+esc2(f[1])+'">' + _val + '</div>';
             });
           }
           if(ty==='photocard'){
@@ -13954,7 +14258,9 @@ if('serviceWorker' in navigator){
       h.querySelectorAll('.dtx[data-di2]').forEach(function(e){
         e.addEventListener('input', function(){
           var row=rows[+e.dataset.di2]; if(!row) return;
-          cont(row)[+e.dataset.dk] = e.textContent;
+          /* 서식 칸은 마크업째로 담는다 — textContent 로 받으면 굵게·형광펜이 그 자리서 날아간다 */
+          cont(row)[+e.dataset.dk] = (e.getAttribute('data-drich')==='1' && window.__lcSanitizeHtml)
+            ? window.__lcSanitizeHtml(e.innerHTML) : e.textContent;
           changed(row);
         });
         e.addEventListener('paste', function(ev){
@@ -14075,8 +14381,11 @@ if('serviceWorker' in navigator){
         };
       });
       h.querySelectorAll('[data-dpic]').forEach(function(e){
-        e.onclick=function(){
+        e.onclick=function(ev){
           var row=rows[+e.dataset.dpic]; if(!row) return;
+          /* 크기를 조절하고 손을 뗀 «직후»의 클릭은 보관함을 열지 않는다 */
+          if(row._sizeGuard && Date.now()-row._sizeGuard < 400) return;
+          if(ev && ev.target && ev.target.className==='dpsz') return;
           try{ if(window.__openVault) window.__openVault(function(url){ cont(row)[0]=url; changed(row); render(); }); }catch(_){}
         };
       });
@@ -14103,6 +14412,137 @@ if('serviceWorker' in navigator){
       });
       h.querySelectorAll('[data-dadd]').forEach(function(e){
         e.onclick=function(){ openAdd(+e.dataset.dadd, rows); };
+      });
+      armSize(h, rows);
+      armDrop(h);
+      armTool(h);
+    }
+
+    /* ══ 사진 크기 조절 — 손잡이를 끌면 폭이 따라온다 (2026-08-21) ═══════════
+       ㉮ 끄는 동안 «지금 몇 %»가 뜬다 — 손이 결과를 보고 멈출 수 있어야 이질감이 없다
+       ㉯ 25·33·50·66·75·100 근처에선 살짝 붙는다(자석) — 대충 놔도 반듯하게 선다
+       ㉰ 놓는 순간에만 저장한다 — 끄는 내내 저장하면 글이 덜컹거린다 */
+    var SNAP=[25,33,50,66,75,100];
+    function armSize(h, rows){
+      h.querySelectorAll('[data-dsz]').forEach(function(g){
+        if(g._armed) return; g._armed=1;
+        g.addEventListener('pointerdown', function(ev){
+          ev.preventDefault(); ev.stopPropagation();
+          var pic=g.parentNode; if(!pic) return;
+          var row=rows[+g.getAttribute('data-dsz')]; if(!row) return;
+          var num=pic.querySelector('.dpnum');
+          var wide=pic.getBoundingClientRect().width||320;
+          var cur=parseFloat(String(cont(row)[2]||'').split('|')[2]||'100')||100;
+          var x0=ev.clientX, live=cur;
+          pic.classList.add('dsizing');
+          try{ g.setPointerCapture(ev.pointerId); }catch(_){}
+          function move(e2){
+            var v=cur + (e2.clientX-x0)/wide*100;
+            SNAP.forEach(function(sv){ if(Math.abs(v-sv)<3.2) v=sv; });
+            live=Math.max(25, Math.min(100, Math.round(v)));
+            pic.style.setProperty('--dpw', live+'%');
+            if(num) num.textContent=live+'%';
+          }
+          function up(){
+            g.removeEventListener('pointermove', move);
+            g.removeEventListener('pointerup', up);
+            g.removeEventListener('pointercancel', up);
+            pic.classList.remove('dsizing');
+            var pv=String(cont(row)[2]||'pc-shadow|').split('|');
+            cont(row)[2]=(pv[0]||'pc-shadow')+'|'+(pv[1]||'')+'|'+(live>=100?'':live);
+            row._sizeGuard=Date.now();       /* 곧바로 오는 click 이 보관함을 열지 않게 */
+            changed(row); reflow();
+          }
+          g.addEventListener('pointermove', move);
+          g.addEventListener('pointerup', up);
+          g.addEventListener('pointercancel', up);
+        });
+      });
+    }
+
+    /* ══ 밖에서 사진 끌어다 놓기 — «놓는 자리»에 내려앉는다 ══════════════════
+       그동안 끌어다 놓기는 자료함에만 있었다. 글 본문에 놓으면 아무 일도 없었다.
+       (CSS·「여기」 표시선은 이미 있었고 배선만 비어 있었다) */
+    function dropAt(h, y){
+      var bl=[].slice.call(h.querySelectorAll('.dblk'));
+      for(var i=0;i<bl.length;i++){
+        var r=bl[i].getBoundingClientRect();
+        if(y < r.top + r.height/2) return i;
+      }
+      return bl.length;
+    }
+    function showLine(h, at){
+      var ln=h.querySelector('.ddropline');
+      if(!ln){ ln=document.createElement('div'); ln.className='ddropline'; h.appendChild(ln); }
+      var bl=h.querySelectorAll('.dblk'), hr=h.getBoundingClientRect(), top;
+      if(!bl.length) top=8;
+      else if(at>=bl.length) top=bl[bl.length-1].getBoundingClientRect().bottom-hr.top+5;
+      else top=bl[at].getBoundingClientRect().top-hr.top-6;
+      ln.style.top=Math.max(2, top)+'px'; ln.classList.add('on');
+    }
+    function hideLine(h){ var ln=h.querySelector('.ddropline'); if(ln) ln.classList.remove('on'); }
+    function hasFiles(dt){ try{ return [].indexOf.call((dt&&dt.types)||[], 'Files')>=0; }catch(_){ return false; } }
+
+    function insertPics(at, files){
+      var list=[].filter.call(files||[], function(f){ return /^image\//.test(f.type); });
+      if(!list.length) return;
+      var h=host(); if(h) h.classList.add('dbusy');
+      try{ if(window.toast) toast('사진 '+list.length+'장 넣는 중…'); }catch(_){}
+      var rows=docRows(), ref=rows[at]||null;
+      (async function(){
+        var made=0;
+        for(var i=0;i<list.length;i++){
+          var url=null;
+          try{ url=await compressImage(list[i], 1280, 0.86); }catch(_){ }
+          if(!url || !window.__createRow) continue;
+          var row=window.__createRow({ type:'photocard', name:'사진', on:true,
+                                       content:[url,'','pc-shadow|'], layout:'' });
+          if(!row) continue;
+          row._content=[url,'','pc-shadow|'];
+          if(ref && ref.parentNode===box()) box().insertBefore(row, ref);
+          made++;
+        }
+        if(h) h.classList.remove('dbusy');
+        if(!made){ try{ if(window.toast) toast('사진을 넣지 못했어요'); }catch(_){} return; }
+        reflow();
+        setTimeout(function(){
+          var b2=document.querySelector('#docwrap .dblk[data-di="'+at+'"]');
+          if(b2){ b2.classList.add('dnew'); try{ b2.scrollIntoView({block:'center', behavior:'smooth'}); }catch(_){} }
+        }, 60);
+        try{ if(window.toast) toast('사진 '+made+'장 넣었어요 · 오른쪽 아래 손잡이로 크기를 줄일 수 있어요'); }catch(_){}
+      })();
+    }
+
+    function armDrop(h){
+      if(h._dropArmed) return; h._dropArmed=1;
+      var depth=0;
+      h.addEventListener('dragenter', function(e){
+        if(!hasFiles(e.dataTransfer)) return;
+        e.preventDefault(); depth++; h.classList.add('ddrag');
+      });
+      h.addEventListener('dragover', function(e){
+        if(!hasFiles(e.dataTransfer)) return;
+        e.preventDefault(); try{ e.dataTransfer.dropEffect='copy'; }catch(_){}
+        showLine(h, dropAt(h, e.clientY));
+      });
+      h.addEventListener('dragleave', function(e){
+        if(!hasFiles(e.dataTransfer)) return;
+        depth--; if(depth<=0){ depth=0; h.classList.remove('ddrag'); hideLine(h); }
+      });
+      h.addEventListener('drop', function(e){
+        if(!hasFiles(e.dataTransfer)) return;
+        e.preventDefault(); depth=0; h.classList.remove('ddrag'); hideLine(h);
+        insertPics(dropAt(h, e.clientY), e.dataTransfer.files);
+      });
+      /* ⌘V 로 사진 붙여넣기 — 캡처한 화면을 바로 넣는 길 */
+      h.addEventListener('paste', function(e){
+        var it=(e.clipboardData&&e.clipboardData.items)||[], fs=[];
+        for(var i=0;i<it.length;i++){ if(/^image\//.test(it[i].type)){ var f=it[i].getAsFile(); if(f) fs.push(f); } }
+        if(!fs.length) return;
+        e.preventDefault();
+        var bl=[].slice.call(h.querySelectorAll('.dblk'));
+        var cur=document.activeElement ? document.activeElement.closest('.dblk') : null;
+        insertPics(cur ? bl.indexOf(cur)+1 : bl.length, fs);
       });
     }
     var PICK = [
@@ -14154,6 +14594,112 @@ if('serviceWorker' in navigator){
       else { b.removeAttribute('data-docview'); }
     };
     window.__renderDocView=render;
+
+    /* ════ 🖼 끌어다 놓기·붙여넣기 (2026-08-21 사장님 «네이버 블로그처럼 이질감 없게») ════
+          ① 글 위로 사진을 끌면 «어느 문단 사이»인지 산호색 줄로 미리 알려준다
+          ② 놓으면 압축 → 보관함 저장 → 그 자리에 사진이 스르륵 내려앉는다
+          ③ Ctrl+V(⌘V) 로 붙여넣어도 커서 바로 아래에 같은 방식으로 들어간다
+          🚨 보관함 같은 «열린 창»이 있으면 손대지 않는다 — 그쪽에 이미 같은 기능이 있다. */
+    function docOn(){ var b=body(); return !!(b && b.getAttribute('data-docview')==='1'); }
+    function ovOpen(){ return !!document.querySelector('.ov.open'); }
+    function hasFiles(e){
+      var dt=e.dataTransfer; if(!dt) return false;
+      var t=dt.types||[]; for(var i=0;i<t.length;i++) if(t[i]==='Files') return true;
+      return false;
+    }
+    function dropAt(y){
+      var h=document.getElementById('docwrap'); if(!h) return 0;
+      var bs=h.querySelectorAll('.dblk');
+      for(var i=0;i<bs.length;i++){
+        var r=bs[i].getBoundingClientRect();
+        if(y < r.top + r.height/2) return +bs[i].dataset.di;
+      }
+      return bs.length;
+    }
+    function lineEl(){
+      var h=document.getElementById('docwrap'); if(!h) return null;
+      var l=h.querySelector('.ddropline');
+      if(!l){ l=document.createElement('div'); l.className='ddropline'; h.appendChild(l); }
+      return l;
+    }
+    function showLine(at){
+      var h=document.getElementById('docwrap'), l=lineEl(); if(!h||!l) return;
+      var bs=h.querySelectorAll('.dblk'), hr=h.getBoundingClientRect(), y=0;
+      if(at>=bs.length){ var lb=bs[bs.length-1]; y = lb ? (lb.getBoundingClientRect().bottom-hr.top) : 4; }
+      else { y = bs[at].getBoundingClientRect().top - hr.top; }
+      l.style.top = Math.max(2, y-1) + 'px'; l.classList.add('on');
+    }
+    function dragEnd(){
+      var h=document.getElementById('docwrap'); if(!h) return;
+      h.classList.remove('ddrag');
+      var l=h.querySelector('.ddropline'); if(l) l.classList.remove('on');
+    }
+    function nearDoc(y){
+      var h=document.getElementById('docwrap'); if(!h) return false;
+      var r=h.getBoundingClientRect();
+      return y >= r.top-60 && y <= r.bottom+60;
+    }
+    async function insertPhotos(at, fileList){
+      var h=document.getElementById('docwrap'); if(!h) return;
+      h.classList.add('dbusy');
+      var urls=[];
+      try{ urls = window.__vaultIngest ? await window.__vaultIngest(fileList) : []; }catch(_){}
+      h.classList.remove('dbusy');
+      if(!urls.length || !window.__createRow) return;
+      var rows=docRows(), ref=rows[at]||null, first=null;
+      urls.forEach(function(u){
+        var row=window.__createRow({ type:'photocard', name:'사진', on:true, content:['','','pc-shadow|'], layout:'' });
+        if(!row) return;
+        row._content=[u,'','pc-shadow|'];
+        if(ref && ref.parentNode===box()) box().insertBefore(row, ref);
+        if(!first) first=row;
+      });
+      reflow();
+      setTimeout(function(){
+        var i2=docRows().indexOf(first); if(i2<0) return;
+        var el=document.querySelector('#docwrap .dblk[data-di="'+i2+'"]'); if(!el) return;
+        el.classList.add('dnew');
+        try{ el.scrollIntoView({ block:'center', behavior:'smooth' }); }catch(_){}
+        setTimeout(function(){ el.classList.remove('dnew'); }, 1400);
+      }, 90);
+    }
+    /* 🚨 창 아무 데나 떨어뜨렸을 때 브라우저가 «그 사진 파일로 이동»해 버리는 사고를 막는다 */
+    document.addEventListener('dragover', function(e){
+      if(!hasFiles(e)) return;
+      e.preventDefault();
+      if(!docOn() || ovOpen() || !nearDoc(e.clientY)){ dragEnd(); return; }
+      try{ e.dataTransfer.dropEffect='copy'; }catch(_){}
+      var h=document.getElementById('docwrap'); if(h) h.classList.add('ddrag');
+      showLine(dropAt(e.clientY));
+    });
+    document.addEventListener('dragleave', function(e){ if(!e.relatedTarget) dragEnd(); });
+    document.addEventListener('dragend', dragEnd);
+    document.addEventListener('drop', function(e){
+      if(!hasFiles(e)) return;
+      e.preventDefault();
+      var ok = docOn() && !ovOpen() && nearDoc(e.clientY);
+      var at = ok ? dropAt(e.clientY) : 0;
+      dragEnd();
+      if(!ok) return;
+      var f=e.dataTransfer && e.dataTransfer.files;
+      if(f && f.length) insertPhotos(at, f);
+    });
+    /* 붙여넣기 — 잡아채기(capture)로 먼저 받는다. 글칸 붙여넣기가 빈 글자를 넣지 못하게. */
+    document.addEventListener('paste', function(e){
+      if(!docOn() || ovOpen()) return;
+      var items=(e.clipboardData && e.clipboardData.items)||[], files=[];
+      for(var i=0;i<items.length;i++) if(/^image\//.test(items[i].type)){ var f=items[i].getAsFile(); if(f) files.push(f); }
+      if(!files.length) return;
+      e.preventDefault(); e.stopPropagation();
+      var at=docRows().length;
+      try{
+        var sel=document.getSelection(), nd=sel && sel.anchorNode;
+        var el=nd && (nd.nodeType===1 ? nd : nd.parentElement);
+        var blk=el && el.closest && el.closest('#docwrap .dblk');
+        if(blk) at=(+blk.dataset.di)+1;
+      }catch(_){}
+      insertPhotos(at, files);
+    }, true);
   })();
   function createPost(type, blocksOverride, titleOverride, summaryOverride){
     var preset=blocksOverride||(POST_PRESETS[type]?POST_PRESETS[type]():[]);
@@ -15495,6 +16041,42 @@ if('serviceWorker' in navigator){
     try{ if(window.__updateDraftsBtn) window.__updateDraftsBtn(); }catch(_){}
   }
   /* 👁 착지가 «손님 화면»으로 예정돼 있나 — 서버를 안 기다리고 즉시 판정 (2026-08-20 깜빡임 수리) */
+  /* ══ 🚨 2026-08-21 사장님 «로그인하면 한번? 두번? 몇 번 다른 곳 갔다가 홈에 도착» ══
+     원인: enter() 안에서 «갈 곳»을 네 군데서 따로 정하고, 각자 다른 시간에 터졌다.
+       0ms   모드 게이트(무엇부터 해볼까요?)
+       500ms 온보딩 소개 6장  → 끝나면 데모 투어까지 자동으로 이어짐
+       700ms 현장 편집 열기
+       900ms u.html 로 페이지 통째 이동
+     새 계정이면 이게 «전부» 걸려서 화면이 서너 번 갈아엎혔다.
+     처방: 착지를 «맨 앞에서 한 번만» 정하고, 그 하나만 실행한다. */
+  function __landing(){
+    try{
+      var q=new URLSearchParams(location.search);
+      if(q.get('live')==='1') return 'live';                        /* 손님 화면의 «고치기» */
+      if(q.get('desk')==='1') return 'desk';                        /* ⚙ 작업실로 돌아옴 */
+      if(window.__devEnter) return 'desk';
+      if(!localStorage.getItem('ch-onboard-v2')) return 'onboard';  /* 첫 로그인 = 소개 6장 */
+      var a=null; try{ a=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_e){}
+      if(a && a.hasPage===false) return 'live';                     /* 아직 아무것도 없다 → 바로 라이트 */
+      if((localStorage.getItem('cm-hub-landing')||'live')!=='live') return 'desk';
+      return (a && a.handle) ? 'home' : 'live';
+    }catch(_){ return 'desk'; }
+  }
+  window.__landing=__landing;   /* 🔬 검수용 창구 — 로그인 없이도 «어디로 갈지»를 물어볼 수 있게 (2026-08-21) */
+  /* 온보딩·데모가 끝난 «뒤»에 착지한다 — 도중에 끼어들지 않는다 */
+  window.__afterOnboard=function(){
+    var a=null; try{ a=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_e){}
+    var h=(a&&a.handle)||'';
+    var noPage=!!(a && a.hasPage===false);
+    setTimeout(function(){
+      try{
+        if(!noPage && h && (localStorage.getItem('cm-hub-landing')||'live')==='live'){
+          location.replace('u.html?u='+encodeURIComponent(h)); return;
+        }
+        if(window.__openLive && !window.__liveEditActive) window.__openLive();
+      }catch(_e){}
+    }, 260);
+  };
   function __willLandHome(){
     try{
       var q=new URLSearchParams(location.search);
@@ -15511,10 +16093,20 @@ if('serviceWorker' in navigator){
   }
   function enter(){
     var ov=document.getElementById('login-ov');
-    /* 🚨 여기서 덮개를 바로 걷는 바람에 «작업실»이 900ms 동안 보였다가 손님 화면으로 넘어갔다.
-          착지 예정이면 덮개를 그대로 두고 안내만 바꾼다 — 사장님이 작업실을 볼 일이 없게. */
+    var DEST=__landing();
+    /* 🚨 2026-08-21 — 덮개를 «손님 화면으로 갈 때»만 붙잡고 있었다.
+          그래서 첫 로그인(소개 6장)·현장편집으로 갈 때는 덮개가 걷히고
+          작업실이 420~520ms 번쩍인 뒤 다음 화면이 덮었다. 그게 «어디 갔다 왔지?»의 마지막 조각.
+          → 작업실에 «머무를 때»만 걷는다. 나머지는 착지가 실제로 열릴 때 걷는다.
+          ⚠️ 덮개가 영영 안 걷히던 사고가 전에 있었다 → 2.5초 안전장치를 반드시 함께 둔다. */
+    var _MSG={ home:'내 홈으로 가는 중…', live:'편집 화면 여는 중…', onboard:'처음 오셨네요 · 소개부터 보여드릴게요' };
+    window.__coverOff=function(){
+      try{ var o=document.getElementById('login-ov'); if(o) o.style.display='none';
+           var m=document.getElementById('land-msg'); if(m) m.remove(); }catch(_){}
+    };
     if(ov){
-      if(__willLandHome()){
+      if(DEST==='desk'){ ov.style.display='none'; }
+      else {
         try{
           var _c=ov.querySelector('.login-card');
           if(_c){ _c.style.transition='opacity .18s'; _c.style.opacity='.0'; }
@@ -15522,12 +16114,12 @@ if('serviceWorker' in navigator){
             var _m=document.createElement('div'); _m.id='land-msg';
             _m.style.cssText='position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;'
               +'font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.62);letter-spacing:-.2px;';
-            _m.textContent='내 홈으로 가는 중…';
+            _m.textContent=_MSG[DEST]||'가는 중…';
             ov.appendChild(_m);
           }
         }catch(_){}
-      } else {
-        ov.style.display='none';
+        /* 🛟 무슨 일이 있어도 2.5초 뒤엔 걷는다 — 덮개에 갇히는 것보다 번쩍이는 게 낫다 */
+        setTimeout(window.__coverOff, 2500);
       }
     }
     try{ var wt=document.getElementById('ws-title');
@@ -15537,46 +16129,42 @@ if('serviceWorker' in navigator){
         wt.appendChild(document.createTextNode('작업실'));
       } }catch(_){} try{ if(window.__renderMyPlan) window.__renderMyPlan(); }catch(_){} loadPage(); try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 300); }catch(_){}
     // 로그인 직후 → 바로 모드 선택 게이트(무엇부터 해볼까요?). 손님 미리보기는 게이트의 '고객용 화면' 타일에서. dev 자동편집(localhost)은 제외 (사용자 요청 2026-06-29: 미리보기 강제 노출 빼고 바로 게이트)
-    if(!window.__devEnter){ try{ if(window.__maybeLoginIntro) window.__maybeLoginIntro(); }catch(_){} try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){} }   // ✨ 하루 첫 로그인 = 쌓인 자산 인트로(게이트 위에 뜸, 탭 스킵)
+    /* 🚨 게이트·인트로는 «작업실에 머무를 때»만 띄운다.
+          다른 데로 갈 거면서 게이트를 띄우면 화면이 두세 번 갈아엎히며 «어디 갔다 왔지?»가 된다. */
+    if(DEST==='desk' && !window.__devEnter){
+      try{ if(window.__maybeLoginIntro) window.__maybeLoginIntro(); }catch(_){}
+      try{ if(window.__showModeGate) window.__showModeGate(); }catch(_){}
+    }
     // 📸 첫 로그인 = 컨텐츠 허브 소개 6장 → 전문성 가시화 체험(데모라인) 1회 자동 · 수익화 이야기는 로그인 💰버튼 (이후 설정에서 다시 보기)
-    try{ if(!localStorage.getItem('ch-onboard-v2') && window.__openOnboardIntro){ setTimeout(function(){ try{ window.__openOnboardIntro(); }catch(_){} }, 500); } }catch(_){}
+    if(DEST==='onboard'){
+      setTimeout(function(){ try{ if(window.__openOnboardIntro) window.__openOnboardIntro(); }catch(_){} 
+                             try{ window.__coverOff(); }catch(_){} }, 420);
+    }
     /* ════ 🏠 A안 착지 뒤집기 (2026-08-19 사장님 픽) ════
        로그인하면 «작업실»이 아니라 «내 홈(현장 편집)»에 바로 착지 — 손님이 보는 그 화면에서 바로 고친다.
        (윅스·스퀘어스페이스 방식) 관리·분석은 현장 하단 도크 «⚙️ 작업실»로 언제든.
        ⚠️ 되돌리기: ⚙설정에서 «로그인하면 작업실로» 켜면 옛 동작으로 즉시 복귀 (cm-hub-landing='desk'). */
+    /* ══ 착지 — 위에서 정한 DEST «하나만» 실행한다 ══════════════════════
+       전엔 _wantLive / _noPage / _land 세 갈래가 각자 타이머를 걸어 겹쳤다.
+       (2026-08-20 A안 «로그인하면 작업실이 아니라 내 홈» 은 그대로 지킨다.
+        ⚠️ 되돌리기: ⚙설정 «로그인하면 작업실로» → cm-hub-landing='desk') */
     try{
-      var _land='live'; try{ _land=localStorage.getItem('cm-hub-landing')||'live'; }catch(_e){}
-      var _isNew=false; try{ _isNew=!localStorage.getItem('ch-onboard-v2'); }catch(_e){}   // 첫 로그인(소개 6장)은 현장 진입 안 함
-      /* 🚨 2026-08-20 — 아직 아무것도 없는 계정 처리.
-            손님 화면(u.html)으로 보내면 «준비 중» 빈 화면만 본다. 그렇다고 작업실에 두면 라이트가 아니다.
-            사장님 원칙: «로그인하면 바로 라이트». 그래서 «현장 편집»을 바로 연다.
-            (온보딩 표시는 «계정»이 아니라 «브라우저»에 저장돼 있어, 계정을 갈아타면 새 계정을 «첫 로그인 아님»으로 잘못 본다) */
-      var _noPage=false; try{ _noPage=!!(window.AUTH && window.AUTH.hasPage===false); }catch(_e){}
-      /* 🚪 2026-08-20 사장님 픽 — «우선 우리 홈으로 먼저 보이고, 우측 상단에서 편집실로»
-            로그인하면 «편집 도구가 얹힌 현장»이 아니라 «손님이 보는 그 화면»으로 진짜 이동한다.
-            ⚠️ ⚙(edit.html?desk=1)로 돌아왔을 땐 다시 튕기면 무한 루프 → _fromGear 로 차단 */
-      var _fromGear=false, _wantLive=false;
-      try{ var _q=new URLSearchParams(location.search); _fromGear=_q.get('desk')==='1'; _wantLive=_q.get('live')==='1'; }catch(_e){}
-      /* ✏️ 손님 화면의 «고치기»로 들어온 경우 — 작업실을 안 거치고 바로 현장 편집 (2026-08-20 사장님 C안) */
-      if(_wantLive){
-        setTimeout(function(){ try{ if(window.__openLiveAuto) window.__openLiveAuto();
-                                    else if(window.__openLive && !window.__liveEditActive) window.__openLive(); }catch(_e){} }, 900);
+      if(DEST==='live'){
+        setTimeout(function(){ try{
+          if(window.__openLiveAuto) window.__openLiveAuto();
+          else if(window.__openLive && !window.__liveEditActive) window.__openLive();
+        }catch(_e){} try{ window.__coverOff(); }catch(_e){} }, 520);
       }
-      /* 🆕 아직 페이지가 없는 새 계정 — 손님 화면엔 «준비 중»뿐이고, 작업실은 라이트가 아니다.
-            사장님 원칙 «로그인하면 바로 라이트» → 현장 편집을 바로 연다. */
-      if(_noPage && !_fromGear && !_wantLive && !window.__devEnter){
-        setTimeout(function(){ try{ if(window.__openLive && !window.__liveEditActive) window.__openLive(); }catch(_e){} }, 700);
+      else if(DEST==='home'){
+        setTimeout(function(){ try{                                   // 데이터 로드(loadPage) 뒤에
+          var _h=(((document.getElementById('pf-handle')||{}).value)||'').trim()
+                 || ((window.AUTH&&window.AUTH.handle)||'');
+          if(_h) location.replace('u.html?u='+encodeURIComponent(_h)); // replace = 뒤로가기로 안 돌아오게
+          else if(window.__openLive && !window.__liveEditActive) window.__openLive();
+        }catch(_e){} }, 620);
       }
-      else if(_land==='live' && !_isNew && !window.__devEnter && !_fromGear && !_wantLive){
-        setTimeout(function(){                                          // 데이터 로드(loadPage) 뒤에
-          try{
-            var _h=(((document.getElementById('pf-handle')||{}).value)||'').trim()
-                   || ((window.AUTH&&window.AUTH.handle)||'');
-            if(_h) location.replace('u.html?u='+encodeURIComponent(_h));   // replace = 뒤로가기로 되돌아오지 않게
-            else if(window.__openLive && !window.__liveEditActive) window.__openLive();   // 주소(핸들)가 아직 없으면 옛 동작
-          }catch(_e){}
-        }, 900);
-      }
+      /* DEST==='onboard' 는 소개 6장이 끝난 뒤 __afterOnboard() 가 착지시킨다.
+         DEST==='desk' 는 여기 그대로 머무른다 — 게이트가 이미 떠 있다. */
     }catch(_){}
   }
 

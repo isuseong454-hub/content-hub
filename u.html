@@ -551,11 +551,17 @@
     background:radial-gradient(circle, var(--coral) 0%, transparent 62%);
     opacity:.12; filter:blur(52px);
   }
-  /* 그라데이션 = 다크 테마만. 라이트 테마는 평평하게 (사용자 결정) */
+  /* 🚨 2026-08-21 사장님 픽 «B · 은은하게» — 라이트 테마도 발광을 켠다.
+        전엔 «라이트는 평평하게»로 10종 전부 opacity:0 이었다(옛 결정).
+        크림 바탕이 밝아서 다크의 12%로는 묻힌다 → 20%로 올리고 원을 키워 더 넓게 번지게.
+        ⚠️ 되돌리기: 아래 opacity 를 0 으로 되돌리면 옛 «평평한» 상태로 즉시 복귀. */
   html[data-theme="cream"] body::before, html[data-theme="hero"] body::before, html[data-theme="herb"] body::before,
   html[data-theme="mocha"] body::before, html[data-theme="pink"] body::before, html[data-theme="lavender"] body::before,
   html[data-theme="pearl"] body::before, html[data-theme="peach"] body::before, html[data-theme="sage"] body::before,
-  html[data-theme="aqua"] body::before{ opacity:0 !important; }
+  html[data-theme="aqua"] body::before{
+    opacity:.20 !important; width:640px !important; height:600px !important;
+    top:-250px !important; filter:blur(64px) !important;
+  }
   .wrap{max-width:460px; margin:0 auto; padding:24px 22px 0; position:relative; z-index:1;}
 
   /* ── 분위기 미리보기 스와치 (나중엔 편집기 설정으로 이동 · 방문자엔 숨김) ── */
@@ -1511,17 +1517,22 @@
   html[data-bright="light"] .num-c{background:linear-gradient(transparent 58%, color-mix(in srgb, var(--coral) 42%, transparent) 58%);
     border:none; border-radius:0; padding:0 1px;}
   /* 🧵 세로 타임라인 (선+점) */
+  /* 🚨 2026-08-21 사장님 «1.2.3 인데 왜 순서가 아니야? 너무 다닥다닥 붙어 가독성 없다» —
+        점만 있고 번호가 없었고, 단계 사이가 17px뿐이라 다섯 줄이 한 덩어리로 보였다. */
   .stf-wrap{display:flex; flex-direction:column; padding-left:4px;}
-  .stf-i{display:flex; gap:13px; position:relative; padding-bottom:17px;}
+  .stf-i{display:flex; gap:15px; position:relative; padding-bottom:26px;}
   .stf-i:last-child{padding-bottom:0;}
-  .stf-i::before{content:''; position:absolute; left:6px; top:17px; bottom:0; width:2px;
-    background:linear-gradient(180deg, var(--coral), color-mix(in srgb, var(--coral) 22%, transparent));}
+  .stf-i::before{content:''; position:absolute; left:11px; top:24px; bottom:0; width:2px;
+    background:linear-gradient(180deg, var(--coral), color-mix(in srgb, var(--coral) 18%, transparent));}
   .stf-i:last-child::before{display:none;}
-  .stf-dot{width:14px; height:14px; border-radius:50%; flex:none; margin-top:3px; position:relative; z-index:1;
-    background:var(--coral); border:2.5px solid var(--coral);
-    box-shadow:0 0 0 4px color-mix(in srgb, var(--coral) 16%, transparent);}
-  .stf-c .st-t{font-size:13.5px; font-weight:800; letter-spacing:-.2px;}
-  .stf-c .st-d{margin-top:3px; line-height:1.6;}
+  .stf-dot{width:24px; height:24px; border-radius:50%; flex:none; margin-top:0; position:relative; z-index:1;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-size:12.5px; font-weight:800; line-height:1;
+    background:var(--coral); color:#fff; border:none;
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--coral) 14%, transparent);}
+  .stf-c{padding-top:2px;}
+  .stf-c .st-t{font-size:14.5px; font-weight:800; letter-spacing:-.2px; line-height:1.5;}
+  .stf-c .st-d{margin-top:5px; line-height:1.7;}
   /* 🎬 영상 썸네일 (클릭 재생) */
   .vid-thumb{position:absolute; inset:0; width:100%; height:100%; border:none; cursor:pointer; padding:0;
     background:#111 center/cover no-repeat; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;}
@@ -1917,7 +1928,7 @@
   /* 사진 블록 (꾸미기 프레임/효과) */
   .pc-block{background:transparent !important; border:none !important; padding:6px 0 !important;}
   .pc-wrap{--pcc:var(--coral); --pccg:var(--coral-soft); display:flex; justify-content:center;}
-  .pc-img{width:100%; aspect-ratio:4/5; max-width:340px; background-size:cover; background-position:center; transition:.2s;}
+  .pc-img{width:var(--pcw,100%); aspect-ratio:4/5; max-width:340px; background-size:cover; background-position:center; transition:.2s;}
   .pc-cap{text-align:center; font-size:13px; color:var(--muted); margin-top:12px;}
   .pc-plain{border-radius:8px;}
   .pc-round{border-radius:22px;}
@@ -1929,6 +1940,27 @@
   .pc-polaroid{border-radius:3px; border:11px solid #fff; border-bottom-width:34px; box-shadow:0 16px 36px rgba(0,0,0,.4); transform:rotate(-2.2deg);}
   .pc-fade{border-radius:18px; -webkit-mask:radial-gradient(ellipse 80% 80% at 50% 45%, #000 55%, transparent 100%); mask:radial-gradient(ellipse 80% 80% at 50% 45%, #000 55%, transparent 100%);}
   .pc-film{border-radius:14px; filter:grayscale(.92) contrast(1.07); box-shadow:0 14px 30px rgba(0,0,0,.4);}
+
+  /* ═══════ 글 화면 여백 — 사장님 픽 «C안 · 종이처럼» (2026-08-21) ═══════
+     문단 11개가 전부 흰 카드였고 간격이 전부 13px로 똑같아 «촙촙해서 답답»했다.
+     카드는 «여기 봐»라는 뜻인데 전부 카드면 아무것도 주목되지 않는다.
+     ㉮ 본문은 카드를 벗고 바닥에 흐른다
+     ㉯ 화제가 바뀌는 자리(소제목)만 크게 띄운다 — 간격이 곧 목차다
+     ㉰ 단계·Q&A·체크·숫자만 카드로 남겨 «진짜 강조»가 살아난다
+     ㉱ 줄간 1.6 → 1.85 (한글은 라틴보다 빽빽해서 1.6이 빡빡하다) */
+  #pm-body .block{ background:transparent; border:none; box-shadow:none; border-radius:0;
+    padding:0 3px; margin-bottom:26px; line-height:1.85; }
+  #pm-body .block:has(.block-h){ margin-top:38px; }
+  #pm-body .ly-bar{ margin:38px 0 26px; padding:4px 0 4px 14px; line-height:1.85; }
+  #pm-body .block-h{ margin-bottom:11px; font-size:15.5px; font-weight:700; letter-spacing:-.3px; }
+  /* 남겨 두는 카드 — 이 넷만 «강조»다 */
+  #pm-body .block:has(.stf-wrap), #pm-body .block:has(.qa-cards),
+  #pm-body .block:has(.st-list),  #pm-body .block:has(.stat-cnt),
+  #pm-body .block:has(ul.lc-check){
+    background:var(--surface); border:1px solid var(--hair); border-radius:18px;
+    padding:18px 19px; margin:30px 0; line-height:1.75; }
+  #pm-body .pc-block{ margin:34px 0 12px; }
+  #pm-body .pc-cap{ margin-top:10px; }
   /* 베스트 · 대표 작업 (사회적 증명 · 고급 스포트라이트) */
   .best-h{font-size:18px; font-weight:800; color:var(--on-strong,var(--ink)); margin-bottom:15px; letter-spacing:-.01em;}
   .best-grid{display:flex; flex-direction:column; gap:13px;}
@@ -3514,6 +3546,8 @@
     var pv=String(fxv||'').split('|'); var fx=pv[0]||'', col=pv[1]||'';
     if(!PC_OK[fx]) fx='';
     var vs='';
+    /* 🖼 2026-08-21 — 편집에서 손잡이로 줄인 «폭»(%)이 세 번째 칸에 산다. 없으면 100%. */
+    var wp=parseFloat(pv[2]||''); if(wp>=15 && wp<=100 && wp<100) vs+='--pcw:'+wp+'%;';
     if(/^#[0-9a-fA-F]{3,8}$/.test(col)){ var hx=col.replace('#',''); if(hx.length===3) hx=hx.replace(/(.)(.)(.)/,'$1$1$2$2$3$3'); var n=parseInt(hx.slice(0,6),16); vs='--pcc:'+col+';--pccg:rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+',.5);'; }
     return { cls: fx, vs: vs };
   }
@@ -3533,9 +3567,33 @@
   }
   // 노션식 본문(HTML) 렌더 — 굵게·강조·소제목·인용·목록·인라인 사진 화이트리스트
   var UIMG={'lc-img-sm':1,'lc-img-md':1,'lc-img-lg':1,'lc-img-full':1};
+  /* 🚨 2026-08-21 — ☑ 줄이 마크업 없이 «글자 ☑»로만 찍혀 있었다.
+        체크박스도, 들여쓰기도, 줄 간격도 없어 목록이 문단에 묻혔다.
+        연달아 2줄 이상이면 진짜 목록으로 세운다 (카드로 남기는 판정도 이걸 본다). */
+  function chkList(h){
+    if(!/[☑✅✔]/.test(h)) return h;
+    var ln=String(h).split('\n'), out=[], grp=[];
+    function close(){
+      if(!grp.length) return;
+      if(grp.length>=2){
+        while(out.length && out[out.length-1]==='') out.pop();
+        out.push('<ul class="lc-check">'+grp.map(function(x){ return '<li>'+x+'</li>'; }).join('')+'</ul>');
+      } else { out.push('☑ '+grp[0]); }
+      grp=[];
+    }
+    ln.forEach(function(x){
+      var m=x.match(/^\s*[☑✅✔]\uFE0F?\s*(.+)$/);
+      if(m){ grp.push(m[1].trim()); return; }
+      close();
+      if(x.trim()==='' && out.length && /^<ul class="lc-check">/.test(out[out.length-1])) return;
+      out.push(x);
+    });
+    close();
+    return out.join('\n');
+  }
   function richBody(s){
     s=String(s==null?'':s);
-    if(!/[<]/.test(s)) return '<div class="post-body" style="white-space:pre-wrap;">'+richText(s)+'</div>';
+    if(!/[<]/.test(s)) return '<div class="post-body" style="white-space:pre-wrap;">'+chkList(richText(s))+'</div>';
     var tmp=document.createElement('div'); tmp.innerHTML=s;
     function walk(node){ var out=''; [].forEach.call(node.childNodes,function(n){
       if(n.nodeType===3){ out+=esc(n.nodeValue); return; }
@@ -3976,7 +4034,7 @@
       if(layout==='flow'){
         /* 🧵 2026-08-20 사장님 픽 — 세로 선 + 점 (편집: 기존 st-et/st-ed/st-edel/st-eadd 배선 재사용) */
         var fitems=list.map(function(sx,i){ return '<div class="stf-i st-ei" style="position:relative;">'
-          +'<span class="stf-dot"></span><div class="stf-c"><div class="st-t st-et">'+esc(sx[0]||'')+'</div>'
+          +'<span class="stf-dot">'+(i+1)+'</span><div class="stf-c"><div class="st-t st-et">'+esc(sx[0]||'')+'</div>'
           +((sx[1]||EDIT)?'<div class="sub st-d st-ed">'+esc(sx[1]||'')+'</div>':'')+'</div>'+del+'</div>'; }).join('');
         var fd=card(''); fd.innerHTML=head+'<div class="stf-wrap">'+fitems+'</div>'+add;
         return fd;

@@ -139,6 +139,8 @@
         여기부터는 «진짜 화면을 재본다». 열려 있지 않은 화면은 조용히 건너뛴다.
      ══════════════════════════════════════════════════════════════ */
   function _vis(el){ if(!el) return false; var cs=getComputedStyle(el);
+    /* 🚨 2026-08-21 — 다 사라진 토스트(opacity:0)를 «떠 있다»고 읽어 겹침으로 잡던 헛빨간줄 */
+    if(parseFloat(cs.opacity||'1') < 0.05) return false;
     return cs.display!=='none' && cs.visibility!=='hidden' && el.getClientRects().length>0; }
   function _rect(el){ return el.getBoundingClientRect(); }
   function _hit(a,b){ return !(a.bottom<=b.top||a.top>=b.bottom||a.right<=b.left||a.left>=b.right); }
@@ -256,7 +258,7 @@
       /* 🚪 왕복 (2026-08-20) — 로그인하면 손님 화면 · ⚙로 편집실 · 비번 안 물음 */
       add('e 손님 화면 착지', et.indexOf("location.replace('u.html?u='") >= 0 && et.indexOf("get('desk')==='1'") >= 0,
         '로그인하면 «편집 도구가 얹힌 현장»이 아니라 진짜 손님 페이지로');
-      add('e 착지 루프 차단', et.indexOf('!_fromGear') >= 0, '⚙로 들어왔을 땐 다시 안 튕긴다');
+      add('e 착지 루프 차단', et.indexOf("q.get('desk')==='1') return 'desk'") >= 0, '⚙로 들어왔을 땐 작업실에 머문다');
       add('e 👁 손님 화면 버튼', et.indexOf('id="go-customer-top"') >= 0 && et.indexOf('id="go-customer-top" style="display:none;"') < 0,
         '2026-07-07에 숨겨졌던 것 — 다시 숨으면 여기서 걸린다');
       add('e 손님 화면 = 진짜 페이지', et.indexOf('window.__openRealHome(true)') >= 0 && et.indexOf('goCT.onclick=function(){ if(window.__openCustomerPreview)') < 0,
@@ -268,9 +270,10 @@
       add('e 폰 상단바 접기', et.indexOf('.topbar #ws-title .tb-who, .topbar .tb-lg') >= 0 && et.indexOf("_who.className='tb-who'") >= 0 && et.indexOf('class="tb-lg"') >= 0,
         '버튼 4개가 되며 제목이 16px로 눌리던 것 (실측 70px 회복)');
       /* ✏️ C안 + 📝 글쓰기 + 🚧 도크 잠금 (2026-08-20) */
-      add('e ?live=1 바로 현장편집', et.indexOf("_wantLive=_q.get('live')==='1'") >= 0 && et.indexOf('window.__openLiveAuto()') >= 0,
+      add('e ?live=1 바로 현장편집', et.indexOf("q.get('live')==='1') return 'live'") >= 0 && et.indexOf('window.__openLiveAuto()') >= 0,
         '«고치기»를 누르면 작업실을 안 거치고 바로 편집');
-      add('e ?live=1 착지 안 튕김', et.indexOf('!_fromGear && !_wantLive') >= 0, '현장 편집으로 들어왔는데 손님 화면으로 다시 튕기면 안 된다');
+      add('e ?live=1 착지 안 튕김', et.indexOf("if(DEST==='live')") >= 0 && et.indexOf("else if(DEST==='home')") >= 0,
+        '착지가 한 갈래(else if)여야 현장편집이 손님 화면으로 다시 안 튕긴다');
       /* 🧭 세 걸음 도크 (2026-08-20 A안 → 글쓰기는 포스팅 칸으로 이사) */
       add('e ⭐ 칸 메뉴 5+1', et.indexOf('function openBlockMenu') >= 0 && et.indexOf("m.type==='la-block-menu'") >= 0,
         '고치기·바꾸기·위·아래·숨기기·빼기 — 숨기기와 빼기를 나눈 게 핵심 (2026-08-20)');
@@ -598,7 +601,7 @@
             🚨 제일 무서운 사고: 데이터가 두 벌이 되는 것. #rows 가 «유일한 진짜»여야 하고
                문서 화면은 그것을 다르게 그린 껍데기여야 한다. serialize()·저장·발행은 #rows 만 읽는다. */
       add('문서형 글 편집 엔진', et.indexOf('window.__docViewOn=') >= 0 && et.indexOf('window.__renderDocView=render') >= 0, '글이 그대로 보이고 그 자리에서 고쳐진다');
-      add('문서형은 껍데기일 뿐', et.indexOf('#home-body[data-docview="1"] #rows{ display:none !important; }') >= 0 && et.indexOf('cont(row)[+e.dataset.dk] = e.textContent') >= 0, '#rows 를 숨길 뿐 지우지 않는다 — 고친 값은 곧바로 row._content 로');
+      add('문서형은 껍데기일 뿐', et.indexOf('#home-body[data-docview="1"] #rows{ display:none !important; }') >= 0 && et.indexOf('cont(row)[+e.dataset.dk] =') >= 0, '#rows 를 숨길 뿐 지우지 않는다 — 고친 값은 곧바로 row._content 로');
       add('문서형은 본문 단계에서만', et.indexOf('window.__docViewOn(n===2)') >= 0, '1단계 썸네일은 원래 폼 그대로');
       add('인용은 layout 으로 가른다', et.indexOf("ty==='text' && (ly==='quote' || ly==='impact')") >= 0, 'AI가 만드는 건 전부 text 블록 — type 만 보면 인용이 소제목 칸으로 떨어진다');
       add('문단 사이 넣기 네 가지', et.indexOf("['photocard','🖼','사진'") >= 0 && et.indexOf("['text','❝','인용'") >= 0, '글 단락·소제목·사진·인용');
@@ -674,6 +677,15 @@
       add('진단 결과 구간', et.indexOf('var PST_BAND') >= 0 && et.indexOf("_lastB.__band") >= 0, '「0~1개 / 2~3개 / 4~5개」 — 진단글의 심장');
       add('진단 구간은 한 묶음', et.indexOf("_lastB.content[0].push([b.a, b.b])") >= 0, '따로따로면 진단표가 안 된다');
       add('사진 자리 5문단마다', et.indexOf('paraSince>=5') >= 0, '3문단마다는 잦다 — 22블록 중 6개가 빈 사진이었다');
+
+      /* 🖼 2026-08-21 사장님 «네이버 블로그처럼 밖에서 끌어와도 부드럽게 안착되나, 이질감 없게» */
+      add('글에 끌어다 놓기', et.indexOf('function dropAt(') >= 0 && et.indexOf('function insertPhotos(') >= 0, '파인더에서 끌어온 사진이 문단 사이로 들어간다');
+      add('놓을 자리 미리 보임', et.indexOf("l.className='ddropline'") >= 0 && et.indexOf('.ddropline.on{') >= 0, '어디 들어갈지 모르면 «이질감»이 된다');
+      add('표시선 기준점', et.indexOf('#docwrap{ position:relative; }') >= 0, 'relative 가 빠지면 표시선이 엉뚱한 데 뜬다');
+      add('창밖 낙하 사고 방지', et.indexOf("document.addEventListener('dragover'") >= 0 && et.indexOf('if(!hasFiles(e)) return;') >= 0, '엉뚱한 데 놓으면 브라우저가 사진 파일로 이동해 글이 날아간다');
+      add('보관함 조용한 창구', et.indexOf('window.__vaultIngest') >= 0, '화면을 안 열고 압축·저장만 맡기는 길');
+      add('붙여넣기도 같은 길', et.indexOf("insertPhotos(at, files);") >= 0, '⌘V 로 넣은 사진이 커서 아래에 들어간다');
+      add('사진첩 그대로', et.indexOf('id="vault-file"') >= 0 && et.indexOf('accept="image/*"') >= 0 && et.indexOf('capture=') < 0, '폰에서 «사진 보관함»이 열려야 한다 — capture 를 붙이면 카메라만 뜬다');
 
       /* 🚨🚨 2026-08-21 사장님 «자동 로그인인데 로그아웃도 운영자 모드도 못 간다» — 갇혔다.
             상단바를 비우면서 «나가는 문»까지 없앴다. 자동 로그인이라 되돌릴 방법도 없었다.
@@ -781,6 +793,56 @@
           // 런타임: 테마 배열 9종 + 이름표
     if (typeof THEMES !== 'undefined') add('THEMES 런타임 9종', THEMES.length === 9, 'THEMES.length=' + THEMES.length);
     if (typeof THEME_NAMES !== 'undefined') add('라임 이름표', THEME_NAMES.lime === '라임', String(THEME_NAMES.lime));
+  }
+
+
+  /* ══════ 2026-08-21 51차 — 오늘 잡은 사고 = 오늘 생긴 항목 ══════ */
+  if (true) {
+    const E = selfHtml || '';   /* edit.html 원문 — 위에서 캐시 없이 받아 둔 것 */
+    const U = uHtml || '';      /* u.html 원문 */
+
+    /* 사고: 「측정 방법 1.2.3」이 5개짜리 한 덩어리가 됐다 (✅ 결과 두 줄이 섞여 들어감) */
+    add('번호목록·체크목록 가르기', E.indexOf('bufOrd') >= 0 && E.indexOf("if(buf.length && bufOrd!==null && bufOrd!==_ord) flush()") >= 0,
+      '표시가 바뀌면 목록을 끊어야 ✅ 결과가 단계에 안 섞인다');
+    /* 사고: 「연필을 턱 아래에 / 수평으로 대주세요」— 한 문장을 앞 세 어절로 반 토막 냈다 */
+    add('문장 반토막 금지', E.indexOf('function pstStepPair') >= 0 && E.indexOf('Math.min(3, w.length)') < 0,
+      '어절 3개로 자르던 코드가 되살아나면 안 된다');
+    /* 사고: 1.2.3 을 썼는데 화면엔 점만 찍히고 번호가 없었다 */
+    add('단계 번호 표시', U.indexOf('stf-dot">\'+(i+1)+\'</span>') >= 0,
+      '타임라인 점 안에 번호가 들어가야 «순서»로 읽힌다');
+    /* 사고: ☑ 가 마크업 없이 글자로만 찍혀 목록이 문단에 묻혔다 */
+    add('☑ 진짜 체크박스', U.indexOf('function chkList') >= 0 && U.indexOf('chkList(richText(s))') >= 0,
+      '☑ 두 줄 이상이면 ul.lc-check 로 세운다');
+    /* 사장님 픽: 카드 11장·간격 전부 13px → «촙촙해서 답답» */
+    add('글 여백 C안', U.indexOf('#pm-body .block{ background:transparent') >= 0 && U.indexOf('#pm-body .block:has(.stf-wrap)') >= 0,
+      '본문은 바닥에, 강조(단계·Q&A·체크·숫자)만 카드');
+    /* 사장님 픽: 라이트 테마 배경 발광 «은은하게» */
+    add('라이트 배경 발광', /html\[data-theme="cream"\] body::before[\s\S]{0,400}?opacity:\.20/.test(U),
+      '0 으로 되돌아가면 «평평한» 옛 상태');
+    /* 사고: 글 본문에 사진을 끌어다 놔도 아무 일도 없었다 (CSS만 있고 배선이 비어 있었음) */
+    add('사진 끌어다 놓기', E.indexOf('function armDrop') >= 0 && E.indexOf('function insertPics') >= 0
+      && E.indexOf("h.addEventListener('drop'") >= 0,
+      '자료함에만 있고 글 본문엔 없던 것');
+    add('사진 크기 손잡이', E.indexOf('function armSize') >= 0 && E.indexOf('data-dsz=') >= 0 && E.indexOf('var SNAP=') >= 0,
+      '끌어서 25~100% · 자석 6단');
+    add('손님 화면 사진 폭', U.indexOf('width:var(--pcw,100%)') >= 0 && U.indexOf('--pcw:') >= 0,
+      '편집에서 줄인 폭이 손님에게도 가야 한다');
+    /* 사고: 로그인하면 게이트→온보딩→현장→u.html 이 겹쳐 터져 화면이 서너 번 갈아엎혔다 */
+    add('로그인 착지 한 갈래', E.indexOf('function __landing()') >= 0
+      && E.indexOf("if(DEST==='desk' && !window.__devEnter)") >= 0
+      && E.indexOf("var _land='live'; try{ _land=localStorage") < 0,
+      '착지를 네 군데서 따로 정하면 화면이 튄다');
+    add('온보딩 건너뛰기', E.indexOf("getElementById('ob-skip').onclick=land") >= 0 && E.indexOf('window.__afterOnboard') >= 0,
+      '건너뛰기를 눌렀는데 데모가 뜨면 그게 이질감');
+    /* 사장님 픽: 툴바 6개 + 더보기 */
+    add('편집툴 툴바', E.indexOf('function toolHtml()') >= 0 && E.indexOf('function armTool') >= 0
+      && E.indexOf('toolHtml() + gapHtml(0)') >= 0,
+      '라이트 위에 «자주 쓰는 6개», 나머지는 더보기');
+    add('본문 서식 저장', E.indexOf('__lcSanitizeHtml(e.innerHTML)') >= 0 && E.indexOf("data-drich=\"1\"") >= 0,
+      'textContent 로 받으면 굵게·형광펜이 그 자리서 날아간다');
+    /* 사고(2026-08-20): 껍데기가 통째로 사라져도 오류 0으로 통과했다 */
+    add('현장 시트 껍데기', E.indexOf('id="live-sheet-ov"') >= 0 && E.indexOf('id="ls-host"') >= 0,
+      '없어지면 시트 함수 5개가 조용히 죽는다');
   }
 
   /* ── 결과 출력 ── */
