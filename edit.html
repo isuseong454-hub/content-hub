@@ -2152,6 +2152,45 @@ if('serviceWorker' in navigator){
     .dpic.has .dpsz{ opacity:1; transform:none; width:34px; height:34px; }
     .dpic.has .dpnum{ opacity:.85; }
   }
+  /* ═══ 🖼 사진 편집 툴 B안 (2026-08-22 사장님 픽) ═══════════════════════
+     축은 «툴이 어디에 뜨나». B = 사진 «아래» 띠.
+     A(사진 위 알약)를 기각한 이유: 자르기 격자 한복판을 툴바가 덮는다.
+     C(올라오는 시트)를 기각한 이유: 폰은 좋은데 PC 관습이 아니다 — «둘 다» 가 조건이었다.
+     🚨 자르기·강조는 캔버스에 «구워» 넣는다. 그래야 손님 화면 렌더러를 안 건드린다.
+        원본은 photofx 4번째 칸에 넣어 «되돌리기»가 된다. */
+  .dpic.dpedit{ border-style:solid; border-color:var(--coral); }
+  .dptb{ display:flex; gap:5px; align-items:center; margin:-4px 0 12px; padding:7px;
+    background:var(--soft); border:1px solid var(--coral); border-radius:12px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .dptb::-webkit-scrollbar{ display:none; }
+  .dptb button{ flex:0 0 auto; display:flex; align-items:center; gap:4px;
+    border:1px solid var(--hair); background:var(--paper); color:var(--ink);
+    border-radius:10px; font:inherit; font-size:12px; font-weight:600;
+    padding:9px 10px; min-height:36px; cursor:pointer; white-space:nowrap; }
+  .dptb button.on{ background:var(--coral); border-color:transparent; color:var(--on-coral,#1a1030); }
+  .dptb button.dp-ok{ margin-left:auto; background:var(--coral-soft); border-color:var(--coral); color:var(--ink); }
+  .dptb .dp-sep{ flex:0 0 auto; width:1px; height:20px; background:var(--hair); margin:0 2px; }
+  .dphint{ font-size:11.5px; color:var(--muted); margin:-6px 0 12px; padding:0 3px; line-height:1.6; }
+  /* 자르기 */
+  .dpcrop{ position:absolute; inset:0; display:none; z-index:4; }
+  .dpic.dpcropping .dpcrop{ display:block; }
+  .dpcrop .cmask{ position:absolute; background:rgba(0,0,0,.55); pointer-events:none; }
+  .dpcrop .cbox{ position:absolute; border:1px solid rgba(255,255,255,.92); cursor:move; touch-action:none; }
+  .dpcrop .cbox i{ position:absolute; width:22px; height:22px; border:3px solid #fff; touch-action:none; }
+  .dpcrop .cbox i.tl{ left:-2px; top:-2px; border-right:0; border-bottom:0; cursor:nwse-resize; }
+  .dpcrop .cbox i.tr{ right:-2px; top:-2px; border-left:0; border-bottom:0; cursor:nesw-resize; }
+  .dpcrop .cbox i.bl{ left:-2px; bottom:-2px; border-right:0; border-top:0; cursor:nesw-resize; }
+  .dpcrop .cbox i.br{ right:-2px; bottom:-2px; border-left:0; border-top:0; cursor:nwse-resize; }
+  .dpratio{ display:flex; gap:5px; margin:-6px 0 12px; overflow-x:auto; scrollbar-width:none; }
+  .dpratio::-webkit-scrollbar{ display:none; }
+  .dpratio button{ flex:0 0 auto; border:1px solid var(--hair); background:var(--soft); color:var(--muted);
+    border-radius:999px; font:inherit; font-size:11.5px; font-weight:700; padding:7px 12px; min-height:34px; cursor:pointer; }
+  .dpratio button.on{ background:var(--coral-soft); border-color:var(--coral); color:var(--ink); }
+  .dpratio .go{ margin-left:auto; background:var(--coral); border-color:transparent; color:var(--on-coral,#1a1030); }
+  /* 강조 그리기 */
+  .dpdraw{ position:absolute; inset:0; display:none; z-index:3; touch-action:none; cursor:crosshair; }
+  .dpic.dpdrawing .dpdraw{ display:block; }
+  .dpmarks{ position:absolute; inset:0; z-index:2; pointer-events:none; overflow:visible; }
   .dpic.dsizing{ border-color:var(--coral); }
   .dpnum{ position:absolute; right:44px; bottom:12px; padding:3px 9px; border-radius:999px;
     background:rgba(0,0,0,.58); color:#fff; font-size:11.5px; font-weight:700;
@@ -14740,6 +14779,9 @@ if('serviceWorker' in navigator){
           /* 크기를 조절하고 손을 뗀 «직후»의 클릭은 보관함을 열지 않는다 */
           if(row._sizeGuard && Date.now()-row._sizeGuard < 400) return;
           if(ev && ev.target && ev.target.className==='dpsz') return;
+          if(ev && ev.target && ev.target.closest && ev.target.closest('.dpcrop,.dpdraw')) return;
+          /* 🖼 2026-08-22 B안 — 사진이 «있으면» 편집 띠, «없으면» 보관함 */
+          if(e.classList.contains('has')){ dpOpen(e, row); return; }
           try{ if(window.__openVault) window.__openVault(function(url){ cont(row)[0]=url; changed(row); render(); }); }catch(_){}
         };
       });
@@ -14776,6 +14818,287 @@ if('serviceWorker' in navigator){
        ㉮ 끄는 동안 «지금 몇 %»가 뜬다 — 손이 결과를 보고 멈출 수 있어야 이질감이 없다
        ㉯ 25·33·50·66·75·100 근처에선 살짝 붙는다(자석) — 대충 놔도 반듯하게 선다
        ㉰ 놓는 순간에만 저장한다 — 끄는 내내 저장하면 글이 덜컹거린다 */
+    /* ══════════ 🖼 사진 편집 툴 B안 (2026-08-22) ══════════════════════════
+       [ ✂️자르기  ↔️크기  ⭕동그라미  ↘화살표  🖍형광 | 🖼바꾸기  ↩되돌리기  ✓완료 ]
+       사진 «아래» 띠 — 사진을 하나도 안 가린다. 아이콘+이름이라 처음 봐도 안다.
+       🚨 자르기·강조는 캔버스에 구워서 c[0] 에 넣는다 → 손님 화면(u.html)은 손댈 게 없다.
+       🚨 원본은 photofx(c[2]) 의 «4번째 칸»에 넣는다. 새 칸을 만들면 저장 규격이 흔들린다.
+          형식: 효과|색|폭|원본(encodeURIComponent) — 앞 세 칸은 옛것 그대로 읽힌다. */
+    var DP_TOOLS=[['crop','✂️','자르기'],['size','↔️','크기'],
+                  ['circle','⭕','동그라미'],['arrow','↘','화살표'],['pen','🖍','형광']];
+    function dpFx(row){ return String(cont(row)[2]||'pc-shadow|').split('|'); }
+    function dpSetFx(row, i, v){ var p=dpFx(row); while(p.length<4) p.push(''); p[i]=v; cont(row)[2]=p.join('|'); }
+    function dpOrig(row){ var p=dpFx(row); try{ return p[3]?decodeURIComponent(p[3]):''; }catch(_){ return ''; } }
+    function dpMarkColor(){
+      try{ var c=getComputedStyle(document.documentElement).getPropertyValue('--coral').trim(); if(c) return c; }catch(_){}
+      return '#FF7A59';
+    }
+    /* 캔버스 → 데이터 URL. compressImage 와 같은 예산·형식을 쓴다(용량 규칙이 둘로 갈리면 안 된다) */
+    function dpEncode(cv){
+      var type = (typeof IMG_WEBP!=='undefined' && IMG_WEBP) ? 'image/webp' : 'image/jpeg';
+      var budget = (typeof IMG_BUDGET!=='undefined') ? IMG_BUDGET : 170*1024;
+      var qs=[0.88,0.82,0.76,0.70,0.64], best=null;
+      for(var i=0;i<qs.length;i++){
+        var u=cv.toDataURL(type, qs[i]);
+        if(!best || u.length<best.length) best=u;
+        if(u.length<=budget) return u;
+      }
+      return best;
+    }
+    function dpLoad(url){
+      return new Promise(function(res, rej){
+        var im=new Image();
+        try{ im.crossOrigin='anonymous'; }catch(_){}
+        im.onload=function(){ res(im); };
+        im.onerror=function(){ rej(new Error('load')); };
+        im.src=url;
+      });
+    }
+    /* 강조를 캔버스에 그린다 — 화면에 보이던 SVG 와 «같은 모양»이어야 한다 */
+    function dpPaint(cx, m, W, H){
+      var x=m.x*W, y=m.y*H, w=m.w*W, h=m.h*H;
+      cx.save();
+      cx.strokeStyle=m.c; cx.fillStyle=m.c;
+      cx.lineCap='round'; cx.lineJoin='round';
+      cx.lineWidth=Math.max(3, Math.round(Math.min(W,H)*0.009));
+      if(m.k==='circle'){
+        cx.beginPath();
+        cx.ellipse(x+w/2, y+h/2, Math.abs(w/2), Math.abs(h/2), -0.06, 0, Math.PI*2);
+        cx.stroke();
+      } else if(m.k==='arrow'){
+        var x2=x+w, y2=y+h, a=Math.atan2(y2-y, x2-x), L=Math.max(14, Math.min(W,H)*0.05);
+        cx.beginPath(); cx.moveTo(x,y); cx.lineTo(x2,y2); cx.stroke();
+        cx.beginPath();
+        cx.moveTo(x2,y2); cx.lineTo(x2-L*Math.cos(a-0.42), y2-L*Math.sin(a-0.42));
+        cx.moveTo(x2,y2); cx.lineTo(x2-L*Math.cos(a+0.42), y2-L*Math.sin(a+0.42));
+        cx.stroke();
+      } else if(m.k==='pen'){
+        cx.globalAlpha=.34;
+        cx.fillRect(Math.min(x,x+w), Math.min(y,y+h), Math.abs(w), Math.abs(h));
+      }
+      cx.restore();
+    }
+    function dpSvg(m){
+      var C=m.c, x=m.x*100, y=m.y*100, w=m.w*100, h=m.h*100;
+      if(m.k==='circle')
+        return '<ellipse cx="'+(x+w/2)+'%" cy="'+(y+h/2)+'%" rx="'+Math.abs(w/2)+'%" ry="'+Math.abs(h/2)+'%" '
+             + 'fill="none" stroke="'+C+'" stroke-width="3" vector-effect="non-scaling-stroke"/>';
+      if(m.k==='arrow')
+        return '<line x1="'+x+'%" y1="'+y+'%" x2="'+(x+w)+'%" y2="'+(y+h)+'%" stroke="'+C+'" stroke-width="3" '
+             + 'stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#dparrow)"/>';
+      return '<rect x="'+Math.min(x,x+w)+'%" y="'+Math.min(y,y+h)+'%" width="'+Math.abs(w)+'%" height="'+Math.abs(h)+'%" '
+           + 'fill="'+C+'" opacity=".34"/>';
+    }
+    function dpDrawMarks(pic){
+      var sv=pic.querySelector('.dpmarks'); if(!sv) return;
+      var ms=pic._marks||[];
+      sv.innerHTML='<defs><marker id="dparrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">'
+        + '<path d="M0 0 L10 5 L0 10 z" fill="'+dpMarkColor()+'"/></marker></defs>'
+        + ms.map(dpSvg).join('');
+    }
+    function dpClose(pic){
+      pic.classList.remove('dpedit','dpcropping','dpdrawing');
+      var tb=pic.parentNode && pic.parentNode.querySelector('.dptb'); if(tb) tb.remove();
+      var rt=pic.parentNode && pic.parentNode.querySelector('.dpratio'); if(rt) rt.remove();
+      var hn=pic.parentNode && pic.parentNode.querySelector('.dphint'); if(hn) hn.remove();
+      var cr=pic.querySelector('.dpcrop'); if(cr) cr.remove();
+      var dw=pic.querySelector('.dpdraw'); if(dw) dw.remove();
+    }
+    function dpHint(pic, txt){
+      var wrap=pic.parentNode; if(!wrap) return;
+      var hn=wrap.querySelector('.dphint');
+      if(!txt){ if(hn) hn.remove(); return; }
+      if(!hn){ hn=document.createElement('div'); hn.className='dphint';
+               var tb=wrap.querySelector('.dptb'); if(tb) tb.after(hn); else wrap.appendChild(hn); }
+      hn.textContent=txt;
+    }
+    function dpOpen(pic, row){
+      if(pic.classList.contains('dpedit')){ dpClose(pic); return; }
+      /* 한 번에 사진 하나만 연다 — 두 개가 열리면 어느 걸 고치는지 모른다 */
+      var h0=host(); if(h0) h0.querySelectorAll('.dpic.dpedit').forEach(function(p){ dpClose(p); });
+      pic.classList.add('dpedit');
+      pic._marks=pic._marks||[];
+      if(!pic.querySelector('.dpmarks')){
+        var sv=document.createElementNS('http://www.w3.org/2000/svg','svg');
+        sv.setAttribute('class','dpmarks'); pic.appendChild(sv);
+      }
+      dpDrawMarks(pic);
+      var tb=document.createElement('div'); tb.className='dptb';
+      tb.innerHTML = DP_TOOLS.map(function(t){
+          return '<button type="button" data-dp="'+t[0]+'">'+t[1]+' '+t[2]+'</button>'; }).join('')
+        + '<span class="dp-sep"></span>'
+        + '<button type="button" data-dp="swap">🖼 바꾸기</button>'
+        + (dpOrig(row) ? '<button type="button" data-dp="undo">↩ 원본으로</button>' : '')
+        + '<button type="button" class="dp-ok" data-dp="ok">✓ 완료</button>';
+      pic.after(tb);
+      tb.addEventListener('click', function(ev){
+        var b=ev.target.closest('[data-dp]'); if(!b) return;
+        ev.preventDefault(); ev.stopPropagation();
+        dpPick(pic, row, tb, b.getAttribute('data-dp'), b);
+      });
+    }
+    function dpPick(pic, row, tb, k, btn){
+      if(k==='ok'){ dpBake(pic, row).then(function(){ dpClose(pic); }); return; }
+      if(k==='swap'){
+        try{ if(window.__openVault) window.__openVault(function(url){
+          cont(row)[0]=url; dpSetFx(row,3,''); changed(row); render(); }); }catch(_){}
+        return;
+      }
+      if(k==='undo'){
+        var o=dpOrig(row); if(!o) return;
+        cont(row)[0]=o; dpSetFx(row,3,''); pic._marks=[]; changed(row); render(); return;
+      }
+      var was=btn.classList.contains('on');
+      tb.querySelectorAll('[data-dp]').forEach(function(x){ x.classList.remove('on'); });
+      pic.classList.remove('dpcropping','dpdrawing');
+      var cr=pic.querySelector('.dpcrop'); if(cr) cr.remove();
+      var dw=pic.querySelector('.dpdraw'); if(dw) dw.remove();
+      var rt=pic.parentNode.querySelector('.dpratio'); if(rt) rt.remove();
+      if(was){ dpHint(pic,''); return; }
+      btn.classList.add('on');
+      if(k==='crop'){ dpCrop(pic, row); dpHint(pic,'모서리를 끌어 자를 부분을 정하고 «자르기»를 누르세요'); return; }
+      if(k==='size'){ dpHint(pic,'사진 오른쪽 아래 ↔ 손잡이를 끌면 25~100%로 줄어요'); return; }
+      dpDraw(pic, k);
+      dpHint(pic, k==='circle' ? '사진 위를 끌어 동그라미를 치세요 (여러 번 가능)'
+                : k==='arrow'  ? '시작점에서 가리킬 곳까지 끄세요'
+                :                '칠할 부분을 끌어 덮으세요');
+    }
+    /* ── 자르기 ── */
+    function dpCrop(pic, row){
+      var img=pic.querySelector('img'); if(!img) return;
+      pic.classList.add('dpcropping');
+      var cr=document.createElement('div'); cr.className='dpcrop';
+      cr.innerHTML='<div class="cbox"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>';
+      pic.appendChild(cr);
+      var box=cr.querySelector('.cbox');
+      var B={x:.10,y:.10,w:.80,h:.80}, ratio=0;
+      function put(){
+        box.style.left=(B.x*100)+'%'; box.style.top=(B.y*100)+'%';
+        box.style.width=(B.w*100)+'%'; box.style.height=(B.h*100)+'%';
+      }
+      put();
+      function fit(){
+        if(!ratio) return;
+        var r=img.getBoundingClientRect(); if(!r.width||!r.height) return;
+        var pxW=B.w*r.width, pxH=pxW/ratio;
+        B.h=Math.min(.98, pxH/r.height);
+        if(B.y+B.h>1) B.y=Math.max(0, 1-B.h);
+        put();
+      }
+      function drag(el, mode){
+        el.addEventListener('pointerdown', function(ev){
+          ev.preventDefault(); ev.stopPropagation();
+          var r=img.getBoundingClientRect(); if(!r.width) return;
+          var sx=ev.clientX, sy=ev.clientY, S={x:B.x,y:B.y,w:B.w,h:B.h};
+          try{ el.setPointerCapture(ev.pointerId); }catch(_){}
+          function mv(e2){
+            var dx=(e2.clientX-sx)/r.width, dy=(e2.clientY-sy)/r.height;
+            if(mode==='move'){
+              B.x=Math.max(0, Math.min(1-S.w, S.x+dx));
+              B.y=Math.max(0, Math.min(1-S.h, S.y+dy));
+            } else {
+              var L=S.x, T=S.y, R=S.x+S.w, Bo=S.y+S.h;
+              if(mode.indexOf('l')>=0) L=Math.max(0, Math.min(R-.06, S.x+dx));
+              if(mode.indexOf('r')>=0) R=Math.min(1, Math.max(L+.06, S.x+S.w+dx));
+              if(mode.indexOf('t')>=0) T=Math.max(0, Math.min(Bo-.06, S.y+dy));
+              if(mode.indexOf('b')>=0) Bo=Math.min(1, Math.max(T+.06, S.y+S.h+dy));
+              B.x=L; B.y=T; B.w=R-L; B.h=Bo-T;
+              if(ratio){ var pxH=(B.w*r.width)/ratio; B.h=Math.min(1-B.y, pxH/r.height); }
+            }
+            put();
+          }
+          function up(){ el.removeEventListener('pointermove',mv); el.removeEventListener('pointerup',up); el.removeEventListener('pointercancel',up); }
+          el.addEventListener('pointermove',mv); el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up);
+        });
+      }
+      drag(box,'move');
+      drag(box.querySelector('.tl'),'lt'); drag(box.querySelector('.tr'),'rt');
+      drag(box.querySelector('.bl'),'lb'); drag(box.querySelector('.br'),'rb');
+      /* 비율 칸 */
+      var rt=document.createElement('div'); rt.className='dpratio';
+      var RS=[['자유',0],['1:1',1],['4:5',0.8],['16:9',16/9],['3:4',0.75]];
+      rt.innerHTML=RS.map(function(x,i){ return '<button type="button" data-r="'+x[1]+'"'+(i===0?' class="on"':'')+'>'+x[0]+'</button>'; }).join('')
+        + '<button type="button" class="go" data-crop="go">✂️ 자르기</button>';
+      var tb=pic.parentNode.querySelector('.dptb'); if(tb) tb.after(rt); else pic.after(rt);
+      rt.addEventListener('click', function(ev){
+        var g=ev.target.closest('[data-crop]');
+        if(g){ ev.preventDefault(); dpApplyCrop(pic, row, B); return; }
+        var b=ev.target.closest('[data-r]'); if(!b) return;
+        rt.querySelectorAll('[data-r]').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on'); ratio=parseFloat(b.getAttribute('data-r'))||0; fit();
+      });
+    }
+    function dpApplyCrop(pic, row, B){
+      var src=cont(row)[0]; if(!src) return;
+      var keepOrig = dpOrig(row) || src;
+      dpLoad(src).then(function(im){
+        var W=im.naturalWidth||im.width, H=im.naturalHeight||im.height;
+        var sx=Math.round(B.x*W), sy=Math.round(B.y*H);
+        var sw=Math.max(8, Math.round(B.w*W)), sh=Math.max(8, Math.round(B.h*H));
+        var cv=document.createElement('canvas'); cv.width=sw; cv.height=sh;
+        var cx=cv.getContext('2d');
+        cx.imageSmoothingEnabled=true; try{ cx.imageSmoothingQuality='high'; }catch(_){}
+        cx.drawImage(im, sx, sy, sw, sh, 0, 0, sw, sh);
+        /* 자를 때 이미 찍어둔 강조가 있으면 같이 굽는다 — 두 번 일하지 않게 */
+        (pic._marks||[]).forEach(function(m){
+          dpPaint(cx, {k:m.k, c:m.c,
+            x:(m.x-B.x)/B.w, y:(m.y-B.y)/B.h, w:m.w/B.w, h:m.h/B.h}, sw, sh);
+        });
+        pic._marks=[];
+        cont(row)[0]=dpEncode(cv);
+        dpSetFx(row, 3, encodeURIComponent(keepOrig));
+        changed(row); render();
+        try{ if(window.toast) toast('잘랐어요 · ↩원본으로 되돌릴 수 있어요'); }catch(_){}
+      }).catch(function(){
+        try{ if(window.toast) toast('이 사진은 자를 수 없어요 (다른 곳에서 불러온 사진)'); }catch(_){}
+      });
+    }
+    /* ── 강조 그리기 ── */
+    function dpDraw(pic, kind){
+      pic.classList.add('dpdrawing');
+      var img=pic.querySelector('img'); if(!img) return;
+      var dw=document.createElement('div'); dw.className='dpdraw'; pic.appendChild(dw);
+      dw.addEventListener('pointerdown', function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        var r=img.getBoundingClientRect(); if(!r.width) return;
+        var x0=(ev.clientX-r.left)/r.width, y0=(ev.clientY-r.top)/r.height;
+        var m={k:kind, c:dpMarkColor(), x:x0, y:y0, w:0, h:0};
+        pic._marks.push(m);
+        try{ dw.setPointerCapture(ev.pointerId); }catch(_){}
+        function mv(e2){
+          m.w=(e2.clientX-r.left)/r.width - x0;
+          m.h=(e2.clientY-r.top)/r.height - y0;
+          dpDrawMarks(pic);
+        }
+        function up(){
+          dw.removeEventListener('pointermove',mv); dw.removeEventListener('pointerup',up); dw.removeEventListener('pointercancel',up);
+          /* 손가락이 미끄러진 정도(아주 작은 것)는 «실수»로 보고 버린다 */
+          if(Math.abs(m.w)<0.03 && Math.abs(m.h)<0.03){ pic._marks.pop(); dpDrawMarks(pic); }
+        }
+        dw.addEventListener('pointermove',mv); dw.addEventListener('pointerup',up); dw.addEventListener('pointercancel',up);
+      });
+    }
+    /* ── 굽기 (완료) ── */
+    function dpBake(pic, row){
+      var ms=pic._marks||[];
+      if(!ms.length) return Promise.resolve();
+      var src=cont(row)[0]; if(!src) return Promise.resolve();
+      var keepOrig = dpOrig(row) || src;
+      return dpLoad(src).then(function(im){
+        var W=im.naturalWidth||im.width, H=im.naturalHeight||im.height;
+        var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+        var cx=cv.getContext('2d');
+        cx.drawImage(im, 0, 0, W, H);
+        ms.forEach(function(m){ dpPaint(cx, m, W, H); });
+        pic._marks=[];
+        cont(row)[0]=dpEncode(cv);
+        dpSetFx(row, 3, encodeURIComponent(keepOrig));
+        changed(row); render();
+        try{ if(window.toast) toast('표시했어요 · ↩원본으로 되돌릴 수 있어요'); }catch(_){}
+      }).catch(function(){
+        try{ if(window.toast) toast('이 사진엔 표시를 구울 수 없어요 (다른 곳에서 불러온 사진)'); }catch(_){}
+      });
+    }
     var SNAP=[25,33,50,66,75,100];
     function armSize(h, rows){
       h.querySelectorAll('[data-dsz]').forEach(function(g){

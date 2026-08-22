@@ -410,6 +410,28 @@
       add('e 사진 손잡이는 폰에도', et.indexOf('@media (hover:none){') >= 0
         && et.indexOf('.dpic.has .dpsz{ opacity:1') >= 0,
         'hover 로만 뜨면 폰에선 크기 조절이 «존재하지 않는 기능»이 된다');
+      /* ── 🖼 사진 편집 툴 B안 (2026-08-22 사장님 픽) ── */
+      add('e 사진 툴 띠 (B안)', et.indexOf("tb.className='dptb'") >= 0 && et.indexOf('function dpOpen') >= 0,
+        'A(사진 위 알약)는 자르기 격자를 덮고, C(시트)는 PC 관습이 아니다 — B로 픽');
+      add('e 사진 툴 6종', ['자르기','크기','동그라미','화살표','형광','바꾸기'].every(function(k){
+          return et.indexOf(k) >= 0; }) && et.indexOf("['crop','✂️','자르기']") >= 0,
+        '아이콘만이 아니라 «이름»도 같이 — 처음 봐도 알아야 한다');
+      add('e 자르기·강조는 구워 넣는다', et.indexOf('function dpBake') >= 0
+        && et.indexOf('function dpApplyCrop') >= 0 && et.indexOf('function dpEncode') >= 0,
+        '캔버스에 구우면 손님 화면(u.html) 렌더러를 손댈 게 없다');
+      add('e 원본 되돌리기', et.indexOf("dpSetFx(row, 3, encodeURIComponent(keepOrig))") >= 0
+        && et.indexOf('function dpOrig') >= 0 && et.indexOf('↩ 원본으로') >= 0,
+        '구우면 못 되돌린다 — 원본을 photofx 4번째 칸에 남긴다');
+      add('e 저장 규격 안 흔든다', et.indexOf("photocard:[['photo','사진','']") >= 0
+        && et.indexOf('효과|색|폭|원본') >= 0,
+        '새 칸을 만들면 저장 규격이 흔들린다 — 기존 photofx 안에 4번째 조각으로');
+      add('e 사진 툴은 손가락도', et.indexOf(".dpdraw{ position:absolute; inset:0; display:none; z-index:3; touch-action:none;") >= 0
+        && et.indexOf('setPointerCapture') >= 0,
+        'pointer 이벤트 하나로 마우스·손가락을 같이 받는다 (PC/폰 이질감 없이)');
+      add('e 용량 예산은 한 벌', et.indexOf("(typeof IMG_BUDGET!=='undefined') ? IMG_BUDGET") >= 0,
+        '사진 넣기와 편집이 다른 예산을 쓰면 어떤 건 무겁고 어떤 건 가벼워진다');
+      add('e 미끄러진 손가락은 버린다', et.indexOf("if(Math.abs(m.w)<0.03 && Math.abs(m.h)<0.03)") >= 0,
+        '폰에서 살짝 스친 것까지 표시로 남으면 지우는 게 일이 된다');
       /* ── 📱 hover 전용 = 폰에서 «없는 기능» (2026-08-22 전수 조사) ──
          사진 손잡이 하나를 고치고 전수 조사했더니 edit 12곳 · u 4곳이었다.
          사장님은 폰으로 일하신다 — 새 «hover 하면 나타나는» 버튼을 만들 때마다
