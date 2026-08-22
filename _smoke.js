@@ -412,6 +412,29 @@
       add('e 사진 손잡이는 폰에도', et.indexOf('@media (hover:none){') >= 0
         && et.indexOf('.dpic.has .dpsz{ opacity:1') >= 0,
         'hover 로만 뜨면 폰에선 크기 조절이 «존재하지 않는 기능»이 된다');
+      /* ── 📷 사진은 바로 사진첩에서 (2026-08-22 사장님 지시) ── */
+      add('e 사진 고르기는 사진첩 직행', et.indexOf('function pickFromDevice') >= 0
+        && et.indexOf('if(cb){ pickFromDevice(cb); return; }') >= 0,
+        '사진 한 장 넣는데 보관함이 한 번 끼어들어 화면이 둘이었다 — 한 곳만 고쳐 31군데가 바뀐다');
+      add('e 고른 사진은 보관 안 함', (function(){
+          var i=et.indexOf('function pickFromDevice'); if(i<0) return false;
+          var seg=et.slice(i, i+1400);
+          return seg.indexOf('vSave') < 0 && seg.indexOf('vault.photos') < 0
+            && seg.indexOf('compressImage(f, 1280, 0.86)') >= 0;
+        })(),
+        '사장님 «보관하지 말고» — 압축해서 곧바로 그 자리에 꽂는다');
+      add('e 사진첩은 누른 그 순간에', (function(){
+          var i=et.indexOf('function pickFromDevice'); if(i<0) return false;
+          var seg=et.slice(i, i+1400);
+          return seg.indexOf('inp.click();') >= 0 && seg.indexOf('setTimeout') < 0;
+        })(),
+        '아이폰은 «누른 그 순간»에만 사진첩을 열어준다 — 기다렸다 열면 막힌다');
+      add('e 보관함 관리는 남아 있다', et.indexOf("if(setVault) setVault.onclick=function(){ openVault(null); }") >= 0
+        && et.indexOf("renderCats(); renderGrid(); vov.classList.add('open');") >= 0,
+        '고르기만 사진첩으로 보낸다 — 이미 올려 둔 사진을 볼 문까지 없애면 갇힌다');
+      add('e 사진 용량 예산은 한 벌', (et.match(/compressImage\(f, 1280, 0\.86\)/g)||[]).length >= 1
+        && et.indexOf("(typeof IMG_BUDGET!=='undefined') ? IMG_BUDGET") >= 0,
+        '넣기·편집이 다른 예산을 쓰면 어떤 건 무겁고 어떤 건 가벼워진다');
       /* ── 🎯 맨 위 바 A안 · 선 아이콘 (2026-08-22 사장님 픽) ── */
       add('e 맨 위 바는 5칸', et.indexOf('id="le-undo" title="되돌리기 (Ctrl+Z)" disabled style="display:none') >= 0
         && et.indexOf('id="le-x" title="지금 바로 저장·공개" style="display:none') >= 0,

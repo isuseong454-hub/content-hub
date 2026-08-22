@@ -8912,10 +8912,37 @@ if('serviceWorker' in navigator){
   }
   document.getElementById('movecat-cancel').onclick=closeMoveDialog;
   mvOv.addEventListener('click', function(e){ if(e.target===mvOv) closeMoveDialog(); });
+  /* ══ 📷 사진은 «바로 사진첩»에서 (2026-08-22 사장님 지시) ═══════════════
+     사장님: «사진 넣기 하면 보관함이 뜨는데 그거 아예 빼줘. 자기 사진첩 뜨게. 보관하지 말고»
+     그동안은 보관함(폴더·격자)이 한 번 끼어들었다 — 사진 한 장 넣는 데 화면이 둘이었다.
+     🚨 여기 한 곳만 고치면 사진을 고르는 31군데가 «전부» 바뀐다.
+     🚨 «보관하지 말고» — 고른 사진은 vault 에 넣지 않는다. 압축해서 곧바로 그 자리에 꽂는다.
+     ⚠️ 그래서 «전에 쓴 사진 다시 쓰기»는 사라진다. 사장님이 그걸 아시고 고르셨다.
+     ⚠️ 아이폰은 «누른 그 순간»에만 사진첩을 열어준다 — 기다렸다 열면 막힌다.
+        그래서 input.click() 을 이 함수 안에서 «바로» 부른다. */
+  function pickFromDevice(cb){
+    var inp=document.createElement('input');
+    inp.type='file'; inp.accept='image/*';
+    inp.style.position='fixed'; inp.style.left='-9999px'; inp.style.opacity='0';
+    document.body.appendChild(inp);
+    inp.onchange=function(){
+      var f=inp.files && inp.files[0];
+      try{ inp.remove(); }catch(_){}
+      if(!f){ return; }
+      if(!/^image\//.test(f.type||'')){ try{ toast('사진 파일만 넣을 수 있어요'); }catch(_){} return; }
+      try{ toast('사진 넣는 중…'); }catch(_){}
+      Promise.resolve(compressImage(f, 1280, 0.86)).then(function(url){
+        if(url) cb(url); else { try{ toast('사진을 넣지 못했어요'); }catch(_){} }
+      }).catch(function(){ try{ toast('사진을 넣지 못했어요'); }catch(_){} });
+    };
+    inp.click();
+  }
+  window.__pickFromDevice=pickFromDevice;
   function openVault(cb){
-    pickCb = cb || null;
-    document.getElementById('vault-desc').textContent = pickCb ? '골라 가져오거나 새로 올리세요 · 끌어다 놓기·붙여넣기(Ctrl+V) 가능' : '올리면 자동 압축돼 저장돼요 · 끌어다 놓기·붙여넣기(Ctrl+V) 가능';
-    var up=document.getElementById('vault-up'); if(up) up.textContent = pickCb ? '＋ 새로 올리기' : '＋ 사진 올리기';
+    if(cb){ pickFromDevice(cb); return; }      /* 고르기 = 곧바로 사진첩 (보관함을 안 거친다) */
+    pickCb = null;
+    document.getElementById('vault-desc').textContent = '올리면 자동 압축돼 저장돼요 · 끌어다 놓기·붙여넣기(Ctrl+V) 가능';
+    var up=document.getElementById('vault-up'); if(up) up.textContent = '＋ 사진 올리기';
     renderCats(); renderGrid(); vov.classList.add('open');
   }
   window.__openVault=openVault;   /* 📄 문서형 글 편집이 사진 자리를 누를 때 쓴다 (2026-08-21) */
