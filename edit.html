@@ -14029,7 +14029,9 @@ if('serviceWorker' in navigator){
       function needPick(){ try{ if(window.toast) toast('꾸밀 글자를 먼저 드래그해 주세요'); }catch(_){} }
       function wrap(cls){
         if(!picked){ needPick(); return; }
-        var r=sel.getRangeAt(0), sp=document.createElement('span'); sp.className=cls;
+        var r=sel.getRangeAt(0);
+        var sp = (cls==='b-hand') ? document.createElement('b') : document.createElement('span');
+        if(cls!=='b-hand') sp.className=cls;
         try{ r.surroundContents(sp); }catch(_){ try{ sp.appendChild(r.extractContents()); r.insertNode(sp); }catch(__){} }
       }
       function put(html){
@@ -14041,12 +14043,30 @@ if('serviceWorker' in navigator){
         var br=document.createElement('div'); br.innerHTML='<br>';
         if(node.parentNode) node.parentNode.insertBefore(br, node.nextSibling);
       }
-      if(k==='bold')        document.execCommand('bold');
+      /* 🚨 2026-08-21 — execCommand 는 «문서에 포커스가 없으면» false 만 돌려주고 조용히 넘어간다.
+            폐기 예정 API 이기도 하다. 눌렀는데 아무 일도 안 일어나는 게 제일 큰 이질감이라,
+            실패하면 직접 DOM 으로 한 번 더 시도한다. (손맛 점검에서 잡음) */
+      function cmd(name, arg){ try{ return document.execCommand(name, false, arg||null); }catch(_){ return false; } }
+      function blockAs(tag){
+        /* 지금 커서가 있는 «줄»을 통째로 tag 로 바꾼다 — formatBlock 이 안 먹을 때의 손수 버전 */
+        var sl=window.getSelection(); if(!sl||!sl.rangeCount) return false;
+        var r=sl.getRangeAt(0), n=r.startContainer;
+        n = (n.nodeType===1) ? n : n.parentNode;
+        while(n && n!==f && n.parentNode!==f) n=n.parentNode;
+        var el=document.createElement(tag);
+        if(n && n!==f){ el.innerHTML=n.innerHTML||n.textContent; n.parentNode.replaceChild(el, n); }
+        else {
+          if(!picked) return false;
+          try{ el.appendChild(r.extractContents()); r.insertNode(el); }catch(_){ return false; }
+        }
+        return true;
+      }
+      if(k==='bold'){        if(!cmd('bold')) wrap('b-hand'); }
       else if(k==='em')     wrap('em');
       else if(/^hl-/.test(k)) wrap(k);
-      else if(k==='h4')     document.execCommand('formatBlock', false, 'h4');
-      else if(k==='quote')  document.execCommand('formatBlock', false, 'blockquote');
-      else if(k==='ol')     document.execCommand('insertOrderedList');
+      else if(k==='h4'){     if(!cmd('formatBlock','h4')) blockAs('h4'); }
+      else if(k==='quote'){  if(!cmd('formatBlock','blockquote')) blockAs('blockquote'); }
+      else if(k==='ol'){     if(!cmd('insertOrderedList')) put('<ol><li>첫 번째</li><li>두 번째</li></ol>'); }
       else if(k==='hr')     put('<hr>');
       else if(k==='check')  put('<ul class="lc-check"><li>첫 번째 항목</li><li>두 번째 항목</li></ul>');
       else if(k==='co-tip') put('<div class="lc-callout lc-co-tip">알아두면 좋은 것을 여기에</div>');
