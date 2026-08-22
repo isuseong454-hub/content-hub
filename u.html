@@ -562,6 +562,16 @@
     opacity:.20 !important; width:640px !important; height:600px !important;
     top:-250px !important; filter:blur(64px) !important;
   }
+  /* ═══ 📱 손가락 기기 전수 보정 (2026-08-22) ═══════════════════════════
+     🚨 라이트 편집을 폰으로 하면 «연필»이 안 보였다 — hover 로만 떴기 때문.
+        사장님은 폰으로 고치신다. 여기가 «편집이 안 된다»의 진짜 이유였을 수 있다. */
+  @media (hover:none){
+    html[data-edit] .la-hb .la-ed-act{ opacity:1 !important; transform:none !important; }
+    html[data-edit] .la-ed-sec .la-ed-pen,
+    html[data-edit] .la-galcard .la-gpen{ opacity:1 !important; }
+    /* 손가락 크기 */
+    html[data-edit] .la-ed-pen, html[data-edit] .la-gpen{ min-width:34px; min-height:34px; }
+  }
   /* ═══ 🌌 광원 두 개 (2026-08-22 사장님 지시) ═══════════════════════════
      «생각대로»의 배경과 같은 «묘한» 느낌 = 세기가 아니라 구조였다.
      ① 두 개가 ② 대각선으로 ③ 화면 비례로 크게 ④ 아주 천천히 한 번 흐른다.

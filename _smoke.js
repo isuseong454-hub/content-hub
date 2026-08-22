@@ -410,6 +410,34 @@
       add('e 사진 손잡이는 폰에도', et.indexOf('@media (hover:none){') >= 0
         && et.indexOf('.dpic.has .dpsz{ opacity:1') >= 0,
         'hover 로만 뜨면 폰에선 크기 조절이 «존재하지 않는 기능»이 된다');
+      /* ── 📱 hover 전용 = 폰에서 «없는 기능» (2026-08-22 전수 조사) ──
+         사진 손잡이 하나를 고치고 전수 조사했더니 edit 12곳 · u 4곳이었다.
+         사장님은 폰으로 일하신다 — 새 «hover 하면 나타나는» 버튼을 만들 때마다
+         (hover:none) 보정을 같이 넣어야 한다. 이 항목이 그걸 강제한다. */
+      (function(){
+        function hoverOnly(src){
+          var css=(src.match(/<style[^>]*>[\s\S]*?<\/style>/g)||[]).join('\n');
+          var out=[];
+          css.split('}').forEach(function(r){
+            var sel=(r.split('{')[0]||'').trim(), body=(r.split('{')[1]||'');
+            if(sel.indexOf(':hover')<0) return;
+            if(!/(opacity\s*:\s*1|visibility\s*:\s*visible)/.test(body)) return;
+            out.push(sel.replace(/\s+/g,' ').slice(0,60));
+          });
+          return out;
+        }
+        var he=hoverOnly(et), hu=hoverOnly(ut);
+        var ge=/@media \(hover:none\)\{[\s\S]{0,900}?\.lblk \.lblk-tools/.test(et.replace(/\s+/g,' ').replace(/@media \( *hover *: *none *\)/g,'@media (hover:none)'));
+        add('e hover 전용 보정 있음', et.indexOf('@media (hover:none){') >= 0
+          && et.indexOf('.dblk .dgrip') >= 0 && et.indexOf('.dgap button{ opacity:1') >= 0,
+          '폰엔 hover 가 없다 — 드래그 손잡이·＋넣기·삭제가 «없는 기능»이 된다 ('+he.length+'곳 발견)');
+        add('u 라이트 편집 연필 보정', ut.indexOf('@media (hover:none){') >= 0
+          && ut.indexOf('.la-ed-pen') >= 0 && ut.indexOf('.la-ed-act') >= 0,
+          '폰으로 고치는데 연필이 안 보이면 «편집이 안 된다»가 된다 ('+hu.length+'곳 발견)');
+        add('손가락 크기 34px 이상', et.indexOf('min-width:34px; min-height:34px') >= 0
+          && ut.indexOf('min-width:34px; min-height:34px') >= 0,
+          '28px 버튼은 손가락으로 잘못 눌린다', 'warn');
+      })();
       /* 사고: _ibN 을 STEPS 뒤에 선언해 지도 칸이 늘 «아직 없음»으로 떴다 (2026-08-22) */
       add('e 문의 수는 지도보다 먼저', (function(){
           var d=et.indexOf('var _ibN='), st=et.indexOf("nm:'판매·예약'"), bd=et.indexOf('var bandHtml');

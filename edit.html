@@ -2126,6 +2126,26 @@ if('serviceWorker' in navigator){
     opacity:0; transform:scale(.9); transition:opacity .16s, transform .16s cubic-bezier(.2,.9,.2,1); }
   .dpsz::before{ content:'\2194'; color:#fff; font-size:15px; line-height:1; }
   .dpic.has:hover .dpsz, .dpic.dsizing .dpsz{ opacity:1; transform:none; }
+  /* ═══ 📱 손가락 기기 전수 보정 (2026-08-22) ═══════════════════════════
+     사진 손잡이 한 개를 고치고 나서 전수 조사했더니, «:hover 로만 나타나는 것»이
+     12군데였다. 폰엔 hover 가 없으므로 그 기능들은 «존재하지 않는 기능»이었다.
+     사장님은 폰으로 일하신다 — 여기가 이 앱에서 가장 큰 구멍이었다.
+     🚨 규칙: 새 «hover 하면 나타나는» 버튼을 만들면 여기에 한 줄 같이 넣는다.
+        (자동검수가 hover 전용 규칙 개수를 세고 있어서, 안 넣으면 빨간 줄이 뜬다) */
+  @media (hover:none){
+    .ins-bar,
+    .dlx,
+    .ddelpost,
+    .scard .sc-del,
+    .dblk .dgrip,
+    .lblk .lblk-tools{ opacity:1 !important; }
+    /* 블록 사이 «＋ 넣기» — 눌러야 하는데 투명해서 못 눌렀다 */
+    .dgap::before{ opacity:.5 !important; }
+    .dgap button{ opacity:1 !important; }
+    /* 손가락 크기 — 28px 는 잘못 눌린다 (44px 권장, 자리가 좁아 34~38로) */
+    .dblk .dgrip{ min-width:34px; min-height:34px; }
+    .scard .sc-del, .ddelpost, .dlx{ min-width:34px; min-height:34px; }
+  }
   /* 🚨 2026-08-22 사장님 «핸드폰으로 어떻게 줄여?» — 손잡이가 :hover 로만 떴다.
      폰엔 hover 가 없어서 크기 조절이 «존재하지 않는 기능»이었다. 손가락 기기에선 늘 보인다. */
   @media (hover:none){
