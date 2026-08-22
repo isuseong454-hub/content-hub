@@ -412,6 +412,52 @@
       add('e 사진 손잡이는 폰에도', et.indexOf('@media (hover:none){') >= 0
         && et.indexOf('.dpic.has .dpsz{ opacity:1') >= 0,
         'hover 로만 뜨면 폰에선 크기 조절이 «존재하지 않는 기능»이 된다');
+      /* ── 🎯 맨 위 바 A안 · 선 아이콘 (2026-08-22 사장님 픽) ── */
+      add('e 맨 위 바는 5칸', et.indexOf('id="le-undo" title="되돌리기 (Ctrl+Z)" disabled style="display:none') >= 0
+        && et.indexOf('id="le-x" title="지금 바로 저장·공개" style="display:none') >= 0,
+        '실측 8칸은 375px 화면에서 ⋯가 11px 잘렸다 — ↶↷·✓저장을 빼서 넘침 0');
+      add('e 되돌리기 키는 산다', et.indexOf("k!=='z'&&k!=='y'") >= 0,
+        '버튼만 숨긴 것이지 기능을 지운 게 아니다 — Ctrl+Z 는 그대로여야 한다');
+      add('e 저장 알약이 문을 이어받음', et.indexOf("asb.onclick=function(){ var x2=document.getElementById('le-x')") >= 0,
+        '✓저장을 없앴으니 «지금 저장»할 길은 남아 있어야 한다 — 없으면 갇힌 느낌이 든다');
+      add('e 맨 위 바에 이모지 없음', (function(){
+          var i=et.indexOf('<div class="le-bar le-bar-slim">'); if(i<0) return false;
+          var j=et.indexOf('id="le-more"'); if(j<0) return false;
+          /* 숨긴 버튼(↶↷·✓저장·🧭)과 주석은 화면에 안 뜬다 — 세면 안 된다 */
+          var seg=et.slice(i,j).replace(/<!--[\s\S]*?-->/g,'')
+                  .replace(/<button[^>]*display:none[^>]*>[\s\S]*?<\/button>/g,'');
+          return !/[\u{1F300}-\u{1FAFF}]/u.test(seg);
+        })(),
+        '이모지는 기기마다 다르게 그려지고 테마색을 못 따르고 줄이 안 맞는다 — «AI 냄새»의 정체');
+      add('e 선 아이콘 3종', (et.match(/class="lei"/g)||[]).length >= 3 && et.indexOf('.lei{width:19px') >= 0,
+        'currentColor 라 테마색을 따르고 기기마다 같게 그려진다');
+      add('e 저장됨 글자 안 숨김', et.indexOf(".le-bar .le-autosave .as-txt{display:none;}") < 0,
+        '점만 남으면 초록 동그라미가 무슨 뜻인지 아무도 모른다');
+      /* ── 🧭 홈 편집 가이드 4단계 · 한 줄 띠 (2026-08-22 사장님 픽 ㉮) ── */
+      add('e 가이드 4단계 이름', ['홈 화면 편집','메뉴 설정','쿠파스 만들기','연락 받을 곳 열기'].every(function(k){
+          return et.indexOf(k) >= 0; }),
+        '사장님이 정하신 이름 그대로 — 바뀌면 말이 앱 안에서 갈라진다');
+      add('e 판정은 한 벌만', et.indexOf('window.__guideState=function()') >= 0
+        && et.indexOf('window.__zsState||{a:false') >= 0 && et.indexOf('window.__btnReadyE && window.__btnReadyE(c, kind).ok') >= 0,
+        '가이드가 따로 세면 «가이드는 3/4인데 홈은 2걸음»이 된다 — zsState·btnReadyE 를 그대로 읽는다');
+      add('e 필수는 둘뿐', (function(){
+          var i=et.indexOf('window.__guideState=function()'); if(i<0) return false;
+          var seg=et.slice(i, i+2600);
+          return (seg.match(/must:true/g)||[]).length===2 && (seg.match(/must:false/g)||[]).length===2;
+        })(),
+        '없으면 안 되는 것만 필수 — 다 필수로 하면 «필수»가 뜻을 잃는다 (메뉴·쿠파스는 안 해도 장사가 된다)');
+      add('e 빈 칸엔 흐린 예시', et.indexOf('lg-ex') >= 0 && et.indexOf('예) ') >= 0 && et.indexOf('ex:') >= 0,
+        '빈 화면은 «뭘 쓰라는 거지»가 된다 — 애플식으로 예시를 흐리게 보여준다');
+      add('e 가이드는 화면 안 한 줄 띠', et.indexOf("el.id='le-guideline'") >= 0
+        && et.indexOf('.le-guideline{flex:0 0 auto;') >= 0,
+        '작업실에 두면 «편집하러 들어왔는데 가이드는 저 밖에»가 된다 — 고치는 중에 보여야 쓸모가 있다');
+      add('e 다 채우면 띠가 사라진다', et.indexOf("if(g.done){ if(el) el.remove(); return; }") >= 0,
+        '끝난 안내가 계속 붙어 있으면 그때부터 잔소리다 (4수)');
+      add('e 첫 로그인 후광', et.indexOf(".le-guideline.halo::after") >= 0
+        && et.indexOf("el.classList.toggle('halo', first)") >= 0,
+        '«있는 줄도 모른다»를 막는 유일한 장치 — 한 번 열면 꺼진다');
+      add('e 🧭 아이콘 가이드 폐기', et.indexOf('id="le-guide" title="편집 가이드" aria-label="가이드" style="display:none') >= 0,
+        '나침반 아이콘은 뜻이 안 읽혔다 — 되살아나면 바가 다시 6칸이 된다');
       /* ── 🔍 «왜 또 로그인을 묻나» 진단 (2026-08-22) ── */
       add('e 로그인 창이 이유를 적는다', et.indexOf('function loginWhy') >= 0
         && et.indexOf('왜 또 물어보나요?') >= 0 && et.indexOf('function loginWhere') >= 0,
@@ -565,7 +611,15 @@
         '별도 경로를 안 만든다(한 기능 두 군데 금지) — 검색칸에 넣어 아래 목록에서 찾게');
       add('e build 표시 없앰', et.indexOf('build 07·10') < 0,
         '로그인 화면은 처음 오는 사람이 보는 곳 — 개발용 표시를 두지 않는다');
-      add('e 저장됨 초기 오표시', et.indexOf('id="le-autosave" title="고치면 자동으로 저장돼요"') >= 0 && et.indexOf('le-autosave is-saved" id=') < 0,
+      /* 🚨 이 항목은 «제목 글자»를 보고 있어서, 제목만 늘려도 헛걸렸다.
+         진짜 불변식은 «처음 보이는 글자가 저장됨이 아닐 것»이다. 그것만 본다. (2026-08-22)
+         실제로 ✓저장 버튼을 없애며 초기값을 «저장됨»으로 되돌려 사고를 재현했고, 이 항목이 잡았다. */
+      add('e 저장됨 초기 오표시', (function(){
+          var i=et.indexOf('id="le-autosave"'); if(i<0) return false;
+          var seg=et.slice(i, i+300);
+          var m=seg.match(/<span class="as-txt">([^<]*)<\/span>/);
+          return !!m && m[1].indexOf('저장됨') < 0 && et.indexOf('le-autosave is-saved" id=') < 0;
+        })(),
         '🚨 아무것도 저장 안 했는데 「저장됨 ✓」이라 적혀 있던 것 → 「자동 저장」');
       add('e 제목 한 줄 고정', et.indexOf('white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}') >= 0 && et.indexOf('.topbar{flex-wrap:nowrap;}') >= 0,
         '🚨 버튼 4개 + 채널 칩이면 제목이 «한 글자씩 세로로» 쏟아져 바가 287px로 부풀었다(실측)');

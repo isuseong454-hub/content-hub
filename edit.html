@@ -2358,7 +2358,9 @@ if('serviceWorker' in navigator){
   #live-edit-ov[data-shell="light"] .le-d{ color:rgba(42,37,48,.62); }
   #live-edit-ov[data-shell="light"] .le-d.is-on,
   #live-edit-ov[data-shell="light"] .le-d:active{ color:#2A2530; }
-  #live-edit-ov[data-shell="light"] .le-autosave{ color:#0E9E72; background:rgba(14,158,114,.10); }
+  /* 🚨 검수 실측 — 밝은 셸에서 대비 2.9:1 (기준 3:1), 높이 28px (손가락 기준 40px).
+     저장 상태는 «못 읽으면 없는 것»이다. 진하게 + 40px. */
+  #live-edit-ov[data-shell="light"] .le-autosave{ color:#07704F; background:rgba(14,158,114,.14); border-color:rgba(14,158,114,.34); }
   #live-edit-ov[data-shell="light"] .le-top-d{ background:rgba(0,0,0,.05); border-color:rgba(0,0,0,.12); color:#2A2530; }
   /* 📏 2026-08-20 실측 검수가 잡음 — 밝은 껍데기에서 ↶↷·「저장」 글씨가 배경에 묻혔다(1.1:1).
         흰 바탕엔 어두운 글씨. 「저장」은 그라데이션 위 흰 글씨라 그대로 두되 대비를 확보한다. */
@@ -2384,6 +2386,13 @@ if('serviceWorker' in navigator){
   /* 자동 저장 상태 칩 */
   .le-bar .le-autosave{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; font-family:var(--sans); color:#46D6A6; background:rgba(70,214,166,.13); padding:6px 10px; border-radius:8px; white-space:nowrap; user-select:none; transition:color .2s ease, background .2s ease;}
   .le-bar .le-autosave .as-dot{width:6px; height:6px; border-radius:50%; background:currentColor; flex:0 0 auto;}
+  /* ✏️ 선 아이콘 — 이모지 대신 (2026-08-22). currentColor 라 테마색을 따르고, 기기마다 같게 그려진다 */
+  .lei{width:19px; height:19px; display:block; stroke:currentColor; fill:none;
+    stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}
+  .le-mini .di{display:inline-flex; align-items:center; justify-content:center;}
+  .le-icon-btn .lei{margin:0 auto;}
+  .le-bar .le-autosave{border:1px solid rgba(70,214,166,.28); cursor:pointer; min-height:40px;}
+  .le-bar .le-autosave:active{transform:scale(.96);}
   .le-bar .le-autosave.is-saving{color:#F5C84B; background:rgba(245,200,75,.15);}
   .le-bar .le-autosave.is-saving .as-dot{animation:asPulse .8s ease-in-out infinite;}
   .le-bar .le-autosave.is-dirty{color:var(--muted); background:rgba(255,255,255,.06);}
@@ -2391,7 +2400,31 @@ if('serviceWorker' in navigator){
   .le-bar .le-autosave.aspop{animation:asPop .42s cubic-bezier(.34,1.56,.64,1);}
   @keyframes asPop{0%{transform:scale(1);} 40%{transform:scale(1.13);} 100%{transform:scale(1);}}
   @keyframes asPulse{0%,100%{opacity:.35; transform:scale(.75);} 50%{opacity:1; transform:scale(1.15);}}
-  @media (max-width:520px){ .le-bar .le-autosave{padding:6px 8px;} .le-bar .le-autosave .as-txt{display:none;} }
+  /* 🚨 2026-08-22 — ↶↷·✓저장을 빼서 자리가 남았다. «저장됨» 글자를 숨길 이유가 없다.
+     점만 남으면 초록 동그라미가 무슨 뜻인지 아무도 모른다. */
+  @media (max-width:520px){ .le-bar .le-autosave{padding:6px 9px;} }
+  /* 🧭 홈 편집 가이드 · 한 줄 띠 (2026-08-22 사장님 픽 ㉮) */
+  .le-guideline{flex:0 0 auto; display:flex; align-items:center; gap:9px; width:100%;
+    padding:11px 13px; border:0; border-bottom:1px solid var(--hair); cursor:pointer;
+    font-family:var(--sans); font-size:12.5px; font-weight:700; text-align:left;
+    background:color-mix(in srgb, var(--coral) 12%, transparent); color:var(--coral); position:relative;}
+  .le-guideline .glc{font-size:11.5px; font-weight:700; opacity:.82;}
+  .le-guideline .glb{display:flex; gap:3px; margin-left:auto;}
+  .le-guideline .glb i{width:15px; height:4px; border-radius:2px; display:block;
+    background:color-mix(in srgb, var(--coral) 26%, transparent);}
+  .le-guideline .glb i.on{background:var(--coral);}
+  .le-guideline .glg{font-size:14px; opacity:.7;}
+  .le-guideline:active{transform:scale(.995);}
+  /* ✨ 첫 로그인 후광 — 다 채우거나 한 번 열면 꺼진다 */
+  .le-guideline.halo::after{content:''; position:absolute; inset:0; pointer-events:none;
+    box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--coral) 55%, transparent),
+               0 0 22px 2px color-mix(in srgb, var(--coral) 34%, transparent);
+    animation:lgHalo 1.9s ease-in-out infinite;}
+  @keyframes lgHalo{0%,100%{opacity:.45;} 50%{opacity:1;}}
+  @media (prefers-reduced-motion:reduce){ .le-guideline.halo::after{animation:none; opacity:.7;} }
+  .lg-must{display:inline-block; margin-left:6px; font-style:normal; font-size:9.5px; font-weight:800;
+    padding:2px 6px; border-radius:999px; background:rgba(224,86,75,.16); color:#E0564B; vertical-align:1px;}
+  .lg-ex{display:block; margin-top:3px; font-size:11px; color:var(--muted); opacity:.62;}
   .le-hint{flex:0 0 auto; text-align:center; font-size:11.5px; color:var(--muted); padding:8px 12px; background:var(--surface2,#26262C); border-bottom:1px solid var(--hair);}
   .le-tip{font-size:11.5px; color:var(--muted); margin-left:auto; margin-right:6px;}
   .le-tip b{color:var(--coral);}
@@ -6775,19 +6808,30 @@ if('serviceWorker' in navigator){
     <!-- 🧭 2026-08-21 사장님 재배치 — «맨 위 공간이 남으니 홈 유형·테마를 작게 올리자»
          위 = 모양 정하기(홈 유형·테마) + 되돌리기 + 저장 / 아래 = 채우기(구성 추가·새 포스팅)
          나가는 문(편집 끝내기)은 화면 오른쪽 위 하나뿐 — 스크롤 따라다닌다 -->
+    <!-- ═══ 🎯 맨 위 바 A안 (2026-08-22 사장님 픽) ═══════════════════════════
+         실측: 8칸이 375px 화면에서 «⋯가 11px 잘렸다».
+         고친 것 넷 —
+         ① ↶↷ 뺐다 — 8칸 중 2칸이 늘 흐렸다 (Ctrl+Z 는 그대로 산다)
+         ② ✓저장 버튼을 뺐다 — «자동 저장»이라면서 옆에 저장 버튼이 있어 서로 부정했다.
+            대신 «저장됨» 알약을 눌러도 즉시 저장된다(빠져나갈 문은 남긴다)
+         ③ 이모지 → 선 아이콘(SVG). 이모지는 기기마다 다르게 그려지고 테마색을 못 따르고
+            광학 중심이 제각각이라 줄이 안 맞는다 — «AI 냄새»의 진짜 정체였다
+         ④ 🧭가이드는 바에서 빼고 편집 화면 «한 줄 띠»로 (아이콘은 뜻이 안 읽혔다)  -->
     <div class="le-bar le-bar-slim">
-      <button class="le-mini" id="le-type" title="홈 유형 — 뼈대 고르기"><span class="di">🏠</span><span class="lb">홈 유형</span></button>
-      <button class="le-mini" id="le-design" title="테마 — 색·분위기"><span class="di">🎨</span><span class="lb">테마</span></button>
+      <button class="le-mini" id="le-type" title="홈 유형 — 뼈대 고르기"><span class="di"><svg viewBox="0 0 24 24" class="lei" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><span class="lb">홈 유형</span></button>
+      <button class="le-mini" id="le-design" title="테마 — 색·분위기"><span class="di"><svg viewBox="0 0 24 24" class="lei" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="9" r="1.3"/><circle cx="15" cy="9" r="1.3"/><circle cx="9.5" cy="14.5" r="1.3"/><circle cx="15" cy="14" r="1.3"/></svg></span><span class="lb">테마</span></button>
       <span class="le-bar-sp"></span>
-      <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" disabled>↶</button>
-      <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled>↷</button>
-      <span class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요"><i class="as-dot"></i><span class="as-txt">자동 저장</span></span>
-      <button class="le-x" id="le-x" title="지금 바로 저장·공개">✓ 저장</button>
+      <button class="le-icon-btn" id="le-undo" title="되돌리기 (Ctrl+Z)" disabled style="display:none !important;">↶</button>
+      <button class="le-icon-btn" id="le-redo" title="다시하기 (Ctrl+Shift+Z)" disabled style="display:none !important;">↷</button>
+      <!-- 🚨 초기값은 반드시 «자동 저장» — 아무것도 저장 안 했는데 «저장됨 ✓»은 거짓말이다.
+           (2026-08-22 검수가 잡음: ✓저장 버튼을 없애며 내가 이 사고를 되살렸다) -->
+      <button type="button" class="le-autosave" id="le-autosave" title="고치면 자동으로 저장돼요 · 눌러서 지금 저장"><i class="as-dot"></i><span class="as-txt">자동 저장</span></button>
+      <button class="le-x" id="le-x" title="지금 바로 저장·공개" style="display:none !important;">✓ 저장</button>
       <!-- 🚨 2026-08-21 사장님 «자동 로그인인데 로그아웃도 운영자 모드도 못 간다» —
            상단바를 비우면서 «나가는 문»까지 없앴다. 갇히는 화면은 만들면 안 된다.
            버튼을 넷 되살리는 대신 ⚙ «하나»에 몰아넣는다. -->
-      <button class="le-icon-btn le-d-guide" id="le-guide" title="편집 가이드 — 뭘 채웠고 뭐가 남았는지" aria-label="가이드">🧭<i class="le-dot" id="le-guide-dot"></i></button>
-      <button class="le-icon-btn" id="le-more" title="더보기 — 운영자 모드 · 로그아웃" aria-label="더보기">⋯</button>
+      <button class="le-icon-btn le-d-guide" id="le-guide" title="편집 가이드" aria-label="가이드" style="display:none !important;">🧭<i class="le-dot" id="le-guide-dot"></i></button>
+      <button class="le-icon-btn" id="le-more" title="더보기 — 운영자 모드 · 로그아웃" aria-label="더보기"><svg viewBox="0 0 24 24" class="lei" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
       <button class="le-quit" id="le-quit" style="display:none !important;">편집 끝내기</button>
       <button class="le-d" id="le-home" style="display:none !important;"><span class="di">👁</span><span class="le-d-lbl">미리보기</span></button>
       <button class="le-d" id="le-opmode" style="display:none !important;"><span class="di">⚙️</span><span class="le-d-lbl">운영</span></button>
@@ -18449,6 +18493,40 @@ if('serviceWorker' in navigator){
           떠다니는 알림이 아니라 «도크에 늘 있는 자리». 누르면 —
           ① 세 걸음이 어디까지 됐는지 ② 내가 쓴 내용이 그대로 보이고 ③ 누르면 그 자리에서 고친다.
           고치고 나오면 숫자·체크가 «바로» 갱신된다(닫힐 때 다시 그린다). */
+    /* ══════════ 🧭 가이드 판정 (2026-08-22) ══════════════════════════════
+       🚨 판정은 «한 벌»만 만든다. __zsState(홈 5걸음·zs 카드) 와 btnReadyE(필수 게이트)를
+          그대로 읽는다. 여기서 따로 세면 «가이드는 3/4인데 홈은 2걸음» 같은 어긋남이 난다. */
+    function _homeRows(t){ try{ return [].slice.call(document.querySelectorAll('#rows .row[data-t="'+t+'"]')); }catch(_){ return []; } }
+    function _rowC(r){ try{ return r._content || (r.dataset.c? JSON.parse(r.dataset.c) : []); }catch(_){ return []; } }
+    function _menuOk(){
+      var rows=_homeRows('link'); if(!rows.length) return {ok:false, n:0, live:0};
+      var live=0;
+      rows.forEach(function(r){
+        try{ var c=_rowC(r); var kind=String(c[6]||'').trim()||'link';
+             if(window.__btnReadyE && window.__btnReadyE(c, kind).ok) live++; }catch(_){}
+      });
+      return {ok:live>0, n:rows.length, live:live};
+    }
+    window.__guideState=function(){
+      var z=window.__zsState||{a:false,b:false,c:false,done:0,nm:'',bio:'',pubs:0};
+      var m=_menuOk(), cp=_homeRows('coupas').length;
+      var steps=[
+        { k:'home',    ok:!!z.a, must:true,  t:'홈 화면 편집',
+          d:'누구에게 뭘 해주는 사람인지', ex:'앞머리만 10년 · 얼굴형 전문',
+          val: z.nm? (z.nm + (z.bio? ' · '+String(z.bio).slice(0,24) : '')) : '' },
+        { k:'menu',    ok:m.ok,  must:false, t:'메뉴 설정',
+          d:'손님이 누를 긴 버튼', ex:'상담 신청 · 전자책 · 예약 받기',
+          val: m.live? ('버튼 '+m.live+'개 살아 있어요'+(m.n>m.live?(' · '+(m.n-m.live)+'개는 필수가 비었어요'):'')) : '' },
+        { k:'coupas',  ok:cp>0,  must:false, t:'쿠파스 만들기',
+          d:'추천 상품으로 부수입', ex:'내가 쓰는 드라이기 · 헤어 오일',
+          val: cp? ('쿠파스 '+cp+'칸 · 홈 맨 아래') : '' },
+        { k:'contact', ok:!!z.c, must:true,  t:'연락 받을 곳 열기',
+          d:'마음 생긴 손님이 바로', ex:'문의 받기 · 예약 · 카톡',
+          val: z.c? '연락 수단이 켜져 있어요' : '' }
+      ];
+      var n=0; steps.forEach(function(x){ if(x.ok) n++; });
+      return { n:n, all:steps.length, steps:steps, done:(n>=steps.length) };
+    };
     function guideOpened(){ try{ return localStorage.getItem('le-guide-seen')==='1'; }catch(_){ return false; } }
     function markGuideSeen(){ try{ localStorage.setItem('le-guide-seen','1'); }catch(_){} syncGuideDot(); }
     function syncGuideDot(){
@@ -18469,33 +18547,44 @@ if('serviceWorker' in navigator){
         ov.addEventListener('click', function(e){ if(e.target===ov) closeGuide(); });
         ov.querySelector('#lg-x').onclick=closeGuide;
       }
-      var ROWS=[
-        {ok:z.a, k:'intro', t:'나를 한 줄로 소개하기', d:'누구에게 뭘 해주는 사람인지',
-         val: z.nm? (z.nm + (z.bio? ' · '+cut(z.bio,26) : '')) : ''},
-        {ok:z.b, k:'work',  t:'대표 작업 하나 보여주기', d:'실력은 말보다 결과물',
-         val: z.pubs? ('올린 글 '+z.pubs+'개') : ''},
-        {ok:z.c, k:'contact', t:'연락 받을 곳 열기', d:'마음 생긴 손님이 바로',
-         val: z.c? '연락 수단이 켜져 있어요' : ''}
-      ];
-      var h='<div class="lg-top"><div class="lg-h">'+(z.done>=3?'세 걸음 다 세웠어요 🎉':'세 걸음이면 손님이 “믿을 만하네” 해요')+'</div>'
-        +'<div class="lg-bar"><i style="width:'+Math.round(z.done/3*100)+'%"></i></div>'
-        +'<div class="lg-cnt">'+z.done+' / 3 세움</div></div>';
+      /* ══════════ 🧭 홈 편집 가이드 · 4단계 (2026-08-22 사장님 지시) ══════════
+         이름: ① 홈 화면 편집 ② 메뉴 설정 ③ 쿠파스 만들기 ④ 연락 받을 곳 열기
+
+         ── 4수 설계 ──
+         1수 · 판정을 새로 만들지 않는다. __zsState(홈 5걸음·zs 카드가 쓰는 그것)와
+              btnReadyE(긴 버튼 필수 게이트)를 그대로 쓴다. 두 벌이면 숫자가 어긋난다.
+         2수 · 빈 칸엔 «이렇게 씁니다» 흐린 예시를 보여준다. 빈 화면은 «뭘 쓰라는 거지»가 된다.
+         3수 · «필수»는 없으면 안 되는 것만 — ①소개 ④연락처 둘뿐.
+              ②메뉴 ③쿠파스는 안 하는 사람도 장사가 된다. 다 필수로 하면 필수가 뜻을 잃는다.
+         4수 · 다 채우면 띠가 «사라진다». 끝난 안내가 계속 붙어 있으면 그때부터 잔소리다.
+              그 뒤엔 ⋯ 안에서만 열린다. */
+      var gs=(window.__guideState? window.__guideState() : {n:0,steps:[]});
+      var ROWS=gs.steps;
+      var _done=gs.n, _all=ROWS.length;
+      var h='<div class="lg-top"><div class="lg-h">'
+        +(_done>=_all?'다 채웠어요 — 손님 받을 준비 끝 🎉':'네 가지만 채우면 손님 받을 준비 끝이에요')+'</div>'
+        +'<div class="lg-bar"><i style="width:'+Math.round(_done/_all*100)+'%"></i></div>'
+        +'<div class="lg-cnt">'+_done+' / '+_all+' 완료</div></div>';
       ROWS.forEach(function(r,i){
         h+='<button type="button" class="lg-l'+(r.ok?' ok':'')+'" data-lg="'+r.k+'">'
           +'<span class="n">'+(r.ok?'✓':(i+1))+'</span>'
-          +'<span class="m"><b>'+r.t+'</b>'
-          +(r.val? '<span class="v">'+escT(r.val)+'</span>' : '<span>'+r.d+'</span>')
+          +'<span class="m"><b>'+r.t+(r.must?'<em class="lg-must">필수</em>':'')+'</b>'
+          +(r.val? '<span class="v">'+escT(r.val)+'</span>'
+                 : '<span>'+r.d+'</span><span class="lg-ex">예) '+escT(r.ex)+'</span>')
           +'</span><span class="go">'+(r.ok?'고치기':'쓰기')+' →</span></button>';
       });
-      h+='<div class="lg-note">한 번에 다 안 해도 돼요 · 쓰는 즉시 손님 화면에 반영돼요</div>';
+      h+='<div class="lg-note">한 번에 다 안 해도 돼요 · 쓰는 즉시 손님 화면에 반영돼요<br>'
+        +'<b>필수</b>가 빠진 버튼은 손님 화면에 안 보여요</div>';
       document.getElementById('lg-body').innerHTML=h;
       ov.querySelectorAll('[data-lg]').forEach(function(b){
         b.onclick=function(){
           var k=b.getAttribute('data-lg'); closeGuide();
           if(k==='intro'){ try{ if(window.__openProfileSheet) window.__openProfileSheet(); }catch(_){} return; }
-          if(k==='work'){ try{ if(window.__openWriteChooser) window.__openWriteChooser(); }catch(_){} return; }
-          if(k==='contact'){ try{ if(window.__setFabInsert) window.__setFabInsert(false); }catch(_){}
-            try{ if(window.__openAddCatalog) window.__openAddCatalog(); }catch(_){} return; }
+          /* ②③④ 는 전부 «구성 추가»로 간다 — 거기서 링크 버튼·쿠파스·문의 받기를 고른다.
+             따로 문을 파면 «어디로 갔지»가 늘어난다. 문은 적을수록 좋다. */
+          try{ if(window.__setFabInsert) window.__setFabInsert(false); }catch(_){}
+          try{ if(window.__openAddCatalog) window.__openAddCatalog(); }catch(_){}
+          return;
         };
       });
       ov.classList.add('open');
@@ -18503,11 +18592,37 @@ if('serviceWorker' in navigator){
     function closeGuide(){ var ov=document.getElementById('le-guide-ov'); if(ov) ov.classList.remove('open');
       /* 고치고 나오면 «바로» 갱신 — 홈 허브가 다시 계산할 시간을 조금 준다 */
       try{ if(window.__renderHomeHub) setTimeout(window.__renderHomeHub, 200); }catch(_){}
+      try{ setTimeout(renderGuideBand, 220); }catch(_){}
       setTimeout(syncGuideDot, 500); }
     window.__openGuideSheet=openGuideSheet;
     window.__syncGuideDot=syncGuideDot;
 
-    function renderLiveSteps(){ syncGuideDot(); }   /* 떠 있는 패널은 없앴다 — 가이드는 도크에 있다 */
+    /* 🧭 한 줄 띠 (2026-08-22 사장님 픽 ㉮) — 고치는 «중»에 보여야 쓸모가 있다.
+       작업실 홈에 두면 «편집하러 들어왔는데 가이드는 저 밖에»가 된다.
+       🚨 4수 — 다 채우면 띠가 사라진다. 끝난 안내가 남아 있으면 그때부터 잔소리다. */
+    function renderGuideBand(){
+      try{
+        var ov=document.getElementById('live-edit-ov'); if(!ov) return;
+        var g=window.__guideState? window.__guideState() : null; if(!g) return;
+        var el=document.getElementById('le-guideline');
+        if(g.done){ if(el) el.remove(); return; }
+        if(!el){
+          el=document.createElement('button'); el.type='button'; el.id='le-guideline'; el.className='le-guideline';
+          var bar=ov.querySelector('.le-bar-slim');
+          if(bar && bar.parentNode) bar.parentNode.insertBefore(el, bar.nextSibling); else return;
+          el.onclick=function(){ try{ openGuideSheet(); }catch(_){} };
+        }
+        /* 첫 로그인이면 후광 — «있는 줄도 모른다»를 막는 유일한 장치 */
+        var first=false; try{ first = localStorage.getItem('le-guide-seen')!=='1'; }catch(_){}
+        el.classList.toggle('halo', first);
+        el.innerHTML='<span class="glt">홈 편집 가이드</span>'
+          +'<span class="glc">'+g.n+'/'+g.all+' 완료</span>'
+          +'<span class="glb">'+g.steps.map(function(s2){ return '<i'+(s2.ok?' class="on"':'')+'></i>'; }).join('')+'</span>'
+          +'<span class="glg">›</span>';
+      }catch(_){}
+    }
+    window.__renderGuideBand=renderGuideBand;
+    function renderLiveSteps(){ syncGuideDot(); renderGuideBand(); }   /* 떠 있는 패널은 없앴다 — 가이드는 한 줄 띠 */
     window.__renderLiveSteps=renderLiveSteps;
     window.__openLive=openLive;
     window.__openLiveAuto=function(){ if(AUTH && !window.__liveEditActive && !ov.classList.contains('open')) openLive(); };  // 기본 진입용(자동)
@@ -18935,6 +19050,10 @@ if('serviceWorker' in navigator){
     var openBtn=document.getElementById('open-live-edit'); if(openBtn) openBtn.onclick=openLive;
     // 편집 종료 → 보면서수정 닫고 게이트로 (편집한 건 그대로 유지 · 공개 반영은 저장)
     // 💾 저장 = 저장·공개 후 그대로 편집 유지 (게이트로 안 감)
+    /* 🚨 ✓저장 버튼을 없앴으니, «저장됨» 알약이 그 문을 이어받는다.
+       자동 저장을 믿더라도 «지금 저장»할 길은 남아 있어야 한다 — 없으면 갇힌 느낌이 든다. */
+    var asb=document.getElementById('le-autosave');
+    if(asb) asb.onclick=function(){ var x2=document.getElementById('le-x'); if(x2) x2.onclick&&x2.onclick(); };
     var xb=document.getElementById('le-x'); if(xb) xb.onclick=function(){
       try{ var eo=document.getElementById('edit-ov'); if(eo && eo.classList.contains('open') && window.__collectEdit){ window.__collectEdit(); } }catch(e){}   // 열린 시트 내용 먼저 반영(사진 누락 방지)
       var top=document.querySelector('.topbar .btn.primary'); if(top) top.click();   // 저장·공개
