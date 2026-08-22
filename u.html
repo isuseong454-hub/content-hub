@@ -4094,7 +4094,11 @@
      ══════════════════════════════════════════════════════════════════════ */
   var LINK_NEED = {
     msg:    ['title','link'],            /* 💌 상담   — 가격은 선택(무료 상담도 있다) */
+    calen:  ['title','link'],            /* 💇 예약   — 가격은 시술마다 달라 선택 */
+    ticket: ['title'],                   /* 🎫 쿠폰   — 링크 없이 «보여주기»만 해도 된다 */
+    paper:  ['title','link'],            /* 📄 견적·자료 */
     bell:   ['title','link'],            /* 🔔 대기자 — 돈을 안 받는다 */
+    search: ['title','link'],            /* 🔍 무료 진단 */
     coffee: ['title','link'],            /* ☕ 후원   — 금액은 선택(자유 후원) */
     book:   ['title','link','price'],    /* 📚 전자책 — 가격 없는 판매 버튼은 안 눌린다 */
     klass:  ['title','link','price'],    /* 🎬 강의   — 같음 */
@@ -4165,7 +4169,9 @@
         「상담 신청」(5만원)과 「인스타그램」(공짜)이 같은 무게였고, 가격은 눌러야 알았다.
         → 아이콘 · 설명 한 줄 · 가격을 담고, «제일 벌고 싶은 것» 하나만 색을 채운다.
         칸: [제목, 링크, 설명, 가격, 아이콘, 강조] — 앞 둘은 옛 순서 그대로라 기존 글이 안 깨진다. */
-  var LC_ICON={ msg:'💌', book:'📚', klass:'🎬', coffee:'☕', bell:'🔔', cart:'🛒',
+  /* 🧭 유형별 종류가 늘어 아이콘도 같이 늘었다 (2026-08-22) — edit.html LINK_KINDS 와 짝 */
+  var LC_ICON={ msg:'💌', calen:'💇', ticket:'🎫', paper:'📄', search:'🔍',
+                book:'📚', klass:'🎬', coffee:'☕', bell:'🔔', cart:'🛒',
                 receipt:'🧾', cam:'📷', play:'▶️', link:'🔗', mail:'✉️', cal:'📅' };
   function linkCard(c){
     var title=c[0]||'링크', url=String(c[1]||'').trim(), desc=String(c[2]||'').trim(),

@@ -829,6 +829,15 @@
         '글 보러 온 사람에게 프로필이 화면 위 40%를 먹으면 글이 안 보인다');
       /* 🔗 2026-08-22 사장님 픽 «B안» — 긴 버튼에 아이콘·설명·가격·강조 */
       /* 🔒 2026-08-22 사장님 — «필요한 게 담겨 있어야 홈에 오픈» */
+      /* 🚨 2026-08-22 — u.html 은 CRLF·LF 가 «섞여» 있다. '  };\r\n' 로 찾다가
+            LF 구역을 지나쳐 8,522자를 잡았고, 그대로 써서 32KB 가 날아갔다.
+            (LC_ICON·_hasPrice 가 통째로 사라져 손님 화면이 죽었다)
+            핵심 조각이 살아 있는지 «개수»로 확인한다 — 크기만 보면 못 잡는다. */
+      add('u.html 핵심 조각 생존',
+        ['var LINK_NEED','var LINK_INNER','function btnReady','function _hasPrice',
+         'var LC_ICON','function shelfCard','function linkCard','lcb-warn']
+          .every(function(k){ return ut.indexOf(k) >= 0; }),
+        '한 조각만 사라져도 손님 화면이 통째로 죽는다');
       add('필수 판정표 두 파일 일치',
         (function(){
           function tbl(t){ var i=t.indexOf('var LINK_NEED'); if(i<0) return null;
@@ -851,7 +860,24 @@
       add('편집 화면엔 «왜»를 말함', ut.indexOf('lcb-warn') >= 0
         && ut.indexOf('손님에겐 안 보여요') >= 0,
         '🚨 흐리기만 하면 «내가 만들었는데 왜 안 보여?» 가 된다');
-      add('버튼 종류 6개', et.indexOf('var LINK_KINDS') >= 0
+      /* 🧭 2026-08-22 사장님 — «크리에이터형만 있는 게 아니라 전문가형·뷰티형도 있잖아» */
+      add('유형별 버튼 추천', et.indexOf("['calen',  '💇','예약 받기'") >= 0
+        && et.indexOf("['paper',  '📄','견적·자료 받기'") >= 0
+        && et.indexOf("['search', '🔍','무료 진단'") >= 0
+        && et.indexOf("['ticket', '🎫','쿠폰·이벤트'") >= 0,
+        '뷰티는 예약·쿠폰, 전문가는 견적, 비포애프터는 진단 — 파는 게 다르다');
+      add('유형이 막지는 않음', et.indexOf('var mine=[], rest=[];') >= 0
+        && et.indexOf("h+='<div class=\"lk-sect\">그 밖에</div>'") >= 0,
+        '🚨 뷰티인데 전자책을 팔 수도 있다 — 추천만 위로, 나머지도 전부 고를 수 있게');
+      add('유형 안 골라도 추정', et.indexOf('function myHtype()') >= 0
+        && et.indexOf("if(t.stylegallery||t.lookbook||t.ranking) return 'tbeauty'") >= 0,
+        '아무 추천도 없는 것보단 홈에 깔린 구성으로 추정하는 게 낫다');
+      add('유형 코드가 한 스코프에',
+        (function(){ var a=et.indexOf('var LINK_KINDS'), b=et.indexOf('function openLinkKind');
+          if(a<0||b<0) return false;
+          return et.slice(0,a).split('<script').length === et.slice(0,b).split('<script').length; })(),
+        '🚨 다른 <script> 블록에 있으면 «myHtype is not defined» 로 시트가 통째로 죽는다 (2026-08-22 실측)');
+      add('버튼 종류 10개', et.indexOf('var LINK_KINDS') >= 0
         && et.indexOf('function openLinkKind') >= 0
         && et.indexOf("t.dataset.nm==='링크 버튼'){ try{ ov.classList.remove('open'); }catch(e){} openLinkKind()") >= 0,
         '전엔 채널 매니저로 새서 «돈 받는 버튼»을 만들 길이 없었다');

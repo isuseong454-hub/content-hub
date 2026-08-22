@@ -3089,6 +3089,10 @@ if('serviceWorker' in navigator){
   .lk-i.lk-off{ opacity:.6; }
   .lk-i.lk-off .m span{ color:#E0866B; font-weight:600; }
   .lk-i.lk-off .go{ color:#E0866B; font-weight:900; }
+  .lk-sect{ font-size:11px; font-weight:800; color:var(--muted); margin:12px 2px 7px; letter-spacing:.02em; }
+  .lk-sect:first-child{ margin-top:0; }
+  .lk-rec{ font-style:normal; font-size:10px; font-weight:800; margin-left:6px; padding:2px 7px;
+    border-radius:999px; background:var(--coral-soft); color:var(--coral); vertical-align:1px; }
   .tf-prev{background:var(--soft); border:1px solid var(--hair); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:7px; margin-bottom:14px;}
   .tf-row{background:var(--surface); border:1px solid var(--hair); border-radius:8px; padding:8px 10px; display:flex; align-items:center; gap:8px;}
   .tf-row.tf-hero{justify-content:center; font-family:'Nanum Myeongjo',serif; font-weight:800; font-size:13px; color:var(--ink);}
@@ -8025,6 +8029,48 @@ if('serviceWorker' in navigator){
       openBlockPreview(t);
     });   // 탭 → 미리보기 → 넣기
   });
+  /* ══ 🧭 «유형»은 한 번 뼈대만 깔고 버려지고 있었다 (2026-08-22 사장님 5수 기획) ══
+     지금까지 htype(뷰티·크리에이터·전문가·비포애프터)은 «홈 3칸»을 깔고 끝이었다.
+     저장은 하는데 그 뒤로 아무 데도 안 쓴다 — 배지 하나 말고는.
+
+     ── 5수 ──
+     1수 무엇을 파나가 유형마다 다르다. 뷰티는 «예약», 전문가는 «상담», 크리에이터는 «콘텐츠».
+          그런데 버튼 종류는 전부 같았다.
+     2수 그래서 유형별 «돈 받는 길»을 종류로 만든다 (예약·쿠폰·견적·진단 추가).
+     3수 유형에 «묶지는» 않는다. 뷰티인데 전자책을 팔 수도 있다.
+          → 추천 순서만 바꾸고, 나머지도 전부 고를 수 있게 둔다. 막으면 그게 감옥이다.
+     4수 유형이 늘어도 고르기 화면이 안 길어지게 — «내 유형» 3~4개를 위로, 나머지는 아래.
+     5수 유형을 안 고른 사람 — 홈에 깔린 구성으로 «추정»한다. 아무 추천도 없는 것보단 낫다.
+
+     ⚠️ 새 종류를 더할 땐 u.html 의 LINK_NEED·LC_ICON 도 «같이» 고쳐야 한다(_smoke 가 대조). */
+  var LINK_KINDS = [
+    /* [키, 아이콘, 이름, 안내, 기본연결, 설명예시, 가격예시, 어울리는 유형] */
+    ['msg',    '💌','상담 신청',   '예약 시트가 열려요',        '#resv',  '얼굴형 보고 기장 잡아드려요 · 30분', '5만',   ['texpert','tbeauty']],
+    ['calen',  '💇','예약 받기',    '예약 시트가 열려요',        '#resv',  '평일 10-19시 · 시술 90분',           '',      ['tbeauty']],
+    ['ticket', '🎫','쿠폰·이벤트',  '조건을 적어 주세요',        '',       '첫 방문 20% · 이번 달까지',          '',      ['tbeauty']],
+    ['paper',  '📄','견적·자료 받기','문의 받기 칸으로 보내요',   '#lead',  '소개서 PDF를 보내드려요',            '',      ['texpert']],
+    ['book',   '📚','전자책·템플릿','판매 링크가 필요해요',      '',       '52p · 유형별 정리',                  '9,900', ['tcreator','texpert']],
+    ['klass',  '🎬','강의·클래스',  '신청 링크가 필요해요',      '',       '남은 자리 3',                        '18만',  ['tcreator','texpert']],
+    ['coffee', '☕','후원하기',     '송금 링크가 필요해요',      '',       '글이 도움 됐다면',                   '3천~',  ['tcreator']],
+    ['search', '🔍','무료 진단',    '문의 받기 칸으로 보내요',   '#lead',  '3분이면 내 유형을 알아요',           '무료',  ['tresult','texpert']],
+    ['bell',   '🔔','대기자 등록',  '문의 받기 칸으로 보내요',   '#lead',  '곧 열려요 · 먼저 알림 받기',         '',      ['tresult','tcreator']],
+    ['link',   '🔗','그냥 링크',    '인스타·유튜브 등',          '',       '',                                   '',      []]
+  ];
+  var HTYPE_NM={ tbeauty:'🌸 뷰티형', tcreator:'🎙 크리에이터형', texpert:'🎓 전문가형', tresult:'⚡ 비포애프터형' };
+  /* 5수 — 유형을 안 골랐으면 «홈에 깔린 것»으로 추정한다. 아무 추천도 없는 것보단 낫다. */
+  function myHtype(){
+    try{
+      var h=(typeof home!=='undefined'&&home&&home.htype)||'';
+      if(HTYPE_NM[h]) return h;
+      var t={}; [].forEach.call(document.querySelectorAll('#rows .row'), function(r){ t[r.dataset.type]=1; });
+      if(t.stylegallery||t.lookbook||t.ranking) return 'tbeauty';
+      if(t.beforeafter||t.diagnostic)           return 'tresult';
+      if(t.authority||t.logowall||t.cover3)     return 'texpert';
+      if(t.links||t.channels||t.cardnews)       return 'tcreator';
+    }catch(_){}
+    return '';
+  }
+  window.__myHtype=myHtype;
   /* ══ 🧰 «어떤 버튼인가» 고르기 (2026-08-22) ═══════════════════════════════
         고른 종류가 아이콘·연결·설명 예시를 «미리» 채운다.
         내부 연결(#resv·#lead)은 앱 안의 받는 곳으로 — 사장님이 주소를 몰라도 된다.
@@ -8047,14 +8093,27 @@ if('serviceWorker' in navigator){
       ov2.addEventListener('click', function(e){ if(e.target===ov2) ov2.classList.remove('open'); });
       ov2.querySelector('#lk-x').onclick=function(){ ov2.classList.remove('open'); };
     }
-    var h='';
+    /* 🧭 4수 — «내 유형»에 어울리는 것을 위로. 막지는 않는다(뷰티인데 전자책을 팔 수도 있다). */
+    var ht=myHtype();
+    var mine=[], rest=[];
     LINK_KINDS.forEach(function(k,i){
-      var live=linkDestLive(k[4]);
-      h+='<button type="button" class="lg-l lk-i'+(live?'':' lk-off')+'" data-lk="'+i+'">'
-        +'<span class="n">'+k[1]+'</span>'
-        +'<span class="m"><b>'+k[2]+'</b><span>'+(live?k[3]:'⚠️ '+(k[4]==='#resv'?'예약이 꺼져 있어요 — 켜고 오세요':'문의 받기 칸이 홈에 없어요'))+'</span></span>'
-        +'<span class="go">'+(live?'→':'!')+'</span></button>';
+      ((ht && (k[7]||[]).indexOf(ht)>=0) ? mine : rest).push(i);
     });
+    function tile(i, isMine){
+      var k=LINK_KINDS[i], live=linkDestLive(k[4]);
+      return '<button type="button" class="lg-l lk-i'+(live?'':' lk-off')+'" data-lk="'+i+'">'
+        +'<span class="n">'+k[1]+'</span>'
+        +'<span class="m"><b>'+k[2]+(isMine?'<em class="lk-rec">추천</em>':'')+'</b>'
+        +'<span>'+(live?k[3]:'⚠️ '+(k[4]==='#resv'?'예약이 꺼져 있어요 — 켜고 오세요':'문의 받기 칸이 홈에 없어요'))+'</span></span>'
+        +'<span class="go">'+(live?'→':'!')+'</span></button>';
+    }
+    var h='';
+    if(mine.length){
+      h+='<div class="lk-sect">'+(HTYPE_NM[ht]||'내 유형')+'에 어울리는 것</div>';
+      mine.forEach(function(i){ h+=tile(i, true); });
+      h+='<div class="lk-sect">그 밖에</div>';
+    }
+    rest.forEach(function(i){ h+=tile(i, false); });
     document.getElementById('lk-body').innerHTML=h;
     ov2.querySelectorAll('[data-lk]').forEach(function(b){
       b.onclick=function(){
@@ -11911,7 +11970,11 @@ if('serviceWorker' in navigator){
      원칙: 필수는 «정말 없으면 안 되는 것»만. 막는 건 손님 화면뿐, 만들기·저장은 자유. */
   var LINK_NEED = {
     msg:    ['title','link'],            /* 💌 상담   — 가격은 선택(무료 상담도 있다) */
+    calen:  ['title','link'],            /* 💇 예약   — 가격은 시술마다 달라 선택 */
+    ticket: ['title'],                   /* 🎫 쿠폰   — 링크 없이 «보여주기»만 해도 된다 */
+    paper:  ['title','link'],            /* 📄 견적·자료 */
     bell:   ['title','link'],            /* 🔔 대기자 — 돈을 안 받는다 */
+    search: ['title','link'],            /* 🔍 무료 진단 */
     coffee: ['title','link'],            /* ☕ 후원   — 금액은 선택(자유 후원) */
     book:   ['title','link','price'],    /* 📚 전자책 — 가격 없는 판매 버튼은 안 눌린다 */
     klass:  ['title','link','price'],    /* 🎬 강의 */
@@ -11947,15 +12010,6 @@ if('serviceWorker' in navigator){
     return { ok:false, why:txt+(jong?'이':'가')+' 없어요' };
   }
   window.__btnReadyE=btnReadyE;
-  /* 🧰 버튼 종류 — 고르면 아이콘·연결·설명 예시가 «미리» 채워진다. 빈 칸을 마주하지 않게. */
-  var LINK_KINDS = [
-    ['msg',    '💌','상담 신청',   '예약 시트가 열려요',        '#resv',  '얼굴형 보고 기장 잡아드려요 · 30분', '5만'],
-    ['book',   '📚','전자책·템플릿','판매 링크가 필요해요',      '',       '52p · 유형별 정리',                  '9,900'],
-    ['klass',  '🎬','강의·클래스',  '신청 링크가 필요해요',      '',       '남은 자리 3',                        '18만'],
-    ['coffee', '☕','후원하기',     '송금 링크가 필요해요',      '',       '글이 도움 됐다면',                   '3천~'],
-    ['bell',   '🔔','대기자 등록',  '문의 받기 칸으로 보내요',   '#lead',  '곧 열려요 · 먼저 알림 받기',         ''],
-    ['link',   '🔗','그냥 링크',    '인스타·유튜브 등',          '',       '',                                   '']
-  ];
   function lcRows(){ return [].slice.call(document.querySelectorAll('#rows .row')); }
   function lcStripNum(s){ return String(s||'').replace(/^[①②③④⑤⑥⑦⑧⑨⑩⑪]\s*/,''); }
   var LC_AUTO={service:1,reservation:1};
