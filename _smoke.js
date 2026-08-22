@@ -756,6 +756,18 @@
         && (et.match(/_ready\.then\(/g)||[]).length >= 2
         && et.indexOf('}, 620);') < 0,
         '고정 시간으로 되돌리면 «예전 홈»이 다시 번쩍인다');
+      /* 🔢 2026-08-21 사장님 «최신순 오래된순 베스트인기순 · 유튜브 참고» */
+      add('포스팅 정렬 3종', ut.indexOf('var ARC_SORTS=') >= 0
+        && ut.indexOf("['new','최신순']") >= 0 && ut.indexOf("['hot','인기순']") >= 0
+        && ut.indexOf('function arcSort(') >= 0,
+        '칩은 «거르기», 정렬은 «줄 세우기» — 둘은 따로 논다');
+      add('정렬은 기억한다', ut.indexOf("localStorage.setItem('cm-arc-sort'") >= 0,
+        '매번 다시 고르게 하면 안 쓴다');
+      add('정렬해도 주제는 유지', ut.indexOf('거르던 주제는 그대로 둔다') >= 0,
+        '정렬 바꿨다고 «전체»로 돌아가면 짜증난다');
+      add('인기순은 조회수 오면 다시', ut.indexOf('window.__arcResort') >= 0
+        && ut.indexOf('window.__viewMap=map') >= 0,
+        '조회수가 서버에서 늦게 와서, 안 하면 인기순이 최신순처럼 보인다');
       add('편집 입구는 하나', ut.indexOf('window.__goEdit = function') >= 0
         && (ut.match(/window\.__goEdit\(/g)||[]).length >= 3,
         '입구가 셋이라 «홈 편집하기»만 로그인창으로 샜다 — 전부 한 문을 지난다');

@@ -1624,7 +1624,17 @@
     background:var(--surface); border:1px solid var(--hair); box-shadow:var(--shadow);
     border-radius:999px; padding:10px 15px; margin-bottom:12px; color:var(--muted); font-size:13px;
   }
-  .cats{display:flex; gap:7px; overflow-x:auto; margin-bottom:14px; scrollbar-width:none;}
+  .cats{display:flex; gap:7px; overflow-x:auto; margin-bottom:10px; scrollbar-width:none;}
+  /* 🔢 포스팅 정렬 줄 — 주제 칩(거르기) «아래», 목록 «위». 유튜브와 같은 자리 */
+  .arc-sort{ display:flex; gap:6px; margin:0 2px 14px; }
+  .arc-sb{ flex:0 0 auto; border:1px solid var(--hair); background:transparent; color:var(--muted);
+    font-family:var(--sans); font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px;
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+    transition:background .15s, color .15s, border-color .15s, transform .12s cubic-bezier(.2,.9,.2,1); }
+  .arc-sb:active{ transform:scale(.95); }
+  .arc-sb.on{ background:var(--coral); border-color:var(--coral); color:var(--on-coral,#fff); }
+  @media (hover:hover){ .arc-sb:not(.on):hover{ border-color:var(--coral); color:var(--coral); } }
+  @media (prefers-reduced-motion: reduce){ .arc-sb{ transition:none; } }
   .cats::-webkit-scrollbar{display:none;}
   .chip{
     flex:0 0 auto; padding:6px 13px; border-radius:999px;
@@ -5771,6 +5781,8 @@
         if(!r||!r.ok||!r.posts||!r.posts.length) return;
         var map={}, top=null, topN=0;
         r.posts.forEach(function(x){ map[x.pid]=x.n; if(x.n>topN){ topN=x.n; top=x.pid; } });
+        /* 🔢 정렬(인기순)이 이 숫자를 쓴다. 서버에서 늦게 오므로 도착하면 한 번 다시 줄 세운다. */
+        try{ window.__viewMap=map; if(window.__arcResort) window.__arcResort(); }catch(_){}
         document.querySelectorAll('[data-pid]').forEach(function(card){
           var pid=card.getAttribute('data-pid'); var n=map[pid]; if(!n) return;
           if(card.querySelector('.pg-views')) return;
@@ -5840,12 +5852,37 @@
     try{ if(typeof EDIT_MODE==='undefined'||!EDIT_MODE){ blk.querySelectorAll('.prod-resv').forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); var rb=document.querySelector('.resv-cta-btn'); if(rb) rb.click(); }); }); } }catch(_){}
   }
 
-  // 아카이브 탭 = 게시물을 주제(카테고리) 칩으로 분류
-  function buildArchive(posts, view){
+  /* ══ 🔢 포스팅 정렬 (2026-08-21 사장님 «최신순 오래된순 베스트인기순 · 유튜브 참고») ══
+        ㉮ 칩(주제)은 «거르기», 정렬은 «줄 세우기» — 둘은 따로 논다. 유튜브도 그렇다.
+        ㉯ 고른 정렬은 기억한다 — 매번 다시 고르게 하지 않는다.
+        ㉰ 글 아이디가 'p_'+만든시각(36진수) 이라 날짜 필드 없이도 최신/오래된을 안다.
+        ㉱ 인기순은 조회수 — 서버에서 늦게 오므로, 오면 그 자리서 다시 줄 세운다. */
+  var ARC_SORTS=[['new','최신순'],['old','오래된순'],['hot','인기순']];
+  function arcSortKey(){ try{ return localStorage.getItem('cm-arc-sort')||'new'; }catch(_){ return 'new'; } }
+  function postMadeAt(p){
+    var m=String(p&&p.id||'').match(/^p_([0-9a-z]+?)\d{0,3}$/);
+    var t=m?parseInt(m[1],36):NaN;
+    return (isFinite(t)&&t>1e12&&t<4e12) ? t : 0;   /* 2001~2096 범위 밖이면 «모름» */
+  }
+  function arcSort(list, key){
+    var a=list.slice();
+    if(key==='hot'){
+      var vm=window.__viewMap||{};
+      a.sort(function(x,y){ var d=(vm[y.id]||0)-(vm[x.id]||0); return d || (postMadeAt(y)-postMadeAt(x)); });
+    } else if(key==='old'){
+      a.sort(function(x,y){ return postMadeAt(x)-postMadeAt(y); });
+    } else {
+      a.sort(function(x,y){ return postMadeAt(y)-postMadeAt(x); });
+    }
+    return a;
+  }
+  // 아카이브 탭 = 게시물을 주제(카테고리) 칩으로 분류
+  function buildArchive(posts, view){
     var sec=document.querySelector('[data-pane="archive"]'); if(!sec) return;
     var live=(posts||[]).filter(function(p){ return p && p.on!==false && p.blocks && p.blocks.length; });
     if(!live.length) return;   // 게시물 없으면 기존 샘플 유지
     view=view||'cards';
+    live = arcSort(live, arcSortKey());          /* 🔢 줄 세우고 시작 */
     var cats=[]; live.forEach(function(p){ var c=(p.cat||'').trim(); if(c && cats.indexOf(c)<0) cats.push(c); });
     var ARC_PAL=['#7DCF96','#7CB0FF','#E3B563','#FF9DBA','#B9A6FF','#5FD0C0','#FF9E7A','#A6B0BC'];   // 유형 색 팔레트
     function catColor(c){ c=(c||'').trim(); if(!c) return ARC_PAL[7]; if(window.__catColors&&window.__catColors[c]) return window.__catColors[c]; var h=0; for(var i=0;i<c.length;i++) h=(h*31+c.charCodeAt(i))>>>0; return ARC_PAL[h%7]; }   // 저장색 우선, 없으면 이름으로 자동(회색=index7은 '분류없음' 전용이라 자동에선 제외)
@@ -5904,7 +5941,22 @@
     } else {
       bodyHtml='<div id="arc-grid">'+fh+'<div class="arc-grid">'+rest.map(item).join('')+'</div></div>';   // 카드(그리드) = 대표 크게 + 나머지 2열 하이브리드
     }
-    sec.innerHTML='<div class="cats" id="arc-cats">'+chips+'</div>'+bodyHtml;
+    var _sk=arcSortKey();
+    var sortBar='<div class="arc-sort" id="arc-sort">'+ARC_SORTS.map(function(s){
+      return '<button type="button" class="arc-sb'+(s[0]===_sk?' on':'')+'" data-sort="'+s[0]+'">'+s[1]+'</button>'; }).join('')+'</div>';
+    sec.innerHTML='<div class="cats" id="arc-cats">'+chips+'</div>'+sortBar+bodyHtml;
+    sec.querySelectorAll('#arc-sort .arc-sb').forEach(function(b){
+      b.onclick=function(){
+        try{ localStorage.setItem('cm-arc-sort', b.getAttribute('data-sort')); }catch(_){}
+        var keep=(sec.querySelector('#arc-cats .chip.on')||{}).getAttribute
+                 ? sec.querySelector('#arc-cats .chip.on').getAttribute('data-cat') : '';
+        buildArchive(posts, view);
+        /* 거르던 주제는 그대로 둔다 — 정렬 바꿨다고 «전체»로 돌아가면 짜증난다 */
+        if(keep){ var ch=sec.querySelector('#arc-cats .chip[data-cat="'+keep.replace(/"/g,'&quot;')+'"]'); if(ch) ch.click(); }
+      };
+    });
+    /* 조회수가 늦게 오면 «인기순»일 때만 다시 줄 세운다 */
+    try{ window.__arcResort=function(){ if(arcSortKey()==='hot') buildArchive(posts, view); }; }catch(_){}
     sec.querySelectorAll('#arc-cats .chip').forEach(function(ch){ ch.onclick=function(){ sec.querySelectorAll('#arc-cats .chip').forEach(function(x){ x.classList.toggle('on', x===ch); }); var c=ch.getAttribute('data-cat'); sec.querySelectorAll('#arc-grid [data-pid]').forEach(function(cd){ cd.style.display=(!c||cd.getAttribute('data-cat')===c)?'':'none'; }); }; });
     sec.querySelectorAll('[data-pid]').forEach(function(a){ a.onclick=function(){ openPostModal(a.getAttribute('data-pid')); }; });
     if(view!=='photo'){ sec.querySelectorAll('#arc-grid [data-pid]').forEach(function(cd){ try{ cd.appendChild(buildCornerShare(cd.getAttribute('data-pid'))); }catch(_){} }); }
