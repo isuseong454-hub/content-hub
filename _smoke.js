@@ -757,6 +757,21 @@
         && et.indexOf('}, 620);') < 0,
         '고정 시간으로 되돌리면 «예전 홈»이 다시 번쩍인다');
       /* 🔢 2026-08-21 사장님 «최신순 오래된순 베스트인기순 · 유튜브 참고» */
+      /* 🏠 2026-08-21 사장님 2차 «보내기 옆에 홈버튼 → 홈에 배치» */
+      add('홈 버튼은 운영자만', ut.indexOf('function isMine()') >= 0
+        && ut.indexOf("isMine() ? '<button type=\"button\" class=\"ig-btn tohome") >= 0,
+        '손님에겐 요소가 «생기지 않아야» 한다 — 숨기는 게 아니라 안 만든다');
+      add('홈에 올리기 저장은 편집기가', ut.indexOf("__goEdit('&addhome='") >= 0
+        && et.indexOf('window.__addHomeFromPost') >= 0
+        && et.indexOf("get('addhome')") >= 0,
+        '손님 화면에서 서버에 쓰면 권한·충돌 사고가 난다');
+      add('홈에 올린 글은 링크트리 버튼', et.indexOf("type:'links', name:label") >= 0,
+        '사장님 픽 ㉯ — 메뉴는 버튼, 글 카드는 포스팅 쪽');
+      add('두 번 올려도 하나', ut.indexOf('function onHome(') >= 0
+        && et.indexOf('이미 홈에 있어요') >= 0,
+        '같은 글이 홈에 두 번 깔리면 지저분하다');
+      add('꾹 눌러 순서 바꾸기', et.indexOf('본문을 꾹 누르면(롱프레스 250ms) 드래그') >= 0,
+        '홈에 올린 버튼도 이 배선을 그대로 탄다');
       add('포스팅 정렬 3종', ut.indexOf('var ARC_SORTS=') >= 0
         && ut.indexOf("['new','최신순']") >= 0 && ut.indexOf("['hot','인기순']") >= 0
         && ut.indexOf('function arcSort(') >= 0,

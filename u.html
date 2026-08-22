@@ -1594,6 +1594,11 @@
 
   /* 게시물 모달 하단(큰) */
   .pm-foot{ display:flex; align-items:center; gap:6px; margin-top:18px; padding-top:8px; border-top:1px solid var(--hair); }
+  /* 🏠 홈에 올리기 — 보내기 옆. 운영자에게만 만들어진다(손님은 요소 자체가 없다) */
+  .ig-btn.tohome{ display:inline-flex; align-items:center; gap:5px; }
+  .ig-btn.tohome .th-i{ font-size:20px; line-height:1; }
+  .ig-btn.tohome.on{ color:var(--coral); }
+  .ig-btn.tohome.on .ig-lbl{ color:var(--coral); font-weight:700; }
   .pm-foot .ig-btn svg{ width:29px; height:29px; }
 
   /* 목록 카드 우측 상단 작은 보내기 (은은) */
@@ -5739,7 +5744,46 @@
     }
     copy();
   }
-  // 좋아요·보내기 액션바 DOM 생성 (모달=큰 cls 'pm-foot', 카드=작은 cls 'arc-acts')
+  /* ══ 🏠 홈에 올리기 (2026-08-21 사장님 2차) ═══════════════════════════════
+        «보내기 옆에 홈버튼을 놔두면 홈에 배치하도록 하는 거 어때?»
+        ㉮ 운영자(내 홈을 보는 나)일 때만 만든다 — 손님에겐 요소가 «생기지 않는다»
+        ㉯ 저장은 편집기가 한다. 손님 화면에서 서버에 쓰지 않는다(권한·충돌 방지)
+           → 눌리면 «단 하나의 문»으로 글 번호를 들고 간다. 편집기가 받아서 홈에 깐다.
+        ㉰ 홈에 올라간 글은 링크트리 «긴 버튼»(links 블록)으로 들어간다 — 사장님 픽 ㉯ */
+  function isMine(){
+    try{
+      var a=JSON.parse(localStorage.getItem('la-auth')||'null');
+      if(!a || !a.code || !a.handle) return false;
+      if(a.expiresAt!=null){ var ex=new Date(a.expiresAt); if(!isNaN(ex.getTime()) && ex<new Date()) return false; }
+      var cur=(new URLSearchParams(location.search).get('u')||'').trim().toLowerCase();
+      return !!cur && String(a.handle).trim().toLowerCase()===cur;
+    }catch(_){ return false; }
+  }
+  window.__isMine=isMine;
+  /* 이미 홈에 올라가 있나 — 홈 블록에 그 글로 가는 링크가 있으면 «있음» */
+  function onHome(id){
+    try{
+      var blocks=((D||{}).blocks)||[];
+      var needle='p='+encodeURIComponent(id);
+      for(var i=0;i<blocks.length;i++){
+        var c=(blocks[i]&&blocks[i].content)||[];
+        for(var j=0;j<c.length;j++){ if(typeof c[j]==='string' && c[j].indexOf(needle)>=0) return true; }
+      }
+    }catch(_){}
+    return false;
+  }
+  function toHome(id, btn){
+    if(onHome(id)){
+      try{ hubToast('이미 홈에 있어요 · 편집기에서 순서를 바꾸거나 뺄 수 있어요'); }catch(_){}
+      return;
+    }
+    try{ hubToast('홈에 올리는 중…'); }catch(_){}
+    try{ if(btn){ btn.classList.add('on'); var i=btn.querySelector('.th-i'); if(i) i.textContent='🏠'; } }catch(_){}
+    /* 🚪 저장은 편집기 몫 — 단 하나의 문으로 글 번호를 들고 간다 */
+    try{ window.__goEdit('&addhome='+encodeURIComponent(id)); }
+    catch(_){ location.href='edit.html?live=1&addhome='+encodeURIComponent(id); }
+  }
+  // 좋아요·보내기 액션바 DOM 생성 (모달=큰 cls 'pm-foot', 카드=작은 cls 'arc-acts')
   function buildActsBar(id, opts){
     opts=opts||{};
     var liked=_likedLocal(id), cnt=_likeCount(id);
@@ -5747,10 +5791,18 @@
     bar.innerHTML=''
       +'<button type="button" class="ig-btn like'+(liked?' liked':'')+'" data-like-pid="'+esc(id)+'" aria-label="좋아요">'+igHeart()+'<span class="ig-ln">'+(cnt>0?cnt:'')+'</span></button>'
       +'<span class="ig-spacer"></span>'
-      +'<button type="button" class="ig-btn share" aria-label="보내기">'+igSend()+(opts.lbl?'<span class="ig-lbl">보내기</span>':'')+'</button>';
+      +'<button type="button" class="ig-btn share" aria-label="보내기">'+igSend()+(opts.lbl?'<span class="ig-lbl">보내기</span>':'')+'</button>'
+      /* 🏠 2026-08-21 사장님 «보내기 옆에 홈 버튼을 놔두면 홈에 배치하도록» —
+            운영자일 때만 만든다. 손님은 이 코드가 아예 요소를 안 만든다. */
+      + (isMine() ? '<button type="button" class="ig-btn tohome'+(onHome(id)?' on':'')+'" aria-label="홈에 올리기">'
+                    + '<span class="th-i">'+(onHome(id)?'🏠':'⌂')+'</span>'
+                    + (opts.lbl?'<span class="ig-lbl">'+(onHome(id)?'홈에 있음':'홈에 올리기')+'</span>':'')
+                    + '</button>' : '');
     var likeBtn=bar.querySelector('.like'), nEl=likeBtn.querySelector('.ig-ln'), shareBtn=bar.querySelector('.share');
     likeBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); hubToggleLike(id, likeBtn, nEl); });
     shareBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); hubShare(id, shareBtn); });
+    var homeBtn=bar.querySelector('.tohome');
+    if(homeBtn) homeBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toHome(id, homeBtn); });
     return bar;
   }
   function buildPostFoot(id){ return buildActsBar(id, { cls:'pm-foot', lbl:true }); }

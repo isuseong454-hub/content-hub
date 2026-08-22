@@ -16134,6 +16134,35 @@ if('serviceWorker' in navigator){
     }catch(_){ return 'desk'; }
   }
   window.__landing=__landing;   /* 🔬 검수용 창구 — 로그인 없이도 «어디로 갈지»를 물어볼 수 있게 (2026-08-21) */
+  /* ══ 🏠 «홈에 올리기» 받는 쪽 (2026-08-21 사장님 2차) ══════════════════
+        손님 화면의 홈 버튼이 ?addhome=<글번호> 를 달고 온다.
+        저장은 여기서 한다 — 손님 화면에서 서버에 쓰지 않는다(권한·충돌 방지).
+        모양은 링크트리 «긴 버튼»(links 블록) — 사장님 픽 ㉯.
+        ⚠️ 쿠파스·내 제품은 «메뉴보다 아래»라 항상 맨 끝에 둔다(3차에서 붙인다). */
+  window.__addHomeFromPost=function(pid){
+    try{
+      if(!pid) return false;
+      var post=null; (postsData||[]).forEach(function(x){ if(x && String(x.id)===String(pid)) post=x; });
+      if(!post){ try{ if(window.toast) toast('그 글을 못 찾았어요'); }catch(_){} return false; }
+      var h=(((window.AUTH||{}).handle)||'').trim();
+      var url='u.html?u='+encodeURIComponent(h)+'&p='+encodeURIComponent(pid);
+      /* 이미 올라가 있으면 두 번 만들지 않는다 */
+      var dup=false;
+      try{ [].forEach.call(document.querySelectorAll('#rows .row'), function(r){
+        var c=r._content||[]; c.forEach(function(v){ if(typeof v==='string' && v.indexOf('p='+pid)>=0) dup=true; }); }); }catch(_){}
+      if(dup){ try{ if(window.toast) toast('이미 홈에 있어요'); }catch(_){} return false; }
+      var label=String(post.title||'글 보기').trim().slice(0,40);
+      var row=window.__createRow({ type:'links', name:label, on:true, content:[label, url], layout:'' });
+      if(!row) return false;
+      row._content=[label, url];
+      try{ if(window.__refreshBuilder) window.__refreshBuilder(); }catch(_){}
+      try{ if(window.__pageAutosaveSchedule) window.__pageAutosaveSchedule(); }catch(_){}
+      /* 바로 저장 — 사장님이 «올렸는데 안 올라갔네» 하는 일이 없게 */
+      try{ var sb=document.querySelector('.topbar .btn.primary'); if(sb) sb.click(); }catch(_){}
+      try{ if(window.toast) toast('홈에 올렸어요 — 「'+label+'」 · 순서는 꾹 눌러 옮기세요'); }catch(_){}
+      return true;
+    }catch(_){ return false; }
+  };
   /* 온보딩·데모가 끝난 «뒤»에 착지한다 — 도중에 끼어들지 않는다 */
   window.__afterOnboard=function(){
     var a=null; try{ a=JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_e){}
@@ -16244,7 +16273,14 @@ if('serviceWorker' in navigator){
           else if(window.__openLive && !window.__liveEditActive) window.__openLive();
         }catch(_e){} });
       }
-      /* DEST==='onboard' 는 소개 6장이 끝난 뒤 __afterOnboard() 가 착지시킨다.
+      /* 🏠 «홈에 올리기»로 왔으면 데이터가 온 뒤 홈에 깐다 (착지보다 먼저 해야 저장에 담긴다) */
+      try{
+        var _ah=new URLSearchParams(location.search).get('addhome');
+        if(_ah) _ready.then(function(){ setTimeout(function(){
+          try{ if(window.__addHomeFromPost) window.__addHomeFromPost(_ah); }catch(_e){}
+        }, 250); });
+      }catch(_e){}
+    /* DEST==='onboard' 는 소개 6장이 끝난 뒤 __afterOnboard() 가 착지시킨다.
          DEST==='desk' 는 여기 그대로 머무른다 — 게이트가 이미 떠 있다. */
     }catch(_){}
   }
