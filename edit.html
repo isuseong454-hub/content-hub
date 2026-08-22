@@ -6720,7 +6720,7 @@ if('serviceWorker' in navigator){
       if(name==='page' && prevWs==='posts' && window.__playHubTransition){ window.__playHubTransition(); }
       // (자동 진입 제거 — 탭 누를 때 안 넘어감. 진입은 편집/설정 게이트로)
     }
-    window.__switchWs=switchWs;
+    /* (위에서 이미 수출했다 — 2026-08-21 정리) */
     document.querySelectorAll('.ws-tab').forEach(function(t){ t.onclick=function(){ switchWs(t.getAttribute('data-ws')); }; });
     // 고객 홈으로 = 새 탭(window.open) 말고 인앱 미리보기(allprev iframe)로 — 왔다갔다 없이 "유기체처럼" 한 화면에서 (✎편집하기로 복귀)
     var goCH=document.getElementById('go-customer-home'); if(goCH) goCH.onclick=function(){ if(window.__openCustomerPreview) window.__openCustomerPreview(); else if(window.__openRealHome) window.__openRealHome(); };

@@ -936,42 +936,6 @@
     .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
   }
 
-  /* 🚪 편집기로 가는 «단 하나의 문» (2026-08-21 큰 수리)
-        전엔 입구가 셋이었고(홈 편집하기 · 탭별 편집 · ⚙메뉴) 저마다 다르게 갔다.
-        그래서 «홈 편집하기»만 로그인창으로 새고, 어떤 길은 보던 자리를 잃었다.
-        → 전부 여기를 지난다. 보던 자리(at)와 열어 둔 글(p)은 «항상» 따라간다. */
-  window.__goEdit = function(extra){
-    var at=0, pid='';
-    try{ at=Math.round(window.scrollY||window.pageYOffset||0); }catch(_){}
-    try{ var pm=document.getElementById('post-modal');
-         if(pm && pm.classList.contains('open')) pid=String(window.__curPost||''); }catch(_){}
-    var u='edit.html?live=1&at='+at
-        + (pid ? '&p='+encodeURIComponent(pid) : '')
-        + (extra || '');
-    /* 화면을 툭 끊지 않고 잇는다 — 페이지가 바뀐 티를 줄인다 */
-    try{ document.body.style.transition='opacity .16s ease'; document.body.style.opacity='.4'; }catch(_){}
-    setTimeout(function(){ location.href=u; }, 150);
-    return false;
-  };
-  /* 🔁 «그 자리에서» — 편집기 iframe 이 at/p 를 달고 오면 보던 자리로 되돌린다 (2026-08-21) */
-  (function(){
-    try{
-      var q=new URLSearchParams(location.search);
-      if(q.get('edit')!=='1') return;
-      var at=parseInt(q.get('at')||'', 10), pid=q.get('p')||'';
-      if(!at && !pid) return;
-      var n=0, t=setInterval(function(){
-        n++;
-        try{
-          if((window.__POSTS||[]).length || n>26){
-            clearInterval(t);
-            if(pid && window.__openPostModal){ window.__openPostModal(pid); }
-            else if(at>0){ window.scrollTo({top:at, behavior:'instant'}); }
-          }
-        }catch(_){ clearInterval(t); }
-      }, 220);
-    }catch(_){}
-  })();
   /* ── 편집 브릿지(?edit=1): 섹션 탭 편집 시안 B ── */
   html[data-edit] .reveal{opacity:1 !important; transform:none !important;}
   /* ── 홈 구성(.la-hb): 평소 깔끔(손님 화면 그대로), 구분 헤더로 명확히 ── */
@@ -3830,6 +3794,42 @@
   (function(){
     try{
       var gear=document.querySelector('.settings-link'), menu=document.getElementById('gear-menu');
+  /* 🚪 편집기로 가는 «단 하나의 문» (2026-08-21 큰 수리)
+        전엔 입구가 셋이었고(홈 편집하기 · 탭별 편집 · ⚙메뉴) 저마다 다르게 갔다.
+        그래서 «홈 편집하기»만 로그인창으로 새고, 어떤 길은 보던 자리를 잃었다.
+        → 전부 여기를 지난다. 보던 자리(at)와 열어 둔 글(p)은 «항상» 따라간다. */
+  window.__goEdit = function(extra){
+    var at=0, pid='';
+    try{ at=Math.round(window.scrollY||window.pageYOffset||0); }catch(_){}
+    try{ var pm=document.getElementById('post-modal');
+         if(pm && pm.classList.contains('open')) pid=String(window.__curPost||''); }catch(_){}
+    var u='edit.html?live=1&at='+at
+        + (pid ? '&p='+encodeURIComponent(pid) : '')
+        + (extra || '');
+    /* 화면을 툭 끊지 않고 잇는다 — 페이지가 바뀐 티를 줄인다 */
+    try{ document.body.style.transition='opacity .16s ease'; document.body.style.opacity='.4'; }catch(_){}
+    setTimeout(function(){ location.href=u; }, 150);
+    return false;
+  };
+  /* 🔁 «그 자리에서» — 편집기 iframe 이 at/p 를 달고 오면 보던 자리로 되돌린다 (2026-08-21) */
+  (function(){
+    try{
+      var q=new URLSearchParams(location.search);
+      if(q.get('edit')!=='1') return;
+      var at=parseInt(q.get('at')||'', 10), pid=q.get('p')||'';
+      if(!at && !pid) return;
+      var n=0, t=setInterval(function(){
+        n++;
+        try{
+          if((window.__POSTS||[]).length || n>26){
+            clearInterval(t);
+            if(pid && window.__openPostModal){ window.__openPostModal(pid); }
+            else if(at>0){ window.scrollTo({top:at, behavior:'instant'}); }
+          }
+        }catch(_){ clearInterval(t); }
+      }, 220);
+    }catch(_){}
+  })();
       if(!gear || !menu) return;
       function auth(){ try{ return JSON.parse(localStorage.getItem('la-auth')||'null'); }catch(_){ return null; } }
       function build(){
@@ -5640,7 +5640,7 @@
     try{ if(p.type==='landing' && window.__revealScan) window.__revealScan([].slice.call(bodyEl.children)); }catch(_e){}
     try{ track('postview',{ kind:'post', label:id }); }catch(_){}
   }
-  window.__openPostModal=function(id){ try{ window.__curPost=id; }catch(_){} return openPostModal(id); };
+  /* (같은 수출이 아래에 한 번 더 있었다 — 2026-08-21 정리) */
   // ── ♥ 좋아요 + ✈ 보내기 (인스타식, 게시물 하단 + 카드) ──
   function hubBuzz(pat){ try{ if(navigator.vibrate) navigator.vibrate(pat||14); }catch(_){} }
   function hubToast(msg){

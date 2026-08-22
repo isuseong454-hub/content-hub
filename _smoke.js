@@ -747,9 +747,23 @@
         '한 번 쓰면 지워져서 «왔다갔다 두 번째»부터 로그인창이 떴다 — 되살리지 않는다');
       add('묻지 않고 들어간다', et.indexOf('먼저 들어간다') >= 0,
         '서버 답을 기다리며 로그인 카드를 띄우면, 그 왕복이 곧 «다시 로그인하라»는 화면이다');
+      /* 🚨 2026-08-21 — 이 함수를 <style> 안에 넣어 «편집 눌러도 무반응»이 됐다.
+            문법 검사는 통과한다(주석·CSS로 읽히니까). «스크립트 안에 있나»를 따로 봐야 한다. */
       add('편집 입구는 하나', ut.indexOf('window.__goEdit = function') >= 0
         && (ut.match(/window\.__goEdit\(/g)||[]).length >= 3,
         '입구가 셋이라 «홈 편집하기»만 로그인창으로 샜다 — 전부 한 문을 지난다');
+      /* 원문에서 «그 자리»가 <script> 안인지 <style> 안인지 직접 가린다.
+         document.scripts 로 보면 edit.html 에서 돌릴 때 u.html 을 못 본다. */
+      const inScript = (html, needle) => {
+        const i = html.indexOf(needle); if (i < 0) return false;
+        const before = html.slice(0, i);
+        return before.lastIndexOf('<script') > before.lastIndexOf('</script>')
+            && before.lastIndexOf('<style') < before.lastIndexOf('</style>');
+      };
+      add('문이 스크립트 «안»에 있다', inScript(ut, 'window.__goEdit = function'),
+        '<style> 안에 넣으면 문법은 통과하는데 실행이 안 돼 «눌러도 무반응»이 된다');
+      add('자리 복원도 스크립트 안', inScript(ut, "q.get('edit')!=='1'"),
+        '같은 사고로 «보던 자리로»도 죽어 있었다');
 
       /* 🗑 사장님 «포스팅에 편집은 있는데 삭제가 없다» — 랜딩 캔버스 안에만 묻혀 있었다 */
       add('글 삭제 공용 함수', et.indexOf('window.__deletePost=function()') >= 0, '한 기능 두 규칙 금지 — 랜딩·블로그가 같은 것을 쓴다');
